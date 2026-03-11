@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tekin Hoca — Estetik Matematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+:root{--ink:#12100e;--cream:#f7f2e8;--aged:#ece4cc;--sepia:#7a5c1e;--gold:#c8960c;--rust:#9b3510;--muted:#5a4a30;--shadow:rgba(18,16,14,0.18);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");color:var(--ink);font-family:'Source Serif 4',Georgia,serif;min-height:100vh;}
+header{background:var(--ink);position:relative;overflow:hidden;}
+header::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 10px,rgba(200,150,12,0.04) 10px,rgba(200,150,12,0.04) 11px);pointer-events:none;}
+.header-inner{max-width:960px;margin:0 auto;padding:52px 24px 44px;text-align:center;position:relative;z-index:1;}
+.logo-band{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
+.logo-line{flex:1;max-width:140px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+.logo-line.r{background:linear-gradient(90deg,var(--gold),transparent);}
+.logo-diamond{width:9px;height:9px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;color:var(--cream);letter-spacing:0.04em;line-height:1.15;}
+h1 span{color:var(--gold);font-style:italic;}
+.header-sub{margin-top:12px;font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,242,232,0.5);}
+nav{background:var(--rust);border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,0.3);}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;}
+nav a{font-family:'Source Serif 4',serif;font-size:0.75rem;font-weight:600;letter-spacing:0.13em;text-transform:uppercase;color:var(--cream);text-decoration:none;padding:13px 16px;transition:background 0.2s,color 0.2s;position:relative;}
+nav a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--gold);transition:left 0.2s,right 0.2s;}
+nav a:hover{background:rgba(200,150,12,0.2);color:var(--gold);}
+nav a:hover::after{left:12%;right:12%;}
+nav a.active{background:rgba(200,150,12,0.28);color:var(--gold);}
+main{max-width:920px;margin:0 auto;padding:52px 20px 72px;}
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.sec-title h2{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--rust);white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--rust),transparent);}
+.intro{text-align:center;margin-bottom:48px;padding-bottom:36px;border-bottom:1px solid rgba(122,92,30,0.25);}
+.intro-quote{font-family:'Playfair Display',serif;font-size:clamp(1rem,2.5vw,1.25rem);font-style:italic;color:var(--sepia);line-height:1.75;max-width:580px;margin:0 auto 10px;}
+.intro-attr{font-size:0.8rem;color:var(--rust);letter-spacing:0.1em;text-transform:uppercase;}
+
+/* KONU KARTLARI */
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;margin-bottom:44px;}
+.topic-card{background:linear-gradient(145deg,#fff9ee,var(--aged));border:1px solid rgba(122,92,30,0.2);border-radius:6px;overflow:hidden;box-shadow:2px 3px 12px var(--shadow);transition:transform 0.2s,box-shadow 0.2s;animation:fadeUp 0.5s ease both;}
+.topic-card:hover{transform:translateY(-4px);box-shadow:5px 9px 22px var(--shadow);}
+.topic-card-head{padding:16px 20px 14px;background:linear-gradient(135deg,var(--ink),#241a08);display:flex;align-items:center;gap:12px;}
+.topic-icon{font-size:1.5rem;}
+.topic-card-head h3{font-family:'Playfair Display',serif;font-size:0.97rem;font-weight:700;color:var(--gold);line-height:1.25;}
+.topic-card-body{padding:16px 20px 18px;}
+.topic-card-body p{font-size:0.85rem;color:var(--muted);line-height:1.7;margin-bottom:10px;}
+.topic-card-body p:last-child{margin-bottom:0;}
+.topic-highlight{font-size:0.82rem;font-style:italic;color:var(--sepia);background:rgba(200,150,12,0.08);border-left:2px solid var(--gold);padding:8px 12px;border-radius:0 3px 3px 0;margin-top:10px;}
+
+/* SVG GÖRSELLER */
+.visual-section{margin-bottom:48px;}
+.visuals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
+.visual-item{background:linear-gradient(145deg,#fff9ee,var(--aged));border:1px solid rgba(122,92,30,0.2);border-radius:6px;padding:20px;text-align:center;box-shadow:2px 3px 10px var(--shadow);animation:fadeUp 0.5s ease both;}
+.visual-item svg{width:100%;max-width:180px;height:auto;margin:0 auto 14px;display:block;}
+.visual-item h4{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;color:var(--rust);margin-bottom:5px;}
+.visual-item p{font-size:0.78rem;color:var(--muted);line-height:1.55;}
+
+/* FORMÜLLER */
+.formula-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:44px;}
+.formula-card{background:linear-gradient(135deg,var(--ink),#241a08);border:1px solid rgba(200,150,12,0.25);border-radius:4px;padding:22px 18px;text-align:center;box-shadow:2px 4px 12px var(--shadow);animation:fadeUp 0.5s ease both;}
+.formula-card .formula{font-family:'Playfair Display',serif;font-size:1.4rem;font-style:italic;color:var(--gold);margin-bottom:10px;letter-spacing:0.05em;}
+.formula-card h4{font-size:0.8rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,242,232,0.7);margin-bottom:6px;}
+.formula-card p{font-size:0.78rem;color:rgba(247,242,232,0.5);line-height:1.55;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.topic-card:nth-child(1){animation-delay:0.05s;}.topic-card:nth-child(2){animation-delay:0.10s;}.topic-card:nth-child(3){animation-delay:0.15s;}.topic-card:nth-child(4){animation-delay:0.20s;}.topic-card:nth-child(5){animation-delay:0.25s;}.topic-card:nth-child(6){animation-delay:0.30s;}
+footer{background:var(--ink);border-top:2px solid var(--gold);padding:24px 20px;text-align:center;}
+footer p{font-size:0.76rem;color:rgba(247,242,232,0.4);letter-spacing:0.08em;line-height:1.8;}
+footer a{color:rgba(200,150,12,0.7);text-decoration:none;}
+footer a:hover{color:var(--gold);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-band">
+      <div class="logo-line"></div>
+      <div class="logo-diamond"></div>
+      <div class="logo-line r"></div>
+    </div>
+    <h1>Estetik <span>Matematik</span></h1>
+    <p class="header-sub">Sayıların Gizli Güzelliği</p>
+  </div>
+</header>
+
+<nav id="site-nav"><button id="burger" aria-label="Menüyü aç/kapat">☰</button></nav>
+
+<main>
+
+  <div class="intro">
+    <p class="intro-quote">"Matematik, doğru bakıldığında yalnızca gerçeği değil, olağanüstü bir güzelliği de barındırır."</p>
+    <p class="intro-attr">— Bertrand Russell</p>
+  </div>
+
+  <!-- EN GÜZEL FORMÜLLER -->
+  <div class="sec-title">
+    <h2>Matematiğin En Zarif Formülleri</h2>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="formula-grid">
+    <div class="formula-card">
+      <div class="formula">e<sup style="font-size:0.85rem">iπ</sup> + 1 = 0</div>
+      <h4>Euler'in Kimliği</h4>
+      <p>e, i, π, 1 ve 0 — matematiğin beş temel sabitini tek denklemde birleştiren "en güzel formül".</p>
+    </div>
+    <div class="formula-card">
+      <div class="formula">a² + b² = c²</div>
+      <h4>Pisagor Teoremi</h4>
+      <p>Dik üçgenlerin evrensel yasası. 2500 yılı aşkın süredir geometrinin temel taşı.</p>
+    </div>
+    <div class="formula-card">
+      <div class="formula">φ = (1+√5) / 2</div>
+      <h4>Altın Oran</h4>
+      <p>≈ 1.618… Doğada, mimaride ve sanatta kendiliğinden ortaya çıkan estetik oran.</p>
+    </div>
+    <div class="formula-card">
+      <div class="formula">∑ 1/n²= π²/6</div>
+      <h4>Basel Problemi</h4>
+      <p>Euler'in 1734'te çözdüğü problem: tüm doğal sayıların karelerinin terslerinin toplamı.</p>
+    </div>
+  </div>
+
+  <!-- KONULAR -->
+  <div class="sec-title">
+    <h2>Matematiğin Güzel Yüzleri</h2>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="topic-grid">
+
+    <div class="topic-card">
+      <div class="topic-card-head">
+        <span class="topic-icon">🌀</span>
+        <h3>Altın Oran ve Fibonacci</h3>
+      </div>
+      <div class="topic-card-body">
+        <p>Fibonacci dizisindeki her sayı, kendinden önceki iki sayının toplamıdır: 1, 1, 2, 3, 5, 8, 13, 21… Bu kadar basit bir kurala dayanan dizi, doğada şaşırtıcı biçimde karşımıza çıkar.</p>
+        <p>Bu dizinin ardışık iki terimi arasındaki oran, sonsuzluğa gidildikçe altın orana (φ ≈ 1.618) yaklaşır. Ayçiçeğinin tohumları, deniz kabuklarının sarmalı, çiçek yapraklarının sayısı — hepsi bu oranı yansıtır.</p>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-head">
+        <span class="topic-icon">🔁</span>
+        <h3>Fraktallar</h3>
+      </div>
+      <div class="topic-card-body">
+        <p>Fraktallar, her ölçekte kendine benzeyen geometrik yapılardır. Mandelbrot kümesi, en tanınmış örnektir; sonsuz karmaşıklık, son derece basit bir formülden doğar.</p>
+        <p>Doğadaki fraktallar: kar taneleri, dağ silüetleri, bulutlar, şimşek kolları, damarlardaki bronşlar.</p>
+        <div class="topic-highlight">İngiltere'nin kıyı uzunluğu ölçüm biriminin küçüklüğüyle sonsuza gider — fraktal boyutun gerçek dünya örneği.</div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-head">
+        <span class="topic-icon">⭐</span>
+        <h3>Simetri ve Grup Teorisi</h3>
+      </div>
+      <div class="topic-card-body">
+        <p>Bir kareyi döndürdüğünüzde veya aynaya tuttuğunuzda bazı konumlarda yine aynı kare görünür. İşte bu "aynı görünme" durumlarının tamamı simetriyi oluşturur.</p>
+        <p>Matematikçiler simetriyi sayıp sınıflandırarak kristallerin, moleküllerin ve hatta atomaltı parçacıkların yapısını açıklamayı başardı. Birçok çiçeğin yaprak sayısı Fibonacci dizisindeki sayılardandır: 3, 5, 8 veya 13 gibi. Buna karşın buz kristalleri her zaman 6 katlı simetriye sahiptir.</p>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-head">
+        <span class="topic-icon">∞</span>
+        <h3>Sonsuzluğun Boyutları</h3>
+      </div>
+      <div class="topic-card-body">
+        <p>Sonsuz büyük bir şeyden daha büyük bir sonsuzluk olabilir mi? Olabilir. Tamsayılar (1, 2, 3, 4…) sonsuzdur; ama 1 ile 2 arasındaki ondalık sayılar da sonsuzdur ve bu ikinci sonsuzluk birinciden çok daha büyüktür.</p>
+        <p>Bunu 1800'lerin sonunda kanıtlayan matematikçi Georg Cantor, döneminde "matematiği mahvediyorsun" suçlamasıyla karşılaştı. Bugün bu keşif matematik tarihinin dönüm noktalarından biri sayılıyor.</p>
+        <div class="topic-highlight">[0,1] aralığındaki noktalar kadar, bütün gerçel sayı doğrusundaki nokta sayısı eşittir.</div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-head">
+        <span class="topic-icon">📐</span>
+        <h3>Tessellasyon (Kaplama)</h3>
+      </div>
+      <div class="topic-card-body">
+        <p>Bir yüzeyi boşluk ve örtüşme olmaksızın kaplayabilen şekillere tessellasyon denir. Düzenli çokgenlerden yalnızca üçgen, kare ve altıgen düzlemi tek başına kaplayabilir.</p>
+        <p>M.C. Escher, bu matematiksel ilkeleri kullanarak olağanüstü sanat eserleri yarattı.</p>
+        <div class="topic-highlight">Düzensiz (aperiodik) kaplamalar ancak 1960'larda keşfedildi; Penrose mozaikleri en tanınmış örnektir.</div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-head">
+        <span class="topic-icon">🎵</span>
+        <h3>Matematik ve Müzik</h3>
+      </div>
+      <div class="topic-card-body">
+        <p>Müzikteki oktav ilişkisi 2:1 frekans oranına, beşli aralık ise 3:2 oranına dayanır. Pisagor, bu matematiksel ilişkileri ilk inceleyen kişidir.</p>
+        <p>Bach'ın fügleri ve Beethoven'ın sonatları, matematiksel simetri ve orantı açısından da analiz edilir.</p>
+        <div class="topic-highlight">Eşit tampere (12 ton) sistemi, 2'nin 12. kökü olan ¹²√2 ≈ 1.0595 oranına dayanır.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GEOMETRİK GÖRSELLER (SVG) -->
+  <div class="visual-section">
+    <div class="sec-title">
+      <h2>Geometrik Güzellikler</h2>
+      <div class="sec-line"></div>
+    </div>
+    <div class="visuals-grid">
+
+      <!-- Altın Spiral -->
+      <div class="visual-item">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" fill="#12100e" rx="4"/>
+          <rect x="76" y="76" width="48" height="48" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <rect x="76" y="28" width="48" height="48" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <rect x="28" y="28" width="48" height="96" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <rect x="28" y="124" width="144" height="48" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <rect x="124" y="28" width="48" height="96" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <path d="M124,76 Q124,28 76,28 Q28,28 28,124 Q28,172 172,172 Q172,76 124,76" fill="none" stroke="#9b3510" stroke-width="2"/>
+        </svg>
+        <h4>Altın Spiral</h4>
+        <p>Fibonacci kareleri üzerine çizilen spiral, altın oranı görselleştirir.</p>
+      </div>
+
+      <!-- Sierpinski Üçgeni -->
+      <div class="visual-item">
+        <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="180" fill="#12100e" rx="4"/>
+          <polygon points="100,10 10,170 190,170" fill="none" stroke="#c8960c" stroke-width="1.5"/>
+          <polygon points="100,10 55,90 145,90" fill="#c8960c" opacity="0.15"/>
+          <polygon points="55,90 10,170 100,170" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <polygon points="55,90 32,130 77,130" fill="#c8960c" opacity="0.12"/>
+          <polygon points="145,90 100,170 190,170" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <polygon points="145,90 122,130 168,130" fill="#c8960c" opacity="0.12"/>
+          <polygon points="100,90 77,130 122,130" fill="none" stroke="#c8960c" stroke-width="1"/>
+        </svg>
+        <h4>Sierpinski Üçgeni</h4>
+        <p>Her adımda kendini tekrar eden fraktal yapı.</p>
+      </div>
+
+      <!-- Koch Kar Tanesi -->
+      <div class="visual-item">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" fill="#12100e" rx="4"/>
+          <polygon points="100,20 175,150 25,150" fill="none" stroke="#c8960c" stroke-width="1.5"/>
+          <polygon points="100,20 175,150 25,150" fill="none" stroke="#9b3510" stroke-width="0.8" transform="rotate(180,100,100) scale(0.55) translate(82,35)"/>
+          <circle cx="100" cy="107" r="45" fill="none" stroke="rgba(200,150,12,0.2)" stroke-width="1" stroke-dasharray="4,3"/>
+          <text x="100" y="185" text-anchor="middle" fill="rgba(200,150,12,0.5)" font-size="11" font-family="Georgia, serif">Koch Eğrisi</text>
+        </svg>
+        <h4>Koch Kar Tanesi</h4>
+        <p>Sonsuz çevre, sonlu alan — fraktal boyutun çarpıcı örneği.</p>
+      </div>
+
+      <!-- Pentagra / 5 Simetri -->
+      <div class="visual-item">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" fill="#12100e" rx="4"/>
+          <polygon points="100,18 183,76 152,170 48,170 17,76" fill="none" stroke="#c8960c" stroke-width="1.5"/>
+          <polygon points="100,18 152,170 17,76 183,76 48,170" fill="none" stroke="#9b3510" stroke-width="1"/>
+          <circle cx="100" cy="100" r="82" fill="none" stroke="rgba(200,150,12,0.15)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="4" fill="#c8960c"/>
+        </svg>
+        <h4>Pentagram</h4>
+        <p>İç köşegen oranı altın orana eşittir — beş katlı simetrinin başyapıtı.</p>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<footer><p>Tekin CANITEZ — Matematik Öğretmeni</p></footer>
+
+<button id="back-to-top" title="Başa dön">↑</button>
+<script src="menu.js"></script>
+<script>
+  const btn=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>

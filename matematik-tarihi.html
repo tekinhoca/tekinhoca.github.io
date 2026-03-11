@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>...TEKiN HOCA... - MATEMATİK TARİHİ</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+  :root {
+    --ink:      #1a1208;
+    --parchment:#f5efd8;
+    --aged:     #e8dfc0;
+    --sepia:    #8b6914;
+    --rust:     #a0390a;
+    --gold:     #c8960c;
+    --shadow:   rgba(26,18,8,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background-color: var(--parchment);
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent, transparent 8px,
+      rgba(200,150,12,0.06) 8px, rgba(200,150,12,0.06) 9px
+    );
+  }
+  .header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+  }
+  .site-link {
+    display: inline-block;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-decoration: none;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .site-link:hover { opacity: 1; }
+
+  .ornament {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; margin-bottom: 16px;
+  }
+  .ornament-line {
+    flex: 1; max-width: 120px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .ornament-line.right {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+  .ornament-diamond {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    color: var(--parchment);
+    letter-spacing: 0.05em;
+    line-height: 1.15;
+  }
+  h1 span { color: var(--gold); font-style: italic; }
+
+  .header-sub {
+    font-size: 0.9rem;
+    color: rgba(245,239,216,0.6);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 14px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--rust);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+  }
+  .nav-inner {
+    max-width: 900px; margin: 0 auto;
+    display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 0;
+  }
+  nav a {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    text-decoration: none;
+    padding: 11px 18px;
+    position: relative;
+    transition: background 0.2s, color 0.2s;
+  }
+  nav a:hover { background: rgba(200,150,12,0.25); color: var(--gold); }
+  nav a.active { background: rgba(200,150,12,0.35); color: var(--gold); }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 900px; margin: 0 auto;
+    padding: 48px 20px 64px;
+  }
+
+  /* ── INTRO ── */
+  .intro {
+    text-align: center;
+    margin-bottom: 52px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(139,105,20,0.3);
+  }
+  .intro-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    font-style: italic;
+    color: var(--sepia);
+    line-height: 1.7;
+    max-width: 600px; margin: 0 auto 10px;
+  }
+  .intro-attr {
+    font-size: 0.82rem;
+    color: var(--rust);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    display: flex; align-items: center; gap: 14px;
+    margin: 48px 0 28px;
+  }
+  .section-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--rust);
+    white-space: nowrap;
+  }
+  .section-title-line {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, var(--rust), transparent);
+  }
+
+  /* ── TIMELINE ── */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 10px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--gold), var(--sepia), var(--gold));
+    border-radius: 2px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    position: relative;
+    background: linear-gradient(135deg, #fff9ee 0%, var(--aged) 100%);
+    border: 1px solid rgba(139,105,20,0.25);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 22px 24px;
+    margin-bottom: 28px;
+    box-shadow: 3px 3px 14px var(--shadow);
+    animation: fadeUp 0.5s ease both;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .card:hover {
+    transform: translateX(4px);
+    box-shadow: 6px 6px 20px var(--shadow);
+    border-left-color: var(--rust);
+  }
+  .card::before {
+    content: '';
+    position: absolute; left: -23px; top: 22px;
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border: 2px solid var(--parchment);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--sepia);
+  }
+
+  .card-header {
+    display: flex; align-items: baseline; flex-wrap: wrap;
+    gap: 10px; margin-bottom: 8px;
+  }
+  .card-date {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rust);
+    background: rgba(160,57,10,0.09);
+    padding: 2px 9px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .card h3 em {
+    font-style: italic;
+    color: var(--sepia);
+  }
+  .card-region {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sepia);
+    opacity: 0.8;
+    margin-left: auto;
+  }
+  .card p {
+    font-size: 0.93rem;
+    line-height: 1.75;
+    color: #3a2e18;
+  }
+  .card p + p { margin-top: 8px; }
+
+  .card-highlight {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: rgba(200,150,12,0.1);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
+    font-size: 0.88rem;
+    font-style: italic;
+    color: var(--sepia);
+    line-height: 1.6;
+  }
+
+  /* ── FEATURED (wide card) ── */
+  .card.featured {
+    background: linear-gradient(135deg, var(--ink) 0%, #2e1f06 100%);
+    border-color: var(--gold);
+    border-left-width: 4px;
+    color: var(--parchment);
+  }
+  .card.featured h3 { color: var(--gold); }
+  .card.featured p  { color: rgba(245,239,216,0.85); }
+  .card.featured .card-date { background: rgba(200,150,12,0.2); color: var(--gold); }
+  .card.featured .card-region { color: rgba(200,150,12,0.6); }
+  .card.featured .card-highlight {
+    background: rgba(200,150,12,0.12);
+    color: var(--aged);
+  }
+  .card.featured::before { background: var(--gold); }
+
+  /* ── CURIOSITIES ── */
+  .curiosities {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-top: 8px;
+  }
+  .curiosity {
+    background: linear-gradient(135deg, #fff9ee, var(--aged));
+    border: 1px solid rgba(139,105,20,0.2);
+    border-top: 3px solid var(--rust);
+    border-radius: 0 0 6px 6px;
+    padding: 20px 18px;
+    box-shadow: 2px 3px 10px var(--shadow);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .curiosity:hover {
+    transform: translateY(-3px);
+    box-shadow: 4px 6px 18px var(--shadow);
+  }
+  .curiosity-icon {
+    font-size: 1.6rem; margin-bottom: 8px;
+    display: block;
+  }
+  .curiosity h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--rust);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+  .curiosity p {
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: #4a3a1e;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink);
+    border-top: 2px solid var(--gold);
+    padding: 28px 20px;
+    text-align: center;
+  }
+  footer p {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.8rem;
+    color: rgba(245,239,216,0.5);
+    letter-spacing: 0.1em;
+  }
+  footer a {
+    color: var(--gold); text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  footer a:hover { opacity: 0.7; }
+
+  /* ── ANIMATION ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card:nth-child(1)  { animation-delay: 0.05s; }
+  .card:nth-child(2)  { animation-delay: 0.10s; }
+  .card:nth-child(3)  { animation-delay: 0.15s; }
+  .card:nth-child(4)  { animation-delay: 0.20s; }
+  .card:nth-child(5)  { animation-delay: 0.25s; }
+  .card:nth-child(6)  { animation-delay: 0.30s; }
+  .card:nth-child(7)  { animation-delay: 0.35s; }
+  .card:nth-child(8)  { animation-delay: 0.40s; }
+  .card:nth-child(9)  { animation-delay: 0.45s; }
+  .card:nth-child(10) { animation-delay: 0.50s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .timeline { padding-left: 24px; }
+    .card { padding: 16px 16px; }
+    .card-header { flex-direction: column; gap: 4px; }
+    .card-region { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="header-inner">
+    <div class="ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-diamond"></div>
+      <div class="ornament-line right"></div>
+    </div>
+    <h1>Matematiğin <span>Tarihi</span></h1>
+    <p class="header-sub">Sayıların, Şekillerin ve Fikirlerin Büyük Yolculuğu</p>
+  </div>
+</header>
+
+<!-- ══ NAV ══ -->
+<nav id="site-nav"><button id="burger" aria-label="Menüyü aç/kapat">☰</button></nav>
+
+<!-- ══ MAIN ══ -->
+<main>
+
+  <!-- GİRİŞ ALINTISI -->
+  <div class="intro">
+    <p class="intro-quote">"Matematik, insan düşüncesinin en güzel ve en güçlü yaratımıdır."</p>
+    <p class="intro-attr">— Stefan Banach</p>
+  </div>
+
+  <!-- BÖLÜM 1: ANTIK ÇAĞLAR -->
+  <div class="section-title">
+    <h2>Antik Çağlar</h2>
+    <div class="section-title-line"></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">MÖ ~3000</span>
+        <h3>Sümer ve Babil: İlk Sayı Sistemleri</h3>
+        <span class="card-region">Mezopotamya</span>
+      </div>
+      <p>Sümerler, insanlık tarihinin bilinen ilk yazılı sayı sistemini geliştirdi. 60 tabanlı <em>(altmışlık)</em> bu sistem; bir saatin 60 dakika, bir dakikanın 60 saniyeden oluşmasının nedenidir. Babil tabletlerinde bugünkü anlamda cebir işlemlerine benzer hesaplamalar bulunmaktadır.</p>
+      <div class="card-highlight">💡 60 sayısının seçilmesinin nedeni: 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30 ve 60 olmak üzere 12 farklı tam böleninin bulunması.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">MÖ ~2700</span>
+        <h3>Mısır: Papirüs Üzerine Geometri</h3>
+        <span class="card-region">Eski Mısır</span>
+      </div>
+      <p>Eski Mısırlılar, Nil'in her yıl taşmasının ardından tarlaları yeniden sınırlandırmak için gelişmiş bir pratik geometri geliştirdi. <em>Rhind Papirüsü</em> (MÖ ~1650), bugün ulaşabildiğimiz en eski matematik ders kitabıdır; kesirler, alan hesapları ve denklemler içerir.</p>
+      <div class="card-highlight">💡 Mısırlılar π sayısını yaklaşık 3,16 olarak hesapladı — gerçek değere yüzyıllar öncesinden inanılmaz bir yaklaşım.</div>
+    </div>
+
+    <div class="card featured">
+      <div class="card-header">
+        <span class="card-date">MÖ ~570 – 495</span>
+        <h3>Pisagor: Sayı Her Şeyin Özüdür</h3>
+        <span class="card-region">Antik Yunan</span>
+      </div>
+      <p>Sakız'da doğan Pisagor, yalnızca geometriyle değil müzik ve felsefe arasındaki matematiksel ilişkiyle de ilgilendi. Kurduğu okul, matematiği sistematik ispat geleneğiyle ele alan ilk düşünce topluluğudur.</p>
+      <p>Adıyla anılan teoremi büyük olasılıkla Babil ve Mısırlılar daha önce biliyordu; Pisagor'un katkısı <em>ispatı</em> ile genel durumu formüle etmesidir.</p>
+      <div class="card-highlight">✦ "Pisagor teoreminin" 370'ten fazla farklı ispatı bulunmaktadır. Bunlar arasında eski bir ABD cumhurbaşkanı olan James Garfield'ın 1876 yılında bulduğu ispat da vardır.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">MÖ ~300</span>
+        <h3>Öklid: Elementler</h3>
+        <span class="card-region">İskenderiye</span>
+      </div>
+      <p>Öklid'in 13 kitaptan oluşan <em>Elementler</em> adlı yapıtı, İncil'den sonra en fazla baskı yapılan kitap olma özelliğini yüzyıllarca korudu. Yalnızca 5 aksiyomdan yola çıkarak yüzlerce teorem inşa eden bu eser, tümdengelimli ispat yönteminin temelini attı.</p>
+      <div class="card-highlight">💡 Öklid'in 5. aksiyomu olan "paralel postülat", binlerce yıl sonra reddedildiğinde hiperbolik ve eliptik geometri gibi yeni matematik dünyaları doğdu.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">MÖ ~287 – 212</span>
+        <h3>Arşimet: Sınırları Zorlayan Deha</h3>
+        <span class="card-region">Siraküza</span>
+      </div>
+      <p>Arşimet, <em>tükenmez yöntem</em> adını verdiği teknikle alanları ve hacimleri hesapladı — bu yaklaşım, 17. yüzyıldaki integralin öncülüdür. π'yi 3 10/71 ile 3 1/7 arasına sıkıştırarak döneminin en kesin tahminine ulaştı.</p>
+      <div class="card-highlight">💡 Roma generali Marcellus, Arşimet'in yaşadığı şehri fethettikten sonra kesinlikle ona dokunulmamasını emretti. Ne var ki bir Roma askeri, kumda geometrik şekiller çizen ve şekilleri bozmamasını söyleyen yaşlı bir adamı öldürdüğünde onun aslında Arşimet olduğunu anlamamıştı.</div>
+    </div>
+
+  </div><!-- /timeline -->
+
+  <!-- BÖLÜM 2: ORTA ÇAĞLAR -->
+  <div class="section-title">
+    <h2>Orta Çağ</h2>
+    <div class="section-title-line"></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="card featured">
+      <div class="card-header">
+        <span class="card-date">MS ~598 – 668</span>
+        <h3>Brahmagupta: Sıfırın Doğuşu</h3>
+        <span class="card-region">Hindistan</span>
+      </div>
+      <p>Hintli matematikçi Brahmagupta, sıfırı yalnızca bir "yokluk" işareti olarak değil, üzerinde aritmetik işlemler yapılabilen tam bir sayı olarak tanımlayan ilk kişidir. Aynı zamanda negatif sayılarla işlem kurallarını da sistematik biçimde ifade etti.</p>
+      <div class="card-highlight">✦ Brahmagupta'nın sıfırla bölme kuralı hatalıydı (0÷0 = 0 dedi); doğru yanıt ancak modern matematikte "tanımsız" olarak netleşti.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">MS ~780 – 850</span>
+        <h3>El-Hârizmî: Cebirin Babası</h3>
+        <span class="card-region">Bağdat, Abbasi İmparatorluğu</span>
+      </div>
+      <p>Muhammed ibn Musa el-Hârizmî'nin yazdığı <em>el-Kitâbü'l-muhtasar fî hisâbi'l-cebr ve'l-mukâbele</em> adlı eser, "cebir" sözcüğünü matematiğe kazandırdı. "Algoritma" sözcüğü ise onun adının Latince okunuşundan (Algoritmi) türemiştir. Sıfır rakamını onluk sayı sistemine kazandırdı.</p>
+      <div class="card-highlight">💡 Batı Avrupa, o dönemde yalnızca Hint ve Arap coğrafyasında kullanılan onluk sayı sistemini büyük ölçüde el-Hârizmî'nin eserleri aracılığıyla öğrendi. Bugün kullandığımız 0–9 rakamları bu köprü sayesinde önce Avrupa'ya, sonra da tüm dünyaya yayıldı.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">MS ~1170 – 1250</span>
+        <h3>Fibonacci: Tavşanlar ve Altın Oran</h3>
+        <span class="card-region">Pisa, İtalya</span>
+      </div>
+      <p>Leonardo Fibonacci, <em>Liber Abaci</em> adlı eseriyle Hint-Arap rakamlarını Avrupa'ya tanıttı. Adıyla özdeşleşen dizi (1, 1, 2, 3, 5, 8, 13…) kitabındaki bir tavşan üreme probleminin çözümünde ortaya çıktı. Dizinin art arda iki terimi arasındaki oran, altın orana (φ ≈ 1.618) yaklaşır.</p>
+      <div class="card-highlight">💡 Fibonacci dizisi; çiçek yapraklarının sayısında, deniz kabuklarının sarmal yapısında ve galaksilerin kollarında karşımıza çıkar.</div>
+    </div>
+
+  </div>
+
+  <!-- BÖLÜM 3: MODERN DÖNEM -->
+  <div class="section-title">
+    <h2>Rönesans'tan Moderne</h2>
+    <div class="section-title-line"></div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">1596 – 1650</span>
+        <h3>Descartes: Koordinat Geometrisi</h3>
+        <span class="card-region">Fransa</span>
+      </div>
+      <p>René Descartes, cebir ile geometriyi tek çatıda birleştirerek <em>analitik geometriyi</em> kurdu. Bir noktayı (x, y) ile ifade etmek artık geometrik şekilleri denklemlerle, denklemleri şekillerle anlatmaya olanak tanıyordu. Bu buluş, Newtoncu fiziğin matematiksel dili oldu.</p>
+      <div class="card-highlight">💡 Efsaneye göre Descartes bu fikre tavandaki bir sineği izlerken ulaştı: "Sineğin konumunu iki sayıyla tam olarak anlatabilirim."</div>
+    </div>
+
+    <div class="card featured">
+      <div class="card-header">
+        <span class="card-date">1643 – 1727</span>
+        <h3>Newton ve Leibniz: Kalkülüsün İki Babası</h3>
+        <span class="card-region">İngiltere / Almanya</span>
+      </div>
+      <p>Isaac Newton ve Gottfried Leibniz, birbirinden bağımsız olarak diferansiyel ve integral hesabını geliştirdi. Tarihte yalnızca "kimin önce bulduğu" tartışmasıyla değil, bilimsel dürüstlük açısından da ders verici bir öncelik kavgasına sahne oldu.</p>
+      <p>Bugün kullandığımız <em>dy/dx</em> notasyonu Leibniz'e, <em>kuvvet serisi</em> açılımları ise Newton'a aittir.</p>
+      <div class="card-highlight">✦ Newton, kalkülüsü 1666'da veba salgını nedeniyle Cambridge'den ayrılıp köye çekildiği süreçte geliştirdi. Tarihte "mucize yıl" (annus mirabilis) olarak geçer.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">1707 – 1783</span>
+        <h3>Euler: Matematiğin En Üretken Dehası</h3>
+        <span class="card-region">İsviçre / Rusya</span>
+      </div>
+      <p>Leonhard Euler, hayatı boyunca 800'den fazla makale ve kitap yayımladı. e, π, i, sin, cos ve Σ notasyonları Euler sayesinde matematiksel dile girdi. Bir gözünü, ardından diğer gözünü kaybetmesine rağmen çalışmalarını sürdürdü.</p>
+      <div class="card-highlight">💡 Euler'in kimliği: e<sup>iπ</sup> + 1 = 0 — beş temel matematiksel sabiti tek denklemde buluşturur. Matematik tarihinin en zarif formülü sayılır.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">1815 – 1852</span>
+        <h3>Ada Lovelace: İlk Programcı</h3>
+        <span class="card-region">İngiltere</span>
+      </div>
+      <p>Ada Lovelace, Charles Babbage'ın tasarladığı mekanik "Analitik Motor" için yazdığı algoritmalar nedeniyle <em>ilk bilgisayar programcısı</em> sayılır. Makinenin yalnızca hesap değil, müzik besteleme ve sembolik işlem yapabileceğini de öngördü — tüm bunlar 1840'larda.</p>
+      <div class="card-highlight">💡 ABD Savunma Bakanlığı tarafından geliştirilen Ada programlama dili, onun adını taşır.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <span class="card-date">1887 – 1920</span>
+        <h3>Ramanujan: Sayıların Şairi</h3>
+        <span class="card-region">Hindistan / İngiltere</span>
+      </div>
+      <p>Srinivasa Ramanujan, neredeyse hiç formel eğitim almadan, sezgisel yollarla olağanüstü matematiksel sonuçlara ulaştı. Cambridge'li G.H. Hardy'nin dikkatini çeken mektuplar, onu İngiltere'ye taşıdı. 32 yılına sığdırdığı yaşamda yaklaşık 3.900 özgün sonuç bıraktı.</p>
+      <div class="card-highlight">💡 Hardy'nin 1729 numaralı taksiyle hastaneye gittiğini söylemesi üzerine Ramanujan şöyle yanıt verdi: "İlginç bir sayı. Hem iki küpün toplamı olarak iki farklı şekilde ifade edilebilen en küçük sayı."</div>
+    </div>
+
+  </div>
+
+  
+</main>
+
+<!-- ══ FOOTER ══ -->
+<footer><p>Tekin CANITEZ — Matematik Öğretmeni</p></footer>
+
+<button id="back-to-top" title="Başa dön">↑</button>
+<script src="menu.js"></script>
+<script>
+  const btn=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>

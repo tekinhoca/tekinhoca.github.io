@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tekin Hoca — Matematik ve Zekâ Oyunları</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+:root{--ink:#12100e;--cream:#f7f2e8;--aged:#ece4cc;--sepia:#7a5c1e;--gold:#c8960c;--rust:#9b3510;--muted:#5a4a30;--shadow:rgba(18,16,14,0.18);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");color:var(--ink);font-family:'Source Serif 4',Georgia,serif;min-height:100vh;}
+header{background:var(--ink);position:relative;overflow:hidden;}
+header::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 10px,rgba(200,150,12,0.04) 10px,rgba(200,150,12,0.04) 11px);pointer-events:none;}
+.header-inner{max-width:960px;margin:0 auto;padding:52px 24px 44px;text-align:center;position:relative;z-index:1;}
+.logo-band{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
+.logo-line{flex:1;max-width:140px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+.logo-line.r{background:linear-gradient(90deg,var(--gold),transparent);}
+.logo-diamond{width:9px;height:9px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;color:var(--cream);letter-spacing:0.04em;line-height:1.15;}
+h1 span{color:var(--gold);font-style:italic;}
+.header-sub{margin-top:12px;font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,242,232,0.5);}
+nav{background:var(--rust);border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,0.3);}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;}
+nav a{font-family:'Source Serif 4',serif;font-size:0.75rem;font-weight:600;letter-spacing:0.13em;text-transform:uppercase;color:var(--cream);text-decoration:none;padding:13px 16px;transition:background 0.2s,color 0.2s;position:relative;}
+nav a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--gold);transition:left 0.2s,right 0.2s;}
+nav a:hover{background:rgba(200,150,12,0.2);color:var(--gold);}
+nav a:hover::after{left:12%;right:12%;}
+nav a.active{background:rgba(200,150,12,0.28);color:var(--gold);}
+main{max-width:960px;margin:0 auto;padding:52px 20px 72px;}
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.sec-title h2{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--rust);white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--rust),transparent);}
+
+/* KATEGORİ ETİKETİ */
+.category-tag{display:inline-block;font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(200,150,12,0.35);padding:3px 10px;border-radius:2px;margin-bottom:20px;}
+
+/* OYUN GRID */
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin-bottom:44px;}
+.game-card{background:linear-gradient(145deg,#fff9ee,var(--aged));border:1px solid rgba(122,92,30,0.2);border-top:3px solid var(--gold);border-radius:0 0 6px 6px;padding:22px 20px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:8px;box-shadow:2px 3px 10px var(--shadow);transition:transform 0.2s,box-shadow 0.2s,border-top-color 0.2s;animation:fadeUp 0.5s ease both;}
+.game-card:hover{transform:translateY(-5px);box-shadow:5px 9px 22px var(--shadow);border-top-color:var(--rust);}
+.game-card-top{display:flex;align-items:center;gap:12px;}
+.game-icon{font-size:1.8rem;flex-shrink:0;}
+.game-card h3{font-family:'Playfair Display',serif;font-size:0.97rem;font-weight:700;color:var(--rust);line-height:1.3;}
+.game-card p{font-size:0.82rem;color:var(--muted);line-height:1.6;flex:1;}
+.game-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px;}
+.game-level{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--sepia);opacity:0.8;}
+.game-arrow{font-size:0.8rem;color:var(--gold);opacity:0.7;}
+
+/* ESKİ OYUNLAR */
+.legacy-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-bottom:16px;}
+.legacy-card{background:#fff9ee;border:1px solid rgba(122,92,30,0.15);border-left:3px solid var(--sepia);border-radius:0 4px 4px 0;padding:14px 16px;animation:fadeUp 0.5s ease both;}
+.legacy-card h4{font-family:'Playfair Display',serif;font-size:0.88rem;font-weight:700;color:var(--muted);margin-bottom:4px;}
+.legacy-card p{font-size:0.78rem;color:#8a7050;line-height:1.5;}
+.legacy-note{font-size:0.8rem;color:var(--rust);background:rgba(155,53,16,0.07);border:1px solid rgba(155,53,16,0.2);border-radius:4px;padding:12px 16px;margin-bottom:28px;line-height:1.65;}
+
+/* GEOGEBRa ÖZEL KART */
+.featured-card{background:linear-gradient(135deg,var(--ink) 0%,#241a08 100%);border:1px solid var(--gold);border-radius:4px;padding:28px 28px 24px;margin-bottom:32px;display:flex;gap:24px;align-items:flex-start;animation:fadeUp 0.5s ease both;}
+.featured-card-icon{font-size:2.5rem;flex-shrink:0;margin-top:4px;}
+.featured-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--gold);margin-bottom:8px;}
+.featured-card p{font-size:0.88rem;color:rgba(247,242,232,0.75);line-height:1.75;margin-bottom:12px;}
+.featured-btn{display:inline-block;background:var(--gold);color:var(--ink);font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;padding:8px 20px;border-radius:2px;text-decoration:none;transition:background 0.2s;}
+.featured-btn:hover{background:#e0ab14;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.game-card:nth-child(1){animation-delay:0.05s;}.game-card:nth-child(2){animation-delay:0.10s;}.game-card:nth-child(3){animation-delay:0.15s;}.game-card:nth-child(4){animation-delay:0.20s;}.game-card:nth-child(5){animation-delay:0.25s;}.game-card:nth-child(6){animation-delay:0.30s;}.game-card:nth-child(7){animation-delay:0.35s;}.game-card:nth-child(8){animation-delay:0.40s;}
+footer{background:var(--ink);border-top:2px solid var(--gold);padding:24px 20px;text-align:center;}
+footer p{font-size:0.76rem;color:rgba(247,242,232,0.4);letter-spacing:0.08em;line-height:1.8;}
+footer a{color:rgba(200,150,12,0.7);text-decoration:none;}
+footer a:hover{color:var(--gold);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-band">
+      <div class="logo-line"></div>
+      <div class="logo-diamond"></div>
+      <div class="logo-line r"></div>
+    </div>
+    <h1>Matematik ve <span>Zekâ Oyunları</span></h1>
+    <p class="header-sub">Düşün · Keşfet · Çöz</p>
+  </div>
+</header>
+
+<nav id="site-nav"><button id="burger" aria-label="Menüyü aç/kapat">☰</button></nav>
+
+<main>
+
+  <!-- GEOGEBRa ÖNE ÇIKAN -->
+  <div class="featured-card">
+    <div class="featured-card-icon">📐</div>
+    <div>
+      <h3>GeoGebra — İnteraktif Matematik</h3>
+      <p>Geometri çiz, fonksiyon grafiği oluştur, cebirsel işlemleri görselleştir. Tarayıcıda, ücretsiz, kurulum gerektirmez. İlköğretimden liseye her seviyeye uygun etkinlikler içerir.</p>
+      <a class="featured-btn" href="https://www.geogebra.org/classic" target="_blank" rel="noopener">GeoGebra'yı Aç →</a>
+    </div>
+  </div>
+
+  <!-- MATEMATİK OYUNLARI -->
+  <div class="sec-title">
+    <h2>Matematik Oyunları</h2>
+    <div class="sec-line"></div>
+  </div>
+  <span class="category-tag">Sayı · Hesaplama · Strateji</span>
+
+  <div class="games-grid">
+    <a class="game-card" href="https://www.mathplayground.com/number-puzzles.html" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">🔢</span>
+        <h3>Sayı Bulmacaları</h3>
+      </div>
+      <p>Sayılarla düşünme ve hızlı hesaplama becerisi gerektiren bulmacalar. Her seviyede onlarca oyun.</p>
+      <div class="game-card-footer"><span class="game-level">Her seviye</span><span class="game-arrow">›</span></div>
+    </a>
+    <a class="game-card" href="https://www.nrich.maths.org/students/primaryandlower" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">🎓</span>
+        <h3>NRICH Matematik</h3>
+      </div>
+      <p>Cambridge Üniversitesi destekli zengin matematik etkinlikleri. Gerçek problem çözme deneyimi.</p>
+      <div class="game-card-footer"><span class="game-level">Orta · İleri</span><span class="game-arrow">›</span></div>
+    </a>
+    <a class="game-card" href="https://www.mathplayground.com/logic-games.html" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">♟️</span>
+        <h3>Strateji ve Mantık</h3>
+      </div>
+      <p>Hamle planlamayı, öngörmeyi ve sistematik düşünmeyi geliştiren strateji oyunları.</p>
+      <div class="game-card-footer"><span class="game-level">Orta</span><span class="game-arrow">›</span></div>
+    </a>
+    <a class="game-card" href="https://www.cut-the-knot.org/games.shtml" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">✂️</span>
+        <h3>Cut the Knot</h3>
+      </div>
+      <p>Matematiksel ispatlar, paradokslar ve interaktif bulmacalar. Matematik meraklısı öğrenciler için.</p>
+      <div class="game-card-footer"><span class="game-level">İleri</span><span class="game-arrow">›</span></div>
+    </a>
+  </div>
+
+  <!-- ZEKÂ OYUNLARI -->
+  <div class="sec-title">
+    <h2>Zekâ Oyunları</h2>
+    <div class="sec-line"></div>
+  </div>
+  <span class="category-tag">Mantık · Uzamsal · Hafıza</span>
+
+  <div class="games-grid">
+    <a class="game-card" href="https://www.puzzle.org/sudoku" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">🔲</span>
+        <h3>Sudoku</h3>
+      </div>
+      <p>Kolay'dan Uzman'a dört zorluk seviyesi. Ipucu, kontrol ve zamanlayıcı özellikleriyle tam Sudoku deneyimi.</p>
+      <div class="game-card-footer"><span class="game-level">Kolay → Uzman</span><span class="game-arrow">›</span></div>
+    </a>
+    <a class="game-card" href="https://www.brainzilla.com/logic/logic-grid/" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">🧩</span>
+        <h3>Mantık Izgarası</h3>
+      </div>
+      <p>İpuçlarından yola çıkarak kim, ne, nerede sorularını yanıtlayan çıkarım bulmacaları.</p>
+      <div class="game-card-footer"><span class="game-level">Orta · İleri</span><span class="game-arrow">›</span></div>
+    </a>
+    <a class="game-card" href="https://www.mathplayground.com/tower_of_hanoi.html" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">🗼</span>
+        <h3>Hanoi Kulesi</h3>
+      </div>
+      <p>Halkaları en az hamleyle taşıyın. Özyinelemeli düşünme ve algoritma mantığını geliştiren klasik bulmaca.</p>
+      <div class="game-card-footer"><span class="game-level">Her seviye</span><span class="game-arrow">›</span></div>
+    </a>
+    <a class="game-card" href="https://www.brainzilla.com/math/kakuro/" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">➕</span>
+        <h3>Kakuro</h3>
+      </div>
+      <p>Çapraz bulmaca ile Sudoku'nun birleşimi. Hem toplama hem de mantık becerisi gerektiren sayı bulmacası.</p>
+      <div class="game-card-footer"><span class="game-level">Orta</span><span class="game-arrow">›</span></div>
+    </a>
+    <a class="game-card" href="https://www.puzzle.org/nonogram" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">🖼️</span>
+        <h3>Nonogram (Picross)</h3>
+      </div>
+      <p>Satır ve sütun ipuçlarını kullanarak gizli resmi ortaya çıkarın. Mantık ve sabır gerektiren piksel bulmacası.</p>
+      <div class="game-card-footer"><span class="game-level">Her seviye</span><span class="game-arrow">›</span></div>
+    </a>
+    <a class="game-card" href="https://www.mathplayground.com/brain-teasers.html" target="_blank" rel="noopener">
+      <div class="game-card-top">
+        <span class="game-icon">🧠</span>
+        <h3>Beyin Jimnastiği</h3>
+      </div>
+      <p>Alışılmışın dışında düşünmeyi zorlayan kısa bulmacalar ve yaratıcı problem çözme egzersizleri.</p>
+      <div class="game-card-footer"><span class="game-level">Her seviye</span><span class="game-arrow">›</span></div>
+    </a>
+  </div>
+
+  <!-- ESKİ OYUNLAR ARŞIV -->
+  <div class="sec-title">
+    <h2>Eski Sitedeki Oyunlar (Arşiv)</h2>
+    <div class="sec-line"></div>
+  </div>
+  <p class="legacy-note">⚠️ Aşağıdaki oyunlar Flash teknolojisine dayanıyordu. Adobe Flash, Aralık 2020'de tüm tarayıcılardan kaldırıldığı için bu oyunlar artık çalışmamaktadır. Arşiv amacıyla listelenmiştir.</p>
+  <div class="legacy-grid">
+    <div class="legacy-card"><h4>Hızlı Matematik</h4><p>Verilen işlemdeki boşluğu bulma oyunu.</p></div>
+    <div class="legacy-card"><h4>Hesaplama Oyunu</h4><p>İşlem sonucunu seçenekler arasından bulma.</p></div>
+    <div class="legacy-card"><h4>İşlemi Yap Cevabı Bul</h4><p>Sonucu tabloda gizli sayılar arasında bulma.</p></div>
+    <div class="legacy-card"><h4>Küpleri Say</h4><p>Dökülen küplerin sayısını tahmin etme.</p></div>
+    <div class="legacy-card"><h4>3D Reversi</h4><p>Taşları rakibin taşlarının arasına alma stratejisi.</p></div>
+    <div class="legacy-card"><h4>Math Lines</h4><p>Toplamı 10 olan topları eşleştirme oyunu.</p></div>
+    <div class="legacy-card"><h4>Sayı Eşleştirme</h4><p>Toplamı 10 olan sayıları çizgiyle bağlama.</p></div>
+    <div class="legacy-card"><h4>Sürahiler</h4><p>5 ve 7 litrelik sürahiyle 6 litre elde etme.</p></div>
+  </div>
+
+</main>
+
+<footer><p>Tekin CANITEZ — Matematik Öğretmeni</p></footer>
+
+<button id="back-to-top" title="Başa dön">↑</button>
+<script src="menu.js"></script>
+<script>
+  const btn=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>

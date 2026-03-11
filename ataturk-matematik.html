@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tekin Hoca — Atatürk ve Matematik</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<style>
+:root {
+  --ink:#12100e; --cream:#f7f2e8; --aged:#ece4cc;
+  --sepia:#7a5c1e; --gold:#c8960c; --rust:#9b3510;
+  --muted:#5a4a30; --shadow:rgba(18,16,14,0.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");color:var(--ink);font-family:'Source Serif 4',Georgia,serif;min-height:100vh;}
+header{background:var(--ink);position:relative;overflow:hidden;}
+header::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 10px,rgba(200,150,12,0.04) 10px,rgba(200,150,12,0.04) 11px);pointer-events:none;}
+.header-inner{max-width:960px;margin:0 auto;padding:52px 24px 44px;text-align:center;position:relative;z-index:1;}
+.logo-band{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
+.logo-line{flex:1;max-width:140px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+.logo-line.r{background:linear-gradient(90deg,var(--gold),transparent);}
+.logo-diamond{width:9px;height:9px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;color:var(--cream);letter-spacing:0.04em;line-height:1.15;}
+h1 span{color:var(--gold);font-style:italic;}
+.header-sub{margin-top:12px;font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,242,232,0.5);}
+nav{background:var(--rust);border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,0.3);}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;}
+nav a{font-family:'Source Serif 4',serif;font-size:0.75rem;font-weight:600;letter-spacing:0.13em;text-transform:uppercase;color:var(--cream);text-decoration:none;padding:13px 16px;transition:background 0.2s,color 0.2s;position:relative;}
+nav a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--gold);transition:left 0.2s,right 0.2s;}
+nav a:hover{background:rgba(200,150,12,0.2);color:var(--gold);}
+nav a:hover::after{left:12%;right:12%;}
+nav a.active{background:rgba(200,150,12,0.28);color:var(--gold);}
+main{max-width:860px;margin:0 auto;padding:52px 20px 72px;}
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.sec-title h2{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--rust);white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--rust),transparent);}
+.prose{font-size:0.95rem;line-height:1.85;color:#2e2210;margin-bottom:28px;}
+.prose p{margin-bottom:16px;}
+.prose p:last-child{margin-bottom:0;}
+.highlight-box{background:linear-gradient(135deg,var(--ink) 0%,#241a08 100%);border:1px solid var(--gold);border-radius:4px;padding:28px 32px;margin:36px 0;position:relative;overflow:hidden;animation:fadeUp 0.5s ease both;}
+.highlight-box::before{content:'★';position:absolute;right:20px;top:12px;font-size:5rem;color:rgba(200,150,12,0.06);line-height:1;}
+.highlight-box h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--gold);margin-bottom:14px;font-style:italic;}
+.highlight-box p{font-size:0.9rem;color:rgba(247,242,232,0.78);line-height:1.8;}
+
+/* TERİM TABLOSU */
+.term-section{margin-top:40px;animation:fadeUp 0.6s ease both;}
+.term-intro{font-size:0.9rem;color:var(--muted);line-height:1.7;margin-bottom:20px;padding:14px 18px;background:rgba(200,150,12,0.08);border-left:3px solid var(--gold);border-radius:0 4px 4px 0;}
+.term-table-wrap{overflow-x:auto;border-radius:4px;box-shadow:2px 3px 12px var(--shadow);}
+table{width:100%;border-collapse:collapse;font-size:0.85rem;}
+thead tr{background:var(--ink);}
+thead th{padding:12px 18px;text-align:left;font-family:'Playfair Display',serif;font-weight:700;letter-spacing:0.08em;color:var(--gold);font-size:0.82rem;text-transform:uppercase;}
+tbody tr{border-bottom:1px solid rgba(122,92,30,0.15);transition:background 0.15s;}
+tbody tr:nth-child(even){background:rgba(236,228,204,0.5);}
+tbody tr:nth-child(odd){background:#fff9ee;}
+tbody tr:hover{background:rgba(200,150,12,0.1);}
+td{padding:10px 18px;color:var(--ink);line-height:1.5;}
+td:first-child{color:var(--muted);font-style:italic;}
+td:last-child{font-weight:600;color:var(--rust);}
+.source-note{margin-top:14px;font-size:0.75rem;color:var(--muted);letter-spacing:0.05em;}
+.source-note a{color:var(--sepia);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+footer{background:var(--ink);border-top:2px solid var(--gold);padding:24px 20px;text-align:center;}
+footer p{font-size:0.76rem;color:rgba(247,242,232,0.4);letter-spacing:0.08em;line-height:1.8;}
+footer a{color:rgba(200,150,12,0.7);text-decoration:none;}
+footer a:hover{color:var(--gold);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-band">
+      <div class="logo-line"></div>
+      <div class="logo-diamond"></div>
+      <div class="logo-line r"></div>
+    </div>
+    <h1>Atatürk ve <span>Matematik</span></h1>
+    <p class="header-sub">Geometri Terimleri · Eğitim Reformu · Dil Devrimi</p>
+  </div>
+</header>
+
+<nav id="site-nav"><button id="burger" aria-label="Menüyü aç/kapat">☰</button></nav>
+
+<main>
+    <div class="quote-box" style="animation:fadeUp 0.4s ease both;margin-bottom:36px;">
+      <p class="quote-text">"Hayatta en hakiki mürşit ilimdir."</p>
+      <p class="quote-attr">Mustafa Kemal ATATÜRK</p>
+    </div>
+
+
+  <div class="sec-title">
+    <h2>Atatürk ve Geometri Çalışmaları</h2>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="prose" style="animation:fadeUp 0.5s ease both;">
+    <p>Mustafa Kemal, Selanik Askeri Rüştiyesi'ndeyken matematik öğretmeni Yüzbaşı Mustafa Efendi sınıfa gelmediğinde, onun yerine birçok kez bu dersi vermiştir.</p>
+    <p>Asker ocağından gelen Atatürk, aynı zamanda büyük bir eğitimci de olup yurdun kültür sorunlarıyla da fazlasıyla ilgilenmiştir. Geometri, eski terimle Hendese, eğitim sistemimizde önemli bir yer tuttuğu halde terimleri çok ağdalı ve çapraşıktı. Arapça ve Farsça okul programından kaldırılmış, fakat Arapça üzerine kurulmuş olan terimler kalmıştı.</p>
+    <p>Türk Dil Kurumu başuzmanı olan ve kendisine Mustafa Kemal tarafından <em>Dilaçar</em> soyadı verilen Agop Dilaçar'a göre; Atatürk Geometri kitabını, ölümünden bir buçuk yıl kadar önce, 1936–1937 yılı kış aylarında, Dolmabahçe Sarayı'nda kendi elleriyle yazmıştır. Bu kitabın hazırlık ve yazım aşamalarında Avrupa baskısı güncel matematik kitaplarından yararlanmıştır.</p>
+  </div>
+
+  <div class="highlight-box">
+    <h3>"Müselles-i mütesaviyül adla" ne demek?</h3>
+    <p>Atatürk, öğrencinin anlayış yolundaki tıkanıklığı açmak için bu terimi <strong style="color:var(--gold)">eşkenar üçgen</strong>'e çevirdi. Bu 44 sayfalık küçük kitapta boyut, uzay, yüzey, düzey, çap, yarıçap, kesek, kesit, yay, çember, teğet, açı, açıortay, içters açı, dışters açı, taban, eğik, kırık, çekül, yatay, düşey, dikey, yöndeş, konum, üçgen, dörtgen, beşgen, köşegen, eşkenar, ikizkenar, paralelkenar, yanal, yamuk, artı, eksi, çarpı, bölü, eşit, toplam, oran, orantı, türev, alan, varsayı, gerekçe gibi terimler hep bu amaçla Atatürk tarafından türetilip Türkçeye yerleşmiştir.</p>
+  </div>
+
+  <div class="prose">
+    <p>Atatürk eleştirileri daima memnunlukla karşılamış ve ortaya koyduğu yeni sözcük ve terimlere bir deneme hakkı tanıdığını belirtmiştir. Amacı daima daha uyguna doğru ilerlemek olmuş, önerilen değişiklikleri akla uygun görünce hemen benimsemiştir.</p>
+    <p>Atatürk'ün ortaya koyduğu terimlerden birkaçı bugün kullanılıştan çıkmış, yerlerini daha uygunlarına bırakmışlardır. <em>Tümey açı</em> yerine <em>tümler açı</em>, <em>bütey açı</em> yerine <em>bütünler açı</em> bunlara örnektir. Mustafa Kemal ilke insanı olduğu için bunları hoş görmüş, hatta sevinmiştir de. Yeter ki ortaya koyduğu ilkeler sarsılmasın ve yine <em>"zaviyetan-ı mütekabiletan-ı dahiletan"</em> (içters açılar) gibi terimlere dönülmesin.</p>
+    <p>Bu kitap ilk kez 1937 yılında, Geometri öğretenlere ve bu konuda bilgi isteyenlere kılavuz olarak Kültür Bakanlığı'nca yayınlanmıştır.</p>
+  </div>
+
+  <!-- TERİM TABLOSU -->
+  <div class="term-section">
+    <div class="sec-title">
+      <h2>Atatürk'ün Getirdiği Geometri Terimleri</h2>
+      <div class="sec-line"></div>
+    </div>
+    <p class="term-intro">Aşağıdaki tablo, Atatürk'ün 1937 tarihli Geometri kitabında Osmanlıca terimler yerine Türkçeye kazandırdığı karşılıkları göstermektedir.</p>
+    <div class="term-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Osmanlıca (Eskisi)</th>
+            <th>Türkçe (Yenisi)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Maksumunaleyh</td><td>Bölen</td></tr>
+          <tr><td>Taksim</td><td>Bölme</td></tr>
+          <tr><td>Haric-i Kısmet</td><td>Bölüm</td></tr>
+          <tr><td>Kabiliyet-i Taksim</td><td>Bölünebilme</td></tr>
+          <tr><td>Zarb</td><td>Çarpı</td></tr>
+          <tr><td>Mazrup</td><td>Çarpan</td></tr>
+          <tr><td>Mazrubata Tefrik</td><td>Çarpanlara Ayırma</td></tr>
+          <tr><td>Muhit-i Daire</td><td>Çember</td></tr>
+          <tr><td>Tarh</td><td>Çıkarma</td></tr>
+          <tr><td>Amudi</td><td>Dikey</td></tr>
+          <tr><td>Gaye</td><td>Limit</td></tr>
+          <tr><td>Aşar'i</td><td>Ondalık</td></tr>
+          <tr><td>Kat'ı Mükafti</td><td>Parabol</td></tr>
+          <tr><td>Ehram</td><td>Piramit</td></tr>
+          <tr><td>Menşur</td><td>Prizma</td></tr>
+          <tr><td>İhtisar</td><td>Sadeleştirme</td></tr>
+          <tr><td>Suret</td><td>Pay</td></tr>
+          <tr><td>Mahrec</td><td>Payda</td></tr>
+          <tr><td>Hatt-ı Mübas</td><td>Teğet</td></tr>
+          <tr><td>Bu'ud</td><td>Boyut</td></tr>
+          <tr><td>Mekan</td><td>Uzay</td></tr>
+          <tr><td>Satıh</td><td>Yüzey</td></tr>
+          <tr><td>Kutur</td><td>Çap</td></tr>
+          <tr><td>Nısf-ı Kutur</td><td>Yarıçap</td></tr>
+          <tr><td>Kavis</td><td>Yay</td></tr>
+          <tr><td>Mümâs</td><td>Teğet</td></tr>
+          <tr><td>Zâviye</td><td>Açı</td></tr>
+          <tr><td>Re'sen Mütekabil Zâviyetân</td><td>Ters Açılar</td></tr>
+          <tr><td>Zâviyetan-ı Mütabâdiletân-ı Dâhiletan</td><td>İç Ters Açılar</td></tr>
+          <tr><td>Kaaide</td><td>Taban</td></tr>
+          <tr><td>Ufkî</td><td>Yatay</td></tr>
+          <tr><td>Şâkulî</td><td>Düşey</td></tr>
+          <tr><td>Amûd</td><td>Dikey</td></tr>
+          <tr><td>Zâviyetân-ı Mütevâfıkatân</td><td>Yöndeş Açılar</td></tr>
+          <tr><td>Va'zîyet</td><td>Konum</td></tr>
+          <tr><td>Mustatîl</td><td>Dikdörtgen</td></tr>
+          <tr><td>Muhammes</td><td>Beşgen</td></tr>
+          <tr><td>Müselles-i Mütesâviyü'l-adlâ</td><td>Eşkenar Üçgen</td></tr>
+          <tr><td>Müselles-i Mütesâviyü's-sâkeyn</td><td>İkizkenar Üçgen</td></tr>
+          <tr><td>Şibh-i Münharif</td><td>Yamuk</td></tr>
+          <tr><td>Mecmû</td><td>Toplam</td></tr>
+          <tr><td>Nisbet</td><td>Oran</td></tr>
+          <tr><td>Tenasüb</td><td>Orantı</td></tr>
+          <tr><td>Mesâha-i Sathiyye</td><td>Alan</td></tr>
+          <tr><td>Müştak</td><td>Türev</td></tr>
+          <tr><td>Müsavi</td><td>Eşit</td></tr>
+          <tr><td>Mahrut</td><td>Koni</td></tr>
+          <tr><td>Faraziye</td><td>Varsayı</td></tr>
+          <tr><td>Hat</td><td>Çizgi</td></tr>
+          <tr><td>Mukavves</td><td>Eğri</td></tr>
+          <tr><td>Seviye</td><td>Düzey</td></tr>
+          <tr><td>Dılı</td><td>Kenar</td></tr>
+          <tr><td>Muvazi</td><td>Paralel / Koşut</td></tr>
+          <tr><td>Hattı Mail</td><td>Eğik</td></tr>
+          <tr><td>Veter</td><td>Kiriş</td></tr>
+          <tr><td>Re's</td><td>Köşe</td></tr>
+          <tr><td>Zaviyei Hadde</td><td>Dar Açı</td></tr>
+          <tr><td>Hattı Munassıf</td><td>Açıortay</td></tr>
+          <tr><td>Muhit</td><td>Çevre</td></tr>
+          <tr><td>Kaim Zaviyeli Müselles</td><td>Dik Üçgen</td></tr>
+          <tr><td>Tamamlıyan Zaviye</td><td>Tümler Açı</td></tr>
+          <tr><td>Murabba</td><td>Kare</td></tr>
+          <tr><td>Küre</td><td>Küre</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="source-note">Kaynak: baskent.edu.tr</p>
+  </div>
+
+</main>
+
+<footer><p>Tekin CANITEZ — Matematik Öğretmeni</p></footer>
+
+<button id="back-to-top" title="Başa dön">↑</button>
+<script src="menu.js"></script>
+<script>
+  const btn=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
