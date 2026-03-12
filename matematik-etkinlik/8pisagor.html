@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pisagor Teoremi – 8. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f4ff; --card:#fff; --primary:#4361ee; --primary-light:#eef0fd;
+  --accent:#f72585; --accent2:#4cc9f0; --success:#06d6a0; --warn:#ffd166;
+  --text:#1a1a2e; --muted:#6b7280; --border:#e0e7ff;
+  --shadow:0 4px 24px rgba(67,97,238,.10); --radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px;}
+header{
+  background:radial-gradient(ellipse at center,#000 0%,#000 35%,#5a0000 70%,#cc0000 100%);
+  color:white;padding:28px 24px 52px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 8px 40px rgba(180,0,0,.45),0 0 0 1px rgba(200,0,0,.25);
+}
+header .badge{
+  display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,80,80,.3);
+  border-radius:50px;padding:3px 14px;font-size:.78rem;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:10px;color:#ffaaaa;position:relative;z-index:1;
+}
+header img.logo{height:90px;object-fit:contain;display:block;margin:8px auto 0;position:relative;z-index:1;}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:800;color:#fff0f0;position:relative;z-index:1;text-shadow:0 0 24px rgba(255,60,60,.3);margin-top:6px;}
+header p{font-size:.93rem;color:rgba(255,220,220,.65);margin-top:4px;position:relative;z-index:1;}
+.tab-bar{display:flex;justify-content:center;gap:8px;margin:-22px auto 0;position:relative;z-index:10;padding:0 12px;flex-wrap:wrap;}
+.tab-btn{background:white;border:none;border-radius:50px;padding:9px 14px;font-family:'Nunito',sans-serif;font-size:clamp(.75rem,2.5vw,.9rem);font-weight:700;color:var(--muted);cursor:pointer;box-shadow:0 2px 12px rgba(67,97,238,.13);transition:all .22s;white-space:nowrap;}
+.tab-btn.active,.tab-btn:hover{background:var(--primary);color:white;box-shadow:0 4px 18px rgba(67,97,238,.28);transform:translateY(-2px);}
+.main{max-width:820px;margin:32px auto 0;padding:0 12px;}
+.section{display:none;}
+.section.active{display:block;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(14px,4vw,26px);margin-bottom:20px;border:1.5px solid var(--border);}
+.card-title{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:700;color:var(--primary);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title .icon{background:var(--primary-light);width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.def-box{background:linear-gradient(135deg,#eef0fd 0%,#f3e8ff 100%);border-left:4px solid var(--primary);border-radius:12px;padding:14px 16px;margin:12px 0;font-size:.95rem;line-height:1.7;}
+.def-box strong{color:var(--primary);}
+.rule-box{background:linear-gradient(90deg,#fff0f9 0%,#fce7f3 100%);border:2px solid var(--accent);border-radius:14px;padding:13px 16px;margin:13px 0;}
+.rule-box .rule-title{color:var(--accent);font-weight:800;font-size:.91rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-box p{font-size:.91rem;line-height:1.65;}
+.resp-table{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.89rem;}
+th{padding:10px 12px;text-align:left;background:var(--primary-light);}
+th:first-child{border-radius:8px 0 0 8px;}th:last-child{border-radius:0 8px 8px 0;}
+td{padding:10px 12px;border-bottom:1px solid var(--border);}
+.example-card{background:white;border-radius:16px;border:1.5px solid var(--border);overflow:hidden;margin-bottom:16px;box-shadow:0 2px 12px rgba(67,97,238,.07);}
+.ex-header{background:linear-gradient(90deg,var(--primary-light) 0%,#f3e8ff 100%);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ex-num{background:var(--primary);color:white;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.83rem;white-space:nowrap;}
+.ex-q{font-weight:700;font-size:.97rem;color:var(--text);font-family:'Baloo 2',cursive;}
+.ex-body{padding:14px 16px;}
+.ex-step{display:flex;gap:10px;margin-bottom:10px;font-size:.91rem;align-items:flex-start;}
+.ex-step .num{color:var(--primary);font-weight:800;min-width:20px;}
+.ex-result{background:linear-gradient(90deg,#e8f8f2 0%,#f0fdf9 100%);border:1.5px solid var(--success);border-radius:10px;padding:10px 14px;font-weight:700;color:#065f46;margin-top:12px;font-size:.93rem;}
+.toggle-sol{background:var(--primary-light);border:1.5px solid var(--border);color:var(--primary);border-radius:50px;padding:7px 18px;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;margin-top:10px;transition:all .18s;}
+.toggle-sol:hover{background:var(--primary);color:white;}
+.ex-solution{display:none;margin-top:14px;}
+.ex-solution.open{display:block;animation:fadeIn .3s ease;}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.summary-grid{grid-template-columns:1fr;}}
+.sum-item{background:var(--primary-light);border-radius:14px;padding:13px;border:1.5px solid var(--border);}
+.sum-item .sum-icon{font-size:1.4rem;margin-bottom:6px;}
+.sum-item h4{font-size:.86rem;color:var(--primary);font-weight:800;margin-bottom:5px;}
+.sum-item p{font-size:.83rem;color:var(--muted);line-height:1.6;}
+.tip-box{background:linear-gradient(135deg,#fff8e1 0%,#fffde7 100%);border:2px solid var(--warn);border-radius:14px;padding:14px 16px;margin-top:16px;display:flex;gap:12px;align-items:flex-start;}
+.tip-box .tip-icon{font-size:1.4rem;flex-shrink:0;}
+.tip-box p{font-size:.89rem;line-height:1.65;color:#6b4c00;}
+.interactive-panel{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-radius:var(--radius);padding:clamp(14px,4vw,26px);color:white;margin-bottom:20px;}
+.score-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.07);border-radius:12px;padding:10px 16px;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.score-label{font-size:.83rem;color:#aaa;}
+.score-value{font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;color:var(--warn);}
+.q-progress{font-size:.83rem;color:#aaa;}
+.q-display{background:rgba(255,255,255,.06);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center;}
+.q-display .q-text{font-family:'Baloo 2',cursive;font-size:clamp(1rem,4vw,1.45rem);font-weight:700;color:var(--accent2);margin-bottom:6px;}
+.q-display .q-sub{font-size:.83rem;color:#aaa;}
+.choice-btn{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:50px;color:white;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;padding:7px 18px;cursor:pointer;transition:all .2s;}
+.choice-btn:hover{background:rgba(255,255,255,.15);}
+.choice-btn.correct-btn{background:var(--success);border-color:var(--success);}
+.choice-btn.wrong-btn{background:#ef4444;border-color:#ef4444;}
+.feedback-box{border-radius:12px;padding:13px 16px;margin-top:13px;font-weight:700;font-size:.97rem;text-align:center;display:none;}
+.feedback-box.visible{display:block;animation:fadeIn .3s ease;}
+.feedback-box.fb-ok{background:rgba(6,214,160,.15);border:1.5px solid var(--success);color:var(--success);}
+.feedback-box.fb-err{background:rgba(239,68,68,.15);border:1.5px solid #ef4444;color:#ef4444;}
+.action-btns{display:none;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center;}
+.action-btns.visible{display:flex;animation:fadeIn .3s ease;}
+.next-btn{background:linear-gradient(90deg,#4361ee,#7209b7);color:white;border:none;border-radius:50px;padding:10px 22px;font-family:'Nunito',sans-serif;font-size:.93rem;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(67,97,238,.35);transition:all .2s;}
+.next-btn:hover{transform:translateY(-2px);}
+/* BAŞA DÖN */
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:white;border:none;border-radius:50px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:opacity .3s,transform .2s;z-index:999;pointer-events:none;}
+.basa-don.gorunsun{opacity:1;pointer-events:auto;}
+.basa-don:hover{transform:translateY(-3px);}
+</style>
+</head>
+<body>
+
+<button class="basa-don" id="basaDon">⬆ Başa Dön</button>
+
+<header>
+  <div class="badge">8. Sınıf Matematik</div>
+  <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+  <h1>📐 Pisagor Teoremi</h1>
+  <p>Dik üçgeni keşfet · Kenar hesapla · Özel üçgenleri tanı</p>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+  <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+  <button class="tab-btn" data-tab="interaktif">🎛️ İnteraktif Çözüm</button>
+  <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+</div>
+
+<div class="main">
+
+  <!-- KONU ANLATIMI -->
+  <div id="konu" class="section active">
+
+    <div class="card">
+      <div class="card-title"><div class="icon">📐</div>Pisagor Teoremi Nedir?</div>
+      <div class="def-box">
+        <strong>Pisagor Teoremi:</strong> Bir dik üçgende dik açının karşısındaki kenara <em>hipotenüs</em> denir.
+        Hipotenüsün karesi, diğer iki kenarın karelerinin toplamına eşittir.<br><br>
+        <strong style="font-size:1.1rem;">a² + b² = c²</strong><br><br>
+        Burada <strong>c</strong> hipotenüs, <strong>a</strong> ve <strong>b</strong> dik kenarlardır.
+      </div>
+      <div style="text-align:center;margin:18px 0;">
+        <svg width="240" height="170" viewBox="0 0 240 170" style="max-width:100%;">
+          <polygon points="25,150 25,30 170,150" fill="#eef0fd" stroke="#4361ee" stroke-width="2.5"/>
+          <rect x="25" y="130" width="20" height="20" fill="none" stroke="#4361ee" stroke-width="2"/>
+          <text x="8" y="98" font-family="Nunito" font-size="15" fill="#4361ee" font-weight="800">a</text>
+          <text x="88" y="168" font-family="Nunito" font-size="15" fill="#4361ee" font-weight="800">b</text>
+          <text x="82" y="82" font-family="Nunito" font-size="14" fill="#f72585" font-weight="800">c (hipotenüs)</text>
+          <text x="4" y="27" font-family="Nunito" font-size="11" fill="#6b7280">B</text>
+          <text x="174" y="155" font-family="Nunito" font-size="11" fill="#6b7280">A</text>
+          <text x="4" y="158" font-family="Nunito" font-size="11" fill="#06d6a0" font-weight="800">90°</text>
+        </svg>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:4px;">
+        <div style="background:var(--primary-light);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:1.1rem;font-weight:800;color:var(--primary);">c² = a² + b²</div>
+          <div style="color:var(--muted);font-size:.78rem;margin-top:4px;">Hipotenüsü bul</div>
+        </div>
+        <div style="background:#e8faf3;border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:1.1rem;font-weight:800;color:#059669;">a² = c² − b²</div>
+          <div style="color:var(--muted);font-size:.78rem;margin-top:4px;">Dik kenar bul</div>
+        </div>
+        <div style="background:#fff8e1;border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:1.1rem;font-weight:800;color:#e67e00;">b² = c² − a²</div>
+          <div style="color:var(--muted);font-size:.78rem;margin-top:4px;">Dik kenar bul</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">🔢</div>Pisagor Teoreminin Tersi</div>
+      <div class="def-box">
+        Üç kenarı bilinen bir üçgende <strong>a² + b² = c²</strong> eşitliği sağlanıyorsa bu üçgen <em>dik açılıdır</em>. Sağlanmıyorsa dik açılı değildir.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div style="background:#e8faf3;border-radius:12px;padding:14px;">
+          <div style="font-weight:700;color:var(--success);margin-bottom:8px;">✔ Dik üçgen</div>
+          <div style="color:var(--text);font-size:.92rem;line-height:1.8;">3, 4, 5 →<br>3²+4² = 9+16 = 25 = 5² ✓</div>
+        </div>
+        <div style="background:#fdecea;border-radius:12px;padding:14px;">
+          <div style="font-weight:700;color:var(--accent);margin-bottom:8px;">✘ Dik üçgen değil</div>
+          <div style="color:var(--text);font-size:.92rem;line-height:1.8;">2, 3, 4 →<br>2²+3² = 4+9 = 13 ≠ 16 ✗</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">⭐</div>Bazı Özel Üçgenler</div>
+      <div class="def-box" style="margin-bottom:14px;">
+        Aşağıdaki üçgen aileleri ve özel açılı dik üçgenler sınavlarda sık çıkar. Ezberlemek yerine <strong>Pisagor bağıntısıyla doğruladığınızda</strong> kalıcı öğrenirsiniz.
+      </div>
+      <p style="font-weight:800;color:var(--primary);margin-bottom:10px;">Pisagor Üçlüleri (Tam Sayılı Kenarlar)</p>
+      <div class="resp-table">
+        <table>
+          <thead><tr><th>Aile</th><th>Örnek Üçlüler</th><th>Doğrulama</th></tr></thead>
+          <tbody>
+            <tr><td><strong>3-4-5</strong></td><td>3-4-5 · 6-8-10 · 9-12-15</td><td>9+16=25 ✓</td></tr>
+            <tr><td><strong>5-12-13</strong></td><td>5-12-13 · 10-24-26</td><td>25+144=169 ✓</td></tr>
+            <tr><td><strong>8-15-17</strong></td><td>8-15-17</td><td>64+225=289 ✓</td></tr>
+            <tr><td><strong>7-24-25</strong></td><td>7-24-25</td><td>49+576=625 ✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-weight:800;color:var(--primary);margin:18px 0 10px;">Özel Açılı Dik Üçgenler</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div style="background:var(--primary-light);border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-weight:800;color:var(--primary);font-size:.97rem;margin-bottom:8px;">45°-45°-90°</div>
+          <div style="font-size:1.15rem;font-weight:800;color:var(--text);">1 : 1 : √2</div>
+          <div style="color:var(--muted);font-size:.82rem;margin-top:6px;">İkizkenar dik üçgen<br>Dik kenar a ise hipotenüs = a√2</div>
+        </div>
+        <div style="background:#fff8e1;border-radius:14px;padding:14px;text-align:center;">
+          <div style="font-weight:800;color:#e67e00;font-size:.97rem;margin-bottom:8px;">30°-60°-90°</div>
+          <div style="font-size:1.15rem;font-weight:800;color:var(--text);">1 : √3 : 2</div>
+          <div style="color:var(--muted);font-size:.82rem;margin-top:6px;">En küçük kenar a ise<br>karşı kenar a√3, hipotenüs 2a</div>
+        </div>
+      </div>
+      <div class="rule-box" style="margin-top:14px;">
+        <div class="rule-title">⚡ Kısa Yol</div>
+        <p>Kenarlar orantılı olabilir. Örneğin 6-8-10, 3-4-5 ailesinin 2 katıdır. Kenarları en sade hale getirip aileyi tanıyın.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ÖRNEKLER -->
+  <div id="ornekler" class="section">
+    <div id="orneklerKonteyner">
+
+      <div class="example-card">
+        <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">Hipotenüsü hesapla</span></div>
+        <div class="ex-body">
+          <div class="ex-step"><span class="num">Soru:</span><span>Dik kenarları 6 cm ve 8 cm olan dik üçgenin hipotenüsünü bulunuz.</span></div>
+          <button class="toggle-sol" data-target="s1">Çözümü Göster / Gizle</button>
+          <div class="ex-solution" id="s1">
+            <div class="ex-step"><span class="num">1.</span><span>c² = a² + b² → c² = 6² + 8²</span></div>
+            <div class="ex-step"><span class="num">2.</span><span>c² = 36 + 64 = 100</span></div>
+            <div class="ex-step"><span class="num">3.</span><span>c = √100 = 10</span></div>
+            <div class="ex-result">✓ Hipotenüs = 10 cm &nbsp;(3-4-5 ailesinin 2 katı)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">Dik kenarı hesapla</span></div>
+        <div class="ex-body">
+          <div class="ex-step"><span class="num">Soru:</span><span>Hipotenüsü 13 cm, bir dik kenarı 5 cm olan dik üçgenin diğer dik kenarını bulunuz.</span></div>
+          <button class="toggle-sol" data-target="s2">Çözümü Göster / Gizle</button>
+          <div class="ex-solution" id="s2">
+            <div class="ex-step"><span class="num">1.</span><span>a² = c² − b² → a² = 13² − 5²</span></div>
+            <div class="ex-step"><span class="num">2.</span><span>a² = 169 − 25 = 144</span></div>
+            <div class="ex-step"><span class="num">3.</span><span>a = √144 = 12</span></div>
+            <div class="ex-result">✓ Diğer dik kenar = 12 cm &nbsp;(5-12-13 ailesi)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">Dik üçgen mi?</span></div>
+        <div class="ex-body">
+          <div class="ex-step"><span class="num">Soru:</span><span>Kenar uzunlukları 9, 40 ve 41 olan üçgen dik açılı mıdır?</span></div>
+          <button class="toggle-sol" data-target="s3">Çözümü Göster / Gizle</button>
+          <div class="ex-solution" id="s3">
+            <div class="ex-step"><span class="num">1.</span><span>En büyük kenar 41 hipotenüs adayıdır.</span></div>
+            <div class="ex-step"><span class="num">2.</span><span>9² + 40² = 81 + 1600 = 1681</span></div>
+            <div class="ex-step"><span class="num">3.</span><span>41² = 1681 → Eşit!</span></div>
+            <div class="ex-result">✓ Evet, dik açılı üçgendir.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">45°-45°-90° özel üçgen</span></div>
+        <div class="ex-body">
+          <div class="ex-step"><span class="num">Soru:</span><span>Dik kenarı 5 cm olan 45°-45°-90° üçgeninin hipotenüsünü bulunuz.</span></div>
+          <button class="toggle-sol" data-target="s4">Çözümü Göster / Gizle</button>
+          <div class="ex-solution" id="s4">
+            <div class="ex-step"><span class="num">1.</span><span>45°-45°-90° üçgeninde oran: 1 : 1 : √2</span></div>
+            <div class="ex-step"><span class="num">2.</span><span>Dik kenar 5 ise hipotenüs = 5 × √2 = 5√2</span></div>
+            <div class="ex-step"><span class="num">3.</span><span>Doğrulama: 5² + 5² = 50 = (5√2)² ✓</span></div>
+            <div class="ex-result">✓ Hipotenüs = 5√2 cm ≈ 7,07 cm</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:18px;">
+      <button class="next-btn" id="dahaFazlaBtn">➕ Daha Fazla Örnek</button>
+    </div>
+  </div>
+
+  <!-- İNTERAKTİF -->
+  <div id="interaktif" class="section">
+    <div class="interactive-panel">
+      <div class="score-bar">
+        <div><div class="score-label">TOPLAM PUAN</div><div class="score-value" id="scoreVal">0</div></div>
+        <div class="q-progress" id="qProgress">Soru 1 / 5</div>
+      </div>
+      <div class="q-display">
+        <div class="q-text" id="qText">Yükleniyor...</div>
+        <div class="q-sub" id="qSub">Doğru seçeneği işaretle</div>
+      </div>
+      <div id="svgArea" style="display:none;text-align:center;margin:0 0 14px 0;"></div>
+      <div id="choicesArea" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
+      <div class="feedback-box" id="feedbackBox"></div>
+      <div class="action-btns" id="actionBtns">
+        <button class="next-btn" id="nextBtn">🎲 Yeni Soru Üret</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÖZET -->
+  <div id="ozet" class="section">
+    <div class="card">
+      <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+      <div class="summary-grid">
+        <div class="sum-item">
+          <div class="sum-icon">📐</div>
+          <h4>Temel Formül</h4>
+          <p>Dik üçgende: <strong>a² + b² = c²</strong> — c hipotenüs, a ve b dik kenarlardır.</p>
+        </div>
+        <div class="sum-item">
+          <div class="sum-icon">🔍</div>
+          <h4>Teoreminin Tersi</h4>
+          <p>a² + b² = c² sağlanıyorsa üçgen <strong>dik açılıdır</strong>.</p>
+        </div>
+        <div class="sum-item">
+          <div class="sum-icon">⭐</div>
+          <h4>Pisagor Üçlüleri</h4>
+          <p><strong>3-4-5</strong>, <strong>5-12-13</strong>, <strong>8-15-17</strong>, <strong>7-24-25</strong> ve katları.</p>
+        </div>
+        <div class="sum-item">
+          <div class="sum-icon">📏</div>
+          <h4>Özel Açılı Üçgenler</h4>
+          <p>45°-45°-90°: <strong>1:1:√2</strong><br>30°-60°-90°: <strong>1:√3:2</strong></p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-icon">💡</div>
+        <p>Hipotenüs her zaman dik açının karşısındadır ve üçgenin en uzun kenarıdır. Hangi kenarın sorulduğunu belirledikten sonra formülü uygulayın.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// BAŞA DÖN
+(function(){
+  var btn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){
+    btn.classList.toggle('gorunsun',window.scrollY>300);
+  });
+  btn.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+
+// TAB
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// TOGGLE ÇÖZÜM
+document.querySelectorAll('.toggle-sol').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.getElementById(btn.dataset.target).classList.toggle('open');
+  });
+});
+
+// DAHA FAZLA ÖRNEK
+(function(){
+  var ekstra = [
+    { num:'Örnek 5', baslik:'30°-60°-90° özel üçgen',
+      soru:'Hipotenüsü 10 cm olan 30°-60°-90° üçgeninin dik kenarlarını bulunuz.',
+      adimlar:['30°-60°-90° oranı: 1 : √3 : 2','Hipotenüs = 2k = 10 → k = 5','Küçük dik kenar = k = 5 cm','Büyük dik kenar = k√3 = 5√3 cm'],
+      sonuc:'Dik kenarlar: 5 cm ve 5√3 cm ≈ 8,66 cm' },
+    { num:'Örnek 6', baslik:'Koordinat düzleminde uzaklık',
+      soru:'A(1, 2) ve B(5, 5) noktaları arasındaki uzaklığı bulunuz.',
+      adimlar:['Yatay fark: Δx = 5 − 1 = 4','Dikey fark: Δy = 5 − 2 = 3','d² = 4² + 3² = 16 + 9 = 25','d = √25 = 5'],
+      sonuc:'AB = 5 birim &nbsp;(3-4-5 ailesi)' },
+    { num:'Örnek 7', baslik:'Dikdörtgenin köşegeni',
+      soru:'Uzun kenarı 12 cm, kısa kenarı 5 cm olan dikdörtgenin köşegenini bulunuz.',
+      adimlar:['Köşegen dik üçgenin hipotenüsüdür.','d² = 12² + 5² = 144 + 25 = 169','d = √169 = 13'],
+      sonuc:'Köşegen = 13 cm &nbsp;(5-12-13 ailesi)' }
+  ];
+  var idx = 0;
+  document.getElementById('dahaFazlaBtn').addEventListener('click', function(){
+    if(idx >= ekstra.length){ this.style.display='none'; return; }
+    var e = ekstra[idx++];
+    var div = document.createElement('div');
+    div.className = 'example-card';
+    var solId = 'sx'+idx;
+    var adimHTML = e.adimlar.map(function(a,i){
+      return '<div class="ex-step"><span class="num">'+(i+1)+'.</span><span>'+a+'</span></div>';
+    }).join('');
+    div.innerHTML =
+      '<div class="ex-header"><span class="ex-num">'+e.num+'</span><span class="ex-q">'+e.baslik+'</span></div>'+
+      '<div class="ex-body">'+
+        '<div class="ex-step"><span class="num">Soru:</span><span>'+e.soru+'</span></div>'+
+        '<button class="toggle-sol" data-target="'+solId+'">Çözümü Göster / Gizle</button>'+
+        '<div class="ex-solution" id="'+solId+'">'+adimHTML+
+          '<div class="ex-result">✓ '+e.sonuc+'</div></div></div>';
+    document.getElementById('orneklerKonteyner').appendChild(div);
+    div.querySelector('.toggle-sol').addEventListener('click', function(){
+      document.getElementById(solId).classList.toggle('open');
+    });
+    if(idx >= ekstra.length) document.getElementById('dahaFazlaBtn').textContent = '✅ Tüm Örnekler Gösterildi';
+  });
+})();
+
+// İNTERAKTİF
+(function(){
+  var score=0, qNum=0, answered=false, sonTip=0;
+  var INITIAL=5, afterInitial=false;
+  function randInt(mn,mx){ return Math.floor(Math.random()*(mx-mn+1))+mn; }
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t; } return a; }
+
+  var ucluler=[[3,4,5],[5,12,13],[8,15,17],[7,24,25],[6,8,10],[9,12,15],[10,24,26],[20,21,29]];
+
+  function drawTri(labelA,labelB,labelC){
+    return '<svg width="220" height="160" viewBox="0 0 220 160" style="max-width:220px;">'+
+      '<polygon points="20,140 20,30 160,140" fill="#eef0fd" stroke="#4361ee" stroke-width="2.2"/>'+
+      '<rect x="20" y="120" width="20" height="20" fill="none" stroke="#4361ee" stroke-width="1.8"/>'+
+      '<text x="4" y="90" font-family="Nunito" font-size="15" fill="#f72585" font-weight="800">'+labelA+'</text>'+
+      '<text x="82" y="158" font-family="Nunito" font-size="15" fill="#4361ee" font-weight="800">'+labelB+'</text>'+
+      '<text x="75" y="75" font-family="Nunito" font-size="14" fill="#7209b7" font-weight="800">'+labelC+'</text>'+
+      '</svg>';
+  }
+
+  function tip1(){ // Hipotenüs bul
+    var u=ucluler[randInt(0,ucluler.length-1)];
+    var a=u[0],b=u[1],c=u[2];
+    var opts=shuffle([c,c+1,c-1,c+2].filter(function(v){return v>0;})).slice(0,4);
+    if(opts.indexOf(c)<0){ opts[0]=c; }
+    opts=shuffle(opts);
+    return {
+      display:'Dik kenarları '+a+' cm ve '+b+' cm olan dik üçgenin hipotenüsü kaç cm\'dir?',
+      svg:drawTri(a+' cm',b+' cm','?'),
+      choices:opts.map(function(v){return {label:v+' cm',correct:v===c};}),
+      aciklama:a+'²+'+b+'² = '+(a*a+b*b)+' → c = '+c+' cm.'
+    };
+  }
+
+  function tip2(){ // Dik kenar bul
+    var u=ucluler[randInt(0,ucluler.length-1)];
+    var a=u[0],b=u[1],c=u[2];
+    var opts=shuffle([a,a+1,a-1,a+2].filter(function(v){return v>0;})).slice(0,4);
+    if(opts.indexOf(a)<0){ opts[0]=a; }
+    opts=shuffle(opts);
+    return {
+      display:'Hipotenüsü '+c+' cm, bir dik kenarı '+b+' cm olan dik üçgenin diğer dik kenarı kaç cm\'dir?',
+      svg:drawTri('?',b+' cm',c+' cm'),
+      choices:opts.map(function(v){return {label:v+' cm',correct:v===a};}),
+      aciklama:c+'²−'+b+'² = '+(c*c-b*b)+' → a = '+a+' cm.'
+    };
+  }
+
+  function tip3(){ // Dik üçgen mi?
+    var dikMi=Math.random()>0.45;
+    var a,b,c;
+    if(dikMi){ var u=ucluler[randInt(0,ucluler.length-1)];a=u[0];b=u[1];c=u[2]; }
+    else { a=randInt(3,8);b=randInt(3,8);c=a+b-randInt(1,2); while(a*a+b*b===c*c){c++;} }
+    var dL=dikMi?'Evet, dik açılıdır':'Hayır, dik açılı değildir';
+    var yL=dikMi?'Hayır, dik açılı değildir':'Evet, dik açılıdır';
+    return {
+      display:'Kenarları '+a+', '+b+' ve '+c+' olan üçgen dik açılı mıdır?',
+      svg:null,
+      choices:shuffle([{label:dL,correct:true},{label:yL,correct:false},{label:'Bilgi yetersiz',correct:false},{label:'İkizkenar üçgendir',correct:false}]),
+      aciklama:a+'²+'+b+'²='+(a*a+b*b)+', '+c+'²='+(c*c)+(dikMi?' → Eşit, dik açılıdır.':' → Eşit değil, dik açılı değildir.')
+    };
+  }
+
+  function tip4(){ // 45-45-90
+    var k=randInt(2,8);
+    var dogru=k+'√2';
+    var opts=shuffle([dogru,k*2+'',k+'√3',(k+1)+'√2']);
+    return {
+      display:'45°-45°-90° üçgeninde dik kenar '+k+' cm ise hipotenüs kaç cm\'dir?',
+      svg:null,
+      choices:opts.map(function(v){return {label:v+' cm',correct:v===dogru};}),
+      aciklama:'Oran 1:1:√2. Hipotenüs = '+k+'×√2 = '+k+'√2 cm.'
+    };
+  }
+
+  function tip5(){ // Koordinat uzaklığı - sadece tam kare sonuçlar
+    // Yalnızca d² tam kare olan dx,dy çiftleri kullan
+    var tamKareCiftler=[[3,4],[4,3],[6,8],[8,6],[5,12],[12,5]];
+    var cift=tamKareCiftler[randInt(0,tamKareCiftler.length-1)];
+    var dx=cift[0],dy=cift[1];
+    var x1=randInt(0,3),y1=randInt(0,3);
+    var x2=x1+dx,y2=y1+dy;
+    var d2=dx*dx+dy*dy;
+    var dv=Math.round(Math.sqrt(d2));
+    var dogru=dv+'';
+    var yanlis=[dv+1+'',dv-1+'',(dx+dy)+''].filter(function(v){return parseInt(v)>0&&v!==dogru;});
+    var opts=shuffle([dogru].concat(yanlis.slice(0,3))).map(function(v){return {label:v+' br',correct:v===dogru};});
+    return {
+      display:'A('+x1+','+y1+') ve B('+x2+','+y2+') noktaları arasındaki uzaklık kaç birimdir?',
+      svg:null,
+      choices:opts,
+      aciklama:'Δx='+dx+', Δy='+dy+'. d²='+dx+'²+'+dy+'²='+d2+' → d='+dogru+' br.'
+    };
+  }
+
+  function generateQ(){
+    var tips=[1,2,3,4,5];
+    var r=Math.random();
+    var tip=r<0.25?1:r<0.50?2:r<0.68?3:r<0.84?4:5;
+    if(tip===sonTip){ var alt=tips.filter(function(t){return t!==sonTip;}); tip=alt[randInt(0,alt.length-1)]; }
+    sonTip=tip;
+    return tip===1?tip1():tip===2?tip2():tip===3?tip3():tip===4?tip4():tip5();
+  }
+
+  function renderQ(q){
+    answered=false;
+    document.getElementById('qText').textContent=q.display;
+    var sa=document.getElementById('svgArea');
+    if(q.svg){sa.style.display='block';sa.innerHTML=q.svg;}else{sa.style.display='none';sa.innerHTML='';}
+    document.getElementById('feedbackBox').className='feedback-box';
+    document.getElementById('actionBtns').className='action-btns';
+    var area=document.getElementById('choicesArea');
+    area.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var btn=document.createElement('button');
+      btn.className='choice-btn';
+      btn.style.cssText='width:100%;padding:12px 18px;border-radius:12px;font-size:1rem;text-align:left;';
+      btn.textContent=c.label;
+      (function(choice,b,idx){ b.addEventListener('click',function(){ if(!answered) checkAnswer(choice,b,q,idx); }); })(c,btn,i);
+      area.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(chosen,btn,q,idx){
+    answered=true;
+    var ok=chosen.correct;
+    if(ok) score+=10;
+    document.getElementById('choicesArea').querySelectorAll('button').forEach(function(b,i){
+      b.disabled=true;
+      if(q.choices[i]&&q.choices[i].correct) b.classList.add('correct-btn');
+      else if(i===idx) b.classList.add('wrong-btn');
+    });
+    var fb=document.getElementById('feedbackBox');
+    fb.className='feedback-box visible '+(ok?'fb-ok':'fb-err');
+    fb.textContent=(ok?'Doğru! +10 puan — ':'Yanlış. — ')+'Açıklama: '+q.aciklama;
+    qNum++;
+    if(!afterInitial&&qNum>=INITIAL) afterInitial=true;
+    updateProgress();
+    document.getElementById('actionBtns').className='action-btns visible';
+  }
+
+  function updateProgress(){
+    document.getElementById('scoreVal').textContent=score;
+    document.getElementById('qProgress').textContent=!afterInitial?'Soru '+Math.min(qNum+1,INITIAL)+' / '+INITIAL:'Toplam çözülen: '+qNum;
+  }
+
+  document.getElementById('nextBtn').addEventListener('click',function(){ renderQ(generateQ()); updateProgress(); });
+  updateProgress();
+  renderQ(generateQ());
+})();
+</script>
+</body>
+</html>

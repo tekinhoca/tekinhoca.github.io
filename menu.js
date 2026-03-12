@@ -7,6 +7,7 @@ const MENU_ITEMS = [
   { label: "Matematik Tarihi",     href: "matematik-tarihi.html" },
   { label: "Matematik Oyunları",   href: "matematik-oyunlari.html" },
   { label: "Estetik Matematik",    href: "estetik-matematik.html" },
+  { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html" },
 ];
 
 (function () {

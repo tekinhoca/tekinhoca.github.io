@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uzunluk ve Alan Ölçüleri | 6. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f4ff; --card:#fff; --primary:#4361ee; --primary-light:#eef0fd;
+  --accent:#f72585; --accent2:#4cc9f0; --success:#06d6a0; --warn:#ffd166;
+  --text:#1a1a2e; --muted:#6b7280; --border:#e0e7ff;
+  --shadow:0 4px 24px rgba(67,97,238,.10); --radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px;}
+
+/* HEADER */
+header{
+  background:radial-gradient(ellipse at center,#000 0%,#000 35%,#5a0000 70%,#cc0000 100%);
+  color:white;padding:28px 24px 52px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 8px 40px rgba(180,0,0,.45),0 0 0 1px rgba(200,0,0,.25);
+}
+header .badge{
+  display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,80,80,.3);
+  border-radius:50px;padding:3px 14px;font-size:.78rem;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:10px;color:#ffaaaa;position:relative;z-index:1;
+}
+header img.logo{
+  height:90px;object-fit:contain;display:block;margin:8px auto 0;
+  position:relative;z-index:1;
+}
+header h1{
+  font-family:'Baloo 2',cursive;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:800;
+  color:#fff0f0;position:relative;z-index:1;text-shadow:0 0 24px rgba(255,60,60,.3);margin-top:6px;
+}
+header p{font-size:.93rem;color:rgba(255,220,220,.65);margin-top:4px;position:relative;z-index:1;}
+
+/* TABS */
+.tab-bar{
+  display:flex;justify-content:center;gap:8px;margin:-22px auto 0;
+  position:relative;z-index:10;padding:0 12px;flex-wrap:wrap;
+}
+.tab-btn{
+  background:white;border:none;border-radius:50px;
+  padding:9px 14px;font-family:'Nunito',sans-serif;
+  font-size:clamp(.75rem,2.5vw,.9rem);font-weight:700;color:var(--muted);
+  cursor:pointer;box-shadow:0 2px 12px rgba(67,97,238,.13);transition:all .22s;white-space:nowrap;
+}
+.tab-btn.active,.tab-btn:hover{background:var(--primary);color:white;box-shadow:0 4px 18px rgba(67,97,238,.28);transform:translateY(-2px);}
+
+/* MAIN */
+.main{max-width:820px;margin:32px auto 0;padding:0 12px;}
+.section{display:none;}
+.section.active{display:block;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARD */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(14px,4vw,26px);margin-bottom:20px;border:1.5px solid var(--border);}
+.card-title{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:700;color:var(--primary);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title .icon{background:var(--primary-light);width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.def-box{background:linear-gradient(135deg,#eef0fd 0%,#f3e8ff 100%);border-left:4px solid var(--primary);border-radius:12px;padding:14px 16px;margin:12px 0;font-size:.95rem;line-height:1.7;}
+.def-box strong{color:var(--primary);}
+.highlight{background:var(--warn);border-radius:8px;padding:2px 8px;font-weight:800;color:#7a4f00;}
+.symbol-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0;}
+@media(max-width:400px){.symbol-grid{grid-template-columns:repeat(2,1fr);}}
+.symbol-card{background:var(--primary-light);border-radius:14px;padding:12px 6px;text-align:center;border:1.5px solid var(--border);transition:transform .18s;}
+.symbol-card:hover{transform:scale(1.04);}
+.symbol-card .sym{font-size:1.8rem;font-weight:900;color:var(--primary);display:block;}
+.symbol-card .sym-name{font-size:.7rem;color:var(--muted);margin-top:4px;font-weight:600;}
+.step{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start;}
+.step-num{background:var(--primary);color:white;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.93rem;flex-shrink:0;margin-top:2px;}
+.step-content{flex:1;}
+.step-content p{line-height:1.65;font-size:.93rem;}
+.step-content .formula{background:#1a1a2e;color:#4cc9f0;border-radius:10px;padding:10px 14px;font-size:.93rem;font-weight:700;font-family:'Courier New',monospace;margin:8px 0;overflow-x:auto;}
+.rule-box{background:linear-gradient(90deg,#fff0f9 0%,#fce7f3 100%);border:2px solid var(--accent);border-radius:14px;padding:13px 16px;margin:13px 0;}
+.rule-box .rule-title{color:var(--accent);font-weight:800;font-size:.91rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-box p{font-size:.91rem;line-height:1.65;}
+.resp-table{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.89rem;}
+th{padding:10px 12px;text-align:left;background:var(--primary-light);}
+th:first-child{border-radius:8px 0 0 8px;}th:last-child{border-radius:0 8px 8px 0;}
+td{padding:10px 12px;border-bottom:1px solid var(--border);}
+
+/* EXAMPLES */
+.example-card{background:white;border-radius:16px;border:1.5px solid var(--border);overflow:hidden;margin-bottom:16px;box-shadow:0 2px 12px rgba(67,97,238,.07);}
+.ex-header{background:linear-gradient(90deg,var(--primary-light) 0%,#f3e8ff 100%);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ex-num{background:var(--primary);color:white;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.83rem;white-space:nowrap;}
+.ex-q{font-weight:700;font-size:.97rem;color:var(--text);font-family:'Baloo 2',cursive;}
+.ex-body{padding:14px 16px;}
+.ex-step{display:flex;gap:10px;margin-bottom:10px;font-size:.91rem;align-items:flex-start;}
+.ex-step .num{color:var(--primary);font-weight:800;min-width:20px;}
+.ex-result{background:linear-gradient(90deg,#e8f8f2 0%,#f0fdf9 100%);border:1.5px solid var(--success);border-radius:10px;padding:10px 14px;font-weight:700;color:#065f46;margin-top:12px;font-size:.93rem;}
+.toggle-sol{background:var(--primary-light);border:1.5px solid var(--border);color:var(--primary);border-radius:50px;padding:7px 18px;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;margin-top:10px;transition:all .18s;}
+.toggle-sol:hover{background:var(--primary);color:white;}
+.ex-solution{display:none;margin-top:14px;}
+.ex-solution.open{display:block;animation:fadeIn .3s ease;}
+
+/* SUMMARY */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.summary-grid{grid-template-columns:1fr;}}
+.sum-item{background:var(--primary-light);border-radius:14px;padding:13px;border:1.5px solid var(--border);}
+.sum-item .sum-icon{font-size:1.4rem;margin-bottom:6px;}
+.sum-item h4{font-size:.86rem;color:var(--primary);font-weight:800;margin-bottom:5px;}
+.sum-item p{font-size:.83rem;color:var(--muted);line-height:1.6;}
+.tip-box{background:linear-gradient(135deg,#fff8e1 0%,#fffde7 100%);border:2px solid var(--warn);border-radius:14px;padding:14px 16px;margin-top:16px;display:flex;gap:12px;align-items:flex-start;}
+.tip-box .tip-icon{font-size:1.4rem;flex-shrink:0;}
+.tip-box p{font-size:.89rem;line-height:1.65;color:#6b4c00;}
+
+/* INTERACTIVE */
+.interactive-panel{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-radius:var(--radius);padding:clamp(14px,4vw,26px);color:white;margin-bottom:20px;}
+.score-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.07);border-radius:12px;padding:10px 16px;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.score-label{font-size:.83rem;color:#aaa;}
+.score-value{font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;color:var(--warn);}
+.q-progress{font-size:.83rem;color:#aaa;}
+.q-display{background:rgba(255,255,255,.06);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center;}
+.q-display .q-text{font-family:'Baloo 2',cursive;font-size:clamp(1rem,4vw,1.45rem);font-weight:700;color:var(--accent2);margin-bottom:6px;}
+.q-display .q-sub{font-size:.83rem;color:#aaa;}
+.decision-area{margin-bottom:14px;}
+.decision-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.decision-label{font-size:.86rem;color:#ccc;min-width:130px;}
+.choice-btn{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:50px;color:white;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;padding:7px 18px;cursor:pointer;transition:all .2s;}
+.choice-btn:hover{background:rgba(255,255,255,.15);}
+.choice-btn.selected{background:var(--primary);border-color:var(--primary);box-shadow:0 0 12px rgba(67,97,238,.5);}
+.choice-btn.correct-btn{background:var(--success);border-color:var(--success);}
+.choice-btn.wrong-btn{background:#ef4444;border-color:#ef4444;}
+.confirm-btn{background:linear-gradient(90deg,var(--accent) 0%,#b5179e 100%);color:white;border:none;border-radius:50px;padding:11px 26px;font-family:'Nunito',sans-serif;font-size:.97rem;font-weight:800;cursor:pointer;box-shadow:0 4px 18px rgba(247,37,133,.35);transition:all .2s;display:block;margin:14px auto 0;}
+.confirm-btn:hover{transform:translateY(-2px);}
+.confirm-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.feedback-box{border-radius:12px;padding:13px 16px;margin-top:13px;font-weight:700;font-size:.97rem;text-align:center;display:none;}
+.feedback-box.visible{display:block;animation:fadeIn .3s ease;}
+.feedback-box.fb-ok{background:rgba(6,214,160,.15);border:1.5px solid var(--success);color:var(--success);}
+.feedback-box.fb-part{background:rgba(255,209,102,.15);border:1.5px solid var(--warn);color:var(--warn);}
+.feedback-box.fb-err{background:rgba(239,68,68,.15);border:1.5px solid #ef4444;color:#ef4444;}
+.nl-wrap{background:rgba(255,255,255,.04);border-radius:14px;padding:14px;margin-top:13px;}
+.nl-wrap h4{font-size:.8rem;color:#aaa;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+canvas.numline{width:100%;height:70px;display:block;border-radius:8px;}
+.nl-legend{display:flex;gap:14px;margin-top:10px;font-size:.76rem;color:#aaa;flex-wrap:wrap;}
+.nl-legend span{display:flex;align-items:center;gap:5px;}
+.dot-o{width:10px;height:10px;border-radius:50%;border:2.5px solid var(--accent2);background:transparent;display:inline-block;}
+.dot-c{width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;}
+.action-btns{display:none;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center;}
+.action-btns.visible{display:flex;animation:fadeIn .3s ease;}
+.next-btn{background:linear-gradient(90deg,#4361ee,#7209b7);color:white;border:none;border-radius:50px;padding:10px 22px;font-family:'Nunito',sans-serif;font-size:.93rem;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(67,97,238,.35);transition:all .2s;}
+.next-btn:hover{transform:translateY(-2px);}
+.manual-btn{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);color:#ccc;border-radius:50px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.manual-btn:hover{background:rgba(255,255,255,.14);}
+.manual-area{background:rgba(255,255,255,.05);border-radius:14px;padding:16px;margin-top:14px;display:none;}
+.manual-area.visible{display:block;animation:fadeIn .3s ease;}
+.manual-area h4{font-size:.88rem;color:#aaa;margin-bottom:12px;}
+.manual-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.m-input{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;color:white;font-family:'Nunito',sans-serif;font-size:.97rem;font-weight:700;padding:8px 12px;width:68px;text-align:center;}
+.m-input:focus{outline:none;border-color:var(--accent2);}
+.m-select{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;color:white;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:700;padding:8px 10px;cursor:pointer;}
+.m-select option{background:#1a1a2e;}
+.m-label{font-size:1rem;font-weight:700;color:#e2e8f0;}
+.load-btn{background:var(--accent2);color:#1a1a2e;border:none;border-radius:50px;padding:9px 20px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;transition:all .2s;margin-top:4px;}
+.load-btn:hover{transform:translateY(-2px);}
+
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:white;border:none;border-radius:50px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:opacity .3s,transform .2s;z-index:999;pointer-events:none;}
+.basa-don.gorunsun{opacity:1;pointer-events:auto;}
+.basa-don:hover{transform:translateY(-3px);}
+</style>
+</head>
+<body>
+
+<button class="basa-don" id="basaDon">⬆ Başa Dön</button>
+<header>
+  <div class="badge">6. Sınıf Matematik</div>
+  <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+  <h1>📏 Uzunluk ve Alan Ölçüleri Arasındaki İlişki</h1>
+  <p>Birim dönüşümlerini öğren, pratik yap</p>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+  <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+  <button class="tab-btn" data-tab="interaktif">🎛️ İnteraktif Çözüm</button>
+  <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+</div>
+
+<div class="main">
+
+<!-- KONU -->
+<div id="konu" class="section active">
+  <div class="card">
+    <div class="card-title"><div class="icon">📌</div>Uzunluk Ölçü Birimleri</div>
+    <div class="def-box">
+      Uzunlukları ölçmek için kullandığımız temel birim <strong>metredir (m)</strong>.<br><br>
+      Metreden daha büyük veya daha küçük uzunlukları ifade etmek için farklı birimler kullanılır.
+    </div>
+    <div class="symbol-grid" style="grid-template-columns:repeat(3,1fr);">
+      <div class="symbol-card"><span class="sym" style="font-size:1.1rem;">km</span><div class="sym-name">Kilometre</div></div>
+      <div class="symbol-card"><span class="sym" style="font-size:1.1rem;">hm</span><div class="sym-name">Hektometre</div></div>
+      <div class="symbol-card"><span class="sym" style="font-size:1.1rem;">dam</span><div class="sym-name">Dekametre</div></div>
+      <div class="symbol-card"><span class="sym" style="font-size:1.3rem;">m</span><div class="sym-name">Metre (temel)</div></div>
+      <div class="symbol-card"><span class="sym" style="font-size:1.1rem;">dm</span><div class="sym-name">Desimetre</div></div>
+      <div class="symbol-card"><span class="sym" style="font-size:1.1rem;">cm</span><div class="sym-name">Santimetre</div></div>
+    </div>
+    <div class="rule-box">
+      <div class="rule-title">&#128273; Altın Kural</div>
+      <p>Birimler arasında geçiş yaparken her basamakta <strong>10 ile çarpılır veya bölünür</strong>.<br>
+      Büyük birimden küçük birime: <span class="highlight">&times;10</span> &nbsp;|&nbsp;
+      Küçük birimden büyük birime: <span class="highlight">&divide;10</span></p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="icon">📊</div>Uzunluk Birimleri Tablosu</div>
+    <div class="resp-table">
+      <table>
+        <thead><tr><th>Birim</th><th>Metre Cinsinden</th><th>Bir Alt Birime Göre</th></tr></thead>
+        <tbody>
+          <tr><td>1 km</td><td>1.000 m</td><td>1 km = 10 hm</td></tr>
+          <tr><td>1 hm</td><td>100 m</td><td>1 hm = 10 dam</td></tr>
+          <tr><td>1 dam</td><td>10 m</td><td>1 dam = 10 m</td></tr>
+          <tr><td><strong>1 m</strong></td><td><strong>1 m (temel birim)</strong></td><td>1 m = 10 dm</td></tr>
+          <tr><td>1 dm</td><td>0,1 m</td><td>1 dm = 10 cm</td></tr>
+          <tr><td>1 cm</td><td>0,01 m</td><td>1 cm = 10 mm</td></tr>
+          <tr><td>1 mm</td><td>0,001 m</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="icon">🟦</div>Alan Ölçü Birimleri</div>
+    <div class="def-box">
+      Alan ölçülerinde temel birim <strong>metrekaredir (m&sup2;)</strong>.<br><br>
+      Uzunluk birimlerinin aksine alan birimlerinde her basamakta <strong>100 ile çarpılır veya bölünür</strong>.
+    </div>
+    <div class="resp-table">
+      <table>
+        <thead><tr><th>Birim</th><th>m&sup2; Cinsinden</th><th>Bir Alt Birime Göre</th></tr></thead>
+        <tbody>
+          <tr><td>1 km&sup2;</td><td>1.000.000 m&sup2;</td><td>1 km&sup2; = 100 hm&sup2;</td></tr>
+          <tr><td>1 hm&sup2;</td><td>10.000 m&sup2;</td><td>1 hm&sup2; = 100 dam&sup2;</td></tr>
+          <tr><td>1 dam&sup2;</td><td>100 m&sup2;</td><td>1 dam&sup2; = 100 m&sup2;</td></tr>
+          <tr><td><strong>1 m&sup2;</strong></td><td><strong>1 m&sup2; (temel birim)</strong></td><td>1 m&sup2; = 100 dm&sup2;</td></tr>
+          <tr><td>1 dm&sup2;</td><td>0,01 m&sup2;</td><td>1 dm&sup2; = 100 cm&sup2;</td></tr>
+          <tr><td>1 cm&sup2;</td><td>0,0001 m&sup2;</td><td>1 cm&sup2; = 100 mm&sup2;</td></tr>
+          <tr><td>1 mm&sup2;</td><td>0,000001 m&sup2;</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rule-box">
+      <div class="rule-title">&#9888; Dikkat: Uzunluk ile Alan Farkı</div>
+      <p>Uzunlukta her basamak <strong>10</strong> iken, alanda her basamak <strong>100</strong>'dür!<br>
+      Örnek: 1 m = 10 dm &rarr; 1 m&sup2; = <span class="highlight">100</span> dm&sup2; (10&sup2; = 100)</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="icon">🔄</div>Birim Dönüşümü Nasıl Yapılır?</div>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <p><strong>Yönü belirle.</strong> Büyük birimden küçüğe mi, küçükten büyüğe mi gidiyorsun?</p>
+        <div class="formula">Büyük &rarr; Küçük : &times;10 (uzunluk) veya &times;100 (alan)</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <p><strong>Kaç basamak atladığını say.</strong> Her basamak için 10 (uzunluk) veya 100 (alan) kullan.</p>
+        <div class="formula">3 m &rarr; cm: 2 basamak &rarr; &times;100 &rarr; 300 cm</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <p><strong>Alan için:</strong> Kaç basamak atladıysan 100'ün o kuvvetini kullan.</p>
+        <div class="formula">2 m&sup2; &rarr; cm&sup2;: 2 basamak &rarr; &times;10.000 &rarr; 20.000 cm&sup2;</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ORNEKLER -->
+<div id="ornekler" class="section">
+  <div id="orneklerKonteyner">
+    <div class="example-card">
+      <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">5 m&sup2; = ? cm&sup2;</span></div>
+      <div class="ex-body">
+        <button class="toggle-sol" data-target="s1">Çözümü Göster / Gizle</button>
+        <div class="ex-solution" id="s1">
+          <div class="ex-step"><span class="num">1.</span><span>m&sup2; &rarr; cm&sup2;: 2 basamak aşağı iniyoruz.</span></div>
+          <div class="ex-step"><span class="num">2.</span><span>Alan biriminde her basamak &times;100 &rarr; 2 basamak: &times;10.000</span></div>
+          <div class="ex-step"><span class="num">3.</span><span>5 &times; 10.000 = 50.000</span></div>
+          <div class="ex-result">&#10003; 5 m&sup2; = 50.000 cm&sup2;</div>
+        </div>
+      </div>
+    </div>
+    <div class="example-card">
+      <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">3 dam&sup2; = ? m&sup2;</span></div>
+      <div class="ex-body">
+        <button class="toggle-sol" data-target="s2">Çözümü Göster / Gizle</button>
+        <div class="ex-solution" id="s2">
+          <div class="ex-step"><span class="num">1.</span><span>dam&sup2; &rarr; m&sup2;: 1 basamak aşağı iniyoruz.</span></div>
+          <div class="ex-step"><span class="num">2.</span><span>Alan biriminde her basamak &times;100 &rarr; 1 basamak: &times;100</span></div>
+          <div class="ex-step"><span class="num">3.</span><span>3 &times; 100 = 300</span></div>
+          <div class="ex-result">&#10003; 3 dam&sup2; = 300 m&sup2;</div>
+        </div>
+      </div>
+    </div>
+    <div class="example-card">
+      <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">450 cm = ? m</span></div>
+      <div class="ex-body">
+        <button class="toggle-sol" data-target="s3">Çözümü Göster / Gizle</button>
+        <div class="ex-solution" id="s3">
+          <div class="ex-step"><span class="num">1.</span><span>cm &rarr; m: 2 basamak yukarı çıkıyoruz.</span></div>
+          <div class="ex-step"><span class="num">2.</span><span>Her basamakta &divide;10 &rarr; 2 basamak: &divide;100</span></div>
+          <div class="ex-step"><span class="num">3.</span><span>450 &divide; 100 = 4,5</span></div>
+          <div class="ex-result">&#10003; 450 cm = 4,5 m</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:8px;">
+    <button class="toggle-sol" id="dahaFazlaBtn" style="background:var(--primary);color:white;border:none;padding:11px 28px;border-radius:50px;font-size:0.95rem;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(67,97,238,.3);">
+      &#43; Daha Fazla Örnek
+    </button>
+  </div>
+</div>
+
+<!-- INTERAKTIF -->
+<div id="interaktif" class="section">
+  <div class="interactive-panel">
+    <div class="score-bar">
+      <div><div class="score-label">TOPLAM PUAN</div><div class="score-value" id="scoreVal">0</div></div>
+      <div class="q-progress" id="qProgress">Soru 1 / 5</div>
+    </div>
+    <div class="q-display">
+      <div class="q-text" id="qText">Yükleniyor...</div>
+      <div class="q-sub">Doğru dönüşüm değerini seç</div>
+    </div>
+    <div id="choicesArea" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <div class="action-btns" id="actionBtns">
+      <button class="next-btn" id="nextBtn">&#127922; Yeni Soru Üret</button>
+      <button class="manual-btn" id="manualToggleBtn">&#9999; Soru üretmek istiyorum (0 puan)</button>
+    </div>
+    <div class="manual-area" id="manualArea">
+      <h4>Kendi sorunuzu girin</h4>
+      <div class="manual-row" style="flex-wrap:wrap;gap:10px;align-items:center;">
+        <input class="m-input" style="width:90px;" type="number" id="mval" placeholder="Değer" value="3">
+        <select class="m-select" id="mfrom">
+          <option value="0">km</option><option value="1">hm</option><option value="2">dam</option>
+          <option value="3" selected>m</option><option value="4">dm</option>
+          <option value="5">cm</option><option value="6">mm</option>
+        </select>
+        <span class="m-label">= ?</span>
+        <select class="m-select" id="mto">
+          <option value="0">km</option><option value="1">hm</option><option value="2">dam</option>
+          <option value="3">m</option><option value="4">dm</option>
+          <option value="5" selected>cm</option><option value="6">mm</option>
+        </select>
+        <select class="m-select" id="mtype">
+          <option value="area" selected>Alan (&sup2;)</option>
+          <option value="len">Uzunluk</option>
+        </select>
+      </div>
+      <button class="load-btn" id="loadManualBtn">&#9658; Soruyu Yükle</button>
+    </div>
+  </div>
+</div>
+
+<!-- OZET -->
+<div id="ozet" class="section">
+  <div class="card">
+    <div class="card-title"><div class="icon">&#128203;</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="sum-item"><div class="sum-icon">&#128207;</div><h4>Uzunluk Ölçü Birimi</h4><p>Temel birim: metre (m). Her basamakta &times;10 veya &divide;10.</p></div>
+      <div class="sum-item"><div class="sum-icon">&#9670;</div><h4>Alan Ölçü Birimi</h4><p>Temel birim: metrekare (m&sup2;). Her basamakta &times;100 veya &divide;100.</p></div>
+      <div class="sum-item"><div class="sum-icon">&#11015;</div><h4>Büyükten Küçüğe</h4><p>Uzunlukta &times;10, alanda &times;100 (her basamak için).</p></div>
+      <div class="sum-item"><div class="sum-icon">&#11014;</div><h4>Küçükten Büyüğe</h4><p>Uzunlukta &divide;10, alanda &divide;100 (her basamak için).</p></div>
+      <div class="sum-item"><div class="sum-icon">&#9888;</div><h4>En Sık Hata</h4><p>Alan dönüşümünde 10 yerine 100 kullanmayı unutmak.</p></div>
+      <div class="sum-item"><div class="sum-icon">&#127806;</div><h4>Özel Alan Birimleri</h4><p>1 hm&sup2; = 1 hektar, 1 dam&sup2; = 1 dekar. Tarımda kullanılır.</p></div>
+    </div>
+    <div class="tip-box">
+      <div class="tip-icon">&#128161;</div>
+      <p><strong>Kontrol Yöntemi:</strong> Cevabını bulduktan sonra, büyük birimden küçük birime geçince sayının büyümesi, küçük birimden büyüğe geçince küçülmesi gerektiğini kontrol et.</p>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){
+    btn.classList.toggle('gorunsun',window.scrollY>300);
+  });
+  btn.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+(function() {
+  // TABS
+  document.querySelectorAll('.tab-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = this.getAttribute('data-tab');
+      document.querySelectorAll('.section').forEach(function(s) { s.classList.remove('active'); });
+      document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById(target).classList.add('active');
+      this.classList.add('active');
+    });
+  });
+
+  // TOGGLE SOL (sabit örnekler)
+  document.querySelectorAll('.toggle-sol[data-target]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.getElementById(this.getAttribute('data-target')).classList.toggle('open');
+    });
+  });
+
+  // BİRİM SİSTEMİ
+  var UNITS = ['km','hm','dam','m','dm','cm','mm'];
+  var AREA_U = ['km²','hm²','dam²','m²','dm²','cm²','mm²'];
+
+  // Ondalık sayı formatla - bilimsel gösterim OLMADAN
+  function formatNum(n) {
+    // Tam sayı mı?
+    if (Number.isInteger(n)) return n.toLocaleString('tr-TR');
+    // Çok büyük sayılar (milyonlarca)
+    if (Math.abs(n) >= 1000) return Math.round(n).toLocaleString('tr-TR');
+    // Normal ondalık
+    if (Math.abs(n) >= 1) {
+      var s = parseFloat(n.toFixed(4));
+      return s.toLocaleString('tr-TR');
+    }
+    // Küçük ondalık (0,001 gibi) - en fazla 6 basamak
+    var s = parseFloat(n.toFixed(6));
+    return s.toLocaleString('tr-TR');
+  }
+
+  function convert(val, fromIdx, toIdx, isArea) {
+    var diff = toIdx - fromIdx;
+    var factor = isArea ? 100 : 10;
+    if (diff > 0) return val * Math.pow(factor, diff);
+    return val / Math.pow(factor, -diff);
+  }
+
+  // DAHA FAZLA ÖRNEK sistemi
+  var ornekSayac = 3;
+  var ALAN_ORNEKLER = [
+    { soru: '8 hm² = ? m²', adimlar: ['hm² → m²: 2 basamak aşağı iniyoruz.', 'Alan biriminde her basamak ×100 → 2 basamak: ×10.000', '8 × 10.000 = 80.000'], sonuç: '8 hm² = 80.000 m²' },
+    { soru: '500 dm² = ? m²', adimlar: ['dm² → m²: 1 basamak yukarı çıkıyoruz.', 'Alan biriminde her basamak ÷100 → 1 basamak: ÷100', '500 ÷ 100 = 5'], sonuç: '500 dm² = 5 m²' },
+    { soru: '2 km² = ? hm²', adimlar: ['km² → hm²: 1 basamak aşağı iniyoruz.', 'Alan biriminde her basamak ×100 → 1 basamak: ×100', '2 × 100 = 200'], sonuç: '2 km² = 200 hm²' },
+    { soru: '6 m² = ? dm²', adimlar: ['m² → dm²: 1 basamak aşağı iniyoruz.', 'Alan biriminde her basamak ×100 → 1 basamak: ×100', '6 × 100 = 600'], sonuç: '6 m² = 600 dm²' },
+    { soru: '3.000 cm² = ? dm²', adimlar: ['cm² → dm²: 1 basamak yukarı çıkıyoruz.', 'Alan biriminde her basamak ÷100 → 1 basamak: ÷100', '3.000 ÷ 100 = 30'], sonuç: '3.000 cm² = 30 dm²' },
+    { soru: '4 dam² = ? dm²', adimlar: ['dam² → dm²: 2 basamak aşağı iniyoruz.', 'Alan biriminde her basamak ×100 → 2 basamak: ×10.000', '4 × 10.000 = 40.000'], sonuç: '4 dam² = 40.000 dm²' },
+    { soru: '7 hm² = ? dam²', adimlar: ['hm² → dam²: 1 basamak aşağı iniyoruz.', 'Alan biriminde her basamak ×100 → 1 basamak: ×100', '7 × 100 = 700'], sonuç: '7 hm² = 700 dam²' },
+    { soru: '90.000 m² = ? km²', adimlar: ['m² → km²: 3 basamak yukarı çıkıyoruz.', 'Alan biriminde her basamak ÷100 → 3 basamak: ÷1.000.000', '90.000 ÷ 1.000.000 = 0,09'], sonuç: '90.000 m² = 0,09 km²' },
+    { soru: '2,5 m² = ? cm²', adimlar: ['m² → cm²: 2 basamak aşağı iniyoruz.', 'Alan biriminde her basamak ×100 → 2 basamak: ×10.000', '2,5 × 10.000 = 25.000'], sonuç: '2,5 m² = 25.000 cm²' },
+  ];
+  var ornekIndex = 0;
+
+  function ornekHTML(no, ornek, id) {
+    return '<div class="example-card" style="animation:fadeIn .35s ease;">' +
+      '<div class="ex-header"><span class="ex-num">Örnek ' + no + '</span>' +
+      '<span class="ex-q">' + ornek.soru + '</span></div>' +
+      '<div class="ex-body">' +
+      '<button class="toggle-sol" data-target="' + id + '">Çözümü Göster / Gizle</button>' +
+      '<div class="ex-solution" id="' + id + '">' +
+      ornek.adimlar.map(function(a, i) {
+        return '<div class="ex-step"><span class="num">' + (i+1) + '.</span><span>' + a + '</span></div>';
+      }).join('') +
+      '<div class="ex-result">&#10003; ' + ornek.sonuc + '</div>' +
+      '</div></div></div>';
+  }
+
+  document.getElementById('dahaFazlaBtn').addEventListener('click', function() {
+    var konteyner = document.getElementById('orneklerKonteyner');
+    var btn = document.getElementById('dahaFazlaBtn');
+    var eklendi = 0;
+    while (eklendi < 3 && ornekIndex < ALAN_ORNEKLER.length) {
+      ornekSayac++;
+      var id = 'sx' + ornekSayac;
+      var div = document.createElement('div');
+      div.innerHTML = ornekHTML(ornekSayac, ALAN_ORNEKLER[ornekIndex], id);
+      var kart = div.firstChild;
+      konteyner.appendChild(kart);
+      // Toggle dinleyici ekle
+      var toggleBtn = kart.querySelector('.toggle-sol');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function() {
+          document.getElementById(this.getAttribute('data-target')).classList.toggle('open');
+        });
+      }
+      ornekIndex++;
+      eklendi++;
+    }
+    // Buton hep altta
+    var btnParent = btn.parentNode;
+    btnParent.parentNode.appendChild(btnParent);
+    // Tüm örnekler bittiyse butonu gizle
+    if (ornekIndex >= ALAN_ORNEKLER.length) btn.style.display = 'none';
+  });
+
+  // INTERAKTİF
+  var score = 0, qNum = 0, INITIAL = 5, afterInitial = false, answered = false, isManual = false, currentQ = null;
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+  function generateQ() {
+    // %75 alan, %25 uzunluk
+    var isArea = Math.random() < 0.75;
+    var fromIdx, toIdx;
+    // Komşu veya 2 basamak, daha anlaşılır
+    do {
+      fromIdx = randInt(0, 6);
+      toIdx = randInt(0, 6);
+    } while (fromIdx === toIdx);
+    var val = randInt(1, 9);
+    var correct = convert(val, fromIdx, toIdx, isArea);
+    // Çok küçük veya çok büyük sonuçlardan kaçın (ondalık gösterim için)
+    // Yeniden dene
+    var attempts = 0;
+    while ((correct < 0.001 || correct > 9000000) && attempts < 30) {
+      fromIdx = randInt(2, 5); toIdx = randInt(2, 5);
+      if (fromIdx === toIdx) { attempts++; continue; }
+      val = randInt(1, 9);
+      correct = convert(val, fromIdx, toIdx, isArea);
+      attempts++;
+    }
+    var fromLabel = isArea ? AREA_U[fromIdx] : UNITS[fromIdx];
+    var toLabel = isArea ? AREA_U[toIdx] : UNITS[toIdx];
+    var display = val + ' ' + fromLabel + ' = ? ' + toLabel;
+    // Yanlış şıklar
+    var wrongs = new Set(); var att = 0;
+    while (wrongs.size < 3 && att < 80) {
+      var f = isArea ? Math.pow(100, randInt(1, 3)) : Math.pow(10, randInt(1, 4));
+      var op = Math.random() > 0.5 ? correct * f : correct / f;
+      if (Math.abs(op - correct) > 0.0001 && op > 0 && op < 9999999 && op >= 0.001) wrongs.add(op);
+      att++;
+    }
+    var choices = [correct].concat(Array.from(wrongs).slice(0, 3));
+    choices.sort(function() { return Math.random() - 0.5; });
+    return { display: display, correct: correct, choices: choices, unit: toLabel };
+  }
+
+  function renderChoices(q) {
+    var area = document.getElementById('choicesArea');
+    area.innerHTML = '';
+    q.choices.forEach(function(c) {
+      var btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.style.cssText = 'width:100%;padding:12px 18px;border-radius:12px;font-size:1rem;text-align:left;margin-bottom:2px;';
+      btn.textContent = formatNum(c) + ' ' + q.unit;
+      btn.dataset.val = c;
+      btn.addEventListener('click', function() { if (!answered) checkAnswer(c, btn, q); });
+      area.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(chosen, btn, q) {
+    answered = true;
+    var ok = Math.abs(chosen - q.correct) < 0.0001;
+    var earned = isManual ? 0 : (ok ? 10 : 0);
+    score += earned;
+    document.getElementById('scoreVal').textContent = score;
+    document.getElementById('choicesArea').querySelectorAll('button').forEach(function(b) {
+      b.disabled = true;
+      var bval = parseFloat(b.dataset.val);
+      if (Math.abs(bval - q.correct) < 0.0001) b.classList.add('correct-btn');
+      else if (b === btn) b.classList.add('wrong-btn');
+    });
+    var fb = document.getElementById('feedbackBox');
+    fb.className = 'feedback-box visible ' + (ok ? 'fb-ok' : 'fb-err');
+    fb.textContent = ok
+      ? 'Dogru! ' + (isManual ? '(0 puan - kendi sorun)' : '+10 puan')
+      : 'Yanlis. Dogru cevap: ' + formatNum(q.correct) + ' ' + q.unit;
+    qNum++;
+    if (!afterInitial && qNum >= INITIAL) afterInitial = true;
+    updateProgress();
+    document.getElementById('actionBtns').className = 'action-btns visible';
+  }
+
+  function loadQ(q, manual) {
+    currentQ = q; isManual = manual || false; answered = false;
+    document.getElementById('qText').textContent = q.display + (isManual ? ' (0 puan)' : '');
+    document.getElementById('feedbackBox').className = 'feedback-box';
+    document.getElementById('actionBtns').className = 'action-btns';
+    document.getElementById('manualArea').className = 'manual-area';
+    renderChoices(q);
+  }
+
+  function updateProgress() {
+    document.getElementById('scoreVal').textContent = score;
+    document.getElementById('qProgress').textContent = !afterInitial
+      ? 'Soru ' + Math.min(qNum + 1, INITIAL) + ' / ' + INITIAL
+      : 'Toplam cozulen: ' + qNum;
+  }
+
+  document.getElementById('nextBtn').addEventListener('click', function() {
+    document.getElementById('manualArea').className = 'manual-area';
+    loadQ(generateQ(), false); updateProgress();
+  });
+
+  document.getElementById('manualToggleBtn').addEventListener('click', function() {
+    var a = document.getElementById('manualArea');
+    a.className = a.classList.contains('visible') ? 'manual-area' : 'manual-area visible';
+  });
+
+  document.getElementById('loadManualBtn').addEventListener('click', function() {
+    var val = parseFloat(document.getElementById('mval').value) || 1;
+    var fromIdx = parseInt(document.getElementById('mfrom').value);
+    var toIdx = parseInt(document.getElementById('mto').value);
+    var isAreaM = document.getElementById('mtype').value === 'area';
+    if (fromIdx === toIdx) { alert('Farkli birimler secin!'); return; }
+    var correct = convert(val, fromIdx, toIdx, isAreaM);
+    var fromLabel = isAreaM ? AREA_U[fromIdx] : UNITS[fromIdx];
+    var toLabel = isAreaM ? AREA_U[toIdx] : UNITS[toIdx];
+    var wrongs = new Set(); var att = 0;
+    while (wrongs.size < 3 && att < 60) {
+      var f = isAreaM ? Math.pow(100, randInt(1, 3)) : Math.pow(10, randInt(1, 4));
+      var op = Math.random() > 0.5 ? correct * f : correct / f;
+      if (Math.abs(op - correct) > 0.0001 && op > 0) wrongs.add(op);
+      att++;
+    }
+    var choices = [correct].concat(Array.from(wrongs).slice(0, 3));
+    choices.sort(function() { return Math.random() - 0.5; });
+    var q = { display: val + ' ' + fromLabel + ' = ? ' + toLabel, correct: correct, choices: choices, unit: toLabel };
+    document.getElementById('manualArea').className = 'manual-area';
+    loadQ(q, true); updateProgress();
+  });
+
+  updateProgress();
+  loadQ(generateQ(), false);
+})();
+</script>
+</body>
+</html>

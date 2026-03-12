@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doğrusal Eşitsizlikler | 8. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f4ff; --card:#fff; --primary:#4361ee; --primary-light:#eef0fd;
+  --accent:#f72585; --accent2:#4cc9f0; --success:#06d6a0; --warn:#ffd166;
+  --text:#1a1a2e; --muted:#6b7280; --border:#e0e7ff;
+  --shadow:0 4px 24px rgba(67,97,238,.10); --radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px;}
+
+/* HEADER */
+header{
+  background:radial-gradient(ellipse at center,#000 0%,#000 35%,#5a0000 70%,#cc0000 100%);
+  color:white;padding:28px 24px 52px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 8px 40px rgba(180,0,0,.45),0 0 0 1px rgba(200,0,0,.25);
+}
+header .badge{
+  display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,80,80,.3);
+  border-radius:50px;padding:3px 14px;font-size:.78rem;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:10px;color:#ffaaaa;position:relative;z-index:1;
+}
+header img.logo{
+  height:90px;object-fit:contain;display:block;margin:8px auto 0;
+  position:relative;z-index:1;
+}
+header h1{
+  font-family:'Baloo 2',cursive;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:800;
+  color:#fff0f0;position:relative;z-index:1;text-shadow:0 0 24px rgba(255,60,60,.3);margin-top:6px;
+}
+header p{font-size:.93rem;color:rgba(255,220,220,.65);margin-top:4px;position:relative;z-index:1;}
+
+/* TABS */
+.tab-bar{
+  display:flex;justify-content:center;gap:8px;margin:-22px auto 0;
+  position:relative;z-index:10;padding:0 12px;flex-wrap:wrap;
+}
+.tab-btn{
+  background:white;border:none;border-radius:50px;
+  padding:9px 14px;font-family:'Nunito',sans-serif;
+  font-size:clamp(.75rem,2.5vw,.9rem);font-weight:700;color:var(--muted);
+  cursor:pointer;box-shadow:0 2px 12px rgba(67,97,238,.13);transition:all .22s;white-space:nowrap;
+}
+.tab-btn.active,.tab-btn:hover{background:var(--primary);color:white;box-shadow:0 4px 18px rgba(67,97,238,.28);transform:translateY(-2px);}
+
+/* MAIN */
+.main{max-width:820px;margin:32px auto 0;padding:0 12px;}
+.section{display:none;}
+.section.active{display:block;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARD */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(14px,4vw,26px);margin-bottom:20px;border:1.5px solid var(--border);}
+.card-title{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:700;color:var(--primary);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title .icon{background:var(--primary-light);width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.def-box{background:linear-gradient(135deg,#eef0fd 0%,#f3e8ff 100%);border-left:4px solid var(--primary);border-radius:12px;padding:14px 16px;margin:12px 0;font-size:.95rem;line-height:1.7;}
+.def-box strong{color:var(--primary);}
+.highlight{background:var(--warn);border-radius:8px;padding:2px 8px;font-weight:800;color:#7a4f00;}
+.symbol-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0;}
+@media(max-width:400px){.symbol-grid{grid-template-columns:repeat(2,1fr);}}
+.symbol-card{background:var(--primary-light);border-radius:14px;padding:12px 6px;text-align:center;border:1.5px solid var(--border);transition:transform .18s;}
+.symbol-card:hover{transform:scale(1.04);}
+.symbol-card .sym{font-size:1.8rem;font-weight:900;color:var(--primary);display:block;}
+.symbol-card .sym-name{font-size:.7rem;color:var(--muted);margin-top:4px;font-weight:600;}
+.step{display:flex;gap:12px;margin-bottom:16px;align-items:flex-start;}
+.step-num{background:var(--primary);color:white;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.93rem;flex-shrink:0;margin-top:2px;}
+.step-content{flex:1;}
+.step-content p{line-height:1.65;font-size:.93rem;}
+.step-content .formula{background:#1a1a2e;color:#4cc9f0;border-radius:10px;padding:10px 14px;font-size:.93rem;font-weight:700;font-family:'Courier New',monospace;margin:8px 0;overflow-x:auto;}
+.rule-box{background:linear-gradient(90deg,#fff0f9 0%,#fce7f3 100%);border:2px solid var(--accent);border-radius:14px;padding:13px 16px;margin:13px 0;}
+.rule-box .rule-title{color:var(--accent);font-weight:800;font-size:.91rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-box p{font-size:.91rem;line-height:1.65;}
+.resp-table{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.89rem;}
+th{padding:10px 12px;text-align:left;background:var(--primary-light);}
+th:first-child{border-radius:8px 0 0 8px;}th:last-child{border-radius:0 8px 8px 0;}
+td{padding:10px 12px;border-bottom:1px solid var(--border);}
+
+/* EXAMPLES */
+.example-card{background:white;border-radius:16px;border:1.5px solid var(--border);overflow:hidden;margin-bottom:16px;box-shadow:0 2px 12px rgba(67,97,238,.07);}
+.ex-header{background:linear-gradient(90deg,var(--primary-light) 0%,#f3e8ff 100%);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ex-num{background:var(--primary);color:white;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.83rem;white-space:nowrap;}
+.ex-q{font-weight:700;font-size:.97rem;color:var(--text);font-family:'Baloo 2',cursive;}
+.ex-body{padding:14px 16px;}
+.ex-step{display:flex;gap:10px;margin-bottom:10px;font-size:.91rem;align-items:flex-start;}
+.ex-step .num{color:var(--primary);font-weight:800;min-width:20px;}
+.ex-result{background:linear-gradient(90deg,#e8f8f2 0%,#f0fdf9 100%);border:1.5px solid var(--success);border-radius:10px;padding:10px 14px;font-weight:700;color:#065f46;margin-top:12px;font-size:.93rem;}
+.toggle-sol{background:var(--primary-light);border:1.5px solid var(--border);color:var(--primary);border-radius:50px;padding:7px 18px;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;margin-top:10px;transition:all .18s;}
+.toggle-sol:hover{background:var(--primary);color:white;}
+.ex-solution{display:none;margin-top:14px;}
+.ex-solution.open{display:block;animation:fadeIn .3s ease;}
+
+/* SUMMARY */
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.summary-grid{grid-template-columns:1fr;}}
+.sum-item{background:var(--primary-light);border-radius:14px;padding:13px;border:1.5px solid var(--border);}
+.sum-item .sum-icon{font-size:1.4rem;margin-bottom:6px;}
+.sum-item h4{font-size:.86rem;color:var(--primary);font-weight:800;margin-bottom:5px;}
+.sum-item p{font-size:.83rem;color:var(--muted);line-height:1.6;}
+.tip-box{background:linear-gradient(135deg,#fff8e1 0%,#fffde7 100%);border:2px solid var(--warn);border-radius:14px;padding:14px 16px;margin-top:16px;display:flex;gap:12px;align-items:flex-start;}
+.tip-box .tip-icon{font-size:1.4rem;flex-shrink:0;}
+.tip-box p{font-size:.89rem;line-height:1.65;color:#6b4c00;}
+
+/* INTERACTIVE */
+.interactive-panel{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-radius:var(--radius);padding:clamp(14px,4vw,26px);color:white;margin-bottom:20px;}
+.score-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.07);border-radius:12px;padding:10px 16px;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.score-label{font-size:.83rem;color:#aaa;}
+.score-value{font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;color:var(--warn);}
+.q-progress{font-size:.83rem;color:#aaa;}
+.q-display{background:rgba(255,255,255,.06);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center;}
+.q-display .q-text{font-family:'Baloo 2',cursive;font-size:clamp(1rem,4vw,1.45rem);font-weight:700;color:var(--accent2);margin-bottom:6px;}
+.q-display .q-sub{font-size:.83rem;color:#aaa;}
+.decision-area{margin-bottom:14px;}
+.decision-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.decision-label{font-size:.86rem;color:#ccc;min-width:130px;}
+.choice-btn{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:50px;color:white;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;padding:7px 18px;cursor:pointer;transition:all .2s;}
+.choice-btn:hover{background:rgba(255,255,255,.15);}
+.choice-btn.selected{background:var(--primary);border-color:var(--primary);box-shadow:0 0 12px rgba(67,97,238,.5);}
+.choice-btn.correct-btn{background:var(--success);border-color:var(--success);}
+.choice-btn.wrong-btn{background:#ef4444;border-color:#ef4444;}
+.confirm-btn{background:linear-gradient(90deg,var(--accent) 0%,#b5179e 100%);color:white;border:none;border-radius:50px;padding:11px 26px;font-family:'Nunito',sans-serif;font-size:.97rem;font-weight:800;cursor:pointer;box-shadow:0 4px 18px rgba(247,37,133,.35);transition:all .2s;display:block;margin:14px auto 0;}
+.confirm-btn:hover{transform:translateY(-2px);}
+.confirm-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.feedback-box{border-radius:12px;padding:13px 16px;margin-top:13px;font-weight:700;font-size:.97rem;text-align:center;display:none;}
+.feedback-box.visible{display:block;animation:fadeIn .3s ease;}
+.feedback-box.fb-ok{background:rgba(6,214,160,.15);border:1.5px solid var(--success);color:var(--success);}
+.feedback-box.fb-part{background:rgba(255,209,102,.15);border:1.5px solid var(--warn);color:var(--warn);}
+.feedback-box.fb-err{background:rgba(239,68,68,.15);border:1.5px solid #ef4444;color:#ef4444;}
+.nl-wrap{background:rgba(255,255,255,.04);border-radius:14px;padding:14px;margin-top:13px;}
+.nl-wrap h4{font-size:.8rem;color:#aaa;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+canvas.numline{width:100%;height:70px;display:block;border-radius:8px;}
+.nl-legend{display:flex;gap:14px;margin-top:10px;font-size:.76rem;color:#aaa;flex-wrap:wrap;}
+.nl-legend span{display:flex;align-items:center;gap:5px;}
+.dot-o{width:10px;height:10px;border-radius:50%;border:2.5px solid var(--accent2);background:transparent;display:inline-block;}
+.dot-c{width:10px;height:10px;border-radius:50%;background:var(--accent2);display:inline-block;}
+.action-btns{display:none;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center;}
+.action-btns.visible{display:flex;animation:fadeIn .3s ease;}
+.next-btn{background:linear-gradient(90deg,#4361ee,#7209b7);color:white;border:none;border-radius:50px;padding:10px 22px;font-family:'Nunito',sans-serif;font-size:.93rem;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(67,97,238,.35);transition:all .2s;}
+.next-btn:hover{transform:translateY(-2px);}
+.manual-btn{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);color:#ccc;border-radius:50px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;transition:all .2s;}
+.manual-btn:hover{background:rgba(255,255,255,.14);}
+.manual-area{background:rgba(255,255,255,.05);border-radius:14px;padding:16px;margin-top:14px;display:none;}
+.manual-area.visible{display:block;animation:fadeIn .3s ease;}
+.manual-area h4{font-size:.88rem;color:#aaa;margin-bottom:12px;}
+.manual-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.m-input{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;color:white;font-family:'Nunito',sans-serif;font-size:.97rem;font-weight:700;padding:8px 12px;width:68px;text-align:center;}
+.m-input:focus{outline:none;border-color:var(--accent2);}
+.m-select{background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);border-radius:10px;color:white;font-family:'Nunito',sans-serif;font-size:1.05rem;font-weight:700;padding:8px 10px;cursor:pointer;}
+.m-select option{background:#1a1a2e;}
+.m-label{font-size:1rem;font-weight:700;color:#e2e8f0;}
+.load-btn{background:var(--accent2);color:#1a1a2e;border:none;border-radius:50px;padding:9px 20px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;transition:all .2s;margin-top:4px;}
+.load-btn:hover{transform:translateY(-2px);}
+
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:white;border:none;border-radius:50px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:opacity .3s,transform .2s;z-index:999;pointer-events:none;}
+.basa-don.gorunsun{opacity:1;pointer-events:auto;}
+.basa-don:hover{transform:translateY(-3px);}
+</style>
+</head>
+<body>
+
+<button class="basa-don" id="basaDon">⬆ Başa Dön</button>
+<header>
+  <div class="badge">8. Sınıf Matematik</div>
+  <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+  <h1>📐 Doğrusal Eşitsizlikler</h1>
+  <p>Adım adım öğren, görsel olarak kavra</p>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+  <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+  <button class="tab-btn" data-tab="interaktif">🎛️ İnteraktif Çözüm</button>
+  <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+</div>
+
+<div class="main">
+
+<!-- KONU -->
+<div id="konu" class="section active">
+  <div class="card">
+    <div class="card-title"><div class="icon">📌</div>Eşitsizlik Nedir?</div>
+    <div class="def-box">
+      İki ifade arasındaki <strong>büyüklük ilişkisini</strong> gösteren matematiksel ifadeye <strong>eşitsizlik</strong> denir.<br><br>
+      Bir denklem <span class="highlight">=</span> işareti kullanırken, eşitsizlik
+      <span class="highlight">&lt;</span>, <span class="highlight">&gt;</span>, <span class="highlight">≤</span> veya <span class="highlight">≥</span> işaretlerinden birini kullanır.
+    </div>
+    <div class="symbol-grid">
+      <div class="symbol-card"><span class="sym">&lt;</span><div class="sym-name">Küçüktür</div></div>
+      <div class="symbol-card"><span class="sym">&gt;</span><div class="sym-name">Büyüktür</div></div>
+      <div class="symbol-card"><span class="sym">≤</span><div class="sym-name">Küçük eşittir</div></div>
+      <div class="symbol-card"><span class="sym">≥</span><div class="sym-name">Büyük eşittir</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="icon">🔢</div>Doğrusal Eşitsizlik</div>
+    <div class="def-box">
+      <strong>Doğrusal eşitsizlik</strong>, değişkenin (genellikle x) 1. dereceden olduğu eşitsizliktir.<br><br>
+      Genel biçimi: <strong>ax + b &gt; c</strong> (veya &lt;, ≤, ≥)
+    </div>
+    <div class="rule-box">
+      <div class="rule-title">⚡ Temel Fark: Denklem mi, Eşitsizlik mi?</div>
+      <p><strong>Denklem</strong> (2x + 3 = 7): Tek bir çözüm noktası vardır.<br>
+      <strong>Eşitsizlik</strong> (2x + 3 &gt; 7): Sonsuz çözüm kümesi vardır; sayı doğrusunda bir aralık olarak gösterilir.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="icon">📐</div>Çözüm Adımları</div>
+    <p style="color:var(--muted);font-size:.89rem;margin-bottom:14px;">ax + b &gt; c biçimindeki bir eşitsizliği çözmek için:</p>
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <p><strong>Sabitleri bir tarafa topla.</strong> Her iki taraftan aynı sayıyı ekleyip çıkarabilirsin.</p>
+        <div class="formula">ax + b &gt; c → ax &gt; c − b</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <p><strong>x'in katsayısına böl.</strong> Pozitif sayıya bölünce yön <u>değişmez</u>.</p>
+        <div class="formula">ax &gt; c − b → x &gt; (c − b) / a</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <p><strong>⚠️ Önemli Kural:</strong> Negatif sayıyla çarpılır/bölünürse eşitsizlik yönü <strong>ters döner!</strong></p>
+        <div class="formula">−2x &gt; 6 → x &lt; −3</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <p><strong>Sayı doğrusunda göster.</strong> &lt; veya &gt; için boş daire, ≤ veya ≥ için dolu daire kullan.</p>
+      </div>
+    </div>
+    <div class="rule-box">
+      <div class="rule-title">🔄 Negatif Çarpma/Bölme Kuralı</div>
+      <p>Negatif sayıyla işlem yapılırken <span class="highlight" style="background:#fce7f3;color:#9d174d;">&lt; ↔ &gt;</span> ve <span class="highlight" style="background:#fce7f3;color:#9d174d;">≤ ↔ ≥</span> şeklinde ters çevrilir.</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title"><div class="icon">📏</div>Sayı Doğrusunda Gösterim</div>
+    <div class="resp-table">
+      <table>
+        <thead><tr><th>Eşitsizlik</th><th>Daire</th><th>Yön</th></tr></thead>
+        <tbody>
+          <tr><td>x &lt; a</td><td>Boş ○</td><td>Sola doğru</td></tr>
+          <tr><td>x &gt; a</td><td>Boş ○</td><td>Sağa doğru</td></tr>
+          <tr><td>x ≤ a</td><td>Dolu ●</td><td>Sola doğru</td></tr>
+          <tr><td>x ≥ a</td><td>Dolu ●</td><td>Sağa doğru</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ÖRNEKLER -->
+<div id="ornekler" class="section">
+  <div class="example-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">3x − 4 &gt; 8 eşitsizliğini çöz.</span></div>
+    <div class="ex-body">
+      <button class="toggle-sol" data-target="s1">Çözümü Göster / Gizle</button>
+      <div class="ex-solution" id="s1">
+        <div class="ex-step"><span class="num">1.</span><span>Her iki tarafa +4 ekle: 3x − 4 + 4 &gt; 8 + 4</span></div>
+        <div class="ex-step"><span class="num">2.</span><span>Basitleştir: 3x &gt; 12</span></div>
+        <div class="ex-step"><span class="num">3.</span><span>3'e böl (pozitif, yön değişmez): x &gt; 4</span></div>
+        <div class="ex-result">✅ Çözüm: x &gt; 4 — 4'ün sağı, boş daire</div>
+      </div>
+    </div>
+  </div>
+  <div class="example-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">−2x + 5 ≤ 11 eşitsizliğini çöz.</span></div>
+    <div class="ex-body">
+      <button class="toggle-sol" data-target="s2">Çözümü Göster / Gizle</button>
+      <div class="ex-solution" id="s2">
+        <div class="ex-step"><span class="num">1.</span><span>Her iki taraftan 5 çıkar: −2x ≤ 6</span></div>
+        <div class="ex-step"><span class="num">2.</span><span>−2'ye böl. <span style="color:#ef4444;font-weight:800;">Negatif → yön ters döner!</span> x ≥ −3</span></div>
+        <div class="ex-result">✅ Çözüm: x ≥ −3 — −3'ün sağı, dolu daire</div>
+      </div>
+    </div>
+  </div>
+  <div class="example-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">4x + 1 &lt; 2x + 9 eşitsizliğini çöz.</span></div>
+    <div class="ex-body">
+      <button class="toggle-sol" data-target="s3">Çözümü Göster / Gizle</button>
+      <div class="ex-solution" id="s3">
+        <div class="ex-step"><span class="num">1.</span><span>x terimlerini topla: 2x &lt; 8</span></div>
+        <div class="ex-step"><span class="num">2.</span><span>2'ye böl (pozitif, yön değişmez): x &lt; 4</span></div>
+        <div class="ex-result">✅ Çözüm: x &lt; 4 — 4'ün solu, boş daire</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- İNTERAKTİF -->
+<div id="interaktif" class="section">
+  <div class="interactive-panel">
+    <div class="score-bar">
+      <div><div class="score-label">TOPLAM PUAN</div><div class="score-value" id="scoreVal">0</div></div>
+      <div class="q-progress" id="qProgress">Soru 1 / 5</div>
+    </div>
+    <div class="q-display">
+      <div class="q-text" id="qText">Yükleniyor...</div>
+      <div class="q-sub">Nokta türünü ve yönü seç, ardından onayla</div>
+    </div>
+    <div class="decision-area">
+      <div class="decision-row">
+        <span class="decision-label">📍 Nokta türü:</span>
+        <button class="choice-btn" id="btnBos">○ Boş</button>
+        <button class="choice-btn" id="btnDolu">● Dolu</button>
+      </div>
+      <div class="decision-row">
+        <span class="decision-label">↔️ Yön:</span>
+        <button class="choice-btn" id="btnSol">◀ Sol</button>
+        <button class="choice-btn" id="btnSag">▶ Sağ</button>
+      </div>
+    </div>
+    <button class="confirm-btn" id="confirmBtn" disabled>✔ Onayla</button>
+    <div class="feedback-box" id="feedbackBox"></div>
+    <div class="nl-wrap">
+      <h4>📏 Sayı Doğrusu</h4>
+      <canvas class="numline" id="numLine" width="760" height="70"></canvas>
+      <div class="nl-legend">
+        <span><span class="dot-o"></span> Dahil değil (&lt; veya &gt;)</span>
+        <span><span class="dot-c"></span> Dahil (≤ veya ≥)</span>
+      </div>
+    </div>
+    <div class="action-btns" id="actionBtns">
+      <button class="next-btn" id="nextBtn">🎲 Yeni Soru Üret</button>
+      <button class="manual-btn" id="manualToggleBtn">✏️ Soru üretmek istiyorum (0 puan)</button>
+    </div>
+    <div class="manual-area" id="manualArea">
+      <h4>Kendi sorunuzu girin (ax + b ▸ c)</h4>
+      <div class="manual-row">
+        <div><div style="font-size:.73rem;color:#aaa;margin-bottom:3px">a</div><input class="m-input" type="number" id="ma" value="2" step="1"></div>
+        <span class="m-label">x +</span>
+        <div><div style="font-size:.73rem;color:#aaa;margin-bottom:3px">b</div><input class="m-input" type="number" id="mb" value="3" step="1"></div>
+        <select class="m-select" id="msign">
+          <option value="gt">&gt;</option>
+          <option value="lt">&lt;</option>
+          <option value="gte">≥</option>
+          <option value="lte">≤</option>
+        </select>
+        <div><div style="font-size:.73rem;color:#aaa;margin-bottom:3px">c</div><input class="m-input" type="number" id="mc" value="7" step="1"></div>
+      </div>
+      <button class="load-btn" id="loadManualBtn">▶ Soruyu Yükle</button>
+    </div>
+  </div>
+</div>
+
+<!-- ÖZET -->
+<div id="ozet" class="section">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="sum-item"><div class="sum-icon">🔣</div><h4>Semboller</h4><p>&lt; küçüktür, &gt; büyüktür, ≤ küçük eşit, ≥ büyük eşit</p></div>
+      <div class="sum-item"><div class="sum-icon">➕➖</div><h4>Toplama / Çıkarma</h4><p>Her iki taraftan aynı sayı eklenip çıkarılabilir. Yön değişmez.</p></div>
+      <div class="sum-item"><div class="sum-icon">✅</div><h4>Pozitif Çarpma/Bölme</h4><p>Pozitif sayıyla işlem yapılırsa eşitsizlik yönü değişmez.</p></div>
+      <div class="sum-item"><div class="sum-icon">⚠️</div><h4>Negatif Çarpma/Bölme</h4><p>Negatif sayıyla işlem yapılırsa eşitsizlik yönü <strong>ters döner!</strong></p></div>
+      <div class="sum-item"><div class="sum-icon">○</div><h4>Boş Daire</h4><p>&lt; veya &gt; işaretinde kullanılır. Nokta çözüm kümesine dahil değildir.</p></div>
+      <div class="sum-item"><div class="sum-icon">●</div><h4>Dolu Daire</h4><p>≤ veya ≥ işaretinde kullanılır. Nokta çözüm kümesine dahildir.</p></div>
+    </div>
+    <div class="tip-box">
+      <div class="tip-icon">💡</div>
+      <p><strong>Kontrol Yöntemi:</strong> Cevabını bulduktan sonra, çözüm kümesinden bir sayıyı seçip sorudaki eşitsizlikte harfin yerine koy. Doğru taraf sağlanıyorsa cevabın doğrudur.</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var btn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){
+    btn.classList.toggle('gorunsun',window.scrollY>300);
+  });
+  btn.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+(function() {
+  // --- TABS ---
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var sections = document.querySelectorAll('.section');
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = this.getAttribute('data-tab');
+      sections.forEach(function(s) { s.classList.remove('active'); });
+      tabBtns.forEach(function(b) { b.classList.remove('active'); });
+      document.getElementById(target).classList.add('active');
+      this.classList.add('active');
+    });
+  });
+
+  // --- TOGGLE SOL ---
+  document.querySelectorAll('.toggle-sol').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = this.getAttribute('data-target');
+      document.getElementById(id).classList.toggle('open');
+    });
+  });
+
+  // --- INTERACTIVE ---
+  var SIGNS = ['gt','lt','gte','lte'];
+  var SYM = {gt:'>',lt:'<',gte:'\u2265',lte:'\u2264'};
+  var INCL = {gt:false,lt:false,gte:true,lte:true};
+  var RIGHT = {gt:true,lt:false,gte:true,lte:false};
+  var FLIP = {gt:'lt',lt:'gt',gte:'lte',lte:'gte'};
+
+  var score = 0;
+  var qNum = 0;
+  var INITIAL = 5;
+  var afterInitial = false;
+  var currentQ = null;
+  var dotChoice = null;
+  var dirChoice = null;
+  var answered = false;
+  var isManual = false;
+
+  function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+
+  function generateQ() {
+    var a,b,c,result,signKey,finalSign;
+    do { a = randInt(-5,5); } while(a===0);
+    b = randInt(-10,10);
+    result = randInt(-8,8);
+    c = result*a + b;
+    signKey = SIGNS[randInt(0,3)];
+    finalSign = a<0 ? FLIP[signKey] : signKey;
+    var bAbs = Math.abs(b);
+    var bStr = b>=0 ? '+ '+b : '\u2212 '+bAbs;
+    return {
+      a:a, b:b, c:c, signKey:signKey, finalSign:finalSign,
+      result:result,
+      display: a+'x '+bStr+' '+SYM[signKey]+' '+c,
+      correctDot: INCL[finalSign]?'dolu':'bos',
+      correctDir: RIGHT[finalSign]?'sag':'sol'
+    };
+  }
+
+  function loadQ(q, manual) {
+    currentQ = q;
+    isManual = manual || false;
+    dotChoice = null; dirChoice = null; answered = false;
+    document.getElementById('qText').textContent = q.display + (isManual?' (0 puan)':'');
+    document.getElementById('feedbackBox').className = 'feedback-box';
+    document.getElementById('feedbackBox').textContent = '';
+    document.getElementById('actionBtns').className = 'action-btns';
+    document.getElementById('manualArea').className = 'manual-area';
+    document.getElementById('confirmBtn').disabled = true;
+    ['btnBos','btnDolu','btnSol','btnSag'].forEach(function(id){
+      var b = document.getElementById(id);
+      b.className = 'choice-btn';
+      b.disabled = false;
+    });
+    clearNL();
+  }
+
+  function updateProgress() {
+    document.getElementById('scoreVal').textContent = score;
+    if (!afterInitial) {
+      document.getElementById('qProgress').textContent = 'Soru '+(Math.min(qNum+1,INITIAL))+' / '+INITIAL;
+    } else {
+      document.getElementById('qProgress').textContent = 'Toplam çözülen: '+qNum;
+    }
+  }
+
+  // Choice buttons
+  document.getElementById('btnBos').addEventListener('click', function(){selectDot('bos');});
+  document.getElementById('btnDolu').addEventListener('click', function(){selectDot('dolu');});
+  document.getElementById('btnSol').addEventListener('click', function(){selectDir('sol');});
+  document.getElementById('btnSag').addEventListener('click', function(){selectDir('sag');});
+
+  function selectDot(v) {
+    if(answered) return;
+    dotChoice = v;
+    document.getElementById('btnBos').className = 'choice-btn'+(v==='bos'?' selected':'');
+    document.getElementById('btnDolu').className = 'choice-btn'+(v==='dolu'?' selected':'');
+    checkReady();
+  }
+  function selectDir(v) {
+    if(answered) return;
+    dirChoice = v;
+    document.getElementById('btnSol').className = 'choice-btn'+(v==='sol'?' selected':'');
+    document.getElementById('btnSag').className = 'choice-btn'+(v==='sag'?' selected':'');
+    checkReady();
+  }
+  function checkReady(){
+    document.getElementById('confirmBtn').disabled = !(dotChoice && dirChoice);
+  }
+
+  document.getElementById('confirmBtn').addEventListener('click', function(){
+    if(answered||!dotChoice||!dirChoice) return;
+    answered = true;
+    document.getElementById('confirmBtn').disabled = true;
+    ['btnBos','btnDolu','btnSol','btnSag'].forEach(function(id){document.getElementById(id).disabled=true;});
+
+    var q = currentQ;
+    var dotOk = dotChoice===q.correctDot;
+    var dirOk = dirChoice===q.correctDir;
+    var earned = 0;
+    var fbCls = '', fbTxt = '';
+
+    if(dotOk&&dirOk){
+      earned = isManual?0:10;
+      fbCls='fb-ok';
+      fbTxt='\uD83C\uDF89 M\u00fckemmel! \u0130kisi de do\u011fru! '+(isManual?'(0 puan \u2014 kendi sorun)':'+10 puan');
+    } else if(dotOk){
+      earned = isManual?0:4;
+      fbCls='fb-part';
+      fbTxt='\uD83D\uDC4D Nokta t\u00fcr\u00fc do\u011fru, y\u00f6n yanl\u0131\u015f. '+(isManual?'(0 puan)':'+4 puan');
+    } else if(dirOk){
+      earned = isManual?0:4;
+      fbCls='fb-part';
+      fbTxt='\uD83D\uDC4D Y\u00f6n do\u011fru, nokta t\u00fcr\u00fc yanl\u0131\u015f. '+(isManual?'(0 puan)':'+4 puan');
+    } else {
+      fbCls='fb-err';
+      fbTxt='\u274C \u0130kisi de yanl\u0131\u015f. Do\u011fru: '+(q.correctDot==='dolu'?'\u25CF Dolu':'\u25CB Bo\u015f')+' + '+(q.correctDir==='sag'?'\u25B6 Sa\u011f':'\u25C4 Sol');
+    }
+
+    score += earned;
+    document.getElementById('scoreVal').textContent = score;
+
+    // Color buttons
+    document.getElementById(q.correctDot==='dolu'?'btnDolu':'btnBos').classList.add('correct-btn');
+    document.getElementById(q.correctDir==='sag'?'btnSag':'btnSol').classList.add('correct-btn');
+    if(!dotOk) document.getElementById(dotChoice==='dolu'?'btnDolu':'btnBos').classList.add('wrong-btn');
+    if(!dirOk) document.getElementById(dirChoice==='sag'?'btnSag':'btnSol').classList.add('wrong-btn');
+
+    var fb = document.getElementById('feedbackBox');
+    fb.className = 'feedback-box visible '+fbCls;
+    fb.textContent = fbTxt;
+
+    qNum++;
+    if(!afterInitial && qNum>=INITIAL) afterInitial=true;
+    updateProgress();
+    drawNL(q.result, q.finalSign);
+    document.getElementById('actionBtns').className = 'action-btns visible';
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', function(){
+    document.getElementById('manualArea').className = 'manual-area';
+    loadQ(generateQ(), false);
+    updateProgress();
+  });
+
+  document.getElementById('manualToggleBtn').addEventListener('click', function(){
+    var area = document.getElementById('manualArea');
+    area.className = area.classList.contains('visible')?'manual-area':'manual-area visible';
+  });
+
+  document.getElementById('loadManualBtn').addEventListener('click', function(){
+    var a = parseFloat(document.getElementById('ma').value)||1;
+    var b = parseFloat(document.getElementById('mb').value)||0;
+    var c = parseFloat(document.getElementById('mc').value)||0;
+    var signKey = document.getElementById('msign').value;
+    if(a===0){alert('a s\u0131f\u0131r olamaz!');return;}
+    var finalSign = a<0?FLIP[signKey]:signKey;
+    var result = (c-b)/a;
+    var bAbs = Math.abs(b);
+    var bStr = b>=0?'+ '+b:'\u2212 '+bAbs;
+    var q = {
+      a:a,b:b,c:c,signKey:signKey,finalSign:finalSign,result:result,
+      display:a+'x '+bStr+' '+SYM[signKey]+' '+c,
+      correctDot:INCL[finalSign]?'dolu':'bos',
+      correctDir:RIGHT[finalSign]?'sag':'sol'
+    };
+    document.getElementById('manualArea').className='manual-area';
+    loadQ(q,true);
+    updateProgress();
+  });
+
+  // --- NUMBER LINE ---
+  function clearNL(){
+    var cv=document.getElementById('numLine');
+    cv.getContext('2d').clearRect(0,0,cv.width,cv.height);
+  }
+
+  function drawNL(val,signKey){
+    var cv=document.getElementById('numLine');
+    var ctx=cv.getContext('2d');
+    var W=cv.width,H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    var incl=INCL[signKey], right=RIGHT[signKey];
+    var pad=55, lineY=H/2+4;
+    var rh=Math.max(7,Math.abs(val)+5);
+    var minV=val-rh, maxV=val+rh;
+    function toX(v){return pad+((v-minV)/(maxV-minV))*(W-2*pad);}
+
+    ctx.strokeStyle='#4a5568';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(pad-10,lineY);ctx.lineTo(W-pad+10,lineY);ctx.stroke();
+    ctx.fillStyle='#4a5568';
+    ctx.beginPath();ctx.moveTo(W-pad+10,lineY);ctx.lineTo(W-pad,lineY-5);ctx.lineTo(W-pad,lineY+5);ctx.closePath();ctx.fill();
+
+    var step=Math.max(1,Math.ceil(rh/5));
+    var startT=Math.ceil(minV/step)*step;
+    ctx.font='11px Nunito,sans-serif';ctx.textAlign='center';
+    for(var v=startT;v<=maxV;v+=step){
+      var x=toX(v);
+      ctx.strokeStyle='#718096';ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(x,lineY-5);ctx.lineTo(x,lineY+5);ctx.stroke();
+      ctx.fillStyle='#a0aec0';ctx.fillText(v,x,lineY+17);
+    }
+
+    var valX=toX(val);
+    ctx.fillStyle='rgba(76,201,240,0.2)';
+    if(right) ctx.fillRect(valX,lineY-9,(W-pad+10)-valX,18);
+    else ctx.fillRect(pad-10,lineY-9,valX-(pad-10),18);
+
+    ctx.beginPath();ctx.arc(valX,lineY,8,0,Math.PI*2);
+    if(incl){ctx.fillStyle='#4cc9f0';ctx.fill();}
+    else{ctx.strokeStyle='#4cc9f0';ctx.lineWidth=3;ctx.stroke();ctx.fillStyle='#1a1a2e';ctx.fill();}
+
+    ctx.fillStyle='#4cc9f0';ctx.font='bold 12px Nunito,sans-serif';
+    ctx.fillText(Number.isInteger(val)?val:val.toFixed(2),valX,lineY-16);
+  }
+
+  // INIT
+  updateProgress();
+  loadQ(generateQ(), false);
+})();
+</script>
+</body>
+</html>

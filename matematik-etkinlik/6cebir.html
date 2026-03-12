@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cebirsel İfadeler – 6. Sınıf</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f0f4ff; --card:#fff; --primary:#4361ee; --primary-light:#eef0fd;
+  --accent:#f72585; --accent2:#4cc9f0; --success:#06d6a0; --warn:#ffd166;
+  --text:#1a1a2e; --muted:#6b7280; --border:#e0e7ff;
+  --shadow:0 4px 24px rgba(67,97,238,.10); --radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:60px;}
+header{
+  background:radial-gradient(ellipse at center,#000 0%,#000 35%,#5a0000 70%,#cc0000 100%);
+  color:white;padding:28px 24px 52px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 8px 40px rgba(180,0,0,.45),0 0 0 1px rgba(200,0,0,.25);
+}
+header .badge{
+  display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,80,80,.3);
+  border-radius:50px;padding:3px 14px;font-size:.78rem;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:10px;color:#ffaaaa;position:relative;z-index:1;
+}
+header img.logo{height:90px;object-fit:contain;display:block;margin:8px auto 0;position:relative;z-index:1;}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:800;color:#fff0f0;position:relative;z-index:1;text-shadow:0 0 24px rgba(255,60,60,.3);margin-top:6px;}
+header p{font-size:.93rem;color:rgba(255,220,220,.65);margin-top:4px;position:relative;z-index:1;}
+.tab-bar{display:flex;justify-content:center;gap:8px;margin:-22px auto 0;position:relative;z-index:10;padding:0 12px;flex-wrap:wrap;}
+.tab-btn{background:white;border:none;border-radius:50px;padding:9px 14px;font-family:'Nunito',sans-serif;font-size:clamp(.75rem,2.5vw,.9rem);font-weight:700;color:var(--muted);cursor:pointer;box-shadow:0 2px 12px rgba(67,97,238,.13);transition:all .22s;white-space:nowrap;}
+.tab-btn.active,.tab-btn:hover{background:var(--primary);color:white;box-shadow:0 4px 18px rgba(67,97,238,.28);transform:translateY(-2px);}
+.main{max-width:820px;margin:32px auto 0;padding:0 12px;}
+.section{display:none;}
+.section.active{display:block;animation:fadeIn .35s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(14px,4vw,26px);margin-bottom:20px;border:1.5px solid var(--border);}
+.card-title{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:700;color:var(--primary);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title .icon{background:var(--primary-light);width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.def-box{background:linear-gradient(135deg,#eef0fd 0%,#f3e8ff 100%);border-left:4px solid var(--primary);border-radius:12px;padding:14px 16px;margin:12px 0;font-size:.95rem;line-height:1.7;}
+.def-box strong{color:var(--primary);}
+.rule-box{background:linear-gradient(90deg,#fff0f9 0%,#fce7f3 100%);border:2px solid var(--accent);border-radius:14px;padding:13px 16px;margin:13px 0;}
+.rule-box .rule-title{color:var(--accent);font-weight:800;font-size:.91rem;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rule-box p{font-size:.91rem;line-height:1.65;}
+.resp-table{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.89rem;}
+th{padding:10px 12px;text-align:left;background:var(--primary-light);}
+th:first-child{border-radius:8px 0 0 8px;}th:last-child{border-radius:0 8px 8px 0;}
+td{padding:10px 12px;border-bottom:1px solid var(--border);text-align:left;}
+.example-card{background:white;border-radius:16px;border:1.5px solid var(--border);overflow:hidden;margin-bottom:16px;box-shadow:0 2px 12px rgba(67,97,238,.07);}
+.ex-header{background:linear-gradient(90deg,var(--primary-light) 0%,#f3e8ff 100%);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.ex-num{background:var(--primary);color:white;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.83rem;white-space:nowrap;}
+.ex-q{font-weight:700;font-size:.97rem;color:var(--text);font-family:'Baloo 2',cursive;}
+.ex-body{padding:14px 16px;}
+.ex-step{display:flex;gap:10px;margin-bottom:10px;font-size:.91rem;align-items:flex-start;}
+.ex-step .num{color:var(--primary);font-weight:800;min-width:20px;}
+.ex-result{background:linear-gradient(90deg,#e8f8f2 0%,#f0fdf9 100%);border:1.5px solid var(--success);border-radius:10px;padding:10px 14px;font-weight:700;color:#065f46;margin-top:12px;font-size:.93rem;}
+.toggle-sol{background:var(--primary-light);border:1.5px solid var(--border);color:var(--primary);border-radius:50px;padding:7px 18px;font-family:'Nunito',sans-serif;font-size:.86rem;font-weight:700;cursor:pointer;margin-top:10px;transition:all .18s;}
+.toggle-sol:hover{background:var(--primary);color:white;}
+.ex-solution{display:none;margin-top:14px;}
+.ex-solution.open{display:block;animation:fadeIn .3s ease;}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.summary-grid{grid-template-columns:1fr;}}
+.sum-item{background:var(--primary-light);border-radius:14px;padding:13px;border:1.5px solid var(--border);}
+.sum-item .sum-icon{font-size:1.4rem;margin-bottom:6px;}
+.sum-item h4{font-size:.86rem;color:var(--primary);font-weight:800;margin-bottom:5px;}
+.sum-item p{font-size:.83rem;color:var(--muted);line-height:1.6;}
+.tip-box{background:linear-gradient(135deg,#fff8e1 0%,#fffde7 100%);border:2px solid var(--warn);border-radius:14px;padding:14px 16px;margin-top:16px;display:flex;gap:12px;align-items:flex-start;}
+.tip-box .tip-icon{font-size:1.4rem;flex-shrink:0;}
+.tip-box p{font-size:.89rem;line-height:1.65;color:#6b4c00;}
+.interactive-panel{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-radius:var(--radius);padding:clamp(14px,4vw,26px);color:white;margin-bottom:20px;}
+.score-bar{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.07);border-radius:12px;padding:10px 16px;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.score-label{font-size:.83rem;color:#aaa;}
+.score-value{font-family:'Baloo 2',cursive;font-size:1.5rem;font-weight:800;color:var(--warn);}
+.q-progress{font-size:.83rem;color:#aaa;}
+.q-display{background:rgba(255,255,255,.06);border-radius:14px;padding:16px;margin-bottom:16px;text-align:center;}
+.q-display .q-text{font-family:'Baloo 2',cursive;font-size:clamp(1rem,4vw,1.35rem);font-weight:700;color:var(--accent2);margin-bottom:6px;}
+.q-display .q-sub{font-size:.83rem;color:#aaa;}
+.choice-btn{background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);border-radius:50px;color:white;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:700;padding:7px 18px;cursor:pointer;transition:all .2s;}
+.choice-btn:hover{background:rgba(255,255,255,.15);}
+.choice-btn.correct-btn{background:var(--success);border-color:var(--success);}
+.choice-btn.wrong-btn{background:#ef4444;border-color:#ef4444;}
+.feedback-box{border-radius:12px;padding:13px 16px;margin-top:13px;font-weight:700;font-size:.97rem;text-align:center;display:none;}
+.feedback-box.visible{display:block;animation:fadeIn .3s ease;}
+.feedback-box.fb-ok{background:rgba(6,214,160,.15);border:1.5px solid var(--success);color:var(--success);}
+.feedback-box.fb-err{background:rgba(239,68,68,.15);border:1.5px solid #ef4444;color:#ef4444;}
+.action-btns{display:none;gap:10px;margin-top:16px;flex-wrap:wrap;justify-content:center;}
+.action-btns.visible{display:flex;animation:fadeIn .3s ease;}
+.next-btn{background:linear-gradient(90deg,#4361ee,#7209b7);color:white;border:none;border-radius:50px;padding:10px 22px;font-family:'Nunito',sans-serif;font-size:.93rem;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(67,97,238,.35);transition:all .2s;}
+.next-btn:hover{transform:translateY(-2px);}
+/* Sözel kart */
+.sozel-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+@media(max-width:480px){.sozel-grid{grid-template-columns:1fr;}}
+.sozel-card{border-radius:12px;padding:12px 14px;border:1.5px solid var(--border);}
+.sozel-card .sozel{font-size:.88rem;color:var(--muted);margin-bottom:4px;}
+.sozel-card .cebir{font-size:1.1rem;font-weight:800;color:var(--primary);}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:white;border:none;border-radius:50px;padding:10px 18px;font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:800;cursor:pointer;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:opacity .3s,transform .2s;z-index:999;pointer-events:none;}
+.basa-don.gorunsun{opacity:1;pointer-events:auto;}
+.basa-don:hover{transform:translateY(-3px);}
+</style>
+</head>
+<body>
+
+<button class="basa-don" id="basaDon">⬆ Başa Dön</button>
+<header>
+  <div class="badge">6. Sınıf Matematik</div>
+  <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+  <h1>🔡 Cebirsel İfadeler</h1>
+  <p>Sözel ifadeden cebirsel ifadeye · Değer hesapla · Gerçek yaşamda cebir</p>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+  <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+  <button class="tab-btn" data-tab="interaktif">🎛️ İnteraktif Çözüm</button>
+  <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+</div>
+
+<div class="main">
+
+  <!-- KONU ANLATIMI -->
+  <div id="konu" class="section active">
+
+    <div class="card">
+      <div class="card-title"><div class="icon">🔡</div>Değişken ve Cebirsel İfade Nedir?</div>
+      <div class="def-box">
+        <strong>Değişken:</strong> Farklı sayı değerleri alabilen harfle gösterilen niceliğe denir. Genellikle x, y, a, n gibi harfler kullanılır.<br><br>
+        <strong>Cebirsel ifade:</strong> Sayılar, değişkenler ve işlem sembollerinden oluşan matematiksel ifadedir.<br><br>
+        Örnek: <strong>3x + 5</strong> → burada <em>x</em> değişken, <em>3</em> katsayı, <em>5</em> sabit terimdir.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;">
+        <div style="background:var(--primary-light);border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:1.4rem;font-weight:800;color:var(--primary);">3x</div>
+          <div style="color:var(--muted);font-size:.78rem;margin-top:4px;">Tek terimli ifade</div>
+        </div>
+        <div style="background:#e8faf3;border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:1.4rem;font-weight:800;color:#059669;">2x + 7</div>
+          <div style="color:var(--muted);font-size:.78rem;margin-top:4px;">İki terimli ifade</div>
+        </div>
+        <div style="background:#fff8e1;border-radius:12px;padding:12px;text-align:center;">
+          <div style="font-size:1.4rem;font-weight:800;color:#e67e00;">x² + 3x + 1</div>
+          <div style="color:var(--muted);font-size:.78rem;margin-top:4px;">Üç terimli ifade</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">💬</div>Sözel İfadeden Cebirsel İfadeye</div>
+      <div class="def-box">
+        Gerçek yaşamdaki durumları matematik diline çevirmek için sözel ifadeyi adım adım okuyun ve her işlemi sembole dönüştürün.
+      </div>
+      <div class="sozel-grid">
+        <div class="sozel-card" style="background:#eef0fd;">
+          <div class="sozel">Bir sayının 3 katı</div>
+          <div class="cebir">3x</div>
+        </div>
+        <div class="sozel-card" style="background:#e8faf3;">
+          <div class="sozel">Bir sayının 5 fazlası</div>
+          <div class="cebir">x + 5</div>
+        </div>
+        <div class="sozel-card" style="background:#fff8e1;">
+          <div class="sozel">Bir sayının 4 eksiği</div>
+          <div class="cebir">x − 4</div>
+        </div>
+        <div class="sozel-card" style="background:#fdecea;">
+          <div class="sozel">Bir sayının yarısı</div>
+          <div class="cebir">x ÷ 2 &nbsp;veya&nbsp; x/2</div>
+        </div>
+        <div class="sozel-card" style="background:#f3e8ff;">
+          <div class="sozel">Bir sayının 2 katının 3 fazlası</div>
+          <div class="cebir">2x + 3</div>
+        </div>
+        <div class="sozel-card" style="background:#e0f7fa;">
+          <div class="sozel">Ardışık iki doğal sayı</div>
+          <div class="cebir">n &nbsp;ve&nbsp; n + 1</div>
+        </div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-title">⚡ Anahtar Kelimeler</div>
+        <p><strong>katı → çarpma</strong> &nbsp;·&nbsp; <strong>fazlası / artı → toplama</strong> &nbsp;·&nbsp; <strong>eksiği / azı → çıkarma</strong> &nbsp;·&nbsp; <strong>bölümü → bölme</strong></p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">📊</div>Tablo ile Cebirsel İlişki Kurma</div>
+      <p style="color:var(--muted);margin-bottom:12px;">Bir tablodaki sayı örüntüsünü inceleyerek değişkenler arasındaki ilişkiyi cebirsel olarak ifade edebiliriz.</p>
+      <div class="resp-table">
+        <table>
+          <thead><tr><th>Gün (x)</th><th>Adım Sayısı (y)</th><th>Kural</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>500</td><td>500 × 1 = 500</td></tr>
+            <tr><td>2</td><td>1000</td><td>500 × 2 = 1000</td></tr>
+            <tr><td>3</td><td>1500</td><td>500 × 3 = 1500</td></tr>
+            <tr><td>x</td><td style="font-weight:800;color:var(--primary);">500x</td><td>Cebirsel kural: <strong>y = 500x</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="def-box" style="background:#e8faf3;border-left-color:var(--success);margin-top:12px;">
+        <strong>Nasıl Bulunur?</strong> Her adımda y değerinin ne kadar değiştiğine bakın. Sabit artış varsa bu artış miktarı x'in katsayısıdır.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">🔢</div>Cebirsel İfadeye Değer Verme</div>
+      <div class="def-box">
+        Değişkenin yerine bir sayı koyarak ifadenin sayısal değerini hesaplayabiliriz.
+      </div>
+      <div style="background:#1a1a2e;border-radius:14px;padding:16px;margin:12px 0;">
+        <div style="color:#4cc9f0;font-weight:800;margin-bottom:10px;">Örnek: 3x + 5 ifadesinde x = 4 ise değeri nedir?</div>
+        <div style="color:#e2e8f0;font-size:.93rem;line-height:1.9;">
+          3 × 4 + 5<br>
+          = 12 + 5<br>
+          = <span style="color:#06d6a0;font-weight:800;font-size:1.1rem;">17</span>
+        </div>
+      </div>
+      <div class="rule-box">
+        <div class="rule-title">⚠️ Dikkat</div>
+        <p>Değer yerine koyarken işlem önceliğine dikkat edin. Önce çarpma/bölme, sonra toplama/çıkarma yapılır.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><div class="icon">🌍</div>Cebirsel İfadelerin Gerçek Yaşamda Kullanımı</div>
+      <div class="def-box">
+        Cebirsel ifadeler bilinmeyen miktarları, örüntüleri ve ilişkileri ifade etmek için kullanılır.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div style="background:var(--primary-light);border-radius:12px;padding:14px;">
+          <div style="font-weight:800;color:var(--primary);margin-bottom:6px;">🛒 Alışveriş</div>
+          <div style="font-size:.9rem;color:var(--text);line-height:1.7;">1 kg elma x TL ise 3 kg elma → <strong>3x TL</strong></div>
+        </div>
+        <div style="background:#fff8e1;border-radius:12px;padding:14px;">
+          <div style="font-weight:800;color:#e67e00;margin-bottom:6px;">🚗 Hız-Yol</div>
+          <div style="font-size:.9rem;color:var(--text);line-height:1.7;">Saatte x km giden araç t saatte → <strong>x·t km</strong></div>
+        </div>
+        <div style="background:#e8faf3;border-radius:12px;padding:14px;">
+          <div style="font-weight:800;color:#059669;margin-bottom:6px;">🎂 Yaş</div>
+          <div style="font-size:.9rem;color:var(--text);line-height:1.7;">Şu an n yaşında olan biri 5 yıl sonra → <strong>n + 5</strong></div>
+        </div>
+        <div style="background:#fdecea;border-radius:12px;padding:14px;">
+          <div style="font-weight:800;color:var(--accent);margin-bottom:6px;">📐 Alan</div>
+          <div style="font-size:.9rem;color:var(--text);line-height:1.7;">Bir kenarı x cm olan karenin alanı → <strong>x² cm²</strong></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ÖRNEKLER -->
+  <div id="ornekler" class="section">
+    <div id="orneklerKonteyner">
+
+      <div class="example-card">
+        <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">Sözel ifadeden cebirsel ifadeye</span></div>
+        <div class="ex-body">
+          <div class="ex-step"><span class="num">Soru:</span><span>Bir markette elma x TL, armut elmanın 3 TL fazlası fiyatındadır. Armudun fiyatını cebirsel olarak yazınız. 5 kg elma ve 2 kg armut alınırsa toplam fiyatı bulunuz.</span></div>
+          <button class="toggle-sol" data-target="s1">Çözümü Göster / Gizle</button>
+          <div class="ex-solution" id="s1">
+            <div class="ex-step"><span class="num">1.</span><span>Elma: x TL, Armut: x + 3 TL</span></div>
+            <div class="ex-step"><span class="num">2.</span><span>5 kg elma: 5 × x = 5x TL</span></div>
+            <div class="ex-step"><span class="num">3.</span><span>2 kg armut: 2 × (x + 3) = 2x + 6 TL</span></div>
+            <div class="ex-step"><span class="num">4.</span><span>Toplam: 5x + 2x + 6 = 7x + 6 TL</span></div>
+            <div class="ex-result">✓ Armut fiyatı: (x + 3) TL — Toplam fiyat: (7x + 6) TL</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">Cebirsel ifadeye değer verme</span></div>
+        <div class="ex-body">
+          <div class="ex-step"><span class="num">Soru:</span><span>4a − 2b + 3 ifadesinde a = 5, b = 2 ise ifadenin değerini bulunuz.</span></div>
+          <button class="toggle-sol" data-target="s2">Çözümü Göster / Gizle</button>
+          <div class="ex-solution" id="s2">
+            <div class="ex-step"><span class="num">1.</span><span>a = 5, b = 2 değerlerini yerine koy: 4×5 − 2×2 + 3</span></div>
+            <div class="ex-step"><span class="num">2.</span><span>= 20 − 4 + 3</span></div>
+            <div class="ex-step"><span class="num">3.</span><span>= 19</span></div>
+            <div class="ex-result">✓ İfadenin değeri: 19</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">Tablodan kural bulma</span></div>
+        <div class="ex-body">
+          <div class="ex-step"><span class="num">Soru:</span><span>Aşağıdaki tabloya göre y'yi x cinsinden ifade ediniz ve x = 10 için y'yi bulunuz.</span></div>
+          <div style="margin:10px 0;" class="resp-table">
+            <table>
+              <thead><tr><th>x</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+              <tbody><tr><td>y</td><td>7</td><td>10</td><td>13</td><td>16</td></tr></tbody>
+            </table>
+          </div>
+          <button class="toggle-sol" data-target="s3">Çözümü Göster / Gizle</button>
+          <div class="ex-solution" id="s3">
+            <div class="ex-step"><span class="num">1.</span><span>Her adımda y, 3 artıyor → katsayı 3.</span></div>
+            <div class="ex-step"><span class="num">2.</span><span>x = 1 için y = 7: 3×1 = 3, fark = 7 − 3 = 4 → sabit terim 4.</span></div>
+            <div class="ex-step"><span class="num">3.</span><span>Kural: y = 3x + 4 — Doğrulama: x=2 → 3×2+4=10 ✓</span></div>
+            <div class="ex-step"><span class="num">4.</span><span>x = 10 için: y = 3×10 + 4 = 34</span></div>
+            <div class="ex-result">✓ Kural: y = 3x + 4 — x = 10 için y = 34</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="example-card">
+        <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">Cebirsel ifadeyi yorumlama</span></div>
+        <div class="ex-body">
+          <div class="ex-step"><span class="num">Soru:</span><span>2n + 1 ifadesinde n bir doğal sayıyı temsil etmektedir. n = 1, 2, 3, 4 için değerleri hesaplayınız. Ne tür sayılar elde ediyorsunuz?</span></div>
+          <button class="toggle-sol" data-target="s4">Çözümü Göster / Gizle</button>
+          <div class="ex-solution" id="s4">
+            <div class="ex-step"><span class="num">1.</span><span>n = 1 → 2×1+1 = 3</span></div>
+            <div class="ex-step"><span class="num">2.</span><span>n = 2 → 2×2+1 = 5</span></div>
+            <div class="ex-step"><span class="num">3.</span><span>n = 3 → 2×3+1 = 7</span></div>
+            <div class="ex-step"><span class="num">4.</span><span>n = 4 → 2×4+1 = 9</span></div>
+            <div class="ex-result">✓ Hep tek sayı elde ediliyor! 2n + 1 ifadesi tüm tek doğal sayıları üretir.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:18px;">
+      <button class="next-btn" id="dahaFazlaBtn">➕ Daha Fazla Örnek</button>
+    </div>
+  </div>
+
+  <!-- İNTERAKTİF -->
+  <div id="interaktif" class="section">
+    <div class="interactive-panel">
+      <div class="score-bar">
+        <div><div class="score-label">TOPLAM PUAN</div><div class="score-value" id="scoreVal">0</div></div>
+        <div class="q-progress" id="qProgress">Soru 1 / 5</div>
+      </div>
+      <div class="q-display">
+        <div class="q-text" id="qText">Yükleniyor...</div>
+        <div class="q-sub" id="qSub">Doğru seçeneği işaretle</div>
+      </div>
+      <div id="svgArea" style="display:none;text-align:center;margin:0 0 14px 0;"></div>
+      <div id="choicesArea" style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;"></div>
+      <div class="feedback-box" id="feedbackBox"></div>
+      <div class="action-btns" id="actionBtns">
+        <button class="next-btn" id="nextBtn">🎲 Yeni Soru Üret</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ÖZET -->
+  <div id="ozet" class="section">
+    <div class="card">
+      <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+      <div class="summary-grid">
+        <div class="sum-item">
+          <div class="sum-icon">🔡</div>
+          <h4>Değişken</h4>
+          <p>Farklı değerler alabilen, harfle gösterilen nicelik. Örn: x, n, a</p>
+        </div>
+        <div class="sum-item">
+          <div class="sum-icon">💬</div>
+          <h4>Sözel → Cebirsel</h4>
+          <p>Katı→×, fazlası→+, eksiği→−, bölümü→÷ anahtar kelimeleri kullan.</p>
+        </div>
+        <div class="sum-item">
+          <div class="sum-icon">📊</div>
+          <h4>Tablo Kuralı</h4>
+          <p>Sabit artışı bul → katsayı, x=1 için sabit terimi hesapla.</p>
+        </div>
+        <div class="sum-item">
+          <div class="sum-icon">🔢</div>
+          <h4>Değer Hesaplama</h4>
+          <p>Değişkenin yerine sayıyı koy, işlem önceliğine dikkat et.</p>
+        </div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-icon">💡</div>
+        <p>Cebirsel ifadeler bilinmeyeni harfle göstererek farklı durumları tek bir kuralla özetlememizi sağlar. Gerçek yaşamda fiyat, hız, alan gibi pek çok durumu ifade etmek için kullanılır.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var btn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){
+    btn.classList.toggle('gorunsun',window.scrollY>300);
+  });
+  btn.addEventListener('click',function(){
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+})();
+// TAB
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// TOGGLE
+document.querySelectorAll('.toggle-sol').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.getElementById(btn.dataset.target).classList.toggle('open');
+  });
+});
+
+// DAHA FAZLA ÖRNEK
+(function(){
+  var ekstra = [
+    { num:'Örnek 5', baslik:'Ardışık sayıların toplamı',
+      soru:'Ardışık üç doğal sayının toplamını n cinsinden yazınız. n = 8 için toplamı bulunuz.',
+      adimlar:['Ardışık üç sayı: n, n+1, n+2','Toplam: n + (n+1) + (n+2) = 3n + 3','n = 8 için: 3×8 + 3 = 24 + 3 = 27','Kontrol: 8 + 9 + 10 = 27 ✓'],
+      sonuc:'Toplam = 3n + 3 — n=8 için toplam = 27' },
+    { num:'Örnek 6', baslik:'Farklı değişkenlerle yeniden ifade etme',
+      soru:'Ali\'nin yaşı Ayşe\'nin yaşının 2 katından 3 eksiktir. Ayşe\'nin yaşı a ise Ali\'nin yaşını yazınız. Ayşe 12 yaşında ise Ali kaç yaşındadır?',
+      adimlar:['Ayşe: a yaşında','Ali: 2a − 3 yaşında','a = 12 için: 2×12 − 3 = 24 − 3 = 21'],
+      sonuc:'Ali\'nin yaşı: 2a − 3 — Ayşe 12 yaşındaysa Ali 21 yaşındadır.' },
+    { num:'Örnek 7', baslik:'Genellemeyi sınama',
+      soru:'3n + 2 ifadesinin her zaman çift sayı mı yoksa tek sayı mı verdiğini farklı n değerleriyle sınayınız.',
+      adimlar:['n=1 → 3+2=5 (tek)','n=2 → 6+2=8 (çift)','n=3 → 9+2=11 (tek)','n=4 → 12+2=14 (çift)'],
+      sonuc:'n tek olduğunda ifade tek, n çift olduğunda ifade çift sayı verir. Sonuç n\'e göre değişir.' }
+  ];
+  var idx=0;
+  document.getElementById('dahaFazlaBtn').addEventListener('click', function(){
+    if(idx>=ekstra.length){ this.style.display='none'; return; }
+    var e=ekstra[idx++];
+    var div=document.createElement('div');
+    div.className='example-card';
+    var solId='sx'+idx;
+    var adimHTML=e.adimlar.map(function(a,i){
+      return '<div class="ex-step"><span class="num">'+(i+1)+'.</span><span>'+a+'</span></div>';
+    }).join('');
+    div.innerHTML=
+      '<div class="ex-header"><span class="ex-num">'+e.num+'</span><span class="ex-q">'+e.baslik+'</span></div>'+
+      '<div class="ex-body">'+
+        '<div class="ex-step"><span class="num">Soru:</span><span>'+e.soru+'</span></div>'+
+        '<button class="toggle-sol" data-target="'+solId+'">Çözümü Göster / Gizle</button>'+
+        '<div class="ex-solution" id="'+solId+'">'+adimHTML+
+          '<div class="ex-result">✓ '+e.sonuc+'</div></div></div>';
+    document.getElementById('orneklerKonteyner').appendChild(div);
+    div.querySelector('.toggle-sol').addEventListener('click', function(){
+      document.getElementById(solId).classList.toggle('open');
+    });
+    if(idx>=ekstra.length) document.getElementById('dahaFazlaBtn').textContent='✅ Tüm Örnekler Gösterildi';
+  });
+})();
+
+// İNTERAKTİF
+(function(){
+  var score=0, qNum=0, answered=false, sonTip=0;
+  var INITIAL=5, afterInitial=false;
+  function randInt(mn,mx){ return Math.floor(Math.random()*(mx-mn+1))+mn; }
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t; } return a; }
+
+  // TİP 1: Sözel → Cebirsel
+  var sozelHavuz = [
+    { sozel:'Bir sayının 4 katı', dogru:'4x', yanlis:['x+4','x-4','4+x'] },
+    { sozel:'Bir sayının 7 fazlası', dogru:'x+7', yanlis:['7x','x-7','7-x'] },
+    { sozel:'Bir sayının 5 eksiği', dogru:'x-5', yanlis:['5x','x+5','5-x'] },
+    { sozel:'Bir sayının üçte biri', dogru:'x÷3', yanlis:['3x','x-3','x+3'] },
+    { sozel:'Bir sayının 2 katının 1 fazlası', dogru:'2x+1', yanlis:['2x-1','x+2+1','2+x+1'] },
+    { sozel:'Bir sayının 3 katından 4 çıkarılması', dogru:'3x-4', yanlis:['3x+4','4-3x','3-4x'] },
+    { sozel:'İki sayının toplamının 5 katı', dogru:'5(a+b)', yanlis:['5a+b','a+5b','5a+5'] },
+    { sozel:'Ardışık iki doğal sayının toplamı (n\'den başlayan)', dogru:'2n+1', yanlis:['n+1','2n','n+2'] }
+  ];
+
+  function tip1(){
+    var s = sozelHavuz[randInt(0, sozelHavuz.length-1)];
+    var opts = shuffle([s.dogru].concat(s.yanlis)).map(function(v){ return {label:v, correct:v===s.dogru}; });
+    return {
+      display: '"'+s.sozel+'" ifadesinin cebirsel karşılığı hangisidir?',
+      svg: null,
+      choices: opts,
+      aciklama: '"'+s.sozel+'" → '+s.dogru
+    };
+  }
+
+  // TİP 2: Değer hesaplama
+  function tip2(){
+    var a = randInt(1,5), b = randInt(1,4), c = randInt(1,8);
+    var x = randInt(1,6);
+    var dogru = a*x + c;
+    var yanlis = [a*x - c, a*x + c + 1, a*x + c - 1].filter(function(v){ return v!==dogru && v>0; });
+    var opts = shuffle([dogru].concat(yanlis.slice(0,3))).map(function(v){ return {label:v+'', correct:v===dogru}; });
+    return {
+      display: a+'x + '+c+' ifadesinde x = '+x+' ise ifadenin değeri kaçtır?',
+      svg: null,
+      choices: opts,
+      aciklama: a+'×'+x+' + '+c+' = '+(a*x)+' + '+c+' = '+dogru
+    };
+  }
+
+  // TİP 3: İki değişkenli değer hesaplama
+  function tip3(){
+    var a = randInt(1,4), b = randInt(1,3), c = randInt(0,5);
+    var x = randInt(1,5), y = randInt(1,4);
+    var dogru = a*x + b*y + c;
+    var yanlis = [dogru+1, dogru-1, dogru+2].filter(function(v){ return v!==dogru && v>0; });
+    var opts = shuffle([dogru].concat(yanlis.slice(0,3))).map(function(v){ return {label:v+'', correct:v===dogru}; });
+    return {
+      display: a+'a + '+b+'b + '+c+' ifadesinde a = '+x+', b = '+y+' ise değeri kaçtır?',
+      svg: null,
+      choices: opts,
+      aciklama: a+'×'+x+' + '+b+'×'+y+' + '+c+' = '+(a*x)+' + '+(b*y)+' + '+c+' = '+dogru
+    };
+  }
+
+  // TİP 4: Tablodan kural bulma
+  var tabloHavuz = [
+    { x:[1,2,3,4], y:[5,8,11,14], kural:'3x+2', acik:'Her adımda 3 artıyor → katsayı 3. x=1: 3+2=5 ✓' },
+    { x:[1,2,3,4], y:[6,9,12,15], kural:'3x+3', acik:'Her adımda 3 artıyor. x=1: 3+3=6 ✓' },
+    { x:[1,2,3,4], y:[4,7,10,13], kural:'3x+1', acik:'Her adımda 3 artıyor. x=1: 3+1=4 ✓' },
+    { x:[1,2,3,4], y:[3,5,7,9], kural:'2x+1', acik:'Her adımda 2 artıyor. x=1: 2+1=3 ✓' },
+    { x:[1,2,3,4], y:[6,10,14,18], kural:'4x+2', acik:'Her adımda 4 artıyor. x=1: 4+2=6 ✓' }
+  ];
+  function tip4(){
+    var t = tabloHavuz[randInt(0, tabloHavuz.length-1)];
+    var yanlis = [t.kural.replace(/\+(\d+)/, function(m,n){ return '+'+(parseInt(n)+1); }),
+                  t.kural.replace(/(\d+)x/, function(m,n){ return (parseInt(n)+1)+'x'; }),
+                  t.kural.replace(/\+(\d+)/, function(m,n){ return '+'+(parseInt(n)-1); })];
+    var opts = shuffle([t.kural].concat(yanlis)).map(function(v){ return {label:'y = '+v, correct:v===t.kural}; });
+    var tablo = '<div style="overflow-x:auto;margin:8px 0;"><table style="border-collapse:collapse;width:100%;font-size:.9rem;">'+
+      '<tr style="background:#2d3a6b;color:#fff;">'+
+      t.x.map(function(v){ return '<td style="padding:6px 12px;border:1px solid #4a5a9a;font-weight:700;">x='+v+'</td>'; }).join('')+
+      '</tr><tr style="background:#1a2240;color:#e8eeff;">'+
+      t.y.map(function(v){ return '<td style="padding:6px 12px;border:1px solid #4a5a9a;">'+v+'</td>'; }).join('')+
+      '</tr></table></div>';
+    return {
+      display: 'Aşağıdaki tabloya göre y\'yi x cinsinden ifade eden kural hangisidir?',
+      svg: tablo,
+      choices: opts,
+      aciklama: t.acik+' Kural: y = '+t.kural
+    };
+  }
+
+  // TİP 5: Cebirsel ifadeyi yorumlama
+  var yorumHavuz = [
+    { ifade:'2n', yorum:'n\'nin 2 katı', yanlis:['n\'nin 2 fazlası', '2\'nin n katı', 'n ile 2\'nin toplamı'] },
+    { ifade:'n + 10', yorum:'n\'nin 10 fazlası', yanlis:['n\'nin 10 katı', '10\'dan n çıkarma', 'n ile 10\'un farkı'] },
+    { ifade:'n − 3', yorum:'n\'den 3 çıkarma (n\'nin 3 eksiği)', yanlis:['3\'ten n çıkarma', 'n\'nin 3 katı', 'n ile 3\'ün toplamı'] },
+    { ifade:'n ÷ 4', yorum:'n\'nin dörtte biri', yanlis:['n\'nin 4 katı', 'n\'nin 4 fazlası', '4\'ün n katı'] },
+    { ifade:'3n + 5', yorum:'n\'nin 3 katına 5 ekleme', yanlis:['n\'nin 3 katından 5 çıkarma', 'n\'ye 5 ekleyip 3 ile çarpma', '3 ile 5\'in toplamının n katı'] }
+  ];
+  function tip5(){
+    var h = yorumHavuz[randInt(0, yorumHavuz.length-1)];
+    var opts = shuffle([h.yorum].concat(h.yanlis)).map(function(v){ return {label:v, correct:v===h.yorum}; });
+    return {
+      display: '"'+h.ifade+'" cebirsel ifadesinin sözel karşılığı hangisidir?',
+      svg: null,
+      choices: opts,
+      aciklama: h.ifade+' → "'+h.yorum+'"'
+    };
+  }
+
+  function generateQ(){
+    var r=Math.random();
+    var tip=r<0.22?1:r<0.44?2:r<0.62?3:r<0.80?4:5;
+    if(tip===sonTip){ var alt=[1,2,3,4,5].filter(function(t){return t!==sonTip;}); tip=alt[randInt(0,alt.length-1)]; }
+    sonTip=tip;
+    return tip===1?tip1():tip===2?tip2():tip===3?tip3():tip===4?tip4():tip5();
+  }
+
+  function renderQ(q){
+    answered=false;
+    document.getElementById('qText').textContent=q.display;
+    var sa=document.getElementById('svgArea');
+    if(q.svg){ sa.style.display='block'; sa.innerHTML=q.svg; }
+    else { sa.style.display='none'; sa.innerHTML=''; }
+    document.getElementById('feedbackBox').className='feedback-box';
+    document.getElementById('actionBtns').className='action-btns';
+    var area=document.getElementById('choicesArea');
+    area.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var btn=document.createElement('button');
+      btn.className='choice-btn';
+      btn.style.cssText='width:100%;padding:12px 18px;border-radius:12px;font-size:1rem;text-align:left;';
+      btn.textContent=c.label;
+      (function(choice,b,idx){ b.addEventListener('click',function(){ if(!answered) checkAnswer(choice,b,q,idx); }); })(c,btn,i);
+      area.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(chosen,btn,q,idx){
+    answered=true;
+    var ok=chosen.correct;
+    if(ok) score+=10;
+    document.getElementById('choicesArea').querySelectorAll('button').forEach(function(b,i){
+      b.disabled=true;
+      if(q.choices[i]&&q.choices[i].correct) b.classList.add('correct-btn');
+      else if(i===idx) b.classList.add('wrong-btn');
+    });
+    var fb=document.getElementById('feedbackBox');
+    fb.className='feedback-box visible '+(ok?'fb-ok':'fb-err');
+    fb.textContent=(ok?'Doğru! +10 puan — ':'Yanlış. — ')+'Açıklama: '+q.aciklama;
+    qNum++;
+    if(!afterInitial&&qNum>=INITIAL) afterInitial=true;
+    updateProgress();
+    document.getElementById('actionBtns').className='action-btns visible';
+  }
+
+  function updateProgress(){
+    document.getElementById('scoreVal').textContent=score;
+    document.getElementById('qProgress').textContent=!afterInitial?'Soru '+Math.min(qNum+1,INITIAL)+' / '+INITIAL:'Toplam çözülen: '+qNum;
+  }
+
+  document.getElementById('nextBtn').addEventListener('click',function(){ renderQ(generateQ()); updateProgress(); });
+  updateProgress();
+  renderQ(generateQ());
+})();
+</script>
+</body>
+</html>

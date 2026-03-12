@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tekin Hoca — Ortaokul Matematik</title>
+<meta name="description" content="Tekin Hoca - İnteraktif Ortaokul Matematik Etkinlikleri. 6. ve 8. sınıf konularına yönelik interaktif etkinlikler.">
+<meta name="keywords" content="ortaokul matematik, interaktif etkinlik, 6. sınıf matematik, 8. sınıf matematik, Tekin CANITEZ, tekinhoca">
+<meta name="author" content="Tekin CANITEZ">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<style>
+:root{--ink:#12100e;--cream:#f7f2e8;--aged:#ece4cc;--sepia:#7a5c1e;--gold:#c8960c;--rust:#9b3510;--muted:#5a4a30;--shadow:rgba(18,16,14,0.18);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--cream);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");color:var(--ink);font-family:'Source Serif 4',Georgia,serif;min-height:100vh;}
+header{background:var(--ink);position:relative;overflow:hidden;}
+header::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-55deg,transparent,transparent 10px,rgba(200,150,12,0.04) 10px,rgba(200,150,12,0.04) 11px);pointer-events:none;}
+.header-inner{max-width:960px;margin:0 auto;padding:52px 24px 44px;text-align:center;position:relative;z-index:1;}
+.logo-band{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
+.logo-line{flex:1;max-width:140px;height:1px;background:linear-gradient(90deg,transparent,var(--gold));}
+.logo-line.r{background:linear-gradient(90deg,var(--gold),transparent);}
+.logo-diamond{width:9px;height:9px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;color:var(--cream);letter-spacing:0.04em;line-height:1.15;}
+h1 span{color:var(--gold);font-style:italic;}
+.header-sub{margin-top:12px;font-size:0.82rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(247,242,232,0.5);}
+nav{background:var(--rust);border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100;box-shadow:0 3px 12px rgba(0,0,0,0.3);}
+.nav-inner{max-width:960px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:center;}
+nav a{font-family:'Source Serif 4',serif;font-size:0.75rem;font-weight:600;letter-spacing:0.13em;text-transform:uppercase;color:var(--cream);text-decoration:none;padding:13px 16px;transition:background 0.2s,color 0.2s;position:relative;}
+nav a::after{content:'';position:absolute;bottom:0;left:50%;right:50%;height:2px;background:var(--gold);transition:left 0.2s,right 0.2s;}
+nav a:hover{background:rgba(200,150,12,0.2);color:var(--gold);}
+nav a:hover::after{left:12%;right:12%;}
+nav a.active{background:rgba(200,150,12,0.28);color:var(--gold);}
+main{max-width:960px;margin:0 auto;padding:52px 20px 72px;}
+.sec-title{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+.sec-title h2{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--rust);white-space:nowrap;}
+.sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--rust),transparent);}
+.grade-block{margin-bottom:52px;}
+/* ETKİNLİK TABLOSU */
+.activity-table{width:100%;border-collapse:collapse;}
+.activity-table tr{border-bottom:1px solid rgba(122,92,30,0.15);transition:background 0.2s;}
+.activity-table tr:last-child{border-bottom:none;}
+.activity-table tr:hover{background:rgba(122,92,30,0.05);}
+/* SVG İKON SÜTUNU */
+.col-icon{width:80px;padding:16px 12px 16px 0;vertical-align:middle;text-align:center;}
+.col-icon svg{display:block;margin:0 auto;}
+/* AD SÜTUNU */
+.col-name{padding:16px 20px 16px 8px;vertical-align:middle;}
+.act-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--ink);line-height:1.3;}
+/* BUTON SÜTUNU */
+.col-btn{width:140px;padding:16px 0 16px 8px;vertical-align:middle;text-align:right;}
+.go-btn{display:inline-block;font-family:'Source Serif 4',serif;font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream);background:var(--rust);border:1px solid var(--gold);border-radius:3px;padding:8px 14px;text-decoration:none;transition:background 0.2s,color 0.2s;}
+.go-btn:hover{background:var(--gold);color:var(--ink);}
+@media(max-width:600px){
+  .col-btn{width:auto;}
+  .go-btn{font-size:0.68rem;padding:7px 10px;}
+  .act-name{font-size:0.95rem;}
+}
+footer{background:var(--ink);border-top:2px solid var(--gold);padding:24px 20px;text-align:center;}
+footer p{font-size:0.76rem;color:rgba(247,242,232,0.4);letter-spacing:0.08em;line-height:1.8;}
+footer a{color:rgba(200,150,12,0.7);text-decoration:none;}
+footer a:hover{color:var(--gold);}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <div class="logo-band">
+      <div class="logo-line"></div>
+      <div class="logo-diamond"></div>
+      <div class="logo-line r"></div>
+    </div>
+    <h1>İnteraktif <span>Matematik Etkinlikleri</span></h1>
+    <p class="header-sub">Keşfet · Uygula · Öğren</p>
+  </div>
+</header>
+<nav id="site-nav"><button id="burger" aria-label="Menüyü aç/kapat">☰</button></nav>
+<main>
+
+  <!-- 6. SINIF -->
+  <div class="grade-block">
+    <div class="sec-title">
+      <h2>6. Sınıf Matematik</h2>
+      <div class="sec-line"></div>
+    </div>
+    <table class="activity-table">
+      <tr>
+        <td class="col-icon">
+          <svg width="64" height="64" viewBox="0 0 80 80">
+            <rect x="8" y="12" width="44" height="32" rx="5" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+            <text x="30" y="32" text-anchor="middle" font-size="14" font-weight="700" fill="#185FA5" font-family="Georgia,serif">x+2</text>
+            <text x="56" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="#185FA5" font-family="Georgia,serif">=</text>
+            <rect x="62" y="12" width="14" height="32" rx="4" fill="#185FA5" fill-opacity="0.15" stroke="#185FA5" stroke-width="1.5"/>
+            <text x="69" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#185FA5" font-family="Georgia,serif">5</text>
+          </svg>
+        </td>
+        <td class="col-name">
+          <div class="act-name">6. Sınıf Cebirsel İfadeler</div>
+        </td>
+        <td class="col-btn">
+          <a class="go-btn" href="matematik-etkinlik/6cebir.html" target="_blank">Etkinliğe Git</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-icon">
+          <svg width="64" height="64" viewBox="0 0 80 80">
+            <circle cx="12" cy="52" r="7" fill="#534AB7"/>
+            <circle cx="30" cy="37" r="9" fill="#7F77DD"/>
+            <circle cx="51" cy="24" r="11" fill="#AFA9EC"/>
+            <circle cx="68" cy="13" r="8" fill="#CECBF6" stroke="#534AB7" stroke-width="1"/>
+          </svg>
+        </td>
+        <td class="col-name">
+          <div class="act-name">6. Sınıf Örüntüler</div>
+        </td>
+        <td class="col-btn">
+          <a class="go-btn" href="matematik-etkinlik/6oruntu.html" target="_blank">Etkinliğe Git</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-icon">
+          <svg width="64" height="64" viewBox="0 0 80 80">
+            <defs>
+              <marker id="ar1" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 1L5 3L0 5" fill="none" stroke="#0F6E56" stroke-width="1.2"/></marker>
+              <marker id="ar2" viewBox="0 0 6 6" refX="1" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 1L5 3L0 5" fill="none" stroke="#0F6E56" stroke-width="1.2"/></marker>
+            </defs>
+            <rect x="6" y="28" width="68" height="22" rx="3" fill="#1D9E75" fill-opacity="0.15" stroke="#1D9E75" stroke-width="1.5"/>
+            <rect x="6" y="28" width="22" height="22" rx="3" fill="#1D9E75" fill-opacity="0.35"/>
+            <text x="17" y="43" text-anchor="middle" font-size="9" font-weight="700" fill="#085041" font-family="Georgia,serif">1 m</text>
+            <text x="40" y="23" text-anchor="middle" font-size="9" fill="#0F6E56" font-family="Georgia,serif">100 cm</text>
+            <line x1="6" y1="20" x2="74" y2="20" stroke="#0F6E56" stroke-width="1" marker-end="url(#ar1)" marker-start="url(#ar2)"/>
+          </svg>
+        </td>
+        <td class="col-name">
+          <div class="act-name">6. Sınıf Uzunluk Ölçüleri ile Alan Ölçüleri Arasındaki İlişki</div>
+        </td>
+        <td class="col-btn">
+          <a class="go-btn" href="matematik-etkinlik/6uzunlukalan.html" target="_blank">Etkinliğe Git</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 8. SINIF -->
+  <div class="grade-block">
+    <div class="sec-title">
+      <h2>8. Sınıf Matematik</h2>
+      <div class="sec-line"></div>
+    </div>
+    <table class="activity-table">
+      <tr>
+        <td class="col-icon">
+          <svg width="64" height="64" viewBox="0 0 80 80">
+            <line x1="8" y1="62" x2="72" y2="62" stroke="#888780" stroke-width="1.5"/>
+            <line x1="8" y1="62" x2="8" y2="8" stroke="#888780" stroke-width="1.5"/>
+            <circle cx="8" cy="62" r="3" fill="#185FA5"/>
+            <circle cx="22" cy="50" r="3" fill="#185FA5"/>
+            <circle cx="36" cy="38" r="3" fill="#185FA5"/>
+            <circle cx="50" cy="26" r="3" fill="#185FA5"/>
+            <circle cx="64" cy="14" r="3" fill="#185FA5"/>
+            <line x1="8" y1="62" x2="64" y2="14" stroke="#185FA5" stroke-width="1.5"/>
+          </svg>
+        </td>
+        <td class="col-name">
+          <div class="act-name">8. Sınıf Doğrusal İlişki</div>
+        </td>
+        <td class="col-btn">
+          <a class="go-btn" href="matematik-etkinlik/8dogrusaliliski.html" target="_blank">Etkinliğe Git</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-icon">
+          <svg width="64" height="64" viewBox="0 0 80 80">
+            <text x="22" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="#D85A30" font-family="Georgia,serif">x</text>
+            <text x="40" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#993C1D" font-family="Georgia,serif">&gt;</text>
+            <text x="58" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="#D85A30" font-family="Georgia,serif">3</text>
+            <line x1="10" y1="54" x2="70" y2="54" stroke="#D85A30" stroke-width="2"/>
+            <circle cx="35" cy="54" r="5" fill="none" stroke="#D85A30" stroke-width="2"/>
+            <line x1="35" y1="54" x2="70" y2="54" stroke="#D85A30" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </td>
+        <td class="col-name">
+          <div class="act-name">8. Sınıf Eşitsizlikler</div>
+        </td>
+        <td class="col-btn">
+          <a class="go-btn" href="matematik-etkinlik/8esitsizlikler.html" target="_blank">Etkinliğe Git</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-icon">
+          <svg width="64" height="64" viewBox="0 0 80 80">
+            <polygon points="40,8 70,58 10,58" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.5"/>
+            <text x="40" y="50" text-anchor="middle" font-size="9" font-weight="700" fill="#854F0B" font-family="Georgia,serif">a &lt; b+c</text>
+          </svg>
+        </td>
+        <td class="col-name">
+          <div class="act-name">8. Sınıf Üçgenlerde Kenarlar ve Açılar Arasındaki İlişkiler</div>
+        </td>
+        <td class="col-btn">
+          <a class="go-btn" href="matematik-etkinlik/8kenaraci.html" target="_blank">Etkinliğe Git</a>
+        </td>
+      </tr>
+      <tr>
+        <td class="col-icon">
+          <svg width="64" height="64" viewBox="0 0 80 80">
+            <polygon points="10,62 56,62 56,10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+            <rect x="48" y="54" width="8" height="8" fill="none" stroke="#0F6E56" stroke-width="1.2"/>
+            <text x="30" y="72" text-anchor="middle" font-size="8" fill="#0F6E56" font-family="Georgia,serif">a</text>
+            <text x="62" y="40" text-anchor="middle" font-size="8" fill="#0F6E56" font-family="Georgia,serif">b</text>
+            <text x="32" y="42" text-anchor="middle" font-size="8" font-weight="700" fill="#085041" font-family="Georgia,serif">c²=a²+b²</text>
+          </svg>
+        </td>
+        <td class="col-name">
+          <div class="act-name">8. Sınıf Pisagor Kuralı</div>
+        </td>
+        <td class="col-btn">
+          <a class="go-btn" href="matematik-etkinlik/8pisagor.html" target="_blank">Etkinliğe Git</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+</main>
+<footer>
+  <img src="TekinHocaLOGO1.png" alt="Tekin Hoca Logo" style="height:48px;opacity:0.75;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
+  <p>Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+<button id="back-to-top" title="Başa dön">↑</button>
+<script src="menu.js"></script>
+<script>
+  const btn=document.getElementById('back-to-top');
+  window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
+  btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
