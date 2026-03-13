@@ -12,14 +12,6 @@ const MENU_ITEMS = [
 ];
 
 (function () {
-  // Sayfa yüklenince menüyü kapat (mobil)
-  document.addEventListener("DOMContentLoaded", function () {
-    var inner = document.querySelector(".nav-inner");
-    var burger = document.getElementById("burger");
-    if (inner) inner.classList.remove("open");
-    if (burger) burger.classList.remove("open");
-  });
-
   // Aktif sayfayı belirle
   const current = window.location.pathname.split("/").pop() || "index.html";
 
@@ -39,6 +31,9 @@ const MENU_ITEMS = [
   });
 
   nav.appendChild(inner);
+
+  // Sayfa yüklenince menüyü kapalı başlat (mobil)
+  inner.classList.remove("open");
 
   // Hamburger menü (mobil)
   const burger = document.getElementById("burger");
