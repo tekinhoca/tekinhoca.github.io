@@ -32,12 +32,11 @@ const MENU_ITEMS = [
 
   nav.appendChild(inner);
 
-  // Sayfa yüklenince ve bfcache'den dönerken menüyü kapat
-  window.addEventListener("pageshow", function () {
-    inner.classList.remove("open");
-    var burger = document.getElementById("burger");
-    if (burger) burger.classList.remove("open");
-  });
+  // Sayfa yüklenince menüyü her zaman kapalı başlat
+  inner.classList.remove("open");
+  if (document.getElementById("burger")) {
+    document.getElementById("burger").classList.remove("open");
+  }
 
   // Hamburger menü (mobil)
   let burger = document.getElementById("burger");
