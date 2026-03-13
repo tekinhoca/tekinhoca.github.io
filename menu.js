@@ -12,6 +12,14 @@ const MENU_ITEMS = [
 ];
 
 (function () {
+  // Sayfa yüklenince menüyü kapat (mobil)
+  document.addEventListener("DOMContentLoaded", function () {
+    var inner = document.querySelector(".nav-inner");
+    var burger = document.getElementById("burger");
+    if (inner) inner.classList.remove("open");
+    if (burger) burger.classList.remove("open");
+  });
+
   // Aktif sayfayı belirle
   const current = window.location.pathname.split("/").pop() || "index.html";
 
