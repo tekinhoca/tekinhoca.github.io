@@ -8,6 +8,7 @@ const MENU_ITEMS = [
   { label: "Matematik Oyunları",   href: "matematik-oyunlari.html" },
   { label: "Estetik Matematik",    href: "estetik-matematik.html" },
   { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html" },
+  { label: "Kulüp Dosyaları",      href: "kulup-dosyalari.html" },
 ];
 
 (function () {
@@ -34,6 +35,7 @@ const MENU_ITEMS = [
   // Hamburger menü (mobil)
   const burger = document.getElementById("burger");
   if (burger) {
+    burger.textContent = "MENÜ";
     burger.addEventListener("click", function () {
       inner.classList.toggle("open");
       burger.classList.toggle("open");
@@ -44,6 +46,13 @@ const MENU_ITEMS = [
         inner.classList.remove("open");
         burger.classList.remove("open");
       }
+    });
+    // Menü bağlantısına tıklanınca menüyü kapat
+    inner.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", function () {
+        inner.classList.remove("open");
+        burger.classList.remove("open");
+      });
     });
   }
 })();
