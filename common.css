@@ -43,13 +43,14 @@ header::after {
 .logo-line.r{ background: linear-gradient(90deg, var(--gold), transparent); }
 .logo-diamond { width: 9px; height: 9px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
 
-.site-title {
+/* Başlık — tüm sayfalar h1 kullanır */
+h1 {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 5vw, 3.2rem);
   font-weight: 700; color: var(--cream);
   letter-spacing: 0.04em; line-height: 1.15;
 }
-.site-title span { color: var(--gold); font-style: italic; }
+h1 span { color: var(--gold); font-style: italic; }
 .header-sub {
   margin-top: 12px; font-size: 0.82rem;
   letter-spacing: 0.2em; text-transform: uppercase;
@@ -107,14 +108,14 @@ header::after {
   #site-nav a { padding: 12px 20px; border-top: 1px solid rgba(200,150,12,0.15); }
 }
 
-/* ── ALINTI KUTUSU ── */
+/* ── MAIN ── */
+main { margin: 0 auto; padding: 52px 20px 72px; }
+
+/* ── ALINTI KUTUSU (koyu, index tarzı) ── */
 .quote-box {
   background: linear-gradient(135deg, var(--ink), #241a08);
-  border: 1px solid var(--gold);
-  border-radius: 4px;
-  padding: 24px 32px;
-  text-align: center;
-  margin-bottom: 40px;
+  border: 1px solid var(--gold); border-radius: 4px;
+  padding: 24px 32px; text-align: center; margin-bottom: 40px;
 }
 .quote-text {
   font-family: 'Playfair Display', serif;
@@ -122,42 +123,35 @@ header::after {
   font-style: italic; color: var(--cream);
   line-height: 1.75; margin-bottom: 10px;
 }
-.quote-attr {
-  font-size: 0.78rem; letter-spacing: 0.15em;
-  text-transform: uppercase; color: var(--gold);
+.quote-attr { font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+
+/* ── SAYFA ALINTI KUTUSU (açık, iç sayfalar) ── */
+.intro { text-align: center; margin-bottom: 48px; padding-bottom: 36px; border-bottom: 1px solid rgba(122,92,30,0.25); }
+.intro-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 2.5vw, 1.2rem); font-style: italic;
+  color: var(--sepia); line-height: 1.75; max-width: 580px; margin: 0 auto 10px;
 }
+.intro-attr { font-size: 0.8rem; color: var(--rust); letter-spacing: 0.1em; text-transform: uppercase; }
 
 /* ── SECTION TITLE ── */
 .sec-title { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
-.sec-title h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.25rem; font-weight: 700;
-  color: var(--rust); white-space: nowrap;
-}
+.sec-title h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--rust); white-space: nowrap; }
 .sec-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--rust), transparent); }
 
 /* ── FOOTER ── */
-footer {
-  background: var(--ink);
-  border-top: 2px solid var(--gold);
-  padding: 20px;
-  text-align: center;
-}
-footer p {
-  font-size: 0.76rem;
-  color: rgba(247,242,232,0.4);
-  letter-spacing: 0.08em;
-}
+footer { background: var(--ink); border-top: 2px solid var(--gold); padding: 24px 20px; text-align: center; }
+footer .footer-logo { height: 48px; opacity: 0.75; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
+footer p { font-size: 0.76rem; color: rgba(247,242,232,0.4); letter-spacing: 0.08em; line-height: 1.8; }
+footer a { color: rgba(200,150,12,0.7); text-decoration: none; }
+footer a:hover { color: var(--gold); }
 
-/* ── BAŞA DÖN BUTONU ── */
+/* ── BAŞA DÖN ── */
 #back-to-top {
   position: fixed; bottom: 28px; right: 24px;
-  width: 42px; height: 42px;
-  background: var(--rust);
-  border: 1px solid var(--gold);
-  border-radius: 50%;
-  color: var(--cream);
-  font-size: 1.1rem; line-height: 42px;
+  width: 42px; height: 42px; background: var(--rust);
+  border: 1px solid var(--gold); border-radius: 50%;
+  color: var(--cream); font-size: 1.1rem; line-height: 42px;
   text-align: center; cursor: pointer;
   opacity: 0; pointer-events: none;
   transition: opacity 0.3s, transform 0.2s;
@@ -167,7 +161,4 @@ footer p {
 #back-to-top:hover { transform: translateY(-3px); background: #b8400f; }
 
 /* ── ANİMASYON ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }

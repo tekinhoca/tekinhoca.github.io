@@ -11,6 +11,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <style>
+  /* Bu sayfanın özel renk değişkenleri — common.css değerlerini ezer */
   :root {
     --ink:      #1a1208;
     --parchment:#f5efd8;
@@ -20,41 +21,14 @@
     --gold:     #c8960c;
     --shadow:   rgba(26,18,8,0.18);
   }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background-color: var(--parchment);
-    background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
-    color: var(--ink);
-    font-family: 'Source Serif 4', Georgia, serif;
-    min-height: 100vh;
-  }
-
-  /* ── HEADER ── */
-  header {
-    background: var(--ink);
-    padding: 0;
-    position: relative;
-    overflow: hidden;
-  }
-  header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(
-      -45deg,
-      transparent, transparent 8px,
-      rgba(200,150,12,0.06) 8px, rgba(200,150,12,0.06) 9px
-    );
-  }
-  .header-inner {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 48px 24px 40px;
-    text-align: center;
-    position: relative;
-  }
+  body { background-color: var(--parchment); }
+  h1 { color: var(--parchment); }
+  h1 span { color: var(--gold); font-style: italic; }
+main { max-width:900px; }
+/* ── HEADER ── */
+  
+  
+  
   .site-link {
     display: inline-block;
     font-family: 'Playfair Display', serif;
@@ -87,51 +61,18 @@
     flex-shrink: 0;
   }
 
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.2rem);
-    font-weight: 700;
-    color: var(--parchment);
-    letter-spacing: 0.05em;
-    line-height: 1.15;
-  }
-  h1 span { color: var(--gold); font-style: italic; }
+  
+  
 
-  .header-sub {
-    font-size: 0.9rem;
-    color: rgba(245,239,216,0.6);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-top: 14px;
-  }
+  
 
   /* ── MAIN ── */
-  main {
-    max-width: 900px; margin: 0 auto;
-    padding: 48px 20px 64px;
-  }
+  
 
   /* ── INTRO ── */
-  .intro {
-    text-align: center;
-    margin-bottom: 52px;
-    padding-bottom: 40px;
-    border-bottom: 1px solid rgba(139,105,20,0.3);
-  }
-  .intro-quote {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
-    font-style: italic;
-    color: var(--sepia);
-    line-height: 1.7;
-    max-width: 600px; margin: 0 auto 10px;
-  }
-  .intro-attr {
-    font-size: 0.82rem;
-    color: var(--rust);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
+  
+  
+  
 
   /* ── SECTION TITLE ── */
   .section-title {
@@ -192,10 +133,7 @@
     box-shadow: 0 0 0 2px var(--sepia);
   }
 
-  .card-header {
-    display: flex; align-items: baseline; flex-wrap: wrap;
-    gap: 10px; margin-bottom: 8px;
-  }
+  .card-
   .card-date {
     font-family: 'Playfair Display', serif;
     font-size: 0.78rem;
@@ -302,27 +240,13 @@
   }
 
   /* ── FOOTER ── */
-  footer {
-    background: var(--ink);
-    border-top: 2px solid var(--gold);
-    padding: 28px 20px;
-    text-align: center;
-  }
-  footer p {
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.8rem;
-    color: rgba(245,239,216,0.5);
-    letter-spacing: 0.1em;
-  }
-  footer a {
-    color: var(--gold); text-decoration: none;
-    transition: opacity 0.2s;
-  }
-  footer a:hover { opacity: 0.7; }
+  
+  
+  
+  
 
   /* ── ANIMATION ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
+  
     to   { opacity: 1; transform: translateY(0); }
   }
   .card:nth-child(1)  { animation-delay: 0.05s; }
@@ -340,9 +264,20 @@
   @media (max-width: 600px) {
     .timeline { padding-left: 24px; }
     .card { padding: 16px 16px; }
-    .card-header { flex-direction: column; gap: 4px; }
+    .card-
     .card-region { margin-left: 0; }
   }
+  /* Matematik Tarihi özel header diagonal deseni */
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent, transparent 8px,
+      rgba(200,150,12,0.06) 8px, rgba(200,150,12,0.06) 9px
+    );
+  }
+  .header-inner { max-width: 900px; padding: 48px 24px 40px; }
 </style>
 </head>
 <body>
@@ -537,7 +472,7 @@
   
 </main>
 <footer>
-  <img src="TekinHocaLOGO1.png" alt="Tekin Hoca Logo" style="height:48px;opacity:0.75;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
+  <img src="TekinHocaLOGO1.png" alt="Tekin Hoca Logo" class="footer-logo">
   <p>Tekin CANITEZ — Matematik Öğretmeni</p>
 </footer>
 <button id="back-to-top" title="Başa dön">↑</button>
