@@ -5,8 +5,9 @@ const MENU_ITEMS = [
   { label: "Ana Sayfa",            href: "index.html" },
   { label: "Atatürk ve Matematik", href: "ataturk-matematik.html" },
   { label: "Matematik Tarihi",     href: "matematik-tarihi.html" },
-  { label: "Matematik Oyunları",   href: "matematik-oyunlari.html" },
   { label: "Estetik Matematik",    href: "estetik-matematik.html" },
+  { label: "Matematik Hikayeleri", href: "matematik-hikayeleri.html" },
+  { label: "Matematik Oyunları",   href: "matematik-oyunlari.html" },
   { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html" },
   { label: "Kulüp Dosyaları",      href: "kulup-dosyalari.html" },
 ];

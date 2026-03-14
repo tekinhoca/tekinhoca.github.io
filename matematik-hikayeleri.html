@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tekin Hoca — Matematik Hikayeleri</title>
+<meta name="description" content="Matematiğin büyüleyici hikayeleri: Satranç tahtası ve buğday, Königsberg köprüleri, Monty Hall paradoksu ve daha fazlası.">
+<meta name="keywords" content="matematik hikayeleri, üstel artış, Euler, Monty Hall, Arşimet, Gauss, Pisagor kupası, ortaokul matematik">
+<meta name="author" content="Tekin CANITEZ">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&family=STIX+Two+Text:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="common.css">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<style>
+/* ── SADECE BU SAYFAYA ÖZGÜ STİLLER ── */
+
+/* Matematiksel ifadeler için özel font */
+.math {
+  font-family: 'STIX Two Text', 'Georgia', serif;
+  font-size: 0.97em;
+}
+
+/* Alıntı kutusu */
+.intro {
+  text-align: center;
+  margin-bottom: 48px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(122,92,30,0.25);
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.intro-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-style: italic;
+  color: var(--sepia);
+  line-height: 1.75;
+  max-width: 580px;
+  margin: 0 auto 10px;
+}
+.intro-attr {
+  font-size: 0.8rem;
+  color: var(--rust);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* Hikaye listesi */
+.hikaye-listesi {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 1rem 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.hikaye {
+  border-top: 1px solid var(--gold);
+  padding: 2.5rem 0;
+  animation: fadeUp 0.5s ease both;
+}
+
+.hikaye:last-of-type {
+  border-bottom: 1px solid var(--gold);
+}
+
+/* Başlık + ikon satırı */
+.hikaye-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.hikaye-ikon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  margin-top: 4px;
+}
+
+.hikaye-header-text {
+  flex: 1;
+}
+
+.hikaye-numara {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--rust);
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.hikaye h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.35;
+}
+
+.hikaye h2 em {
+  color: var(--rust);
+  font-style: italic;
+}
+
+.hikaye p {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--muted);
+  margin: 0 0 0.9rem 0;
+}
+
+.hikaye p:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Zeka Molası */
+.zeka-molasi {
+  background: var(--aged);
+  border-left: 4px solid var(--gold);
+  border-radius: 0 8px 8px 0;
+  padding: 1.4rem 1.6rem;
+  margin-top: 2rem;
+}
+
+.zeka-molasi-baslik {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--rust);
+  text-transform: uppercase;
+  margin-bottom: 0.7rem;
+}
+
+.zeka-molasi-soru {
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.6;
+  margin-bottom: 0.9rem;
+}
+
+.cevap-btn {
+  display: inline-block;
+  background: var(--rust);
+  color: var(--cream);
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  padding: 0.42rem 1.1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.cevap-btn:hover {
+  background: var(--sepia);
+  transform: translateY(-1px);
+}
+
+.cevap-btn:active {
+  transform: translateY(0);
+}
+
+.cevap-kutusu {
+  display: none;
+  margin-top: 1rem;
+  padding: 1rem 1.2rem;
+  background: var(--cream);
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.93rem;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.cevap-kutusu.acik {
+  display: block;
+  animation: fadeUp 0.25s ease both;
+}
+
+.cevap-kutusu strong {
+  color: var(--rust);
+}
+
+.ipucu-kutusu {
+  background: rgba(200, 150, 12, 0.08);
+  border: 1px dashed var(--gold);
+  border-radius: 4px;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: 0.7rem;
+  font-size: 0.88rem;
+  color: var(--sepia);
+  font-style: italic;
+}
+
+/* Sayfa alt notu */
+.sayfa-notu {
+  max-width: 760px;
+  margin: 0 auto 2rem auto;
+  padding: 0 1rem;
+  text-align: center;
+  font-family: 'Source Serif 4', serif;
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-band">
+      <div class="logo-line"></div>
+      <div class="logo-diamond"></div>
+      <div class="logo-line r"></div>
+    </div>
+    <h1>Matematik <span>Hikayeleri</span></h1>
+    <p class="header-sub">Sayıların Ardındaki Efsaneler, Paradokslar ve Deha Anları</p>
+  </div>
+</header>
+
+<nav id="site-nav"><button id="burger" aria-label="Menüyü aç/kapat">MENÜ</button></nav>
+
+<main>
+
+  <div class="intro">
+    <p class="intro-quote">"Matematik, hayal gücü olmadan yapılamaz; zira matematik, özünde hayal etme sanatıdır."</p>
+    <p class="intro-attr">— Augustus De Morgan</p>
+  </div>
+
+  <div class="hikaye-listesi">
+
+    <!-- HİKAYE 1 -->
+    <article class="hikaye">
+      <div class="hikaye-header">
+        <!-- İkon: Satranç tahtası karesi + katlanma oku -->
+        <svg class="hikaye-ikon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="4" fill="#12100e"/>
+          <!-- 2x2 satranç deseni -->
+          <rect x="6"  y="6"  width="8" height="8" fill="#c8960c" fill-opacity="0.9"/>
+          <rect x="14" y="6"  width="8" height="8" fill="#c8960c" fill-opacity="0.25"/>
+          <rect x="6"  y="14" width="8" height="8" fill="#c8960c" fill-opacity="0.25"/>
+          <rect x="14" y="14" width="8" height="8" fill="#c8960c" fill-opacity="0.9"/>
+          <!-- Buğday taneleri (noktalar) -->
+          <circle cx="28" cy="10" r="1.5" fill="#c8960c"/>
+          <circle cx="34" cy="10" r="1.5" fill="#c8960c"/>
+          <circle cx="28" cy="16" r="1.5" fill="#c8960c"/>
+          <circle cx="34" cy="16" r="1.5" fill="#c8960c"/>
+          <circle cx="40" cy="10" r="1.5" fill="#c8960c"/>
+          <circle cx="40" cy="16" r="1.5" fill="#c8960c"/>
+          <!-- Üstel artış eğrisi -->
+          <polyline points="6,42 12,40 18,37 24,32 30,25 36,16 42,6" fill="none" stroke="#9b3510" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        <div class="hikaye-header-text">
+          <div class="hikaye-numara">Hikaye 1</div>
+          <h2>Satranç Tahtası ve Buğday Tanesi: <em>Üstel Artışın Görünmez Gücü</em></h2>
+        </div>
+      </div>
+      <p>Satrancın icadına dair anlatılan bu efsane, matematiğin ne kadar hızlı devleşebileceğini gösterir. Hint Kralı, oyunu çok beğenince mucitten bir dilekte bulunmasını ister. Mucit mütevazı görünerek şöyle der: "Sizden sadece biraz buğday istiyorum. Satranç tahtasının ilk karesine 1 tane, ikinciye 2, üçüncüye 4, dördüncüye 8 tane… Yani her kareye bir öncekinin iki katı buğday koyun yeter."</p>
+      <p>Kral, bu isteği önce küçümser. Ancak vezirler hesaplamayı bitirdiğinde gerçek ortaya çıkar: 64. kareye gelindiğinde gereken buğday miktarı <strong>18 kentilyon (18.446.744.073.709.551.615)</strong> tanedir. Bu miktar, günümüz dünyasındaki yıllık toplam buğday üretiminin yaklaşık 2.000 katına denk gelmektedir. Matematik bize der ki: Basit bir katlama işlemi, çok geçmeden hayal gücümüzü aşar.</p>
+
+      <div class="zeka-molasi">
+        <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
+        <div class="zeka-molasi-soru">Satranç tahtasının sadece ilk 20 karesindeki buğdayları saniyede 1 tane sayacak olsaydınız, sayma işlemini bitirmeniz yaklaşık ne kadar sürerdi?</div>
+        <button class="cevap-btn" onclick="cevapAc(this)">Cevabı Gör</button>
+        <div class="cevap-kutusu">
+          <strong>Yaklaşık 12 gün!</strong> İlk 20 karenin toplamı <span class="math">2<sup>20</sup> − 1 = 1.048.575</span> tanedir. Saniyede 1 tane sayarsanız bu yaklaşık 12 güne karşılık gelir. 30. kareye ulaştığınızda ise bu süre <strong>34 yıla</strong> çıkar. Üstel artış yalnızca miktarı değil, zamanı da büker.
+        </div>
+      </div>
+    </article>
+
+    <!-- HİKAYE 2 -->
+    <article class="hikaye">
+      <div class="hikaye-header">
+        <!-- İkon: Graf teorisi — 4 nokta + köprüler -->
+        <svg class="hikaye-ikon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="4" fill="#12100e"/>
+          <!-- Kenarlar / köprüler -->
+          <line x1="12" y1="24" x2="24" y2="10" stroke="#c8960c" stroke-width="1.4" stroke-opacity="0.7"/>
+          <line x1="12" y1="24" x2="24" y2="38" stroke="#c8960c" stroke-width="1.4" stroke-opacity="0.7"/>
+          <line x1="36" y1="24" x2="24" y2="10" stroke="#c8960c" stroke-width="1.4" stroke-opacity="0.7"/>
+          <line x1="36" y1="24" x2="24" y2="38" stroke="#c8960c" stroke-width="1.4" stroke-opacity="0.7"/>
+          <path d="M12,24 Q24,18 36,24" fill="none" stroke="#9b3510" stroke-width="1.4"/>
+          <path d="M12,24 Q24,30 36,24" fill="none" stroke="#9b3510" stroke-width="1.4"/>
+          <line x1="24" y1="10" x2="24" y2="38" stroke="#c8960c" stroke-width="1.4" stroke-opacity="0.4" stroke-dasharray="3,2"/>
+          <!-- Düğüm noktaları -->
+          <circle cx="24" cy="10" r="4" fill="#c8960c"/>
+          <circle cx="12" cy="24" r="4" fill="#c8960c"/>
+          <circle cx="36" cy="24" r="4" fill="#c8960c"/>
+          <circle cx="24" cy="38" r="4" fill="#c8960c"/>
+        </svg>
+        <div class="hikaye-header-text">
+          <div class="hikaye-numara">Hikaye 2</div>
+          <h2>Königsberg'in Yedi Köprüsü: <em>Bir Gezintiyle Doğan Yeni Bilim</em></h2>
+        </div>
+      </div>
+      <p>1700'lü yıllarda Prusya'nın Königsberg şehrinde yaşayan halk, bir pazar gezintisi bilmecesine takılmıştı: "Şehirdeki yedi köprünün her birinden tam olarak bir kez geçerek tüm şehri dolaşmak mümkün müdür?" Kimse bunu başaramıyordu; ama nedenini de kimse açıklayamıyordu.</p>
+      <p>Ünlü matematikçi Leonhard Euler, 1735 yılında bu soruyu çözmek için haritadaki kara parçalarını "noktalara", köprüleri ise "çizgilere" indirgedi. Bir noktaya giren her çizginin bir de çıkışı olması gerektiğini fark etti. Eğer bir noktaya tek sayıda köprü bağlanmışsa, o nokta ya başlangıç ya da bitiş noktası olmalıydı. Şehirde 4 kara parçası vardı ve hepsine de tek sayıda köprü bağlanmıştı; oysa bir rota için en fazla iki başlangıç/bitiş noktası olabilirdi. Euler bu imkânsızlığı kanıtlayarak, bugün modern ağ yapılarını ve GPS teknolojilerini mümkün kılan <strong>Graf Teorisi</strong>'ni başlatmış oldu.</p>
+
+      <div class="zeka-molasi">
+        <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
+        <div class="zeka-molasi-soru">Königsberg şehrine 8. bir köprü eklenseydi, tüm köprülerden sadece bir kez geçerek şehri gezmek mümkün olur muydu?</div>
+        <button class="cevap-btn" onclick="cevapAc(this)">Cevabı Gör</button>
+        <div class="cevap-kutusu">
+          <strong>Euler'in kuralına göre evet!</strong> Eğer yeni köprü, tek sayıda köprüye sahip olan iki kara parçasını birbirine bağlasaydı, "tek sayılı nokta" sayısı ikiye inerdi. Euler, bir rotanın mümkün olabilmesi için tek sayılı noktanın en fazla iki adet olması gerektiğini kanıtlamıştır — bu koşul sağlandığında şehri baştan sona dolaşmak mümkün hale gelir.
+        </div>
+      </div>
+    </article>
+
+    <!-- HİKAYE 3 -->
+    <article class="hikaye">
+      <div class="hikaye-header">
+        <!-- İkon: 3 kapı, ortada araba silüeti -->
+        <svg class="hikaye-ikon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="4" fill="#12100e"/>
+          <!-- Kapı 1 -->
+          <rect x="4" y="14" width="10" height="26" rx="1" fill="none" stroke="#c8960c" stroke-width="1.4"/>
+          <circle cx="13" cy="27" r="1.2" fill="#c8960c"/>
+          <!-- Kapı 2 (orta, vurgulu) -->
+          <rect x="19" y="10" width="10" height="30" rx="1" fill="#c8960c" fill-opacity="0.15" stroke="#c8960c" stroke-width="1.8"/>
+          <circle cx="28" cy="25" r="1.2" fill="#c8960c"/>
+          <!-- Küçük araba (orta kapıda) -->
+          <rect x="21" y="20" width="6" height="4" rx="1" fill="#c8960c" fill-opacity="0.7"/>
+          <rect x="22" y="18" width="4" height="3" rx="1" fill="#c8960c" fill-opacity="0.5"/>
+          <circle cx="22.5" cy="24.5" r="1" fill="#12100e"/>
+          <circle cx="25.5" cy="24.5" r="1" fill="#12100e"/>
+          <!-- Kapı 3 (açık, eğimli) -->
+          <path d="M34,14 L44,16 L44,40 L34,40 Z" fill="none" stroke="#9b3510" stroke-width="1.4"/>
+          <circle cx="35.5" cy="27" r="1.2" fill="#9b3510"/>
+          <!-- Soru işareti (seçim belirsizliği) -->
+          <text x="39" y="32" font-size="10" fill="#9b3510" font-family="Georgia,serif" text-anchor="middle">?</text>
+        </svg>
+        <div class="hikaye-header-text">
+          <div class="hikaye-numara">Hikaye 3</div>
+          <h2>Monty Hall Problemi: <em>Zihnimizin Olasılıkla İmtihanı</em></h2>
+        </div>
+      </div>
+      <p>Adını Amerikalı bir televizyon sunucusundan alan bu problem, en zeki matematikçileri bile karşı karşıya getirmiştir. Önünüzde üç kapı var: Birinin arkasında son model bir araba, diğer ikisinde ise keçi duruyor. Bir kapı seçiyorsunuz (diyelim ki 1. kapı). Kapıların arkasında ne olduğunu bilen sunucu, kalan iki kapıdan arkasında keçi olan birini (diyelim ki 3. kapı) açıyor ve size soruyor: "Seçiminizi değiştirip 2. kapıya geçmek ister misiniz?"</p>
+      <p>Sezgi bize "Fark etmez, iki kapı kaldı, şans %50" dese de matematik <strong>"Değiştir!"</strong> der. Çünkü ilk başta yanlış kapıyı seçme ihtimaliniz %66'ydı (2/3). Seçiminizi değiştirdiğinizde, aslında başlangıçtaki o %66'lık "yanlış yapma ihtimalini" kazanma şansına çevirmiş olursunuz. Bu paradoks, olasılığın her zaman göründüğü kadar basit olmadığını kanıtlar.</p>
+
+      <div class="zeka-molasi">
+        <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
+        <div class="zeka-molasi-soru">Eğer sunucu hangi kapıda araba olduğunu bilmeseydi ve rastgele bir kapı açıp şans eseri arkasından keçi çıksaydı, seçiminizi değiştirmek hâlâ avantajlı olur muydu?</div>
+        <button class="cevap-btn" onclick="cevapAc(this)">Cevabı Gör</button>
+        <div class="cevap-kutusu">
+          <strong>Hayır.</strong> Eğer sunucu kapıyı bilerek değil de rastgele açsaydı, kalan iki kapı için şansınız eşit (%50-%50) olurdu. Monty Hall paradoksunun özü sunucunun <em>bilinçli seçiminde</em> yatmaktadır — bu bilinç, olasılık dağılımını değiştirir. Bilginin olasılığı nasıl dönüştürdüğüne dair harika bir örnektir.
+        </div>
+      </div>
+    </article>
+
+    <!-- HİKAYE 4 -->
+    <article class="hikaye">
+      <div class="hikaye-header">
+        <!-- İkon: Küvet + su seviyesi + taç -->
+        <svg class="hikaye-ikon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="4" fill="#12100e"/>
+          <!-- Küvet gövdesi -->
+          <path d="M6,20 Q6,36 24,36 Q42,36 42,20" fill="none" stroke="#c8960c" stroke-width="1.6"/>
+          <line x1="6" y1="20" x2="6" y2="16" stroke="#c8960c" stroke-width="1.6"/>
+          <line x1="42" y1="20" x2="42" y2="16" stroke="#c8960c" stroke-width="1.6"/>
+          <!-- Su (dolu seviye) -->
+          <path d="M8,28 Q16,25 24,28 Q32,31 40,28 L40,35 Q32,35 24,35 Q16,35 8,35 Z" fill="#c8960c" fill-opacity="0.2" stroke="none"/>
+          <!-- Su yüzeyi dalgası -->
+          <path d="M8,28 Q16,25 24,28 Q32,31 40,28" fill="none" stroke="#c8960c" stroke-width="1.2"/>
+          <!-- Taç -->
+          <polyline points="16,18 18,10 21,16 24,8 27,16 30,10 32,18" fill="none" stroke="#c8960c" stroke-width="1.5" stroke-linejoin="round"/>
+          <!-- Eureka! ünlemi -->
+          <text x="38" y="13" font-size="9" fill="#9b3510" font-family="Georgia,serif" font-style="italic">!</text>
+        </svg>
+        <div class="hikaye-header-text">
+          <div class="hikaye-numara">Hikaye 4</div>
+          <h2>Arşimet'in "Eureka" Çığlığı: <em>Bir Hamamda Çözülen Gizem</em></h2>
+        </div>
+      </div>
+      <p>Siraküza Kralı Hieron, yaptırdığı yeni tacın saf altından olup olmadığından şüphelenir ve Arşimet'ten taca zarar vermeden bu gerçeği bulmasını ister. Arşimet, bu sorunu düşünürken hamama gider. Küvete girdiğinde suyun yükseldiğini ve vücudunun hafiflediğini fark eder. Aradığı cevabı bulmuştur: Suya batan her cisim, kendi hacmi kadar suyu yerinden oynatır.</p>
+      <p>Saf altın ve gümüşün yoğunlukları farklı olduğu için, eğer tacın içinde gümüş varsa aynı ağırlıktaki saf altından daha fazla su taşıracaktır. Heyecandan <strong>"Buldum!" (Eureka!)</strong> diye bağırarak sokağa fırlayan Arşimet, sadece kralın tacının sahte olduğunu kanıtlamakla kalmamış; akışkanlar mekaniğinin ve modern fizikteki hacim hesaplamalarının temelini atmıştır.</p>
+    </article>
+
+    <!-- HİKAYE 5 -->
+    <article class="hikaye">
+      <div class="hikaye-header">
+        <!-- İkon: 1+2+...+n dizilişi, toplam ok -->
+        <svg class="hikaye-ikon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="4" fill="#12100e"/>
+          <!-- Sayı bloklarının eşleşme çizgileri -->
+          <text x="5"  y="16" font-size="8" fill="#c8960c" font-family="Georgia,serif">1</text>
+          <text x="5"  y="28" font-size="8" fill="#c8960c" font-family="Georgia,serif">2</text>
+          <text x="5"  y="40" font-size="8" fill="#c8960c" font-family="Georgia,serif">3</text>
+          <text x="38" y="16" font-size="8" fill="#c8960c" font-family="Georgia,serif">100</text>
+          <text x="39" y="28" font-size="8" fill="#c8960c" font-family="Georgia,serif">99</text>
+          <text x="39" y="40" font-size="8" fill="#c8960c" font-family="Georgia,serif">98</text>
+          <!-- Eşleşme yayları -->
+          <path d="M10,13 Q24,6 37,13"  fill="none" stroke="#9b3510" stroke-width="1.2" stroke-dasharray="2,2"/>
+          <path d="M10,25 Q24,18 37,25" fill="none" stroke="#9b3510" stroke-width="1.2" stroke-dasharray="2,2"/>
+          <path d="M10,37 Q24,30 37,37" fill="none" stroke="#9b3510" stroke-width="1.2" stroke-dasharray="2,2"/>
+          <!-- 101 etiketi -->
+          <text x="24" y="10" font-size="7" fill="#c8960c" font-family="Georgia,serif" text-anchor="middle">101</text>
+          <text x="24" y="22" font-size="7" fill="#c8960c" font-family="Georgia,serif" text-anchor="middle">101</text>
+          <text x="24" y="34" font-size="7" fill="#c8960c" font-family="Georgia,serif" text-anchor="middle">101</text>
+        </svg>
+        <div class="hikaye-header-text">
+          <div class="hikaye-numara">Hikaye 5</div>
+          <h2>Küçük Gauss ve Toplam Formülü: <em>Dehanın İlk Parıltısı</em></h2>
+        </div>
+      </div>
+      <p>Modern matematiğin prensi kabul edilen Carl Friedrich Gauss, henüz ilkokul çağındayken tüm sınıfı hayrete düşüren bir çözüm üretmiştir. Öğretmeni, öğrencilerini oyalamak amacıyla onlardan 1'den 100'e kadar olan tüm sayıları toplamalarını ister. Diğer öğrenciler uzun işlemlerle uğraşırken, Gauss birkaç saniye içinde cevabı bulur: <strong>5050</strong>.</p>
+      <p>Gauss'un yöntemi, karmaşık bir soruyu basitleştirmenin en güzel örneğidir. Sayıları baştan ve sondan eşleştirdiğini fark etmiştir: 1+100=101, 2+99=101, 3+98=101… Bu şekilde toplamı hep 101 olan tam 50 adet çift olduğunu görür. 50×101 işlemini zihninden yaparak sonuca ulaşır. Bugün öğrencilerin kullandığı <strong><span class="math">n(n+1)/2</span></strong> formülü, küçük bir çocuğun sınıftaki o pratik gözlemine dayanmaktadır.</p>
+
+      <div class="zeka-molasi">
+        <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
+        <div class="zeka-molasi-soru">Gauss'un yöntemini kullanarak, 1'den 200'e kadar olan çift sayıların (2+4+6…+200) toplamını kalem oynatmadan, sadece zihninizden nasıl bulursunuz?</div>
+        <button class="cevap-btn" onclick="cevapAc(this)">Cevabı Gör</button>
+        <div class="cevap-kutusu">
+          <div class="ipucu-kutusu">İpucu: Tüm sayıları 2 parantezine alırsanız <span class="math">2×[1+2+3…+100]</span> ifadesini elde edersiniz.</div>
+          Gauss'un yöntemiyle köşeli parantez içindeki toplam <strong>5050</strong>'dir. Dışarıdaki 2 ile çarpınca sonuç <strong>10.100</strong> olur. Serideki çift sayıların toplamı her zaman <span class="math">n(n+2)/4 × (sonuncu sayı)</span> ile de hesaplanabilir; ancak Gauss'un eşleştirme yöntemi çok daha zarif ve akılda kalıcıdır.
+        </div>
+      </div>
+    </article>
+
+    <!-- HİKAYE 6 -->
+    <article class="hikaye">
+      <div class="hikaye-header">
+        <!-- İkon: Kupa + sifon tüpü + doluluk sınırı -->
+        <svg class="hikaye-ikon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="4" fill="#12100e"/>
+          <!-- Kupa gövdesi -->
+          <path d="M14,8 L12,36 Q12,40 24,40 Q36,40 34,36 L32,8 Z" fill="none" stroke="#c8960c" stroke-width="1.5"/>
+          <!-- Sap -->
+          <line x1="24" y1="40" x2="24" y2="44" stroke="#c8960c" stroke-width="2"/>
+          <line x1="18" y1="44" x2="30" y2="44" stroke="#c8960c" stroke-width="1.5"/>
+          <!-- Sınır çizgisi (kırmızı) -->
+          <line x1="13" y1="22" x2="35" y2="22" stroke="#9b3510" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <!-- Su doluluk (sınırın altında — normal) -->
+          <path d="M13,28 L13,35 Q13,39 24,39 Q35,39 35,35 L35,28 Q24,26 13,28 Z" fill="#c8960c" fill-opacity="0.2"/>
+          <!-- Gizli sifon tüpü -->
+          <path d="M24,22 Q28,22 28,28 Q28,36 24,38" fill="none" stroke="#9b3510" stroke-width="1.2" stroke-dasharray="2,2"/>
+          <!-- Denge/adalet sembolü (küçük terazi çizgisi) -->
+          <line x1="8" y1="16" x2="8" y2="8" stroke="#c8960c" stroke-width="1"/>
+          <line x1="5" y1="8" x2="11" y2="8" stroke="#c8960c" stroke-width="1"/>
+          <line x1="5" y1="12" x2="8" y2="8" stroke="#c8960c" stroke-width="0.8"/>
+          <line x1="11" y1="12" x2="8" y2="8" stroke="#c8960c" stroke-width="0.8"/>
+        </svg>
+        <div class="hikaye-header-text">
+          <div class="hikaye-numara">Hikaye 6</div>
+          <h2>Pisagor'un Adalet Kupası: <em>Açgözlülüğün Matematiksel Sınırı</em></h2>
+        </div>
+      </div>
+      <p>Büyük matematikçi Pisagor tarafından yaklaşık 2500 yıl önce icat edilen bu kupa, aslında bir "etik ve denge" dersidir. Görünüşte sıradan bir kadehe benzeyen bu kupanın içinde gizli bir sifon düzeneği bulunur. Kupada, sıvının doldurulabileceği bir sınır çizgisi vardır.</p>
+      <p>Eğer kişi kadehini bu sınırın altında doldurursa, içeceğini rahatlıkla içebilir. Ancak kişi açgözlülük yapıp çizgiyi aşarsa sifon etkisi başlar ve kupanın içindeki tüm içecek alt delikten dışarı boşalır. Pisagor, matematiksel bir tasarım aracılığıyla şu mesajı verir: <strong>"Eğer azla yetinmeyi bilmezseniz, elinizde olanın tamamını da kaybedersiniz."</strong></p>
+
+      <div class="zeka-molasi">
+        <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
+        <div class="zeka-molasi-soru">Pisagor'un kupasını tamamen suyun içine daldırıp sonra ters çevirerek çıkarsanız ne olur? Sifon etkisi kupa boşalana kadar devam eder mi?</div>
+        <button class="cevap-btn" onclick="cevapAc(this)">Cevabı Gör</button>
+        <div class="cevap-kutusu">
+          Kupa suyun dışına çıkarıldığında, ters durduğu için hava basıncı ve yerçekimi dengesi değişir; düzenek "ters sifon" gibi çalışmaz. Ancak kupa <em>dik konumda</em> ve sınır çizgisi bir kez geçildiği an sifon durdurulamaz — tüm sıvı boşalır. Kupanın sırrı fizik yasalarından çok, tasarımın yarattığı <strong>geri dönüşsüz eşikte</strong> yatmaktadır.
+        </div>
+      </div>
+    </article>
+
+  </div><!-- /hikaye-listesi -->
+
+  <p class="sayfa-notu">Bu hikayeler, matematiğin yalnızca bir hesap bilimi olmadığını; aynı zamanda merak, gözlem ve yaratıcı düşüncenin ürünü olduğunu göstermektedir.</p>
+
+</main>
+
+<footer>
+  <img src="TekinHocaLOGO1.png" alt="Tekin Hoca Logo" style="height:48px;opacity:0.75;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
+  <p>Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+
+<button id="back-to-top" title="Başa dön">↑</button>
+
+<script src="menu.js"></script>
+<script>
+  const btn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', function () {
+    btn.classList.toggle('visible', window.scrollY > 300);
+  });
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function cevapAc(buton) {
+    const kutu = buton.nextElementSibling;
+    const acik = kutu.classList.toggle('acik');
+    buton.textContent = acik ? 'Cevabı Gizle' : 'Cevabı Gör';
+  }
+</script>
+</body>
+</html>
