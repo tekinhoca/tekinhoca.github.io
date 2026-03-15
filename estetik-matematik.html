@@ -120,9 +120,8 @@ to{opacity:1;transform:translateY(0);}}
         <h3>Fraktallar</h3>
       </div>
       <div class="topic-card-body">
-        <p>Fraktallar, her ölçekte kendine benzeyen geometrik yapılardır. Mandelbrot kümesi, en tanınmış örnektir; sonsuz karmaşıklık, son derece basit bir formülden doğar.</p>
-        <p>Doğadaki fraktallar: kar taneleri, dağ silüetleri, bulutlar, şimşek kolları, damarlardaki bronşlar.</p>
-        <div class="topic-highlight">İngiltere'nin kıyı uzunluğu ölçüm biriminin küçüklüğüyle sonsuza gider — fraktal boyutun gerçek dünya örneği.</div>
+        <p>Fraktallar, ne kadar yakından baksan o kadar fazla ayrıntı çıkaran şekillerdir. Bir dalın ucu daha küçük dallara, onlar daha küçük dallara ayrılır — sonsuza kadar. Bu "kendi kendine benzerlik" sadece matematiksel bir oyun değildir: kar taneleri, şimşek, dağ silüetleri, ciğerlerdeki hava yolları ve damarlardaki bronşlar hep fraktal yapıdadır.</p>
+        <p>Mandelbrot kümesi bu yapıların en ünlüsüdür. Onu oluşturan formül son derece basittir — ama ortaya çıkan şekil, ne kadar büyütürsen büyüt, bitmez tükenmez bir karmaşıklık sergiler.</p>
       </div>
     </div>
 
@@ -145,7 +144,7 @@ to{opacity:1;transform:translateY(0);}}
       <div class="topic-card-body">
         <p>Sonsuz büyük bir şeyden daha büyük bir sonsuzluk olabilir mi? Olabilir. Tamsayılar (1, 2, 3, 4…) sonsuzdur; ama 1 ile 2 arasındaki ondalık sayılar da sonsuzdur ve bu ikinci sonsuzluk birinciden çok daha büyüktür.</p>
         <p>Bunu 1800'lerin sonunda kanıtlayan matematikçi Georg Cantor, döneminde "matematiği mahvediyorsun" suçlamasıyla karşılaştı. Bugün bu keşif matematik tarihinin dönüm noktalarından biri sayılıyor.</p>
-        <div class="topic-highlight">[0,1] aralığındaki nokta sayısı, bütün gerçel sayı doğrusundaki nokta sayısıyla eşittir.</div>
+        <div class="topic-highlight">[0,1] aralığındaki noktaların sayısı bütün gerçel sayılar doğrusundaki nokta sayısına eşittir.</div>
       </div>
     </div>
 
@@ -155,7 +154,7 @@ to{opacity:1;transform:translateY(0);}}
         <h3>Tessellasyon (Kaplama)</h3>
       </div>
       <div class="topic-card-body">
-        <p>Bir yüzeyi boşluk ve örtüşme olmaksızın kaplayabilen şekillere tessellasyon denir. Düzgün çokgenlerden yalnızca üçgen, kare ve altıgen bir düzlemi tek başına kaplayabilir.</p>
+        <p>Bir yüzeyi boşluk ve örtüşme olmaksızın kaplayabilen şekillere tessellasyon denir. Düzgün çokgenlerden yalnızca eşkenar üçgen, kare ve düzgün altıgen bir düzlemi tek başına kaplayabilir.</p>
         <p>M.C. Escher, bu matematiksel ilkeleri kullanarak olağanüstü sanat eserleri yarattı.</p>
         <div class="topic-highlight">Düzensiz (aperiodik) kaplamalar ancak 1960'larda keşfedildi; Penrose mozaikleri en tanınmış örnektir.</div>
       </div>
@@ -251,14 +250,18 @@ to{opacity:1;transform:translateY(0);}}
       <div class="visual-item">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <rect width="200" height="200" fill="#12100e" rx="4"/>
-          <polygon points="40,160 120,160 120,80" fill="none" stroke="#c8960c" stroke-width="1.5"/>
-          <polyline points="112,160 112,152 120,152" fill="none" stroke="#c8960c" stroke-width="1"/>
-          <rect x="40" y="160" width="80" height="80" fill="#c8960c" fill-opacity="0.25" stroke="#c8960c" stroke-width="1"/>
-          <text x="80" y="206" text-anchor="middle" font-size="11" fill="#c8960c" font-family="Georgia,serif" font-style="italic">a²</text>
-          <rect x="120" y="80" width="60" height="80" fill="#9b3510" fill-opacity="0.25" stroke="#9b3510" stroke-width="1"/>
-          <text x="152" y="124" text-anchor="middle" font-size="11" fill="#9b3510" font-family="Georgia,serif" font-style="italic">b²</text>
-          <polygon points="40,160 120,80 80,40 0,120" fill="#c8960c" fill-opacity="0.12" stroke="#c8960c" stroke-width="1" stroke-dasharray="4,2"/>
-          <text x="48" y="96" text-anchor="middle" font-size="11" fill="#c8960c" font-family="Georgia,serif" font-style="italic">c²</text>
+          <!-- Dik üçgen: A(75,125) B(125,125) C(125,75) -->
+          <polygon points="75,125 125,125 125,75" fill="none" stroke="#c8960c" stroke-width="1.5"/>
+          <polyline points="119,125 119,119 125,119" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <!-- a² karesi (alt, 50×50) -->
+          <rect x="75" y="125" width="50" height="50" fill="#c8960c" fill-opacity="0.25" stroke="#c8960c" stroke-width="1"/>
+          <text x="100" y="156" text-anchor="middle" font-size="11" fill="#c8960c" font-family="Georgia,serif" font-style="italic">a²</text>
+          <!-- b² karesi (sağ, 50×50) -->
+          <rect x="125" y="75" width="50" height="50" fill="#9b3510" fill-opacity="0.25" stroke="#9b3510" stroke-width="1"/>
+          <text x="150" y="106" text-anchor="middle" font-size="11" fill="#9b3510" font-family="Georgia,serif" font-style="italic">b²</text>
+          <!-- c² karesi: köşeler A(75,125) C(125,75) C+(75,25) A+(25,75) -->
+          <polygon points="75,125 125,75 75,25 25,75" fill="#c8960c" fill-opacity="0.12" stroke="#c8960c" stroke-width="1" stroke-dasharray="4,2"/>
+          <text x="58" y="88" text-anchor="middle" font-size="11" fill="#c8960c" font-family="Georgia,serif" font-style="italic">c²</text>
         </svg>
         <h4>Pisagor Teoreminin Geometrik Kanıtı</h4>
         <p>M.Ö. 570'te yaşamış olan Pisagor'a atfedilen bu teorem, dik üçgenlerin evrensel yasasını görünür kılar: her karenin alanı o karenin kenarı uzunluğundaki doğrunun karesine eşittir; ve dik üçgende iki katetin karelerinin toplamı, hipotenüsün karesine eşittir.</p>
@@ -287,18 +290,19 @@ to{opacity:1;transform:translateY(0);}}
       <!-- Düzgün Çokgenler -->
       <div class="visual-item">
         <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="160" fill="#12100e" rx="4"/>
           <polygon points="30.0,25.0 47.3,55.0 12.7,55.0" fill="none" stroke="#c8960c" stroke-width="1.2"/>
-          <text x="30" y="78" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">3gen</text>
+          <text x="30" y="73" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">3gen</text>
           <polygon points="80.0,25.0 100.0,45.0 80.0,65.0 60.0,45.0" fill="none" stroke="#9b3510" stroke-width="1.2"/>
-          <text x="80" y="78" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">4gen</text>
+          <text x="80" y="73" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">4gen</text>
           <polygon points="133.0,25.0 152.0,38.8 144.8,61.2 121.2,61.2 114.0,38.8" fill="none" stroke="#c8960c" stroke-width="1.2"/>
-          <text x="133" y="78" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">5gen</text>
+          <text x="133" y="73" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">5gen</text>
           <polygon points="170.0,25.0 187.3,35.0 187.3,55.0 170.0,65.0 152.7,55.0 152.7,35.0" fill="none" stroke="#9b3510" stroke-width="1.2"/>
-          <text x="170" y="78" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">6gen</text>
+          <text x="170" y="73" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">6gen</text>
           <polygon points="50.0,85.0 71.2,93.8 80.0,115.0 71.2,136.2 50.0,145.0 28.8,136.2 20.0,115.0 28.8,93.8" fill="none" stroke="#c8960c" stroke-width="1.2"/>
-          <text x="50" y="158" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">8gen</text>
+          <text x="50" y="153" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">8gen</text>
           <polygon points="145.0,85.0 160.0,89.0 171.0,100.0 175.0,115.0 171.0,130.0 160.0,141.0 145.0,145.0 130.0,141.0 119.0,130.0 115.0,115.0 119.0,100.0 130.0,89.0" fill="none" stroke="#9b3510" stroke-width="1.2"/>
-          <text x="145" y="158" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">12gen</text>
+          <text x="145" y="153" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">12gen</text>
         </svg>
         <h4>Düzgün Çokgenler</h4>
         <p>Kenar sayısı arttıkça düzgün çokgen çembere yaklaşır. Üçgenin iç açıları toplamı 180°, karenin 360°, beşgenin 540° — her yeni kenar 180° ekler.</p>
