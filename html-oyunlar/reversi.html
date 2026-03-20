@@ -183,14 +183,14 @@ function applyMove(r,c,t){
   turn = t===BLACK?WHITE:BLACK;
   // Rakibin hamlesi yoksa geri dön
   if(validMoves(turn).length===0){
-    turn = t===BLACK?WHITE:BLACK; // tekrar orijinal
+    const skipped = turnName(turn);
+    turn = turn===BLACK?WHITE:BLACK; // orijinal oyuncuya geri dön
     if(validMoves(turn).length===0){
       // İki taraf da hamle yapamıyor — oyun bitti
       endGame();
       return;
     }
     // Pas geç
-    const skipped = turn===BLACK?'Beyaz':'Siyah';
     updateScorebar();
     render();
     setMsg(skipped+' pas geçti. '+turnName(turn)+' oynuyor.');
