@@ -7,16 +7,15 @@ const MENU_ITEMS = [
   { label: "Matematik Tarihi",     href: "matematik-tarihi.html" },
   { label: "Estetik Matematik",    href: "estetik-matematik.html" },
   { label: "Matematik Hikayeleri", href: "matematik-hikayeleri.html" },
-  { label: "Matematik Oyunları",   href: "matematik-oyunlari.html" },
+  { label: "HTML Zekâ Oyunları",   href: "html-oyunlar.html" },
+  { label: "Flash Zekâ Oyunları",  href: "matematik-oyunlari.html" },
   { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html" },
   { label: "Kulüp Dosyaları",      href: "kulup-dosyalari.html" },
 ];
 
 (function () {
-  // Aktif sayfayı belirle
   const current = window.location.pathname.split("/").pop() || "index.html";
 
-  // Nav HTML'i oluştur
   const nav = document.getElementById("site-nav");
   if (!nav) return;
 
@@ -33,13 +32,11 @@ const MENU_ITEMS = [
 
   nav.appendChild(inner);
 
-  // Sayfa yüklenince menüyü her zaman kapalı başlat
   inner.classList.remove("open");
   if (document.getElementById("burger")) {
     document.getElementById("burger").classList.remove("open");
   }
 
-  // Hamburger menü (mobil)
   let burger = document.getElementById("burger");
   if (burger) {
     burger.textContent = "MENÜ";
@@ -47,14 +44,12 @@ const MENU_ITEMS = [
       inner.classList.toggle("open");
       burger.classList.toggle("open");
     });
-    // Dışarı tıklanınca kapat
     document.addEventListener("click", function (e) {
       if (!nav.contains(e.target)) {
         inner.classList.remove("open");
         burger.classList.remove("open");
       }
     });
-    // Menü bağlantısına tıklanınca menüyü kapat
     inner.querySelectorAll("a").forEach(function (a) {
       a.addEventListener("click", function () {
         inner.classList.remove("open");

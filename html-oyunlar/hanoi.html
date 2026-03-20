@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hanoi Kulesi</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#1a1208;font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;padding:10px}
+.wrap{width:100%;max-width:720px;display:flex;flex-direction:column;gap:10px}
+
+/* BAŞLIK */
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.game-title{font-size:16px;font-weight:700;color:#c8960c;letter-spacing:.06em}
+.disk-select{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(247,242,232,0.45)}
+.disk-select label{white-space:nowrap}
+.disk-select select{background:#2a1a08;border:1px solid rgba(200,150,12,0.35);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:3px 6px;cursor:pointer}
+
+/* SAYAÇLAR */
+.counters{display:flex;gap:7px;flex-wrap:wrap}
+.cnt{background:rgba(255,255,255,0.05);border-radius:5px;padding:6px 12px;flex:1;min-width:80px;text-align:center}
+.cnt .l{font-size:10px;color:rgba(247,242,232,0.35);margin-bottom:2px}
+.cnt .v{font-size:16px;font-weight:700;color:#FFD97A}
+.cnt .v.good{color:#6fcf97}
+.cnt .v.bad{color:#eb5757}
+
+/* OYUN ALANI */
+.game-area{position:relative;background:#2a1a08;border-radius:8px;border:1px solid rgba(200,150,12,0.15);padding:16px 12px 0;user-select:none}
+
+/* MİLLER */
+.towers{display:flex;justify-content:space-around;align-items:flex-end;height:220px;position:relative}
+.tower{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1;cursor:pointer;position:relative;padding-bottom:0}
+.tower:hover .pole{background:rgba(200,150,12,0.6)}
+.tower.selected .pole{background:#c8960c}
+.tower.target .pole{background:rgba(111,207,151,0.6)}
+
+.pole{width:6px;height:180px;background:rgba(200,150,12,0.3);border-radius:3px 3px 0 0;position:absolute;bottom:0;left:50%;transform:translateX(-50%);transition:background .2s;z-index:1}
+
+/* DİSKLER */
+.disks{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:100%;height:180px;position:relative;z-index:2}
+.disk{border-radius:4px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(18,16,14,0.7);cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;margin-top:1px}
+.disk:hover{transform:scaleY(1.08)}
+.disk.lifted{box-shadow:0 8px 24px rgba(0,0,0,0.6);transform:translateY(-12px) scaleY(1.1)}
+
+/* Disk renkleri — disk sayısına göre indeks */
+.disk[data-size="1"] {background:#e74c3c}
+.disk[data-size="2"] {background:#e67e22}
+.disk[data-size="3"] {background:#f1c40f}
+.disk[data-size="4"] {background:#2ecc71}
+.disk[data-size="5"] {background:#1abc9c}
+.disk[data-size="6"] {background:#3498db}
+.disk[data-size="7"] {background:#9b59b6}
+.disk[data-size="8"] {background:#e91e63}
+
+/* TABAN */
+.base{height:12px;background:rgba(200,150,12,0.35);border-radius:0 0 6px 6px;margin:0 4px;border-top:2px solid rgba(200,150,12,0.5)}
+
+/* KULELERİN ETIKETLERI */
+.tower-labels{display:flex;justify-content:space-around;padding:6px 0 10px}
+.tower-label{flex:1;text-align:center;font-size:10px;color:rgba(247,242,232,0.3);letter-spacing:.08em;font-weight:600}
+.tower-label.sel{color:#c8960c}
+.tower-label.tgt{color:#6fcf97}
+
+/* MESAJ */
+.msg{font-size:11px;color:rgba(247,242,232,0.5);text-align:center;min-height:15px}
+
+/* KAZANMA MESAJI */
+.win-banner{display:none;background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.4);border-radius:5px;padding:10px 16px;text-align:center}
+.win-banner.show{display:block}
+.win-banner h2{font-size:14px;color:#6fcf97;margin-bottom:4px}
+.win-banner p{font-size:11px;color:rgba(247,242,232,0.55)}
+
+/* BUTONLAR */
+.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.4);border-radius:3px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.75);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(155,53,16,0.6)}
+button.a.hint-btn{border-color:rgba(52,152,219,0.4);color:rgba(147,197,253,0.75)}
+button.a.hint-btn:hover{background:rgba(52,152,219,0.15)}
+
+/* ÇÖZÜM İPUCU */
+.hint-box{display:none;background:rgba(52,152,219,0.08);border:1px solid rgba(52,152,219,0.25);border-radius:5px;padding:8px 14px;font-size:11px;color:rgba(147,197,253,0.8);line-height:1.7}
+.hint-box.show{display:block}
+.hint-box b{color:rgba(147,197,253,1)}
+
+@media(max-width:480px){
+  .towers{height:180px}
+  .pole{height:148px}
+  .disks{height:148px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top-bar">
+    <div class="game-title">Hanoi Kulesi</div>
+    <div class="disk-select">
+      <label for="diskCount">Disk sayısı:</label>
+      <select id="diskCount">
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="counters">
+    <div class="cnt"><div class="l">Hamle</div><div class="v" id="moves">0</div></div>
+    <div class="cnt"><div class="l">Minimum</div><div class="v" id="minMoves">7</div></div>
+    <div class="cnt"><div class="l">Durum</div><div class="v" id="status">Devam ediyor</div></div>
+  </div>
+
+  <div class="game-area">
+    <div class="towers" id="towers">
+      <div class="tower" id="tower-0" onclick="selectTower(0)">
+        <div class="disks" id="disks-0"></div>
+        <div class="pole"></div>
+      </div>
+      <div class="tower" id="tower-1" onclick="selectTower(1)">
+        <div class="disks" id="disks-1"></div>
+        <div class="pole"></div>
+      </div>
+      <div class="tower" id="tower-2" onclick="selectTower(2)">
+        <div class="disks" id="disks-2"></div>
+        <div class="pole"></div>
+      </div>
+    </div>
+    <div class="base"></div>
+    <div class="tower-labels">
+      <div class="tower-label" id="lbl-0">A</div>
+      <div class="tower-label" id="lbl-1">B</div>
+      <div class="tower-label" id="lbl-2">C</div>
+    </div>
+  </div>
+
+  <div class="msg" id="msg">A kulesine tıklayarak başlayın.</div>
+  <div class="win-banner" id="winBanner">
+    <h2 id="winTitle">Tebrikler!</h2>
+    <p id="winBody"></p>
+  </div>
+
+  <div class="br">
+    <button class="a" onclick="resetGame()">&#8635; Yeniden Başla</button>
+    <button class="a hint-btn" onclick="toggleHint()">&#9998; İpucu</button>
+  </div>
+
+  <div class="hint-box" id="hintBox">
+    <b>Hanoi Kulesi Stratejisi</b><br>
+    N disk için minimum hamle sayısı <b>2ᴺ − 1</b>'dir.<br>
+    Temel strateji: N diski C'ye taşımak için önce N-1 diski B'ye, büyük diski C'ye, ardından N-1 diski B'den C'ye taşıyın.<br>
+    Tek diskler her zaman <b>A→C→B→A</b> döngüsünde, çift diskler <b>A→B→C→A</b> döngüsünde hareket eder.
+  </div>
+
+</div>
+
+<script>
+let towers, moves, selected, diskCount, won;
+
+function init(){
+  diskCount = parseInt(document.getElementById('diskCount').value);
+  towers = [[], [], []];
+  moves = 0; selected = null; won = false;
+  document.getElementById('minMoves').textContent = Math.pow(2, diskCount) - 1;
+  document.getElementById('moves').textContent = '0';
+  document.getElementById('moves').className = 'v';
+  document.getElementById('status').textContent = 'Devam ediyor';
+  document.getElementById('status').className = 'v';
+  document.getElementById('winBanner').classList.remove('show');
+  document.getElementById('hintBox').classList.remove('show');
+  // Diskleri A kulesine ekle (büyükten küçüğe)
+  for(let i = diskCount; i >= 1; i--) towers[0].push(i);
+  clearSelection();
+  render();
+  setMsg('A kulesine tıklayarak başlayın.');
+}
+
+function resetGame(){ init(); }
+
+function diskWidth(size, total){
+  // En büyük disk %90, en küçük %28 genişlik
+  const min = 28, max = 90;
+  return min + (max - min) * (size - 1) / (total - 1 || 1);
+}
+
+function render(){
+  for(let t = 0; t < 3; t++){
+    const container = document.getElementById('disks-' + t);
+    container.innerHTML = '';
+    const topSize = towers[t].length > 0 ? towers[t][towers[t].length - 1] : null;
+    // Diziyi tersine kopyala: küçük diskler önce DOM'a girer → flex-end ile üstte görünür
+    // Büyük diskler son girer → görsel olarak altta olur
+    const reversed = towers[t].slice().reverse();
+    reversed.forEach(function(size){
+      const d = document.createElement('div');
+      const isTop = (selected !== null && selected === t && size === topSize);
+      d.className = 'disk' + (isTop ? ' lifted' : '');
+      d.dataset.size = size;
+      const w = diskWidth(size, diskCount);
+      d.style.width = w + '%';
+      d.textContent = size;
+      container.appendChild(d);
+    });
+  }
+}
+
+function clearSelection(){
+  selected = null;
+  for(let i = 0; i < 3; i++){
+    document.getElementById('tower-' + i).classList.remove('selected','target');
+    document.getElementById('lbl-' + i).className = 'tower-label';
+  }
+}
+
+function selectTower(t){
+  if(won) return;
+
+  if(selected === null){
+    // İlk tıklama: kaynak seç
+    if(towers[t].length === 0){
+      setMsg('Bu kule boş. Taşı olan bir kule seçin.');
+      return;
+    }
+    selected = t;
+    document.getElementById('tower-' + t).classList.add('selected');
+    document.getElementById('lbl-' + t).className = 'tower-label sel';
+    // Geçerli hedefleri göster
+    for(let i = 0; i < 3; i++){
+      if(i !== t){
+        const topDisk = towers[i].length === 0 ? Infinity : towers[i][towers[i].length-1];
+        if(topDisk > towers[t][towers[t].length-1]){
+          document.getElementById('tower-' + i).classList.add('target');
+          document.getElementById('lbl-' + i).className = 'tower-label tgt';
+        }
+      }
+    }
+    render();
+    const names = ['A','B','C'];
+    setMsg(names[t] + ' kulesi seçildi. Hedef kuleye tıklayın.');
+  } else {
+    // İkinci tıklama: hareket et
+    if(t === selected){
+      clearSelection();
+      render();
+      setMsg('Seçim iptal edildi.');
+      return;
+    }
+    const fromDisk = towers[selected][towers[selected].length - 1];
+    const toDisk   = towers[t].length === 0 ? Infinity : towers[t][towers[t].length - 1];
+
+    if(fromDisk < toDisk){
+      // Geçerli hamle
+      towers[t].push(towers[selected].pop());
+      moves++;
+      document.getElementById('moves').textContent = moves;
+      const min = Math.pow(2, diskCount) - 1;
+      if(moves > min){
+        document.getElementById('moves').className = 'v bad';
+      }
+      clearSelection();
+      render();
+      checkWin();
+      if(!won) setMsg('Hamle yapıldı. Devam edin.');
+    } else {
+      // Geçersiz hamle
+      clearSelection();
+      render();
+      setMsg('Geçersiz hamle! Büyük disk küçük diskin üzerine konulamaz.');
+    }
+  }
+}
+
+function checkWin(){
+  if(towers[2].length === diskCount){
+    won = true;
+    const min = Math.pow(2, diskCount) - 1;
+    const perfect = moves === min;
+    document.getElementById('status').textContent = perfect ? 'Mükemmel!' : 'Tamamlandı';
+    document.getElementById('status').className = 'v good';
+    const banner = document.getElementById('winBanner');
+    document.getElementById('winTitle').textContent = perfect ? 'Mükemmel Çözüm!' : 'Tebrikler!';
+    document.getElementById('winBody').textContent =
+      diskCount + ' diski ' + moves + ' hamlede taşıdınız.' +
+      (perfect ? ' Minimum hamle sayısına ulaştınız!' : ' Minimum ' + min + ' hamlede mümkündü.');
+    banner.classList.add('show');
+    setMsg('');
+  }
+}
+
+function toggleHint(){
+  const h = document.getElementById('hintBox');
+  h.classList.toggle('show');
+}
+
+function setMsg(t){ document.getElementById('msg').textContent = t; }
+
+document.getElementById('diskCount').addEventListener('change', init);
+init();
+</script>
+</body>
+</html>

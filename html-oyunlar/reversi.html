@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reversi</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a160a;font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;padding:10px}
+.wrap{width:100%;max-width:600px;display:flex;flex-direction:column;gap:9px}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.game-title{font-size:16px;font-weight:700;color:#c8960c;letter-spacing:.06em}
+.mode-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.mode-sel select{background:#0e1e0e;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+
+/* SKOR */
+.scorebar{display:flex;align-items:stretch;gap:0;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.08)}
+.sbox{flex:1;padding:7px 10px;text-align:center}
+.sbox.black{background:#1a1a1a}
+.sbox.white{background:#e8e8e8}
+.sbox .sname{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.sbox.black .sname{color:rgba(247,242,232,0.4)}
+.sbox.white .sname{color:rgba(18,16,14,0.5)}
+.sbox .scount{font-size:22px;font-weight:700}
+.sbox.black .scount{color:#f0f0f0}
+.sbox.white .scount{color:#1a1a1a}
+.sbox.active-turn{outline:2px solid #c8960c;outline-offset:-2px}
+.smid{background:#1e2e1e;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 10px;gap:1px}
+.smid .sl{font-size:9px;color:rgba(247,242,232,0.3);letter-spacing:.05em}
+.smid .sv{font-size:11px;color:rgba(247,242,232,0.5);font-weight:600}
+
+/* TAHTA */
+.board-wrap{position:relative}
+.board{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;background:#1a4a1a;border-radius:4px;padding:6px;border:2px solid #1a4a1a}
+.cell{aspect-ratio:1;background:#2a6a2a;border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:background .15s}
+.cell:hover{background:#336633}
+.cell.hint{background:#336633}
+.cell.hint::after{content:'';width:30%;height:30%;border-radius:50%;background:rgba(200,150,12,0.5);position:absolute}
+.cell.no-hint{cursor:default}
+.cell.no-hint:hover{background:#2a6a2a}
+
+/* TAŞ */
+.piece{width:78%;height:78%;border-radius:50%;position:absolute;transition:transform .18s}
+.piece.black{background:radial-gradient(circle at 35% 35%, #555, #111);box-shadow:1px 2px 4px rgba(0,0,0,0.6)}
+.piece.white{background:radial-gradient(circle at 35% 35%, #fff, #ccc);box-shadow:1px 2px 4px rgba(0,0,0,0.4)}
+.piece.flip{animation:flip .18s ease-in-out}
+@keyframes flip{0%{transform:scaleX(1)}50%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+
+/* MESAJ */
+.msg{font-size:12px;color:rgba(247,242,232,0.5);text-align:center;min-height:16px}
+
+/* KAZANMA */
+.win-banner{display:none;background:rgba(111,207,151,0.1);border:1px solid rgba(111,207,151,0.3);border-radius:5px;padding:9px 14px;text-align:center}
+.win-banner.show{display:block}
+.win-banner h2{font-size:14px;color:#6fcf97;margin-bottom:3px}
+.win-banner p{font-size:11px;color:rgba(247,242,232,0.5)}
+
+.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(10,22,10,0.8);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.75);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(155,53,16,0.45)}
+
+/* Bilgi kutusu */
+.info-box{display:none;background:rgba(200,150,12,0.06);border:1px solid rgba(200,150,12,0.18);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.5);line-height:1.8}
+.info-box b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top-bar">
+    <div class="game-title">Reversi</div>
+    <div class="mode-sel">
+      <label>Mod:</label>
+      <select id="modeSelect">
+        <option value="2p">İki oyuncu</option>
+        <option value="cpu-easy">Bilgisayar (kolay)</option>
+        <option value="cpu-hard">Bilgisayar (zor)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="scorebar">
+    <div class="sbox black" id="sboxBlack">
+      <div class="sname">&#9679; Siyah</div>
+      <div class="scount" id="scoreBlack">2</div>
+    </div>
+    <div class="smid">
+      <div class="sl">Hamle</div>
+      <div class="sv" id="moveCount">0</div>
+    </div>
+    <div class="sbox white" id="sboxWhite">
+      <div class="sname">&#9675; Beyaz</div>
+      <div class="scount" id="scoreWhite">2</div>
+    </div>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="msg" id="msg">Siyah başlar. Bir kareye tıklayın.</div>
+  <div class="win-banner" id="winBanner">
+    <h2 id="winTitle"></h2>
+    <p id="winBody"></p>
+  </div>
+
+  <div class="br">
+    <button class="a" onclick="resetGame()">&#8635; Yeni Oyun</button>
+    <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
+  </div>
+
+  <div class="info-box" id="infoBox">
+    <b>Reversi Nasıl Oynanır?</b><br>
+    Tahta ortasında 2 siyah ve 2 beyaz taş çapraz dizilidir.<br>
+    Her hamlede rakip taşı iki kendi taşınız arasına sıkıştıracak şekilde taş koymalısınız.<br>
+    Sıkışan tüm rakip taşlar sizin renginize döner.<br>
+    Geçerli hamle yoksa sıra rakibe geçer.<br>
+    Tahta dolduğunda ya da her iki taraf da hamle yapamadığında oyun biter — çok taşa sahip olan kazanır.<br>
+    <b>İpucu:</b> Köşe kareleri ele geçirmek büyük avantaj sağlar.
+  </div>
+
+</div>
+
+<script>
+const EMPTY=0, BLACK=1, WHITE=2;
+const DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+let board, turn, moveCount, won, cpuMode, cpuHard;
+let cpuTimer = null;
+
+function resetGame(){
+  if(cpuTimer) clearTimeout(cpuTimer);
+  const mode = document.getElementById('modeSelect').value;
+  cpuMode = mode !== '2p';
+  cpuHard = mode === 'cpu-hard';
+  board = Array.from({length:8}, ()=>Array(8).fill(EMPTY));
+  board[3][3]=WHITE; board[3][4]=BLACK;
+  board[4][3]=BLACK; board[4][4]=WHITE;
+  turn = BLACK;
+  moveCount = 0;
+  won = false;
+  document.getElementById('winBanner').classList.remove('show');
+  updateScorebar();
+  render();
+  setMsg(turnName(turn)+' başlar. Bir kareye tıklayın.');
+}
+
+function turnName(t){ return t===BLACK ? 'Siyah' : 'Beyaz'; }
+function cpuTurn(){ return cpuMode && turn===WHITE; }
+
+/* ── GEÇERLI HAMLELERİ BUL ── */
+function validMoves(t){
+  const moves=[];
+  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+    if(board[r][c]!==EMPTY) continue;
+    if(flips(r,c,t).length>0) moves.push([r,c]);
+  }
+  return moves;
+}
+
+function flips(r,c,t){
+  const opp = t===BLACK?WHITE:BLACK;
+  const result=[];
+  for(const [dr,dc] of DIRS){
+    const line=[];
+    let nr=r+dr, nc=c+dc;
+    while(nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===opp){
+      line.push([nr,nc]); nr+=dr; nc+=dc;
+    }
+    if(line.length>0&&nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===t){
+      result.push(...line);
+    }
+  }
+  return result;
+}
+
+/* ── HAMLE UYGULA ── */
+function applyMove(r,c,t){
+  const f = flips(r,c,t);
+  board[r][c]=t;
+  for(const [fr,fc] of f) board[fr][fc]=t;
+  moveCount++;
+  turn = t===BLACK?WHITE:BLACK;
+  // Rakibin hamlesi yoksa geri dön
+  if(validMoves(turn).length===0){
+    turn = t===BLACK?WHITE:BLACK; // tekrar orijinal
+    if(validMoves(turn).length===0){
+      // İki taraf da hamle yapamıyor — oyun bitti
+      endGame();
+      return;
+    }
+    // Pas geç
+    const skipped = turn===BLACK?'Beyaz':'Siyah';
+    updateScorebar();
+    render();
+    setMsg(skipped+' pas geçti. '+turnName(turn)+' oynuyor.');
+    if(cpuTurn()) scheduleCpu();
+    return;
+  }
+  updateScorebar();
+  render();
+  if(won) return;
+  // Tahta dolu mu?
+  const total = countPieces();
+  if(total.black+total.white===64){ endGame(); return; }
+  if(cpuTurn()){
+    setMsg('Bilgisayar düşünüyor…');
+    scheduleCpu();
+  } else {
+    setMsg(turnName(turn)+', hamlenizi yapın.');
+  }
+}
+
+function scheduleCpu(){
+  cpuTimer = setTimeout(function(){
+    const moves = validMoves(turn);
+    if(moves.length===0){endGame();return;}
+    let chosen;
+    if(cpuHard){ chosen=bestMove(turn); }
+    else        { chosen=easyMove(moves); }
+    applyMove(chosen[0], chosen[1], turn);
+  }, 500);
+}
+
+/* ── CPU STRATEJİLERİ ── */
+function easyMove(moves){
+  // Kolay: köşe varsa al, yoksa rastgele
+  const corners=[[0,0],[0,7],[7,0],[7,7]];
+  for(const [r,c] of moves) for(const [cr,cc] of corners) if(r===cr&&c===cc) return [r,c];
+  return moves[Math.floor(Math.random()*moves.length)];
+}
+
+const WEIGHTS=[
+  [120,-20,20, 5, 5,20,-20,120],
+  [-20,-40,-5,-5,-5,-5,-40,-20],
+  [ 20, -5,15, 3, 3,15, -5, 20],
+  [  5, -5, 3, 3, 3, 3, -5,  5],
+  [  5, -5, 3, 3, 3, 3, -5,  5],
+  [ 20, -5,15, 3, 3,15, -5, 20],
+  [-20,-40,-5,-5,-5,-5,-40,-20],
+  [120,-20,20, 5, 5,20,-20,120]
+];
+
+function bestMove(t){
+  const moves=validMoves(t);
+  let best=null, bestVal=-Infinity;
+  for(const [r,c] of moves){
+    // Simüle et
+    const saved=board.map(row=>row.slice());
+    const f=flips(r,c,t);
+    board[r][c]=t;
+    for(const [fr,fc] of f) board[fr][fc]=t;
+    const val=evalBoard(t);
+    board=saved;
+    if(val>bestVal){bestVal=val;best=[r,c];}
+  }
+  return best||moves[0];
+}
+
+function evalBoard(t){
+  const opp=t===BLACK?WHITE:BLACK;
+  let score=0;
+  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+    if(board[r][c]===t) score+=WEIGHTS[r][c];
+    else if(board[r][c]===opp) score-=WEIGHTS[r][c];
+  }
+  return score;
+}
+
+/* ── OYUN SONU ── */
+function countPieces(){
+  let black=0,white=0;
+  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+    if(board[r][c]===BLACK) black++;
+    else if(board[r][c]===WHITE) white++;
+  }
+  return {black,white};
+}
+
+function endGame(){
+  won=true;
+  const {black,white}=countPieces();
+  updateScorebar();
+  render();
+  let title,body;
+  if(black>white){
+    title='Siyah kazandı!';
+    body='Siyah: '+black+' — Beyaz: '+white;
+  } else if(white>black){
+    title='Beyaz kazandı!';
+    body='Beyaz: '+white+' — Siyah: '+black;
+  } else {
+    title='Berabere!';
+    body='Siyah: '+black+' — Beyaz: '+white;
+  }
+  document.getElementById('winTitle').textContent=title;
+  document.getElementById('winBody').textContent=body;
+  document.getElementById('winBanner').classList.add('show');
+  setMsg('');
+}
+
+/* ── RENDER ── */
+function updateScorebar(){
+  const {black,white}=countPieces();
+  document.getElementById('scoreBlack').textContent=black;
+  document.getElementById('scoreWhite').textContent=white;
+  document.getElementById('moveCount').textContent=moveCount;
+  document.getElementById('sboxBlack').classList.toggle('active-turn',turn===BLACK&&!won);
+  document.getElementById('sboxWhite').classList.toggle('active-turn',turn===WHITE&&!won);
+}
+
+function render(){
+  const boardEl=document.getElementById('board');
+  boardEl.innerHTML='';
+  const vm = won ? [] : validMoves(turn);
+  const vmSet=new Set(vm.map(([r,c])=>r+','+c));
+  for(let r=0;r<8;r++){
+    for(let c=0;c<8;c++){
+      const cell=document.createElement('div');
+      const isHint = vmSet.has(r+','+c);
+      cell.className='cell'+(isHint?' hint':' no-hint');
+      if(board[r][c]!==EMPTY){
+        const p=document.createElement('div');
+        p.className='piece '+(board[r][c]===BLACK?'black':'white');
+        cell.appendChild(p);
+      }
+      if(isHint && !(cpuMode&&turn===WHITE)){
+        cell.addEventListener('click',(function(row,col){
+          return function(){ handleClick(row,col); };
+        })(r,c));
+      }
+      boardEl.appendChild(cell);
+    }
+  }
+}
+
+function handleClick(r,c){
+  if(won) return;
+  if(cpuMode&&turn===WHITE) return;
+  const f=flips(r,c,turn);
+  if(f.length===0) return;
+  applyMove(r,c,turn);
+}
+
+function toggleInfo(){
+  const b=document.getElementById('infoBox');
+  b.style.display=b.style.display==='none'?'block':'none';
+}
+
+function setMsg(t){document.getElementById('msg').textContent=t;}
+
+document.getElementById('modeSelect').addEventListener('change',resetGame);
+
+resetGame();
+</script>
+</body>
+</html>

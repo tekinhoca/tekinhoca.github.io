@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9 Taş Oyunu</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#12100e;font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;padding:10px}
+.wrap{width:100%;max-width:540px;display:flex;flex-direction:column;gap:9px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.game-title{font-size:16px;font-weight:700;color:#c8960c;letter-spacing:.06em}
+.mode-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.mode-sel select{background:#1e1a14;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+.infobar{display:flex;gap:7px;flex-wrap:wrap}
+.ibox{background:rgba(255,255,255,0.05);border-radius:5px;padding:6px 10px;flex:1;min-width:70px;text-align:center}
+.ibox .l{font-size:10px;color:rgba(247,242,232,0.32);margin-bottom:2px}
+.ibox .v{font-size:14px;font-weight:700;color:#FFD97A}
+.ibox .v.p1c{color:#e8d5a0}.ibox .v.p2c{color:#6a9fc0}
+.turn-header{display:flex;justify-content:center;gap:20px;align-items:center}
+.ptag{font-size:13px;font-weight:600;color:rgba(247,242,232,0.3);padding:4px 14px;border-radius:14px;border:1.5px solid transparent;transition:all .3s;display:flex;align-items:center;gap:6px}
+.ptag.active.p1t{font-size:15px;color:#e8d5a0;border-color:#c8a060;animation:g1 1.4s ease-in-out infinite}
+.ptag.active.p2t{font-size:15px;color:#8aabdf;border-color:#5a7abf;animation:g2 1.4s ease-in-out infinite}
+@keyframes g1{0%,100%{box-shadow:0 0 0 0 rgba(200,160,96,0.3)}50%{box-shadow:0 0 0 6px rgba(200,160,96,0)}}
+@keyframes g2{0%,100%{box-shadow:0 0 0 0 rgba(90,122,191,0.3)}50%{box-shadow:0 0 0 6px rgba(90,122,191,0)}}
+@keyframes cpufl{0%,100%{opacity:1}50%{opacity:0.1}}
+.vsep{font-size:11px;color:rgba(247,242,232,0.18)}
+.sp{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+.sp.p1{background:radial-gradient(circle at 35% 35%,#f5e8c0,#c8a060)}
+.sp.p2{background:radial-gradient(circle at 35% 35%,#aac4ef,#4a6aaf)}
+.phase-bar{text-align:center;font-size:11px;color:rgba(247,242,232,0.38);background:rgba(255,255,255,0.04);border-radius:4px;padding:5px 10px}
+.phase-bar b{color:#c8960c}
+.board-wrap{display:flex;align-items:center;justify-content:center}
+.bsw{width:100%;max-width:440px;margin:0 auto}
+.bsw svg{width:100%;height:auto;display:block}
+.msg{font-size:12px;color:rgba(247,242,232,0.48);text-align:center;min-height:16px}
+.wb{display:none;background:rgba(111,207,151,0.1);border:1px solid rgba(111,207,151,0.3);border-radius:5px;padding:9px 14px;text-align:center}
+.wb.show{display:block}
+.wb h2{font-size:14px;color:#6fcf97;margin-bottom:3px}
+.wb p{font-size:11px;color:rgba(247,242,232,0.48)}
+.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(18,16,14,0.8);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.75);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(155,53,16,0.45)}
+.ib{display:none;background:rgba(200,150,12,0.06);border:1px solid rgba(200,150,12,0.18);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.48);line-height:1.85}
+.ib b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">9 Taş Oyunu</div>
+    <div class="mode-sel">
+      <label>Mod:</label>
+      <select id="modeSelect">
+        <option value="2p">İki oyuncu</option>
+        <option value="cpu">Bilgisayara karşı</option>
+      </select>
+    </div>
+  </div>
+  <div class="turn-header">
+    <div class="ptag p1t" id="tag1"><span class="sp p1"></span><span id="n1">Oyuncu 1</span></div>
+    <div class="vsep">—</div>
+    <div class="ptag p2t" id="tag2"><span class="sp p2"></span><span id="n2">Oyuncu 2</span></div>
+  </div>
+  <div class="infobar">
+    <div class="ibox"><div class="l">Oyuncu 1</div><div class="v p1c" id="r1">9</div></div>
+    <div class="ibox"><div class="l">Faz</div><div class="v" id="phD">Yerleştirme</div></div>
+    <div class="ibox"><div class="l">Oyuncu 2</div><div class="v p2c" id="r2">9</div></div>
+  </div>
+  <div class="phase-bar" id="phB"><b>Faz 1 — Yerleştirme:</b> Sırayla boş noktalara taş koyun.</div>
+  <div class="board-wrap"><div class="bsw">
+    <svg id="bsvg" viewBox="0 0 440 440" xmlns="http://www.w3.org/2000/svg">
+      <rect width="440" height="440" fill="#1e1a14"/>
+      <!-- Dış kare -->
+      <rect x="25" y="25" width="390" height="390" fill="none" stroke="#c8960c" stroke-width="2" opacity=".5"/>
+      <!-- Orta kare -->
+      <rect x="90" y="90" width="260" height="260" fill="none" stroke="#c8960c" stroke-width="2" opacity=".5"/>
+      <!-- İç kare -->
+      <rect x="155" y="155" width="130" height="130" fill="none" stroke="#c8960c" stroke-width="2" opacity=".5"/>
+      <!-- Bağlantı çizgileri (4 adet, kenar ortalarını birleştirir) -->
+      <line x1="220" y1="25"  x2="220" y2="155" stroke="#c8960c" stroke-width="1.5" opacity=".4"/>
+      <line x1="220" y1="285" x2="220" y2="415" stroke="#c8960c" stroke-width="1.5" opacity=".4"/>
+      <line x1="25"  y1="220" x2="155" y2="220" stroke="#c8960c" stroke-width="1.5" opacity=".4"/>
+      <line x1="285" y1="220" x2="415" y2="220" stroke="#c8960c" stroke-width="1.5" opacity=".4"/>
+      <g id="pl"></g>
+      <g id="hl"></g>
+    </svg>
+  </div></div>
+  <div class="msg" id="msg">Oyuncu 1, bir noktaya taş koyun.</div>
+  <div class="wb" id="wb"><h2 id="wt"></h2><p id="wp"></p></div>
+  <div class="br">
+    <button class="a" onclick="reset()">&#8635; Yeni Oyun</button>
+    <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
+  </div>
+  <div class="ib" id="ib">
+    <b>9 Taş Nasıl Oynanır?</b><br>
+    <b>Faz 1 — Yerleştirme:</b> Her oyuncu sırayla 9 taşını boş noktalara koyar. Aynı çizgide 3 taş (değirmen) kurunca rakibin değirmen dışındaki bir taşını alırsınız.<br>
+    <b>Faz 2 — Hareket:</b> Taşlar komşu boş noktalara kaydırılır. Yeni değirmen kurulunca rakibin taşı alınır.<br>
+    <b>Faz 3 — Uçuş:</b> 3 taşa düşen oyuncu taşını herhangi bir boş noktaya atlayabilir.<br>
+    <b>Kazanma:</b> Rakip 2 taşa düşünce veya hamle yapamaz hale gelince oyun biter.
+  </div>
+</div>
+<script>
+// ── KOORDİNATLAR (d=65, merkez=220) ──
+// Dış: 25, Orta: 90, İç: 155 — her bağlantı çizgisinde eşit aralık (65px)
+const CO = [
+  [25,25],[220,25],[415,25],   // 0,1,2
+  [25,220],                    // 3
+  [415,220],                   // 4
+  [25,415],[220,415],[415,415],// 5,6,7
+  [90,90],[220,90],[350,90],   // 8,9,10
+  [90,220],                    // 11
+  [350,220],                   // 12
+  [90,350],[220,350],[350,350],// 13,14,15
+  [155,155],[220,155],[285,155],// 16,17,18
+  [155,220],                   // 19
+  [285,220],                   // 20
+  [155,285],[220,285],[285,285],// 21,22,23
+];
+
+// ── 16 DEĞIRMEN ──
+const ML = [
+  [0,1,2],[5,6,7],[0,3,5],[2,4,7],       // Dış kare
+  [8,9,10],[13,14,15],[8,11,13],[10,12,15],// Orta kare
+  [16,17,18],[21,22,23],[16,19,21],[18,20,23],// İç kare
+  [1,9,17],[6,14,22],[3,11,19],[4,12,20], // Bağlantı çizgileri
+];
+
+// ── KOMŞULUK ──
+const NB = {
+  0:[1,3],1:[0,2,9],2:[1,4],
+  3:[0,5,11],4:[2,7,12],
+  5:[3,6],6:[5,7,14],7:[4,6],
+  8:[9,11],9:[1,8,10,17],10:[9,12],
+  11:[3,8,13,19],12:[4,10,15,20],
+  13:[11,14],14:[6,13,15,22],15:[12,14],
+  16:[17,19],17:[9,16,18],18:[17,20],
+  19:[11,16,21],20:[12,18,23],
+  21:[19,22],22:[14,21,23],23:[20,22],
+};
+
+const E=0,P1=1,P2=2,NS='http://www.w3.org/2000/svg';
+let bd,ph,turn,plcd,sel,rmv,won,cpu,cpuT;
+let flashIdx=-1; // CPU animasyonu için yanıp sönen taş indeksi
+
+function pn(p){return(cpu&&p===P2)?'Bilgisayar':'Oyuncu '+p;}
+function cnt(p){return bd.filter(v=>v===p).length;}
+function fly(p){return ph>=2&&plcd[p-1]===9&&cnt(p)===3;}
+
+// Hangi mill'ler p'ye ait (indeks seti)
+function getMills(p,b){
+  b=b||bd;
+  const s=new Set();
+  ML.forEach((m,i)=>{if(m.every(j=>b[j]===p))s.add(i);});
+  return s;
+}
+
+// Hamle sonrası YENİ mill var mı?
+function newMill(p,oldSet){
+  for(const i of getMills(p)){
+    if(!oldSet.has(i)) return true;
+  }
+  return false;
+}
+
+function reset(){
+  if(cpuT)clearTimeout(cpuT);
+  cpu=document.getElementById('modeSelect').value==='cpu';
+  bd=Array(24).fill(E);
+  ph=1;turn=P1;plcd=[0,0];sel=null;rmv=false;won=false;flashIdx=-1;
+  ensureDefs();
+  document.getElementById('wb').classList.remove('show');
+  upUI();render();
+  setMsg(pn(P1)+', bir noktaya taş koyun.');
+}
+
+function click(idx){
+  if(won)return;
+  if(cpu&&turn===P2)return;
+  run(idx);
+}
+
+function run(idx){
+  if(rmv){doRmv(idx);return;}
+  if(ph===1)doPlace(idx);
+  else doMove(idx);
+}
+
+function doPlace(idx){
+  if(bd[idx]!==E){setMsg('Bu nokta dolu!');return;}
+  const old=getMills(turn);
+  bd[idx]=turn;plcd[turn-1]++;
+  if(newMill(turn,old)){
+    rmv=true;render();
+    setMsg('Değirmen! '+pn(turn)+', rakibin taşını seçin.');
+    if(cpu&&turn===P2)cpuT=setTimeout(cpuRmv,500);
+    return;
+  }
+  endTurn();
+}
+
+function doMove(idx){
+  if(sel===null){
+    if(bd[idx]!==turn){setMsg('Kendi taşınızı seçin!');return;}
+    sel=idx;render();setMsg('Hedef noktaya tıklayın.');
+  } else {
+    if(idx===sel){sel=null;render();setMsg(pn(turn)+', taşını seçin.');return;}
+    if(bd[idx]===turn){sel=idx;render();return;}
+    if(bd[idx]!==E){setMsg('Hedef dolu!');return;}
+    if(!fly(turn)&&!NB[sel].includes(idx)){setMsg('Bu noktaya hareket edilemez!');return;}
+    const old=getMills(turn);
+    bd[idx]=turn;bd[sel]=E;sel=null;
+    if(newMill(turn,old)){
+      rmv=true;render();
+      setMsg('Değirmen! '+pn(turn)+', rakibin taşını seçin.');
+      if(cpu&&turn===P2)cpuT=setTimeout(cpuRmv,500);
+      return;
+    }
+    endTurn();
+  }
+}
+
+function doRmv(idx){
+  const opp=3-turn;
+  if(bd[idx]!==opp){setMsg('Rakibin taşını seçin!');return;}
+  // Değirmen içindeki taş yasağı (değirmen dışı taş varsa)
+  const allOpp=bd.map((v,i)=>v===opp?i:-1).filter(i=>i>=0);
+  const nonMill=allOpp.filter(i=>!ML.some(m=>m.includes(i)&&m.every(j=>bd[j]===opp)));
+  const inM=ML.some(m=>m.includes(idx)&&m.every(j=>bd[j]===opp));
+  if(nonMill.length>0&&inM){setMsg('Değirmen içindeki taşı alamazsınız (başka taş varken).');return;}
+  bd[idx]=E;rmv=false;
+  if(winCheck())return;
+  endTurn();
+}
+
+function endTurn(){
+  turn=3-turn;
+  if(plcd[0]===9&&plcd[1]===9&&ph===1)ph=2;
+  upUI();render();
+  if(won)return;
+  // Hamle yapamama kontrolü
+  if(ph>=2&&plcd[turn-1]===9&&!fly(turn)){
+    const ok=bd.map((v,i)=>v===turn?i:-1).filter(i=>i>=0)
+      .some(i=>NB[i].some(n=>bd[n]===E));
+    if(!ok){endGame(3-turn);return;}
+  }
+  if(cpu&&turn===P2)cpuT=setTimeout(cpuGo,600);
+  else setMsg(ph===1?pn(turn)+', bir noktaya taş koyun.':pn(turn)+', taşını seçin.');
+}
+
+function winCheck(){
+  const opp=3-turn;
+  if(plcd[opp-1]===9&&cnt(opp)<=2){endGame(turn);return true;}
+  return false;
+}
+
+function endGame(w){
+  won=true;
+  document.getElementById('wt').textContent=pn(w)+' kazandı!';
+  document.getElementById('wp').textContent='';
+  document.getElementById('wb').classList.add('show');
+  upUI();render();setMsg('');
+}
+
+// ── CPU ──
+function cpuGo(){
+  if(won||rmv)return;
+  if(ph===1){
+    // Yerleştirme: hedef noktayı önce ışılt, sonra koy
+    const to=cpuPlace();
+    flashIdx=to;render();
+    cpuT=setTimeout(()=>{flashIdx=-1;doPlace(to);},700);
+  } else {
+    const[f,t]=cpuMove();
+    // Önce kaynak taşı ışılt
+    flashIdx=f;render();
+    cpuT=setTimeout(()=>{
+      flashIdx=-1;
+      // Hareketi simüle et: önce seç, sonra git
+      if(sel!==f){run(f);}
+      if(sel===f){
+        flashIdx=t;render();
+        cpuT=setTimeout(()=>{flashIdx=-1;run(t);},400);
+      }
+    },700);
+  }
+}
+
+function cpuRmv(){
+  const opp=P1;
+  const all=bd.map((v,i)=>v===opp?i:-1).filter(i=>i>=0);
+  const nm=all.filter(i=>!ML.some(m=>m.includes(i)&&m.every(j=>bd[j]===opp)));
+  const pool=nm.length>0?nm:all;
+  const target=pool[Math.floor(Math.random()*pool.length)];
+  // Hedef taşı ışılt, sonra al
+  flashIdx=target;render();
+  cpuT=setTimeout(()=>{flashIdx=-1;doRmv(target);},700);
+}
+
+function cpuPlace(){
+  const emp=bd.map((v,i)=>v===E?i:-1).filter(i=>i>=0);
+  for(const m of ML){
+    const mine=m.filter(i=>bd[i]===P2),e=m.filter(i=>bd[i]===E);
+    if(mine.length===2&&e.length===1)return e[0];
+  }
+  for(const m of ML){
+    const op=m.filter(i=>bd[i]===P1),e=m.filter(i=>bd[i]===E);
+    if(op.length===2&&e.length===1)return e[0];
+  }
+  const pref=[9,11,12,14,17,19,20,22,1,3,4,6];
+  for(const p of pref)if(bd[p]===E)return p;
+  return emp[Math.floor(Math.random()*emp.length)];
+}
+
+function cpuMove(){
+  const pcs=bd.map((v,i)=>v===P2?i:-1).filter(i=>i>=0);
+  const old=getMills(P2);
+  for(const f of pcs){
+    const tgts=fly(P2)?bd.map((v,i)=>v===E?i:-1).filter(i=>i>=0):NB[f].filter(n=>bd[n]===E);
+    for(const t of tgts){
+      const tmp=bd.slice();tmp[f]=E;tmp[t]=P2;
+      if(ML.some((m,i)=>!old.has(i)&&m.includes(t)&&m.every(j=>tmp[j]===P2)))return[f,t];
+    }
+  }
+  for(const f of pcs){
+    const tgts=fly(P2)?bd.map((v,i)=>v===E?i:-1).filter(i=>i>=0):NB[f].filter(n=>bd[n]===E);
+    if(tgts.length)return[f,tgts[0]];
+  }
+  return[pcs[0],NB[pcs[0]].find(n=>bd[n]===E)||pcs[0]];
+}
+
+// ── RENDER ──
+function ensureDefs(){
+  if(document.getElementById('p1g'))return;
+  const svg=document.getElementById('bsvg');
+  const defs=document.createElementNS(NS,'defs');
+  function grad(id,c1,c2){
+    const g=document.createElementNS(NS,'radialGradient');
+    g.setAttribute('id',id);g.setAttribute('cx','35%');g.setAttribute('cy','35%');
+    const a=document.createElementNS(NS,'stop');a.setAttribute('offset','0%');a.setAttribute('stop-color',c1);
+    const b=document.createElementNS(NS,'stop');b.setAttribute('offset','100%');b.setAttribute('stop-color',c2);
+    g.appendChild(a);g.appendChild(b);defs.appendChild(g);
+  }
+  grad('p1g','#f5e8c0','#c8a060');grad('p2g','#aac4ef','#4a6aaf');
+  svg.insertBefore(defs,svg.firstChild);
+}
+
+function render(){
+  const pl=document.getElementById('pl'),hl=document.getElementById('hl');
+  pl.innerHTML='';hl.innerHTML='';
+
+  // Geçerli hedefler
+  const vt=new Set();
+  if(!won&&!rmv&&ph>=2&&sel!==null){
+    if(fly(turn))bd.forEach((v,i)=>{if(v===E)vt.add(i);});
+    else NB[sel].forEach(n=>{if(bd[n]===E)vt.add(n);});
+  }
+  // Alınabilir taşlar
+  const rv=new Set();
+  if(rmv&&!won){
+    const opp=3-turn;
+    const all=bd.map((v,i)=>v===opp?i:-1).filter(i=>i>=0);
+    const nm=all.filter(i=>!ML.some(m=>m.includes(i)&&m.every(j=>bd[j]===opp)));
+    (nm.length>0?nm:all).forEach(i=>rv.add(i));
+  }
+  // Seçilebilir kendi taşlar (faz 2)
+  const mv=new Set();
+  if(!won&&!rmv&&ph>=2&&sel===null){
+    bd.forEach((v,i)=>{
+      if(v===turn&&(fly(turn)||NB[i].some(n=>bd[n]===E)))mv.add(i);
+    });
+  }
+
+  CO.forEach(([x,y],i)=>{
+    const p=bd[i];
+    if(p!==E){
+      const c=document.createElementNS(NS,'circle');
+      c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r','15');
+      c.setAttribute('fill',p===P1?'url(#p1g)':'url(#p2g)');
+      let sc=p===P1?'#a08040':'#3a5a9f',sw='1.5';
+      if(i===sel){sc='#c8960c';sw='3';}
+      if(rv.has(i)){sc='#eb5757';sw='2.5';}
+      if(mv.has(i)&&!rmv){sc=p===P1?'#FFD97A':'#9abcef';sw='2';}
+      c.setAttribute('stroke',sc);c.setAttribute('stroke-width',sw);
+      // CPU flash animasyonu
+      if(i===flashIdx){
+        c.setAttribute('stroke','#ffffff');c.setAttribute('stroke-width','3');
+        const anim=document.createElementNS(NS,'animate');
+        anim.setAttribute('attributeName','opacity');
+        anim.setAttribute('values','1;0.1;1;0.1;1');
+        anim.setAttribute('dur','0.7s');
+        anim.setAttribute('repeatCount','1');
+        c.appendChild(anim);
+        // Hedef nokta için daha büyük titreşim
+        const animR=document.createElementNS(NS,'animate');
+        animR.setAttribute('attributeName','r');
+        animR.setAttribute('values','15;19;15;19;15');
+        animR.setAttribute('dur','0.7s');
+        animR.setAttribute('repeatCount','1');
+        c.appendChild(animR);
+      }
+      pl.appendChild(c);
+    } else {
+      // Flash hedefi boş bir noktaysa (yerleştirme fazı)
+      const d=document.createElementNS(NS,'circle');
+      d.setAttribute('cx',x);d.setAttribute('cy',y);
+      const isFlashEmpty=(i===flashIdx);
+      d.setAttribute('r',isFlashEmpty?'12':'5');
+      d.setAttribute('fill',isFlashEmpty?'rgba(106,159,192,0.8)':vt.has(i)?'rgba(200,150,12,0.6)':'rgba(200,150,12,0.22)');
+      d.setAttribute('pointer-events','none');
+      if(isFlashEmpty){
+        const anim=document.createElementNS(NS,'animate');
+        anim.setAttribute('attributeName','opacity');
+        anim.setAttribute('values','1;0.1;1;0.1;1');
+        anim.setAttribute('dur','0.7s');
+        anim.setAttribute('repeatCount','1');
+        d.appendChild(anim);
+        const animR=document.createElementNS(NS,'animate');
+        animR.setAttribute('attributeName','r');
+        animR.setAttribute('values','12;16;12;16;12');
+        animR.setAttribute('dur','0.7s');
+        animR.setAttribute('repeatCount','1');
+        d.appendChild(animR);
+      }
+      pl.appendChild(d);
+    }
+    const h=document.createElementNS(NS,'circle');
+    h.setAttribute('cx',x);h.setAttribute('cy',y);h.setAttribute('r','22');
+    h.setAttribute('fill','transparent');h.setAttribute('cursor','pointer');
+    h.addEventListener('click',()=>click(i));
+    hl.appendChild(h);
+  });
+}
+
+function upUI(){
+  const t1=document.getElementById('tag1'),t2=document.getElementById('tag2');
+  document.getElementById('n2').textContent=cpu?'Bilgisayar':'Oyuncu 2';
+  if(!won){
+    t1.className='ptag p1t'+(turn===P1?' active':'');
+    t2.className='ptag p2t'+(turn===P2?' active':'');
+  } else {t1.className='ptag p1t';t2.className='ptag p2t';}
+  document.getElementById('r1').textContent=cnt(P1);
+  document.getElementById('r2').textContent=cnt(P2);
+  const fl=fly(P1)||fly(P2);
+  const phn=ph===1?'Yerleştirme':fl?'Uçuş':'Hareket';
+  document.getElementById('phD').textContent=phn;
+  const tx={
+    'Yerleştirme':'<b>Faz 1 — Yerleştirme:</b> Sırayla boş noktalara taş koyun. Değirmen kurarsanız rakibin taşını alırsınız.',
+    'Hareket':'<b>Faz 2 — Hareket:</b> Taşlarınızı komşu boş noktalara kaydırın. Değirmen kurunca rakibin taşını alırsınız.',
+    'Uçuş':'<b>Faz 3 — Uçuş:</b> 3 taşa düşen oyuncu taşını herhangi bir boş noktaya atlayabilir.'
+  };
+  document.getElementById('phB').innerHTML=tx[phn];
+}
+
+function toggleInfo(){const b=document.getElementById('ib');b.style.display=b.style.display==='none'?'block':'none';}
+function setMsg(t){document.getElementById('msg').textContent=t;}
+document.getElementById('modeSelect').addEventListener('change',reset);
+reset();
+</script>
+</body>
+</html>
