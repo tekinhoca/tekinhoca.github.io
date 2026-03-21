@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Işıkları Söndür</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0a0e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px;margin:auto}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.sel-row{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4);flex-wrap:wrap}
+.sel-row select{background:#0a080e;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:13px;font-weight:700;color:#c8960c}
+
+/* IZGARA */
+.board-wrap{display:flex;justify-content:center}
+.board{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:6px;
+  padding:10px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:8px;
+  width:100%;
+  max-width:min(360px,88vw);
+}
+
+.cell{
+  aspect-ratio:1;
+  border-radius:6px;
+  cursor:pointer;
+  transition:background .12s, box-shadow .12s;
+  border:none;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  user-select:none;
+}
+.cell.on{
+  background:#f0c040;
+  box-shadow:0 0 12px rgba(240,192,64,0.6), 0 0 4px rgba(240,192,64,0.8);
+}
+.cell.off{
+  background:#1a1620;
+  border:1px solid rgba(255,255,255,0.06);
+}
+.cell.on:hover{background:#f5d060}
+.cell.off:hover{background:#251e30}
+.cell.flash{background:#eb5757 !important;box-shadow:none !important}
+
+/* Adım sayacı animasyonu */
+.cell.clicked{outline:2px solid rgba(255,255,255,0.4);outline-offset:1px}
+
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+
+.win-banner{display:none;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35);border-radius:5px;padding:10px 14px;text-align:center}
+.win-banner.show{display:block}
+.win-banner h2{font-size:14px;color:#50c878;margin-bottom:3px}
+.win-banner p{font-size:12px;color:rgba(247,242,232,0.45)}
+
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
+.info-box b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Işıkları Söndür</div>
+    <div class="sel-row">
+      <label>Zorluk:</label>
+      <select id="diffSel">
+        <option value="easy">Kolay</option>
+        <option value="medium" selected>Orta</option>
+        <option value="hard">Zor</option>
+      </select>
+      <label style="margin-left:6px">Bulmaca:</label>
+      <select id="puzSel"></select>
+    </div>
+  </div>
+
+  <div class="infobar">
+    <div class="ibox"><div class="l">Zorluk</div><div class="v" id="diffDisp">Orta</div></div>
+    <div class="ibox"><div class="l">Bulmaca</div><div class="v" id="puzDisp">1/10</div></div>
+    <div class="ibox"><div class="l">Tıklama</div><div class="v" id="clickDisp">0</div></div>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="msg" id="msg">Hücrelere tıklayarak tüm ışıkları söndürün.</div>
+
+  <div class="win-banner" id="winBanner">
+    <h2 id="winTitle">Tebrikler!</h2>
+    <p id="winBody"></p>
+  </div>
+
+  <div class="br-btns">
+    <button class="a" onclick="restartPuzzle()">&#8635; Yeniden</button>
+    <button class="a" onclick="revealAll()">&#128065; Çöz</button>
+    <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
+  </div>
+
+  <div class="info-box" id="infoBox">
+    <b>Işıkları Söndür Nasıl Oynanır?</b><br>
+    Bir hücreye tıkladığınızda o hücrede ve üst, alt, sağ, sol komşularında ışık yanıyorsa söner, sönükse yanar.<br>
+    Hedef: Tüm ışıkları söndürmek.
+  </div>
+</div>
+
+<script>
+const PUZZLES={
+  easy:[
+    {grid:[[0,1,1,1,1],[1,0,0,0,1],[1,1,0,1,0],[1,1,0,1,1],[0,1,0,1,0]],solution:[[0,4],[1,0],[0,1],[3,3],[3,1]]},
+    {grid:[[0,0,1,1,0],[0,1,1,0,1],[0,0,0,0,1],[1,1,0,0,1],[0,1,1,1,0]],solution:[[1,3],[4,3],[2,2],[3,1],[1,2],[3,4]]},
+    {grid:[[0,0,0,0,0],[0,0,1,0,0],[0,1,0,1,1],[0,1,0,0,1],[0,0,1,0,1]],solution:[[3,4],[3,2],[2,2]]},
+    {grid:[[0,0,0,1,1],[0,1,0,1,1],[1,1,0,0,1],[0,1,1,0,1],[0,0,0,1,0]],solution:[[0,4],[3,3],[2,3],[2,1]]},
+    {grid:[[0,0,0,1,0],[0,0,0,1,0],[0,1,0,1,1],[1,1,0,1,0],[0,1,0,0,1]],solution:[[0,4],[3,3],[3,1],[1,4],[4,4]]},
+    {grid:[[0,0,1,0,0],[0,0,0,0,1],[0,0,1,0,1],[0,0,0,0,0],[0,1,1,1,1]],solution:[[0,4],[4,4],[3,3],[4,2],[0,3],[2,3]]},
+    {grid:[[1,1,0,1,1],[1,1,1,1,0],[0,0,1,1,1],[0,1,1,0,0],[0,0,1,0,0]],solution:[[2,3],[0,3],[3,2],[0,0],[1,2]]},
+    {grid:[[0,1,0,1,1],[1,1,0,0,0],[0,0,1,0,1],[0,1,1,0,1],[1,1,1,0,0]],solution:[[2,4],[4,1],[2,2],[0,4],[1,1]]},
+    {grid:[[1,0,1,1,1],[1,0,1,1,0],[0,0,1,1,1],[1,1,0,1,1],[1,0,1,1,1]],solution:[[3,0],[2,4],[4,3],[1,0],[1,2],[0,4]]},
+    {grid:[[0,1,0,0,0],[0,1,0,0,0],[1,1,1,1,0],[0,1,1,0,0],[0,0,1,0,0]],solution:[[2,0],[4,1],[4,0],[1,1],[2,2]]},
+  ],
+  medium:[
+    {grid:[[0,0,1,1,1],[1,0,1,0,1],[0,0,0,1,1],[0,0,0,1,1],[0,0,1,1,1]],solution:[[2,1],[0,0],[0,1],[2,2],[4,2],[4,0],[0,4],[3,0],[3,4]]},
+    {grid:[[0,1,0,1,0],[0,0,0,1,1],[1,0,1,0,0],[0,0,0,1,0],[1,0,1,1,1]],solution:[[0,4],[3,1],[0,2],[4,4],[0,3],[2,2],[3,0],[4,2],[3,3]]},
+    {grid:[[0,0,1,0,0],[1,0,1,0,1],[0,1,1,1,0],[0,0,1,0,1],[0,1,0,1,0]],solution:[[1,1],[3,2],[2,2],[2,4],[0,0],[2,3],[1,0],[2,1],[1,2],[4,2]]},
+    {grid:[[1,0,0,0,1],[1,1,0,0,1],[0,1,0,0,1],[1,0,1,0,0],[0,0,1,1,1]],solution:[[0,1],[4,3],[4,0],[1,2],[4,1],[1,1],[3,2],[1,4]]},
+    {grid:[[0,1,0,0,0],[1,0,1,1,1],[1,0,0,0,0],[1,0,0,1,1],[1,1,1,1,1]],solution:[[0,3],[1,3],[1,0],[2,4],[1,4],[0,1],[4,0],[4,3]]},
+    {grid:[[1,1,1,1,1],[1,1,0,1,1],[1,0,0,0,0],[0,0,0,0,0],[0,1,1,0,0]],solution:[[2,2],[0,1],[3,0],[4,0],[1,2],[2,3],[1,4],[1,1],[0,2],[3,2]]},
+    {grid:[[0,0,1,0,1],[1,1,0,1,0],[0,1,1,1,0],[1,0,0,1,0],[0,0,0,1,0]],solution:[[3,3],[1,0],[2,0],[0,1],[2,2],[1,4],[2,4],[1,1]]},
+    {grid:[[0,1,1,0,0],[0,0,0,1,0],[0,1,1,0,1],[0,1,1,1,1],[1,1,0,1,0]],solution:[[2,0],[1,3],[0,3],[4,0],[1,1],[2,1],[1,4],[3,3]]},
+    {grid:[[1,0,1,0,0],[0,0,1,0,1],[1,0,1,0,1],[1,1,1,0,0],[1,0,1,0,0]],solution:[[1,4],[2,1],[0,2],[4,1],[0,1],[3,1],[0,3]]},
+    {grid:[[0,0,0,1,1],[1,1,0,0,0],[0,1,1,1,0],[1,1,1,1,0],[1,0,0,0,1]],solution:[[4,4],[1,1],[3,3],[3,0],[0,3],[0,0],[1,2],[1,0]]},
+  ],
+  hard:[
+    {grid:[[0,0,0,1,0],[0,1,0,0,0],[1,0,0,0,0],[1,1,1,0,1],[1,0,0,1,0]],solution:[[2,0],[0,2],[1,4],[2,3],[2,2],[1,3],[1,1],[3,1],[4,0],[0,3],[3,3]]},
+    {grid:[[0,1,0,1,0],[1,0,1,1,1],[0,0,1,0,0],[1,0,1,0,0],[1,1,0,0,0]],solution:[[0,3],[1,4],[3,2],[4,1],[4,0],[1,0],[3,0],[2,2],[0,1],[2,3],[3,1]]},
+    {grid:[[1,0,1,0,0],[1,0,0,0,0],[1,1,0,1,1],[1,0,1,0,1],[1,1,1,1,0]],solution:[[0,2],[1,0],[4,1],[2,3],[4,3],[2,0],[3,0],[4,0],[4,2],[1,1],[3,4],[1,3],[2,4],[3,3],[2,2]]},
+    {grid:[[1,0,0,1,1],[1,1,1,1,1],[0,0,0,0,1],[1,0,1,0,1],[1,1,1,0,0]],solution:[[3,3],[3,2],[0,3],[0,0],[4,2],[0,1],[1,0],[1,3],[3,0],[4,1],[4,0],[2,1],[1,4],[0,4],[2,0]]},
+    {grid:[[1,1,0,1,0],[1,0,1,0,0],[1,1,0,0,1],[1,0,1,0,1],[1,0,0,0,1]],solution:[[1,1],[2,2],[1,0],[3,3],[1,2],[0,4],[4,1],[3,1],[0,0],[0,1],[1,4],[4,3]]},
+    {grid:[[0,1,0,0,0],[0,0,0,1,0],[1,1,0,1,0],[1,0,0,0,1],[1,0,1,1,0]],solution:[[4,4],[3,2],[3,4],[1,3],[3,1],[0,4],[4,2],[2,3],[3,0],[3,3],[4,1],[0,2],[4,0],[0,3]]},
+    {grid:[[1,0,1,0,1],[1,1,1,1,1],[0,1,1,1,1],[1,0,1,1,0],[1,1,0,0,1]],solution:[[2,0],[4,4],[3,3],[3,1],[0,1],[0,4],[1,3],[0,2],[1,4],[0,3],[2,2],[3,0]]},
+    {grid:[[1,1,1,1,1],[0,0,1,1,1],[0,0,0,0,0],[1,1,1,0,0],[0,0,0,1,1]],solution:[[0,0],[3,4],[2,2],[3,3],[1,4],[3,1],[1,1],[4,0],[3,0],[0,2],[2,1]]},
+    {grid:[[0,1,1,1,0],[1,1,0,1,0],[0,1,0,1,0],[1,1,1,0,0],[0,0,0,0,0]],solution:[[0,4],[0,0],[4,3],[3,0],[4,4],[1,1],[2,2],[0,1],[0,3],[1,2],[4,0],[2,0],[3,3],[1,3],[4,2]]},
+    {grid:[[1,1,1,0,0],[1,0,0,0,0],[1,1,0,0,0],[1,1,0,0,0],[1,1,0,1,1]],solution:[[4,4],[2,1],[0,0],[0,2],[1,4],[2,0],[4,1],[3,0],[2,3],[1,1],[4,0],[3,3],[0,4],[4,2]]},
+  ],
+};
+
+const N=5;
+let puzzle, grid, clicks, solved;
+
+function loadPuzzle(diff,idx){
+  puzzle=PUZZLES[diff][idx];
+  grid=puzzle.grid.map(r=>r.slice());
+  clicks=0; solved=false;
+  const diffNames={easy:'Kolay',medium:'Orta',hard:'Zor'};
+  document.getElementById('diffDisp').textContent=diffNames[diff];
+  document.getElementById('puzDisp').textContent=(idx+1)+'/10';
+  document.getElementById('clickDisp').textContent='0';
+  document.getElementById('winBanner').classList.remove('show');
+  setMsg('Hücrelere tıklayarak tüm ışıkları söndürün.');
+  render();
+}
+
+function render(){
+  const board=document.getElementById('board');
+  board.innerHTML='';
+  for(let r=0;r<N;r++){
+    for(let c=0;c<N;c++){
+      const cell=document.createElement('div');
+      cell.className='cell '+(grid[r][c]?'on':'off');
+      cell.addEventListener('click',(()=>{const rr=r,cc=c;return()=>handleClick(rr,cc);})());
+      cell.addEventListener('touchstart',(e)=>{e.preventDefault();},{passive:false});
+      cell.addEventListener('touchend',(()=>{const rr=r,cc=c;return(e)=>{e.preventDefault();handleClick(rr,cc);}})(),{passive:false});
+      board.appendChild(cell);
+    }
+  }
+}
+
+function toggle(r,c){
+  const dirs=[[0,0],[0,1],[0,-1],[1,0],[-1,0]];
+  dirs.forEach(([dr,dc])=>{
+    const nr=r+dr,nc=c+dc;
+    if(nr>=0&&nr<N&&nc>=0&&nc<N) grid[nr][nc]^=1;
+  });
+}
+
+function handleClick(r,c){
+  if(solved)return;
+  toggle(r,c);
+  clicks++;
+  document.getElementById('clickDisp').textContent=clicks;
+  render();
+  if(grid.flat().every(v=>v===0)){
+    solved=true;
+    document.getElementById('winTitle').textContent='Tebrikler!';
+    document.getElementById('winBody').textContent=clicks+' tıklamada söndürdünüz!';
+    document.getElementById('winBanner').classList.add('show');
+    setMsg('');
+  }
+}
+
+function revealAll(){
+  // Çözümü animasyonlu göster
+  grid=puzzle.grid.map(r=>r.slice());
+  clicks=0;
+  render();
+  const sol=puzzle.solution;
+  let i=0;
+  const interval=setInterval(()=>{
+    if(i>=sol.length){
+      clearInterval(interval);
+      document.getElementById('clickDisp').textContent=sol.length;
+      setMsg('Çözüm gösterildi — '+sol.length+' tıklama.');
+      return;
+    }
+    toggle(sol[i][0],sol[i][1]);
+    clicks++;
+    document.getElementById('clickDisp').textContent=clicks;
+    render();
+    // Tıklanan hücreyi vurgula
+    const idx=sol[i][0]*N+sol[i][1];
+    const cells=document.getElementById('board').children;
+    cells[idx].classList.add('clicked');
+    setTimeout(()=>cells[idx].classList.remove('clicked'),300);
+    i++;
+  },400);
+}
+
+function restartPuzzle(){
+  const diff=document.getElementById('diffSel').value;
+  const idx=parseInt(document.getElementById('puzSel').value);
+  loadPuzzle(diff,idx);
+}
+
+function fillPuzSel(){
+  const ps=document.getElementById('puzSel');
+  ps.innerHTML='';
+  for(let i=0;i<10;i++){
+    const o=document.createElement('option');
+    o.value=i;o.textContent=(i+1)+'. Bulmaca';
+    ps.appendChild(o);
+  }
+}
+
+document.getElementById('diffSel').addEventListener('change',function(){
+  fillPuzSel();document.getElementById('puzSel').value=0;loadPuzzle(this.value,0);
+});
+document.getElementById('puzSel').addEventListener('change',function(){
+  loadPuzzle(document.getElementById('diffSel').value,parseInt(this.value));
+});
+
+function setMsg(t){document.getElementById('msg').textContent=t;}
+function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='none'?'block':'none';}
+
+fillPuzSel();
+loadPuzzle('medium',0);
+</script>
+</body>
+</html>
