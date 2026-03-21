@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Hafıza Oyunu</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0c0e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:500px;display:flex;flex-direction:column;gap:8px;margin:auto}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:13px;font-weight:700;color:#c8960c}
+
+/* SEVİYE SEÇİM EKRANI */
+#levelScreen{display:flex;flex-direction:column;gap:10px}
+.level-title{font-size:13px;color:rgba(247,242,232,0.5);text-align:center;margin-bottom:4px}
+.level-btn{
+  padding:14px 20px;border-radius:6px;
+  border:1px solid rgba(200,150,12,0.35);
+  background:rgba(200,150,12,0.06);
+  color:rgba(247,242,232,0.85);
+  font-family:Georgia,serif;font-size:14px;
+  cursor:pointer;transition:all .2s;
+  text-align:left;
+}
+.level-btn:hover{background:rgba(200,150,12,0.15);border-color:#c8960c}
+.level-btn .lname{font-weight:700;color:#c8960c;display:block;margin-bottom:3px}
+.level-btn .ldesc{font-size:11px;color:rgba(247,242,232,0.4)}
+
+/* KART TAHTASI */
+#gameScreen{display:none;flex-direction:column;gap:8px}
+.board{display:grid;gap:8px;justify-content:center}
+.card{
+  aspect-ratio:1;
+  border-radius:8px;
+  cursor:pointer;
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform .35s;
+  user-select:none;
+}
+.card.flipped{transform:rotateY(180deg)}
+.card.matched{transform:rotateY(180deg);cursor:default}
+
+.card-face{
+  position:absolute;inset:0;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+.card-back{
+  background:#1a1628;
+  border:1.5px solid rgba(200,150,12,0.25);
+}
+.card-back::after{
+  content:'?';
+  font-size:clamp(16px,4vw,24px);
+  font-weight:700;
+  color:rgba(200,150,12,0.3);
+  font-family:Georgia,serif;
+}
+.card-front{
+  background:#1e1830;
+  border:1.5px solid rgba(200,150,12,0.4);
+  transform:rotateY(180deg);
+  flex-direction:column;
+  gap:2px;
+  padding:4px;
+}
+.card.matched .card-front{
+  background:#0e1e14;
+  border-color:rgba(80,200,120,0.5);
+}
+
+.card-text{
+  font-family:Georgia,serif;
+  font-weight:700;
+  color:rgba(247,242,232,0.9);
+  text-align:center;
+  line-height:1.1;
+}
+/* Kesir gösterimi */
+.fraction{display:flex;flex-direction:column;align-items:center;line-height:1}
+.frac-num{border-bottom:1.5px solid rgba(247,242,232,0.7);padding-bottom:1px;width:100%;text-align:center}
+.frac-den{padding-top:1px;width:100%;text-align:center}
+
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.win-banner{display:none;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35);border-radius:5px;padding:10px 14px;text-align:center}
+.win-banner.show{display:block}
+.win-banner h2{font-size:14px;color:#50c878;margin-bottom:3px}
+.win-banner p{font-size:12px;color:rgba(247,242,232,0.45)}
+
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Hafıza Oyunu</div>
+  </div>
+
+  <div class="infobar">
+    <div class="ibox"><div class="l">Seviye</div><div class="v" id="levelDisp">—</div></div>
+    <div class="ibox"><div class="l">Hamle</div><div class="v" id="moveDisp">0</div></div>
+    <div class="ibox"><div class="l">Eşleşen</div><div class="v" id="matchDisp">0/8</div></div>
+  </div>
+
+  <!-- Seviye seçim ekranı -->
+  <div id="levelScreen">
+    <div class="level-title">Seviye seçin</div>
+    <button class="level-btn" onclick="startGame('ilkokul')">
+      <span class="lname">İlkokul</span>
+      <span class="ldesc">1-10 arası toplama, çıkarma ve çarpma</span>
+    </button>
+    <button class="level-btn" onclick="startGame('ortaokul')">
+      <span class="lname">Ortaokul</span>
+      <span class="ldesc">Çarpım tablosu, bölme ve karekök</span>
+    </button>
+    <button class="level-btn" onclick="startGame('lise')">
+      <span class="lname">Lise</span>
+      <span class="ldesc">Kareler, küpler ve küçük üsler</span>
+    </button>
+  </div>
+
+  <!-- Oyun ekranı -->
+  <div id="gameScreen">
+    <div class="board" id="board"></div>
+    <div class="msg" id="msg">Kartları açarak eşleşen çiftleri bulun.</div>
+    <div class="win-banner" id="winBanner">
+      <h2>Tebrikler!</h2>
+      <p id="winBody"></p>
+    </div>
+    <div class="br-btns">
+      <button class="a" onclick="restartSame()">&#8635; Tekrar</button>
+      <button class="a" onclick="backToLevels()">&#8592; Seviye Seç</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── KART SETLERİ ──
+// Her çift: {q: soru, a: cevap} — q ve a string veya {type:'frac',n,d} olabilir
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function makePairs_ilkokul(){
+  const pool=[
+    {q:'2+3',a:'5'},{q:'4+5',a:'9'},{q:'7+6',a:'13'},
+    {q:'8+4',a:'12'},{q:'6+7',a:'13'},{q:'9+5',a:'14'},
+    {q:'3+8',a:'11'},{q:'7+8',a:'15'},{q:'9+6',a:'15'},
+    {q:'5+7',a:'12'},{q:'8+6',a:'14'},{q:'4+9',a:'13'},
+    {q:'9-4',a:'5'},{q:'8-3',a:'5'},{q:'10-6',a:'4'},
+    {q:'12-7',a:'5'},{q:'14-9',a:'5'},{q:'11-4',a:'7'},
+    {q:'13-6',a:'7'},{q:'15-8',a:'7'},{q:'16-9',a:'7'},
+    {q:'2×3',a:'6'},{q:'3×4',a:'12'},{q:'4×5',a:'20'},
+    {q:'5×6',a:'30'},{q:'6×7',a:'42'},{q:'7×8',a:'56'},
+    {q:'8×9',a:'72'},{q:'6×8',a:'48'},{q:'7×6',a:'42'},
+    {q:'9×4',a:'36'},{q:'5×8',a:'40'},{q:'3×9',a:'27'},
+  ];
+  return shuffle(pool).slice(0,8);
+}
+
+function makePairs_ortaokul(){
+  const pool=[
+    {q:'11×11',a:'121'},{q:'12×8',a:'96'},{q:'13×7',a:'91'},
+    {q:'14×6',a:'84'},{q:'15×6',a:'90'},{q:'11×12',a:'132'},
+    {q:'13×9',a:'117'},{q:'16×6',a:'96'},{q:'12×9',a:'108'},
+    {q:'14×7',a:'98'},{q:'15×7',a:'105'},{q:'11×9',a:'99'},
+    {q:'63÷7',a:'9'},{q:'72÷8',a:'9'},{q:'54÷6',a:'9'},
+    {q:'48÷6',a:'8'},{q:'56÷7',a:'8'},{q:'64÷8',a:'8'},
+    {q:'45÷9',a:'5'},{q:'36÷6',a:'6'},{q:'42÷7',a:'6'},
+    {q:'√36',a:'6'},{q:'√49',a:'7'},{q:'√64',a:'8'},
+    {q:'√81',a:'9'},{q:'√100',a:'10'},{q:'√121',a:'11'},
+    {q:'√144',a:'12'},{q:'√25',a:'5'},{q:'√16',a:'4'},
+  ];
+  // Eşleşme kontrolü: aynı cevap olmasın (karışıklık önle)
+  const used=new Map();
+  const result=[];
+  for(const p of shuffle(pool)){
+    if(!used.has(p.a)){used.set(p.a,true);result.push(p);}
+    if(result.length>=8) break;
+  }
+  return result;
+}
+
+function makePairs_lise(){
+  const pool=[
+    {q:'2²',a:'4'},{q:'3²',a:'9'},{q:'4²',a:'16'},
+    {q:'5²',a:'25'},{q:'6²',a:'36'},{q:'7²',a:'49'},
+    {q:'8²',a:'64'},{q:'9²',a:'81'},{q:'10²',a:'100'},
+    {q:'11²',a:'121'},{q:'12²',a:'144'},{q:'13²',a:'169'},
+    {q:'2³',a:'8'},{q:'3³',a:'27'},{q:'4³',a:'64'},
+    {q:'5³',a:'125'},{q:'2⁴',a:'16'},{q:'2⁵',a:'32'},
+    {q:'2⁶',a:'64'},{q:'3⁴',a:'81'},{q:'2⁷',a:'128'},
+    {q:'√169',a:'13'},{q:'√196',a:'14'},{q:'√225',a:'15'},
+  ];
+  // Eşleşme kontrolü
+  const used=new Map();
+  const result=[];
+  for(const p of shuffle(pool)){
+    if(!used.has(p.a)){used.set(p.a,true);result.push(p);}
+    if(result.length>=8) break;
+  }
+  return result;
+}
+
+// ── OYUN DURUMU ──
+let cards, flipped, matched, moves, locked, currentLevel;
+
+function startGame(level){
+  currentLevel=level;
+  document.getElementById('levelScreen').style.display='none';
+  document.getElementById('gameScreen').style.display='flex';
+
+  const levelNames={ilkokul:'İlkokul',ortaokul:'Ortaokul',lise:'Lise'};
+  document.getElementById('levelDisp').textContent=levelNames[level];
+
+  const makers={ilkokul:makePairs_ilkokul,ortaokul:makePairs_ortaokul,lise:makePairs_lise};
+  const pairs=makers[level]();
+
+  // Her çiftten iki kart: soru ve cevap
+  const allCards=[];
+  pairs.forEach((p,i)=>{
+    allCards.push({id:i,type:'q',text:p.q,pairId:i});
+    allCards.push({id:i+100,type:'a',text:p.a,pairId:i});
+  });
+  cards=shuffle(allCards);
+  flipped=[];matched=new Set();moves=0;locked=false;
+
+  document.getElementById('moveDisp').textContent='0';
+  document.getElementById('matchDisp').textContent='0/8';
+  document.getElementById('winBanner').classList.remove('show');
+  setMsg('Kartları açarak eşleşen çiftleri bulun.');
+  renderBoard();
+}
+
+function renderBoard(){
+  const board=document.getElementById('board');
+  const n=cards.length; // 16 kart = 4x4
+  const cols=4;
+  const maxW=Math.min(480,window.innerWidth-20);
+  const cardSize=Math.floor((maxW-(cols-1)*8-16)/cols);
+
+  board.style.gridTemplateColumns=`repeat(${cols},${cardSize}px)`;
+  board.innerHTML='';
+
+  cards.forEach((card,idx)=>{
+    const el=document.createElement('div');
+    el.className='card';
+    el.style.width=cardSize+'px';
+    el.dataset.idx=idx;
+
+    const isFlipped=flipped.includes(idx)||matched.has(card.pairId);
+    if(isFlipped) el.classList.add(matched.has(card.pairId)?'matched':'flipped');
+
+    // Arka yüz
+    const back=document.createElement('div');
+    back.className='card-face card-back';
+    el.appendChild(back);
+
+    // Ön yüz
+    const front=document.createElement('div');
+    front.className='card-face card-front';
+    const fs=Math.max(11,Math.floor(cardSize*0.28));
+    front.innerHTML=renderCardContent(card.text,fs);
+    el.appendChild(front);
+
+    el.addEventListener('click',()=>handleCardClick(idx));
+    board.appendChild(el);
+  });
+}
+
+function renderCardContent(text, fs){
+  // Üs işaretlerini göster
+  const styled=text
+    .replace(/²/g,'<sup>2</sup>')
+    .replace(/³/g,'<sup>3</sup>')
+    .replace(/⁴/g,'<sup>4</sup>')
+    .replace(/⁵/g,'<sup>5</sup>')
+    .replace(/⁶/g,'<sup>6</sup>')
+    .replace(/⁷/g,'<sup>7</sup>')
+    .replace(/√/g,'√');
+  return `<div class="card-text" style="font-size:${fs}px">${styled}</div>`;
+}
+
+function handleCardClick(idx){
+  if(locked) return;
+  if(matched.has(cards[idx].pairId)) return;
+  if(flipped.includes(idx)) return;
+  if(flipped.length>=2) return;
+
+  flipped.push(idx);
+  renderBoard();
+
+  if(flipped.length===2){
+    moves++;
+    document.getElementById('moveDisp').textContent=moves;
+    locked=true;
+
+    const [i1,i2]=flipped;
+    const c1=cards[i1], c2=cards[i2];
+
+    if(c1.pairId===c2.pairId){
+      // Eşleşme
+      setTimeout(()=>{
+        matched.add(c1.pairId);
+        flipped=[];
+        locked=false;
+        document.getElementById('matchDisp').textContent=matched.size+'/8';
+        renderBoard();
+        if(matched.size===8){
+          document.getElementById('winBanner').classList.add('show');
+          document.getElementById('winBody').textContent=moves+' hamlede tamamladınız!';
+          setMsg('');
+        }
+      },600);
+    } else {
+      // Eşleşme yok
+      setTimeout(()=>{
+        flipped=[];
+        locked=false;
+        renderBoard();
+      },900);
+    }
+  }
+}
+
+function restartSame(){startGame(currentLevel);}
+function backToLevels(){
+  document.getElementById('gameScreen').style.display='none';
+  document.getElementById('levelScreen').style.display='flex';
+  document.getElementById('levelDisp').textContent='—';
+  document.getElementById('moveDisp').textContent='0';
+  document.getElementById('matchDisp').textContent='0/8';
+}
+
+window.addEventListener('resize',()=>{if(cards) renderBoard();});
+function setMsg(t){document.getElementById('msg').textContent=t;}
+</script>
+</body>
+</html>
