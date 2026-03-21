@@ -239,8 +239,8 @@ function endTurn(){
   if(plcd[0]===9&&plcd[1]===9&&ph===1)ph=2;
   upUI();render();
   if(won)return;
-  // Hamle yapamama kontrolü
-  if(ph>=2&&plcd[turn-1]===9&&!fly(turn)){
+  // Hamle yapamama kontrolü — sadece her iki taraf da tüm taşlarını yerleştirdiyse
+  if(ph>=2&&plcd[0]===9&&plcd[1]===9&&!fly(turn)){
     const ok=bd.map((v,i)=>v===turn?i:-1).filter(i=>i>=0)
       .some(i=>NB[i].some(n=>bd[n]===E));
     if(!ok){endGame(3-turn);return;}
@@ -250,6 +250,8 @@ function endTurn(){
 }
 
 function winCheck(){
+  // Kazanma sadece faz 2'de kontrol edilir
+  if(ph<2) return false;
   const opp=3-turn;
   if(plcd[opp-1]===9&&cnt(opp)<=2){endGame(turn);return true;}
   return false;
