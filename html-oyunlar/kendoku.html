@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Kendoku</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a100e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:500px;display:flex;flex-direction:column;gap:7px;margin:auto}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.sel-row{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4);flex-wrap:wrap}
+.sel-row select{background:#080e0c;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:13px;font-weight:700;color:#c8960c}
+
+/* TAHTA */
+.board-wrap{display:flex;justify-content:center}
+.board{display:inline-grid;position:relative}
+
+/* Hücre */
+.cell{
+  display:flex;align-items:center;justify-content:center;
+  font-size:var(--wf);font-weight:700;font-family:Georgia,serif;
+  color:rgba(247,242,232,0.9);
+  background:#131a16;
+  cursor:pointer;
+  position:relative;
+  transition:background .1s;
+  border:1px solid rgba(200,150,12,0.12);
+  user-select:none;
+}
+.cell:hover{background:#1c2820}
+.cell.selected{background:#1e3028;outline:2px solid #c8960c;outline-offset:-2px;z-index:2}
+.cell.same-val{color:#6ab8a0}
+.cell.error{background:#1e0c10;color:#eb5757}
+.cell.given{color:#c8960c;cursor:default}
+
+/* Kafes ipucu (sol üst köşe) */
+.cage-label{
+  position:absolute;top:2px;left:3px;
+  font-size:var(--cf);color:rgba(200,150,12,0.85);
+  font-weight:700;font-family:Georgia,serif;
+  line-height:1;pointer-events:none;
+}
+
+/* Kafes sınırları SVG overlay ile çizilir */
+.board-svg{position:absolute;top:0;left:0;pointer-events:none}
+
+/* NUMPAD */
+.numpad{display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;width:100%}
+.nbtn{flex:1;min-width:28px;height:40px;background:rgba(200,150,12,0.1);border:1px solid rgba(200,150,12,0.3);border-radius:5px;color:rgba(247,242,232,0.85);font-size:16px;font-weight:700;font-family:Georgia,serif;cursor:pointer;transition:background .12s}
+.nbtn:hover{background:rgba(200,150,12,0.25)}
+.nbtn.del{font-size:12px;color:rgba(247,242,232,0.5)}
+
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.win-banner{display:none;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35);border-radius:5px;padding:8px 14px;text-align:center}
+.win-banner.show{display:block}
+.win-banner h2{font-size:13px;color:#50c878;margin-bottom:2px}
+.win-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
+
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
+.info-box b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Kendoku</div>
+    <div class="sel-row">
+      <label>Zorluk:</label>
+      <select id="diffSel">
+        <option value="easy">Kolay (4×4)</option>
+        <option value="medium" selected>Orta (5×5)</option>
+        <option value="hard">Zor (6×6)</option>
+      </select>
+      <label style="margin-left:6px">Bulmaca:</label>
+      <select id="puzSel"></select>
+    </div>
+  </div>
+
+  <div class="infobar">
+    <div class="ibox"><div class="l">Zorluk</div><div class="v" id="diffDisp">Orta</div></div>
+    <div class="ibox"><div class="l">Bulmaca</div><div class="v" id="puzDisp">1/10</div></div>
+    <div class="ibox"><div class="l">Hata</div><div class="v" id="errDisp">0</div></div>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="numpad" id="numpad"></div>
+
+  <div class="msg" id="msg">Boş bir hücreye tıklayın, ardından sayı girin.</div>
+  <div class="win-banner" id="winBanner">
+    <h2>Tebrikler!</h2>
+    <p id="winBody"></p>
+  </div>
+
+  <div class="br-btns">
+    <button class="a" onclick="restartPuzzle()">&#8635; Yeniden</button>
+    <button class="a" onclick="checkAll()">&#10003; Kontrol</button>
+    <button class="a" onclick="revealAll()">&#128065; Çöz</button>
+    <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
+  </div>
+
+  <div class="info-box" id="infoBox">
+    <b>Kendoku Nasıl Oynanır?</b><br>
+    Her satır ve sütuna 1'den N'e kadar sayılar <b>birer kez</b> girilir (N = ızgara boyutu).<br>
+    Kalın çizgilerle ayrılmış <b>kafesler</b>in sol üst köşesindeki ipucu, o kafesteki sayılara uygulanacak işlemi ve sonucu gösterir.<br>
+    <b>+</b> toplama, <b>-</b> çıkarma (büyük eksi küçük), <b>×</b> çarpma, <b>÷</b> bölme (büyük bölü küçük), <b>=</b> doğrudan değer.
+  </div>
+</div>
+
+<script>
+const PUZZLES={
+  easy:[
+    {size:4,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":4},{"op":"*","target":6,"cells":[{"r":0,"c":1},{"r":1,"c":1}]},{"op":"+","target":3,"cells":[{"r":0,"c":2},{"r":0,"c":3}]},{"op":"/","target":3,"cells":[{"r":1,"c":0},{"r":2,"c":0}]},{"op":"+","target":7,"cells":[{"r":1,"c":2},{"r":1,"c":3}]},{"cells":[{"r":2,"c":1}],"op":"=","target":1},{"cells":[{"r":2,"c":2}],"op":"=","target":4},{"cells":[{"r":2,"c":3}],"op":"=","target":2},{"cells":[{"r":3,"c":0}],"op":"=","target":2},{"op":"-","target":3,"cells":[{"r":3,"c":1},{"r":3,"c":2}]},{"cells":[{"r":3,"c":3}],"op":"=","target":3}],solution:[[4,3,2,1],[1,2,3,4],[3,1,4,2],[2,4,1,3]]},
+    {size:4,cages:[{"op":"*","target":2,"cells":[{"r":0,"c":0},{"r":0,"c":1}]},{"cells":[{"r":0,"c":2}],"op":"=","target":3},{"cells":[{"r":0,"c":3}],"op":"=","target":4},{"op":"+","target":4,"cells":[{"r":1,"c":0},{"r":1,"c":1}]},{"cells":[{"r":1,"c":2}],"op":"=","target":4},{"op":"*","target":2,"cells":[{"r":1,"c":3},{"r":2,"c":3}]},{"cells":[{"r":2,"c":0}],"op":"=","target":4},{"op":"*","target":12,"cells":[{"r":2,"c":1},{"r":3,"c":1}]},{"cells":[{"r":2,"c":2}],"op":"=","target":2},{"cells":[{"r":3,"c":0}],"op":"=","target":2},{"op":"+","target":4,"cells":[{"r":3,"c":2},{"r":3,"c":3}]}],solution:[[1,2,3,4],[3,1,4,2],[4,3,2,1],[2,4,1,3]]},
+    {size:4,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":3},{"cells":[{"r":0,"c":1}],"op":"=","target":2},{"op":"-","target":3,"cells":[{"r":0,"c":2},{"r":1,"c":2}]},{"op":"+","target":4,"cells":[{"r":0,"c":3},{"r":1,"c":3}]},{"cells":[{"r":1,"c":0}],"op":"=","target":2},{"cells":[{"r":1,"c":1}],"op":"=","target":4},{"cells":[{"r":2,"c":0}],"op":"=","target":1},{"cells":[{"r":2,"c":1}],"op":"=","target":3},{"op":"+","target":5,"cells":[{"r":2,"c":2},{"r":3,"c":2}]},{"op":"*","target":8,"cells":[{"r":2,"c":3},{"r":3,"c":3}]},{"cells":[{"r":3,"c":0}],"op":"=","target":4},{"cells":[{"r":3,"c":1}],"op":"=","target":1}],solution:[[3,2,4,1],[2,4,1,3],[1,3,2,4],[4,1,3,2]]},
+    {size:4,cages:[{"op":"+","target":4,"cells":[{"r":0,"c":0},{"r":1,"c":0}]},{"cells":[{"r":0,"c":1}],"op":"=","target":2},{"op":"+","target":5,"cells":[{"r":0,"c":2},{"r":1,"c":2}]},{"cells":[{"r":0,"c":3}],"op":"=","target":3},{"op":"/","target":4,"cells":[{"r":1,"c":1},{"r":2,"c":1}]},{"op":"+","target":6,"cells":[{"r":1,"c":3},{"r":2,"c":3}]},{"op":"-","target":2,"cells":[{"r":2,"c":0},{"r":3,"c":0}]},{"cells":[{"r":2,"c":2}],"op":"=","target":3},{"op":"-","target":1,"cells":[{"r":3,"c":1},{"r":3,"c":2}]},{"cells":[{"r":3,"c":3}],"op":"=","target":1}],solution:[[1,2,4,3],[3,4,1,2],[2,1,3,4],[4,3,2,1]]},
+    {size:4,cages:[{"op":"*","target":8,"cells":[{"r":0,"c":0},{"r":0,"c":1}]},{"op":"+","target":4,"cells":[{"r":0,"c":2},{"r":0,"c":3}]},{"op":"-","target":1,"cells":[{"r":1,"c":0},{"r":2,"c":0}]},{"cells":[{"r":1,"c":1}],"op":"=","target":4},{"op":"/","target":4,"cells":[{"r":1,"c":2},{"r":2,"c":2}]},{"cells":[{"r":1,"c":3}],"op":"=","target":2},{"op":"+","target":4,"cells":[{"r":2,"c":1},{"r":3,"c":1}]},{"cells":[{"r":2,"c":3}],"op":"=","target":3},{"cells":[{"r":3,"c":0}],"op":"=","target":1},{"op":"/","target":2,"cells":[{"r":3,"c":2},{"r":3,"c":3}]}],solution:[[4,2,3,1],[3,4,1,2],[2,1,4,3],[1,3,2,4]]},
+    {size:4,cages:[{"op":"/","target":3,"cells":[{"r":0,"c":0},{"r":1,"c":0}]},{"op":"-","target":2,"cells":[{"r":0,"c":1},{"r":1,"c":1}]},{"op":"+","target":6,"cells":[{"r":0,"c":2},{"r":0,"c":3}]},{"op":"+","target":6,"cells":[{"r":1,"c":2},{"r":1,"c":3}]},{"op":"*","target":8,"cells":[{"r":2,"c":0},{"r":2,"c":1}]},{"cells":[{"r":2,"c":2}],"op":"=","target":1},{"op":"*","target":3,"cells":[{"r":2,"c":3},{"r":3,"c":3}]},{"cells":[{"r":3,"c":0}],"op":"=","target":2},{"cells":[{"r":3,"c":1}],"op":"=","target":4},{"cells":[{"r":3,"c":2}],"op":"=","target":3}],solution:[[1,3,4,2],[3,1,2,4],[4,2,1,3],[2,4,3,1]]},
+    {size:4,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":1},{"cells":[{"r":0,"c":1}],"op":"=","target":4},{"cells":[{"r":0,"c":2}],"op":"=","target":2},{"cells":[{"r":0,"c":3}],"op":"=","target":3},{"cells":[{"r":1,"c":0}],"op":"=","target":4},{"op":"/","target":2,"cells":[{"r":1,"c":1},{"r":2,"c":1}]},{"op":"*","target":12,"cells":[{"r":1,"c":2},{"r":2,"c":2}]},{"op":"*","target":2,"cells":[{"r":1,"c":3},{"r":2,"c":3}]},{"cells":[{"r":2,"c":0}],"op":"=","target":3},{"op":"*","target":6,"cells":[{"r":3,"c":0},{"r":3,"c":1}]},{"op":"+","target":5,"cells":[{"r":3,"c":2},{"r":3,"c":3}]}],solution:[[1,4,2,3],[4,2,3,1],[3,1,4,2],[2,3,1,4]]},
+    {size:4,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":2},{"op":"+","target":6,"cells":[{"r":0,"c":1},{"r":1,"c":1}]},{"cells":[{"r":0,"c":2}],"op":"=","target":1},{"cells":[{"r":0,"c":3}],"op":"=","target":3},{"op":"*","target":3,"cells":[{"r":1,"c":0},{"r":2,"c":0}]},{"op":"/","target":2,"cells":[{"r":1,"c":2},{"r":2,"c":2}]},{"cells":[{"r":1,"c":3}],"op":"=","target":1},{"cells":[{"r":2,"c":1}],"op":"=","target":3},{"op":"*","target":8,"cells":[{"r":2,"c":3},{"r":3,"c":3}]},{"cells":[{"r":3,"c":0}],"op":"=","target":4},{"cells":[{"r":3,"c":1}],"op":"=","target":1},{"cells":[{"r":3,"c":2}],"op":"=","target":3}],solution:[[2,4,1,3],[3,2,4,1],[1,3,2,4],[4,1,3,2]]},
+    {size:4,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":3},{"op":"+","target":3,"cells":[{"r":0,"c":1},{"r":0,"c":2}]},{"op":"-","target":3,"cells":[{"r":0,"c":3},{"r":1,"c":3}]},{"op":"-","target":1,"cells":[{"r":1,"c":0},{"r":1,"c":1}]},{"cells":[{"r":1,"c":2}],"op":"=","target":4},{"op":"*","target":4,"cells":[{"r":2,"c":0},{"r":2,"c":1}]},{"op":"*","target":6,"cells":[{"r":2,"c":2},{"r":3,"c":2}]},{"cells":[{"r":2,"c":3}],"op":"=","target":3},{"cells":[{"r":3,"c":0}],"op":"=","target":1},{"cells":[{"r":3,"c":1}],"op":"=","target":4},{"cells":[{"r":3,"c":3}],"op":"=","target":2}],solution:[[3,2,1,4],[2,3,4,1],[4,1,2,3],[1,4,3,2]]},
+    {size:4,cages:[{"op":"-","target":1,"cells":[{"r":0,"c":0},{"r":0,"c":1}]},{"op":"*","target":2,"cells":[{"r":0,"c":2},{"r":1,"c":2}]},{"op":"+","target":5,"cells":[{"r":0,"c":3},{"r":1,"c":3}]},{"cells":[{"r":1,"c":0}],"op":"=","target":3},{"cells":[{"r":1,"c":1}],"op":"=","target":4},{"cells":[{"r":2,"c":0}],"op":"=","target":1},{"cells":[{"r":2,"c":1}],"op":"=","target":2},{"cells":[{"r":2,"c":2}],"op":"=","target":4},{"cells":[{"r":2,"c":3}],"op":"=","target":3},{"op":"*","target":4,"cells":[{"r":3,"c":0},{"r":3,"c":1}]},{"op":"+","target":5,"cells":[{"r":3,"c":2},{"r":3,"c":3}]}],solution:[[2,3,1,4],[3,4,2,1],[1,2,4,3],[4,1,3,2]]},
+  ],
+  medium:[
+    {size:5,cages:[{"op":"+","target":4,"cells":[{"r":0,"c":0},{"r":1,"c":0}]},{"cells":[{"r":0,"c":1},{"r":0,"c":2},{"r":0,"c":3}],"op":"+","target":8},{"op":"*","target":20,"cells":[{"r":0,"c":4},{"r":1,"c":4}]},{"op":"*","target":12,"cells":[{"r":1,"c":1},{"r":1,"c":2}]},{"op":"*","target":2,"cells":[{"r":1,"c":3},{"r":2,"c":3}]},{"op":"-","target":1,"cells":[{"r":2,"c":0},{"r":3,"c":0}]},{"cells":[{"r":2,"c":1}],"op":"=","target":3},{"op":"-","target":1,"cells":[{"r":2,"c":2},{"r":3,"c":2}]},{"op":"-","target":1,"cells":[{"r":2,"c":4},{"r":3,"c":4}]},{"cells":[{"r":3,"c":1}],"op":"=","target":2},{"cells":[{"r":3,"c":3},{"r":4,"c":3},{"r":4,"c":2}],"op":"*","target":12},{"op":"-","target":3,"cells":[{"r":4,"c":0},{"r":4,"c":1}]},{"cells":[{"r":4,"c":4}],"op":"=","target":3}],solution:[[3,1,2,5,4],[1,4,3,2,5],[5,3,4,1,2],[4,2,5,3,1],[2,5,1,4,3]]},
+    {size:5,cages:[{"op":"/","target":2,"cells":[{"r":0,"c":0},{"r":0,"c":1}]},{"cells":[{"r":0,"c":2},{"r":1,"c":2},{"r":1,"c":3}],"op":"*","target":10},{"cells":[{"r":0,"c":3}],"op":"=","target":4},{"cells":[{"r":0,"c":4}],"op":"=","target":3},{"op":"*","target":15,"cells":[{"r":1,"c":0},{"r":2,"c":0}]},{"op":"-","target":2,"cells":[{"r":1,"c":1},{"r":2,"c":1}]},{"op":"-","target":2,"cells":[{"r":1,"c":4},{"r":2,"c":4}]},{"cells":[{"r":2,"c":2},{"r":3,"c":2},{"r":3,"c":1}],"op":"+","target":7},{"cells":[{"r":2,"c":3},{"r":3,"c":3},{"r":3,"c":4}],"op":"*","target":15},{"cells":[{"r":3,"c":0}],"op":"=","target":4},{"cells":[{"r":4,"c":0}],"op":"=","target":2},{"cells":[{"r":4,"c":1},{"r":4,"c":2},{"r":4,"c":3}],"op":"*","target":60},{"cells":[{"r":4,"c":4}],"op":"=","target":1}],solution:[[1,2,5,4,3],[5,3,1,2,4],[3,5,4,1,2],[4,1,2,3,5],[2,4,3,5,1]]},
+    {size:5,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":5},{"cells":[{"r":0,"c":1}],"op":"=","target":2},{"cells":[{"r":0,"c":2},{"r":1,"c":2},{"r":1,"c":3}],"op":"*","target":15},{"cells":[{"r":0,"c":3},{"r":0,"c":4},{"r":1,"c":4}],"op":"*","target":12},{"op":"/","target":2,"cells":[{"r":1,"c":0},{"r":1,"c":1}]},{"op":"+","target":7,"cells":[{"r":2,"c":0},{"r":3,"c":0}]},{"op":"-","target":1,"cells":[{"r":2,"c":1},{"r":2,"c":2}]},{"op":"*","target":2,"cells":[{"r":2,"c":3},{"r":2,"c":4}]},{"cells":[{"r":3,"c":1}],"op":"=","target":1},{"op":"-","target":3,"cells":[{"r":3,"c":2},{"r":4,"c":2}]},{"op":"*","target":15,"cells":[{"r":3,"c":3},{"r":3,"c":4}]},{"op":"+","target":4,"cells":[{"r":4,"c":0},{"r":4,"c":1}]},{"op":"+","target":6,"cells":[{"r":4,"c":3},{"r":4,"c":4}]}],solution:[[5,2,1,4,3],[2,4,3,5,1],[3,5,4,1,2],[4,1,2,3,5],[1,3,5,2,4]]},
+    {size:5,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":3},{"cells":[{"r":0,"c":1},{"r":0,"c":2},{"r":0,"c":3}],"op":"*","target":8},{"op":"-","target":1,"cells":[{"r":0,"c":4},{"r":1,"c":4}]},{"op":"/","target":5,"cells":[{"r":1,"c":0},{"r":2,"c":0}]},{"op":"*","target":15,"cells":[{"r":1,"c":1},{"r":1,"c":2}]},{"op":"+","target":5,"cells":[{"r":1,"c":3},{"r":2,"c":3}]},{"cells":[{"r":2,"c":1}],"op":"=","target":1},{"op":"-","target":2,"cells":[{"r":2,"c":2},{"r":3,"c":2}]},{"op":"*","target":2,"cells":[{"r":2,"c":4},{"r":3,"c":4}]},{"cells":[{"r":3,"c":0},{"r":3,"c":1},{"r":4,"c":1}],"op":"+","target":11},{"op":"/","target":5,"cells":[{"r":3,"c":3},{"r":4,"c":3}]},{"cells":[{"r":4,"c":0}],"op":"=","target":2},{"cells":[{"r":4,"c":2}],"op":"=","target":5},{"cells":[{"r":4,"c":4}],"op":"=","target":3}],solution:[[3,2,1,4,5],[1,5,3,2,4],[5,1,4,3,2],[4,3,2,5,1],[2,4,5,1,3]]},
+    {size:5,cages:[{"op":"+","target":9,"cells":[{"r":0,"c":0},{"r":1,"c":0}]},{"cells":[{"r":0,"c":1}],"op":"=","target":4},{"cells":[{"r":0,"c":2}],"op":"=","target":1},{"op":"-","target":1,"cells":[{"r":0,"c":3},{"r":0,"c":4}]},{"cells":[{"r":1,"c":1},{"r":1,"c":2},{"r":2,"c":2}],"op":"*","target":20},{"cells":[{"r":1,"c":3},{"r":1,"c":4},{"r":2,"c":4}],"op":"+","target":9},{"cells":[{"r":2,"c":0},{"r":3,"c":0},{"r":3,"c":1}],"op":"*","target":10},{"cells":[{"r":2,"c":1}],"op":"=","target":3},{"op":"/","target":4,"cells":[{"r":2,"c":3},{"r":3,"c":3}]},{"cells":[{"r":3,"c":2},{"r":4,"c":2},{"r":4,"c":1}],"op":"*","target":12},{"cells":[{"r":3,"c":4},{"r":4,"c":4},{"r":4,"c":3}],"op":"+","target":11},{"cells":[{"r":4,"c":0}],"op":"=","target":3}],solution:[[5,4,1,2,3],[4,2,5,3,1],[1,3,2,4,5],[2,5,3,1,4],[3,1,4,5,2]]},
+    {size:5,cages:[{"op":"-","target":1,"cells":[{"r":0,"c":0},{"r":1,"c":0}]},{"cells":[{"r":0,"c":1},{"r":1,"c":1},{"r":1,"c":2}],"op":"+","target":4},{"cells":[{"r":0,"c":2}],"op":"=","target":5},{"op":"-","target":1,"cells":[{"r":0,"c":3},{"r":1,"c":3}]},{"cells":[{"r":0,"c":4}],"op":"=","target":2},{"op":"+","target":8,"cells":[{"r":1,"c":4},{"r":2,"c":4}]},{"op":"+","target":9,"cells":[{"r":2,"c":0},{"r":2,"c":1}]},{"op":"+","target":5,"cells":[{"r":2,"c":2},{"r":3,"c":2}]},{"cells":[{"r":2,"c":3},{"r":3,"c":3},{"r":3,"c":4}],"op":"*","target":8},{"cells":[{"r":3,"c":0},{"r":3,"c":1},{"r":4,"c":1}],"op":"*","target":15},{"cells":[{"r":4,"c":0}],"op":"=","target":2},{"cells":[{"r":4,"c":2}],"op":"=","target":4},{"op":"+","target":6,"cells":[{"r":4,"c":3},{"r":4,"c":4}]}],solution:[[3,1,5,4,2],[4,2,1,3,5],[5,4,2,1,3],[1,5,3,2,4],[2,3,4,5,1]]},
+    {size:5,cages:[{"cells":[{"r":0,"c":0},{"r":0,"c":1},{"r":0,"c":2}],"op":"*","target":10},{"op":"+","target":7,"cells":[{"r":0,"c":3},{"r":0,"c":4}]},{"cells":[{"r":1,"c":0},{"r":2,"c":0},{"r":2,"c":1}],"op":"*","target":48},{"cells":[{"r":1,"c":1},{"r":1,"c":2},{"r":1,"c":3}],"op":"+","target":6},{"cells":[{"r":1,"c":4},{"r":2,"c":4},{"r":2,"c":3}],"op":"*","target":25},{"cells":[{"r":2,"c":2},{"r":3,"c":2},{"r":3,"c":1}],"op":"*","target":24},{"op":"*","target":10,"cells":[{"r":3,"c":0},{"r":4,"c":0}]},{"cells":[{"r":3,"c":3},{"r":3,"c":4},{"r":4,"c":4}],"op":"*","target":8},{"cells":[{"r":4,"c":1},{"r":4,"c":2},{"r":4,"c":3}],"op":"+","target":9}],solution:[[1,2,5,4,3],[4,1,3,2,5],[3,4,2,5,1],[5,3,4,1,2],[2,5,1,3,4]]},
+    {size:5,cages:[{"op":"*","target":12,"cells":[{"r":0,"c":0},{"r":1,"c":0}]},{"op":"+","target":9,"cells":[{"r":0,"c":1},{"r":1,"c":1}]},{"cells":[{"r":0,"c":2}],"op":"=","target":3},{"cells":[{"r":0,"c":3}],"op":"=","target":2},{"cells":[{"r":0,"c":4}],"op":"=","target":1},{"op":"/","target":2,"cells":[{"r":1,"c":2},{"r":2,"c":2}]},{"cells":[{"r":1,"c":3}],"op":"=","target":1},{"cells":[{"r":1,"c":4}],"op":"=","target":5},{"cells":[{"r":2,"c":0},{"r":3,"c":0},{"r":4,"c":0}],"op":"+","target":8},{"cells":[{"r":2,"c":1}],"op":"=","target":3},{"cells":[{"r":2,"c":3}],"op":"=","target":5},{"cells":[{"r":2,"c":4},{"r":3,"c":4},{"r":3,"c":3}],"op":"*","target":24},{"cells":[{"r":3,"c":1},{"r":3,"c":2},{"r":4,"c":2}],"op":"+","target":10},{"cells":[{"r":4,"c":1}],"op":"=","target":2},{"op":"+","target":7,"cells":[{"r":4,"c":3},{"r":4,"c":4}]}],solution:[[4,5,3,2,1],[3,4,2,1,5],[2,3,1,5,4],[5,1,4,3,2],[1,2,5,4,3]]},
+    {size:5,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":1},{"op":"/","target":2,"cells":[{"r":0,"c":1},{"r":0,"c":2}]},{"cells":[{"r":0,"c":3},{"r":0,"c":4},{"r":1,"c":4}],"op":"*","target":15},{"cells":[{"r":1,"c":0},{"r":1,"c":1},{"r":1,"c":2}],"op":"*","target":60},{"op":"+","target":7,"cells":[{"r":1,"c":3},{"r":2,"c":3}]},{"cells":[{"r":2,"c":0}],"op":"=","target":4},{"cells":[{"r":2,"c":1}],"op":"=","target":1},{"op":"+","target":8,"cells":[{"r":2,"c":2},{"r":3,"c":2}]},{"op":"*","target":8,"cells":[{"r":2,"c":4},{"r":3,"c":4}]},{"cells":[{"r":3,"c":0}],"op":"=","target":2},{"cells":[{"r":3,"c":1}],"op":"=","target":3},{"op":"+","target":5,"cells":[{"r":3,"c":3},{"r":4,"c":3}]},{"op":"+","target":7,"cells":[{"r":4,"c":0},{"r":4,"c":1}]},{"cells":[{"r":4,"c":2}],"op":"=","target":1},{"cells":[{"r":4,"c":4}],"op":"=","target":3}],solution:[[1,4,2,3,5],[3,5,4,2,1],[4,1,3,5,2],[2,3,5,1,4],[5,2,1,4,3]]},
+    {size:5,cages:[{"cells":[{"r":0,"c":0},{"r":1,"c":0},{"r":2,"c":0}],"op":"+","target":7},{"cells":[{"r":0,"c":1},{"r":0,"c":2},{"r":0,"c":3}],"op":"+","target":12},{"cells":[{"r":0,"c":4}],"op":"=","target":2},{"cells":[{"r":1,"c":1}],"op":"=","target":3},{"op":"-","target":1,"cells":[{"r":1,"c":2},{"r":1,"c":3}]},{"cells":[{"r":1,"c":4}],"op":"=","target":1},{"cells":[{"r":2,"c":1},{"r":3,"c":1},{"r":4,"c":1}],"op":"*","target":8},{"cells":[{"r":2,"c":2},{"r":3,"c":2},{"r":3,"c":3}],"op":"*","target":6},{"cells":[{"r":2,"c":3},{"r":2,"c":4},{"r":3,"c":4}],"op":"*","target":30},{"cells":[{"r":3,"c":0}],"op":"=","target":5},{"cells":[{"r":4,"c":0}],"op":"=","target":3},{"cells":[{"r":4,"c":2}],"op":"=","target":1},{"cells":[{"r":4,"c":3}],"op":"=","target":5},{"cells":[{"r":4,"c":4}],"op":"=","target":4}],solution:[[1,5,4,3,2],[2,3,5,4,1],[4,1,3,2,5],[5,4,2,1,3],[3,2,1,5,4]]},
+  ],
+  hard:[
+    {size:6,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":2},{"op":"*","target":6,"cells":[{"r":0,"c":1},{"r":1,"c":1}]},{"cells":[{"r":0,"c":2}],"op":"=","target":4},{"op":"+","target":11,"cells":[{"r":0,"c":3},{"r":0,"c":4}]},{"cells":[{"r":0,"c":5},{"r":1,"c":5},{"r":2,"c":5}],"op":"*","target":30},{"cells":[{"r":1,"c":0}],"op":"=","target":3},{"op":"*","target":4,"cells":[{"r":1,"c":2},{"r":1,"c":3}]},{"cells":[{"r":1,"c":4}],"op":"=","target":5},{"cells":[{"r":2,"c":0}],"op":"=","target":1},{"op":"-","target":4,"cells":[{"r":2,"c":1},{"r":2,"c":2}]},{"cells":[{"r":2,"c":3},{"r":2,"c":4},{"r":3,"c":4}],"op":"*","target":36},{"cells":[{"r":3,"c":0},{"r":4,"c":0},{"r":4,"c":1}],"op":"+","target":15},{"op":"-","target":4,"cells":[{"r":3,"c":1},{"r":3,"c":2}]},{"cells":[{"r":3,"c":3}],"op":"=","target":6},{"cells":[{"r":3,"c":5}],"op":"=","target":2},{"cells":[{"r":4,"c":2}],"op":"=","target":3},{"cells":[{"r":4,"c":3},{"r":5,"c":3},{"r":5,"c":2}],"op":"+","target":9},{"cells":[{"r":4,"c":4}],"op":"=","target":1},{"op":"+","target":7,"cells":[{"r":4,"c":5},{"r":5,"c":5}]},{"cells":[{"r":5,"c":0}],"op":"=","target":5},{"cells":[{"r":5,"c":1}],"op":"=","target":4},{"cells":[{"r":5,"c":4}],"op":"=","target":2}],solution:[[2,3,4,5,6,1],[3,2,1,4,5,6],[1,6,2,3,4,5],[4,1,5,6,3,2],[6,5,3,2,1,4],[5,4,6,1,2,3]]},
+    {size:6,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":4},{"op":"*","target":12,"cells":[{"r":0,"c":1},{"r":0,"c":2}]},{"cells":[{"r":0,"c":3},{"r":1,"c":3},{"r":1,"c":2}],"op":"+","target":11},{"cells":[{"r":0,"c":4},{"r":1,"c":4},{"r":2,"c":4}],"op":"*","target":30},{"op":"-","target":1,"cells":[{"r":0,"c":5},{"r":1,"c":5}]},{"cells":[{"r":1,"c":0}],"op":"=","target":2},{"cells":[{"r":1,"c":1}],"op":"=","target":1},{"cells":[{"r":2,"c":0}],"op":"=","target":6},{"op":"*","target":18,"cells":[{"r":2,"c":1},{"r":3,"c":1}]},{"cells":[{"r":2,"c":2}],"op":"=","target":4},{"cells":[{"r":2,"c":3},{"r":3,"c":3},{"r":4,"c":3}],"op":"+","target":7},{"cells":[{"r":2,"c":5},{"r":3,"c":5},{"r":3,"c":4}],"op":"*","target":24},{"cells":[{"r":3,"c":0}],"op":"=","target":1},{"cells":[{"r":3,"c":2},{"r":4,"c":2},{"r":4,"c":1}],"op":"+","target":11},{"cells":[{"r":4,"c":0}],"op":"=","target":3},{"cells":[{"r":4,"c":4}],"op":"=","target":2},{"op":"*","target":6,"cells":[{"r":4,"c":5},{"r":5,"c":5}]},{"op":"*","target":20,"cells":[{"r":5,"c":0},{"r":5,"c":1}]},{"cells":[{"r":5,"c":2}],"op":"=","target":2},{"cells":[{"r":5,"c":3}],"op":"=","target":6},{"cells":[{"r":5,"c":4}],"op":"=","target":3}],solution:[[4,2,6,3,1,5],[2,1,3,5,6,4],[6,3,4,1,5,2],[1,6,5,2,4,3],[3,5,1,4,2,6],[5,4,2,6,3,1]]},
+    {size:6,cages:[{"op":"*","target":30,"cells":[{"r":0,"c":0},{"r":1,"c":0}]},{"cells":[{"r":0,"c":1},{"r":1,"c":1},{"r":2,"c":1}],"op":"*","target":12},{"cells":[{"r":0,"c":2}],"op":"=","target":5},{"cells":[{"r":0,"c":3}],"op":"=","target":3},{"cells":[{"r":0,"c":4}],"op":"=","target":2},{"op":"-","target":3,"cells":[{"r":0,"c":5},{"r":1,"c":5}]},{"cells":[{"r":1,"c":2}],"op":"=","target":4},{"op":"+","target":9,"cells":[{"r":1,"c":3},{"r":1,"c":4}]},{"cells":[{"r":2,"c":0}],"op":"=","target":3},{"op":"-","target":3,"cells":[{"r":2,"c":2},{"r":2,"c":3}]},{"cells":[{"r":2,"c":4}],"op":"=","target":5},{"op":"-","target":1,"cells":[{"r":2,"c":5},{"r":3,"c":5}]},{"cells":[{"r":3,"c":0},{"r":3,"c":1},{"r":4,"c":1}],"op":"+","target":11},{"op":"+","target":9,"cells":[{"r":3,"c":2},{"r":4,"c":2}]},{"cells":[{"r":3,"c":3}],"op":"=","target":1},{"cells":[{"r":3,"c":4},{"r":4,"c":4},{"r":5,"c":4}],"op":"+","target":11},{"cells":[{"r":4,"c":0},{"r":5,"c":0},{"r":5,"c":1}],"op":"+","target":8},{"cells":[{"r":4,"c":3}],"op":"=","target":2},{"op":"+","target":11,"cells":[{"r":4,"c":5},{"r":5,"c":5}]},{"op":"*","target":10,"cells":[{"r":5,"c":2},{"r":5,"c":3}]}],solution:[[6,1,5,3,2,4],[5,2,4,6,3,1],[3,6,1,4,5,2],[2,5,6,1,4,3],[1,4,3,2,6,5],[4,3,2,5,1,6]]},
+    {size:6,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":5},{"cells":[{"r":0,"c":1},{"r":0,"c":2},{"r":0,"c":3}],"op":"+","target":10},{"cells":[{"r":0,"c":4},{"r":1,"c":4},{"r":2,"c":4}],"op":"*","target":48},{"cells":[{"r":0,"c":5}],"op":"=","target":4},{"cells":[{"r":1,"c":0},{"r":1,"c":1},{"r":2,"c":1}],"op":"+","target":12},{"cells":[{"r":1,"c":2},{"r":1,"c":3},{"r":2,"c":3}],"op":"*","target":24},{"op":"+","target":4,"cells":[{"r":1,"c":5},{"r":2,"c":5}]},{"cells":[{"r":2,"c":0},{"r":3,"c":0},{"r":3,"c":1}],"op":"+","target":10},{"cells":[{"r":2,"c":2}],"op":"=","target":5},{"op":"*","target":4,"cells":[{"r":3,"c":2},{"r":3,"c":3}]},{"cells":[{"r":3,"c":4}],"op":"=","target":3},{"cells":[{"r":3,"c":5}],"op":"=","target":5},{"cells":[{"r":4,"c":0},{"r":5,"c":0},{"r":5,"c":1}],"op":"*","target":48},{"cells":[{"r":4,"c":1},{"r":4,"c":2},{"r":5,"c":2}],"op":"*","target":18},{"cells":[{"r":4,"c":3},{"r":5,"c":3},{"r":5,"c":4}],"op":"*","target":10},{"cells":[{"r":4,"c":4},{"r":4,"c":5},{"r":5,"c":5}],"op":"*","target":60}],solution:[[5,3,1,6,2,4],[1,5,2,4,6,3],[2,6,5,3,4,1],[6,2,4,1,3,5],[4,1,3,2,5,6],[3,4,6,5,1,2]]},
+    {size:6,cages:[{"op":"-","target":3,"cells":[{"r":0,"c":0},{"r":0,"c":1}]},{"cells":[{"r":0,"c":2},{"r":1,"c":2},{"r":1,"c":3}],"op":"*","target":5},{"cells":[{"r":0,"c":3}],"op":"=","target":3},{"op":"+","target":10,"cells":[{"r":0,"c":4},{"r":0,"c":5}]},{"cells":[{"r":1,"c":0},{"r":1,"c":1},{"r":2,"c":1}],"op":"+","target":13},{"op":"+","target":5,"cells":[{"r":1,"c":4},{"r":1,"c":5}]},{"cells":[{"r":2,"c":0},{"r":3,"c":0},{"r":4,"c":0}],"op":"*","target":12},{"op":"+","target":11,"cells":[{"r":2,"c":2},{"r":2,"c":3}]},{"cells":[{"r":2,"c":4},{"r":2,"c":5},{"r":3,"c":5}],"op":"*","target":20},{"cells":[{"r":3,"c":1}],"op":"=","target":1},{"op":"-","target":1,"cells":[{"r":3,"c":2},{"r":4,"c":2}]},{"cells":[{"r":3,"c":3}],"op":"=","target":4},{"cells":[{"r":3,"c":4}],"op":"=","target":3},{"cells":[{"r":4,"c":1}],"op":"=","target":4},{"cells":[{"r":4,"c":3},{"r":4,"c":4},{"r":4,"c":5}],"op":"+","target":13},{"cells":[{"r":5,"c":0},{"r":5,"c":1},{"r":5,"c":2}],"op":"*","target":60},{"cells":[{"r":5,"c":3},{"r":5,"c":4},{"r":5,"c":5}],"op":"*","target":12}],solution:[[5,2,1,3,4,6],[4,6,5,1,2,3],[2,3,6,5,1,4],[6,1,2,4,3,5],[1,4,3,6,5,2],[3,5,4,2,6,1]]},
+    {size:6,cages:[{"cells":[{"r":0,"c":0},{"r":0,"c":1},{"r":0,"c":2}],"op":"*","target":8},{"cells":[{"r":0,"c":3}],"op":"=","target":5},{"cells":[{"r":0,"c":4},{"r":1,"c":4},{"r":2,"c":4}],"op":"*","target":60},{"op":"/","target":2,"cells":[{"r":0,"c":5},{"r":1,"c":5}]},{"cells":[{"r":1,"c":0},{"r":2,"c":0},{"r":3,"c":0}],"op":"+","target":12},{"cells":[{"r":1,"c":1},{"r":2,"c":1},{"r":3,"c":1}],"op":"+","target":9},{"op":"-","target":4,"cells":[{"r":1,"c":2},{"r":2,"c":2}]},{"cells":[{"r":1,"c":3}],"op":"=","target":1},{"cells":[{"r":2,"c":3}],"op":"=","target":3},{"op":"*","target":8,"cells":[{"r":2,"c":5},{"r":3,"c":5}]},{"cells":[{"r":3,"c":2}],"op":"=","target":5},{"cells":[{"r":3,"c":3}],"op":"=","target":6},{"cells":[{"r":3,"c":4}],"op":"=","target":1},{"cells":[{"r":4,"c":0},{"r":4,"c":1},{"r":5,"c":1}],"op":"+","target":9},{"cells":[{"r":4,"c":2}],"op":"=","target":4},{"cells":[{"r":4,"c":3}],"op":"=","target":2},{"op":"+","target":11,"cells":[{"r":4,"c":4},{"r":4,"c":5}]},{"cells":[{"r":5,"c":0}],"op":"=","target":6},{"cells":[{"r":5,"c":2},{"r":5,"c":3},{"r":5,"c":4}],"op":"*","target":24},{"cells":[{"r":5,"c":5}],"op":"=","target":1}],solution:[[2,4,1,5,3,6],[4,6,2,1,5,3],[5,1,6,3,4,2],[3,2,5,6,1,4],[1,3,4,2,6,5],[6,5,3,4,2,1]]},
+    {size:6,cages:[{"op":"+","target":5,"cells":[{"r":0,"c":0},{"r":1,"c":0}]},{"cells":[{"r":0,"c":1},{"r":1,"c":1},{"r":2,"c":1}],"op":"*","target":12},{"cells":[{"r":0,"c":2}],"op":"=","target":2},{"cells":[{"r":0,"c":3},{"r":0,"c":4},{"r":1,"c":4}],"op":"+","target":14},{"op":"/","target":5,"cells":[{"r":0,"c":5},{"r":1,"c":5}]},{"cells":[{"r":1,"c":2},{"r":1,"c":3},{"r":2,"c":3}],"op":"*","target":60},{"cells":[{"r":2,"c":0}],"op":"=","target":2},{"cells":[{"r":2,"c":2},{"r":3,"c":2},{"r":3,"c":1}],"op":"+","target":10},{"cells":[{"r":2,"c":4}],"op":"=","target":6},{"cells":[{"r":2,"c":5},{"r":3,"c":5},{"r":4,"c":5}],"op":"*","target":72},{"op":"/","target":2,"cells":[{"r":3,"c":0},{"r":4,"c":0}]},{"op":"-","target":3,"cells":[{"r":3,"c":3},{"r":4,"c":3}]},{"cells":[{"r":3,"c":4},{"r":4,"c":4},{"r":5,"c":4}],"op":"+","target":7},{"op":"-","target":1,"cells":[{"r":4,"c":1},{"r":4,"c":2}]},{"cells":[{"r":5,"c":0},{"r":5,"c":1},{"r":5,"c":2}],"op":"+","target":12},{"cells":[{"r":5,"c":3}],"op":"=","target":3},{"cells":[{"r":5,"c":5}],"op":"=","target":2}],solution:[[4,3,2,6,5,1],[1,4,6,2,3,5],[2,1,3,5,6,4],[6,2,5,4,1,3],[3,5,4,1,2,6],[5,6,1,3,4,2]]},
+    {size:6,cages:[{"cells":[{"r":0,"c":0},{"r":1,"c":0},{"r":1,"c":1}],"op":"*","target":90},{"op":"+","target":3,"cells":[{"r":0,"c":1},{"r":0,"c":2}]},{"cells":[{"r":0,"c":3}],"op":"=","target":4},{"op":"+","target":9,"cells":[{"r":0,"c":4},{"r":0,"c":5}]},{"cells":[{"r":1,"c":2}],"op":"=","target":4},{"op":"+","target":7,"cells":[{"r":1,"c":3},{"r":1,"c":4}]},{"cells":[{"r":1,"c":5}],"op":"=","target":1},{"cells":[{"r":2,"c":0},{"r":2,"c":1},{"r":2,"c":2}],"op":"*","target":30},{"cells":[{"r":2,"c":3},{"r":2,"c":4},{"r":2,"c":5}],"op":"*","target":24},{"op":"+","target":6,"cells":[{"r":3,"c":0},{"r":4,"c":0}]},{"op":"*","target":6,"cells":[{"r":3,"c":1},{"r":4,"c":1}]},{"cells":[{"r":3,"c":2},{"r":3,"c":3},{"r":4,"c":3}],"op":"*","target":75},{"op":"*","target":4,"cells":[{"r":3,"c":4},{"r":4,"c":4}]},{"cells":[{"r":3,"c":5}],"op":"=","target":2},{"cells":[{"r":4,"c":2},{"r":5,"c":2},{"r":5,"c":3}],"op":"*","target":108},{"op":"-","target":2,"cells":[{"r":4,"c":5},{"r":5,"c":5}]},{"op":"/","target":4,"cells":[{"r":5,"c":0},{"r":5,"c":1}]},{"cells":[{"r":5,"c":4}],"op":"=","target":2}],solution:[[5,2,1,4,3,6],[6,3,4,2,5,1],[3,5,2,1,6,4],[4,6,5,3,1,2],[2,1,6,5,4,3],[1,4,3,6,2,5]]},
+    {size:6,cages:[{"cells":[{"r":0,"c":0}],"op":"=","target":6},{"cells":[{"r":0,"c":1},{"r":1,"c":1},{"r":2,"c":1}],"op":"*","target":30},{"cells":[{"r":0,"c":2},{"r":1,"c":2},{"r":1,"c":3}],"op":"+","target":13},{"cells":[{"r":0,"c":3},{"r":0,"c":4},{"r":1,"c":4}],"op":"*","target":12},{"op":"+","target":9,"cells":[{"r":0,"c":5},{"r":1,"c":5}]},{"op":"-","target":1,"cells":[{"r":1,"c":0},{"r":2,"c":0}]},{"op":"+","target":6,"cells":[{"r":2,"c":2},{"r":2,"c":3}]},{"cells":[{"r":2,"c":4}],"op":"=","target":4},{"op":"-","target":1,"cells":[{"r":2,"c":5},{"r":3,"c":5}]},{"cells":[{"r":3,"c":0}],"op":"=","target":5},{"op":"-","target":1,"cells":[{"r":3,"c":1},{"r":4,"c":1}]},{"cells":[{"r":3,"c":2},{"r":3,"c":3},{"r":3,"c":4}],"op":"*","target":24},{"op":"*","target":12,"cells":[{"r":4,"c":0},{"r":5,"c":0}]},{"op":"-","target":2,"cells":[{"r":4,"c":2},{"r":4,"c":3}]},{"cells":[{"r":4,"c":4}],"op":"=","target":6},{"op":"/","target":6,"cells":[{"r":4,"c":5},{"r":5,"c":5}]},{"op":"-","target":2,"cells":[{"r":5,"c":1},{"r":5,"c":2}]},{"op":"*","target":5,"cells":[{"r":5,"c":3},{"r":5,"c":4}]}],solution:[[6,1,4,2,3,5],[1,5,3,6,2,4],[2,6,1,5,4,3],[5,3,6,4,1,2],[4,2,5,3,6,1],[3,4,2,1,5,6]]},
+    {size:6,cages:[{"cells":[{"r":0,"c":0},{"r":0,"c":1},{"r":1,"c":1}],"op":"*","target":12},{"cells":[{"r":0,"c":2},{"r":0,"c":3},{"r":1,"c":3}],"op":"*","target":60},{"cells":[{"r":0,"c":4}],"op":"=","target":1},{"cells":[{"r":0,"c":5}],"op":"=","target":2},{"cells":[{"r":1,"c":0},{"r":2,"c":0},{"r":2,"c":1}],"op":"+","target":15},{"op":"/","target":2,"cells":[{"r":1,"c":2},{"r":2,"c":2}]},{"cells":[{"r":1,"c":4},{"r":1,"c":5},{"r":2,"c":5}],"op":"+","target":12},{"op":"+","target":5,"cells":[{"r":2,"c":3},{"r":3,"c":3}]},{"op":"+","target":11,"cells":[{"r":2,"c":4},{"r":3,"c":4}]},{"op":"-","target":1,"cells":[{"r":3,"c":0},{"r":4,"c":0}]},{"cells":[{"r":3,"c":1}],"op":"=","target":3},{"cells":[{"r":3,"c":2}],"op":"=","target":5},{"cells":[{"r":3,"c":5},{"r":4,"c":5},{"r":4,"c":4}],"op":"*","target":8},{"cells":[{"r":4,"c":1},{"r":5,"c":1},{"r":5,"c":2}],"op":"*","target":10},{"cells":[{"r":4,"c":2}],"op":"=","target":3},{"cells":[{"r":4,"c":3},{"r":5,"c":3},{"r":5,"c":4}],"op":"+","target":13},{"cells":[{"r":5,"c":0}],"op":"=","target":6},{"cells":[{"r":5,"c":5}],"op":"=","target":5}],solution:[[3,4,6,5,1,2],[5,1,4,2,3,6],[4,6,2,1,5,3],[2,3,5,4,6,1],[1,5,3,6,2,4],[6,2,1,3,4,5]]},
+  ],
+};
+
+let puzzle, userGrid, selected, solved, CS;
+
+function loadPuzzle(diff, idx){
+  puzzle = PUZZLES[diff][idx];
+  const n = puzzle.size;
+  userGrid = Array.from({length:n},()=>Array(n).fill(0));
+  selected=null; solved=false;
+  const diffNames={easy:'Kolay',medium:'Orta',hard:'Zor'};
+  document.getElementById('diffDisp').textContent=diffNames[diff];
+  document.getElementById('puzDisp').textContent=(idx+1)+'/10';
+  document.getElementById('errDisp').textContent='0';
+  document.getElementById('winBanner').classList.remove('show');
+  setMsg('Boş bir hücreye tıklayın, ardından sayı girin.');
+  buildNumpad();
+  render();
+}
+
+function buildNumpad(){
+  const np=document.getElementById('numpad');
+  np.innerHTML='';
+  const n=puzzle.size;
+  for(let i=1;i<=n;i++){
+    const b=document.createElement('button');
+    b.className='nbtn';b.textContent=i;
+    b.onclick=(()=>{const v=i;return()=>enterNum(v);})();
+    np.appendChild(b);
+  }
+  const d=document.createElement('button');
+  d.className='nbtn del';d.textContent='Sil';
+  d.onclick=()=>enterNum(0);
+  np.appendChild(d);
+}
+
+// Hücre → kafes indeksi
+function getCageOf(r,c){
+  return puzzle.cages.findIndex(cage=>cage.cells.some(cell=>cell.r===r&&cell.c===c));
+}
+
+function render(){
+  const board=document.getElementById('board');
+  const n=puzzle.size;
+  const maxW=Math.min(460,window.innerWidth-32);
+  CS=Math.min(64,Math.floor(maxW/n));
+  const cf=Math.max(8,Math.floor(CS*0.22));
+  const wf=Math.max(14,Math.floor(CS*0.42));
+
+  board.style.setProperty('--cf',cf+'px');
+  board.style.setProperty('--wf',wf+'px');
+  board.style.gridTemplateColumns=`repeat(${n},${CS}px)`;
+  board.style.gridTemplateRows=`repeat(${n},${CS}px)`;
+  board.style.width=(n*CS)+'px';
+  board.style.height=(n*CS)+'px';
+  board.innerHTML='';
+
+  // Hata hücrelerini hesapla
+  const errCells=getErrorCells();
+
+  for(let r=0;r<n;r++){
+    for(let c=0;c<n;c++){
+      const cell=document.createElement('div');
+      cell.className='cell';
+      const v=userGrid[r][c];
+      const solV=puzzle.solution[r][c];
+      const isSel=selected&&selected[0]===r&&selected[1]===c;
+      const selVal=selected?userGrid[selected[0]][selected[1]]:0;
+      const isSameVal=!isSel&&v!==0&&v===selVal;
+
+      if(errCells.has(r+','+c)) cell.classList.add('error');
+      else if(isSel) cell.classList.add('selected');
+      else if(isSameVal) cell.classList.add('same-val');
+
+      if(v>0) cell.textContent=v;
+
+      // Kafes ipucu: bu hücre kafes'in ilk hücresi mi?
+      const ci=getCageOf(r,c);
+      const cage=puzzle.cages[ci];
+      if(cage){
+        const topLeft=cage.cells.reduce((a,b)=>
+          a.r<b.r||(a.r===b.r&&a.c<b.c)?a:b
+        );
+        if(topLeft.r===r&&topLeft.c===c){
+          const lbl=document.createElement('span');
+          lbl.className='cage-label';
+          const opSym=cage.op==='*'?'×':cage.op==='/'?'÷':cage.op;
+          lbl.textContent=cage.target+(cage.op==='='?'':opSym);
+          cell.appendChild(lbl);
+        }
+      }
+
+      cell.addEventListener('click',(()=>{const rr=r,cc=c;return()=>selectCell(rr,cc);})());
+      board.appendChild(cell);
+    }
+  }
+
+  // Kafes sınırlarını SVG ile çiz
+  drawCageBorders(n);
+}
+
+function drawCageBorders(n){
+  const board=document.getElementById('board');
+  // Eski SVG'yi kaldır
+  const old=board.querySelector('.board-svg');
+  if(old) old.remove();
+
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.classList.add('board-svg');
+  svg.setAttribute('width',n*CS);
+  svg.setAttribute('height',n*CS);
+  svg.style.width=n*CS+'px';
+  svg.style.height=n*CS+'px';
+
+  // Her kenar için: iki hücre farklı kafesteyse kalın çizgi çiz
+  const strokeColor='rgba(200,150,12,0.75)';
+  const strokeW=2.5;
+
+  for(let r=0;r<n;r++){
+    for(let c=0;c<n;c++){
+      const ci=getCageOf(r,c);
+      // Sağ kenar
+      if(c<n-1){
+        const ci2=getCageOf(r,c+1);
+        if(ci!==ci2){
+          const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+          line.setAttribute('x1',(c+1)*CS);line.setAttribute('y1',r*CS);
+          line.setAttribute('x2',(c+1)*CS);line.setAttribute('y2',(r+1)*CS);
+          line.setAttribute('stroke',strokeColor);line.setAttribute('stroke-width',strokeW);
+          svg.appendChild(line);
+        }
+      }
+      // Alt kenar
+      if(r<n-1){
+        const ci2=getCageOf(r+1,c);
+        if(ci!==ci2){
+          const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+          line.setAttribute('x1',c*CS);line.setAttribute('y1',(r+1)*CS);
+          line.setAttribute('x2',(c+1)*CS);line.setAttribute('y2',(r+1)*CS);
+          line.setAttribute('stroke',strokeColor);line.setAttribute('stroke-width',strokeW);
+          svg.appendChild(line);
+        }
+      }
+    }
+  }
+  // Dış çerçeve
+  const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+  rect.setAttribute('x',1);rect.setAttribute('y',1);
+  rect.setAttribute('width',n*CS-2);rect.setAttribute('height',n*CS-2);
+  rect.setAttribute('fill','none');
+  rect.setAttribute('stroke','rgba(200,150,12,0.6)');
+  rect.setAttribute('stroke-width',2);
+  svg.appendChild(rect);
+
+  board.appendChild(svg);
+}
+
+function selectCell(r,c){
+  selected=[r,c];
+  render();
+}
+
+function enterNum(v){
+  if(!selected)return;
+  const[r,c]=selected;
+  userGrid[r][c]=v;
+  render();
+  if(v!==0&&isComplete()) autoCheck();
+}
+
+function isComplete(){
+  const n=puzzle.size;
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++) if(userGrid[r][c]===0) return false;
+  return true;
+}
+
+function getErrorCells(){
+  const n=puzzle.size;
+  const ec=new Set();
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+    if(userGrid[r][c]!==0&&userGrid[r][c]!==puzzle.solution[r][c]) ec.add(r+','+c);
+  }
+  return ec;
+}
+
+function checkAll(){
+  const ec=getErrorCells();
+  document.getElementById('errDisp').textContent=ec.size;
+  if(ec.size===0&&isComplete()) autoCheck();
+  else if(ec.size>0) setMsg(ec.size+' hatalı hücre var.');
+  else setMsg('Henüz tamamlanmadı, devam edin.');
+  render();
+}
+
+function autoCheck(){
+  solved=true;
+  document.getElementById('winBanner').classList.add('show');
+  document.getElementById('winBody').textContent='Kendokuyu çözdünüz!';
+  setMsg('');
+}
+
+function revealAll(){
+  const n=puzzle.size;
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++) userGrid[r][c]=puzzle.solution[r][c];
+  render();setMsg('Çözüm gösterildi.');
+}
+
+function restartPuzzle(){
+  const diff=document.getElementById('diffSel').value;
+  const idx=parseInt(document.getElementById('puzSel').value);
+  loadPuzzle(diff,idx);
+}
+
+function fillPuzSel(){
+  const ps=document.getElementById('puzSel');
+  ps.innerHTML='';
+  for(let i=0;i<10;i++){
+    const o=document.createElement('option');
+    o.value=i;o.textContent=(i+1)+'. Bulmaca';
+    ps.appendChild(o);
+  }
+}
+
+document.addEventListener('keydown',function(e){
+  const k=e.key;
+  const n=puzzle?puzzle.size:0;
+  if(k>='1'&&k<=n.toString()) enterNum(parseInt(k));
+  else if(k==='0'||k==='Backspace'||k==='Delete') enterNum(0);
+  else if(k==='ArrowUp'&&selected){e.preventDefault();if(selected[0]>0)selectCell(selected[0]-1,selected[1]);}
+  else if(k==='ArrowDown'&&selected){e.preventDefault();if(selected[0]<n-1)selectCell(selected[0]+1,selected[1]);}
+  else if(k==='ArrowLeft'&&selected){e.preventDefault();if(selected[1]>0)selectCell(selected[0],selected[1]-1);}
+  else if(k==='ArrowRight'&&selected){e.preventDefault();if(selected[1]<n-1)selectCell(selected[0],selected[1]+1);}
+});
+
+document.getElementById('diffSel').addEventListener('change',function(){
+  fillPuzSel();document.getElementById('puzSel').value=0;loadPuzzle(this.value,0);
+});
+document.getElementById('puzSel').addEventListener('change',function(){
+  loadPuzzle(document.getElementById('diffSel').value,parseInt(this.value));
+});
+window.addEventListener('resize',()=>{if(puzzle)render();});
+
+function setMsg(t){document.getElementById('msg').textContent=t;}
+function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='none'?'block':'none';}
+
+fillPuzSel();
+loadPuzzle('medium',0);
+</script>
+</body>
+</html>
