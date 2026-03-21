@@ -21,17 +21,17 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .ibox .v{font-size:13px;font-weight:700;color:#c8960c}
 
 /* NONOGRAM TAHTASI */
-.board-outer{display:flex;justify-content:center;overflow-x:auto}
-.board-wrap{display:inline-flex;flex-direction:column}
+.board-outer{display:flex;justify-content:center;overflow:hidden}
+.board-wrap{display:inline-flex;flex-direction:column;overflow:visible}
 
 /* İpucu ve hücre boyutları JS'de dinamik ayarlanır */
 .col-clues-row{display:flex}
 .col-clue-spacer{flex-shrink:0}
 .col-clue-cell{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex-shrink:0;padding-bottom:2px;gap:1px}
-.clue-num{font-size:11px;color:rgba(247,242,232,0.7);font-family:Georgia,serif;font-weight:600;line-height:1.2}
+.clue-num{font-size:12px;color:rgba(247,242,232,0.75);font-family:Georgia,serif;font-weight:700;line-height:1.2}
 
 .grid-row{display:flex;align-items:center}
-.row-clue-cell{display:flex;align-items:center;justify-content:flex-end;flex-shrink:0;gap:3px;padding-right:4px}
+.row-clue-cell{display:flex;align-items:center;justify-content:flex-end;flex-shrink:0;gap:4px;padding-right:5px}
 
 .cell{
   flex-shrink:0;
@@ -211,10 +211,12 @@ function render(){
   wrap.innerHTML = '';
 
   // Hücre boyutu
-  const maxW = Math.min(520, window.innerWidth - 40);
-  const maxClueW = n <= 5 ? 30 : n <= 10 ? 40 : 50;
-  const CELL = Math.floor((maxW - maxClueW) / n);
-  const CS = Math.max(CELL, n <= 5 ? 36 : n <= 10 ? 28 : 22);
+  const maxClueW = n <= 5 ? 28 : n <= 10 ? 36 : 44;
+  // Kullanılabilir genişlik: pencere - padding - ipucu alanı
+  const availW = Math.min(window.innerWidth - 32, 560) - maxClueW - 4;
+  // Hücre boyutu: mevcut alana sığacak şekilde hesapla
+  const maxCS = n <= 5 ? 44 : n <= 10 ? 36 : 26;
+  const CS = Math.min(maxCS, Math.floor(availW / n));
 
   // Sütun ipuçları için max yükseklik
   const maxColLen = Math.max(...puzzle.colClues.map(c=>c.length));
@@ -229,23 +231,25 @@ function render(){
   spacer.style.width = maxClueW+'px';
   colRow.appendChild(spacer);
 
+  const clueFont = Math.max(9, Math.min(12, CS - 4));
+
   puzzle.colClues.forEach((clues, c) => {
     const cell = document.createElement('div');
     cell.className = 'col-clue-cell';
     cell.style.width = CS+'px';
-    cell.style.height = (maxColLen * 16 + 4)+'px';
-    // Üstten hizala — boş satırlar için padding
+    cell.style.height = (maxColLen * (clueFont + 4) + 4)+'px';
     const pad = maxColLen - clues.length;
     for(let i=0; i<pad; i++){
       const empty = document.createElement('div');
       empty.className = 'clue-num';
+      empty.style.fontSize = clueFont+'px';
       empty.textContent = '';
       cell.appendChild(empty);
     }
     clues.forEach(v => {
       const num = document.createElement('div');
       num.className = 'clue-num';
-      // Satır tamamlandıysa soluklaştır
+      num.style.fontSize = clueFont+'px';
       num.textContent = v === 0 ? '' : v;
       if(isColDone(c)) num.style.opacity = '0.35';
       cell.appendChild(num);
@@ -264,7 +268,7 @@ function render(){
     rowClueCell.className = 'row-clue-cell';
     rowClueCell.style.width = maxClueW+'px';
     rowClueCell.style.height = CS+'px';
-    rowClueCell.style.fontSize = (n<=5?13:n<=10?11:10)+'px';
+    rowClueCell.style.fontSize = clueFont+'px';
     const rc = puzzle.rowClues[r];
     rc.forEach((v,i) => {
       const span = document.createElement('span');
