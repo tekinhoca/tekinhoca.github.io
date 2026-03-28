@@ -35,26 +35,19 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .level-btn .ldesc{font-size:11px;color:rgba(247,242,232,0.4)}
 
 /* KART TAHTASI */
-#gameScreen{display:none;flex-direction:column;gap:8px}
-.board{display:grid;gap:8px;justify-content:center}
+#gameScreen{display:none;flex-direction:column;gap:6px;position:relative}
+.board{display:grid;gap:6px;justify-content:center}
 .card{
   aspect-ratio:1;
   border-radius:8px;
   cursor:pointer;
   position:relative;
-  transform-style:preserve-3d;
-  transition:transform .35s;
   user-select:none;
 }
-.card.flipped{transform:rotateY(180deg)}
-.card.matched{transform:rotateY(180deg);cursor:default}
-
 .card-face{
   position:absolute;inset:0;
   border-radius:8px;
   display:flex;align-items:center;justify-content:center;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
 }
 .card-back{
   background:#1a1628;
@@ -70,15 +63,15 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .card-front{
   background:#1e1830;
   border:1.5px solid rgba(200,150,12,0.4);
-  transform:rotateY(180deg);
+  display:none;
   flex-direction:column;
   gap:2px;
   padding:4px;
 }
-.card.matched .card-front{
-  background:#0e1e14;
-  border-color:rgba(80,200,120,0.5);
-}
+.card.flipped .card-back{display:none}
+.card.flipped .card-front{display:flex}
+.card.matched .card-back{display:none}
+.card.matched .card-front{display:flex;background:#0e1e14;border-color:rgba(80,200,120,0.5);}
 
 .card-text{
   font-family:'Trebuchet MS',Arial,sans-serif;
@@ -87,17 +80,24 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   text-align:center;
   line-height:1.1;
 }
-/* Kesir gösterimi */
-.fraction{display:flex;flex-direction:column;align-items:center;line-height:1}
-.frac-num{border-bottom:1.5px solid rgba(247,242,232,0.7);padding-bottom:1px;width:100%;text-align:center}
-.frac-den{padding-top:1px;width:100%;text-align:center}
+
+/* Kazanma overlay */
+.win-overlay{
+  display:none;
+  position:absolute;inset:0;
+  background:rgba(10,12,14,0.85);
+  border-radius:8px;
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:14px;
+  z-index:10;
+}
+.win-overlay.show{display:flex}
+.win-overlay h2{font-size:18px;color:#50c878;font-family:Georgia,serif}
+.win-overlay p{font-size:12px;color:rgba(247,242,232,0.5)}
+.win-overlay .ov-btns{display:flex;gap:8px}
 
 .msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
-.win-banner{display:none;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35);border-radius:5px;padding:10px 14px;text-align:center}
-.win-banner.show{display:block}
-.win-banner h2{font-size:14px;color:#50c878;margin-bottom:3px}
-.win-banner p{font-size:12px;color:rgba(247,242,232,0.45)}
-
 .br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
 button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
 button.a:hover{background:rgba(200,150,12,0.2)}
@@ -134,12 +134,18 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 
   <!-- Oyun ekranı -->
   <div id="gameScreen">
-    <div class="board" id="board"></div>
-    <div class="msg" id="msg">Kartları açarak eşleşen çiftleri bulun.</div>
-    <div class="win-banner" id="winBanner">
-      <h2>Tebrikler!</h2>
-      <p id="winBody"></p>
+    <div style="position:relative">
+      <div class="board" id="board"></div>
+      <div class="win-overlay" id="winOverlay">
+        <h2>Tebrikler!</h2>
+        <p id="winBody"></p>
+        <div class="ov-btns">
+          <button class="a" onclick="restartSame()">&#8635; Tekrar</button>
+          <button class="a" onclick="backToLevels()">&#8592; Seviye Seç</button>
+        </div>
+      </div>
     </div>
+    <div class="msg" id="msg">Kartları açarak eşleşen çiftleri bulun.</div>
     <div class="br-btns">
       <button class="a" onclick="restartSame()">&#8635; Tekrar</button>
       <button class="a" onclick="backToLevels()">&#8592; Seviye Seç</button>
@@ -194,12 +200,19 @@ function makePairs_ortaokul(){
     {q:'√81',a:'9'},{q:'√100',a:'10'},{q:'√121',a:'11'},
     {q:'√144',a:'12'},{q:'√25',a:'5'},{q:'√16',a:'4'},
   ]);
-  function pick(pool,n){
-    const used=new Set();const res=[];
-    for(const p of pool){if(!used.has(p.a)){used.add(p.a);res.push(p);}if(res.length>=n)break;}
+  function pick(pool,n,usedGlobal){
+    const res=[];
+    for(const p of pool){
+      if(!usedGlobal.has(p.a)){usedGlobal.add(p.a);res.push(p);}
+      if(res.length>=n)break;
+    }
     return res;
   }
-  return [...pick(carpma,3),...pick(bolme,3),...pick(karekok,2)];
+  const usedAll=new Set();
+  const c=pick(carpma,3,usedAll);
+  const b=pick(bolme,3,usedAll);
+  const k=pick(karekok,2,usedAll);
+  return [...c,...b,...k];
 }
 
 function makePairs_lise(){
@@ -221,17 +234,18 @@ function makePairs_lise(){
     {q:'1!',a:'1'},{q:'2!',a:'2'},{q:'3!',a:'6'},
     {q:'4!',a:'24'},{q:'5!',a:'120'},
   ]);
-  function pick(pool,n){
-    const used=new Set();const res=[];
-    for(const p of pool){if(!used.has(p.a)){used.add(p.a);res.push(p);}if(res.length>=n)break;}
+  function pick(pool,n,usedGlobal){
+    const res=[];
+    for(const p of pool){
+      if(!usedGlobal.has(p.a)){usedGlobal.add(p.a);res.push(p);}
+      if(res.length>=n)break;
+    }
     return res;
   }
-  // Her oyunda 6 üslü (3 çift) + 4 karekök (2 çift) + 6 faktöriyel (3 çift) = 16 kart
-  // Ama üslü ve karekök cevapları çakışmaması için birleşik kontrol
-  const u=pick(uslu,3);
-  const usedVals=new Set(u.map(p=>p.a));
-  const k=karekok.filter(p=>!usedVals.has(p.a)).slice(0,2);
-  const f=pick(faktoriyel,3);
+  const usedAll=new Set();
+  const u=pick(uslu,3,usedAll);
+  const k=pick(karekok,2,usedAll);
+  const f=pick(faktoriyel,3,usedAll);
   return [...u,...k,...f];
 }
 
@@ -260,17 +274,16 @@ function startGame(level){
 
   document.getElementById('moveDisp').textContent='0';
   document.getElementById('matchDisp').textContent='0/8';
-  document.getElementById('winBanner').classList.remove('show');
+  document.getElementById('winOverlay').classList.remove('show');
   setMsg('Kartları açarak eşleşen çiftleri bulun.');
   renderBoard();
 }
 
 function renderBoard(){
   const board=document.getElementById('board');
-  const n=cards.length; // 16 kart = 4x4
   const cols=4;
-  const maxW=Math.min(480,window.innerWidth-20);
-  const cardSize=Math.floor((maxW-(cols-1)*8-16)/cols);
+  const maxW=Math.min(460,window.innerWidth-20);
+  const cardSize=Math.floor((maxW-(cols-1)*6-16)/cols);
 
   board.style.gridTemplateColumns=`repeat(${cols},${cardSize}px)`;
   board.innerHTML='';
@@ -284,15 +297,13 @@ function renderBoard(){
     const isFlipped=flipped.includes(idx)||matched.has(card.pairId);
     if(isFlipped) el.classList.add(matched.has(card.pairId)?'matched':'flipped');
 
-    // Arka yüz
     const back=document.createElement('div');
     back.className='card-face card-back';
     el.appendChild(back);
 
-    // Ön yüz
     const front=document.createElement('div');
     front.className='card-face card-front';
-    const fs=Math.max(11,Math.floor(cardSize*0.28));
+    const fs=Math.max(11,Math.floor(cardSize*0.26));
     front.innerHTML=renderCardContent(card.text,fs);
     el.appendChild(front);
 
@@ -340,7 +351,7 @@ function handleCardClick(idx){
         document.getElementById('matchDisp').textContent=matched.size+'/8';
         renderBoard();
         if(matched.size===8){
-          document.getElementById('winBanner').classList.add('show');
+          document.getElementById('winOverlay').classList.add('show');
           document.getElementById('winBody').textContent=moves+' hamlede tamamladınız!';
           setMsg('');
         }
