@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Şifreyi Bul</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0e0a0a;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:8px;margin:auto}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.diff-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.diff-sel select{background:#140a0a;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:13px;font-weight:700;color:#c8960c}
+
+/* TAHMIN TABLOSU */
+.table-wrap{display:flex;flex-direction:column}
+
+/* Geçmiş tahminler */
+.guesses{display:flex;flex-direction:column;gap:0}
+
+.guess-row{
+  display:grid;
+  grid-template-columns:22px 1fr 56px 56px;
+  align-items:center;gap:8px;
+  padding:7px 0;
+  border-bottom:0.5px solid rgba(255,255,255,0.07);
+}
+.guess-num{font-size:11px;color:rgba(247,242,232,0.3);text-align:right;padding-right:3px}
+.guess-digits{display:flex;gap:5px}
+.digit-box{
+  width:36px;height:36px;
+  background:#1a1218;
+  border:0.5px solid rgba(200,150,12,0.2);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:700;
+  color:rgba(247,242,232,0.9);
+  font-family:Georgia,serif;
+}
+.score-cell{text-align:center}
+.score-val{font-size:22px;font-weight:700;font-family:Georgia,serif}
+.score-val.correct{color:#c8960c}
+.score-val.misplaced{color:rgba(247,242,232,0.45)}
+
+/* Aktif tahmin girişi */
+.active-row{
+  display:grid;
+  grid-template-columns:22px 1fr 56px 56px;
+  align-items:center;gap:8px;
+  padding:7px 0;
+  border-bottom:2px solid rgba(200,150,12,0.4);
+}
+.active-digits{display:flex;gap:5px}
+.active-box{
+  width:36px;height:36px;
+  background:#1e1420;
+  border:1.5px solid rgba(200,150,12,0.4);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:700;
+  color:#c8960c;
+  font-family:Georgia,serif;
+  cursor:pointer;
+  transition:border-color .12s,background .12s;
+  position:relative;
+}
+.active-box.selected{
+  border-color:#c8960c;
+  background:#251830;
+  outline:2px solid rgba(200,150,12,0.5);
+  outline-offset:-1px;
+}
+.active-box.filled{color:rgba(247,242,232,0.9);background:#1a1428}
+
+/* Başlık satırı — sabit en altta */
+.header-row{
+  display:grid;
+  grid-template-columns:22px 1fr 56px 56px;
+  align-items:start;gap:8px;
+  padding:8px 0 0;
+}
+.hdr-tahmin{font-size:10px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;padding-top:3px}
+.hdr-score{text-align:center;line-height:1.4}
+.hdr-score.correct{color:#c8960c}
+.hdr-score.misplaced{color:rgba(247,242,232,0.4)}
+.hdr-line{font-size:10px;font-weight:500;letter-spacing:.05em}
+.hdr-sub{font-size:9px;opacity:.7;letter-spacing:.04em}
+
+/* NUMPAD */
+.numpad{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.nbtn{
+  width:52px;height:44px;
+  background:rgba(200,150,12,0.08);
+  border:1px solid rgba(200,150,12,0.25);
+  border-radius:5px;
+  color:rgba(247,242,232,0.85);
+  font-size:18px;font-weight:700;
+  font-family:Georgia,serif;
+  cursor:pointer;transition:background .12s;
+}
+.nbtn:hover{background:rgba(200,150,12,0.2)}
+.nbtn.del{font-size:12px;color:rgba(247,242,232,0.5);width:64px}
+.nbtn.ok{font-size:12px;color:#50c878;border-color:rgba(80,200,120,0.4);background:rgba(80,200,120,0.08);width:80px}
+.nbtn.ok:hover{background:rgba(80,200,120,0.18)}
+.nbtn.ok:disabled{opacity:0.3;cursor:default}
+
+/* Mesaj */
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+
+/* Banner */
+.result-banner{display:none;border-radius:5px;padding:10px 14px;text-align:center}
+.result-banner.show{display:block}
+.result-banner.win{background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35)}
+.result-banner.lose{background:rgba(200,50,50,0.1);border:1px solid rgba(200,50,50,0.35)}
+.result-banner h2{font-size:14px;margin-bottom:3px}
+.result-banner.win h2{color:#50c878}
+.result-banner.lose h2{color:#eb5757}
+.result-banner p{font-size:12px;color:rgba(247,242,232,0.5)}
+
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
+.info-box b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Şifreyi Bul</div>
+    <div class="diff-sel">
+      <label>Tahmin hakkı:</label>
+      <select id="limitSel">
+        <option value="0">Sınırsız</option>
+        <option value="10" selected>10 (kolay)</option>
+        <option value="8">8 (orta)</option>
+        <option value="6">6 (zor)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="infobar">
+    <div class="ibox"><div class="l">Tahmin</div><div class="v" id="guessDisp">0</div></div>
+    <div class="ibox"><div class="l">Kalan Hak</div><div class="v" id="remDisp">10</div></div>
+    <div class="ibox"><div class="l">Basamak</div><div class="v">4</div></div>
+  </div>
+
+  <div class="table-wrap">
+    <div class="guesses" id="guesses"></div>
+
+    <!-- Aktif giriş satırı -->
+    <div class="active-row" id="activeRow">
+      <div class="guess-num" id="activeNum">1</div>
+      <div class="active-digits" id="activeDigits"></div>
+      <div></div><div></div>
+    </div>
+
+    <!-- Sabit başlık -->
+    <div class="header-row">
+      <div></div>
+      <div class="hdr-tahmin">Tahmin</div>
+      <div class="hdr-score correct">
+        <div class="hdr-line">DOĞRU</div>
+        <div class="hdr-sub">YERDE</div>
+      </div>
+      <div class="hdr-score misplaced">
+        <div class="hdr-line">YANLIŞ</div>
+        <div class="hdr-sub">YERDE</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="numpad" id="numpad"></div>
+
+  <div class="msg" id="msg">4 farklı rakam girin (0-9), ardından Tamam'a basın.</div>
+
+  <div class="result-banner" id="resultBanner">
+    <h2 id="resultTitle"></h2>
+    <p id="resultBody"></p>
+  </div>
+
+  <div class="br-btns">
+    <button class="a" onclick="newGame()">&#8635; Yeni Oyun</button>
+    <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
+  </div>
+
+  <div class="info-box" id="infoBox">
+    <b>Şifreyi Bul Oyunu Nasıl Oynanır?</b><br>
+    YZ 4 basamaklı, <b>rakamları farklı</b> bir sayı tutar.<br>
+    Her tahmin sonrası iki ipucu alırsınız:<br>
+    <b style="color:#c8960c">Doğru Yerde:</b> Hem rakam doğru hem yeri doğru.<br>
+    <b style="color:rgba(247,242,232,0.6)">Yanlış Yerde:</b> Rakam var ama yanlış basamakta.<br>
+    4'ü de doğru basamakta = KAZANDINIZ!
+  </div>
+</div>
+
+<script>
+let secret, guesses, current, selectedBox, gameOver, limit;
+
+function newGame(){
+  // Gizli sayı: 4 farklı rakam
+  const digits=[0,1,2,3,4,5,6,7,8,9];
+  for(let i=digits.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[digits[i],digits[j]]=[digits[j],digits[i]];}
+  secret=digits.slice(0,4);
+  guesses=[];
+  current=['','','',''];
+  selectedBox=0;
+  gameOver=false;
+  limit=parseInt(document.getElementById('limitSel').value);
+
+  document.getElementById('resultBanner').classList.remove('show','win','lose');
+  setMsg('4 farklı rakam girin (0-9), ardından Tamam\'a basın.');
+  buildNumpad();
+  render();
+}
+
+function buildNumpad(){
+  const np=document.getElementById('numpad');
+  np.innerHTML='';
+  for(let i=0;i<=9;i++){
+    const b=document.createElement('button');
+    b.className='nbtn';b.textContent=i;
+    b.onclick=(()=>{const v=i;return()=>enterDigit(v);})();
+    np.appendChild(b);
+  }
+  const d=document.createElement('button');
+  d.className='nbtn del';d.textContent='← Sil';
+  d.onclick=deleteDigit;
+  np.appendChild(d);
+  const ok=document.createElement('button');
+  ok.className='nbtn ok';ok.id='okBtn';ok.textContent='✓ Tamam';
+  ok.onclick=submitGuess;
+  np.appendChild(ok);
+}
+
+function render(){
+  // Geçmiş tahminler
+  const gDiv=document.getElementById('guesses');
+  gDiv.innerHTML='';
+  guesses.forEach((g,i)=>{
+    const row=document.createElement('div');
+    row.className='guess-row';
+    // Numara
+    const num=document.createElement('div');
+    num.className='guess-num';num.textContent=i+1;
+    row.appendChild(num);
+    // Rakamlar
+    const digs=document.createElement('div');
+    digs.className='guess-digits';
+    g.digits.forEach(d=>{
+      const box=document.createElement('div');
+      box.className='digit-box';box.textContent=d;
+      digs.appendChild(box);
+    });
+    row.appendChild(digs);
+    // Doğru yerde
+    const c=document.createElement('div');
+    c.className='score-cell';
+    const cv=document.createElement('div');
+    cv.className='score-val correct';cv.textContent=g.correct;
+    c.appendChild(cv);row.appendChild(c);
+    // Yanlış yerde
+    const m=document.createElement('div');
+    m.className='score-cell';
+    const mv=document.createElement('div');
+    mv.className='score-val misplaced';mv.textContent=g.misplaced;
+    m.appendChild(mv);row.appendChild(m);
+    gDiv.appendChild(row);
+  });
+
+  // Aktif satır
+  const activeRow=document.getElementById('activeRow');
+  activeRow.style.display=gameOver?'none':'grid';
+  document.getElementById('activeNum').textContent=guesses.length+1;
+
+  const digs=document.getElementById('activeDigits');
+  digs.innerHTML='';
+  current.forEach((v,i)=>{
+    const box=document.createElement('div');
+    box.className='active-box'+(v!==''?' filled':'')+(i===selectedBox&&!gameOver?' selected':'');
+    box.textContent=v!==''?v:'';
+    box.onclick=(()=>{const ii=i;return()=>{selectedBox=ii;render();}})();
+    digs.appendChild(box);
+  });
+
+  // İnfobar
+  document.getElementById('guessDisp').textContent=guesses.length;
+  const rem=limit===0?'∞':(limit-guesses.length);
+  document.getElementById('remDisp').textContent=gameOver?'-':rem;
+
+  // Tamam butonu
+  const okBtn=document.getElementById('okBtn');
+  if(okBtn) okBtn.disabled=current.some(v=>v==='')||gameOver;
+}
+
+function enterDigit(v){
+  if(gameOver) return;
+  const vs=String(v);
+  // Aynı rakam zaten var mı?
+  if(current.some((d,i)=>d===vs&&i!==selectedBox)){
+    setMsg('Aynı rakamı iki kez kullanamazsınız!');
+    return;
+  }
+  setMsg('');
+  current[selectedBox]=vs;
+  // Sonraki boş kutuya geç
+  let next=selectedBox+1;
+  while(next<4&&current[next]!=='') next++;
+  if(next<4) selectedBox=next;
+  render();
+}
+
+function deleteDigit(){
+  if(gameOver) return;
+  current[selectedBox]='';
+  render();
+}
+
+function submitGuess(){
+  if(gameOver||current.some(v=>v==='')) return;
+  const guess=current.map(Number);
+  // Hesapla
+  let correct=0,misplaced=0;
+  for(let i=0;i<4;i++) if(guess[i]===secret[i]) correct++;
+  for(let i=0;i<4;i++) if(secret.includes(guess[i])&&guess[i]!==secret[i]) misplaced++;
+
+  guesses.push({digits:[...guess],correct,misplaced});
+  current=['','','',''];
+  selectedBox=0;
+
+  if(correct===4){
+    gameOver=true;
+    showResult(true);
+  } else if(limit>0&&guesses.length>=limit){
+    gameOver=true;
+    showResult(false);
+  } else {
+    setMsg('');
+  }
+  render();
+}
+
+function showResult(win){
+  const banner=document.getElementById('resultBanner');
+  banner.classList.add('show',win?'win':'lose');
+  document.getElementById('resultTitle').textContent=win?'Tebrikler! Buldunuz!':'Maalesef, hakkınız bitti.';
+  document.getElementById('resultBody').textContent=win
+    ?guesses.length+'. tahminde buldunuz! Gizli sayı: '+secret.join('')
+    :'Gizli sayı: '+secret.join('');
+}
+
+document.addEventListener('keydown',function(e){
+  if(gameOver)return;
+  const k=e.key;
+  if(k>='0'&&k<='9') enterDigit(parseInt(k));
+  else if(k==='Backspace'||k==='Delete') deleteDigit();
+  else if(k==='Enter') submitGuess();
+  else if(k==='ArrowRight'&&selectedBox<3){selectedBox++;render();}
+  else if(k==='ArrowLeft'&&selectedBox>0){selectedBox--;render();}
+});
+
+document.getElementById('limitSel').addEventListener('change',newGame);
+
+function setMsg(t){document.getElementById('msg').textContent=t;}
+function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='none'?'block':'none';}
+
+newGame();
+</script>
+</body>
+</html>
