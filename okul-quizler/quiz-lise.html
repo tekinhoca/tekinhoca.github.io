@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lise (9/10) Matematik Quiz - Tekin Hoca</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --ink: #12100e; --gold: #c8960c; --cream: #f7f2e8; --rust: #9b3510; --aged: #ece4cc; --sepia: #5d4037; }
+        body { font-family: 'Source Serif 4', serif; background-color: var(--cream); color: var(--ink); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .header-bar { width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 2px solid var(--gold); padding-bottom: 10px; }
+        .header-bar h2 { font-family: 'Playfair Display', serif; color: var(--rust); margin: 0; font-size: 1.5rem; }
+        .exit-btn { background: var(--rust); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 0.85rem; }
+        #quiz-card { background: var(--aged); width: 100%; max-width: 700px; padding: 35px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid rgba(122,92,30,0.2); }
+        .q-meta { font-weight: 600; color: var(--sepia); margin-bottom: 15px; font-size: 0.95rem; border-bottom: 1px solid var(--gold); display: block; padding-bottom: 5px; }
+        .q-text { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 25px; line-height: 1.5; }
+        .options-grid { display: grid; gap: 12px; }
+        .opt-btn { background: var(--cream); border: 1px solid rgba(122,92,30,0.3); padding: 14px 16px; text-align: left; font-size: 1rem; cursor: pointer; transition: 0.2s; font-family: inherit; border-radius: 3px; width: 100%; }
+        .opt-btn:hover:not(:disabled) { border-color: var(--gold); background: #fff; }
+        .correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724; font-weight: 600; }
+        .wrong { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
+        #hint-box { margin-top: 25px; padding: 18px; border-left: 5px solid var(--gold); background: rgba(255,255,255,0.6); display: none; font-size: 1.05rem; line-height: 1.6; }
+        #nav-btn { margin-top: 25px; width: 100%; padding: 16px; background: var(--rust); color: white; border: none; font-weight: 700; cursor: pointer; display: none; text-transform: uppercase; border-radius: 3px; }
+        #result-screen { display: none; text-align: center; }
+        #result-screen h2 { font-family: 'Playfair Display', serif; color: var(--rust); font-size: 1.8rem; margin-bottom: 10px; }
+        #score-display { font-size: 2.5rem; color: var(--ink); font-family: 'Playfair Display', serif; margin: 10px 0; font-weight: bold; }
+        .analysis-table { width: 100%; border-collapse: collapse; margin-top: 25px; background: #fff; text-align: left; }
+        .analysis-table th, .analysis-table td { padding: 12px; border: 1px solid var(--aged); font-size: 0.95rem; }
+        .analysis-table th { background: var(--ink); color: var(--gold); }
+        .status-true { color: #28a745; font-weight: bold; }
+        .status-false { color: #dc3545; font-weight: bold; }
+        .restart-btn { margin-top: 25px; width: 100%; padding: 18px; background: var(--ink); color: var(--gold); border: none; font-weight: 700; cursor: pointer; text-transform: uppercase; border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+<div class="header-bar">
+    <h2>LİSE MATEMATİK (9/10) QUİZ</h2>
+    <button class="exit-btn" onclick="window.close()">QUİZDEN ÇIK</button>
+</div>
+
+<div id="quiz-card">
+    <div id="play-area">
+        <div id="q-info" class="q-meta"></div>
+        <div id="q-content" class="q-text"></div>
+        <div id="options-area" class="options-grid"></div>
+        <div id="hint-box"></div>
+        <button id="nav-btn" onclick="handleNext()"></button>
+    </div>
+
+    <div id="result-screen">
+        <h2>Performans Analizi</h2>
+        <div id="score-display"></div>
+        <table class="analysis-table">
+            <thead>
+                <tr><th>Sıra</th><th>Kazanım Alanı</th><th>Başarı Durumu</th></tr>
+            </thead>
+            <tbody id="analysis-body"></tbody>
+        </table>
+        <button class="restart-btn" onclick="startNewQuiz()">YENİ QUİZ BAŞLAT</button>
+    </div>
+</div>
+
+<script>
+const quizPool = {
+    c1: [
+        {q:"3x + 7 = 22 denkleminin çözümü nedir?", a:["x = 3","x = 4","x = 5","x = 6","x = 7"], c:2, s:"3x = 15 olduğundan x = 5 bulunur."},
+        {q:"2(x - 3) + 4 = 10 denkleminin çözümü nedir?", a:["x = 4","x = 5","x = 6","x = 7","x = 8"], c:2, s:"2x - 6 + 4 = 10, 2x - 2 = 10, 2x = 12, x = 6."},
+        {q:"(x + 2)(x - 5) işleminin sonucu hangisidir?", a:["x² - 3x - 10","x² + 3x - 10","x² - 3x + 10","x² - 7x - 10","x² + 7x - 10"], c:0, s:"x² - 5x + 2x - 10 = x² - 3x - 10."},
+        {q:"x² - 9 ifadesinin çarpanlarına ayrılmış şekli hangisidir?", a:["(x-3)(x+3)","(x-9)(x+1)","(x-3)²","(x+3)²","x(x-9)"], c:0, s:"İki kare farkı özdeşliğine göre, a² - b² = (a-b)(a+b). x² - 9 = (x-3)(x+3)."},
+        {q:"x² - 5x + 6 = 0 denkleminin kökleri nelerdir?", a:["x=1 ve x=6","x=2 ve x=3","x=-2 ve x=-3","x=-1 ve x=-6","x=2 ve x=-3"], c:1, s:"Önce çarpanlarına ayırırsak, (x-2)(x-3) = 0, x = 2 veya x = 3."},
+        {q:"(2x + 3)² ifadesinin açılımı nedir?", a:["4x² + 9","4x² + 6x + 9","4x² + 12x + 9","2x² + 12x + 9","4x² - 12x + 9"], c:2, s:"(a+b)² = a² + 2ab + b². (2x+3)² = 4x² + 12x + 9."},
+        {q:"x² + 6x + 9 ifadesi hangisine eşittir?", a:["(x+3)²","(x-3)²","(x+6)²","(x+3)(x-3)","(x+9)²"], c:0, s:"x² + 2·3·x + 3² = (x+3)²."},
+        {q:"3x - 2y = 12 ve x = 4 ise y kaçtır?", a:["y = 0","y = 1","y = 2","y = -1","y = 3"], c:0, s:"3(4) - 2y = 12, 12 - 2y = 12, y = 0."},
+        {q:"x² - 4x + 4 = 0 denkleminin kaç gerçek kökü vardır?", a:["0","1","2","3","4"], c:1, s:"(x-2)² = 0, x = 2 tek kök var. Gerçek kök sayısı 1."},
+        {q:"2x² - 8 = 0 denkleminin kökleri nelerdir?", a:["x = ±1","x = ±2","x = ±3","x = ±4","x = ±8"], c:1, s:"x² = 4, x = ±2."},
+        {q:"(x - 4)(x + 4) ifadesinin değeri nedir?", a:["x² - 16","x² + 16","x² - 8x + 16","x² + 8x - 16","x² - 8"], c:0, s:"İki kare farkı özdeşliğini kullanırsak, (x-4)(x+4) = x² - 16."},
+        {q:"5x + 3 = 2x + 18 denkleminin çözümü nedir?", a:["x = 3","x = 4","x = 5","x = 6","x = 7"], c:2, s:"3x = 15, x = 5."},
+        {q:"x² + 2x - 15 = 0 denkleminin pozitif kökü nedir?", a:["x = 2","x = 3","x = 4","x = 5","x = 6"], c:1, s:"(x+5)(x-3) = 0, (x-3)=0 alırsak x = 3 pozitif kök."},
+        {q:"(3x - 1)(2x + 4) işleminin sonucu hangi seçenekte verilmiştir?", a:["6x² + 10x - 4","6x² - 10x - 4","6x² + 14x - 4","6x² - 14x - 4","6x² + 10x + 4"], c:0, s:"6x² + 12x - 2x - 4 = 6x² + 10x - 4."},
+        {q:"x² - 7x + 12 = 0 denkleminin kökleri toplamı nedir?", a:["5","6","7","8","9"], c:2, s:"Köklerin toplamı = -b/a = 7."}
+    ],
+    c2: [
+        {q:"f(x) = 3x - 4 ise f(3) kaçtır?", a:["3","4","5","6","7"], c:2, s:"f(3) = 3(3) - 4 = 5."},
+        {q:"f(x) = x² + 2x - 1 ise f(2) kaçtır?", a:["5","6","7","8","9"], c:2, s:"f(2) = 4 + 4 - 1 = 7."},
+        {q:"f(x) = 2x + 1 ve g(x) = x² ise g(f(2)) kaçtır?", a:["10","15","22","25","30"], c:3, s:"g(f(x)) için önce f, sonra g hesaplanır; f(2) = 5, g(5) = 25."},
+        {q:"f(x) = x² - 4 fonksiyonunun f(0) değeri nedir?", a:["0","-4","4","-2","2"], c:1, s:"f(0) = 0 - 4 = -4."},
+        {q:"f(x) = (2x + 6) / 2 fonksiyonunun en sade hali nedir?", a:["x + 3","x + 6","2x + 3","x","2x"], c:0, s:"(2x+6)/2 = x + 3."},
+        {q:"f(x) = 3x² ise f(-2) kaçtır?", a:["6","9","12","18","36"], c:2, s:"f(-2) = 3·4 = 12."},
+        {q:"f(x) = x + 5 fonksiyonunun tersi f⁻¹(x) nedir?", a:["f⁻¹(x) = x - 5","f⁻¹(x) = 5 - x","f⁻¹(x) = x + 5","f⁻¹(x) = 1/(x+5)","f⁻¹(x) = 5x"], c:0, s:"y = x + 5 → x = y - 5 → f⁻¹(x) = x - 5."},
+        {q:"f(x) = 5 - 2x fonksiyonunda f(x) = 1 ise x kaçtır?", a:["x = 1","x = 2","x = 3","x = 4","x = 5"], c:1, s:"5 - 2x = 1, 2x = 4, x = 2."},
+        {q:"f(x) = |x - 3| fonksiyonunun f(-1) değeri nedir?", a:["1","2","3","4","5"], c:3, s:"f(-1) = |-1 - 3| = |-4| = 4."},
+        {q:"f(x) = x² + 1 ve g(x) = 2x ise f(g(1)) kaçtır?", a:["3","4","5","6","7"], c:2, s:"f(g(x)) için önce g, sonra f hesaplanır; g(1) = 2, f(2) = 4 + 1 = 5."},
+        {q:"f: R → R, f(x) = 2x - 3 fonksiyonunun görüntü kümesi nedir?", a:["Yalnızca pozitif sayılar","R (tüm gerçel sayılar)","Yalnızca negatif sayılar","Sadece tam sayılar","Pozitif tam sayılar"], c:1, s:"f(x) = 2x-3 doğrusal fonksiyonunda x yerine yazılacak her bir reel sayı için f(x) de bir reel sayı olur; görüntü kümesi R'dir."},
+        {q:"f(x) = x² - 2x + 1 fonksiyonunun f(1) değeri nedir?", a:["0","1","2","3","4"], c:0, s:"f(1) = 1 - 2 + 1 = 0."},
+        {q:"f(x) = 3x + 2 fonksiyonu için f(a) = 17 ise a kaçtır?", a:["3","4","5","6","7"], c:2, s:"3a + 2 = 17, a = 5."},
+        {q:"f(x) = x³ ise f(-1) + f(1) kaçtır?", a:["2","-2","0","1","-1"], c:2, s:"f(-1) = -1, f(1) = 1, toplam = 0."},
+        {q:"f(x) = √(x - 2) fonksiyonunun tanım kümesi nedir?", a:["x > 2","x ≥ 2","x < 2","x ≤ 2","Tüm gerçel sayılar"], c:1, s:"x - 2 ≥ 0 → x ≥ 2."}
+    ],
+    c3: [
+        {q:"y = 3x - 5 doğrusunun eğimi kaçtır?", a:["-5","3","-3","5","1/3"], c:1, s:"y = mx + n biçiminde m = 3."},
+        {q:"y = -2x + 7 doğrusunun y eksenini kestiği nokta nedir?", a:["(0,-2)","(0,7)","(7,0)","(-2,0)","(0,-7)"], c:1, s:"x'e 0 vererek y'yi kestiği noktayı buluruz; x=0 için y = 7. Nokta (0,7)."},
+        {q:"Eğimi 4 olan ve (0,-3) noktasından geçen doğrunun denklemi nedir?", a:["y = 4x+3","y = 4x-3","y = -4x+3","y = -3x+4","y = 3x-4"], c:1, s:"y = mx+n: m=4, n=-3 → y = 4x-3."},
+        {q:"A(1,2) ve B(3,8) noktalarından geçen doğrunun eğimi kaçtır?", a:["2","3","4","5","6"], c:1, s:"m = (8-2)/(3-1) = 6/2 = 3."},
+        {q:"y = 2x+4 ve y = 2x-1 doğruları birbirine göre nasıldır?", a:["Kesişir","Diktir","Paraleldir","Çakışır","Kesiştirmez"], c:2, s:"Eğimleri eşit (m=2), y-kesişimleri farklı → paralel."},
+        {q:"Birbirine dik iki doğrunun eğimleri m₁ ve m₂ için m₁·m₂ nedir?", a:["0","1","-1","2","-2"], c:2, s:"Dik doğrular için m₁·m₂ = -1."},
+        {q:"y = x - 3 doğrusunun x eksenini kestiği nokta nedir?", a:["(3,0)","(0,3)","(-3,0)","(0,-3)","(1,-3)"], c:0, s:"y'ye 0 vererek x'i kestiği noktayı buluruz; y=0 için x = 3. Nokta (3,0)."},
+        {q:"y = -x + 5 doğrusunda x = 2 ise y kaçtır?", a:["1","2","3","4","5"], c:2, s:"y = -2 + 5 = 3."},
+        {q:"Eğimi -3 olan ve (2,1) noktasından geçen doğrunun denklemi nedir?", a:["y=-3x+5","y=-3x-5","y=3x+5","y=-3x+7","y=-3x-7"], c:3, s:"y-y1 = m.(x-x1) olduğuna göre, y-1 = -3(x-2) → y = -3x+7."},
+        {q:"y = 4x-8 doğrusunun x eksenini kestiği nokta nedir?", a:["(2,0)","(0,2)","(-2,0)","(0,-8)","(4,0)"], c:0, s:"y'ye 0 vererek x'i kestiği noktayı buluruz; y=0 için x = 2. Nokta (2,0)."},
+        {q:"y = 3x+c doğrusu (1,4) noktasından geçiyorsa c kaçtır?", a:["0","1","2","3","4"], c:1, s:"4 = 3(1)+c → c = 1."},
+        {q:"(4,0) ve (0,2) noktalarını birleştiren doğrunun eğimi nedir?", a:["1/2","-1/2","2","-2","1/4"], c:1, s:"m=(y'lerin farkı)/(x'lerin farkı) olduğuna göre, m = (2-0)/(0-4) = -1/2."},
+        {q:"y = 5x+3 doğrusuna paralel, (0,-1) noktasından geçen doğru nedir?", a:["y=5x+1","y=5x-1","y=-5x+3","y=x-1","y=5x+3"], c:1, s:"Paralel olduğu için m=5. (0,-1) → n=-1 → y=5x-1."},
+        {q:"y = -4x+2 doğrusunun eğimi ve y-eksenini kestiği nokta nedir?", a:["4 ve 2","-4 ve -2","-4 ve 2","4 ve -2","2 ve -4"], c:2, s:"y=mx+n: m=-4, n=2."},
+        {q:"A(0,3) ve B(6,0) noktalarından geçen doğrunun denklemi nedir?", a:["y = -x/2+3","y = -2x+3","y = x/2+3","y = -x+3","y = -x/3+3"], c:0, s:"m = (0-3)/(6-0) = -1/2 → y = -x/2+3."}
+    ],
+    c4: [
+        {q:"x² - 5x + 6 = 0 denkleminin çözüm kümesi nedir?", a:["{1,6}","{2,3}","{-2,-3}","{-1,6}","{1,-6}"], c:1, s:"(x-2)(x-3)=0, x=2 veya x=3."},
+        {q:"a=1, b=4, c=4 için diskriminant Δ kaçtır?", a:["0","4","8","16","32"], c:0, s:"Δ = b²-4ac = 16 - 16 = 0."},
+        {q:"x² + 4x + 3 = 0 denkleminin kökleri nelerdir?", a:["x=1 ve x=3","x=-1 ve x=-3","x=1 ve x=-3","x=-1 ve x=3","x=2 ve x=-2"], c:1, s:"(x+1)(x+3)=0, x=-1 veya x=-3."},
+        {q:"x² - 2x - 8 = 0 denkleminin kökleri çarpımı nedir?", a:["-10","-8","-6","8","10"], c:1, s:"Köklerin çarpımı = c/a = -8."},
+        {q:"2x² - 3x - 2 = 0 denkleminin kökleri nelerdir?", a:["x=2 ve x=-1/2","x=-2 ve x=1/2","x=1 ve x=-2","x=-1 ve x=2","x=2 ve x=1/2"], c:0, s:"(2x+1)(x-2)=0, x=-1/2 veya x=2."},
+        {q:"Kökleri 3 ve -5 olan ikinci dereceden denklem hangisidir?", a:["x²+2x-15=0","x²-2x-15=0","x²+2x+15=0","x²-2x+15=0","x²+8x-15=0"], c:0, s:"(x-3)(x+5) = x²+2x-15 = 0."},
+        {q:"x² - 6x + 9 = 0 denkleminin kaç gerçek kökü vardır?", a:["0","1","2","3","4"], c:1, s:"Δ = b²-4ac = 36 - 36 = 0. Tek gerçek kök: x=3."},
+        {q:"x² + x + 1 = 0 denkleminin diskriminantı kaçtır?", a:["5","3","1","-3","-5"], c:3, s:"Δ = b²-4ac = 1 - 4 = -3. Gerçek kök yoktur."},
+        {q:"x² - 3x = 0 denkleminin kökleri nelerdir?", a:["x=0 ve x=3","x=0 ve x=-3","x=3 ve x=-3","x=1 ve x=3","x=0 ve x=1"], c:0, s:"x(x-3)=0, x=0 veya x=3."},
+        {q:"3x² - 12 = 0 denkleminin kökleri nelerdir?", a:["x=±1","x=±2","x=±3","x=±4","x=±6"], c:1, s:"x² = 4, x = ±2."},
+        {q:"x² - 8x + 15 = 0 denkleminin kökleri toplamı nedir?", a:["5","6","7","8","9"], c:3, s:"Köklerin toplamı = -b/a = 8."},
+        {q:"Kökleri 2 ve 5 olan denklem hangisidir?", a:["x²-7x+10=0","x²+7x+10=0","x²-7x-10=0","x²+3x+10=0","x²-3x+10=0"], c:0, s:"(x-2)(x-5) = x²-7x+10 = 0."},
+        {q:"x² - 4 = 0 denkleminin pozitif kökü kaçtır?", a:["1","2","3","4","√3"], c:1, s:"x²=4, x=±2. Pozitif kök 2."},
+        {q:"4x² - 12x + 9 = 0 denkleminin kökü kaçtır?", a:["x=3","x=-3","x=3/2","x=-3/2","x=9/4"], c:2, s:"(2x-3)²=0, 2x-3=0, x=3/2."},
+        {q:"x² + 5x + 6 = 0 denkleminin kökleri nelerdir?", a:["x=2 ve x=3","x=-2 ve x=3","x=2 ve x=-3","x=-2 ve x=-3","x=1 ve x=6"], c:3, s:"(x+2)(x+3)=0, x=-2 veya x=-3."}
+    ],
+    c5: [
+        {q:"2⁵ işleminin sonucu nedir?", a:["16","24","32","48","64"], c:2, s:"2⁵ = 32."},
+        {q:"√144 işleminin sonucu nedir?", a:["10","11","12","13","14"], c:2, s:"12² = 144, √144 = 12."},
+        {q:"3⁻² işleminin sonucu nedir?", a:["9","1/9","-9","-1/9","6"], c:1, s:"3⁻² = 1/9."},
+        {q:"√18 ifadesinin sadeleştirilmiş hali nedir?", a:["3√2","2√3","6√2","3√6","9√2"], c:0, s:"√18 = √(9·2) = 3√2."},
+        {q:"4^(3/2) işleminin sonucu nedir?", a:["4","6","8","12","16"], c:2, s:"4^(3/2) = (√4)³ = 2³ = 8."},
+        {q:"(2³)² işleminin sonucu nedir?", a:["32","48","64","128","256"], c:2, s:"(2³)² = 2⁶ = 64."},
+        {q:"√50 + √8 ifadesinin sadeleştirilmiş hali nedir?", a:["5√2+2√2","7√2","7√4","√58","5√10"], c:1, s:"5√2 + 2√2 = 7√2."},
+        {q:"x³ · x⁴ işleminin sonucu nedir?", a:["x⁷","x¹²","x","x⁶","x⁸"], c:0, s:"x^(3+4) = x⁷."},
+        {q:"(3x²)³ işleminin sonucu nedir?", a:["9x⁵","27x⁵","9x⁶","27x⁶","81x⁶"], c:3, s:"27 · x⁶ = 27x⁶."},
+        {q:"√75 - √27 ifadesinin sadeleştirilmiş hali nedir?", a:["2√3","3√3","4√3","5√3","6√3"], c:0, s:"5√3 - 3√3 = 2√3."},
+        {q:"5⁰ işleminin sonucu nedir?", a:["0","1","5","25","125"], c:1, s:"Sıfırdan farklı her sayının sıfırıncı kuvveti 1."},
+        {q:"x⁴ / x² işleminin sonucu nedir?", a:["x⁶","x⁸","x²","x","x³"], c:2, s:"x^(4-2) = x²."},
+        {q:"√3 · √12 işleminin sonucu nedir?", a:["3","4","5","6","√26"], c:3, s:"√3·√12 = √36 = 6."},
+        {q:"27^(1/3) işleminin sonucu nedir?", a:["2","3","4","9","27"], c:1, s:"∛27 = 3, çünkü 3³ = 27."},
+        {q:"2x⁻³ ifadesini, kuvvet pozitif olacak biçimde nasıl yazabiliriz?", a:["2/x³","x³/2","-2x³","2x³","-x³/2"], c:0, s:"x⁻³ = 1/x³ → 2x⁻³ = 2/x³."}
+    ],
+    c6: [
+        {q:"log₁₀(1000) ifadesinin değeri nedir?", a:["1","2","3","4","5"], c:2, s:"10³ = 1000 → log₁₀(1000) = 3."},
+        {q:"log₂(16) ifadesinin değeri nedir?", a:["2","3","4","5","8"], c:2, s:"2⁴ = 16 → log₂(16) = 4."},
+        {q:"log₃(1) ifadesinin değeri nedir?", a:["0","1","3","-1","1/3"], c:0, s:"log_a(1) = 0, çünkü a⁰ = 1."},
+        {q:"log₅(25) ifadesinin değeri nedir?", a:["1","2","5","10","25"], c:1, s:"5² = 25 → log₅(25) = 2."},
+        {q:"log₂(8) + log₂(4) ifadesinin değeri nedir?", a:["3","4","5","6","7"], c:2, s:"log₂(8) = 3, log₂(4) = 2. Toplam = 5."},
+        {q:"log(a) + log(b) ifadesinin eşdeğeri nedir?", a:["log(a+b)","log(a-b)","log(a·b)","log(a/b)","a·log(b)"], c:2, s:"Çarpım kuralı: log(a) + log(b) = log(a·b)."},
+        {q:"log₁₀(100) - log₁₀(10) ifadesinin değeri nedir?", a:["0","1","2","10","100"], c:1, s:"log(100/10) = log(10) = 1."},
+        {q:"log₃(81) ifadesinin değeri nedir?", a:["2","3","4","5","6"], c:2, s:"3⁴ = 81 → log₃(81) = 4."},
+        {q:"2·log(5) + log(4) ifadesinin değeri nedir? (log₁₀)", a:["log(14)","log(20)","log(50)","log(100)","2"], c:3, s:"log(25) + log(4) = log(100) = 2."},
+        {q:"log₄(64) ifadesinin değeri nedir?", a:["2","3","4","6","8"], c:1, s:"4³ = 64 → log₄(64) = 3."},
+        {q:"log(a/b) ifadesinin eşdeğeri nedir?", a:["log(a)·log(b)","log(a)+log(b)","log(a)-log(b)","log(b)-log(a)","log(a)/log(b)"], c:2, s:"Bölme kuralı: log(a/b) = log(a) - log(b)."},
+        {q:"log₂(32) ifadesinin değeri nedir?", a:["4","5","6","7","8"], c:1, s:"2⁵ = 32 → log₂(32) = 5."},
+        {q:"10^(log₁₀(7)) ifadesinin değeri nedir?", a:["1","7","10","70","100"], c:1, s:"10^(log₁₀(x)) = x → sonuç 7."},
+        {q:"log₅(5⁴) ifadesinin değeri nedir?", a:["1","4","5","20","625"], c:1, s:"log_a(aⁿ) = n → log₅(5⁴) = 4."},
+        {q:"log₆(36) ifadesinin değeri nedir?", a:["1","2","6","12","36"], c:1, s:"6² = 36 → log₆(36) = 2."}
+    ],
+    c7: [
+        {q:"sin(30°) değeri nedir?", a:["√3/2","1/2","√2/2","1","0"], c:1, s:"sin(30°) = 1/2."},
+        {q:"cos(60°) değeri nedir?", a:["√3/2","1/2","√2/2","1","0"], c:1, s:"cos(60°) = 1/2."},
+        {q:"tan(45°) değeri nedir?", a:["0","1/2","√3/3","√3","1"], c:4, s:"tan(45°) = 1."},
+        {q:"sin²(x) + cos²(x) ifadesinin değeri nedir?", a:["0","1","2","sin(2x)","cos(2x)"], c:1, s:"Temel trigonometrik özdeşlik: sin²x + cos²x = 1."},
+        {q:"cos(0°) değeri nedir?", a:["0","1/2","√2/2","√3/2","1"], c:4, s:"cos(0°) = 1."},
+        {q:"sin(90°) değeri nedir?", a:["0","1/2","√2/2","√3/2","1"], c:4, s:"sin(90°) = 1."},
+        {q:"cos(x) = 0 ise tan(x) için ne söylenebilir?", a:["tan(x)=0","tan(x)=1","tan(x)=-1","Tanımsızdır","tan(x)=sonsuz"], c:3, s:"Payda sıfır olduğundan tan(x) tanımsızdır."},
+        {q:"Dik üçgende a açısının karşısındaki dik kenar 3, hipotenüs 5 ise sina değeri nedir?", a:["3/4","4/5","3/5","5/3","4/3"], c:2, s:"sin = 3/5."},
+        {q:"cos(30°) değeri nedir?", a:["√3/2","1/2","√2/2","1","0"], c:0, s:"cos(30°) = √3/2."},
+        {q:"Dik üçgende a açısına bitişik dik kenar 4, hipotenüs 5 ise cosa değeri nedir?", a:["3/5","4/5","3/4","5/4","4/3"], c:1, s:"cos = 4/5."},
+        {q:"sin(45°) değeri nedir?", a:["√3/2","1/2","√2/2","1","0"], c:2, s:"sin(45°) = √2/2."},
+        {q:"1 + tan²(x) ifadesi hangisine eşittir?", a:["sin²(x)","cos²(x)","sec²(x)","csc²(x)","tan²(x)"], c:2, s:"1 + tan²(x) = sec²(x)."},
+        {q:"sin(0°) değeri nedir?", a:["0","1/2","√2/2","√3/2","1"], c:0, s:"sin(0°) = 0."},
+        {q:"Dik üçgende a açısının karşısındaki kenar 5, bitişik kenarı 12 ise tana değeri nedir?", a:["5/12","12/5","5/13","12/13","13/5"], c:0, s:"tan = 5/12."},
+        {q:"cos(90°) değeri nedir?", a:["0","1/2","√2/2","√3/2","1"], c:0, s:"cos(90°) = 0."}
+    ],
+    c8: [
+        {q:"A(1,2) ve B(4,6) arasındaki uzaklık nedir?", a:["3","4","5","6","7"], c:2, s:"d = √(9+16) = 5."},
+        {q:"Orijin ile (3,4) arasındaki uzaklık kaçtır?", a:["3","4","5","6","7"], c:2, s:"d = √(9+16) = 5."},
+        {q:"A(2,3) ve B(8,3) doğru parçasının orta noktası nedir?", a:["(4,3)","(5,3)","(6,3)","(3,3)","(5,6)"], c:1, s:"Orta nokta = (5, 3)."},
+        {q:"x² + y² = 25 çemberinin merkezi ve yarıçapı nedir?", a:["Merkez(1,1), r=5","Merkez(0,0), r=25","Merkez(0,0), r=5","Merkez(5,5), r=5","Merkez(0,0), r=√5"], c:2, s:"Merkez (0,0), r = 5."},
+        {q:"(x-2)² + (y-3)² = 16 çemberinin yarıçapı kaçtır?", a:["2","3","4","8","16"], c:2, s:"r² = 16 → r = 4."},
+        {q:"A(-1,4) ve B(3,-2) doğru parçasının orta noktası nedir?", a:["(1,1)","(2,2)","(1,2)","(2,1)","(0,2)"], c:0, s:"Orta nokta = (1, 1)."},
+        {q:"Merkezi (3,-1), yarıçapı 4 olan çemberin denklemi nedir?", a:["(x-3)²+(y+1)²=4","(x+3)²+(y-1)²=4","(x-3)²+(y+1)²=16","(x+3)²+(y-1)²=16","(x-3)²+(y-1)²=16"], c:2, s:"M(a,b) olmak üzere çember denklemi: (x-a)² + (y-b)² = r². Buna göre, (x-3)² + (y+1)² = 16."},
+        {q:"A(0,0) ve B(6,8) arasındaki uzaklık nedir?", a:["8","10","12","14","16"], c:1, s:"d = √(36+64) = 10."},
+        {q:"(x+1)² + (y-2)² = 9 çemberinin merkezi nedir?", a:["(1,2)","(-1,2)","(1,-2)","(-1,-2)","(0,0)"], c:1, s:"Merkez (-1, 2)."},
+        {q:"A(1,1) ve B(4,5) arasındaki uzaklık nedir?", a:["3","4","5","6","7"], c:2, s:"d = √(9+16) = 5."},
+        {q:"x²+y²-6x+4y=3 çemberinin merkezi nedir?", a:["(3,-2)","(-3,2)","(6,-4)","(-6,4)","(3,2)"], c:0, s:"M(a,b) olmak üzere çember denklemi: (x-a)² + (y-b)² = r². x²+y²-6x+4y=3 → (x-3)² - 9 + (y+2)² - 4 = 3 → (x-3)² + (y+2)² = 16 → Merkez (3,-2)."},
+        {q:"Orijinden (5,12) noktasına olan uzaklık nedir?", a:["11","12","13","14","15"], c:2, s:"d = √(25+144) = 13."},
+        {q:"A(2,5) ve B(2,-3) doğru parçasının uzunluğu nedir?", a:["4","6","8","10","12"], c:2, s:"d = |5-(-3)| = 8."},
+        {q:"Merkezi (0,0) ve A(3,4) noktasından geçen çemberin denklemi nedir?", a:["x²+y²=5","x²+y²=7","x²+y²=25","x²+y²=49","x²+y²=12"], c:2, s:"r = 5 → x²+y² = 25."},
+        {q:"A(-2,1) ve B(4,9) doğru parçasının orta noktası nedir?", a:["(1,4)","(2,5)","(1,5)","(2,4)","(0,5)"], c:2, s:"Orta nokta = (1, 5)."}
+    ],
+    c9: [
+        {q:"Madeni para atıldığında yazı gelme olasılığı nedir?", a:["1/4","1/3","1/2","2/3","3/4"], c:2, s:"Olasılık = 1/2."},
+        {q:"Zar atıldığında 4'ten büyük sayı gelme olasılığı nedir?", a:["1/6","2/6","3/6","4/6","5/6"], c:1, s:"{5,6} → P = 2/6 = 1/3."},
+        {q:"3 kırmızı 5 mavi toplu torbadan mavi top çekme olasılığı nedir?", a:["3/8","5/8","3/5","5/3","1/2"], c:1, s:"P = 5/8."},
+        {q:"Olasılıkları 1/2 ve 1/3 olan bağımsız olayların birlikte gerçekleşme olasılığı nedir?", a:["1/6","1/4","1/3","2/5","5/6"], c:0, s:"P(A∩B) = 1/2 · 1/3 = 1/6."},
+        {q:"1,2,3,4,5 kartlarından biri çekildiğinde çift sayı gelme olasılığı nedir?", a:["1/5","2/5","3/5","4/5","1/2"], c:1, s:"{2,4} → P = 2/5."},
+        {q:"P(A) = 0.3 ise tamamlayan olayın olasılığı nedir?", a:["0.3","0.5","0.7","0.8","1"], c:2, s:"P(A') = 1 - 0.3 = 0.7."},
+        {q:"İki zar atıldığında her ikisinde 6 gelme olasılığı nedir?", a:["1/36","1/18","1/12","1/6","2/6"], c:0, s:"P = 1/6 · 1/6 = 1/36."},
+        {q:"2 kırmızı 3 beyaz 5 mavi toplu torbadan kırmızı çekme olasılığı nedir?", a:["1/5","2/5","1/2","3/10","1/10"], c:0, s:"P = 2/10 = 1/5."},
+        {q:"52 kartlık desteden as çekme olasılığı nedir?", a:["1/52","1/13","4/52","1/4","4/13"], c:1, s:"P = 4/52 = 1/13."},
+        {q:"P(A)=0.4 ve P(B)=0.5 bağımsız olaylar için P(A ve B) nedir?", a:["0.1","0.2","0.3","0.45","0.9"], c:1, s:"P = 0.4 · 0.5 = 0.2."},
+        {q:"1'den 10'a kadar sayılarda 3'ün katı gelme olasılığı nedir?", a:["1/10","2/10","3/10","4/10","5/10"], c:2, s:"{3,6,9} → P = 3/10."},
+        {q:"Olasılığı 0.25 olan olay yüzde kaçtır?", a:["%15","%20","%25","%30","%35"], c:2, s:"0.25 = %25."},
+        {q:"İki madeni para atıldığında her ikisinin de yazı gelmesi olasılığı nedir?", a:["1/8","1/4","1/3","1/2","3/4"], c:1, s:"P = 1/2 · 1/2 = 1/4."},
+        {q:"Kesin olayın olasılığı nedir?", a:["0","1/2","1/4","3/4","1"], c:4, s:"Kesin olay her zaman gerçekleşir, P = 1."},
+        {q:"Zar atıldığında asal sayı gelme olasılığı nedir?", a:["1/6","2/6","3/6","4/6","5/6"], c:1, s:"{2,3,5} → P = 3/6 = 1/2."}
+    ],
+    c10: [
+        {q:"5! işleminin sonucu nedir?", a:["60","100","120","150","240"], c:2, s:"5! = 120."},
+        {q:"P(5,2) işleminin sonucu nedir?", a:["10","15","20","25","30"], c:2, s:"5·4 = 20."},
+        {q:"C(5,2) kombinasyonunun değeri nedir?", a:["5","10","15","20","25"], c:1, s:"5·4/1.2 = 10."},
+        {q:"3 kişiden sıra önemsiz 2 kişi seçilirse kaç yol vardır?", a:["2","3","4","5","6"], c:1, s:"C(3,2) = 3."},
+        {q:"A,B,C,D harfleri tümü kullanılarak kaç farklı sıralama yapılır?", a:["12","16","20","24","28"], c:3, s:"4! = 24."},
+        {q:"C(6,3) kombinasyonunun değeri nedir?", a:["12","15","18","20","24"], c:3, s:"C(6,3) = 6.5.4/1.2.3 = 20."},
+        {q:"5 kişiden başkan ve yardımcı başkan seçilirse kaç yol vardır?", a:["10","15","20","25","30"], c:2, s:"Sıra önemli: P(5,2) = 5.4 = 20."},
+        {q:"0! kaçtır?", a:["0","1","2","3","tanımsız"], c:1, s:"0! = 1 olarak tanımlanmıştır."},
+        {q:"4 kişiden sıra önemsiz 2 kişi seçilirse kaç yol vardır?", a:["4","6","8","10","12"], c:1, s:"C(4,2) = 4.3/1.2 = 6."},
+        {q:"P(4,4) işleminin sonucu nedir?", a:["12","16","20","24","28"], c:3, s:"P(4,4) = 4! = 24."},
+        {q:"C(n,0) ifadesinin değeri nedir?", a:["0","1","n","n!","tanımsız"], c:1, s:"C(n,0) = 1."},
+        {q:"7 kişilik gruptan 3 kişilik komite kaç farklı kurulabilir?", a:["21","28","35","42","49"], c:2, s:"Sıra önemsiz; C(7,3) = 7.6.5/1.2.3 = 35."},
+        {q:"P(6,2) işleminin sonucu nedir?", a:["12","20","25","30","36"], c:3, s:"P(6,2) = 6·5 = 30."},
+        {q:"C(8,8) kombinasyonunun değeri nedir?", a:["0","1","8","28","64"], c:1, s:"C(8,8) = 1."},
+        {q:"6 kişi bir sıraya kaç farklı biçimde oturabilir?", a:["120","360","480","600","720"], c:4, s:"6! = 720."}
+    ]
+};
+
+const TOPICS = [
+    {t:"Cebirsel İfadeler ve Denklemler", s:"9. Sınıf"},
+    {t:"Fonksiyonlar", s:"10. Sınıf"},
+    {t:"Doğrusal Fonksiyonlar ve Grafik", s:"9. Sınıf"},
+    {t:"İkinci Dereceden Denklemler", s:"10. Sınıf"},
+    {t:"Üslü ve Köklü İfadeler", s:"9. Sınıf"},
+    {t:"Logaritma", s:"10. Sınıf"},
+    {t:"Trigonometri Temelleri", s:"10. Sınıf"},
+    {t:"Analitik Geometri", s:"11. Sınıf"},
+    {t:"Olasılık", s:"11. Sınıf"},
+    {t:"Permütasyon ve Kombinasyon", s:"11. Sınıf"}
+];
+
+let currentQuestions = []; let qIdx = 0; let score = 0; let results = [];
+
+function getUsedHistory() {
+    return JSON.parse(localStorage.getItem('quiz_history_lise') || '{"c1":[],"c2":[],"c3":[],"c4":[],"c5":[],"c6":[],"c7":[],"c8":[],"c9":[],"c10":[]}');
+}
+
+function saveUsedHistory(hist) {
+    localStorage.setItem('quiz_history_lise', JSON.stringify(hist));
+}
+
+function startNewQuiz() {
+    currentQuestions = []; results = []; qIdx = 0; score = 0;
+    let history = getUsedHistory();
+
+    for(let i=1; i<=10; i++) {
+        let cat = 'c' + i;
+        let pool = quizPool[cat];
+        let used = history[cat];
+        let availableIndices = pool.map((_, idx) => idx).filter(idx => !used.includes(idx));
+        if(availableIndices.length === 0) {
+            availableIndices = pool.map((_, idx) => idx);
+            history[cat] = [];
+        }
+        let randomIdx = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+        currentQuestions.push(pool[randomIdx]);
+        history[cat].push(randomIdx);
+    }
+
+    saveUsedHistory(history);
+    document.getElementById('play-area').style.display = 'block';
+    document.getElementById('result-screen').style.display = 'none';
+    showQuestion();
+}
+
+function showQuestion() {
+    const data = currentQuestions[qIdx];
+    const topicInfo = TOPICS[qIdx];
+    document.getElementById('q-info').innerText = `SORU: ${qIdx+1}/10 — ${topicInfo.t.toUpperCase()} (${topicInfo.s})`;
+    document.getElementById('q-content').innerHTML = data.q;
+
+    const area = document.getElementById('options-area');
+    area.innerHTML = '';
+    document.getElementById('hint-box').style.display = 'none';
+
+    const navBtn = document.getElementById('nav-btn');
+    navBtn.style.display = 'none';
+    navBtn.innerText = (qIdx === 9) ? "QUIZ BİTTİ. ANALİZİ GÖR." : "SIRADAKİ SORU";
+
+    data.a.forEach((txt, i) => {
+        const b = document.createElement('button');
+        b.className = 'opt-btn';
+        b.innerHTML = txt;
+        b.onclick = () => {
+            const btns = document.querySelectorAll('.opt-btn');
+            btns.forEach(btn => btn.disabled = true);
+            let isCorrect = (i === data.c);
+            results.push(isCorrect);
+            if(isCorrect) {
+                b.classList.add('correct');
+                score++;
+            } else {
+                b.classList.add('wrong');
+                btns[data.c].classList.add('correct');
+                document.getElementById('hint-box').innerHTML = `<strong>Çözüm:</strong> ${data.s}`;
+                document.getElementById('hint-box').style.display = 'block';
+            }
+            navBtn.style.display = 'block';
+            MathJax.typesetPromise();
+        };
+        area.appendChild(b);
+    });
+    MathJax.typesetPromise();
+}
+
+function handleNext() {
+    if(qIdx < 9) { qIdx++; showQuestion(); }
+    else { finish(); }
+}
+
+function finish() {
+    document.getElementById('play-area').style.display = 'none';
+    document.getElementById('result-screen').style.display = 'block';
+    document.getElementById('score-display').innerText = `${score} / 10`;
+    const tbody = document.getElementById('analysis-body');
+    tbody.innerHTML = '';
+    TOPICS.forEach((topic, i) => {
+        tbody.innerHTML += `<tr><td>${i+1}</td><td>${topic.t}</td><td class="status-${results[i]}">${results[i] ? 'BAŞARILI' : 'GELİŞTİRİLMELİ'}</td></tr>`;
+    });
+}
+
+startNewQuiz();
+</script>
+</body>
+</html>
