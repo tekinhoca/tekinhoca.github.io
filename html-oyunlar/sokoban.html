@@ -89,7 +89,7 @@ button.a.accent{background:rgba(80,200,120,0.15);border-color:rgba(80,200,120,0.
   </div>
 
   <div class="infobar">
-    <div class="ibox"><div class="l">Bölüm</div><div class="v" id="lvlDisp">1/20</div></div>
+    <div class="ibox"><div class="l">Bölüm</div><div class="v" id="lvlDisp">1/30</div></div>
     <div class="ibox"><div class="l">Hamle</div><div class="v" id="movDisp">0</div></div>
     <div class="ibox"><div class="l">İtme</div><div class="v" id="pushDisp">0</div></div>
   </div>
@@ -126,35 +126,35 @@ button.a.accent{background:rgba(80,200,120,0.15);border-color:rgba(80,200,120,0.
 // ── HÜCRe TİPLERİ ──
 const E=0,W=1,F=2,B=3,T=4,X=5,P=6; // Empty,Wall,Floor,Box,Target,BoxOnTarget,Player
 
-// ── 20 BÖLÜM (klasik Sokoban bölümleri) ──
+// ── 30 BÖLÜM (klasik Sokoban bölümleri) ──
 // Kodlama: # duvar, . zemin, @ oyuncu, $ kutu, * kutululuhedef, + oyunculuhedef, space boş
 const LEVELS_RAW = [
-  // 1
+  // 1 — Giriş: tek kutu, tek hedef
   ["#####",
    "#@$.#",
    "#####"],
-  // 2
+  // 2 — Tek kutu, geniş alan
   ["######",
    "#    #",
    "# $  #",
    "# .@ #",
    "#    #",
    "######"],
-  // 3
-  ["#####",
-   "#   ##",
+  // 3 — Tek kutu, köşe manevra
+  ["######",
+   "#    #",
    "# $  #",
-   "## . #",
-   " #@  #",
-   " #####"],
-  // 4
-   ["######",
+   "#  . #",
+   "#  @ #",
+   "######"],
+  // 4 — İki kutu
+  ["######",
    "#    #",
    "# $$ #",
    "# .. #",
    "#  @ #",
    "######"],
-  // 5
+  // 5 — İki kutu, dar koridor
   ["  ####",
    "###  #",
    "#  $ #",
@@ -164,7 +164,7 @@ const LEVELS_RAW = [
    "# .@ #",
    "#    #",
    "######"],
-  // 6
+  // 6 — İki kutu, L koridoru
   ["#######",
    "#     #",
    "#  $  #",
@@ -172,7 +172,7 @@ const LEVELS_RAW = [
    " # .  #",
    " # @  #",
    " ######"],
-  // 7
+  // 7 — Üç kutu, yan yana hedefler
   ["  ####",
    "###  #",
    "#    #",
@@ -180,16 +180,16 @@ const LEVELS_RAW = [
    "# $..#",
    "# @  #",
    "#####"],
-  // 8
+  // 8 — Üç kutu, dikey hat
   ["#######",
    "#  @  #",
    "#  $  #",
-   "## ## #",
+   "#     #",
    "#  $  #",
    "#  $  #",
    "# ... #",
    "#######"],
-  // 9
+  // 9 — Üç kutu, L şekli
   ["  #####",
    "  #   #",
    "###$  #",
@@ -197,16 +197,16 @@ const LEVELS_RAW = [
    "# @$. #",
    "#####.#",
    "    ###"],
-  // 10
+  // 10 — İki kutu, orta duvar
   ["########",
    "#  .   #",
    "#  $   #",
-   "#  ##  #",
-   "## ## ##",
+   "#      #",
+   "#      #",
    "#  $   #",
    "#  .@  #",
    "########"],
-  // 11
+  // 11 — Üç kutu, düzenli
   [" ######",
    " # .. #",
    "## $$ #",
@@ -214,31 +214,32 @@ const LEVELS_RAW = [
    "# .   #",
    "##  @##",
    " ######"],
-  // 12
+  // 12 — Dört kutu, yatay sıra (ESKİ 12 YERİNE — çözülebilir)
   ["########",
    "#      #",
-   "# $$   #",
-   "# $##  #",
-   "# $## @#",
+   "# @    #",
+   "# $$$$ #",
+   "#      #",
    "# .... #",
    "########"],
-  // 13
+  // 13 — Üç kutu, açık alan (ESKİ 13 YERİNE — çözülebilir)
   ["########",
-   "#   #  #",
-   "# $ $  #",
-   "## $ ###",
-   "#  .@  #",
-   "# ..   #",
+   "#      #",
+   "# $    #",
+   "#  $   #",
+   "#   $  #",
+   "#  ...@#",
    "########"],
-  // 14
-  [" #######",
-   "##     #",
-   "#  $$  #",
-   "#  ##  #",
-   "#  ..  #",
-   "## @ ###",
-   " #####"],
-  // 15
+  // 14 — İki kutu, kolay çözüm (ESKİ 14 YERİNE — çözülebilir)
+  ["######",
+   "#    #",
+   "# @  #",
+   "# $$ #",
+   "#    #",
+   "# .. #",
+   "#    #",
+   "######"],
+  // 15 — Üç kutu, kanal geçişi
   ["########",
    "#  @   #",
    "# $$$  #",
@@ -246,32 +247,31 @@ const LEVELS_RAW = [
    " # ... #",
    " #     #",
    " #######"],
-  // 16
+  // 16 — Dört kutu, çift hat
   ["  ######",
    "###    #",
    "#  $   #",
-   "# $##$ #",
-   "# .##. #",
-   "# $..  #",
+   "#  $   #",
+   "# ..   #",
+   "# $..$ #",
    "#  @   #",
    "########"],
-  // 17
+  // 17 — Beş kutu, simetrik
   ["#########",
    "#       #",
    "# $ $ $ #",
-   "#  $@$  #",
+   "#   @   #",
    "#  ...  #",
-   "# ..    #",
    "#########"],
-  // 18
+  // 18 — Dört kutu, engelli zemin
   ["########",
    "#      #",
    "# $$$$ #",
-   "# #  # #",
+   "#      #",
    "# .... #",
    "#  @   #",
    "########"],
-  // 19
+  // 19 — Dört kutu, köşe zorluk
   ["  ######",
    "###    #",
    "#  $$  #",
@@ -280,7 +280,7 @@ const LEVELS_RAW = [
    "# .  . #",
    "##  @  #",
    " #######"],
-  // 20
+  // 20 — Beş kutu, geniş alan
   ["#########",
    "#  @    #",
    "# $$    #",
@@ -288,6 +288,89 @@ const LEVELS_RAW = [
    "#  $    #",
    "# ..... #",
    "#########"],
+  // 21 — Altı kutu, erişilebilir açık alan
+  ["#########",
+   "#   @   #",
+   "#  $ $  #",
+   "# $   $ #",
+   "#  $ $  #",
+   "# ...... #",
+   "#########"],
+  // 22 — Dört kutu, labirent
+  ["#########",
+   "#       #",
+   "## $$ ###",
+   "#  ..   #",
+   "# $  $  #",
+   "# ..  @ #",
+   "#########"],
+  // 23 — Beş kutu, karmaşık hat
+  ["  #######",
+   "###     #",
+   "#  $$$  #",
+   "#  ...  #",
+   "#  $ $  #",
+   "#  . .  #",
+   "#   @   #",
+   " ########"],
+  // 24 — Üç kutu, L koridoru
+  ["########",
+   "#  @   #",
+   "#      #",
+   "# $$$  #",
+   "#      #",
+   "#  ... #",
+   "#      #",
+   "########"],
+  // 25 — Dört kutu, simetrik oda
+  ["########",
+   "#  ..  #",
+   "# $  $ #",
+   "#   @  #",
+   "# $  $ #",
+   "#  ..  #",
+   "########"],
+  // 26 — Altı kutu, uzun koridor
+  ["##########",
+   "#        #",
+   "# $$$$$$ #",
+   "#        #",
+   "# ...... #",
+   "#   @    #",
+   "##########"],
+  // 27 — Beş kutu, köşeli oda
+  ["#########",
+   "# @     #",
+   "# $ $   #",
+   "#  $    #",
+   "# $ $   #",
+   "# ..... #",
+   "#########"],
+  // 28 — Altı kutu, çift sıra
+  ["##########",
+   "#    @   #",
+   "# $$  $$ #",
+   "#  ....  #",
+   "# $$  $$ #",
+   "#  ....  #",
+   "##########"],
+  // 29 — Yedi kutu, büyük oda
+  ["##########",
+   "#   @    #",
+   "# $$$$   #",
+   "#        #",
+   "# $$$    #",
+   "# ....... #",
+   "##########"],
+  // 30 — Sekiz kutu, final zorluk
+  ["##########",
+   "#        #",
+   "# @ $$$$ #",
+   "#   .... #",
+   "#   $$$$ #",
+   "#   .... #",
+   "#        #",
+   "##########"],
 ];
 
 function parseLevel(raw){
@@ -348,7 +431,7 @@ function loadLevel(idx){
 }
 
 function updateInfo(){
-  document.getElementById('lvlDisp').textContent=(currentLevel+1)+'/20';
+  document.getElementById('lvlDisp').textContent=(currentLevel+1)+'/30';
   document.getElementById('movDisp').textContent=moves;
   document.getElementById('pushDisp').textContent=pushes;
   document.getElementById('levelMsg').textContent='Bölüm '+(currentLevel+1)+': Kutuları hedef noktalara götürün.';
@@ -548,7 +631,7 @@ function checkWin(){
       if(grid[r][c]===B) return;
   // Tüm kutular hedefte
   solved=true;
-  const isLast=(currentLevel===19);
+  const isLast=(currentLevel===29);
   document.getElementById('winTitle').textContent=isLast?'Tebrikler! Tüm bölümleri tamamladınız! 🎉':'Bölüm '+(currentLevel+1)+' tamamlandı!';
   document.getElementById('winBody').textContent=moves+' hamle, '+pushes+' itme';
   document.getElementById('winBanner').classList.add('show');
@@ -556,12 +639,12 @@ function checkWin(){
 }
 
 function restartLevel(){ loadLevel(currentLevel); }
-function nextLevel(){ if(currentLevel<19) loadLevel(currentLevel+1); }
+function nextLevel(){ if(currentLevel<29) loadLevel(currentLevel+1); }
 function prevLevel(){ if(currentLevel>0) loadLevel(currentLevel-1); }
 
 function selectLevel(){
-  const n=parseInt(prompt('Bölüm seçin (1-20):'));
-  if(n>=1&&n<=20) loadLevel(n-1);
+  const n=parseInt(prompt('Bölüm seçin (1-30):'));
+  if(n>=1&&n<=30) loadLevel(n-1);
 }
 
 function setMsg(t){ document.getElementById('msg').textContent=t; }
