@@ -130,69 +130,6 @@ main { max-width: 960px; }
 .game-thumb:nth-child(9){animation-delay:0.27s}.game-thumb:nth-child(10){animation-delay:0.30s}
 .game-thumb:nth-child(11){animation-delay:0.33s}.game-thumb:nth-child(12){animation-delay:0.36s}
 
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(18,16,14,0.92);
-  z-index: 1000;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-}
-.modal-overlay.open { display: flex; }
-.modal-box {
-  position: relative;
-  background: var(--ink);
-  border: 2px solid var(--gold);
-  border-radius: 4px;
-  padding: 12px;
-  width: min(780px, 96vw);
-  max-height: 92vh;
-  display: flex;
-  flex-direction: column;
-}
-.modal-close {
-  position: absolute;
-  top: -16px; right: -16px;
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: var(--rust);
-  border: 2px solid var(--gold);
-  color: var(--cream);
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
-  z-index: 10;
-}
-.modal-close:hover { background: #c04010; }
-.modal-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.9rem;
-  color: var(--gold);
-  margin-bottom: 10px;
-  text-align: center;
-  letter-spacing: 0.05em;
-  flex-shrink: 0;
-}
-#game-container {
-  width: 100%;
-  flex: 1;
-  overflow: hidden;
-  background: #1a1208;
-  border-radius: 2px;
-  min-height: 560px;
-}
-#game-container iframe {
-  width: 100%;
-  height: 100%;
-  min-height: 560px;
-  border: none;
-  display: block;
-}
 </style>
 </head>
 <body>
@@ -804,12 +741,6 @@ main { max-width: 960px; }
   </div>
 
 </main>
-
-<!-- MODAL -->
-<div class="modal-overlay" id="gameModal">
-  <div class="modal-box">
-    <button class="modal-close" id="modalClose" aria-label="Kapat">✕</button>
-    <div class="modal-title" id="modalTitle"></div>
     <div id="game-container"></div>
   </div>
 </div>
@@ -845,30 +776,13 @@ main { max-width: 960px; }
     'hafiza':         'html-oyunlar/hafiza.html'
   };
 
-  const modal         = document.getElementById('gameModal');
-  const modalTitle    = document.getElementById('modalTitle');
-  const gameContainer = document.getElementById('game-container');
-  const closeBtn      = document.getElementById('modalClose');
-
   document.querySelectorAll('.game-thumb:not(.coming-soon)').forEach(function(card){
     card.addEventListener('click', function(){
       const file = GAME_FILES[card.dataset.game];
       if (!file) return;
-      modalTitle.textContent = card.dataset.title;
-      gameContainer.innerHTML = '<iframe src="' + file + '" allowfullscreen></iframe>';
-      modal.classList.add('open');
-      document.body.style.overflow = 'hidden';
+      window.open(file, '_blank');
     });
   });
-
-  function closeModal(){
-    modal.classList.remove('open');
-    gameContainer.innerHTML = '';
-    document.body.style.overflow = '';
-  }
-  closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', function(e){ if(e.target===modal) closeModal(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
 </script>
 </body>
 </html>
