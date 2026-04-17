@@ -12,15 +12,12 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 
 .top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
 .game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
-.sel-row{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
-.sel-row select{background:#100a10;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
 
 .infobar{display:flex;gap:6px}
 .ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:4px 6px;flex:1;text-align:center}
 .ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
 .ibox .v{font-size:13px;font-weight:700;color:#c8960c}
 
-/* PARÇA PALETİ */
 .palette-label{font-size:10px;color:rgba(247,242,232,0.3);text-align:center;text-transform:uppercase;letter-spacing:.08em}
 .palette{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;padding:4px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:5px}
 .piece-btn{
@@ -34,11 +31,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .piece-btn.placed{opacity:0.3;cursor:default;pointer-events:none}
 .piece-btn canvas{display:block}
 
-/* IZGARA */
 .grid-wrap{display:flex;justify-content:center}
 .grid-canvas{display:block;cursor:pointer;touch-action:none}
 
-/* KONTROLLER */
 .controls{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
 .cbtn{
   padding:4px 10px;border-radius:4px;
@@ -69,15 +64,11 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 <div class="wrap">
   <div class="top-bar">
     <div class="game-title">Pentomino</div>
-    <div class="sel-row">
-      <label>Bulmaca:</label>
-      <select id="puzSel"></select>
-    </div>
   </div>
 
   <div class="infobar">
     <div class="ibox"><div class="l">Izgara</div><div class="v">6×10</div></div>
-    <div class="ibox"><div class="l">Bulmaca</div><div class="v" id="puzDisp">1/20</div></div>
+    <div class="ibox"><div class="l">Parça</div><div class="v">12</div></div>
     <div class="ibox"><div class="l">Kalan</div><div class="v" id="remDisp">12</div></div>
   </div>
 
@@ -85,8 +76,8 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   <div class="palette" id="palette"></div>
 
   <div class="controls">
-    <button class="cbtn" id="btnRotate" onclick="rotatePiece()">↻ Döndür</button>
-    <button class="cbtn" id="btnMirror" onclick="mirrorPiece()">↔ Yansıt</button>
+    <button class="cbtn" onclick="rotatePiece()">↻ Döndür</button>
+    <button class="cbtn" onclick="mirrorPiece()">↔ Yansıt</button>
     <button class="cbtn" onclick="removeLast()">↩ Son Geri Al</button>
   </div>
 
@@ -97,85 +88,37 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   <div class="msg" id="msg">Bir parça seçin, ardından ızgarada bir hücreye tıklayın.</div>
   <div class="win-banner" id="winBanner">
     <h2>Tebrikler! 🎉</h2>
-    <p>Tüm parçaları yerleştirdiniz!</p>
+    <p id="winBody">Tüm parçaları yerleştirdiniz!</p>
   </div>
 
   <div class="br-btns">
-    <button class="a" onclick="restartPuzzle()">&#8635; Yeniden</button>
-    <button class="a" onclick="revealAll()">&#128065; Çöz</button>
+    <button class="a" onclick="restartGame()">&#8635; Yeniden</button>
     <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
   </div>
 
   <div class="info-box" id="infoBox">
     <b>Pentomino Nasıl Oynanır?</b><br>
     12 pentomino parçasının her biri 5 kareden oluşur. Hepsini 6×10 ızgaraya sığdırın.<br>
-    <b>Seç:</b> Alttaki parça paletinden bir parçaya tıklayın.<br>
+    <b>Seç:</b> Parça paletinden bir parçaya tıklayın.<br>
     <b>Yerleştir:</b> Izgarada istediğiniz hücreye tıklayın.<br>
     <b>Döndür / Yansıt:</b> Yerleştirmeden önce parçayı döndürebilir veya yansıtabilirsiniz.<br>
-    Parça bir hücreye sığmazsa ızgara kırmızı flash yapar.
+    <b>Geri Al:</b> En son yerleştirilen parçayı geri alır.<br>
+    Parça sığmazsa ızgara kırmızıya flash yapar.<br>
+    <b>İpucu:</b> 6×10 ızgaranın bilinen 2339 farklı çözümü vardır. Birini bulmaya çalışın!
   </div>
 </div>
 
 <script>
-const PUZZLES=[
-  {grid:[["P", "P", "Y", "Y", "Y", "Y", "X", "T", "T", "T"], ["P", "P", "W", "Y", "F", "X", "X", "X", "T", "I"], ["P", "W", "W", "F", "F", "F", "X", "N", "T", "I"], ["W", "W", "Z", "V", "U", "F", "U", "N", "N", "I"], ["Z", "Z", "Z", "V", "U", "U", "U", "L", "N", "I"], ["Z", "V", "V", "V", "L", "L", "L", "L", "N", "I"]],placements:[{"name": "P", "cells": [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0]]}, {"name": "Y", "cells": [[0, 2], [0, 3], [0, 4], [0, 5], [1, 3]]}, {"name": "X", "cells": [[0, 6], [1, 5], [1, 6], [1, 7], [2, 6]]}, {"name": "T", "cells": [[0, 7], [0, 8], [0, 9], [1, 8], [2, 8]]}, {"name": "W", "cells": [[1, 2], [2, 1], [2, 2], [3, 0], [3, 1]]}, {"name": "F", "cells": [[1, 4], [2, 3], [2, 4], [2, 5], [3, 5]]}, {"name": "I", "cells": [[1, 9], [2, 9], [3, 9], [4, 9], [5, 9]]}, {"name": "N", "cells": [[2, 7], [3, 7], [3, 8], [4, 8], [5, 8]]}, {"name": "Z", "cells": [[3, 2], [4, 0], [4, 1], [4, 2], [5, 0]]}, {"name": "V", "cells": [[3, 3], [4, 3], [5, 1], [5, 2], [5, 3]]}, {"name": "U", "cells": [[3, 4], [3, 6], [4, 4], [4, 5], [4, 6]]}, {"name": "L", "cells": [[4, 7], [5, 4], [5, 5], [5, 6], [5, 7]]}]},
-  {grid:[["N", "N", "N", "Y", "Y", "Y", "Y", "Z", "P", "P"], ["F", "F", "N", "N", "Y", "Z", "Z", "Z", "P", "P"], ["L", "F", "F", "W", "T", "Z", "X", "U", "U", "P"], ["L", "F", "W", "W", "T", "X", "X", "X", "U", "V"], ["L", "W", "W", "T", "T", "T", "X", "U", "U", "V"], ["L", "L", "I", "I", "I", "I", "I", "V", "V", "V"]],placements:[{"name": "N", "cells": [[0, 0], [0, 1], [0, 2], [1, 2], [1, 3]]}, {"name": "Y", "cells": [[0, 3], [0, 4], [0, 5], [0, 6], [1, 4]]}, {"name": "Z", "cells": [[0, 7], [1, 5], [1, 6], [1, 7], [2, 5]]}, {"name": "P", "cells": [[0, 8], [0, 9], [1, 8], [1, 9], [2, 9]]}, {"name": "F", "cells": [[1, 0], [1, 1], [2, 1], [2, 2], [3, 1]]}, {"name": "L", "cells": [[2, 0], [3, 0], [4, 0], [5, 0], [5, 1]]}, {"name": "W", "cells": [[2, 3], [3, 2], [3, 3], [4, 1], [4, 2]]}, {"name": "T", "cells": [[2, 4], [3, 4], [4, 3], [4, 4], [4, 5]]}, {"name": "X", "cells": [[2, 6], [3, 5], [3, 6], [3, 7], [4, 6]]}, {"name": "U", "cells": [[2, 7], [2, 8], [3, 8], [4, 7], [4, 8]]}, {"name": "V", "cells": [[3, 9], [4, 9], [5, 7], [5, 8], [5, 9]]}, {"name": "I", "cells": [[5, 2], [5, 3], [5, 4], [5, 5], [5, 6]]}]},
-  {grid:[["W", "N", "N", "V", "V", "V", "U", "U", "U", "L"], ["W", "W", "N", "N", "N", "V", "U", "X", "U", "L"], ["Y", "W", "W", "F", "T", "V", "X", "X", "X", "L"], ["Y", "F", "F", "F", "T", "Z", "Z", "X", "L", "L"], ["Y", "Y", "F", "T", "T", "T", "Z", "P", "P", "P"], ["Y", "I", "I", "I", "I", "I", "Z", "Z", "P", "P"]],placements:[{"name": "W", "cells": [[0, 0], [1, 0], [1, 1], [2, 1], [2, 2]]}, {"name": "N", "cells": [[0, 1], [0, 2], [1, 2], [1, 3], [1, 4]]}, {"name": "V", "cells": [[0, 3], [0, 4], [0, 5], [1, 5], [2, 5]]}, {"name": "U", "cells": [[0, 6], [0, 7], [0, 8], [1, 6], [1, 8]]}, {"name": "L", "cells": [[0, 9], [1, 9], [2, 9], [3, 8], [3, 9]]}, {"name": "X", "cells": [[1, 7], [2, 6], [2, 7], [2, 8], [3, 7]]}, {"name": "Y", "cells": [[2, 0], [3, 0], [4, 0], [4, 1], [5, 0]]}, {"name": "F", "cells": [[2, 3], [3, 1], [3, 2], [3, 3], [4, 2]]}, {"name": "T", "cells": [[2, 4], [3, 4], [4, 3], [4, 4], [4, 5]]}, {"name": "Z", "cells": [[3, 5], [3, 6], [4, 6], [5, 6], [5, 7]]}, {"name": "P", "cells": [[4, 7], [4, 8], [4, 9], [5, 8], [5, 9]]}, {"name": "I", "cells": [[5, 1], [5, 2], [5, 3], [5, 4], [5, 5]]}]},
-  {grid:[["I", "I", "I", "I", "I", "P", "P", "V", "V", "V"], ["U", "U", "U", "Z", "Z", "P", "P", "W", "W", "V"], ["U", "X", "U", "T", "Z", "P", "W", "W", "N", "V"], ["X", "X", "X", "T", "Z", "Z", "W", "F", "N", "N"], ["L", "X", "T", "T", "T", "Y", "F", "F", "F", "N"], ["L", "L", "L", "L", "Y", "Y", "Y", "Y", "F", "N"]],placements:[{"name": "I", "cells": [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]}, {"name": "P", "cells": [[0, 5], [0, 6], [1, 5], [1, 6], [2, 5]]}, {"name": "V", "cells": [[0, 7], [0, 8], [0, 9], [1, 9], [2, 9]]}, {"name": "U", "cells": [[1, 0], [1, 1], [1, 2], [2, 0], [2, 2]]}, {"name": "Z", "cells": [[1, 3], [1, 4], [2, 4], [3, 4], [3, 5]]}, {"name": "W", "cells": [[1, 7], [1, 8], [2, 6], [2, 7], [3, 6]]}, {"name": "X", "cells": [[2, 1], [3, 0], [3, 1], [3, 2], [4, 1]]}, {"name": "T", "cells": [[2, 3], [3, 3], [4, 2], [4, 3], [4, 4]]}, {"name": "N", "cells": [[2, 8], [3, 8], [3, 9], [4, 9], [5, 9]]}, {"name": "F", "cells": [[3, 7], [4, 6], [4, 7], [4, 8], [5, 8]]}, {"name": "L", "cells": [[4, 0], [5, 0], [5, 1], [5, 2], [5, 3]]}, {"name": "Y", "cells": [[4, 5], [5, 4], [5, 5], [5, 6], [5, 7]]}]},
-  {grid:[["U", "U", "X", "N", "N", "N", "T", "T", "T", "Y"], ["U", "X", "X", "X", "W", "N", "N", "T", "Y", "Y"], ["U", "U", "X", "W", "W", "P", "P", "T", "F", "Y"], ["V", "Z", "W", "W", "P", "P", "P", "F", "F", "Y"], ["V", "Z", "Z", "Z", "L", "L", "L", "L", "F", "F"], ["V", "V", "V", "Z", "L", "I", "I", "I", "I", "I"]],placements:[{"name": "U", "cells": [[0, 0], [0, 1], [1, 0], [2, 0], [2, 1]]}, {"name": "X", "cells": [[0, 2], [1, 1], [1, 2], [1, 3], [2, 2]]}, {"name": "N", "cells": [[0, 3], [0, 4], [0, 5], [1, 5], [1, 6]]}, {"name": "T", "cells": [[0, 6], [0, 7], [0, 8], [1, 7], [2, 7]]}, {"name": "Y", "cells": [[0, 9], [1, 8], [1, 9], [2, 9], [3, 9]]}, {"name": "W", "cells": [[1, 4], [2, 3], [2, 4], [3, 2], [3, 3]]}, {"name": "P", "cells": [[2, 5], [2, 6], [3, 4], [3, 5], [3, 6]]}, {"name": "F", "cells": [[2, 8], [3, 7], [3, 8], [4, 8], [4, 9]]}, {"name": "V", "cells": [[3, 0], [4, 0], [5, 0], [5, 1], [5, 2]]}, {"name": "Z", "cells": [[3, 1], [4, 1], [4, 2], [4, 3], [5, 3]]}, {"name": "L", "cells": [[4, 4], [4, 5], [4, 6], [4, 7], [5, 4]]}, {"name": "I", "cells": [[5, 5], [5, 6], [5, 7], [5, 8], [5, 9]]}]},
-  {grid:[["P", "P", "Z", "Z", "F", "I", "I", "I", "I", "I"], ["P", "P", "Y", "Z", "F", "F", "F", "T", "T", "T"], ["P", "N", "Y", "Z", "Z", "F", "W", "W", "T", "L"], ["N", "N", "Y", "Y", "V", "W", "W", "X", "T", "L"], ["N", "U", "Y", "U", "V", "W", "X", "X", "X", "L"], ["N", "U", "U", "U", "V", "V", "V", "X", "L", "L"]],placements:[{"name": "P", "cells": [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0]]}, {"name": "Z", "cells": [[0, 2], [0, 3], [1, 3], [2, 3], [2, 4]]}, {"name": "F", "cells": [[0, 4], [1, 4], [1, 5], [1, 6], [2, 5]]}, {"name": "I", "cells": [[0, 5], [0, 6], [0, 7], [0, 8], [0, 9]]}, {"name": "Y", "cells": [[1, 2], [2, 2], [3, 2], [3, 3], [4, 2]]}, {"name": "T", "cells": [[1, 7], [1, 8], [1, 9], [2, 8], [3, 8]]}, {"name": "N", "cells": [[2, 1], [3, 0], [3, 1], [4, 0], [5, 0]]}, {"name": "W", "cells": [[2, 6], [2, 7], [3, 5], [3, 6], [4, 5]]}, {"name": "L", "cells": [[2, 9], [3, 9], [4, 9], [5, 8], [5, 9]]}, {"name": "V", "cells": [[3, 4], [4, 4], [5, 4], [5, 5], [5, 6]]}, {"name": "X", "cells": [[3, 7], [4, 6], [4, 7], [4, 8], [5, 7]]}, {"name": "U", "cells": [[4, 1], [4, 3], [5, 1], [5, 2], [5, 3]]}]},
-  {grid:[["F", "N", "N", "N", "W", "W", "L", "L", "L", "L"], ["F", "F", "F", "N", "N", "W", "W", "P", "P", "L"], ["Y", "F", "X", "U", "U", "T", "W", "P", "P", "P"], ["Y", "X", "X", "X", "U", "T", "T", "T", "Z", "V"], ["Y", "Y", "X", "U", "U", "T", "Z", "Z", "Z", "V"], ["Y", "I", "I", "I", "I", "I", "Z", "V", "V", "V"]],placements:[{"name": "F", "cells": [[0, 0], [1, 0], [1, 1], [1, 2], [2, 1]]}, {"name": "N", "cells": [[0, 1], [0, 2], [0, 3], [1, 3], [1, 4]]}, {"name": "W", "cells": [[0, 4], [0, 5], [1, 5], [1, 6], [2, 6]]}, {"name": "L", "cells": [[0, 6], [0, 7], [0, 8], [0, 9], [1, 9]]}, {"name": "P", "cells": [[1, 7], [1, 8], [2, 7], [2, 8], [2, 9]]}, {"name": "Y", "cells": [[2, 0], [3, 0], [4, 0], [4, 1], [5, 0]]}, {"name": "X", "cells": [[2, 2], [3, 1], [3, 2], [3, 3], [4, 2]]}, {"name": "U", "cells": [[2, 3], [2, 4], [3, 4], [4, 3], [4, 4]]}, {"name": "T", "cells": [[2, 5], [3, 5], [3, 6], [3, 7], [4, 5]]}, {"name": "Z", "cells": [[3, 8], [4, 6], [4, 7], [4, 8], [5, 6]]}, {"name": "V", "cells": [[3, 9], [4, 9], [5, 7], [5, 8], [5, 9]]}, {"name": "I", "cells": [[5, 1], [5, 2], [5, 3], [5, 4], [5, 5]]}]},
-  {grid:[["F", "V", "V", "V", "T", "N", "N", "N", "U", "U"], ["F", "F", "F", "V", "T", "T", "T", "N", "N", "U"], ["Y", "F", "X", "V", "T", "W", "Z", "Z", "U", "U"], ["Y", "X", "X", "X", "W", "W", "Z", "P", "P", "P"], ["Y", "Y", "X", "W", "W", "Z", "Z", "P", "P", "L"], ["Y", "I", "I", "I", "I", "I", "L", "L", "L", "L"]],placements:[{"name": "F", "cells": [[0, 0], [1, 0], [1, 1], [1, 2], [2, 1]]}, {"name": "V", "cells": [[0, 1], [0, 2], [0, 3], [1, 3], [2, 3]]}, {"name": "T", "cells": [[0, 4], [1, 4], [1, 5], [1, 6], [2, 4]]}, {"name": "N", "cells": [[0, 5], [0, 6], [0, 7], [1, 7], [1, 8]]}, {"name": "U", "cells": [[0, 8], [0, 9], [1, 9], [2, 8], [2, 9]]}, {"name": "Y", "cells": [[2, 0], [3, 0], [4, 0], [4, 1], [5, 0]]}, {"name": "X", "cells": [[2, 2], [3, 1], [3, 2], [3, 3], [4, 2]]}, {"name": "W", "cells": [[2, 5], [3, 4], [3, 5], [4, 3], [4, 4]]}, {"name": "Z", "cells": [[2, 6], [2, 7], [3, 6], [4, 5], [4, 6]]}, {"name": "P", "cells": [[3, 7], [3, 8], [3, 9], [4, 7], [4, 8]]}, {"name": "L", "cells": [[4, 9], [5, 6], [5, 7], [5, 8], [5, 9]]}, {"name": "I", "cells": [[5, 1], [5, 2], [5, 3], [5, 4], [5, 5]]}]},
-  {grid:[["W", "N", "N", "L", "L", "L", "L", "U", "U", "U"], ["W", "W", "N", "N", "N", "X", "L", "U", "P", "U"], ["T", "W", "W", "F", "X", "X", "X", "P", "P", "V"], ["T", "T", "T", "F", "F", "X", "Z", "P", "P", "V"], ["T", "Y", "F", "F", "Z", "Z", "Z", "V", "V", "V"], ["Y", "Y", "Y", "Y", "Z", "I", "I", "I", "I", "I"]],placements:[{"name": "W", "cells": [[0, 0], [1, 0], [1, 1], [2, 1], [2, 2]]}, {"name": "N", "cells": [[0, 1], [0, 2], [1, 2], [1, 3], [1, 4]]}, {"name": "L", "cells": [[0, 3], [0, 4], [0, 5], [0, 6], [1, 6]]}, {"name": "U", "cells": [[0, 7], [0, 8], [0, 9], [1, 7], [1, 9]]}, {"name": "X", "cells": [[1, 5], [2, 4], [2, 5], [2, 6], [3, 5]]}, {"name": "P", "cells": [[1, 8], [2, 7], [2, 8], [3, 7], [3, 8]]}, {"name": "T", "cells": [[2, 0], [3, 0], [3, 1], [3, 2], [4, 0]]}, {"name": "F", "cells": [[2, 3], [3, 3], [3, 4], [4, 2], [4, 3]]}, {"name": "V", "cells": [[2, 9], [3, 9], [4, 7], [4, 8], [4, 9]]}, {"name": "Z", "cells": [[3, 6], [4, 4], [4, 5], [4, 6], [5, 4]]}, {"name": "Y", "cells": [[4, 1], [5, 0], [5, 1], [5, 2], [5, 3]]}, {"name": "I", "cells": [[5, 5], [5, 6], [5, 7], [5, 8], [5, 9]]}]},
-  {grid:[["Z", "Z", "N", "N", "N", "L", "L", "U", "U", "U"], ["I", "Z", "W", "W", "N", "N", "L", "U", "X", "U"], ["I", "Z", "Z", "W", "W", "Y", "L", "X", "X", "X"], ["I", "P", "P", "T", "W", "Y", "L", "F", "X", "V"], ["I", "P", "P", "T", "Y", "Y", "F", "F", "F", "V"], ["I", "P", "T", "T", "T", "Y", "F", "V", "V", "V"]],placements:[{"name": "Z", "cells": [[0, 0], [0, 1], [1, 1], [2, 1], [2, 2]]}, {"name": "N", "cells": [[0, 2], [0, 3], [0, 4], [1, 4], [1, 5]]}, {"name": "L", "cells": [[0, 5], [0, 6], [1, 6], [2, 6], [3, 6]]}, {"name": "U", "cells": [[0, 7], [0, 8], [0, 9], [1, 7], [1, 9]]}, {"name": "I", "cells": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0]]}, {"name": "W", "cells": [[1, 2], [1, 3], [2, 3], [2, 4], [3, 4]]}, {"name": "X", "cells": [[1, 8], [2, 7], [2, 8], [2, 9], [3, 8]]}, {"name": "Y", "cells": [[2, 5], [3, 5], [4, 4], [4, 5], [5, 5]]}, {"name": "P", "cells": [[3, 1], [3, 2], [4, 1], [4, 2], [5, 1]]}, {"name": "T", "cells": [[3, 3], [4, 3], [5, 2], [5, 3], [5, 4]]}, {"name": "F", "cells": [[3, 7], [4, 6], [4, 7], [4, 8], [5, 6]]}, {"name": "V", "cells": [[3, 9], [4, 9], [5, 7], [5, 8], [5, 9]]}]},
-  {grid:[["Z", "Z", "P", "P", "N", "N", "L", "L", "L", "L"], ["Y", "Z", "P", "P", "P", "N", "N", "N", "X", "L"], ["Y", "Z", "Z", "W", "U", "U", "U", "X", "X", "X"], ["Y", "Y", "W", "W", "U", "T", "U", "F", "X", "V"], ["Y", "W", "W", "T", "T", "T", "F", "F", "F", "V"], ["I", "I", "I", "I", "I", "T", "F", "V", "V", "V"]],placements:[{"name": "Z", "cells": [[0, 0], [0, 1], [1, 1], [2, 1], [2, 2]]}, {"name": "P", "cells": [[0, 2], [0, 3], [1, 2], [1, 3], [1, 4]]}, {"name": "N", "cells": [[0, 4], [0, 5], [1, 5], [1, 6], [1, 7]]}, {"name": "L", "cells": [[0, 6], [0, 7], [0, 8], [0, 9], [1, 9]]}, {"name": "Y", "cells": [[1, 0], [2, 0], [3, 0], [3, 1], [4, 0]]}, {"name": "X", "cells": [[1, 8], [2, 7], [2, 8], [2, 9], [3, 8]]}, {"name": "W", "cells": [[2, 3], [3, 2], [3, 3], [4, 1], [4, 2]]}, {"name": "U", "cells": [[2, 4], [2, 5], [2, 6], [3, 4], [3, 6]]}, {"name": "T", "cells": [[3, 5], [4, 3], [4, 4], [4, 5], [5, 5]]}, {"name": "F", "cells": [[3, 7], [4, 6], [4, 7], [4, 8], [5, 6]]}, {"name": "V", "cells": [[3, 9], [4, 9], [5, 7], [5, 8], [5, 9]]}, {"name": "I", "cells": [[5, 0], [5, 1], [5, 2], [5, 3], [5, 4]]}]},
-  {grid:[["Z", "Z", "P", "P", "F", "F", "L", "L", "L", "L"], ["I", "Z", "P", "P", "P", "F", "F", "Y", "N", "L"], ["I", "Z", "Z", "W", "W", "F", "Y", "Y", "N", "N"], ["I", "V", "W", "W", "X", "U", "U", "Y", "T", "N"], ["I", "V", "W", "X", "X", "X", "U", "Y", "T", "N"], ["I", "V", "V", "V", "X", "U", "U", "T", "T", "T"]],placements:[{"name": "Z", "cells": [[0, 0], [0, 1], [1, 1], [2, 1], [2, 2]]}, {"name": "P", "cells": [[0, 2], [0, 3], [1, 2], [1, 3], [1, 4]]}, {"name": "F", "cells": [[0, 4], [0, 5], [1, 5], [1, 6], [2, 5]]}, {"name": "L", "cells": [[0, 6], [0, 7], [0, 8], [0, 9], [1, 9]]}, {"name": "I", "cells": [[1, 0], [2, 0], [3, 0], [4, 0], [5, 0]]}, {"name": "Y", "cells": [[1, 7], [2, 6], [2, 7], [3, 7], [4, 7]]}, {"name": "N", "cells": [[1, 8], [2, 8], [2, 9], [3, 9], [4, 9]]}, {"name": "W", "cells": [[2, 3], [2, 4], [3, 2], [3, 3], [4, 2]]}, {"name": "V", "cells": [[3, 1], [4, 1], [5, 1], [5, 2], [5, 3]]}, {"name": "X", "cells": [[3, 4], [4, 3], [4, 4], [4, 5], [5, 4]]}, {"name": "U", "cells": [[3, 5], [3, 6], [4, 6], [5, 5], [5, 6]]}, {"name": "T", "cells": [[3, 8], [4, 8], [5, 7], [5, 8], [5, 9]]}]},
-  {grid:[["I", "I", "I", "I", "I", "P", "P", "V", "V", "V"], ["U", "U", "U", "Z", "Z", "P", "P", "W", "W", "V"], ["U", "F", "U", "T", "Z", "P", "W", "W", "X", "V"], ["F", "F", "F", "T", "Z", "Z", "W", "X", "X", "X"], ["F", "Y", "T", "T", "T", "N", "N", "N", "X", "L"], ["Y", "Y", "Y", "Y", "N", "N", "L", "L", "L", "L"]],placements:[{"name": "I", "cells": [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4]]}, {"name": "P", "cells": [[0, 5], [0, 6], [1, 5], [1, 6], [2, 5]]}, {"name": "V", "cells": [[0, 7], [0, 8], [0, 9], [1, 9], [2, 9]]}, {"name": "U", "cells": [[1, 0], [1, 1], [1, 2], [2, 0], [2, 2]]}, {"name": "Z", "cells": [[1, 3], [1, 4], [2, 4], [3, 4], [3, 5]]}, {"name": "W", "cells": [[1, 7], [1, 8], [2, 6], [2, 7], [3, 6]]}, {"name": "F", "cells": [[2, 1], [3, 0], [3, 1], [3, 2], [4, 0]]}, {"name": "T", "cells": [[2, 3], [3, 3], [4, 2], [4, 3], [4, 4]]}, {"name": "X", "cells": [[2, 8], [3, 7], [3, 8], [3, 9], [4, 8]]}, {"name": "Y", "cells": [[4, 1], [5, 0], [5, 1], [5, 2], [5, 3]]}, {"name": "N", "cells": [[4, 5], [4, 6], [4, 7], [5, 4], [5, 5]]}, {"name": "L", "cells": [[4, 9], [5, 6], [5, 7], [5, 8], [5, 9]]}]},
-  {grid:[["Z", "Z", "Y", "Y", "Y", "Y", "X", "U", "U", "L"], ["V", "Z", "W", "W", "Y", "X", "X", "X", "U", "L"], ["V", "Z", "Z", "W", "W", "T", "X", "U", "U", "L"], ["V", "V", "V", "F", "W", "T", "N", "N", "L", "L"], ["P", "P", "F", "F", "T", "T", "T", "N", "N", "N"], ["P", "P", "P", "F", "F", "I", "I", "I", "I", "I"]],placements:[{"name": "Z", "cells": [[0, 0], [0, 1], [1, 1], [2, 1], [2, 2]]}, {"name": "Y", "cells": [[0, 2], [0, 3], [0, 4], [0, 5], [1, 4]]}, {"name": "X", "cells": [[0, 6], [1, 5], [1, 6], [1, 7], [2, 6]]}, {"name": "U", "cells": [[0, 7], [0, 8], [1, 8], [2, 7], [2, 8]]}, {"name": "L", "cells": [[0, 9], [1, 9], [2, 9], [3, 8], [3, 9]]}, {"name": "V", "cells": [[1, 0], [2, 0], [3, 0], [3, 1], [3, 2]]}, {"name": "W", "cells": [[1, 2], [1, 3], [2, 3], [2, 4], [3, 4]]}, {"name": "T", "cells": [[2, 5], [3, 5], [4, 4], [4, 5], [4, 6]]}, {"name": "F", "cells": [[3, 3], [4, 2], [4, 3], [5, 3], [5, 4]]}, {"name": "N", "cells": [[3, 6], [3, 7], [4, 7], [4, 8], [4, 9]]}, {"name": "P", "cells": [[4, 0], [4, 1], [5, 0], [5, 1], [5, 2]]}, {"name": "I", "cells": [[5, 5], [5, 6], [5, 7], [5, 8], [5, 9]]}]},
-  {grid:[["Y", "U", "U", "U", "N", "N", "L", "L", "L", "L"], ["Y", "U", "W", "U", "Z", "N", "N", "N", "X", "L"], ["Y", "Y", "W", "W", "Z", "Z", "Z", "X", "X", "X"], ["Y", "P", "P", "W", "W", "T", "Z", "F", "X", "V"], ["P", "P", "P", "T", "T", "T", "F", "F", "F", "V"], ["I", "I", "I", "I", "I", "T", "F", "V", "V", "V"]],placements:[{"name": "Y", "cells": [[0, 0], [1, 0], [2, 0], [2, 1], [3, 0]]}, {"name": "U", "cells": [[0, 1], [0, 2], [0, 3], [1, 1], [1, 3]]}, {"name": "N", "cells": [[0, 4], [0, 5], [1, 5], [1, 6], [1, 7]]}, {"name": "L", "cells": [[0, 6], [0, 7], [0, 8], [0, 9], [1, 9]]}, {"name": "W", "cells": [[1, 2], [2, 2], [2, 3], [3, 3], [3, 4]]}, {"name": "Z", "cells": [[1, 4], [2, 4], [2, 5], [2, 6], [3, 6]]}, {"name": "X", "cells": [[1, 8], [2, 7], [2, 8], [2, 9], [3, 8]]}, {"name": "P", "cells": [[3, 1], [3, 2], [4, 0], [4, 1], [4, 2]]}, {"name": "T", "cells": [[3, 5], [4, 3], [4, 4], [4, 5], [5, 5]]}, {"name": "F", "cells": [[3, 7], [4, 6], [4, 7], [4, 8], [5, 6]]}, {"name": "V", "cells": [[3, 9], [4, 9], [5, 7], [5, 8], [5, 9]]}, {"name": "I", "cells": [[5, 0], [5, 1], [5, 2], [5, 3], [5, 4]]}]},
-  {grid:[["P", "P", "U", "U", "F", "Z", "Y", "Y", "Y", "Y"], ["P", "P", "U", "F", "F", "Z", "Z", "Z", "Y", "W"], ["P", "X", "U", "U", "F", "F", "V", "Z", "W", "W"], ["X", "X", "X", "N", "N", "N", "V", "W", "W", "T"], ["L", "X", "N", "N", "V", "V", "V", "T", "T", "T"], ["L", "L", "L", "L", "I", "I", "I", "I", "I", "T"]],placements:[{"name": "P", "cells": [[0, 0], [0, 1], [1, 0], [1, 1], [2, 0]]}, {"name": "U", "cells": [[0, 2], [0, 3], [1, 2], [2, 2], [2, 3]]}, {"name": "F", "cells": [[0, 4], [1, 3], [1, 4], [2, 4], [2, 5]]}, {"name": "Z", "cells": [[0, 5], [1, 5], [1, 6], [1, 7], [2, 7]]}, {"name": "Y", "cells": [[0, 6], [0, 7], [0, 8], [0, 9], [1, 8]]}, {"name": "W", "cells": [[1, 9], [2, 8], [2, 9], [3, 7], [3, 8]]}, {"name": "X", "cells": [[2, 1], [3, 0], [3, 1], [3, 2], [4, 1]]}, {"name": "V", "cells": [[2, 6], [3, 6], [4, 4], [4, 5], [4, 6]]}, {"name": "N", "cells": [[3, 3], [3, 4], [3, 5], [4, 2], [4, 3]]}, {"name": "T", "cells": [[3, 9], [4, 7], [4, 8], [4, 9], [5, 9]]}, {"name": "L", "cells": [[4, 0], [5, 0], [5, 1], [5, 2], [5, 3]]}, {"name": "I", "cells": [[5, 4], [5, 5], [5, 6], [5, 7], [5, 8]]}]},
-  {grid:[["F", "I", "I", "I", "I", "I", "W", "W", "P", "P"], ["F", "F", "F", "L", "L", "W", "W", "N", "P", "P"], ["Y", "F", "Z", "Z", "L", "W", "N", "N", "X", "P"], ["Y", "Y", "Z", "V", "L", "T", "N", "X", "X", "X"], ["Y", "Z", "Z", "V", "L", "T", "N", "U", "X", "U"], ["Y", "V", "V", "V", "T", "T", "T", "U", "U", "U"]],placements:[{"name": "F", "cells": [[0, 0], [1, 0], [1, 1], [1, 2], [2, 1]]}, {"name": "I", "cells": [[0, 1], [0, 2], [0, 3], [0, 4], [0, 5]]}, {"name": "W", "cells": [[0, 6], [0, 7], [1, 5], [1, 6], [2, 5]]}, {"name": "P", "cells": [[0, 8], [0, 9], [1, 8], [1, 9], [2, 9]]}, {"name": "L", "cells": [[1, 3], [1, 4], [2, 4], [3, 4], [4, 4]]}, {"name": "N", "cells": [[1, 7], [2, 6], [2, 7], [3, 6], [4, 6]]}, {"name": "Y", "cells": [[2, 0], [3, 0], [3, 1], [4, 0], [5, 0]]}, {"name": "Z", "cells": [[2, 2], [2, 3], [3, 2], [4, 1], [4, 2]]}, {"name": "X", "cells": [[2, 8], [3, 7], [3, 8], [3, 9], [4, 8]]}, {"name": "V", "cells": [[3, 3], [4, 3], [5, 1], [5, 2], [5, 3]]}, {"name": "T", "cells": [[3, 5], [4, 5], [5, 4], [5, 5], [5, 6]]}, {"name": "U", "cells": [[4, 7], [4, 9], [5, 7], [5, 8], [5, 9]]}]},
-  {grid:[["W", "P", "P", "P", "I", "I", "I", "I", "I", "L"], ["W", "W", "P", "P", "N", "N", "L", "L", "L", "L"], ["T", "W", "W", "Z", "Z", "N", "N", "N", "F", "F"], ["T", "T", "T", "Z", "U", "U", "X", "F", "F", "V"], ["T", "Y", "Z", "Z", "U", "X", "X", "X", "F", "V"], ["Y", "Y", "Y", "Y", "U", "U", "X", "V", "V", "V"]],placements:[{"name": "W", "cells": [[0, 0], [1, 0], [1, 1], [2, 1], [2, 2]]}, {"name": "P", "cells": [[0, 1], [0, 2], [0, 3], [1, 2], [1, 3]]}, {"name": "I", "cells": [[0, 4], [0, 5], [0, 6], [0, 7], [0, 8]]}, {"name": "L", "cells": [[0, 9], [1, 6], [1, 7], [1, 8], [1, 9]]}, {"name": "N", "cells": [[1, 4], [1, 5], [2, 5], [2, 6], [2, 7]]}, {"name": "T", "cells": [[2, 0], [3, 0], [3, 1], [3, 2], [4, 0]]}, {"name": "Z", "cells": [[2, 3], [2, 4], [3, 3], [4, 2], [4, 3]]}, {"name": "F", "cells": [[2, 8], [2, 9], [3, 7], [3, 8], [4, 8]]}, {"name": "U", "cells": [[3, 4], [3, 5], [4, 4], [5, 4], [5, 5]]}, {"name": "X", "cells": [[3, 6], [4, 5], [4, 6], [4, 7], [5, 6]]}, {"name": "V", "cells": [[3, 9], [4, 9], [5, 7], [5, 8], [5, 9]]}, {"name": "Y", "cells": [[4, 1], [5, 0], [5, 1], [5, 2], [5, 3]]}]},
-  {grid:[["V", "Z", "Y", "Y", "Y", "Y", "W", "U", "U", "U"], ["V", "Z", "Z", "Z", "Y", "W", "W", "U", "X", "U"], ["V", "V", "V", "Z", "W", "W", "F", "X", "X", "X"], ["T", "I", "I", "I", "I", "I", "F", "F", "X", "P"], ["T", "T", "T", "N", "N", "F", "F", "L", "P", "P"], ["T", "N", "N", "N", "L", "L", "L", "L", "P", "P"]],placements:[{"name": "V", "cells": [[0, 0], [1, 0], [2, 0], [2, 1], [2, 2]]}, {"name": "Z", "cells": [[0, 1], [1, 1], [1, 2], [1, 3], [2, 3]]}, {"name": "Y", "cells": [[0, 2], [0, 3], [0, 4], [0, 5], [1, 4]]}, {"name": "W", "cells": [[0, 6], [1, 5], [1, 6], [2, 4], [2, 5]]}, {"name": "U", "cells": [[0, 7], [0, 8], [0, 9], [1, 7], [1, 9]]}, {"name": "X", "cells": [[1, 8], [2, 7], [2, 8], [2, 9], [3, 8]]}, {"name": "F", "cells": [[2, 6], [3, 6], [3, 7], [4, 5], [4, 6]]}, {"name": "T", "cells": [[3, 0], [4, 0], [4, 1], [4, 2], [5, 0]]}, {"name": "I", "cells": [[3, 1], [3, 2], [3, 3], [3, 4], [3, 5]]}, {"name": "P", "cells": [[3, 9], [4, 8], [4, 9], [5, 8], [5, 9]]}, {"name": "N", "cells": [[4, 3], [4, 4], [5, 1], [5, 2], [5, 3]]}, {"name": "L", "cells": [[4, 7], [5, 4], [5, 5], [5, 6], [5, 7]]}]},
-  {grid:[["L", "U", "U", "X", "V", "V", "V", "T", "T", "T"], ["L", "U", "X", "X", "X", "F", "V", "N", "T", "I"], ["L", "U", "U", "X", "F", "F", "V", "N", "T", "I"], ["L", "L", "Z", "W", "W", "F", "F", "N", "N", "I"], ["Z", "Z", "Z", "Y", "W", "W", "P", "P", "N", "I"], ["Z", "Y", "Y", "Y", "Y", "W", "P", "P", "P", "I"]],placements:[{"name": "L", "cells": [[0, 0], [1, 0], [2, 0], [3, 0], [3, 1]]}, {"name": "U", "cells": [[0, 1], [0, 2], [1, 1], [2, 1], [2, 2]]}, {"name": "X", "cells": [[0, 3], [1, 2], [1, 3], [1, 4], [2, 3]]}, {"name": "V", "cells": [[0, 4], [0, 5], [0, 6], [1, 6], [2, 6]]}, {"name": "T", "cells": [[0, 7], [0, 8], [0, 9], [1, 8], [2, 8]]}, {"name": "F", "cells": [[1, 5], [2, 4], [2, 5], [3, 5], [3, 6]]}, {"name": "N", "cells": [[1, 7], [2, 7], [3, 7], [3, 8], [4, 8]]}, {"name": "I", "cells": [[1, 9], [2, 9], [3, 9], [4, 9], [5, 9]]}, {"name": "Z", "cells": [[3, 2], [4, 0], [4, 1], [4, 2], [5, 0]]}, {"name": "W", "cells": [[3, 3], [3, 4], [4, 4], [4, 5], [5, 5]]}, {"name": "Y", "cells": [[4, 3], [5, 1], [5, 2], [5, 3], [5, 4]]}, {"name": "P", "cells": [[4, 6], [4, 7], [5, 6], [5, 7], [5, 8]]}]},
-];
-
-// Parça renkleri
 const COLORS={
   F:'#e74c3c',I:'#3498db',L:'#e67e22',N:'#9b59b6',
   P:'#1abc9c',T:'#e91e63',U:'#00bcd4',V:'#8bc34a',
   W:'#ff9800',X:'#f1c40f',Y:'#795548',Z:'#607d8b'
 };
 
-const ROWS=6,COLS=10;
-let puzzle,grid,placed,selectedPiece,selectedOrient,hoverCell;
-let CS; // hücre boyutu
+const ROWS=6, COLS=10;
+let grid, placed, selectedPiece, hoverCell, orientIdx, history;
+let CS;
 
-// Rotasyon/yansıma için yönelim indeksi
-let orientIdx=0;
-
-function normalize(cells){
-  const minR=Math.min(...cells.map(c=>c[0]));
-  const minC=Math.min(...cells.map(c=>c[1]));
-  return cells.map(c=>[c[0]-minR,c[1]-minC]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
-}
-function rotate90(cells){return normalize(cells.map(([r,c])=>[c,-r]));}
-function mirror(cells){return normalize(cells.map(([r,c])=>[r,-c]));}
-function allOrientations(cells){
-  const seen=new Set(),result=[];
-  let cur=normalize(cells);
-  for(let m=0;m<2;m++){
-    for(let r=0;r<4;r++){
-      const key=JSON.stringify(cur);
-      if(!seen.has(key)){seen.add(key);result.push(cur);}
-      cur=rotate90(cur);
-    }
-    cur=mirror(normalize(cells));
-  }
-  return result;
-}
-
-// Temel parça şekilleri
 const BASE={
   F:[[0,1],[0,2],[1,0],[1,1],[2,1]],
   I:[[0,0],[0,1],[0,2],[0,3],[0,4]],
@@ -191,30 +134,52 @@ const BASE={
   Z:[[0,0],[0,1],[1,1],[2,1],[2,2]]
 };
 
+function normalize(cells){
+  const minR=Math.min(...cells.map(c=>c[0]));
+  const minC=Math.min(...cells.map(c=>c[1]));
+  return cells.map(c=>[c[0]-minR,c[1]-minC]).sort((a,b)=>a[0]-b[0]||a[1]-b[1]);
+}
+function rotate90(cells){return normalize(cells.map(([r,c])=>[c,-r]));}
+function mirrorCells(cells){return normalize(cells.map(([r,c])=>[r,-c]));}
+function allOrientations(cells){
+  const seen=new Set(), result=[];
+  let cur=normalize(cells);
+  for(let m=0;m<2;m++){
+    for(let r=0;r<4;r++){
+      const key=JSON.stringify(cur);
+      if(!seen.has(key)){seen.add(key);result.push(cur);}
+      cur=rotate90(cur);
+    }
+    cur=mirrorCells(normalize(cells));
+  }
+  return result;
+}
+
 const PIECE_ORIENTS={};
 for(const [name,cells] of Object.entries(BASE)){
   PIECE_ORIENTS[name]=allOrientations(cells);
 }
 
-function loadPuzzle(idx){
-  puzzle=PUZZLES[idx];
+function startGame(){
   grid=Array.from({length:ROWS},()=>Array(COLS).fill(''));
-  placed={}; // name → {cells, orientIdx}
+  placed={};
   selectedPiece=null;
   orientIdx=0;
   hoverCell=null;
+  history=[];
   document.getElementById('winBanner').classList.remove('show');
-  document.getElementById('puzDisp').textContent=(idx+1)+'/20';
   setMsg('Bir parça seçin, ardından ızgaraya tıklayın.');
   buildPalette();
   resizeCanvas();
   render();
 }
 
+function restartGame(){ startGame(); }
+
 function buildPalette(){
   const pal=document.getElementById('palette');
   pal.innerHTML='';
-  const pCS=11; // palette hücre boyutu
+  const pCS=11;
   for(const name of Object.keys(BASE)){
     const cells=PIECE_ORIENTS[name][0];
     const maxR=Math.max(...cells.map(c=>c[0]));
@@ -226,10 +191,10 @@ function buildPalette(){
     const cvs=document.createElement('canvas');
     cvs.width=(maxC+1)*pCS+2;
     cvs.height=(maxR+1)*pCS+2;
-    const ctx=cvs.getContext('2d');
-    ctx.fillStyle=COLORS[name];
+    const ctx2=cvs.getContext('2d');
+    ctx2.fillStyle=COLORS[name];
     cells.forEach(([r,c])=>{
-      ctx.fillRect(c*pCS+1,r*pCS+1,pCS-1,pCS-1);
+      ctx2.fillRect(c*pCS+1,r*pCS+1,pCS-1,pCS-1);
     });
     btn.appendChild(cvs);
     btn.addEventListener('click',()=>selectPiece(name));
@@ -260,19 +225,15 @@ function updatePalette(){
 
 function rotatePiece(){
   if(!selectedPiece) return;
-  const orients=PIECE_ORIENTS[selectedPiece];
-  orientIdx=(orientIdx+1)%orients.length;
+  orientIdx=(orientIdx+1)%PIECE_ORIENTS[selectedPiece].length;
   render();
 }
 
 function mirrorPiece(){
   if(!selectedPiece) return;
   const orients=PIECE_ORIENTS[selectedPiece];
-  // Yansıma: ilk yarı orijinal, ikinci yarı yansıma
-  // Basit: mevcut yönelimi bul, yansımasını bul
   const cur=orients[orientIdx];
-  const mirrored=mirror(cur);
-  const mKey=JSON.stringify(mirrored);
+  const mKey=JSON.stringify(mirrorCells(cur));
   const mi=orients.findIndex(o=>JSON.stringify(o)===mKey);
   if(mi!==-1) orientIdx=mi;
   render();
@@ -291,18 +252,15 @@ function render(flashErr){
   const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // Arkaplan
   ctx.fillStyle='#131018';
   ctx.fillRect(0,0,canvas.width,canvas.height);
 
-  // Yerleştirilmiş parçalar
   for(let r=0;r<ROWS;r++){
     for(let c=0;c<COLS;c++){
       const name=grid[r][c];
       if(name){
         ctx.fillStyle=COLORS[name];
         ctx.fillRect(c*CS+1,r*CS+1,CS-2,CS-2);
-        // Harf
         ctx.fillStyle='rgba(0,0,0,0.4)';
         ctx.font=`bold ${Math.floor(CS*0.4)}px Georgia`;
         ctx.textAlign='center';
@@ -312,7 +270,6 @@ function render(flashErr){
     }
   }
 
-  // Hover önizleme
   if(selectedPiece&&hoverCell){
     const cells=getPlacementCells(hoverCell[0],hoverCell[1]);
     const valid=cells&&canPlace(cells);
@@ -325,13 +282,11 @@ function render(flashErr){
     }
   }
 
-  // Flash hata efekti
   if(flashErr){
     ctx.fillStyle='rgba(255,0,0,0.25)';
     ctx.fillRect(0,0,canvas.width,canvas.height);
   }
 
-  // Izgara çizgileri
   ctx.strokeStyle='rgba(200,150,12,0.2)';
   ctx.lineWidth=1;
   for(let r=0;r<=ROWS;r++){
@@ -341,7 +296,6 @@ function render(flashErr){
     ctx.beginPath();ctx.moveTo(c*CS,0);ctx.lineTo(c*CS,ROWS*CS);ctx.stroke();
   }
 
-  // Dış çerçeve
   ctx.strokeStyle='rgba(200,150,12,0.6)';
   ctx.lineWidth=2;
   ctx.strokeRect(1,1,COLS*CS-2,ROWS*CS-2);
@@ -350,10 +304,8 @@ function render(flashErr){
 function getPlacementCells(r,c){
   if(!selectedPiece) return null;
   const orient=PIECE_ORIENTS[selectedPiece][orientIdx];
-  // Parçanın merkez noktasını hesapla
   const centerR=Math.round(orient.reduce((s,cell)=>s+cell[0],0)/orient.length);
   const centerC=Math.round(orient.reduce((s,cell)=>s+cell[1],0)/orient.length);
-  // Tıklanan hücre merkeze gelsin
   return orient.map(([dr,dc])=>[r+(dr-centerR),c+(dc-centerC)]);
 }
 
@@ -361,20 +313,18 @@ function canPlace(cells){
   return cells.every(([r,c])=>r>=0&&r<ROWS&&c>=0&&c<COLS&&grid[r][c]==='');
 }
 
-// Canvas tıklama
 const canvas=document.getElementById('gridCanvas');
 
 canvas.addEventListener('click',function(e){
   const rect=canvas.getBoundingClientRect();
-  const x=e.clientX-rect.left, y=e.clientY-rect.top;
-  const c=Math.floor(x/CS), r=Math.floor(y/CS);
+  const c=Math.floor((e.clientX-rect.left)/CS);
+  const r=Math.floor((e.clientY-rect.top)/CS);
   handleGridClick(r,c);
 });
 
 canvas.addEventListener('mousemove',function(e){
   const rect=canvas.getBoundingClientRect();
-  const x=e.clientX-rect.left, y=e.clientY-rect.top;
-  hoverCell=[Math.floor(y/CS),Math.floor(x/CS)];
+  hoverCell=[Math.floor((e.clientY-rect.top)/CS),Math.floor((e.clientX-rect.left)/CS)];
   render();
 });
 
@@ -387,8 +337,7 @@ canvas.addEventListener('touchstart',function(e){
   e.preventDefault();
   const rect=canvas.getBoundingClientRect();
   const t=e.touches[0];
-  const x=t.clientX-rect.left, y=t.clientY-rect.top;
-  hoverCell=[Math.floor(y/CS),Math.floor(x/CS)];
+  hoverCell=[Math.floor((t.clientY-rect.top)/CS),Math.floor((t.clientX-rect.left)/CS)];
   render();
 },{passive:false});
 
@@ -396,16 +345,13 @@ canvas.addEventListener('touchmove',function(e){
   e.preventDefault();
   const rect=canvas.getBoundingClientRect();
   const t=e.touches[0];
-  const x=t.clientX-rect.left, y=t.clientY-rect.top;
-  hoverCell=[Math.floor(y/CS),Math.floor(x/CS)];
+  hoverCell=[Math.floor((t.clientY-rect.top)/CS),Math.floor((t.clientX-rect.left)/CS)];
   render();
 },{passive:false});
 
 canvas.addEventListener('touchend',function(e){
   e.preventDefault();
-  if(hoverCell){
-    handleGridClick(hoverCell[0],hoverCell[1]);
-  }
+  if(hoverCell) handleGridClick(hoverCell[0],hoverCell[1]);
   hoverCell=null;
   render();
 },{passive:false});
@@ -413,16 +359,17 @@ canvas.addEventListener('touchend',function(e){
 function handleGridClick(r,c){
   if(!selectedPiece){setMsg('Önce bir parça seçin.');return;}
   const cells=getPlacementCells(r,c);
-  if(!cells){return;}
+  if(!cells) return;
   if(!canPlace(cells)){
     render(true);
     setTimeout(()=>render(),300);
     setMsg('Parça buraya sığmıyor!');
     return;
   }
-  // Yerleştir
+  // Geçmişe kaydet (tam ızgara snapshot)
+  history.push({name:selectedPiece, prevGrid:grid.map(row=>row.slice())});
   cells.forEach(([pr,pc])=>grid[pr][pc]=selectedPiece);
-  placed[selectedPiece]={cells,orientIdx};
+  placed[selectedPiece]={cells, orientIdx};
   selectedPiece=null;
   orientIdx=0;
   updatePalette();
@@ -431,59 +378,33 @@ function handleGridClick(r,c){
 }
 
 function removeLast(){
-  const names=Object.keys(placed);
-  if(names.length===0){setMsg('Geri alınacak hamle yok.');return;}
-  const last=names[names.length-1];
-  placed[last].cells.forEach(([r,c])=>grid[r][c]='');
-  delete placed[last];
+  if(history.length===0){setMsg('Geri alınacak hamle yok.');return;}
+  const last=history.pop();
+  grid=last.prevGrid;
+  delete placed[last.name];
   updatePalette();
   render();
-  setMsg(`"${last}" geri alındı.`);
+  document.getElementById('winBanner').classList.remove('show');
+  setMsg(`"${last.name}" geri alındı.`);
 }
 
 function checkWin(){
-  if(Object.keys(placed).length===12){
-    document.getElementById('winBanner').classList.add('show');
-    setMsg('');
-  }
+  if(Object.keys(placed).length!==12) return;
+  if(!grid.every(row=>row.every(cell=>cell!==''))) return;
+  document.getElementById('winBody').textContent=
+    `${history.length} adımda tüm parçaları yerleştirdiniz! 6×10 ızgaranın 2339 çözümünden birini buldunuz.`;
+  document.getElementById('winBanner').classList.add('show');
+  setMsg('');
 }
-
-function revealAll(){
-  // Puzzle çözümünü göster
-  grid=puzzle.grid.map(r=>r.slice());
-  placed={};
-  for(const name of Object.keys(BASE)) placed[name]={cells:[]};
-  selectedPiece=null;
-  updatePalette();
-  render();
-  setMsg('Çözüm gösterildi.');
-}
-
-function restartPuzzle(){
-  const idx=parseInt(document.getElementById('puzSel').value);
-  loadPuzzle(idx);
-}
-
-function fillPuzSel(){
-  const ps=document.getElementById('puzSel');
-  ps.innerHTML='';
-  for(let i=0;i<20;i++){
-    const o=document.createElement('option');
-    o.value=i;o.textContent=(i+1)+'. Bulmaca';
-    ps.appendChild(o);
-  }
-}
-
-document.getElementById('puzSel').addEventListener('change',function(){
-  loadPuzzle(parseInt(this.value));
-});
-window.addEventListener('resize',()=>{resizeCanvas();render();});
 
 function setMsg(t){document.getElementById('msg').textContent=t;}
-function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='none'?'block':'none';}
+function toggleInfo(){
+  const b=document.getElementById('infoBox');
+  b.style.display=b.style.display==='none'||b.style.display===''?'block':'none';
+}
 
-fillPuzSel();
-loadPuzzle(0);
+window.addEventListener('resize',()=>{resizeCanvas();render();});
+startGame();
 </script>
 </body>
 </html>
