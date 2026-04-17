@@ -4,33 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oyun — Tekin Hoca</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <style>
-:root{--ink:#12100e;--cream:#f7f2e8;--aged:#ece4cc;--sepia:#7a5c1e;--gold:#c8960c;--rust:#9b3510;--muted:#5a4a30;--shadow:rgba(18,16,14,0.18);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;background:var(--ink);color:var(--cream);font-family:'Source Serif 4',Georgia,serif;display:flex;flex-direction:column;}
-header{background:var(--ink);border-bottom:2px solid var(--gold);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.back-btn{display:inline-flex;align-items:center;gap:7px;font-family:'Playfair Display',serif;font-size:0.82rem;color:var(--gold);text-decoration:none;border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:6px 14px;transition:background 0.18s,color 0.18s;}
-.back-btn:hover{background:rgba(200,150,12,0.12);color:var(--cream);}
-.game-title{font-family:'Playfair Display',serif;font-size:1rem;font-style:italic;color:var(--cream);letter-spacing:0.04em;text-align:center;flex:1;padding:0 12px;}
-main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;}
-#ruffle-container{width:min(640px,96vw);aspect-ratio:4/3;background:#000;border:2px solid rgba(200,150,12,0.3);border-radius:4px;box-shadow:0 8px 40px rgba(0,0,0,0.6);}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;}
+#ruffle-container{width:100%;height:100%;}
 #ruffle-container ruffle-player{width:100%;height:100%;}
-.error-msg{color:var(--gold);font-family:'Playfair Display',serif;text-align:center;padding:40px 20px;font-size:1rem;line-height:1.7;}
+.error-msg{color:#c8960c;font-family:Georgia,serif;text-align:center;padding:60px 20px;font-size:1rem;line-height:1.7;}
 </style>
 </head>
 <body>
-<header>
-  <a class="back-btn" href="javascript:history.back()">← Geri</a>
-  <div class="game-title" id="gameTitle">Oyun Yükleniyor…</div>
-  <div style="width:80px"></div><!-- simetri için boşluk -->
-</header>
-<main>
-  <div id="ruffle-container">
-    <div class="error-msg" id="errorMsg" style="display:none">Oyun yüklenemedi.<br>Lütfen sayfayı yenileyin veya geri dönün.</div>
-  </div>
-</main>
+<div id="ruffle-container">
+  <div class="error-msg" id="errorMsg" style="display:none">Oyun yüklenemedi.<br>Lütfen sayfayı yenileyin.</div>
+</div>
 <script src="ruffle/ruffle.js"></script>
 <script>
 (function(){
@@ -38,21 +24,13 @@ main{flex:1;display:flex;align-items:center;justify-content:center;padding:20px;
   const swf=params.get('swf');
   const title=params.get('title')||'Oyun';
   document.title=title+' — Tekin Hoca';
-  document.getElementById('gameTitle').textContent=title;
-  if(!swf){
-    document.getElementById('errorMsg').style.display='block';
-    return;
-  }
+  if(!swf){document.getElementById('errorMsg').style.display='block';return;}
   const ruffle=window.RufflePlayer&&window.RufflePlayer.newest();
-  if(!ruffle){
-    document.getElementById('errorMsg').style.display='block';
-    return;
-  }
+  if(!ruffle){document.getElementById('errorMsg').style.display='block';return;}
   const player=ruffle.createPlayer();
   player.style.width='100%';
   player.style.height='100%';
-  const container=document.getElementById('ruffle-container');
-  container.appendChild(player);
+  document.getElementById('ruffle-container').appendChild(player);
   player.load(swf);
 })();
 </script>
