@@ -51,15 +51,7 @@ main{max-width:960px;margin:0 auto;padding:52px 20px 72px;}
 .game-thumb:hover{transform:translateY(-5px);box-shadow:5px 9px 22px var(--shadow);border-top-color:var(--rust);}
 .game-thumb img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
 .game-thumb-label{font-family:'Playfair Display',serif;font-size:0.88rem;font-weight:700;color:var(--rust);text-align:center;padding:10px 10px 12px;line-height:1.3;}
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(18,16,14,0.88);z-index:1000;align-items:center;justify-content:center;}
-.modal-overlay.open{display:flex;}
-.modal-box{position:relative;background:var(--ink);border:2px solid var(--gold);border-radius:4px;padding:12px;width:min(640px,96vw);}
-.modal-close{position:absolute;top:-16px;right:-16px;width:34px;height:34px;border-radius:50%;background:var(--rust);border:2px solid var(--gold);color:var(--cream);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;transition:background 0.2s;}
-.modal-close:hover{background:#c04010;}
-.modal-title{font-family:'Playfair Display',serif;font-size:0.9rem;color:var(--gold);margin-bottom:10px;text-align:center;letter-spacing:0.05em;}
-#ruffle-container{width:100%;aspect-ratio:4/3;background:#000;}
-#ruffle-container ruffle-player{width:100%;height:100%;}
+
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 .game-thumb:nth-child(1){animation-delay:0.03s;}.game-thumb:nth-child(2){animation-delay:0.06s;}.game-thumb:nth-child(3){animation-delay:0.09s;}.game-thumb:nth-child(4){animation-delay:0.12s;}.game-thumb:nth-child(5){animation-delay:0.15s;}.game-thumb:nth-child(6){animation-delay:0.18s;}.game-thumb:nth-child(7){animation-delay:0.21s;}.game-thumb:nth-child(8){animation-delay:0.24s;}.game-thumb:nth-child(9){animation-delay:0.27s;}.game-thumb:nth-child(10){animation-delay:0.30s;}.game-thumb:nth-child(11){animation-delay:0.33s;}.game-thumb:nth-child(12){animation-delay:0.36s;}.game-thumb:nth-child(13){animation-delay:0.39s;}.game-thumb:nth-child(14){animation-delay:0.42s;}.game-thumb:nth-child(15){animation-delay:0.45s;}.game-thumb:nth-child(16){animation-delay:0.48s;}.game-thumb:nth-child(17){animation-delay:0.51s;}.game-thumb:nth-child(18){animation-delay:0.54s;}
 footer{background:var(--ink);border-top:2px solid var(--gold);padding:24px 20px;text-align:center;}
@@ -172,55 +164,26 @@ footer a:hover{color:var(--gold);}
     </div>
   </div>
 </main>
-<!-- MODAL -->
-<div class="modal-overlay" id="gameModal">
-  <div class="modal-box">
-    <button class="modal-close" id="modalClose" aria-label="Kapat">✕</button>
-    <div class="modal-title" id="modalTitle"></div>
-    <div id="ruffle-container"></div>
-  </div>
-</div>
+
 <footer>
   <img src="TekinHocaLOGO1.png" alt="Tekin Hoca Logo" style="height:48px;opacity:0.75;margin-bottom:10px;display:block;margin-left:auto;margin-right:auto;">
   <p>Tekin CANITEZ — Matematik Öğretmeni</p>
 </footer>
 <button id="back-to-top" title="Başa dön">↑</button>
-<script src="ruffle/ruffle.js"></script>
 <script src="menu.js"></script>
 <script>
   // Başa dön
   const btn=document.getElementById('back-to-top');
   window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
   btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
-  // Modal & Ruffle
-  const modal=document.getElementById('gameModal');
-  const modalTitle=document.getElementById('modalTitle');
-  const ruffleContainer=document.getElementById('ruffle-container');
-  const closeBtn=document.getElementById('modalClose');
+  // Yeni sekmede oyun aç
   document.querySelectorAll('.game-thumb').forEach(function(card){
     card.addEventListener('click',function(){
-      const swf=card.dataset.swf;
-      const title=card.dataset.title;
-      modalTitle.textContent=title;
-      ruffleContainer.innerHTML='';
-      const ruffle=window.RufflePlayer.newest();
-      const player=ruffle.createPlayer();
-      player.style.width='100%';
-      player.style.height='100%';
-      ruffleContainer.appendChild(player);
-      player.load(swf);
-      modal.classList.add('open');
-      document.body.style.overflow='hidden';
+      const swf=encodeURIComponent(card.dataset.swf);
+      const title=encodeURIComponent(card.dataset.title);
+      window.open('oyun-player.html?swf='+swf+'&title='+title,'_blank');
     });
   });
-  function closeModal(){
-    modal.classList.remove('open');
-    ruffleContainer.innerHTML='';
-    document.body.style.overflow='';
-  }
-  closeBtn.addEventListener('click',closeModal);
-  modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeModal();});
 </script>
 </body>
 </html>
