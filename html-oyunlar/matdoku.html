@@ -92,7 +92,7 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   <div class="infobar">
     <div class="ibox"><div class="l">Zorluk</div><div class="v" id="diffDisp">Orta</div></div>
     <div class="ibox"><div class="l">Bulmaca</div><div class="v" id="puzDisp">1/10</div></div>
-    <div class="ibox"><div class="l">Hata</div><div class="v" id="errDisp">0</div></div>
+
   </div>
 
   <div class="board-wrap">
@@ -109,7 +109,6 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 
   <div class="br-btns">
     <button class="a" onclick="restartPuzzle()">&#8635; Yeniden</button>
-    <button class="a" onclick="checkAll()">&#10003; Kontrol</button>
     <button class="a" onclick="revealAll()">&#128065; Çöz</button>
     <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
   </div>
@@ -172,7 +171,6 @@ function loadPuzzle(diff, idx){
   const diffNames={easy:'Kolay',medium:'Orta',hard:'Zor'};
   document.getElementById('diffDisp').textContent=diffNames[diff];
   document.getElementById('puzDisp').textContent=(idx+1)+'/10';
-  document.getElementById('errDisp').textContent='0';
   document.getElementById('winBanner').classList.remove('show');
   setMsg('Boş bir hücreye tıklayın, ardından sayı girin.');
   buildNumpad();
@@ -216,21 +214,16 @@ function render(){
   board.style.height=(n*CS)+'px';
   board.innerHTML='';
 
-  // Hata hücrelerini hesapla
-  const errCells=getErrorCells();
-
   for(let r=0;r<n;r++){
     for(let c=0;c<n;c++){
       const cell=document.createElement('div');
       cell.className='cell';
       const v=userGrid[r][c];
-      const solV=puzzle.solution[r][c];
       const isSel=selected&&selected[0]===r&&selected[1]===c;
       const selVal=selected?userGrid[selected[0]][selected[1]]:0;
       const isSameVal=!isSel&&v!==0&&v===selVal;
 
-      if(errCells.has(r+','+c)) cell.classList.add('error');
-      else if(isSel) cell.classList.add('selected');
+      if(isSel) cell.classList.add('selected');
       else if(isSameVal) cell.classList.add('same-val');
 
       if(v>0) cell.textContent=v;
@@ -335,23 +328,6 @@ function isComplete(){
   return true;
 }
 
-function getErrorCells(){
-  const n=puzzle.size;
-  const ec=new Set();
-  for(let r=0;r<n;r++) for(let c=0;c<n;c++){
-    if(userGrid[r][c]!==0&&userGrid[r][c]!==puzzle.solution[r][c]) ec.add(r+','+c);
-  }
-  return ec;
-}
-
-function checkAll(){
-  const ec=getErrorCells();
-  document.getElementById('errDisp').textContent=ec.size;
-  if(ec.size===0&&isComplete()) autoCheck();
-  else if(ec.size>0) setMsg(ec.size+' hatalı hücre var.');
-  else setMsg('Henüz tamamlanmadı, devam edin.');
-  render();
-}
 
 function autoCheck(){
   solved=true;
