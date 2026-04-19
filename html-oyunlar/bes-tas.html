@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Beş Taş</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a120a;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:560px;display:flex;flex-direction:column;gap:7px;margin:auto}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.size-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.size-sel select{background:#0c140c;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:14px;font-weight:700;color:#c8960c}
+.turn-indicator{display:flex;align-items:center;justify-content:center;gap:10px;font-size:12px;color:rgba(247,242,232,0.5)}
+.stone-preview{width:20px;height:20px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.2)}
+.stone-preview.black{background:radial-gradient(circle at 35% 35%,#555,#111)}
+.stone-preview.white{background:radial-gradient(circle at 35% 35%,#fff,#ccc)}
+.board-outer{display:flex;justify-content:center}
+canvas{border:1px solid rgba(200,150,12,0.3);border-radius:3px;cursor:crosshair;touch-action:none}
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.result-banner{display:none;border-radius:5px;padding:8px 14px;text-align:center}
+.result-banner.show{display:block;background:rgba(200,150,12,0.1);border:1px solid rgba(200,150,12,0.4)}
+.result-banner h2{font-size:14px;color:#c8960c;margin-bottom:3px}
+.result-banner p{font-size:11px;color:rgba(247,242,232,0.5)}
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
+.info-box b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Beş Taş</div>
+    <div class="size-sel">
+      <label>Izgara:</label>
+      <select id="sizeSel" onchange="BT.newGame()">
+        <option value="13">13×13</option>
+        <option value="15" selected>15×15</option>
+        <option value="19">19×19</option>
+      </select>
+      <label style="margin-left:6px">Mod:</label>
+      <select id="modeSel" onchange="BT.newGame()">
+        <option value="2p">2 Oyuncu</option>
+        <option value="ai">Bilgisayara Karşı</option>
+      </select>
+    </div>
+  </div>
+  <div class="infobar">
+    <div class="ibox"><div class="l">Siyah</div><div class="v" id="blackDisp">Oyuncu 1</div></div>
+    <div class="ibox"><div class="l">Beyaz</div><div class="v" id="whiteDisp">Oyuncu 2</div></div>
+    <div class="ibox"><div class="l">Hamle</div><div class="v" id="moveDisp">0</div></div>
+  </div>
+  <div class="turn-indicator" id="turnInd">
+    <div class="stone-preview black" id="turnStone"></div>
+    <span id="turnText">Siyah oynuyor</span>
+  </div>
+  <div class="board-outer"><canvas id="canvas"></canvas></div>
+  <div class="msg" id="msg">Herhangi bir kesişim noktasına tıklayın.</div>
+  <div class="result-banner" id="banner"><h2 id="bannerTitle"></h2><p id="bannerBody"></p></div>
+  <div class="br-btns">
+    <button class="a" onclick="BT.newGame()">&#8635; Yeni Oyun</button>
+    <button class="a" onclick="BT.undo()">&#8592; Geri Al</button>
+    <button class="a" onclick="BT.toggleInfo()">&#9432; Kurallar</button>
+  </div>
+  <div class="info-box" id="infoBox">
+    <b>Beş Taş (Gomoku) Nasıl Oynanır?</b><br>
+    İki oyuncu sırayla ızgaranın kesişim noktalarına taş koyar.<br>
+    Yatay, dikey veya çapraz yönde <b>art arda 5 taş</b> dizen oyuncu kazanır.<br>
+    <b>Siyah</b> taş: Oyuncu 1 (ya da siz, bilgisayar modunda)<br>
+    <b>Beyaz</b> taş: Oyuncu 2 (ya da bilgisayar)<br>
+    <b>Geri Al</b> düğmesiyle son hamleyi iptal edebilirsiniz.<br>
+    Bilgisayar modu orta zorlukta oynamaktadır.
+  </div>
+</div>
+<script>
+const BT = (function(){
+  let N, board, turn, over, history, aiMode, moveCount;
+  let cellSize, margin, canvasSize;
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  function newGame(){
+    N = parseInt(document.getElementById('sizeSel').value);
+    aiMode = document.getElementById('modeSel').value === 'ai';
+    board = Array.from({length:N},()=>Array(N).fill(0));
+    turn = 1; over = false; history = []; moveCount = 0;
+    document.getElementById('blackDisp').textContent = aiMode ? 'Sen' : 'Oyuncu 1';
+    document.getElementById('whiteDisp').textContent = aiMode ? 'Bilgisayar' : 'Oyuncu 2';
+    document.getElementById('moveDisp').textContent = '0';
+    document.getElementById('banner').className = 'result-banner';
+    setMsg('Herhangi bir kesişim noktasına tıklayın.');
+    resize();
+    render();
+    updateTurn();
+  }
+
+  function resize(){
+    const maxW = Math.min(window.innerWidth - 32, 520);
+    cellSize = Math.floor((maxW - 20) / N);
+    margin = cellSize;
+    canvasSize = cellSize * (N-1) + margin * 2;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    canvas.style.width = canvasSize + 'px';
+    canvas.style.height = canvasSize + 'px';
+  }
+
+  function render(){
+    ctx.clearRect(0,0,canvasSize,canvasSize);
+    // Background
+    ctx.fillStyle = '#0c1a0c';
+    ctx.fillRect(0,0,canvasSize,canvasSize);
+    // Grid lines
+    ctx.strokeStyle = 'rgba(80,160,80,0.35)';
+    ctx.lineWidth = 1;
+    for(let i=0;i<N;i++){
+      const x = margin + i*cellSize, y = margin + i*cellSize;
+      ctx.beginPath();ctx.moveTo(margin,y);ctx.lineTo(margin+(N-1)*cellSize,y);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(x,margin);ctx.lineTo(x,margin+(N-1)*cellSize);ctx.stroke();
+    }
+    // Border
+    ctx.strokeStyle = 'rgba(200,150,12,0.4)';ctx.lineWidth=2;
+    ctx.strokeRect(margin,margin,(N-1)*cellSize,(N-1)*cellSize);
+    // Star points
+    const stars = N===15?[3,7,11]:N===13?[3,6,9]:N===19?[3,9,15]:[];
+    stars.forEach(sr=>stars.forEach(sc=>{
+      ctx.fillStyle='rgba(200,150,12,0.5)';
+      ctx.beginPath();ctx.arc(margin+sc*cellSize,margin+sr*cellSize,3,0,Math.PI*2);ctx.fill();
+    }));
+    // Stones
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      if(board[r][c]===0) continue;
+      drawStone(r,c,board[r][c]);
+    }
+    // Last move marker
+    if(history.length>0){
+      const [lr,lc]=history[history.length-1].slice(0,2);
+      const px=margin+lc*cellSize, py=margin+lr*cellSize;
+      ctx.strokeStyle=board[lr][lc]===1?'rgba(255,180,0,0.8)':'rgba(80,80,80,0.8)';
+      ctx.lineWidth=2;
+      const s=cellSize*0.18;
+      ctx.strokeRect(px-s,py-s,s*2,s*2);
+    }
+  }
+
+  function drawStone(r,c,player){
+    const x=margin+c*cellSize, y=margin+r*cellSize, rad=cellSize*0.42;
+    const grad=ctx.createRadialGradient(x-rad*0.3,y-rad*0.3,rad*0.05,x,y,rad);
+    if(player===1){
+      grad.addColorStop(0,'#666');grad.addColorStop(1,'#0a0a0a');
+    } else {
+      grad.addColorStop(0,'#fff');grad.addColorStop(1,'#bbb');
+    }
+    ctx.beginPath();ctx.arc(x,y,rad,0,Math.PI*2);
+    ctx.fillStyle=grad;ctx.fill();
+    ctx.strokeStyle=player===1?'#333':'#888';ctx.lineWidth=0.5;ctx.stroke();
+  }
+
+  function place(r,c){
+    if(over||board[r][c]!==0) return;
+    board[r][c]=turn;
+    history.push([r,c,turn]);
+    moveCount++;
+    document.getElementById('moveDisp').textContent=moveCount;
+    render();
+    if(checkWin(r,c,turn)){
+      over=true;
+      const name=turn===1?(aiMode?'Tebrikler! Sen kazandın!':'Oyuncu 1 kazandı!'):(aiMode?'Bilgisayar kazandı!':'Oyuncu 2 kazandı!');
+      showBanner(name,'Art arda 5 taş! '+moveCount+' hamlede tamamlandı.');
+      return;
+    }
+    if(isFull()){over=true;showBanner('Berabere!','Tahta doldu, kazanan yok.');return;}
+    turn=3-turn;updateTurn();
+    if(aiMode&&turn===2&&!over) setTimeout(aiMove,200);
+  }
+
+  function aiMove(){
+    // Score each empty cell
+    let best=-1,br=-1,bc=-1;
+    for(let r=0;r<N;r++) for(let c=0;c<N;c++){
+      if(board[r][c]!==0) continue;
+      let sc=scoreCell(r,c,2)*10+scoreCell(r,c,1)*9+proximityScore(r,c);
+      if(sc>best){best=sc;br=r;bc=c;}
+    }
+    if(br>=0) place(br,bc);
+  }
+
+  function scoreCell(r,c,p){
+    let best=0;
+    const dirs=[[0,1],[1,0],[1,1],[1,-1]];
+    dirs.forEach(([dr,dc])=>{
+      let cnt=0,open=0;
+      for(let d=1;d<=4;d++){
+        const nr=r+dr*d,nc=c+dc*d;
+        if(nr<0||nr>=N||nc<0||nc>=N) break;
+        if(board[nr][nc]===p) cnt++; else if(board[nr][nc]===0) {open++;break;} else break;
+      }
+      for(let d=1;d<=4;d++){
+        const nr=r-dr*d,nc=c-dc*d;
+        if(nr<0||nr>=N||nc<0||nc>=N) break;
+        if(board[nr][nc]===p) cnt++; else if(board[nr][nc]===0) {open++;break;} else break;
+      }
+      const sc=cnt>=4?100000:cnt===3?open>0?1000:100:cnt===2?open>0?50:5:cnt===1?2:0;
+      if(sc>best) best=sc;
+    });
+    return best;
+  }
+
+  function proximityScore(r,c){
+    let s=0;
+    for(let dr=-2;dr<=2;dr++) for(let dc=-2;dc<=2;dc++){
+      const nr=r+dr,nc=c+dc;
+      if(nr<0||nr>=N||nc<0||nc>=N) continue;
+      if(board[nr][nc]!==0) s+=3-Math.max(Math.abs(dr),Math.abs(dc));
+    }
+    return s;
+  }
+
+  function checkWin(r,c,p){
+    const dirs=[[0,1],[1,0],[1,1],[1,-1]];
+    return dirs.some(([dr,dc])=>{
+      let cnt=1;
+      for(let d=1;d<=4;d++){const nr=r+dr*d,nc=c+dc*d;if(nr<0||nr>=N||nc<0||nc>=N||board[nr][nc]!==p) break;cnt++;}
+      for(let d=1;d<=4;d++){const nr=r-dr*d,nc=c-dc*d;if(nr<0||nr>=N||nc<0||nc>=N||board[nr][nc]!==p) break;cnt++;}
+      return cnt>=5;
+    });
+  }
+
+  function isFull(){for(let r=0;r<N;r++) for(let c=0;c<N;c++) if(board[r][c]===0) return false;return true;}
+
+  function undo(){
+    if(over||history.length===0) return;
+    const [r,c]=history.pop();
+    board[r][c]=0;moveCount--;
+    document.getElementById('moveDisp').textContent=moveCount;
+    if(aiMode&&history.length>0&&history[history.length-1][2]===2){
+      const [r2,c2]=history.pop();board[r2][c2]=0;moveCount--;
+      document.getElementById('moveDisp').textContent=moveCount;
+    }
+    turn=history.length>0?3-history[history.length-1][2]:1;
+    render();updateTurn();setMsg('Son hamle geri alındı.');
+  }
+
+  function updateTurn(){
+    const stone=document.getElementById('turnStone');
+    const txt=document.getElementById('turnText');
+    if(turn===1){stone.className='stone-preview black';txt.textContent=aiMode?'Senin sıran (Siyah)':'Siyah oynuyor (Oyuncu 1)';}
+    else {stone.className='stone-preview white';txt.textContent=aiMode?'Bilgisayar düşünüyor…':'Beyaz oynuyor (Oyuncu 2)';}
+  }
+
+  function showBanner(title,body){
+    const b=document.getElementById('banner');b.className='result-banner show';
+    document.getElementById('bannerTitle').textContent=title;
+    document.getElementById('bannerBody').textContent=body;
+  }
+
+  function setMsg(t){document.getElementById('msg').textContent=t;}
+
+  function getCellFromEvent(e){
+    const rect=canvas.getBoundingClientRect();
+    const scaleX=canvas.width/rect.width,scaleY=canvas.height/rect.height;
+    let cx,cy;
+    if(e.touches){cx=(e.touches[0].clientX-rect.left)*scaleX;cy=(e.touches[0].clientY-rect.top)*scaleY;}
+    else {cx=(e.clientX-rect.left)*scaleX;cy=(e.clientY-rect.top)*scaleY;}
+    const c=Math.round((cx-margin)/cellSize),r=Math.round((cy-margin)/cellSize);
+    if(r<0||r>=N||c<0||c>=N) return null;
+    return [r,c];
+  }
+
+  canvas.addEventListener('click',e=>{
+    if(over||(aiMode&&turn===2)) return;
+    const pos=getCellFromEvent(e);
+    if(pos) place(pos[0],pos[1]);
+  });
+  canvas.addEventListener('touchend',e=>{
+    e.preventDefault();
+    if(over||(aiMode&&turn===2)) return;
+    const pos=getCellFromEvent(e.changedTouches[0]?{clientX:e.changedTouches[0].clientX,clientY:e.changedTouches[0].clientY}:e);
+    if(pos) place(pos[0],pos[1]);
+  },{passive:false});
+
+  function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='block'?'none':'block';}
+
+  return {newGame,undo,toggleInfo};
+})();
+
+BT.newGame();
+window.addEventListener('resize',()=>BT.newGame());
+</script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>15-Puzzle</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0e14;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:7px;margin:auto}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.size-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.size-sel select{background:#0c1018;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:14px;font-weight:700;color:#c8960c}
+.board-outer{display:flex;justify-content:center}
+.board{display:inline-grid;gap:5px;padding:10px;background:#12182a;border:2px solid rgba(200,150,12,0.4);border-radius:8px}
+.tile{
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',Georgia,serif;font-weight:700;
+  background:linear-gradient(135deg,#1e2840,#161e34);
+  border:1px solid rgba(200,150,12,0.35);border-radius:6px;
+  color:#e8d5a0;cursor:pointer;
+  transition:transform 0.12s,background 0.12s,box-shadow 0.12s;
+  user-select:none;
+  box-shadow:2px 2px 6px rgba(0,0,0,0.4);
+}
+.tile:hover:not(.empty){background:linear-gradient(135deg,#263050,#1a2440);border-color:rgba(200,150,12,0.6);}
+.tile.correct{background:linear-gradient(135deg,#1a3020,#122018);border-color:rgba(80,200,120,0.5);color:#50c878;}
+.tile.empty{background:transparent;border:2px dashed rgba(200,150,12,0.15);cursor:default;box-shadow:none;}
+.tile.active{transform:scale(0.94);}
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.result-banner{display:none;border-radius:5px;padding:8px 14px;text-align:center}
+.result-banner.show{display:block;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35)}
+.result-banner h2{font-size:14px;color:#50c878;margin-bottom:3px}
+.result-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
+.info-box b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">15-Puzzle</div>
+    <div class="size-sel">
+      <label>Boyut:</label>
+      <select id="sizeSel" onchange="PZ.newGame()">
+        <option value="3">3×3 (8-Puzzle)</option>
+        <option value="4" selected>4×4 (15-Puzzle)</option>
+        <option value="5">5×5 (24-Puzzle)</option>
+      </select>
+    </div>
+  </div>
+  <div class="infobar">
+    <div class="ibox"><div class="l">Hamle</div><div class="v" id="moveDisp">0</div></div>
+    <div class="ibox"><div class="l">Süre</div><div class="v" id="timeDisp">0:00</div></div>
+    <div class="ibox"><div class="l">Yerinde</div><div class="v" id="correctDisp">0</div></div>
+  </div>
+  <div class="board-outer"><div class="board" id="board"></div></div>
+  <div class="msg" id="msg">Boş kareye komşu bir kareye tıklayarak kaydırın.</div>
+  <div class="result-banner" id="banner"><h2 id="bannerTitle"></h2><p id="bannerBody"></p></div>
+  <div class="br-btns">
+    <button class="a" onclick="PZ.newGame()">&#8635; Karıştır</button>
+    <button class="a" onclick="PZ.toggleInfo()">&#9432; Kurallar</button>
+  </div>
+  <div class="info-box" id="infoBox">
+    <b>15-Puzzle Nasıl Oynanır?</b><br>
+    4×4 çerçevede 1'den 15'e kadar numaralı 15 kare ve 1 boş yer vardır.<br>
+    Boş kareye komşu (yatay veya dikey) bir kareye tıkladığınızda o kare boş yere kayar.<br>
+    <b>Amaç:</b> Tüm sayıları soldan sağa, yukarıdan aşağıya sıralı hale getirmek.<br>
+    Yeşil renkli kareler doğru konumda demektir.<br>
+    3×3 (8-Puzzle) kolay, 5×5 (24-Puzzle) çok zorlu bir varyanttır.
+  </div>
+</div>
+<script>
+const PZ = (function(){
+  let N, tiles, blank, moves, timerID, elapsed, over, started;
+
+  function newGame(){
+    clearInterval(timerID);
+    N = parseInt(document.getElementById('sizeSel').value);
+    over = false; moves = 0; elapsed = 0; started = false;
+    document.getElementById('moveDisp').textContent = '0';
+    document.getElementById('timeDisp').textContent = '0:00';
+    document.getElementById('correctDisp').textContent = '0';
+    document.getElementById('banner').className = 'result-banner';
+    setMsg('Boş kareye komşu bir kareye tıklayarak kaydırın.');
+    // Çözümlü durumu oluştur, sonra karıştır
+    tiles = [];
+    for(let i=0;i<N*N-1;i++) tiles.push(i+1);
+    tiles.push(0); // 0 = boş
+    blank = N*N-1;
+    shuffle();
+    render();
+  }
+
+  function shuffle(){
+    // Çözülebilir karıştırma: rastgele geçerli hamleler yap
+    const steps = N===3?200:N===4?500:1000;
+    for(let i=0;i<steps;i++){
+      const neighbors=getNeighbors(blank);
+      const pick=neighbors[Math.floor(Math.random()*neighbors.length)];
+      swapWithBlank(pick);
+    }
+  }
+
+  function getNeighbors(pos){
+    const r=Math.floor(pos/N),c=pos%N,nb=[];
+    if(r>0) nb.push(pos-N);
+    if(r<N-1) nb.push(pos+N);
+    if(c>0) nb.push(pos-1);
+    if(c<N-1) nb.push(pos+1);
+    return nb;
+  }
+
+  function swapWithBlank(pos){
+    tiles[blank]=tiles[pos];
+    tiles[pos]=0;
+    blank=pos;
+  }
+
+  function move(pos){
+    if(over) return;
+    if(!getNeighbors(blank).includes(pos)) return;
+    if(!started){started=true;startTimer();}
+    swapWithBlank(pos);
+    moves++;
+    document.getElementById('moveDisp').textContent=moves;
+    const correct=countCorrect();
+    document.getElementById('correctDisp').textContent=correct;
+    render();
+    if(correct===N*N-1){
+      // Win: all except blank(last) correct
+      over=true;clearInterval(timerID);
+      const b=document.getElementById('banner');b.className='result-banner show';
+      document.getElementById('bannerTitle').textContent='Tebrikler!';
+      document.getElementById('bannerBody').textContent=
+        (N*N-1)+'-Puzzle '+moves+' hamlede çözüldü! Süre: '+document.getElementById('timeDisp').textContent;
+    }
+  }
+
+  function countCorrect(){
+    let c=0;
+    for(let i=0;i<N*N-1;i++) if(tiles[i]===i+1) c++;
+    return c;
+  }
+
+  function startTimer(){
+    const t0=Date.now();
+    timerID=setInterval(()=>{
+      elapsed=Math.floor((Date.now()-t0)/1000);
+      document.getElementById('timeDisp').textContent=
+        Math.floor(elapsed/60)+':'+(elapsed%60<10?'0':'')+elapsed%60;
+    },500);
+  }
+
+  function render(){
+    const bd=document.getElementById('board');
+    // Kare boyutu hesapla
+    const maxW=Math.min(window.innerWidth-48,420);
+    const gap=5,pad=10;
+    const tileSize=Math.floor((maxW-pad*2-gap*(N-1))/N);
+    const fontSize=tileSize>70?28:tileSize>50?22:tileSize>38?17:13;
+    bd.style.gridTemplateColumns=`repeat(${N},${tileSize}px)`;
+    bd.style.gap=gap+'px';
+    bd.innerHTML='';
+    const correct=new Set();
+    for(let i=0;i<N*N-1;i++) if(tiles[i]===i+1) correct.add(i);
+    tiles.forEach((val,pos)=>{
+      const el=document.createElement('div');
+      el.className='tile'+(val===0?' empty':correct.has(pos)?' correct':'');
+      el.style.width=tileSize+'px';el.style.height=tileSize+'px';
+      el.style.fontSize=fontSize+'px';
+      if(val!==0) el.textContent=val;
+      if(val!==0){
+        el.addEventListener('click',()=>{
+          el.classList.add('active');
+          setTimeout(()=>el.classList.remove('active'),120);
+          move(pos);
+        });
+        el.addEventListener('touchend',e=>{e.preventDefault();move(pos);},{passive:false});
+      }
+      bd.appendChild(el);
+    });
+  }
+
+  function setMsg(t){document.getElementById('msg').textContent=t;}
+  function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='block'?'none':'block';}
+
+  return {newGame,toggleInfo};
+})();
+
+PZ.newGame();
+window.addEventListener('resize',()=>PZ.newGame());
+</script>
+</body>
+</html>

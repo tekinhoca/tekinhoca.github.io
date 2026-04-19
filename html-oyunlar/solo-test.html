@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Solo Test</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#12100a;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:7px;margin:auto}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:14px;font-weight:700;color:#c8960c}
+.board-outer{display:flex;justify-content:center}
+canvas{cursor:pointer;touch-action:none;border-radius:6px}
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.result-banner{display:none;border-radius:5px;padding:8px 14px;text-align:center}
+.result-banner.show{display:block}
+.result-banner.win{background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35)}
+.result-banner.good{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3)}
+.result-banner.lose{background:rgba(100,80,30,0.1);border:1px solid rgba(150,120,40,0.3)}
+.result-banner h2{font-size:13px;margin-bottom:2px}
+.result-banner.win h2{color:#50c878}
+.result-banner.good h2{color:#c8960c}
+.result-banner.lose h2{color:rgba(247,242,232,0.5)}
+.result-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
+.info-box b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Solo Test</div>
+  </div>
+  <div class="infobar">
+    <div class="ibox"><div class="l">Kalan Taş</div><div class="v" id="stonesDisp">32</div></div>
+    <div class="ibox"><div class="l">Hamle</div><div class="v" id="moveDisp">0</div></div>
+    <div class="ibox"><div class="l">Geri Al</div><div class="v" id="undoDisp">5</div></div>
+  </div>
+  <div class="board-outer"><canvas id="canvas"></canvas></div>
+  <div class="msg" id="msg">Bir taş seçin, ardından atlamak istediğiniz yeri tıklayın.</div>
+  <div class="result-banner" id="banner"><h2 id="bannerTitle"></h2><p id="bannerBody"></p></div>
+  <div class="br-btns">
+    <button class="a" onclick="ST.newGame()">&#8635; Yeni Oyun</button>
+    <button class="a" onclick="ST.undo()">&#8592; Geri Al</button>
+    <button class="a" onclick="ST.toggleInfo()">&#9432; Kurallar</button>
+  </div>
+  <div class="info-box" id="infoBox">
+    <b>Solo Test Nasıl Oynanır?</b><br>
+    Artı (+) şeklindeki tahtada başlangıçta ortadaki delik boş, geri kalan 32 delikte birer taş vardır.<br>
+    Bir taş, yatay ya da dikey olarak komşu taşı <b>atlayarak</b> karşı boş deliğe geçebilir.<br>
+    Atlanan taş tahtadan kalkar.<br>
+    <b>Amaç:</b> Tahtada yalnızca 1 taş bırakmak — ve o taş ortada olursa mükemmel!<br>
+    5 hamle geri alma hakkınız var. İyi şanslar!
+  </div>
+</div>
+<script>
+const ST = (function(){
+  // Artı şekli: 7x7 ızgara, köşeler geçersiz
+  // (r,c) geçerli mi?
+  function valid(r,c){
+    if(r<0||r>6||c<0||c>6) return false;
+    if((r<2||r>4)&&(c<2||c>4)) return false;
+    return true;
+  }
+
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let board, selected, over, history, moves, undoLeft;
+  let cellSize, margin, canvasSize;
+
+  function newGame(){
+    board=Array.from({length:7},(_,r)=>Array.from({length:7},(_,c)=>valid(r,c)?1:0));
+    board[3][3]=0; // Ortası boş
+    selected=null;over=false;history=[];moves=0;undoLeft=5;
+    document.getElementById('banner').className='result-banner';
+    setMsg('Bir taş seçin, ardından atlamak istediğiniz yeri tıklayın.');
+    resize();render();updateInfo();
+  }
+
+  function resize(){
+    const maxW=Math.min(window.innerWidth-32,400);
+    cellSize=Math.floor(maxW/9);
+    margin=cellSize;
+    canvasSize=cellSize*7+margin*2;
+    canvas.width=canvasSize;canvas.height=canvasSize;
+    canvas.style.width=canvasSize+'px';canvas.style.height=canvasSize+'px';
+  }
+
+  function render(){
+    ctx.clearRect(0,0,canvasSize,canvasSize);
+    ctx.fillStyle='#1a1408';ctx.fillRect(0,0,canvasSize,canvasSize);
+    // Tahta çerçevesi
+    ctx.strokeStyle='rgba(200,150,12,0.3)';ctx.lineWidth=1.5;
+    // Artı şeklini çiz
+    const r1=cellSize*0.45;
+    for(let r=0;r<7;r++) for(let c=0;c<7;c++){
+      if(!valid(r,c)) continue;
+      const px=margin+c*cellSize,py=margin+r*cellSize;
+      // Delik arkaplanı
+      ctx.fillStyle='#4a2e0a';
+      ctx.beginPath();ctx.arc(px,py,r1,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='rgba(200,150,12,0.2)';ctx.lineWidth=1;ctx.stroke();
+      // Bağlantı çizgileri
+      if(valid(r,c+1)){
+        ctx.strokeStyle='rgba(100,70,20,0.4)';ctx.lineWidth=2;
+        ctx.beginPath();ctx.moveTo(px+r1,py);ctx.lineTo(margin+(c+1)*cellSize-r1,py);ctx.stroke();
+      }
+      if(valid(r+1,c)){
+        ctx.strokeStyle='rgba(100,70,20,0.4)';ctx.lineWidth=2;
+        ctx.beginPath();ctx.moveTo(px,py+r1);ctx.lineTo(px,margin+(r+1)*cellSize-r1);ctx.stroke();
+      }
+    }
+    // Taşlar
+    for(let r=0;r<7;r++) for(let c=0;c<7;c++){
+      if(!valid(r,c)||board[r][c]!==1) continue;
+      const px=margin+c*cellSize,py=margin+r*cellSize,rad=cellSize*0.38;
+      const isSel=selected&&selected[0]===r&&selected[1]===c;
+      const grad=ctx.createRadialGradient(px-rad*0.3,py-rad*0.3,rad*0.05,px,py,rad);
+      if(isSel){grad.addColorStop(0,'#ffd97a');grad.addColorStop(1,'#c8960c');}
+      else {grad.addColorStop(0,'#d4956a');grad.addColorStop(1,'#8a4a1a');}
+      ctx.beginPath();ctx.arc(px,py,rad,0,Math.PI*2);
+      ctx.fillStyle=grad;ctx.fill();
+      ctx.strokeStyle=isSel?'#ffe070':'#6a3010';ctx.lineWidth=isSel?2:1;ctx.stroke();
+    }
+    // Geçerli hamleler
+    if(selected){
+      const [sr,sc]=selected;
+      const dirs=[[0,2],[0,-2],[2,0],[-2,0]];
+      dirs.forEach(([dr,dc])=>{
+        const mr=sr+dr/2,mc=sc+dc/2,tr=sr+dr,tc=sc+dc;
+        if(valid(tr,tc)&&board[tr][tc]===0&&board[mr][mc]===1){
+          const px=margin+tc*cellSize,py=margin+tr*cellSize;
+          ctx.beginPath();ctx.arc(px,py,cellSize*0.25,0,Math.PI*2);
+          ctx.fillStyle='rgba(200,150,12,0.35)';ctx.fill();
+          ctx.strokeStyle='rgba(200,150,12,0.6)';ctx.lineWidth=1.5;ctx.stroke();
+        }
+      });
+    }
+  }
+
+  function handleClick(px,py){
+    if(over) return;
+    const c=Math.round((px-margin)/cellSize),r=Math.round((py-margin)/cellSize);
+    if(!valid(r,c)) return;
+    if(board[r][c]===1){
+      selected=[r,c];setMsg('Şimdi gitmek istediğiniz boş yeri seçin.');render();return;
+    }
+    if(board[r][c]===0&&selected){
+      const [sr,sc]=selected;
+      const dr=r-sr,dc=c-sc;
+      if((Math.abs(dr)===2&&dc===0)||(Math.abs(dc)===2&&dr===0)){
+        const mr=sr+dr/2,mc=sc+dc/2;
+        if(board[mr][mc]===1){
+          history.push(board.map(row=>row.slice()));
+          board[sr][sc]=0;board[mr][mc]=0;board[r][c]=1;
+          moves++;selected=null;updateInfo();render();
+          checkEnd();return;
+        }
+      }
+    }
+    selected=null;setMsg('Bir taş seçin, ardından atlamak istediğiniz yeri tıklayın.');render();
+  }
+
+  function undo(){
+    if(over||history.length===0||undoLeft<=0) return;
+    board=history.pop();moves--;undoLeft--;selected=null;
+    updateInfo();render();setMsg('Hamle geri alındı.');
+  }
+
+  function updateInfo(){
+    let stones=0;for(let r=0;r<7;r++) for(let c=0;c<7;c++) if(valid(r,c)&&board[r][c]===1) stones++;
+    document.getElementById('stonesDisp').textContent=stones;
+    document.getElementById('moveDisp').textContent=moves;
+    document.getElementById('undoDisp').textContent=undoLeft;
+  }
+
+  function checkEnd(){
+    let stones=0;for(let r=0;r<7;r++) for(let c=0;c<7;c++) if(valid(r,c)&&board[r][c]===1) stones++;
+    // Hamle var mı?
+    let canMove=false;
+    const dirs=[[0,2],[0,-2],[2,0],[-2,0]];
+    outer:for(let r=0;r<7;r++) for(let c=0;c<7;c++){
+      if(!valid(r,c)||board[r][c]!==1) continue;
+      for(const [dr,dc] of dirs){
+        const mr=r+dr/2,mc=c+dc/2,tr=r+dr,tc=c+dc;
+        if(valid(tr,tc)&&board[tr][tc]===0&&board[mr][mc]===1){canMove=true;break outer;}
+      }
+    }
+    if(!canMove){
+      over=true;
+      const b=document.getElementById('banner');
+      if(stones===1&&board[3][3]===1){
+        b.className='result-banner show win';
+        document.getElementById('bannerTitle').textContent='Mükemmel!';
+        document.getElementById('bannerBody').textContent='Tek taş kaldı ve o da ortada! '+moves+' hamlede tamamladınız.';
+      } else if(stones===1){
+        b.className='result-banner show good';
+        document.getElementById('bannerTitle').textContent='Tebrikler!';
+        document.getElementById('bannerBody').textContent='Tek taş kaldı! Ama ortada değil. '+moves+' hamle yaptınız.';
+      } else {
+        b.className='result-banner show lose';
+        document.getElementById('bannerTitle').textContent=stones+' taş kaldı';
+        document.getElementById('bannerBody').textContent='Hiç hamle kalmadı. Tekrar deneyin!';
+      }
+    } else {
+      setMsg(stones+' taş kaldı. Oynamaya devam edin!');
+    }
+  }
+
+  function getCellPos(e){
+    const rect=canvas.getBoundingClientRect();
+    const scaleX=canvas.width/rect.width,scaleY=canvas.height/rect.height;
+    if(e.touches){return[(e.touches[0].clientX-rect.left)*scaleX,(e.touches[0].clientY-rect.top)*scaleY];}
+    return[(e.clientX-rect.left)*scaleX,(e.clientY-rect.top)*scaleY];
+  }
+
+  canvas.addEventListener('click',e=>{const[px,py]=getCellPos(e);handleClick(px,py);});
+  canvas.addEventListener('touchend',e=>{
+    e.preventDefault();
+    const r=canvas.getBoundingClientRect();
+    const scX=canvas.width/r.width,scY=canvas.height/r.height;
+    handleClick((e.changedTouches[0].clientX-r.left)*scX,(e.changedTouches[0].clientY-r.top)*scY);
+  },{passive:false});
+
+  function setMsg(t){document.getElementById('msg').textContent=t;}
+  function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='block'?'none':'block';}
+
+  return {newGame,undo,toggleInfo};
+})();
+
+ST.newGame();
+window.addEventListener('resize',()=>ST.newGame());
+</script>
+</body>
+</html>

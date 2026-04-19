@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Mayın Tarlası</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0e0e0a;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:600px;display:flex;flex-direction:column;gap:7px;margin:auto}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.diff-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.diff-sel select{background:#14120a;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:14px;font-weight:700;color:#c8960c}
+.ibox .v.danger{color:#e74c3c}
+.board-outer{display:flex;justify-content:center;overflow-x:auto}
+.board{display:inline-grid;border:2px solid rgba(200,150,12,0.5);border-radius:4px;overflow:hidden;user-select:none}
+.cell{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:Georgia,serif;cursor:pointer;border-right:1px solid rgba(200,150,12,0.1);border-bottom:1px solid rgba(200,150,12,0.1);background:#1a1810;transition:background .1s}
+.cell:hover:not(.open):not(.flagged){background:#2a2618}
+.cell.open{background:#0e0c08;cursor:default}
+.cell.flagged{background:#2a1208}
+.cell.mine-hit{background:#5a0808}
+.cell.mine-show{background:#1a0808}
+.n1{color:#3498db}.n2{color:#2ecc71}.n3{color:#e74c3c}.n4{color:#9b59b6}
+.n5{color:#e67e22}.n6{color:#1abc9c}.n7{color:#e8d5a0}.n8{color:#888}
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.result-banner{display:none;border-radius:5px;padding:8px 14px;text-align:center}
+.result-banner.show{display:block}
+.result-banner.win{background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35)}
+.result-banner.lose{background:rgba(231,76,60,0.08);border:1px solid rgba(231,76,60,0.3)}
+.result-banner h2{font-size:13px;margin-bottom:2px}
+.result-banner.win h2{color:#50c878}
+.result-banner.lose h2{color:#e74c3c}
+.result-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
+.info-box b{color:#c8960c}
+@media(max-width:420px){.cell{width:26px;height:26px;font-size:11px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Mayın Tarlası</div>
+    <div class="diff-sel">
+      <label>Zorluk:</label>
+      <select id="diffSel" onchange="MT.newGame()">
+        <option value="easy">Kolay (9×9 · 10 mayın)</option>
+        <option value="medium" selected>Orta (16×16 · 40 mayın)</option>
+        <option value="hard">Zor (16×30 · 99 mayın)</option>
+      </select>
+    </div>
+  </div>
+  <div class="infobar">
+    <div class="ibox"><div class="l">Kalan Mayın</div><div class="v danger" id="mineDisp">10</div></div>
+    <div class="ibox"><div class="l">Süre</div><div class="v" id="timeDisp">0:00</div></div>
+    <div class="ibox"><div class="l">Hamle</div><div class="v" id="moveDisp">0</div></div>
+  </div>
+  <div class="board-outer"><div class="board" id="board"></div></div>
+  <div class="msg" id="msg">Sol tık: hücre aç · Sağ tık / uzun bas: bayrak koy</div>
+  <div class="result-banner" id="banner"><h2 id="bannerTitle"></h2><p id="bannerBody"></p></div>
+  <div class="br-btns">
+    <button class="a" onclick="MT.newGame()">&#8635; Yeni Oyun</button>
+    <button class="a" onclick="MT.toggleInfo()">&#9432; Kurallar</button>
+  </div>
+  <div class="info-box" id="infoBox">
+    <b>Mayın Tarlası Nasıl Oynanır?</b><br>
+    <b>Sol tık</b> (mobilde tek dokunuş): Hücreyi aç.<br>
+    <b>Sağ tık</b> (mobilde uzun basış ~0.5 sn): Bayrak koy / kaldır.<br>
+    Açılan hücredeki sayı, o hücrenin 8 komşusundaki mayın sayısını gösterir.<br>
+    Boş hücre açıldığında çevresi otomatik açılır.<br>
+    Tüm mayınsız hücreleri açarsan kazanırsın. Mayına basarsan kaybedersin.<br>
+    <b>İpucu:</b> İlk hamle hiçbir zaman mayına basmaz.
+  </div>
+</div>
+<script>
+const MT = (function(){
+  const CONFIGS={easy:{rows:9,cols:9,mines:10},medium:{rows:16,cols:16,mines:40},hard:{rows:16,cols:30,mines:99}};
+  let cfg,grid,rev,flag,mines,over,first,moves,timerID,elapsed,hitR,hitC;
+
+  function mk2d(v){return Array.from({length:cfg.rows},()=>Array(cfg.cols).fill(v));}
+  function upd(id,v){document.getElementById(id).textContent=v;}
+
+  function newGame(){
+    clearInterval(timerID);
+    cfg=CONFIGS[document.getElementById('diffSel').value];
+    grid=mk2d(0);rev=mk2d(false);flag=mk2d(false);
+    mines=new Set();over=false;first=true;moves=0;elapsed=0;hitR=-1;hitC=-1;
+    upd('moveDisp','0');upd('timeDisp','0:00');upd('mineDisp',cfg.mines);
+    document.getElementById('banner').className='result-banner';
+    upd('msg','Sol tık: hücre aç · Sağ tık / uzun bas: bayrak koy');
+    render();
+  }
+
+  function placeMines(sr,sc){
+    const safe=new Set();
+    for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
+      const nr=sr+dr,nc=sc+dc;
+      if(nr>=0&&nr<cfg.rows&&nc>=0&&nc<cfg.cols) safe.add(nr+','+nc);
+    }
+    while(mines.size<cfg.mines){
+      const r=Math.floor(Math.random()*cfg.rows),c=Math.floor(Math.random()*cfg.cols);
+      if(!safe.has(r+','+c)) mines.add(r+','+c);
+    }
+    for(let r=0;r<cfg.rows;r++) for(let c=0;c<cfg.cols;c++)
+      grid[r][c]=mines.has(r+','+c)?-1:adjCount(r,c);
+  }
+
+  function adjCount(r,c){
+    let n=0;
+    for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++){
+      const nr=r+dr,nc=c+dc;
+      if(nr>=0&&nr<cfg.rows&&nc>=0&&nc<cfg.cols&&mines.has(nr+','+nc)) n++;
+    }
+    return n;
+  }
+
+  function revealCell(r,c){
+    if(over||rev[r][c]||flag[r][c]) return;
+    if(first){first=false;placeMines(r,c);startTimer();}
+    if(mines.has(r+','+c)){
+      hitR=r;hitC=c;rev[r][c]=true;over=true;
+      clearInterval(timerID);
+      mines.forEach(k=>{const[mr,mc]=k.split(',').map(Number);rev[mr][mc]=true;});
+      showBanner(false);render();return;
+    }
+    flood(r,c);moves++;upd('moveDisp',moves);checkWin();render();
+  }
+
+  function flood(r,c){
+    if(r<0||r>=cfg.rows||c<0||c>=cfg.cols||rev[r][c]||flag[r][c]) return;
+    rev[r][c]=true;
+    if(grid[r][c]===0) for(let dr=-1;dr<=1;dr++) for(let dc=-1;dc<=1;dc++) flood(r+dr,c+dc);
+  }
+
+  function toggleFlag(r,c){
+    if(over||rev[r][c]) return;
+    flag[r][c]=!flag[r][c];
+    let f=0;for(let r2=0;r2<cfg.rows;r2++) for(let c2=0;c2<cfg.cols;c2++) if(flag[r2][c2]) f++;
+    upd('mineDisp',cfg.mines-f);render();
+  }
+
+  function checkWin(){
+    let closed=0;
+    for(let r=0;r<cfg.rows;r++) for(let c=0;c<cfg.cols;c++) if(!rev[r][c]) closed++;
+    if(closed===cfg.mines){over=true;clearInterval(timerID);showBanner(true);}
+  }
+
+  function showBanner(won){
+    const b=document.getElementById('banner');
+    b.className='result-banner show '+(won?'win':'lose');
+    upd('bannerTitle',won?'Tebrikler!':'Boom! Mayına bastınız!');
+    upd('bannerBody',won
+      ?cfg.mines+' mayının hepsini buldunuz! Süre: '+document.getElementById('timeDisp').textContent
+      :'Üzülmeyin, tekrar deneyin. Mayın konumları gösterildi.');
+  }
+
+  function startTimer(){
+    const t0=Date.now();
+    timerID=setInterval(()=>{
+      elapsed=Math.floor((Date.now()-t0)/1000);
+      upd('timeDisp',Math.floor(elapsed/60)+':'+(elapsed%60<10?'0':'')+elapsed%60);
+    },500);
+  }
+
+  function render(){
+    const bd=document.getElementById('board');
+    bd.style.gridTemplateColumns=`repeat(${cfg.cols},1fr)`;
+    bd.innerHTML='';
+    for(let r=0;r<cfg.rows;r++) for(let c=0;c<cfg.cols;c++){
+      const el=document.createElement('div');
+      el.className='cell';
+      const isMine=mines.has(r+','+c);
+      if(rev[r][c]){
+        if(isMine){
+          el.classList.add(r===hitR&&c===hitC?'mine-hit':'mine-show');
+          el.textContent='💣';
+        } else {
+          el.classList.add('open');
+          if(grid[r][c]>0){el.textContent=grid[r][c];el.classList.add('n'+grid[r][c]);}
+        }
+      } else if(flag[r][c]){el.classList.add('flagged');el.textContent='🚩';}
+      const rr=r,cc=c;
+      el.addEventListener('click',()=>revealCell(rr,cc));
+      el.addEventListener('contextmenu',e=>{e.preventDefault();toggleFlag(rr,cc);});
+      let pt;
+      el.addEventListener('touchstart',e=>{pt=setTimeout(()=>{e.preventDefault();toggleFlag(rr,cc);},500);},{passive:false});
+      el.addEventListener('touchend',()=>clearTimeout(pt));
+      el.addEventListener('touchmove',()=>clearTimeout(pt));
+      bd.appendChild(el);
+    }
+  }
+
+  function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='block'?'none':'block';}
+
+  return {newGame, toggleInfo};
+})();
+
+MT.newGame();
+</script>
+</body>
+</html>
