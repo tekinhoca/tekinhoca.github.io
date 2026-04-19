@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Türk Daması</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#12100a;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:580px;display:flex;flex-direction:column;gap:7px;margin:auto}
+
+.turn-header{display:flex;justify-content:center;gap:20px;align-items:center;margin-bottom:2px}
+.player-tag{font-size:13px;font-weight:600;color:rgba(247,242,232,0.35);padding:4px 14px;border-radius:14px;border:1.5px solid transparent;transition:all .3s}
+.player-tag.p1.active{font-size:15px;color:#f0ece4;border-color:#c8c0b0;box-shadow:0 0 0 0 rgba(240,236,228,0.3);animation:pulse1 1.4s ease-in-out infinite}
+.player-tag.p2.active{font-size:15px;color:#888;border-color:#555;animation:pulse2 1.4s ease-in-out infinite}
+@keyframes pulse1{0%,100%{box-shadow:0 0 0 0 rgba(240,236,228,0.25)}50%{box-shadow:0 0 0 6px rgba(240,236,228,0)}}
+@keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(100,100,100,0.25)}50%{box-shadow:0 0 0 6px rgba(100,100,100,0)}}
+.vs{font-size:11px;color:rgba(247,242,232,0.2)}
+
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:14px;font-weight:700;color:#c8960c}
+
+.board-outer{display:flex;justify-content:center}
+canvas{border:2px solid rgba(200,150,12,0.5);border-radius:4px;cursor:pointer;touch-action:none}
+
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.result-banner{display:none;border-radius:5px;padding:8px 14px;text-align:center}
+.result-banner.show{display:block;background:rgba(200,150,12,0.1);border:1px solid rgba(200,150,12,0.4)}
+.result-banner h2{font-size:14px;color:#c8960c;margin-bottom:3px}
+.result-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
+
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.9}
+.info-box b{color:#c8960c}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="turn-header">
+    <div class="player-tag p1" id="tag1">⬜ Oyuncu 1 (Beyaz)</div>
+    <div class="vs">—</div>
+    <div class="player-tag p2" id="tag2">⬛ Oyuncu 2 (Siyah)</div>
+  </div>
+
+  <div class="infobar">
+    <div class="ibox"><div class="l">Beyaz Taş</div><div class="v" id="w-count">16</div></div>
+    <div class="ibox"><div class="l">Hamle</div><div class="v" id="move-count">0</div></div>
+    <div class="ibox"><div class="l">Siyah Taş</div><div class="v" id="b-count">16</div></div>
+  </div>
+
+  <div class="board-outer"><canvas id="canvas"></canvas></div>
+
+  <div class="msg" id="msg">Oyuncu 1 (Beyaz) başlar. Bir taş seçin.</div>
+  <div class="result-banner" id="banner"><h2 id="bannerTitle"></h2><p id="bannerBody"></p></div>
+
+  <div class="br-btns">
+    <button class="a" onclick="TD.newGame()">&#8635; Yeni Oyun</button>
+    <button class="a" onclick="TD.undo()">&#8592; Geri Al</button>
+    <button class="a" onclick="TD.toggleInfo()">&#9432; Kurallar</button>
+  </div>
+
+  <div class="info-box" id="infoBox">
+    <b>Türk Daması Kuralları</b><br>
+    8×8 tahtada her oyuncunun 16 taşı vardır (ilk iki sıra).<br>
+    <b>Hareket:</b> Taşlar yalnızca <b>yatay ve dikey</b> yönde ilerler (çapraz yasak). Düz taşlar sadece <b>ileri</b> gidebilir (yana da gidebilir, geri gidemez). Dama taşları her yönde istenilen kadar ilerleyebilir.<br>
+    <b>Atlama:</b> Karşı taşı atlayarak almak <b>zorunludur</b>; birden fazla taş alınabiliyorsa almaya devam edilmelidir. En fazla taş alan hamle seçilmek <b>zorundadır</b>.<br>
+    <b>Dama:</b> Taş karşı tarafın son sırasına ulaşırsa dama olur (👑).<br>
+    <b>Kazanma:</b> Rakibin tüm taşlarını alan ya da rakibi hamlesiz bırakan oyuncu kazanır.
+  </div>
+</div>
+
+<script>
+const TD = (function(){
+  // Taş değerleri: 0=boş, 1=beyaz taş, 2=siyah taş, 3=beyaz dama, 4=siyah dama
+  const EMPTY=0,W=1,B=2,WD=3,BD=4;
+  const isWhite=p=>p===W||p===WD;
+  const isBlack=p=>p===B||p===BD;
+  const isDama=p=>p===WD||p===BD;
+  const isOwn=(p,turn)=>turn===1?isWhite(p):isBlack(p);
+  const isOpp=(p,turn)=>turn===1?isBlack(p):isWhite(p);
+
+  let board, turn, selected, mustCapture, capturePiece, over, history, moveCount;
+  let cellSize, canvas, ctx;
+
+  canvas = document.getElementById('canvas');
+  ctx = canvas.getContext('2d');
+
+  function newGame(){
+    board = Array.from({length:8},()=>Array(8).fill(EMPTY));
+    // Siyah: satır 1-2 (üst), Beyaz: satır 5-6 (alt), 0 ve 7 boş
+    for(let r=1;r<3;r++) for(let c=0;c<8;c++) board[r][c]=B;
+    for(let r=5;r<7;r++) for(let c=0;c<8;c++) board[r][c]=W;
+    turn=1; selected=null; mustCapture=null; capturePiece=null;
+    over=false; history=[]; moveCount=0;
+    document.getElementById('banner').className='result-banner';
+    resize(); render(); updateUI();
+    setMsg('Oyuncu 1 (Beyaz) başlar. Bir taş seçin.');
+  }
+
+  function resize(){
+    const maxW=Math.min(window.innerWidth-32,480);
+    cellSize=Math.floor(maxW/8);
+    canvas.width=cellSize*8; canvas.height=cellSize*8;
+    canvas.style.width=cellSize*8+'px'; canvas.style.height=cellSize*8+'px';
+  }
+
+  // ── HAMLE HESAPLAMA ──
+
+  // Düz taş için yön kısıtı: beyaz yukarı (r azalır), siyah aşağı (r artar)
+  function forwardDir(turn){ return turn===1?-1:1; }
+
+  // Bir taşın atlama hamlelerini döndür
+  function getCaptures(board, r, c){
+    const p=board[r][c];
+    const t=isWhite(p)?1:2;
+    const moves=[];
+    if(isDama(p)){
+      // Dama: 4 yönde istediği kadar ilerleyip taş atlayabilir
+      const dirs=[[0,1],[0,-1],[1,0],[-1,0]];
+      dirs.forEach(([dr,dc])=>{
+        let nr=r+dr,nc=c+dc;
+        // Boşlukları geç
+        while(nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===EMPTY){nr+=dr;nc+=dc;}
+        // Rakip taş var mı?
+        if(nr>=0&&nr<8&&nc>=0&&nc<8&&isOpp(board[nr][nc],t)){
+          const er=nr,ec=nc;
+          nr+=dr;nc+=dc;
+          // Atladıktan sonra boş yer(ler)
+          while(nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===EMPTY){
+            moves.push({fr:r,fc:c,tr:nr,tc:nc,er,ec});
+            nr+=dr;nc+=dc;
+          }
+        }
+      });
+    } else {
+      // Düz taş: 3 yönde (ileri + 2 yana) 1 adım atlama
+      const fwd=forwardDir(t);
+      const dirs=[[fwd,0],[0,1],[0,-1]]; // ileri, sağ, sol
+      dirs.forEach(([dr,dc])=>{
+        const mr=r+dr,mc=c+dc,tr=r+dr*2,tc=c+dc*2;
+        if(tr>=0&&tr<8&&tc>=0&&tc<8&&board[mr][mc]!==EMPTY&&isOpp(board[mr][mc],t)&&board[tr][tc]===EMPTY)
+          moves.push({fr:r,fc:c,tr,tc,er:mr,ec:mc});
+      });
+    }
+    return moves;
+  }
+
+  // Tüm taşların tüm atlama hamlelerini getir
+  function getAllCaptures(board,t){
+    let all=[];
+    for(let r=0;r<8;r++) for(let c=0;c<8;c++)
+      if(isOwn(board[r][c],t)) all=all.concat(getCaptures(board,r,c));
+    return all;
+  }
+
+  // En fazla taş alan hamle zincirlerini bul
+  function maxCaptureMoves(board,t){
+    const best=[];
+    let maxLen=0;
+    function dfs(b,r,c,chain){
+      const taken=new Set(chain.map(m=>m.er+','+m.ec));
+      const caps=getCaptures(b,r,c).filter(m=>!taken.has(m.er+','+m.ec));
+      if(caps.length===0){
+        if(chain.length===0) return; // atlama yok, ekleme
+        if(chain.length>maxLen){maxLen=chain.length;best.length=0;best.push([...chain]);}
+        else if(chain.length===maxLen) best.push([...chain]);
+        return;
+      }
+      caps.forEach(m=>{
+        const nb=b.map(row=>row.slice());
+        nb[m.tr][m.tc]=nb[m.fr][m.fc];
+        nb[m.fr][m.fc]=EMPTY;
+        nb[m.er][m.ec]=EMPTY;
+        const promoted=checkPromotion(nb,m.tr,m.tc,t);
+        if(promoted){
+          // Dama olunca zincir o hamlede biter
+          const ch=[...chain,m];
+          if(ch.length>maxLen){maxLen=ch.length;best.length=0;best.push(ch);}
+          else if(ch.length===maxLen) best.push(ch);
+        } else {
+          dfs(nb,m.tr,m.tc,[...chain,m]);
+        }
+      });
+    }
+    for(let r=0;r<8;r++) for(let c=0;c<8;c++)
+      if(isOwn(board[r][c],t)) dfs(board,r,c,[]);
+    return best;
+  }
+
+  // Normal hamleler (atlama yoksa)
+  function getNormalMoves(board,r,c){
+    const p=board[r][c];
+    const t=isWhite(p)?1:2;
+    const moves=[];
+    if(isDama(p)){
+      const dirs=[[0,1],[0,-1],[1,0],[-1,0]];
+      dirs.forEach(([dr,dc])=>{
+        let nr=r+dr,nc=c+dc;
+        while(nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===EMPTY){
+          moves.push({fr:r,fc:c,tr:nr,tc:nc});
+          nr+=dr;nc+=dc;
+        }
+      });
+    } else {
+      const fwd=forwardDir(t);
+      [[fwd,0],[0,1],[0,-1]].forEach(([dr,dc])=>{
+        const nr=r+dr,nc=c+dc;
+        if(nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===EMPTY)
+          moves.push({fr:r,fc:c,tr:nr,tc:nc});
+      });
+    }
+    return moves;
+  }
+
+  function checkPromotion(b,r,c,t){
+    if(t===1&&r===0&&b[r][c]===W){b[r][c]=WD;return true;}
+    if(t===2&&r===7&&b[r][c]===B){b[r][c]=BD;return true;}
+    return false;
+  }
+
+  // ── TIKLAMA YÖNETİMİ ──
+  function handleClick(r,c){
+    if(over) return;
+
+    // Atlama zincirleri hesapla
+    const capChains=maxCaptureMoves(board,turn);
+    const mustCap=capChains.length>0;
+
+    // Taş seçimi
+    if(selected===null){
+      if(board[r][c]===EMPTY||!isOwn(board[r][c],turn)) return;
+      // Zorunlu atlama varsa sadece atlayabilecek taşlar seçilebilir
+      if(mustCap){
+        const canCap=capChains.some(ch=>ch[0].fr===r&&ch[0].fc===c);
+        if(!canCap){setMsg('Zorunlu atlama var! Atlayabilecek bir taş seçin.');return;}
+      }
+      selected=[r,c]; render(); return;
+    }
+
+    const [sr,sc]=selected;
+
+    // Aynı taşa tekrar tıklandıysa seçimi kaldır
+    if(sr===r&&sc===c){selected=null;render();return;}
+
+    // Kendi başka taşına tıklandıysa onu seç
+    if(isOwn(board[r][c],turn)){
+      if(mustCap){
+        const canCap=capChains.some(ch=>ch[0].fr===r&&ch[0].fc===c);
+        if(!canCap){setMsg('Zorunlu atlama var! Atlayabilecek bir taş seçin.');return;}
+      }
+      selected=[r,c];render();return;
+    }
+
+    // Hamle dene
+    if(mustCap){
+      // Seçili taşın başlangıç kareye sahip zincirler
+      const chains=capChains.filter(ch=>ch[0].fr===sr&&ch[0].fc===sc);
+      // İlk adımı r,c olan zincirler
+      const matching=chains.filter(ch=>ch[0].tr===r&&ch[0].tc===c);
+      if(matching.length===0){setMsg('Geçersiz hamle. Zorunlu atlama yapmalısınız.');return;}
+      // Zincirin tamamını uygula
+      executeChain(matching[0]);
+    } else {
+      const normals=getNormalMoves(board,sr,sc);
+      const m=normals.find(mv=>mv.tr===r&&mv.tc===c);
+      if(!m){setMsg('Geçersiz hamle.');return;}
+      executeNormal(m);
+    }
+  }
+
+  function executeChain(chain){
+    history.push({board:board.map(r=>r.slice()),turn,moveCount});
+    chain.forEach(m=>{
+      board[m.tr][m.tc]=board[m.fr][m.fc];
+      board[m.fr][m.fc]=EMPTY;
+      board[m.er][m.ec]=EMPTY;
+    });
+    const last=chain[chain.length-1];
+    checkPromotion(board,last.tr,last.tc,turn);
+    moveCount++;
+    selected=null;
+    finishTurn();
+  }
+
+  function executeNormal(m){
+    history.push({board:board.map(r=>r.slice()),turn,moveCount});
+    board[m.tr][m.tc]=board[m.fr][m.fc];
+    board[m.fr][m.fc]=EMPTY;
+    checkPromotion(board,m.tr,m.tc,turn);
+    moveCount++;
+    selected=null;
+    finishTurn();
+  }
+
+  function finishTurn(){
+    turn=3-turn;
+    updateUI();
+    // Kazanma kontrolü
+    let wc=0,bc=0;
+    for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+      if(isWhite(board[r][c])) wc++;
+      if(isBlack(board[r][c])) bc++;
+    }
+    if(wc===0){gameOver(2);return;}
+    if(bc===0){gameOver(1);return;}
+    // Hamlesizlik kontrolü
+    const caps=maxCaptureMoves(board,turn);
+    let hasNormal=false;
+    for(let r=0;r<8&&!hasNormal;r++) for(let c=0;c<8&&!hasNormal;c++)
+      if(isOwn(board[r][c],turn)&&getNormalMoves(board,r,c).length>0) hasNormal=true;
+    if(caps.length===0&&!hasNormal){gameOver(3-turn);return;}
+    render();
+    const mustCap=caps.length>0;
+    setMsg(mustCap
+      ?'Oyuncu '+(turn===1?'1 (Beyaz)':'2 (Siyah)')+': Zorunlu atlama var!'
+      :'Oyuncu '+(turn===1?'1 (Beyaz)':'2 (Siyah)')+': Bir taş seçin.');
+  }
+
+  function gameOver(winner){
+    over=true;
+    const b=document.getElementById('banner');b.className='result-banner show';
+    document.getElementById('bannerTitle').textContent='Oyuncu '+(winner===1?'1 (Beyaz)':'2 (Siyah)')+' Kazandı!';
+    document.getElementById('bannerBody').textContent=moveCount+' hamlede oyun tamamlandı.';
+    const t1=document.getElementById('tag1'),t2=document.getElementById('tag2');
+    t1.className='player-tag p1'+(winner===1?' active':'');
+    t2.className='player-tag p2'+(winner===2?' active':'');
+    render();
+  }
+
+  function undo(){
+    if(history.length===0) return;
+    const snap=history.pop();
+    board=snap.board;turn=snap.turn;moveCount=snap.moveCount;
+    selected=null;over=false;
+    document.getElementById('banner').className='result-banner';
+    updateUI();render();
+    setMsg('Hamle geri alındı. Oyuncu '+(turn===1?'1 (Beyaz)':'2 (Siyah)')+' oynuyor.');
+  }
+
+  // ── RENDER ──
+  function render(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const cs=cellSize;
+
+    // Kareleri çiz — Türk damasında tek renk
+    for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+      const x=c*cs,y=r*cs;
+      ctx.fillStyle='#8a5c28';
+      ctx.fillRect(x,y,cs,cs);
+      ctx.strokeStyle='rgba(200,150,12,0.25)';ctx.lineWidth=0.8;
+      ctx.strokeRect(x,y,cs,cs);
+    }
+
+    // Satır/sütun etiketleri
+    ctx.font=`${Math.max(9,cs*0.18)}px Georgia,serif`;
+    ctx.fillStyle='rgba(200,150,12,0.5)';ctx.textAlign='center';ctx.textBaseline='middle';
+    for(let i=0;i<8;i++){
+      ctx.fillText(String.fromCharCode(65+i),i*cs+cs/2,cs*8-cs*0.15);
+      ctx.fillText(8-i,(cs*0.12),i*cs+cs/2);
+    }
+
+    // Seçili taşın vurgusu
+    if(selected){
+      const [sr,sc]=selected;
+      ctx.fillStyle='rgba(200,220,100,0.3)';
+      ctx.fillRect(sc*cs,sr*cs,cs,cs);
+    }
+
+    // Geçerli hedef kareleri göster
+    if(selected){
+      const [sr,sc]=selected;
+      const capChains=maxCaptureMoves(board,turn);
+      const mustCap=capChains.length>0;
+      if(mustCap){
+        capChains.filter(ch=>ch[0].fr===sr&&ch[0].fc===sc)
+          .forEach(ch=>{
+            const m=ch[0];
+            ctx.fillStyle='rgba(231,76,60,0.35)';
+            ctx.beginPath();ctx.arc(m.tc*cs+cs/2,m.tr*cs+cs/2,cs*0.22,0,Math.PI*2);ctx.fill();
+          });
+      } else {
+        getNormalMoves(board,sr,sc).forEach(m=>{
+          ctx.fillStyle='rgba(200,150,12,0.35)';
+          ctx.beginPath();ctx.arc(m.tc*cs+cs/2,m.tr*cs+cs/2,cs*0.22,0,Math.PI*2);ctx.fill();
+        });
+      }
+    }
+
+    // Taşları çiz
+    for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+      const p=board[r][c];
+      if(p===EMPTY) continue;
+      const x=c*cs+cs/2,y=r*cs+cs/2,rad=cs*0.38;
+      const white=isWhite(p);
+      const grad=ctx.createRadialGradient(x-rad*0.3,y-rad*0.3,rad*0.05,x,y,rad);
+      if(white){grad.addColorStop(0,'#fff');grad.addColorStop(1,'#c8c0b0');}
+      else {grad.addColorStop(0,'#555');grad.addColorStop(1,'#111');}
+      ctx.beginPath();ctx.arc(x,y,rad,0,Math.PI*2);
+      ctx.fillStyle=grad;ctx.fill();
+      ctx.strokeStyle=white?'#a09888':'#333';ctx.lineWidth=1.5;ctx.stroke();
+      // Dama tacı
+      if(isDama(p)){
+        ctx.fillStyle=white?'#c8960c':'#c8960c';
+        ctx.font=`bold ${Math.floor(cs*0.32)}px Georgia,serif`;
+        ctx.textAlign='center';ctx.textBaseline='middle';
+        ctx.fillText('♛',x,y);
+      }
+    }
+
+    // Koordinat çizgisi (dış çerçeve)
+    ctx.strokeStyle='rgba(200,150,12,0.6)';ctx.lineWidth=2;
+    ctx.strokeRect(0,0,canvas.width,canvas.height);
+  }
+
+  function updateUI(){
+    let wc=0,bc=0;
+    for(let r=0;r<8;r++) for(let c=0;c<8;c++){
+      if(isWhite(board[r][c])) wc++;
+      if(isBlack(board[r][c])) bc++;
+    }
+    document.getElementById('w-count').textContent=wc;
+    document.getElementById('b-count').textContent=bc;
+    document.getElementById('move-count').textContent=moveCount;
+    if(!over){
+      document.getElementById('tag1').className='player-tag p1'+(turn===1?' active':'');
+      document.getElementById('tag2').className='player-tag p2'+(turn===2?' active':'');
+    }
+  }
+
+  function setMsg(t){document.getElementById('msg').textContent=t;}
+
+  function getCell(e){
+    const rect=canvas.getBoundingClientRect();
+    const scX=canvas.width/rect.width,scY=canvas.height/rect.height;
+    let cx,cy;
+    if(e.touches){cx=(e.touches[0].clientX-rect.left)*scX;cy=(e.touches[0].clientY-rect.top)*scY;}
+    else{cx=(e.clientX-rect.left)*scX;cy=(e.clientY-rect.top)*scY;}
+    return[Math.floor(cy/cellSize),Math.floor(cx/cellSize)];
+  }
+
+  canvas.addEventListener('click',e=>{const[r,c]=getCell(e);handleClick(r,c);});
+  canvas.addEventListener('touchend',e=>{
+    e.preventDefault();
+    const rect=canvas.getBoundingClientRect();
+    const scX=canvas.width/rect.width,scY=canvas.height/rect.height;
+    const cx=(e.changedTouches[0].clientX-rect.left)*scX;
+    const cy=(e.changedTouches[0].clientY-rect.top)*scY;
+    handleClick(Math.floor(cy/cellSize),Math.floor(cx/cellSize));
+  },{passive:false});
+
+  function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='block'?'none':'block';}
+
+  return{newGame,undo,toggleInfo};
+})();
+
+TD.newGame();
+window.addEventListener('resize',()=>TD.newGame());
+</script>
+</body>
+</html>
