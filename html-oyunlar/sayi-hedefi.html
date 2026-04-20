@@ -144,12 +144,14 @@ button.primary:hover{background:rgba(200,150,12,0.35)}
       <div class="mode-btn" onclick="G.selectMode(1)">
         <span class="mode-icon">🧠</span>
         <span class="mode-label">Tek Kişi</span>
-        <span class="mode-desc">10 soruluk yarışma</span>
+        <span class="mode-desc">10 soruluk</span>
+        <span class="mode-desc">meydan okuma</span>
       </div>
       <div class="mode-btn" onclick="G.selectMode(2)">
         <span class="mode-icon">⚔️</span>
         <span class="mode-label">İki Kişi</span>
-        <span class="mode-desc">6 turlu rekabet</span>
+        <span class="mode-desc">8 soruluk</span>
+        <span class="mode-desc">kıyasıya rekabet</span>
       </div>
     </div>
   </div>
@@ -350,7 +352,7 @@ const G = (function(){
     // currentQ: bulmaca no (0..5 iki kişi, 0..9 tek kişi)
     // currentP: hangi oyuncu oynuyor (0 veya 1)
 
-    const maxQ = mode===1?10:6;
+    const maxQ = mode===1?10:8;
 
     if(mode===1){
       if(currentQ>=maxQ){ showEnd(); return; }
@@ -457,10 +459,10 @@ const G = (function(){
       banner.innerHTML=`<h2>🎯 TAM İSABET!</h2><p>${players[playerIdx]}, hedefe ulaştınız! <b>+${pts} puan</b></p>`;
     } else if(pts>0){
       banner.className='result-banner show close';
-      banner.innerHTML=`<h2>Hedef: ${target}</h2><p>En yakın: <b>${best}</b> — Fark: <b>${diff}</b></p><p style="margin-top:4px">Puan: <b>+${pts}</b></p>`;
+      banner.innerHTML=`<h2>Hedef: ${target}</h2><p>Ulaşılan: <b>${best}</b> — Fark: <b>${diff}</b></p><p style="margin-top:4px">Puan: <b>+${pts}</b></p>`;
     } else {
       banner.className='result-banner show miss';
-      banner.innerHTML=`<h2>Hedef: ${target}</h2><p>En yakın: <b>${best===0?'Bulunamadı':best}</b>${best>0?` — Fark: <b>${diff}</b>`:''}</p><p style="margin-top:4px">Puan: <b>0</b></p>`;
+      banner.innerHTML=`<h2>Hedef: ${target}</h2><p>Ulaşılan: <b>${best===0?'Yok':best}</b>${best>0?` — Fark: <b>${diff}</b>`:''}</p><p style="margin-top:4px">Puan: <b>0</b></p>`;
     }
 
     scores[playerIdx] += pts;
