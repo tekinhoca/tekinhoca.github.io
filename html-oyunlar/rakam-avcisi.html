@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Rakam Avcısı</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0e0a;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:440px;display:flex;flex-direction:column;gap:8px;margin:auto}
+
+/* ── MODAL ── */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.82);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:16px;
+}
+.modal-overlay.hidden{display:none}
+.modal-box{
+  background:#141a12;
+  border:1px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:24px 22px 20px;
+  max-width:380px;width:100%;
+  display:flex;flex-direction:column;gap:14px;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-title{font-size:20px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em}
+.modal-sub{font-size:11px;color:rgba(247,242,232,0.35);text-align:center;letter-spacing:.04em}
+.modal-rules{font-size:12px;color:rgba(247,242,232,0.55);line-height:1.9;display:flex;flex-direction:column;gap:6px}
+.modal-rules b{color:#c8960c}
+.rule-row{display:flex;align-items:center;gap:10px}
+.rule-swatch{width:28px;height:28px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff}
+.sw-green{background:#27ae60}
+.sw-orange{background:#e67e22}
+.sw-dark{background:#2a2a2a;border:1px solid #444}
+.modal-btns{display:flex;gap:8px;justify-content:center}
+button.modal-start{
+  background:rgba(200,150,12,0.2);border:1px solid rgba(200,150,12,0.6);
+  border-radius:5px;padding:9px 28px;font-size:13px;font-weight:700;
+  cursor:pointer;color:#e8d5a0;font-family:Georgia,serif;
+  transition:background .2s;letter-spacing:.04em;
+}
+button.modal-start:hover{background:rgba(200,150,12,0.35)}
+button.modal-close{
+  background:transparent;border:1px solid rgba(255,255,255,0.12);
+  border-radius:5px;padding:9px 16px;font-size:11px;
+  cursor:pointer;color:rgba(247,242,232,0.4);font-family:Georgia,serif;
+}
+button.modal-close:hover{background:rgba(255,255,255,0.06)}
+
+/* ── ÜSTBAR ── */
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.diff-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.diff-sel select{background:#0c100c;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
+
+/* ── İNFOBAR ── */
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:13px;font-weight:700;color:#c8960c}
+
+/* ── TAHMİN IZGARASI ── */
+.grid-wrap{display:flex;flex-direction:column;gap:5px;align-items:center}
+
+.guess-row-grid{display:flex;gap:5px}
+
+.cell{
+  width:46px;height:46px;
+  border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:700;font-family:Georgia,serif;
+  border:2px solid rgba(255,255,255,0.1);
+  background:#141a12;
+  color:rgba(247,242,232,0.9);
+  transition:background .3s,border-color .3s,transform .15s;
+  user-select:none;
+}
+.cell.active-empty{border-color:rgba(200,150,12,0.35);background:#161e14}
+.cell.active-filled{border-color:rgba(200,150,12,0.6);background:#1a2018;animation:pop .1s ease}
+@keyframes pop{0%{transform:scale(1.12)}100%{transform:scale(1)}}
+.cell.correct{background:#27ae60;border-color:#27ae60;color:#fff}
+.cell.misplaced{background:#e67e22;border-color:#e67e22;color:#fff}
+.cell.absent{background:#2a2a2a;border-color:#2a2a2a;color:rgba(255,255,255,0.5)}
+.cell.reveal{animation:flip .4s ease forwards}
+@keyframes flip{
+  0%{transform:rotateX(0)}
+  50%{transform:rotateX(-90deg)}
+  100%{transform:rotateX(0)}
+}
+
+/* ── NUMPAD ── */
+.numpad{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:4px}
+.nbtn{
+  width:38px;height:40px;
+  border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:700;font-family:Georgia,serif;
+  cursor:pointer;transition:background .15s,opacity .3s;
+  border:1px solid rgba(200,150,12,0.25);
+  background:rgba(200,150,12,0.08);
+  color:rgba(247,242,232,0.85);
+  user-select:none;
+}
+.nbtn:hover{background:rgba(200,150,12,0.22)}
+.nbtn.k-correct{background:#27ae60;border-color:#27ae60;color:#fff}
+.nbtn.k-misplaced{background:#e67e22;border-color:#e67e22;color:#fff}
+.nbtn.k-absent{background:#2a2a2a;border-color:#2a2a2a;color:rgba(255,255,255,0.4)}
+.nbtn.wide{width:56px;font-size:11px}
+.nbtn.ok-btn{width:64px;font-size:11px;color:#50c878;border-color:rgba(80,200,120,0.4);background:rgba(80,200,120,0.08)}
+.nbtn.ok-btn:hover{background:rgba(80,200,120,0.2)}
+.nbtn.ok-btn:disabled{opacity:.3;cursor:default}
+
+/* ── MESAJ ── */
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.msg.shake{animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+/* ── SONUÇ ── */
+.result-banner{display:none;border-radius:5px;padding:10px 14px;text-align:center}
+.result-banner.show{display:block}
+.result-banner.win{background:rgba(39,174,96,0.12);border:1px solid rgba(39,174,96,0.4)}
+.result-banner.lose{background:rgba(200,50,50,0.08);border:1px solid rgba(200,50,50,0.3)}
+.result-banner h2{font-size:14px;margin-bottom:3px}
+.result-banner.win h2{color:#27ae60}
+.result-banner.lose h2{color:#eb5757}
+.result-banner p{font-size:11px;color:rgba(247,242,232,0.5)}
+.secret-reveal{font-size:22px;font-weight:700;color:#c8960c;letter-spacing:.12em;margin-top:4px}
+
+/* ── BUTONLAR ── */
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+/* ── LOGO (modal içinde) ── */
+</style>
+</head>
+<body>
+
+<!-- ── KARŞILAMA MODALI ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">Rakam Avcısı</div>
+    <div class="modal-sub">Gizli sayıyı tahmin et</div>
+    <div class="modal-rules">
+      <div>Seçtiğin basamak sayısına göre gizli bir sayı belirlenir. Her tahmin sonrası rakamlar renkle işaretlenir:</div>
+      <div class="rule-row">
+        <div class="rule-swatch sw-green">7</div>
+        <div><b>Yeşil:</b> Rakam doğru, yeri de doğru.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-swatch sw-orange">3</div>
+        <div><b>Turuncu:</b> Rakam var ama yanlış yerde.</div>
+      </div>
+      <div class="rule-row">
+        <div class="rule-swatch sw-dark">9</div>
+        <div><b>Koyu:</b> Bu rakam gizli sayıda yok.</div>
+      </div>
+      <div>Aynı rakam birden fazla kez kullanılabilir. Klavyedeki rakamlar da renklenir. Hakkın dolmadan bul!</div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="RA.closeModal()">Kapat</button>
+      <button class="modal-start" onclick="RA.closeModal()">🎯 Başla</button>
+    </div>
+    <div style="text-align:center;margin-top:4px">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:28px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.35'">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- ÜSTBAR -->
+  <div class="top-bar">
+    <div class="game-title">Rakam Avcısı</div>
+    <div class="diff-sel">
+      <label>Basamak:</label>
+      <select id="digitSel" onchange="RA.newGame(); this.blur()">
+        <option value="3">3 basamak</option>
+        <option value="4" selected>4 basamak</option>
+        <option value="5">5 basamak</option>
+        <option value="6">6 basamak</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- İNFOBAR -->
+  <div class="infobar">
+    <div class="ibox"><div class="l">Tahmin</div><div class="v" id="guessDisp">0</div></div>
+    <div class="ibox"><div class="l">Kalan Hak</div><div class="v" id="remDisp">6</div></div>
+    <div class="ibox"><div class="l">Basamak</div><div class="v" id="digitDisp">4</div></div>
+  </div>
+
+  <!-- TAHMİN IZGARASI -->
+  <div class="grid-wrap" id="gridWrap"></div>
+
+  <!-- NUMPAD -->
+  <div class="numpad" id="numpad"></div>
+
+  <div class="msg" id="msg">İlk tahmininizi girin.</div>
+
+  <div class="result-banner" id="resultBanner">
+    <h2 id="resultTitle"></h2>
+    <div class="secret-reveal" id="secretReveal"></div>
+    <p id="resultBody"></p>
+  </div>
+
+  <div class="br-btns">
+    <button class="a" onclick="RA.newGame()">&#8635; Yeni Oyun</button>
+    <button class="a" onclick="RA.showModal()">&#9432; Kurallar</button>
+  </div>
+</div>
+
+<script>
+const RA = (function(){
+  const MAX_TRIES = {3:5, 4:6, 5:7, 6:8};
+  let digits, maxTries, secret, guesses, current, gameOver, keyState;
+
+  // ── MODAL ──
+  function closeModal(){ document.getElementById('modalOverlay').classList.add('hidden'); }
+  function showModal(){ document.getElementById('modalOverlay').classList.remove('hidden'); }
+
+  // ── YENİ OYUN ──
+  function newGame(){
+    digits = parseInt(document.getElementById('digitSel').value);
+    maxTries = MAX_TRIES[digits];
+    secret = generateSecret(digits);
+    guesses = [];
+    current = Array(digits).fill('');
+    gameOver = false;
+    keyState = {}; // 0-9 için renk durumu
+
+    document.getElementById('guessDisp').textContent = '0';
+    document.getElementById('remDisp').textContent = maxTries;
+    document.getElementById('digitDisp').textContent = digits;
+    document.getElementById('resultBanner').className = 'result-banner';
+    setMsg('İlk tahmininizi girin.');
+
+    buildGrid();
+    buildNumpad();
+  }
+
+  function generateSecret(n){
+    const arr = [];
+    for(let i=0;i<n;i++) arr.push(Math.floor(Math.random()*10));
+    return arr;
+  }
+
+  // ── IZGARA ──
+  function buildGrid(){
+    const wrap = document.getElementById('gridWrap');
+    wrap.innerHTML = '';
+
+    // Hücre boyutunu ekrana göre dinamik hesapla
+    const maxW = Math.min(window.innerWidth - 32, 440);
+    const cellW = Math.min(46, Math.floor((maxW - (digits-1)*5) / digits));
+    // Satır yüksekliği: çok satır varsa küçült
+    const viewH = window.innerHeight;
+    const reservedH = 280; // üstbar + infobar + numpad + butonlar tahminen
+    const availH = viewH - reservedH;
+    const cellH = Math.min(cellW, Math.max(28, Math.floor(availH / maxTries) - 5));
+    const fontSize = Math.max(12, Math.floor(Math.min(cellW, cellH) * 0.45));
+
+    for(let r=0; r<maxTries; r++){
+      const row = document.createElement('div');
+      row.className = 'guess-row-grid';
+      row.id = 'row-'+r;
+      row.style.gap = '5px';
+      for(let c=0; c<digits; c++){
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.id = `cell-${r}-${c}`;
+        cell.style.width = cellW+'px';
+        cell.style.height = cellH+'px';
+        cell.style.fontSize = fontSize+'px';
+        row.appendChild(cell);
+      }
+      wrap.appendChild(row);
+    }
+    updateActiveRow();
+  }
+
+  function updateActiveRow(){
+    const r = guesses.length;
+    if(r >= maxTries) return;
+    for(let c=0; c<digits; c++){
+      const cell = document.getElementById(`cell-${r}-${c}`);
+      if(!cell) continue;
+      const val = current[c];
+      cell.textContent = val;
+      cell.className = 'cell ' + (val !== '' ? 'active-filled' : 'active-empty');
+    }
+  }
+
+  // ── NUMPAD ──
+  function buildNumpad(){
+    const np = document.getElementById('numpad');
+    np.innerHTML = '';
+    for(let i=0;i<=9;i++){
+      const b = document.createElement('div');
+      b.className = 'nbtn' + (keyState[i] ? ' k-'+keyState[i] : '');
+      b.id = 'key-'+i;
+      b.textContent = i;
+      b.onclick = ()=>enterDigit(i);
+      np.appendChild(b);
+    }
+    // Sil
+    const del = document.createElement('div');
+    del.className = 'nbtn wide';
+    del.textContent = '← Sil';
+    del.onclick = deleteDigit;
+    np.appendChild(del);
+    // Tamam
+    const ok = document.createElement('div');
+    ok.className = 'nbtn ok-btn';
+    ok.id = 'okBtn';
+    ok.textContent = '✓ Tamam';
+    ok.onclick = submitGuess;
+    np.appendChild(ok);
+    updateOkBtn();
+  }
+
+  function updateOkBtn(){
+    const ok = document.getElementById('okBtn');
+    if(ok) ok.style.opacity = current.every(v=>v!=='') && !gameOver ? '1' : '0.3';
+  }
+
+  // ── GİRİŞ ──
+  function enterDigit(v){
+    if(gameOver) return;
+    const firstEmpty = current.indexOf('');
+    if(firstEmpty === -1) return;
+    current[firstEmpty] = String(v);
+    updateActiveRow();
+    updateOkBtn();
+  }
+
+  function deleteDigit(){
+    if(gameOver) return;
+    // Son dolu kutuyu sil
+    let last = -1;
+    for(let i=digits-1;i>=0;i--){ if(current[i]!==''){last=i;break;} }
+    if(last === -1) return;
+    current[last] = '';
+    updateActiveRow();
+    updateOkBtn();
+  }
+
+  function submitGuess(){
+    if(gameOver || !current.every(v=>v!=='')) return;
+    const guess = current.map(Number);
+    const result = scoreGuess(guess, secret);
+    const row = guesses.length;
+    guesses.push({guess, result});
+
+    // Renk animasyonlu göster
+    revealRow(row, guess, result, ()=>{
+      // Klavye renklerini güncelle
+      updateKeyState(guess, result);
+      buildNumpad();
+
+      current = Array(digits).fill('');
+      document.getElementById('guessDisp').textContent = guesses.length;
+      document.getElementById('remDisp').textContent = maxTries - guesses.length;
+
+      const won = result.every(r=>r==='correct');
+      if(won){
+        gameOver = true;
+        showResult(true);
+      } else if(guesses.length >= maxTries){
+        gameOver = true;
+        showResult(false);
+      } else {
+        updateActiveRow();
+        updateOkBtn();
+        setMsg('');
+      }
+    });
+  }
+
+  // ── PUANLAMA (Wordle mantığı) ──
+  function scoreGuess(guess, secret){
+    const result = Array(guess.length).fill('absent');
+    const secretCopy = [...secret];
+    const guessCopy = [...guess];
+
+    // 1. Geçiş: doğru yerdekiler
+    for(let i=0;i<guess.length;i++){
+      if(guessCopy[i] === secretCopy[i]){
+        result[i] = 'correct';
+        secretCopy[i] = null;
+        guessCopy[i] = null;
+      }
+    }
+    // 2. Geçiş: yanlış yerdekiler
+    for(let i=0;i<guess.length;i++){
+      if(guessCopy[i] === null) continue;
+      const idx = secretCopy.indexOf(guessCopy[i]);
+      if(idx !== -1){
+        result[i] = 'misplaced';
+        secretCopy[idx] = null;
+      }
+    }
+    return result;
+  }
+
+  // ── ANIMASYONLU AÇILIM ──
+  function revealRow(row, guess, result, cb){
+    const delay = 220;
+    for(let c=0;c<digits;c++){
+      (function(col){
+        setTimeout(()=>{
+          const cell = document.getElementById(`cell-${row}-${col}`);
+          if(!cell) return;
+          cell.classList.add('reveal');
+          setTimeout(()=>{
+            cell.textContent = guess[col];
+            cell.className = 'cell ' + result[col];
+          }, delay/2);
+        }, col * delay);
+      })(c);
+    }
+    setTimeout(cb, digits * delay + 100);
+  }
+
+  // ── KLAVYE DURUM GÜNCELLEME ──
+  function updateKeyState(guess, result){
+    const priority = {correct:3, misplaced:2, absent:1};
+    for(let i=0;i<guess.length;i++){
+      const d = guess[i];
+      const r = result[i];
+      const cur = keyState[d];
+      if(!cur || priority[r] > priority[cur]){
+        keyState[d] = r;
+      }
+    }
+  }
+
+  // ── SONUÇ ──
+  function showResult(won){
+    const banner = document.getElementById('resultBanner');
+    banner.className = 'result-banner show ' + (won?'win':'lose');
+    document.getElementById('resultTitle').textContent = won
+      ? '🎯 Tebrikler! Buldunuz!'
+      : 'Hakkınız bitti!';
+    document.getElementById('secretReveal').textContent = secret.join('');
+    document.getElementById('resultBody').textContent = won
+      ? guesses.length + '. tahminde ' + digits + ' basamaklı sayıyı buldunuz!'
+      : 'Gizli sayı buydu.';
+  }
+
+  function setMsg(t, shake){
+    const el = document.getElementById('msg');
+    el.textContent = t;
+    if(shake){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+  }
+
+  // Klavye desteği
+  document.addEventListener('keydown', function(e){
+    // Select elementi odaklıysa klavye girişini oyuna yönlendirme
+    if(document.activeElement && document.activeElement.tagName === 'SELECT') return;
+    if(gameOver || !document.getElementById('modalOverlay').classList.contains('hidden')) return;
+    const k = e.key;
+    if(k>='0'&&k<='9'){ e.preventDefault(); enterDigit(parseInt(k)); }
+    else if(k==='Backspace'||k==='Delete'){ e.preventDefault(); deleteDigit(); }
+    else if(k==='Enter'){ e.preventDefault(); submitGuess(); }
+  });
+
+  return {newGame, closeModal, showModal};
+})();
+
+RA.newGame();
+</script>
+</body>
+</html>
