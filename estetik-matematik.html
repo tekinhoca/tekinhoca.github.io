@@ -11,37 +11,70 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <style>
+/* MEVCUT STİLLER */
 main { max-width:920px; }
-/* KONU KARTLARI */
 .topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;margin-bottom:44px;}
 .topic-card{background:linear-gradient(145deg,#fff9ee,var(--aged));border:1px solid rgba(122,92,30,0.2);border-radius:6px;overflow:hidden;box-shadow:2px 3px 12px var(--shadow);transition:transform 0.2s,box-shadow 0.2s;animation:fadeUp 0.5s ease both;}
 .topic-card:hover{transform:translateY(-4px);box-shadow:5px 9px 22px var(--shadow);}
 .topic-card-head{padding:16px 20px 14px;background:linear-gradient(135deg,var(--ink),#241a08);display:flex;align-items:center;gap:12px;}
 .topic-icon{font-size:1.5rem;}
 .topic-card-head h3{font-family:'Playfair Display',serif;font-size:0.97rem;font-weight:700;color:var(--gold);line-height:1.25;}
-.topic-card-
 .topic-card-body{padding:16px 20px 18px !important;}
 .topic-card-body p{font-size:0.85rem;color:var(--muted);line-height:1.7;margin-bottom:10px;}
-.topic-card-body p:last-child{margin-bottom:0;}
 .topic-highlight{font-size:0.82rem;font-style:italic;color:var(--sepia);background:rgba(200,150,12,0.08);border-left:2px solid var(--gold);padding:8px 12px;border-radius:0 3px 3px 0;margin-top:10px;}
 
-/* SVG GÖRSELLER */
+/* YENİ YATAY KART STİLLERİ (ÖZEL SAYILAR İÇİN) */
+.number-section { margin-bottom: 48px; }
+.number-list { display: flex; flex-direction: column; gap: 20px; }
+.number-card { 
+    display: flex; 
+    background: linear-gradient(145deg, #fff9ee, var(--aged)); 
+    border: 1px solid rgba(122,92,30,0.2); 
+    border-radius: 6px; 
+    overflow: hidden; 
+    box-shadow: 2px 3px 12px var(--shadow); 
+    transition: transform 0.2s ease;
+    animation: fadeUp 0.5s ease both;
+}
+.number-card:hover { transform: translateX(8px); }
+.number-card-idx { 
+    background: linear-gradient(135deg, var(--ink), #241a08); 
+    color: var(--gold); 
+    min-width: 60px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-family: 'Playfair Display', serif; 
+    font-size: 1.4rem; 
+    font-weight: 700;
+    border-right: 1px solid var(--gold);
+}
+.number-card-content { padding: 18px 24px; flex-grow: 1; }
+.number-card-content h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--rust); margin-bottom: 6px; }
+.number-card-content p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+.number-example { 
+    font-size: 0.82rem; 
+    background: rgba(155, 53, 16, 0.04); 
+    padding: 10px 14px; 
+    border-left: 3px solid var(--rust); 
+    color: var(--sepia);
+    font-style: italic;
+}
+
+/* FORMÜLLER VE GÖRSELLER */
 .visual-section{margin-bottom:48px;}
 .visuals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
 .visual-item{background:linear-gradient(145deg,#fff9ee,var(--aged));border:1px solid rgba(122,92,30,0.2);border-radius:6px;padding:20px;text-align:center;box-shadow:2px 3px 10px var(--shadow);animation:fadeUp 0.5s ease both;}
 .visual-item svg{width:100%;max-width:180px;height:auto;margin:0 auto 14px;display:block;}
 .visual-item h4{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;color:var(--rust);margin-bottom:5px;}
 .visual-item p{font-size:0.78rem;color:var(--muted);line-height:1.55;}
-
-/* FORMÜLLER */
 .formula-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:44px;}
 .formula-card{background:linear-gradient(135deg,var(--ink),#241a08);border:1px solid rgba(200,150,12,0.25);border-radius:4px;padding:22px 18px;text-align:center;box-shadow:2px 4px 12px var(--shadow);animation:fadeUp 0.5s ease both;}
 .formula-card .formula{font-family:'Playfair Display',serif;font-size:1.4rem;font-style:italic;color:var(--gold);margin-bottom:10px;letter-spacing:0.05em;}
 .formula-card h4{font-size:0.8rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,242,232,0.7);margin-bottom:6px;}
 .formula-card p{font-size:0.78rem;color:rgba(247,242,232,0.5);line-height:1.55;}
 
-to{opacity:1;transform:translateY(0);}}
-.topic-card:nth-child(1){animation-delay:0.05s;}.topic-card:nth-child(2){animation-delay:0.10s;}.topic-card:nth-child(3){animation-delay:0.15s;}.topic-card:nth-child(4){animation-delay:0.20s;}.topic-card:nth-child(5){animation-delay:0.25s;}.topic-card:nth-child(6){animation-delay:0.30s;}
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
@@ -67,7 +100,82 @@ to{opacity:1;transform:translateY(0);}}
     <p class="intro-attr">— Bertrand Russell</p>
   </div>
 
-  <!-- EN GÜZEL FORMÜLLER -->
+  <div class="number-section">
+    <div class="sec-title">
+      <h2>Özel / İlginç Sayı Kümeleri</h2>
+      <div class="sec-line"></div>
+    </div>
+
+    <div class="number-list">
+      
+      <div class="number-card" style="animation-delay: 0.1s;">
+        <div class="number-card-idx">1</div>
+        <div class="number-card-content">
+          <h3>Mutlu Sayılar</h3>
+          <p>Bir doğal sayının basamaklarındaki rakamların karelerini alıp topluyoruz. Bulduğumuz sayının da rakamlarının karelerini alıp topluyoruz. Bu işlemi tekrar tekrar uyguluyoruz. Sonunda 1’e ulaşıyorsak başlangıçtaki doğal sayıya mutlu sayı diyoruz.</p>
+          <div class="number-example">Örnek: 7 sayısından yola çıkıldığında: 49 → 97 → 130 → 10 → 1.</div>
+        </div>
+      </div>
+
+      <div class="number-card" style="animation-delay: 0.2s;">
+        <div class="number-card-idx">2</div>
+        <div class="number-card-content">
+          <h3>Mutsuz Sayılar</h3>
+          <p>Bir doğal sayının basamaklarındaki rakamların karelerini alıp topluyoruz. Bulduğumuz sayının da rakamlarının karelerini alıp topluyoruz. Bu işlemi tekrar tekrar uyguluyoruz. Sonunda 1’e ulaşamıyorsak (bir döngüye giriyorsak) başlangıçtaki doğal sayıya mutsuz sayı diyoruz.</p>
+          <p>Mutsuz sayılarla işleme devam edildiğinde 1’e ulaşılamaz; bunun yerine 4, 16, 37, 89, 42, 58, 145, 20, 4… gibi bir döngüye gireriz.</p>
+          <div class="number-example">Örnek: 2 ve 4 sayıları birer mutsuz sayıdır; asla 1'e ulaşamazlar.</div>
+        </div>
+      </div>
+
+      <div class="number-card" style="animation-delay: 0.3s;">
+        <div class="number-card-idx">3</div>
+        <div class="number-card-content">
+          <h3>Narsistik Sayılar (Armstrong Sayıları)</h3>
+          <p>n basamaklı bir doğal sayıyı oluşturan her bir rakamın n. kuvvetini alıp topluyoruz. Elde ettiğimiz sonuç yine kendisine eşit oluyorsa bu sayıya narsistik sayı (ya da Armstrong sayısı) diyoruz.</p>
+          <div class="number-example">Örnek: 153 için; 1³ + 5³ + 3³ = 1 + 125 + 27 = 153.</div>
+        </div>
+      </div>
+
+      <div class="number-card" style="animation-delay: 0.4s;">
+        <div class="number-card-idx">4</div>
+        <div class="number-card-content">
+          <h3>Mükemmel Sayılar</h3>
+          <p>Bir doğal sayının, kendisi hariç tüm pozitif bölenlerinin toplamı kendisine eşitse bu sayıya mükemmel sayı diyoruz.</p>
+          <p>Günümüzde bilinen tüm mükemmel sayılar çift sayılardır; henüz bir tane bile tek mükemmel sayı bulunmamıştır.</p>
+          <div class="number-example">Örnek: 28'in kendisi hariç pozitif bölenleri 1, 2, 4, 7 ve 14'tür. 1+2+4+7+14=28.</div>
+        </div>
+      </div>
+
+      <div class="number-card" style="animation-delay: 0.5s;">
+        <div class="number-card-idx">5</div>
+        <div class="number-card-content">
+          <h3>Dost Sayılar (Amicable Numbers)</h3>
+          <p>A ve B iki doğal sayı olsun. A sayısının kendisi hariç pozitif bölenlerinin toplamı B’ye, B’nin kendisi hariç pozitif bölenlerinin toplamı ise A’ya eşitse bu ikiliye dost sayılar diyoruz.</p>
+          <div class="number-example">Örnek: 220 ve 284 en küçük dost sayı çiftidir.</div>
+        </div>
+      </div>
+
+      <div class="number-card" style="animation-delay: 0.6s;">
+        <div class="number-card-idx">6</div>
+        <div class="number-card-content">
+          <h3>Palindrom Sayılar</h3>
+          <p>Tersinden okunduğunda da değeri değişmeyen, rakam dizilimi simetrik olan sayılara Palindrom Sayılar diyoruz.</p>
+          <div class="number-example">Örnek: 77, 141, 2332, 74547, 1001.</div>
+        </div>
+      </div>
+
+      <div class="number-card" style="animation-delay: 0.7s;">
+        <div class="number-card-idx">7</div>
+        <div class="number-card-content">
+          <h3>Harshad Sayıları (Niven Sayıları)</h3>
+          <p>Kendi rakamlarının toplamına tam bölünebilen doğal sayılara Harshad sayıları (ya da Niven sayıları) diyoruz.</p>
+          <div class="number-example">Örnek: 171'in rakamlarının toplamı 9'dur ve 171, 9'a tam bölünebilir.</div>
+        </div>
+      </div>
+      </div>
+      </div>
+
+
   <div class="sec-title">
     <h2>Matematiğin En Zarif Formülleri</h2>
     <div class="sec-line"></div>
@@ -96,56 +204,41 @@ to{opacity:1;transform:translateY(0);}}
     </div>
   </div>
 
-  <!-- KONULAR -->
   <div class="sec-title">
     <h2>Matematiğin Güzel Yüzleri</h2>
     <div class="sec-line"></div>
   </div>
 
   <div class="topic-grid">
-
     <div class="topic-card">
-      <div class="topic-card-head">
-        <span class="topic-icon">🌀</span>
-        <h3>Altın Oran ve Fibonacci</h3>
-      </div>
+      <div class="topic-card-head"><span class="topic-icon">🌀</span><h3>Altın Oran ve Fibonacci</h3></div>
       <div class="topic-card-body">
-        <p>Fibonacci dizisindeki her sayı, kendinden önceki iki sayının toplamıdır: 1, 1, 2, 3, 5, 8, 13, 21… Bu kadar basit bir kurala dayanan dizi, doğada şaşırtıcı biçimde karşımıza çıkar.</p>
+        <p>Fibonacci dizisi iki tane 1 ile başlar ve sıradaki her sayı, kendinden önceki iki sayının toplamına eşittir:</p>
+        <p>1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...</p>
+        <p>Bu kadar basit bir kurala dayanan dizi, doğada şaşırtıcı biçimde karşımıza çıkar.</p>
         <p>Bu dizinin ardışık iki terimi arasındaki oran, sonsuzluğa gidildikçe altın orana (φ ≈ 1.618) yaklaşır. Ayçiçeğinin tohumları, deniz kabuklarının sarmalı, çiçek yapraklarının sayısı — hepsi bu oranı yansıtır.</p>
       </div>
     </div>
-
     <div class="topic-card">
-      <div class="topic-card-head">
-        <span class="topic-icon">🔁</span>
-        <h3>Fraktallar</h3>
-      </div>
+      <div class="topic-card-head"><span class="topic-icon">🔁</span><h3>Fraktallar</h3></div>
       <div class="topic-card-body">
-        <p>Fraktallar, ne kadar yakından baksan o kadar fazla ayrıntı çıkaran şekillerdir. Bir dalın ucu daha küçük dallara, onlar daha küçük dallara ayrılır — sonsuza kadar. Bu "kendi kendine benzerlik" sadece matematiksel bir oyun değildir: kar taneleri, şimşek, dağ silüetleri, ciğerlerdeki hava yolları ve damarlardaki bronşlar hep fraktal yapıdadır.</p>
+        <p>Fraktallar, ne kadar yakından baksan o kadar fazla ayrıntı çıkaran şekillerdir. Bir dalın ucu daha küçük dallara, onlar daha küçük dallara ayrılır — sonsuza kadar. Bu "kendine benzerlik" sadece matematiksel bir oyun değildir: Kar taneleri, şimşek, dağ silüetleri, ciğerlerdeki hava yolları ve damarlardaki bronşlar hep fraktal yapıdadır.</p>
         <p>Mandelbrot kümesi bu yapıların en ünlüsüdür. Onu oluşturan formül son derece basittir — ama ortaya çıkan şekil, ne kadar büyütürsen büyüt, bitmez tükenmez bir karmaşıklık sergiler.</p>
       </div>
     </div>
-
     <div class="topic-card">
-      <div class="topic-card-head">
-        <span class="topic-icon">⭐</span>
-        <h3>Simetri ve Grup Teorisi</h3>
-      </div>
+      <div class="topic-card-head"><span class="topic-icon">⭐</span><h3>Simetri ve Grup Teorisi</h3></div>
       <div class="topic-card-body">
         <p>Bir kareyi döndürdüğünüzde veya aynaya tuttuğunuzda bazı konumlarda yine aynı kare görünür. İşte bu "aynı görünme" durumlarının tamamı simetriyi oluşturur.</p>
-        <p>Matematikçiler simetriyi sayıp sınıflandırarak kristallerin, moleküllerin ve hatta atomaltı parçacıkların yapısını açıklamayı başardı. Birçok çiçeğin yaprak sayısı Fibonacci dizisindeki sayılardandır: 3, 5, 8 veya 13 gibi. Buna karşın buz kristalleri her zaman 6 katlı simetriye sahiptir.</p>
+        <p>Matematikçiler simetriyi sayıp sınıflandırarak kristallerin, moleküllerin ve hatta atomaltı parçacıkların yapısını açıklamayı başardı. Birçok çiçeğin yaprak sayısı 3, 5, 8, 13 gibi Fibonacci dizisindeki sayılardandır. Buna karşın buz kristalleri her zaman 6 katlı simetriye sahiptir.</p>
       </div>
     </div>
-
     <div class="topic-card">
-      <div class="topic-card-head">
-        <span class="topic-icon" style="color:#c8960c;">∞</span>
-        <h3>Sonsuzluk</h3>
-      </div>
+      <div class="topic-card-head"><span class="topic-icon" style="color:#c8960c;">∞</span><h3>Sonsuzluk</h3></div>
       <div class="topic-card-body">
-        <p>Sonsuz büyük bir şeyden daha büyük bir sonsuzluk olabilir mi? Olabilir. Tamsayılar (1, 2, 3, 4…) sonsuzdur; ama 1 ile 2 arasındaki ondalık sayılar da sonsuzdur ve bu ikinci sonsuzluk birinciden çok daha büyüktür.</p>
+        <p>Sonsuzdan daha büyük başka bir sonsuz olabilir mi? Olabilir. Tamsayılar (1, 2, 3, 4…) sonsuzdur; ama 1 ile 2 arasındaki ondalık sayılar da sonsuzdur ve bu ikinci sonsuzluk birinciden çok daha büyüktür.</p>
         <p>Bunu 1800'lerin sonunda kanıtlayan matematikçi Georg Cantor, döneminde "matematiği mahvediyorsun" suçlamasıyla karşılaştı. Bugün bu keşif matematik tarihinin dönüm noktalarından biri sayılıyor.</p>
-        <div class="topic-highlight">[0,1] aralığındaki noktaların sayısı bütün gerçel sayılar kümesindeki nokta sayısına eşittir.</div>
+        <div class="topic-highlight">(0,1) aralığındaki noktaların sayısı da sonsuzdur, reel sayılar kümesindeki noktaların sayısı da.</div>
       </div>
     </div>
 
@@ -173,6 +266,10 @@ to{opacity:1;transform:translateY(0);}}
       </div>
     </div>
 
+  </div>
+
+
+    </div>
   </div>
 
   <!-- GEOMETRİK GÖRSELLER (SVG) -->
@@ -310,15 +407,14 @@ to{opacity:1;transform:translateY(0);}}
         <p>Bu ilişki, çemberin "sonsuz kenarlı çokgen" olarak düşünülebileceğini gösterir. Arşimet, π sayısını hesaplamak için tam da bu yaklaşımı kullanmıştır.</p>
       </div>
 
-    </div>
-  </div>
-
 </main>
+
 <footer>
   <img src="TekinHocaLOGO1.png" alt="Tekin Hoca Logo" class="footer-logo">
   <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
   <p><a href="hakkimda.html">HAKKIMDA</a></p>
 </footer>
+
 <button id="back-to-top" title="Başa dön">↑</button>
 <script src="menu.js"></script>
 <script>
