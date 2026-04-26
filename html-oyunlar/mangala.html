@@ -53,6 +53,31 @@ button.a:hover{background:rgba(155,53,16,0.7)}
   .hcnt{font-size:15px}.pcnt{font-size:12px}.s{width:6px;height:6px}.sw{max-width:36px}
 }
 
+/* ── Parıldama Animasyonu ── */
+.pit.glow-p1{
+  background:#7a3d10 !important;
+  border-color:#c8845a !important;
+  box-shadow:0 0 14px 4px rgba(200,132,90,0.65);
+  transform:scale(1.13) !important;
+  transition:background .08s,box-shadow .08s,transform .08s !important;
+}
+.pit.glow-p2{
+  background:#1a3d5a !important;
+  border-color:#6a9fc0 !important;
+  box-shadow:0 0 14px 4px rgba(106,159,192,0.65);
+  transform:scale(1.13) !important;
+  transition:background .08s,box-shadow .08s,transform .08s !important;
+}
+.hazine.glow-p1{
+  border-color:#c8845a !important;
+  box-shadow:0 0 16px 5px rgba(200,132,90,0.6);
+  transition:box-shadow .08s !important;
+}
+.hazine.glow-p2{
+  border-color:#6a9fc0 !important;
+  box-shadow:0 0 16px 5px rgba(106,159,192,0.6);
+  transition:box-shadow .08s !important;
+}
 /* ── Açılış Modalı ── */
 .modal-overlay{
   position:fixed;inset:0;
@@ -211,6 +236,55 @@ button.a:hover{background:rgba(155,53,16,0.7)}
 */
 const MAX_SETS=5;
 let pits,hazine,turn,moves,over,setNum,points,setHistory,lastWasHazine,lastPlayer;
+let animating=false;
+
+function delay(ms){return new Promise(r=>setTimeout(r,ms));}
+
+function calcGlowSequence(pitIdx,p,total){
+  let seq=[];
+  if(total===1){
+    let dest=nextPos(pitIdx,p);
+    seq.push({type:'pit',idx:pitIdx});
+    seq.push(dest==='H1'?{type:'haz',idx:0}:dest==='H2'?{type:'haz',idx:1}:{type:'pit',idx:dest});
+    return seq;
+  }
+  seq.push({type:'pit',idx:pitIdx});
+  let stones=total-1,cur=pitIdx;
+  while(stones>0){
+    cur=nextPos(cur,p);
+    if(cur==='H1'){seq.push({type:'haz',idx:0});stones--;}
+    else if(cur==='H2'){seq.push({type:'haz',idx:1});stones--;}
+    else{seq.push({type:'pit',idx:cur});stones--;}
+  }
+  return seq;
+}
+
+function getPitEl(idx){
+  const r1=document.getElementById('row1');
+  const r2=document.getElementById('row2');
+  if(idx<=5) return r1.children[idx];
+  return r2.children[11-idx];
+}
+
+function getHazEl(idx){
+  const hazs=document.querySelectorAll('.hazine');
+  return idx===0?hazs[1]:hazs[0];
+}
+
+async function runGlowAnim(seq,p){
+  const gcls=p===0?'glow-p1':'glow-p2';
+  const STEP=220,HOLD=120,LAST_HOLD=320;
+  for(let i=0;i<seq.length;i++){
+    const s=seq[i];
+    const el=s.type==='pit'?getPitEl(s.idx):getHazEl(s.idx);
+    if(!el) continue;
+    el.classList.add(gcls);
+    const waitMs=(i===seq.length-1)?LAST_HOLD:HOLD;
+    await delay(waitMs);
+    el.classList.remove(gcls);
+    if(i<seq.length-1) await delay(STEP-HOLD);
+  }
+}
 
 function closeModal(){
   document.getElementById('modalOverlay').classList.add('hidden');
@@ -242,12 +316,19 @@ function isMyPit(i,p){return p===0?i<=5:i>=6;}
 function isOppPit(i,p){return p===0?i>=6:i<=5;}
 function oppIdx(i){return 11-i;}
 
-function sow(pitIdx){
-  if(over) return;
+async function sow(pitIdx){
+  if(over||animating) return;
   let p=turn;
   if(!isMyPit(pitIdx,p)){setMsg('Sadece kendi kuyularınızdan taş alabilirsiniz!');return;}
   let total=pits[pitIdx];
   if(total===0){setMsg('Bu kuyu boş.');return;}
+
+  /* Animasyon: önce glow dizisini hesapla, sonra çalıştır */
+  animating=true;
+  const seq=calcGlowSequence(pitIdx,p,total);
+  await runGlowAnim(seq,p);
+  animating=false;
+
   lastPlayer=p;lastWasHazine=false;
 
   if(total===1){
