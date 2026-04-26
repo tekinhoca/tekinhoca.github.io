@@ -129,11 +129,91 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
 button.a:hover{background:rgba(200,150,12,0.2)}
 
-.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
-.info-box b{color:#c8960c}
+/* ── Açılış Modalı ── */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:16px;
+}
+.modal-overlay.hidden{display:none;}
+.modal-box{
+  background:#0b0707;
+  border:1px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:22px 20px 18px;
+  max-width:360px;width:100%;
+  display:flex;flex-direction:column;gap:12px;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94);}
+  to{opacity:1;transform:scale(1);}
+}
+.modal-title{
+  font-size:22px;font-weight:700;
+  color:#c8960c;text-align:center;
+  letter-spacing:.06em;
+}
+.modal-rules{
+  font-size:11.5px;
+  color:rgba(247,242,232,0.72);
+  line-height:1.75;
+  border-top:1px solid rgba(200,150,12,0.2);
+  border-bottom:1px solid rgba(200,150,12,0.2);
+  padding:10px 4px;
+  list-style:none;
+}
+.modal-rules li{margin-bottom:3px;padding-left:4px;}
+.modal-rules li::before{content:"🔑 ";font-size:10px;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{
+  background:rgba(18,16,14,0.7);
+  border:1px solid rgba(200,150,12,0.35);
+  border-radius:3px;padding:6px 18px;
+  font-size:12px;cursor:pointer;
+  color:rgba(247,242,232,0.6);
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-close:hover{background:rgba(50,20,20,0.9);}
+.modal-start{
+  background:rgba(120,60,10,0.75);
+  border:1px solid rgba(200,150,12,0.6);
+  border-radius:3px;padding:6px 22px;
+  font-size:12px;cursor:pointer;
+  color:#c8960c;font-weight:600;
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-start:hover{background:rgba(170,90,15,0.9);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
 </style>
 </head>
 <body>
+<!-- Açılış Modalı -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">ŞİFREYİ BUL</div>
+    <ul class="modal-rules">
+      <li>Bilgisayar 4 basamaklı, <b style="color:#c8960c">rakamları farklı</b> gizli bir sayı tutar.</li>
+      <li>Her tahminin ardından iki ipucu alırsınız.</li>
+      <li><b style="color:#c8960c">Doğru Yerde:</b> Hem rakam doğru hem yeri doğru.</li>
+      <li><b style="color:rgba(247,242,232,0.55)">Yanlış Yerde:</b> Rakam var ama yanlış basamakta.</li>
+      <li>4 rakamın tamamı doğru yerde olunca kazanırsınız.</li>
+      <li>Klavyeden rakam, ok tuşları ve Enter da kullanılabilir.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
   <div class="top-bar">
     <div class="game-title">Şifreyi Bul</div>
@@ -190,16 +270,7 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 
   <div class="br-btns">
     <button class="a" onclick="newGame()">&#8635; Yeni Oyun</button>
-    <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
-  </div>
-
-  <div class="info-box" id="infoBox">
-    <b>Şifreyi Bul Oyunu Nasıl Oynanır?</b><br>
-    YZ 4 basamaklı, <b>rakamları farklı</b> bir sayı tutar.<br>
-    Her tahmin sonrası iki ipucu alırsınız:<br>
-    <b style="color:#c8960c">Doğru Yerde:</b> Hem rakam doğru hem yeri doğru.<br>
-    <b style="color:rgba(247,242,232,0.6)">Yanlış Yerde:</b> Rakam var ama yanlış basamakta.<br>
-    4'ü de doğru basamakta = KAZANDINIZ!
+    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
   </div>
 </div><script>
 let secret, guesses, current, selectedBox, gameOver, limit;
@@ -369,15 +440,11 @@ document.addEventListener('keydown',function(e){
 document.getElementById('limitSel').addEventListener('change',newGame);
 
 function setMsg(t){document.getElementById('msg').textContent=t;}
-function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='none'?'block':'none';}
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
 
 newGame();
 </script>
 
-<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
-  <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
-       style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
-       onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
-</div>
 </body>
 </html>
