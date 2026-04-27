@@ -56,11 +56,91 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
 button.a:hover{background:rgba(200,150,12,0.2)}
 
-.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
-.info-box b{color:#c8960c}
+/* ── Açılış Modalı ── */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:16px;
+}
+.modal-overlay.hidden{display:none;}
+.modal-box{
+  background:#0b070b;
+  border:1px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:22px 20px 18px;
+  max-width:360px;width:100%;
+  display:flex;flex-direction:column;gap:12px;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94);}
+  to{opacity:1;transform:scale(1);}
+}
+.modal-title{
+  font-size:22px;font-weight:700;
+  color:#c8960c;text-align:center;
+  letter-spacing:.06em;
+}
+.modal-rules{
+  font-size:11.5px;
+  color:rgba(247,242,232,0.72);
+  line-height:1.75;
+  border-top:1px solid rgba(200,150,12,0.2);
+  border-bottom:1px solid rgba(200,150,12,0.2);
+  padding:10px 4px;
+  list-style:none;
+}
+.modal-rules li{margin-bottom:3px;padding-left:4px;}
+.modal-rules li::before{content:"⬛ ";font-size:9px;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{
+  background:rgba(18,16,14,0.7);
+  border:1px solid rgba(200,150,12,0.35);
+  border-radius:3px;padding:6px 18px;
+  font-size:12px;cursor:pointer;
+  color:rgba(247,242,232,0.6);
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-close:hover{background:rgba(30,10,30,0.9);}
+.modal-start{
+  background:rgba(100,40,100,0.6);
+  border:1px solid rgba(200,150,12,0.6);
+  border-radius:3px;padding:6px 22px;
+  font-size:12px;cursor:pointer;
+  color:#c8960c;font-weight:600;
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-start:hover{background:rgba(140,60,140,0.8);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
 </style>
 </head>
 <body>
+<!-- Açılış Modalı -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">PENTOMİNO</div>
+    <ul class="modal-rules">
+      <li>12 pentomino parçasının her biri 5 kareden oluşur; hepsini 6×10 ızgaraya sığdırın.</li>
+      <li><b style="color:#c8960c">Seç:</b> Parça paletinden bir parçaya tıklayın.</li>
+      <li><b style="color:#c8960c">Döndür / Yansıt:</b> Yerleştirmeden önce parçayı istediğiniz yönde çevirin.</li>
+      <li><b style="color:#c8960c">Yerleştir:</b> Izgarada istediğiniz hücreye tıklayın.</li>
+      <li><b style="color:#c8960c">Geri Al:</b> En son yerleştirilen parçayı geri alır.</li>
+      <li>6×10 ızgaranın bilinen <b style="color:#c8960c">2339</b> farklı çözümü vardır.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
   <div class="top-bar">
     <div class="game-title">Pentomino</div>
@@ -93,18 +173,7 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 
   <div class="br-btns">
     <button class="a" onclick="restartGame()">&#8635; Yeniden</button>
-    <button class="a" onclick="toggleInfo()">&#9432; Kurallar</button>
-  </div>
-
-  <div class="info-box" id="infoBox">
-    <b>Pentomino Nasıl Oynanır?</b><br>
-    12 pentomino parçasının her biri 5 kareden oluşur. Hepsini 6×10 ızgaraya sığdırın.<br>
-    <b>Seç:</b> Parça paletinden bir parçaya tıklayın.<br>
-    <b>Yerleştir:</b> Izgarada istediğiniz hücreye tıklayın.<br>
-    <b>Döndür / Yansıt:</b> Yerleştirmeden önce parçayı döndürebilir veya yansıtabilirsiniz.<br>
-    <b>Geri Al:</b> En son yerleştirilen parçayı geri alır.<br>
-    Parça sığmazsa ızgara kırmızıya flash yapar.<br>
-    <b>İpucu:</b> 6×10 ızgaranın bilinen 2339 farklı çözümü vardır. Birini bulmaya çalışın!
+    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
   </div>
 </div>
 
@@ -398,19 +467,12 @@ function checkWin(){
 }
 
 function setMsg(t){document.getElementById('msg').textContent=t;}
-function toggleInfo(){
-  const b=document.getElementById('infoBox');
-  b.style.display=b.style.display==='none'||b.style.display===''?'block':'none';
-}
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
 
 window.addEventListener('resize',()=>{resizeCanvas();render();});
 startGame();
 </script>
 
-<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
-  <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
-       style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
-       onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
-</div>
 </body>
 </html>

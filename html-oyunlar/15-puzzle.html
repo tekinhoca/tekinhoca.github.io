@@ -41,11 +41,90 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
 button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
 button.a:hover{background:rgba(200,150,12,0.2)}
-.info-box{display:none;background:rgba(200,150,12,0.05);border:1px solid rgba(200,150,12,0.15);border-radius:5px;padding:10px 14px;font-size:11px;color:rgba(247,242,232,0.45);line-height:1.8}
-.info-box b{color:#c8960c}
+/* ── Açılış Modalı ── */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:16px;
+}
+.modal-overlay.hidden{display:none;}
+.modal-box{
+  background:#080c14;
+  border:1px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:22px 20px 18px;
+  max-width:360px;width:100%;
+  display:flex;flex-direction:column;gap:12px;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94);}
+  to{opacity:1;transform:scale(1);}
+}
+.modal-title{
+  font-size:22px;font-weight:700;
+  color:#c8960c;text-align:center;
+  letter-spacing:.06em;
+}
+.modal-rules{
+  font-size:11.5px;
+  color:rgba(247,242,232,0.72);
+  line-height:1.75;
+  border-top:1px solid rgba(200,150,12,0.2);
+  border-bottom:1px solid rgba(200,150,12,0.2);
+  padding:10px 4px;
+  list-style:none;
+}
+.modal-rules li{margin-bottom:3px;padding-left:4px;}
+.modal-rules li::before{content:"⬜ ";font-size:10px;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{
+  background:rgba(18,16,14,0.7);
+  border:1px solid rgba(200,150,12,0.35);
+  border-radius:3px;padding:6px 18px;
+  font-size:12px;cursor:pointer;
+  color:rgba(247,242,232,0.6);
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-close:hover{background:rgba(15,20,40,0.9);}
+.modal-start{
+  background:rgba(30,45,90,0.7);
+  border:1px solid rgba(200,150,12,0.6);
+  border-radius:3px;padding:6px 22px;
+  font-size:12px;cursor:pointer;
+  color:#c8960c;font-weight:600;
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-start:hover{background:rgba(45,65,130,0.85);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
 </style>
 </head>
 <body>
+<!-- Açılış Modalı -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">15-PUZZLE</div>
+    <ul class="modal-rules">
+      <li>Çerçevede numaralı kareler ve bir boş yer vardır.</li>
+      <li>Boş kareye komşu (yatay veya dikey) bir kareye tıkladığınızda o kare boş yere kayar.</li>
+      <li><b style="color:#c8960c">Amaç:</b> Tüm sayıları soldan sağa, yukarıdan aşağıya sıralı hale getirmek.</li>
+      <li>Yeşil renkli kareler doğru konumda demektir.</li>
+      <li>3×3 (8-Puzzle) kolay, 5×5 (24-Puzzle) çok zorlu bir varyanttır.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
   <div class="top-bar">
     <div class="game-title">15-Puzzle</div>
@@ -68,15 +147,7 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   <div class="result-banner" id="banner"><h2 id="bannerTitle"></h2><p id="bannerBody"></p></div>
   <div class="br-btns">
     <button class="a" onclick="PZ.newGame()">&#8635; Karıştır</button>
-    <button class="a" onclick="PZ.toggleInfo()">&#9432; Kurallar</button>
-  </div>
-  <div class="info-box" id="infoBox">
-    <b>15-Puzzle Nasıl Oynanır?</b><br>
-    4×4 çerçevede 1'den 15'e kadar numaralı 15 kare ve 1 boş yer vardır.<br>
-    Boş kareye komşu (yatay veya dikey) bir kareye tıkladığınızda o kare boş yere kayar.<br>
-    <b>Amaç:</b> Tüm sayıları soldan sağa, yukarıdan aşağıya sıralı hale getirmek.<br>
-    Yeşil renkli kareler doğru konumda demektir.<br>
-    3×3 (8-Puzzle) kolay, 5×5 (24-Puzzle) çok zorlu bir varyanttır.
+    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
   </div>
 </div>
 <script>
@@ -192,19 +263,17 @@ const PZ = (function(){
   }
 
   function setMsg(t){document.getElementById('msg').textContent=t;}
-  function toggleInfo(){const b=document.getElementById('infoBox');b.style.display=b.style.display==='block'?'none':'block';}
+  function toggleInfo(){}
 
   return {newGame,toggleInfo};
 })();
+
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
 
 PZ.newGame();
 window.addEventListener('resize',()=>PZ.newGame());
 </script>
 
-<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
-  <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
-       style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
-       onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
-</div>
 </body>
 </html>
