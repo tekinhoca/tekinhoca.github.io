@@ -13,16 +13,28 @@
 <style>
   main { max-width:960px; margin: 0 auto; }
   
-  /* --- Quiz Kartları --- */
-  .quiz-section-title { text-align: center; margin: 40px 0 20px; color: var(--rust); font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; }
-  .quiz-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; max-width: 700px; margin: 0 auto 50px; padding: 0 15px; }
-  .quiz-link { text-decoration: none; display: block; }
+  /* --- Bölüm Başlıkları --- */
+  .section-title { text-align: center; margin: 40px 0 18px; color: var(--rust); font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; }
+
+  /* --- Quiz Kartları (2 kart, ortalanmış, küçük) --- */
+  .quiz-grid { display: flex; gap: 15px; justify-content: center; max-width: 360px; margin: 0 auto 50px; padding: 0 15px; }
+  .quiz-link { text-decoration: none; display: block; flex: 0 0 150px; }
   .quiz-card { 
-    background: var(--aged); border: 1px solid rgba(122,92,30,0.2); padding: 15px; border-radius: 8px; 
+    background: var(--aged); border: 1px solid rgba(122,92,30,0.2); padding: 12px 10px; border-radius: 8px; 
     text-align: center; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; 
   }
   .quiz-card:hover { transform: translateY(-3px); border-color: var(--gold); background: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-  .quiz-card span { margin-top: 10px; font-weight: 600; color: var(--ink); font-family: 'Source Serif 4', serif; font-size: 0.85rem; letter-spacing: 0.5px; }
+  .quiz-card span { margin-top: 8px; font-weight: 600; color: var(--ink); font-family: 'Source Serif 4', serif; font-size: 0.8rem; letter-spacing: 0.5px; }
+
+  /* --- Oyun Kartları --- */
+  .game-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; max-width: 700px; margin: 0 auto 50px; padding: 0 15px; }
+  .game-link { text-decoration: none; display: block; }
+  .game-card {
+    background: var(--aged); border: 1px solid rgba(122,92,30,0.2); padding: 10px 8px; border-radius: 8px;
+    text-align: center; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center;
+  }
+  .game-card:hover { transform: translateY(-3px); border-color: var(--gold); background: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+  .game-card span { margin-top: 6px; font-weight: 600; color: var(--ink); font-family: 'Source Serif 4', serif; font-size: 0.72rem; letter-spacing: 0.3px; line-height: 1.25; }
 
   /* --- Akordiyon Yapısı --- */
   .grade-block { margin-bottom: 20px; }
@@ -39,7 +51,6 @@
   .activity-table { width:100%; border-collapse:collapse; }
   .activity-table tr { border-bottom:1px solid rgba(122,92,30,0.15); transition:background 0.2s; }
   .activity-table tr:last-child { border-bottom:none; }
-  /* Satır üzerine gelince koyulaşma efekti */
   .activity-table tr:hover { background: rgba(122,92,30,0.08); }
   
   .col-icon { width:80px; padding:16px 12px 16px 0; vertical-align:middle; text-align:center; }
@@ -59,7 +70,8 @@
   .disabled-section { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
 
   @media(max-width:600px){
-    .quiz-grid { grid-template-columns: 1fr; }
+    .game-grid { grid-template-columns: repeat(3, 1fr); }
+    .quiz-grid { max-width: 280px; }
     .col-btn { width:auto; }
     .go-btn { font-size:0.68rem; padding:7px 10px; }
     .act-name { font-size:0.95rem; }
@@ -85,28 +97,76 @@
 </nav>
 
 <main>
-  <h2 class="quiz-section-title">Matematik Quizleri</h2>
-  
-  <div class="quiz-grid">
-    <a href="okul-quizler/quiz-ilk.html" target="_blank" class="quiz-link">
-      <div class="quiz-card">
-        <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><circle cx="17" cy="7" r="4"/><path d="M10 21l4-8 4 8z"/></svg>
-        <span>İLKOKUL</span>
+
+  <!-- MATEMATİK OYUNLARI -->
+  <h2 class="section-title">Matematik Oyunları</h2>
+
+  <div class="game-grid">
+    <a href="mat-oyunlar/esin-bul.html" target="_blank" class="game-link">
+      <div class="game-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5">
+          <rect x="2" y="4" width="9" height="9" rx="2"/><rect x="13" y="4" width="9" height="9" rx="2"/>
+          <rect x="2" y="14" width="9" height="9" rx="2" opacity=".4"/><rect x="13" y="14" width="9" height="9" rx="2" opacity=".4"/>
+        </svg>
+        <span>Eşini Bul</span>
       </div>
     </a>
+    <a href="mat-oyunlar/cevaplari-yakala.html" target="_blank" class="game-link">
+      <div class="game-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5">
+          <path d="M12 2v10M8 8l4 4 4-4"/><rect x="4" y="16" width="16" height="4" rx="2"/>
+        </svg>
+        <span>Cevapları Yakala</span>
+      </div>
+    </a>
+    <a href="mat-oyunlar/labirent.html" target="_blank" class="game-link">
+      <div class="game-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5">
+          <path d="M3 3h5v5H3zM3 10v11h5v-6h8v6h5V10"/><path d="M16 3h5v5h-5z"/>
+        </svg>
+        <span>Labirent</span>
+      </div>
+    </a>
+    <a href="mat-oyunlar/kesir-eslestir.html" target="_blank" class="game-link">
+      <div class="game-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5">
+          <line x1="12" y1="4" x2="12" y2="20"/><circle cx="12" cy="8" r="2.5"/><circle cx="12" cy="16" r="2.5"/>
+          <line x1="7" y1="12" x2="17" y2="12"/>
+        </svg>
+        <span>Kesirleri Eşleştir</span>
+      </div>
+    </a>
+    <a href="mat-oyunlar/koordinatlar.html" target="_blank" class="game-link">
+      <div class="game-card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5">
+          <line x1="3" y1="12" x2="21" y2="12"/><line x1="12" y1="3" x2="12" y2="21"/>
+          <circle cx="16" cy="8" r="2" fill="var(--rust)" opacity=".6"/>
+        </svg>
+        <span>Koordinatlar</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- MATEMATİK QUİZLERİ -->
+  <h2 class="section-title">Matematik Quizleri</h2>
+  
+  <div class="quiz-grid">
     <a href="okul-quizler/quiz-orta.html" target="_blank" class="quiz-link">
       <div class="quiz-card">
-        <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5"><path d="M4 19L12 4l8 15H4z"/><path d="M12 4v15" stroke-dasharray="2 2"/></svg>
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5"><path d="M4 19L12 4l8 15H4z"/><path d="M12 4v15" stroke-dasharray="2 2"/></svg>
         <span>ORTAOKUL</span>
       </div>
     </a>
     <a href="okul-quizler/quiz-lise.html" target="_blank" class="quiz-link">
       <div class="quiz-card">
-        <svg width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.5"><path d="M3 12h18M12 3v18"/><path d="M5 18c4-6 10-6 14-12" stroke-width="2"/></svg>
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.5"><path d="M3 12h18M12 3v18"/><path d="M5 18c4-6 10-6 14-12" stroke-width="2"/></svg>
         <span>LİSE</span>
       </div>
     </a>
   </div>
+
+  <!-- MATEMATİK ETKİNLİKLERİ -->
+  <h2 class="section-title">Matematik Etkinlikleri</h2>
 
   <div class="grade-block">
     <div class="accordion-item">

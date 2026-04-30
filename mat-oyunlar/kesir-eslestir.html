@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kesirleri Eşleştir</title>
+<style>
+/* Tekin Hoca Oyun Tasarım Dili */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#12100e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:6px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+.wrap{width:100%;max-width:520px;display:flex;flex-direction:column;gap:8px;margin:auto;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.game-title{font-size:18px;font-weight:700;color:#c8960c;letter-spacing:.06em}
+.infobar{display:flex;gap:7px;}
+.ibox{background:rgba(255,255,255,0.05);border-radius:5px;padding:6px 10px;flex:1;text-align:center}
+.ibox .l{font-size:10px;color:rgba(247,242,232,0.32);margin-bottom:2px;text-transform:uppercase;}
+.ibox .v{font-size:16px;font-weight:700;color:#FFD97A}
+
+/* Oyun Kartları */
+.game-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+.card {
+    aspect-ratio: 3 / 4;
+    background: #1e1a14;
+    border: 1px solid rgba(200,150,12,0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    transform-style: preserve-3d;
+}
+.card.flipped {
+    background: #ece4cc;
+    color: #12100e;
+    transform: rotateY(180deg);
+}
+.card.matched {
+    background: #1d9e75;
+    border-color: #1d9e75;
+    color: #fff;
+    cursor: default;
+    visibility: hidden;
+    opacity: 0;
+}
+.card-content {
+    transform: rotateY(180deg);
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Açılış Modalı */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px;}
+.modal-overlay.hidden{display:none;}
+.modal-box{background:#0d0b08;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+.modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em;}
+.modal-rules{font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);padding:10px 4px;list-style:none;}
+.modal-rules li{margin-bottom:3px;padding-left:4px;}
+.modal-rules li::before{content:"◈ ";color:#c8960c;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s;}
+.modal-close:hover{background:rgba(40,30,10,0.9);}
+.modal-start{background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s;}
+.modal-start:hover{background:rgba(60,40,5,0.9);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
+
+.msg { text-align: center; color: #FFD97A; font-size: 11px; min-height: 14px; margin-top: 6px;}
+
+/* WIN OVERLAY */
+.grid-wrap{position:relative}
+.win-overlay{display:none;position:absolute;inset:0;background:rgba(10,8,5,0.9);border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50}
+.win-overlay.show{display:flex}
+.win-title{font-size:20px;font-weight:700;color:#50c878;font-family:Georgia,serif}
+.win-body{font-size:12px;color:rgba(247,242,232,0.55);text-align:center;line-height:1.7}
+.win-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+</style>
+</head>
+<body>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">KESİRLERİ EŞLEŞTİR</div>
+    <ul class="modal-rules">
+      <li>Aynı değeri gösteren <b style="color:#c8960c">kesir, ondalık gösterim</b> veya <b style="color:#c8960c">yüzde</b> kartlarını bul.</li>
+      <li>Her hamlede <b style="color:#c8960c">iki kart</b> açılır.</li>
+      <li>Eşleşirlerse iki kart da masadan kaldırılır.</li>
+      <li>Örnek: <b style="color:#c8960c">1/2</b> kartı ile <b style="color:#c8960c">%50</b> kartı eşleşir ve masadan kaldırılır.</li>
+      <li>En az <b style="color:#c8960c">hamleyle</b> tüm kartları eşleştirmeye çalış!</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+    <div class="top-bar">
+        <div class="game-title">Kesirleri Eşleştir</div>
+        <div style="display:flex;gap:5px;">
+          <button style="background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;" onmouseenter="this.style.background='rgba(200,150,12,0.2)'" onmouseleave="this.style.background='rgba(200,150,12,0.08)'" onclick="openModal()">&#9432; Kurallar</button>
+        </div>
+    </div>
+
+    <div class="infobar">
+        <div class="ibox"><div class="l">Hamle</div><div class="v" id="moves">0</div></div>
+        <div class="ibox"><div class="l">Eşleşen</div><div class="v" id="matches">0/8</div></div>
+    </div>
+
+    <div class="grid-wrap">
+      <div class="game-grid" id="grid"></div>
+      <div class="win-overlay" id="winOverlay">
+        <div class="win-title">Tebrikler!</div>
+        <div class="win-body" id="winBody"></div>
+        <div class="win-btns">
+          <button class="a" onclick="restartGame()">&#8635; Tekrar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="msg" id="msg">Kartları açarak eşlerini bul!</div>
+
+    <div style="text-align:center; margin-top:16px;">
+        <button onclick="restartGame()" style="background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;" onmouseenter="this.style.background='rgba(200,150,12,0.2)'" onmouseleave="this.style.background='rgba(200,150,12,0.08)'">&#8635; Yeniden Başlat</button>
+    </div>
+</div>
+
+<script>
+const pairs = [
+    { a: "1/2", b: "%50" },
+    { a: "1/4", b: "0.25" },
+    { a: "3/4", b: "%75" },
+    { a: "1/5", b: "0.2" },
+    { a: "2/5", b: "%40" },
+    { a: "1/10", b: "0.1" },
+    { a: "1/8", b: "0.125" },
+    { a: "1/1", b: "%100" }
+];
+
+let cards = [];
+let flippedCards = [];
+let moves = 0;
+let matches = 0;
+let lockBoard = false;
+
+function initGame() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    
+    // Kartları hazırla ve karıştır
+    const cardData = [];
+    pairs.forEach((p, index) => {
+        cardData.push({ text: p.a, id: index });
+        cardData.push({ text: p.b, id: index });
+    });
+    cardData.sort(() => Math.random() - 0.5);
+
+    cardData.forEach((data, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.id = data.id;
+        card.innerHTML = `<div class="card-content">${data.text}</div>`;
+        card.onclick = () => flipCard(card);
+        grid.appendChild(card);
+    });
+}
+
+function flipCard(card) {
+    if (lockBoard || card === flippedCards[0] || card.classList.contains('matched')) return;
+
+    card.classList.add('flipped');
+    flippedCards.push(card);
+
+    if (flippedCards.length === 2) {
+        moves++;
+        document.getElementById('moves').innerText = moves;
+        checkMatch();
+    }
+}
+
+function checkMatch() {
+    lockBoard = true;
+    const [c1, c2] = flippedCards;
+    const isMatch = c1.dataset.id === c2.dataset.id;
+
+    if (isMatch) {
+        matches++;
+        document.getElementById('matches').innerText = `${matches}/8`;
+        document.getElementById('msg').innerText = "Harika! Bir eşleşme buldun.";
+        setTimeout(() => {
+            c1.classList.add('matched');
+            c2.classList.add('matched');
+            resetTurn();
+            if (matches === 8) win();
+        }, 600);
+    } else {
+        document.getElementById('msg').innerText = "Maalesef, bunlar eş değil.";
+        setTimeout(() => {
+            c1.classList.remove('flipped');
+            c2.classList.remove('flipped');
+            resetTurn();
+        }, 1000);
+    }
+}
+
+function resetTurn() {
+    flippedCards = [];
+    lockBoard = false;
+}
+
+function win() {
+    document.getElementById('msg').innerText = '';
+    document.getElementById('winBody').innerHTML =
+        `${moves} hamlede tamamladınız!`;
+    document.getElementById('winOverlay').classList.add('show');
+}
+
+function restartGame() {
+    moves = 0; matches = 0; flippedCards = []; lockBoard = false;
+    document.getElementById('moves').innerText = '0';
+    document.getElementById('matches').innerText = '0/8';
+    document.getElementById('msg').innerText = 'Kartları açarak eşlerini bul!';
+    document.getElementById('winOverlay').classList.remove('show');
+    initGame();
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.add('hidden');
+}
+function openModal() {
+    document.getElementById('modalOverlay').classList.remove('hidden');
+}
+
+initGame();
+</script>
+<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
+  <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+       style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
+       onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
+</div>
+</body>
+</html>

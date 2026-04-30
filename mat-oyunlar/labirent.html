@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Labirent</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#12100e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:440px;display:flex;flex-direction:column;gap:8px;margin:auto}
+.top-bar{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.game-title{font-size:20px;font-weight:700;color:#c8960c;letter-spacing:.06em}
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border-radius:5px;padding:5px 0;text-align:center;border:1px solid rgba(200,150,12,0.2);width:56px;flex-shrink:0}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.32);margin-bottom:1px;text-transform:uppercase;letter-spacing:.07em}
+.ibox .v{font-size:14px;font-weight:700;color:#FFD97A;font-family:'Courier New',Courier,monospace;letter-spacing:.05em}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;white-space:nowrap}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+/* IZGARA */
+.grid-wrap{position:relative;width:100%}
+#grid{
+  display:grid;
+  grid-template-columns:repeat(11,1fr);
+  grid-template-rows:repeat(13,1fr);
+  width:100%;
+  aspect-ratio:11/13;
+  background:#1a1610;
+  border:3px solid #c8960c;
+  border-radius:10px;
+  box-shadow:0 8px 28px rgba(0,0,0,0.55);
+  overflow:hidden;
+}
+.cell{display:flex;align-items:center;justify-content:center;position:relative}
+.cell.passage{background:#1a1610}
+.cell.wall{background:#2c2419;box-shadow:inset 0 0 6px rgba(0,0,0,0.4)}
+.player{
+  position:absolute;width:76%;height:76%;
+  background:transparent;
+  border-radius:10%;z-index:5;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.player img{width:100%;height:100%;object-fit:contain;display:block}
+.door-el{
+  width:76%;height:76%;background:#8b2a0a;border-radius:5px;
+  border:1.5px solid #c8500a;
+  box-shadow:0 2px 0 #4a1505;
+}
+.target-el{
+  width:72%;height:72%;
+  background:radial-gradient(circle,#50e090,#1d9e75);
+  border-radius:50%;box-shadow:0 0 14px rgba(29,158,117,0.8);
+  animation:gpulse 1.6s ease-in-out infinite;
+}
+@keyframes gpulse{0%,100%{transform:scale(.82);opacity:.75}50%{transform:scale(1);opacity:1}}
+
+/* SORU OVERLAY */
+.q-overlay{display:none;position:absolute;inset:0;background:rgba(10,8,5,0.96);border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50;padding:16px}
+.q-overlay.active{display:flex}
+.q-text{font-size:clamp(18px,5vw,26px);font-weight:700;color:#FFD97A;font-family:Georgia,serif;text-align:center}
+.q-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:300px}
+.q-btn{background:#241e14;border:2px solid rgba(200,150,12,0.5);color:rgba(247,242,232,0.9);padding:12px 8px;border-radius:7px;cursor:pointer;font-size:clamp(14px,4vw,20px);font-weight:700;font-family:Georgia,serif;transition:background .15s,border-color .15s}
+.q-btn:hover{background:#c8960c;color:#12100e;border-color:#c8960c}
+.q-btn.wrong-flash{animation:wrongfl .35s ease}
+@keyframes wrongfl{0%,100%{background:#241e14}50%{background:rgba(180,40,20,0.45);border-color:#eb5757}}
+
+/* WIN OVERLAY */
+.win-overlay{display:none;position:absolute;inset:0;background:rgba(10,8,5,0.9);border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50}
+.win-overlay.show{display:flex}
+.win-title{font-size:20px;font-weight:700;color:#50c878;font-family:Georgia,serif}
+.win-body{font-size:12px;color:rgba(247,242,232,0.55);text-align:center;line-height:1.7}
+.win-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.br-btns{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+
+/* KONTROLLER */
+.controls{display:grid;grid-template-columns:repeat(3,36px);grid-template-rows:repeat(2,36px);gap:5px;margin:0 auto}
+.ctrl-btn{background:rgba(200,150,12,0.1);border:1.5px solid rgba(200,150,12,0.35);color:#c8960c;border-radius:7px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s;-webkit-tap-highlight-color:transparent;user-select:none}
+.ctrl-btn:active{background:rgba(200,150,12,0.35);transform:scale(.9)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.modal-overlay.hidden{display:none}
+.modal-box{background:#0d0b08;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em}
+.modal-rules{font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);padding:10px 4px;list-style:none}
+.modal-rules li{margin-bottom:3px;padding-left:4px}
+.modal-rules li::before{content:"◈ ";color:#c8960c}
+.modal-btns{display:flex;gap:10px;justify-content:center}
+.modal-close{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s}
+.modal-close:hover{background:rgba(40,30,10,0.9)}
+.modal-start{background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s}
+.modal-start:hover{background:rgba(60,40,5,0.9)}
+.modal-logo{display:flex;justify-content:center;padding-top:4px}
+</style>
+</head>
+<body>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">LABİRENT</div>
+    <ul class="modal-rules">
+      <li>Karakteri <b style="color:#c8960c">yön tuşları</b> veya ekrandaki butonlarla hareket ettir.</li>
+      <li><b style="color:#c8960c">Kırmızı kapıları</b> açmak için sorulacak soruyu doğru cevapla.</li>
+      <li>İşlem sırası: <b style="color:#c8960c">( )</b> → Üslü → <b style="color:#c8960c">× ÷</b> → + −</li>
+      <li>Yanlış cevapta kapı açılmaz; doğruyu bulana kadar dene.</li>
+      <li>En kısa sürede <b style="color:#c8960c">yeşil hedefe</b> ulaş!</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="startFromModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Labirent</div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <div class="infobar">
+        <div class="ibox"><div class="l">Kapı</div><div class="v" id="qCount">0/6</div></div>
+        <div class="ibox"><div class="l">Süre</div><div class="v" id="timer">00:00</div></div>
+      </div>
+      <button class="a" onclick="openModal()">&#9432; Kurallar</button>
+    </div>
+  </div>
+
+  <div class="grid-wrap">
+    <div id="grid"></div>
+    <div class="q-overlay" id="qOverlay">
+      <div class="q-text" id="qTxt"></div>
+      <div class="q-opts" id="qOpts"></div>
+    </div>
+    <div class="win-overlay" id="winOverlay">
+      <div class="win-title">Tebrikler!</div>
+      <div class="win-body" id="winBody"></div>
+      <div class="win-btns">
+        <button class="a" onclick="newGame()">&#8635; Yeni Labirent</button>
+        <button class="a" onclick="restartCurrent()">&#8593; Başa Dön</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="msg" id="msg">Yeşil hedefe ulaş!</div>
+
+  <div class="controls">
+    <div></div>
+    <button class="ctrl-btn" onclick="move(0,-1)">▲</button>
+    <div></div>
+    <button class="ctrl-btn" onclick="move(-1,0)">◀</button>
+    <button class="ctrl-btn" onclick="move(0,1)">▼</button>
+    <button class="ctrl-btn" onclick="move(1,0)">▶</button>
+  </div>
+
+  <div class="br-btns">
+    <button class="a" onclick="newGame()">&#8635; Yeni Labirent</button>
+    <button class="a" onclick="restartCurrent()">&#8593; Başa Dön</button>
+  </div>
+</div>
+
+<script>
+// ── LABİRENT ÜRETİCİ ──
+// Görsel ızgara: 11 sütun × 13 satır
+// 6 sütun odası × 7 satır odası, aralarında duvar hücreleri
+const GCOLS=11, GROWS=13, RCOLS=6, RROWS=7, DOOR_COUNT=6, MIN_PATH=20;
+
+function rg(r){ return r*2; }
+
+function generateMaze(){
+  const g=Array.from({length:GCOLS},()=>new Array(GROWS).fill(1));
+  const visited=Array.from({length:RCOLS},()=>new Array(RROWS).fill(false));
+  const stack=[];
+  visited[0][0]=true; g[0][0]=0; stack.push([0,0]);
+  const dirs=[[0,-1],[0,1],[-1,0],[1,0]];
+  while(stack.length){
+    const [rx,ry]=stack[stack.length-1];
+    const nb=dirs.map(([dx,dy])=>[rx+dx,ry+dy])
+      .filter(([nx,ny])=>nx>=0&&nx<RCOLS&&ny>=0&&ny<RROWS&&!visited[nx][ny])
+      .sort(()=>Math.random()-.5);
+    if(!nb.length){stack.pop();continue;}
+    const [nx,ny]=nb[0];
+    visited[nx][ny]=true;
+    g[rg(nx)][rg(ny)]=0;
+    g[(rg(rx)+rg(nx))/2][(rg(ry)+rg(ny))/2]=0;
+    stack.push([nx,ny]);
+  }
+  return g;
+}
+
+function generateValidMaze(){
+  for(let i=0;i<30;i++){
+    const g=generateMaze();
+    const p=bfsPath(g,0,0,GCOLS-1,GROWS-1);
+    if(p&&p.length>=MIN_PATH) return g;
+  }
+  return generateMaze();
+}
+
+function bfsPath(g,sx,sy,ex,ey){
+  const vis=Array.from({length:GCOLS},()=>new Array(GROWS).fill(false));
+  const prv=Array.from({length:GCOLS},()=>new Array(GROWS).fill(null));
+  const q=[[sx,sy]]; vis[sx][sy]=true;
+  const D=[[0,-1],[0,1],[-1,0],[1,0]];
+  while(q.length){
+    const [cx,cy]=q.shift();
+    if(cx===ex&&cy===ey){
+      const path=[]; let cur=[ex,ey];
+      while(cur){path.unshift(cur);cur=prv[cur[0]][cur[1]];}
+      return path;
+    }
+    for(const [dx,dy] of D){
+      const nx=cx+dx,ny=cy+dy;
+      if(nx>=0&&nx<GCOLS&&ny>=0&&ny<GROWS&&!vis[nx][ny]&&g[nx][ny]!==1){
+        vis[nx][ny]=true;prv[nx][ny]=[cx,cy];q.push([nx,ny]);
+      }
+    }
+  }
+  return null;
+}
+
+function placeDoors(g,count){
+  const path=bfsPath(g,0,0,GCOLS-1,GROWS-1);
+  if(!path||path.length<4) return [];
+  const mid=path.slice(Math.floor(path.length*.12),Math.floor(path.length*.88))
+    .filter(([x,y])=>x>0&&y>0&&x<GCOLS-1&&y<GROWS-1);
+  for(let i=mid.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[mid[i],mid[j]]=[mid[j],mid[i]];}
+  const doors=[],chosen=[];
+  for(const [x,y] of mid){
+    if(chosen.every(([cx,cy])=>Math.abs(cx-x)+Math.abs(cy-y)>=3)){
+      doors.push({x,y});chosen.push([x,y]);g[x][y]=2;
+    }
+    if(doors.length>=count) break;
+  }
+  return doors;
+}
+
+// ── SORU HAVUZU ──
+const ALL_Q=[
+  {q:"12 + 8 \u00f7 4",        a:14, wrong:5},
+  {q:"20 \u2212 2 \u00d7 5",  a:10, wrong:90},
+  {q:"3 \u00d7 (4 + 6)",       a:30, wrong:18},
+  {q:"40 \u00f7 (10 \u2212 2)",a:5,  wrong:2},
+  {q:"(15 \u2212 3) \u00f7 4", a:3,  wrong:4},
+  {q:"6 + 4 \u00d7 3",         a:18, wrong:30},
+  {q:"24 \u00f7 4 + 5",        a:11, wrong:8},
+  {q:"(8 + 2) \u00d7 4",       a:40, wrong:10},
+  {q:"15 \u2212 3 \u00d7 4",  a:3,  wrong:48},
+  {q:"(9 + 3) \u00f7 4",       a:3,  wrong:6},
+  {q:"5 \u00d7 6 \u2212 8",   a:22, wrong:10},
+  {q:"18 \u00f7 (3 + 3)",      a:3,  wrong:9},
+  {q:"7 \u00d7 3 + 4",         a:25, wrong:49},
+  {q:"50 \u2212 4 \u00d7 8",  a:18, wrong:368},
+  {q:"(7+3)\u00d7(6\u22124)", a:20, wrong:14},
+  {q:"36 \u00f7 (4 + 2)",      a:6,  wrong:11},
+  {q:"4\u00d7(5\u22122)+3",   a:15, wrong:11},
+  {q:"8+12\u00f74\u22121",    a:10, wrong:4},
+  {q:"3\u00d74 + 2\u00d75",   a:22, wrong:34},
+  {q:"2\u00b3 + 5 \u00d7 2",  a:18, wrong:26},
+  {q:"2 \u00d7 5\u00b2 \u2212 10", a:40, wrong:90},
+  {q:"100 \u00f7 5\u00b2 \u00d7 2", a:8, wrong:4},
+  {q:"3\u00b2 + 4\u00b2",     a:25, wrong:49},
+  {q:"2\u2074 \u2212 4 \u00d7 3", a:4, wrong:36},
+  {q:"(2+3)\u00b2",            a:25, wrong:11},
+  {q:"3 \u00d7 2\u00b2 + 5",  a:17, wrong:29},
+  {q:"2\u00b3 \u00d7 3 \u2212 4", a:20, wrong:28},
+  {q:"(6\u22122)\u00b2 \u00f7 4", a:4, wrong:8},
+  {q:"5\u00b2 \u2212 3\u00b2", a:16, wrong:4},
+  {q:"2\u00b2 \u00d7 (3+5)",  a:32, wrong:20},
+  {q:"2\u00d73\u00d74\u00f76", a:4, wrong:24},
+  {q:"48\u00f74\u00f73",      a:4,  wrong:36},
+  {q:"5\u00d74\u00f72+3",     a:13, wrong:17},
+  {q:"60\u00f7(3\u00d74)",    a:5,  wrong:80},
+  {q:"((3+2)\u00d74)\u00f75", a:4,  wrong:5},
+  {q:"(2\u00d7(5+3))\u22126", a:10, wrong:14},
+  {q:"3\u00d7(2+(8\u00f74))", a:12, wrong:18},
+  {q:"14\u22122\u00d7(3+1)",  a:6,  wrong:48},
+  {q:"9 + 6 \u00f7 3",         a:11, wrong:5},
+  {q:"(9 + 6) \u00f7 3",       a:5,  wrong:11},
+  {q:"4 + 3 \u00d7 5",         a:19, wrong:35},
+  {q:"(4 + 3) \u00d7 5",       a:35, wrong:19},
+  {q:"16 \u00f7 4 + 2",        a:6,  wrong:4},
+  {q:"16 \u00f7 (4 + 2)",      a:8,  wrong:6},
+  {q:"2 \u00d7 3\u00b2 \u2212 1", a:17, wrong:35},
+  {q:"(2 \u00d7 3)\u00b2 \u2212 1", a:35, wrong:17},
+  {q:"30 \u2212 6 \u00d7 4",  a:6,  wrong:96},
+  {q:"(30 \u2212 6) \u00d7 4", a:96, wrong:6},
+  {q:"5 + 4\u00b2 \u00f7 2",  a:13, wrong:20},
+];
+
+function makeDecoys(a,wrong,n){
+  const used=new Set([a,wrong]);const d=[];
+  let t=0;
+  while(d.length<n&&t<120){
+    t++;
+    const delta=Math.floor(Math.random()*16)-7;
+    const c=a+delta+(delta===0?1:0);
+    if(!used.has(c)&&c>0){used.add(c);d.push(c);}
+  }
+  let k=1;while(d.length<n){const c=a+d.length*k;if(!used.has(c)){used.add(c);d.push(c);}k++;}
+  return d;
+}
+
+function buildOptions(q){
+  const decoys=makeDecoys(q.a,q.wrong,2);
+  const opts=[...new Set([q.a,q.wrong,...decoys])].slice(0,4);
+  while(opts.length<4) opts.push(opts[opts.length-1]+opts.length);
+  return opts.sort(()=>Math.random()-.5);
+}
+
+function pickQuestions(n){
+  const arr=[...ALL_Q];
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr.slice(0,n);
+}
+
+// ── OYUN DURUMU ──
+let mazeGrid,playerX,playerY,solvedDoors,totalDoors;
+let startTime,timerInterval,gameActive=false;
+let currentDoor=null,doorMap={},questionPool=[];
+let savedMaze=null,savedDoorMap={},savedPool=[];
+
+function newGame(){
+  clearInterval(timerInterval);
+  document.getElementById('winOverlay').classList.remove('show');
+  document.getElementById('qOverlay').classList.remove('active');
+  mazeGrid=generateValidMaze();
+  const doors=placeDoors(mazeGrid,DOOR_COUNT);
+  totalDoors=doors.length; solvedDoors=0;
+  document.getElementById('qCount').textContent=`0/${totalDoors}`;
+  questionPool=pickQuestions(Math.max(totalDoors+4,12));
+  doorMap={};
+  doors.forEach((d,i)=>{doorMap[`${d.x},${d.y}`]=i%questionPool.length;});
+  savedMaze=mazeGrid.map(r=>[...r]);
+  savedDoorMap={...doorMap};savedPool=[...questionPool];
+  playerX=0;playerY=0;gameActive=false;
+  document.getElementById('timer').textContent='00:00';
+  setMsg('Yeşil hedefe ulaş!');
+  renderGrid();renderPlayer();
+}
+
+function restartCurrent(){
+  clearInterval(timerInterval);
+  document.getElementById('winOverlay').classList.remove('show');
+  document.getElementById('qOverlay').classList.remove('active');
+  mazeGrid=savedMaze.map(r=>[...r]);
+  doorMap={...savedDoorMap};questionPool=[...savedPool];
+  totalDoors=Object.keys(doorMap).length;solvedDoors=0;
+  document.getElementById('qCount').textContent=`0/${totalDoors}`;
+  playerX=0;playerY=0;gameActive=false;
+  document.getElementById('timer').textContent='00:00';
+  setMsg('Yeşil hedefe ulaş!');
+  renderGrid();renderPlayer();
+}
+
+function startTimer(){
+  if(gameActive) return;
+  gameActive=true;startTime=new Date();
+  timerInterval=setInterval(()=>{
+    const d=Math.floor((new Date()-startTime)/1000);
+    document.getElementById('timer').textContent=
+      String(Math.floor(d/60)).padStart(2,'0')+':'+String(d%60).padStart(2,'0');
+  },1000);
+}
+
+function renderGrid(){
+  const grid=document.getElementById('grid');
+  grid.querySelectorAll('.cell').forEach(c=>c.remove());
+  for(let row=0;row<GROWS;row++){
+    for(let col=0;col<GCOLS;col++){
+      const cell=document.createElement('div');
+      cell.className='cell';cell.id=`c-${col}-${row}`;
+      const v=mazeGrid[col][row];
+      if(v===1)      cell.classList.add('wall');
+      else if(v===2) cell.innerHTML='<div class="door-el"></div>';
+      else if(col===GCOLS-1&&row===GROWS-1) cell.innerHTML='<div class="target-el"></div>';
+      else           cell.classList.add('passage');
+      grid.appendChild(cell);
+    }
+  }
+}
+
+function renderPlayer(){
+  document.querySelectorAll('.player').forEach(p=>p.remove());
+  const cell=document.getElementById(`c-${playerX}-${playerY}`);
+  if(cell){
+    const p=document.createElement('div');p.className='player';
+    p.innerHTML='<img src="../img/th-ikon.png" alt="">';
+    cell.appendChild(p);
+  }
+}
+
+function move(dx,dy){
+  if(document.getElementById('qOverlay').classList.contains('active')) return;
+  if(document.getElementById('winOverlay').classList.contains('show')) return;
+  const nx=playerX+dx,ny=playerY+dy;
+  if(nx<0||nx>=GCOLS||ny<0||ny>=GROWS) return;
+  const v=mazeGrid[nx][ny];
+  if(v===1) return;
+  startTimer();
+  if(v===2){askQuestion(nx,ny);return;}
+  playerX=nx;playerY=ny;renderPlayer();
+  if(nx===GCOLS-1&&ny===GROWS-1) win();
+}
+
+function askQuestion(x,y){
+  currentDoor={x,y};
+  const q=questionPool[doorMap[`${x},${y}`]??0];
+  document.getElementById('qTxt').textContent=q.q+' = ?';
+  const container=document.getElementById('qOpts');container.innerHTML='';
+  buildOptions(q).forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='q-btn';btn.textContent=opt;
+    btn.onclick=()=>checkAnswer(opt,q.a,btn);
+    container.appendChild(btn);
+  });
+  document.getElementById('qOverlay').classList.add('active');
+}
+
+function checkAnswer(val,correct,btnEl){
+  if(val===correct){
+    document.getElementById('qOverlay').classList.remove('active');
+    mazeGrid[currentDoor.x][currentDoor.y]=0;
+    const cell=document.getElementById(`c-${currentDoor.x}-${currentDoor.y}`);
+    if(cell){cell.innerHTML='';cell.classList.add('passage');}
+    playerX=currentDoor.x;playerY=currentDoor.y;renderPlayer();
+    solvedDoors++;
+    document.getElementById('qCount').textContent=`${solvedDoors}/${totalDoors}`;
+    setMsg('\u2713 Kap\u0131 a\u00e7\u0131ld\u0131!');
+    if(playerX===GCOLS-1&&playerY===GROWS-1) win();
+  } else {
+    btnEl.classList.add('wrong-flash');
+    setTimeout(()=>btnEl.classList.remove('wrong-flash'),350);
+    setMsg('\u2717 Yanl\u0131\u015f! Tekrar dene.');
+  }
+}
+
+function win(){
+  clearInterval(timerInterval);gameActive=false;
+  const t=document.getElementById('timer').textContent;
+  document.getElementById('winBody').innerHTML=
+    `${solvedDoors} kap\u0131 &nbsp;\u00b7&nbsp; S\u00fcre: <b style="color:#FFD97A">${t}</b>`;
+  document.getElementById('winOverlay').classList.add('show');
+  setMsg('');
+}
+
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
+function startFromModal(){closeModal();newGame();}
+function setMsg(t){document.getElementById('msg').textContent=t;}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowUp')   {e.preventDefault();move(0,-1);}
+  if(e.key==='ArrowDown') {e.preventDefault();move(0,1);}
+  if(e.key==='ArrowLeft') {e.preventDefault();move(-1,0);}
+  if(e.key==='ArrowRight'){e.preventDefault();move(1,0);}
+});
+
+newGame();
+</script>
+<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
+  <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+       style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
+       onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
+</div>
+</body>
+</html>

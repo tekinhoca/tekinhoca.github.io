@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Eşini Bul</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0a0c0e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:500px;display:flex;flex-direction:column;gap:8px;margin:auto}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:13px;font-weight:700;color:#c8960c}
+
+/* SEVİYE SEÇİM EKRANI */
+#levelScreen{display:flex;flex-direction:column;gap:10px}
+.level-title{font-size:13px;color:rgba(247,242,232,0.5);text-align:center;margin-bottom:4px}
+.level-btn{
+  padding:14px 20px;border-radius:6px;
+  border:1px solid rgba(200,150,12,0.35);
+  background:rgba(200,150,12,0.06);
+  color:rgba(247,242,232,0.85);
+  font-family:Georgia,serif;font-size:14px;
+  cursor:pointer;transition:all .2s;
+  text-align:left;
+}
+.level-btn:hover{background:rgba(200,150,12,0.15);border-color:#c8960c}
+.level-btn .lname{font-weight:700;color:#c8960c;display:block;margin-bottom:3px}
+.level-btn .ldesc{font-size:11px;color:rgba(247,242,232,0.4)}
+
+/* KART TAHTASI */
+#gameScreen{display:none;flex-direction:column;gap:6px;position:relative}
+.board{display:grid;gap:6px;justify-content:center}
+.card{
+  aspect-ratio:1;
+  border-radius:8px;
+  cursor:pointer;
+  position:relative;
+  user-select:none;
+}
+.card-face{
+  position:absolute;inset:0;
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+}
+.card-back{
+  background:#1a1628;
+  border:1.5px solid rgba(200,150,12,0.25);
+}
+.card-back::after{
+  content:'?';
+  font-size:clamp(16px,4vw,24px);
+  font-weight:700;
+  color:rgba(200,150,12,0.3);
+  font-family:Georgia,serif;
+}
+.card-front{
+  background:#1e1830;
+  border:1.5px solid rgba(200,150,12,0.4);
+  display:none;
+  flex-direction:column;
+  gap:2px;
+  padding:4px;
+}
+.card.flipped .card-back{display:none}
+.card.flipped .card-front{display:flex}
+.card.matched .card-back{display:none}
+.card.matched .card-front{display:flex;background:#0e1e14;border-color:rgba(80,200,120,0.5);}
+
+.card-text{
+  font-family:Georgia,serif;
+  font-weight:700;
+  color:rgba(247,242,232,0.9);
+  text-align:center;
+  line-height:1.1;
+}
+
+/* Kazanma overlay */
+.win-overlay{
+  display:none;
+  position:absolute;inset:0;
+  background:rgba(10,12,14,0.85);
+  border-radius:8px;
+  flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:14px;
+  z-index:10;
+}
+.win-overlay.show{display:flex}
+.win-overlay h2{font-size:18px;color:#50c878;font-family:Georgia,serif}
+.win-overlay p{font-size:12px;color:rgba(247,242,232,0.5)}
+.win-overlay .ov-btns{display:flex;gap:8px}
+
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+/* AÇILIŞ MODALI */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:16px;
+}
+.modal-overlay.hidden{display:none;}
+.modal-box{
+  background:#07090b;
+  border:1px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:22px 20px 18px;
+  max-width:360px;width:100%;
+  display:flex;flex-direction:column;gap:12px;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+.modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em;}
+.modal-rules{
+  font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;
+  border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);
+  padding:10px 4px;list-style:none;
+}
+.modal-rules li{margin-bottom:3px;padding-left:4px;}
+.modal-rules li::before{content:"◈ ";color:#c8960c;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{
+  background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);
+  border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;
+  color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s;
+}
+.modal-close:hover{background:rgba(40,30,10,0.9);}
+.modal-start{
+  background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);
+  border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;
+  color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s;
+}
+.modal-start:hover{background:rgba(60,40,5,0.9);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
+</style>
+</head>
+<body>
+
+<!-- Açılış Modalı -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">EŞİNİ BUL</div>
+    <ul class="modal-rules">
+      <li>Her turda <b style="color:#c8960c">8 çift</b> kart karışık şekilde dizilir.</li>
+      <li>Her hamlede <b style="color:#c8960c">iki kart</b> açılır; eşleşirlerse sabit kalır.</li>
+      <li>Kartlar soru–cevap çiftleridir; matematiksel eşitliği bul.</li>
+      <li>Seviyeyi seçerek başla: İlkokul, Ortaokul veya Lise.</li>
+      <li>En az <b style="color:#c8960c">hamleyle</b> tüm çiftleri bulmaya çalış!</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Eşini Bul</div>
+    <div style="display:flex;gap:5px;">
+      <button class="a" onclick="openModal()">&#9432; Kurallar</button>
+    </div>
+  </div>
+
+  <div class="infobar">
+    <div class="ibox"><div class="l">Seviye</div><div class="v" id="levelDisp">—</div></div>
+    <div class="ibox"><div class="l">Hamle</div><div class="v" id="moveDisp">0</div></div>
+    <div class="ibox"><div class="l">Eşleşen</div><div class="v" id="matchDisp">0/8</div></div>
+  </div>
+
+  <!-- Seviye seçim ekranı -->
+  <div id="levelScreen">
+    <div class="level-title">Seviye seçin</div>
+    <button class="level-btn" onclick="startGame('ilkokul')">
+      <span class="lname">İlkokul</span>
+      <span class="ldesc">1-10 arası toplama, çıkarma ve çarpma</span>
+    </button>
+    <button class="level-btn" onclick="startGame('ortaokul')">
+      <span class="lname">Ortaokul</span>
+      <span class="ldesc">Çarpım tablosu, bölme ve karekök</span>
+    </button>
+    <button class="level-btn" onclick="startGame('lise')">
+      <span class="lname">Lise</span>
+      <span class="ldesc">Üslü sayılar, karekökler ve faktöriyel</span>
+    </button>
+  </div>
+
+  <!-- Oyun ekranı -->
+  <div id="gameScreen">
+    <div style="position:relative">
+      <div class="board" id="board"></div>
+      <div class="win-overlay" id="winOverlay">
+        <h2>Tebrikler!</h2>
+        <p id="winBody"></p>
+        <div class="ov-btns">
+          <button class="a" onclick="restartSame()">&#8635; Tekrar</button>
+          <button class="a" onclick="backToLevels()">&#8592; Seviye Seç</button>
+        </div>
+      </div>
+    </div>
+    <div class="msg" id="msg">Kartları açarak eşleşen çiftleri bulun.</div>
+    <div class="br-btns">
+      <button class="a" onclick="restartSame()">&#8635; Tekrar</button>
+      <button class="a" onclick="backToLevels()">&#8592; Seviye Seç</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── KART SETLERİ ──
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function makePairs_ilkokul(){
+  const toplama=shuffle([
+    {q:'2+3',a:'5'},{q:'4+5',a:'9'},{q:'7+6',a:'13'},
+    {q:'8+4',a:'12'},{q:'9+5',a:'14'},{q:'3+8',a:'11'},
+    {q:'7+8',a:'15'},{q:'5+7',a:'12'},{q:'8+6',a:'14'},
+  ]);
+  const cikarma=shuffle([
+    {q:'9-4',a:'5'},{q:'8-3',a:'5'},{q:'10-6',a:'4'},
+    {q:'11-4',a:'7'},{q:'13-6',a:'7'},{q:'15-8',a:'7'},
+    {q:'14-9',a:'5'},{q:'16-9',a:'7'},{q:'12-5',a:'7'},
+  ]);
+  const carpma=shuffle([
+    {q:'2×3',a:'6'},{q:'3×4',a:'12'},{q:'4×5',a:'20'},
+    {q:'5×6',a:'30'},{q:'6×7',a:'42'},{q:'7×8',a:'56'},
+    {q:'8×9',a:'72'},{q:'6×8',a:'48'},{q:'9×4',a:'36'},
+  ]);
+  function pick(pool,n){
+    const used=new Set();const res=[];
+    for(const p of pool){if(!used.has(p.a)){used.add(p.a);res.push(p);}if(res.length>=n)break;}
+    return res;
+  }
+  return [...pick(toplama,3),...pick(cikarma,3),...pick(carpma,2)];
+}
+
+function makePairs_ortaokul(){
+  const carpma=shuffle([
+    {q:'11×11',a:'121'},{q:'12×8',a:'96'},{q:'13×7',a:'91'},
+    {q:'14×6',a:'84'},{q:'15×6',a:'90'},{q:'11×12',a:'132'},
+    {q:'13×9',a:'117'},{q:'12×9',a:'108'},{q:'14×7',a:'98'},
+    {q:'15×7',a:'105'},{q:'11×9',a:'99'},
+  ]);
+  const bolme=shuffle([
+    {q:'63÷7',a:'9'},{q:'72÷8',a:'9'},{q:'54÷6',a:'9'},
+    {q:'48÷6',a:'8'},{q:'56÷7',a:'8'},{q:'64÷8',a:'8'},
+    {q:'45÷9',a:'5'},{q:'36÷6',a:'6'},{q:'42÷7',a:'6'},
+  ]);
+  const karekok=shuffle([
+    {q:'√36',a:'6'},{q:'√49',a:'7'},{q:'√64',a:'8'},
+    {q:'√81',a:'9'},{q:'√100',a:'10'},{q:'√121',a:'11'},
+    {q:'√144',a:'12'},{q:'√25',a:'5'},{q:'√16',a:'4'},
+  ]);
+  function pick(pool,n,usedGlobal){
+    const res=[];
+    for(const p of pool){if(!usedGlobal.has(p.a)){usedGlobal.add(p.a);res.push(p);}if(res.length>=n)break;}
+    return res;
+  }
+  const usedAll=new Set();
+  return [...pick(carpma,3,usedAll),...pick(bolme,3,usedAll),...pick(karekok,2,usedAll)];
+}
+
+function makePairs_lise(){
+  const uslu=shuffle([
+    {q:'2²',a:'4'},{q:'3²',a:'9'},{q:'4²',a:'16'},
+    {q:'5²',a:'25'},{q:'6²',a:'36'},{q:'7²',a:'49'},
+    {q:'8²',a:'64'},{q:'9²',a:'81'},{q:'10²',a:'100'},
+    {q:'11²',a:'121'},{q:'12²',a:'144'},{q:'13²',a:'169'},
+    {q:'2³',a:'8'},{q:'3³',a:'27'},{q:'5³',a:'125'},
+    {q:'2⁴',a:'16'},{q:'2⁵',a:'32'},{q:'2⁷',a:'128'},
+  ]);
+  const karekok=shuffle([
+    {q:'√4',a:'2'},{q:'√9',a:'3'},{q:'√16',a:'4'},
+    {q:'√25',a:'5'},{q:'√36',a:'6'},{q:'√49',a:'7'},
+    {q:'√64',a:'8'},{q:'√81',a:'9'},{q:'√100',a:'10'},
+    {q:'√121',a:'11'},{q:'√144',a:'12'},{q:'√169',a:'13'},
+  ]);
+  const faktoriyel=shuffle([
+    {q:'1!',a:'1'},{q:'2!',a:'2'},{q:'3!',a:'6'},
+    {q:'4!',a:'24'},{q:'5!',a:'120'},
+  ]);
+  function pick(pool,n,usedGlobal){
+    const res=[];
+    for(const p of pool){if(!usedGlobal.has(p.a)){usedGlobal.add(p.a);res.push(p);}if(res.length>=n)break;}
+    return res;
+  }
+  const usedAll=new Set();
+  return [...pick(uslu,3,usedAll),...pick(karekok,2,usedAll),...pick(faktoriyel,3,usedAll)];
+}
+
+// ── OYUN DURUMU ──
+let cards, flipped, matched, moves, locked, currentLevel;
+
+function startGame(level){
+  currentLevel=level;
+  document.getElementById('levelScreen').style.display='none';
+  document.getElementById('gameScreen').style.display='flex';
+
+  const levelNames={ilkokul:'İlkokul',ortaokul:'Ortaokul',lise:'Lise'};
+  document.getElementById('levelDisp').textContent=levelNames[level];
+
+  const makers={ilkokul:makePairs_ilkokul,ortaokul:makePairs_ortaokul,lise:makePairs_lise};
+  const pairs=makers[level]();
+
+  const allCards=[];
+  pairs.forEach((p,i)=>{
+    allCards.push({id:i,type:'q',text:p.q,pairId:i});
+    allCards.push({id:i+100,type:'a',text:p.a,pairId:i});
+  });
+  cards=shuffle(allCards);
+  flipped=[];matched=new Set();moves=0;locked=false;
+
+  document.getElementById('moveDisp').textContent='0';
+  document.getElementById('matchDisp').textContent='0/8';
+  document.getElementById('winOverlay').classList.remove('show');
+  setMsg('Kartları açarak eşleşen çiftleri bulun.');
+  renderBoard();
+}
+
+function renderBoard(){
+  const board=document.getElementById('board');
+  const cols=4;
+  const maxW=Math.min(460,window.innerWidth-20);
+  const cardSize=Math.floor((maxW-(cols-1)*6-16)/cols);
+
+  board.style.gridTemplateColumns=`repeat(${cols},${cardSize}px)`;
+  board.innerHTML='';
+
+  cards.forEach((card,idx)=>{
+    const el=document.createElement('div');
+    el.className='card';
+    el.style.width=cardSize+'px';
+    el.dataset.idx=idx;
+
+    const isFlipped=flipped.includes(idx)||matched.has(card.pairId);
+    if(isFlipped) el.classList.add(matched.has(card.pairId)?'matched':'flipped');
+
+    const back=document.createElement('div');
+    back.className='card-face card-back';
+    el.appendChild(back);
+
+    const front=document.createElement('div');
+    front.className='card-face card-front';
+    const fs=Math.max(11,Math.floor(cardSize*0.26));
+    front.innerHTML=renderCardContent(card.text,fs);
+    el.appendChild(front);
+
+    el.addEventListener('click',()=>handleCardClick(idx));
+    board.appendChild(el);
+  });
+}
+
+function renderCardContent(text,fs){
+  const styled=text
+    .replace(/²/g,'<sup style="color:#f0a040;font-size:0.65em;">2</sup>')
+    .replace(/³/g,'<sup style="color:#f0a040;font-size:0.65em;">3</sup>')
+    .replace(/⁴/g,'<sup style="color:#f0a040;font-size:0.65em;">4</sup>')
+    .replace(/⁵/g,'<sup style="color:#f0a040;font-size:0.65em;">5</sup>')
+    .replace(/⁶/g,'<sup style="color:#f0a040;font-size:0.65em;">6</sup>')
+    .replace(/⁷/g,'<sup style="color:#f0a040;font-size:0.65em;">7</sup>')
+    .replace(/!/g,'<span style="color:#f0a040;">!</span>')
+    .replace(/√/g,'<span style="color:#f0a040;">√</span>');
+  return `<div class="card-text" style="font-size:${fs}px;">${styled}</div>`;
+}
+
+function handleCardClick(idx){
+  if(locked)return;
+  if(matched.has(cards[idx].pairId))return;
+  if(flipped.includes(idx))return;
+  if(flipped.length>=2)return;
+
+  flipped.push(idx);
+  renderBoard();
+
+  if(flipped.length===2){
+    moves++;
+    document.getElementById('moveDisp').textContent=moves;
+    locked=true;
+
+    const [i1,i2]=flipped;
+    const c1=cards[i1],c2=cards[i2];
+
+    if(c1.pairId===c2.pairId){
+      setTimeout(()=>{
+        matched.add(c1.pairId);
+        flipped=[];
+        locked=false;
+        document.getElementById('matchDisp').textContent=matched.size+'/8';
+        renderBoard();
+        if(matched.size===8){
+          document.getElementById('winOverlay').classList.add('show');
+          document.getElementById('winBody').textContent=moves+' hamlede tamamladınız!';
+          setMsg('');
+        }
+      },600);
+    } else {
+      setTimeout(()=>{
+        flipped=[];
+        locked=false;
+        renderBoard();
+      },900);
+    }
+  }
+}
+
+function restartSame(){startGame(currentLevel);}
+function backToLevels(){
+  document.getElementById('gameScreen').style.display='none';
+  document.getElementById('levelScreen').style.display='flex';
+  document.getElementById('levelDisp').textContent='—';
+  document.getElementById('moveDisp').textContent='0';
+  document.getElementById('matchDisp').textContent='0/8';
+}
+
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
+
+window.addEventListener('resize',()=>{if(cards)renderBoard();});
+function setMsg(t){document.getElementById('msg').textContent=t;}
+</script>
+</body>
+</html>

@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Cevapları Yakala</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  height:100%;
+  background:#080c10;
+  font-family:'Share Tech Mono',monospace;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:8px;overflow-y:auto;
+  scrollbar-width:none;-ms-overflow-style:none;
+  user-select:none;
+}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+
+.wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:8px;margin:auto}
+
+/* BAŞLIK */
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:15px;font-weight:900;
+  color:#c8960c;letter-spacing:.15em;
+  text-shadow:0 0 12px rgba(200,150,12,0.5);
+}
+.diff-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.diff-sel select{
+  background:#0e1318;border:1px solid rgba(200,150,12,0.35);
+  border-radius:3px;color:rgba(247,242,232,0.85);
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  padding:3px 6px;cursor:pointer;
+}
+
+/* ÜSTTE BİLGİ ÇUBUĞU */
+.hud{display:flex;gap:6px;align-items:stretch}
+.hud-box{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(200,150,12,0.2);
+  border-radius:5px;padding:5px 10px;
+  flex:1;text-align:center;
+}
+.hud-box .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.hud-box .v{font-size:15px;font-weight:700;color:#FFD97A;font-family:'Orbitron',sans-serif;}
+.hud-box .v.red{color:#eb5757}
+
+/* SORU KUTUSU */
+.question-box{
+  background:rgba(200,150,12,0.08);
+  border:2px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:10px 16px;
+  text-align:center;
+  min-height:52px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  overflow:hidden;
+}
+.question-box::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(200,150,12,0.05),transparent);
+  animation:scanline 3s linear infinite;
+}
+@keyframes scanline{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.question-text{
+  font-family:'Orbitron',sans-serif;
+  font-size:22px;font-weight:900;
+  color:#FFD97A;
+  letter-spacing:.1em;
+  text-shadow:0 0 16px rgba(255,217,122,0.6);
+  transition:opacity .2s;
+}
+.question-text.flash-correct{animation:flashCorrect .4s ease;}
+.question-text.flash-wrong{animation:flashWrong .4s ease;}
+@keyframes flashCorrect{0%,100%{color:#FFD97A}50%{color:#50c878;text-shadow:0 0 20px rgba(80,200,120,0.8);}}
+@keyframes flashWrong{0%,100%{color:#FFD97A}50%{color:#eb5757;text-shadow:0 0 20px rgba(235,87,87,0.8);}}
+
+/* OYUN ALANI */
+.arena-wrap{position:relative;width:100%;}
+canvas{
+  display:block;width:100%;
+  border:1px solid rgba(200,150,12,0.2);
+  border-radius:6px;
+  background:#0a0e14;
+  touch-action:none;
+}
+
+/* MESAJ */
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px;letter-spacing:.05em;}
+
+/* CANLAR */
+.lives{display:flex;gap:6px;justify-content:center;align-items:center;}
+.heart{font-size:18px;transition:transform .2s,opacity .2s;}
+.heart.lost{opacity:0.2;transform:scale(0.8);}
+
+/* SONUÇ EKRANI */
+.result-overlay{
+  display:none;position:absolute;inset:0;
+  background:rgba(8,12,16,0.92);
+  border-radius:6px;
+  flex-direction:column;align-items:center;justify-content:center;
+  gap:12px;z-index:10;
+}
+.result-overlay.show{display:flex;}
+.result-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:20px;font-weight:900;
+  color:#c8960c;letter-spacing:.12em;
+  text-align:center;
+}
+.result-score{
+  font-family:'Orbitron',sans-serif;
+  font-size:28px;font-weight:900;color:#FFD97A;
+}
+.result-detail{font-size:11px;color:rgba(247,242,232,0.5);text-align:center;line-height:1.8}
+
+/* BUTONLAR */
+.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
+button.a{
+  background:rgba(200,150,12,0.08);
+  border:1px solid rgba(200,150,12,0.35);
+  border-radius:4px;padding:6px 16px;font-size:11px;
+  cursor:pointer;color:rgba(247,242,232,0.75);
+  font-family:'Share Tech Mono',monospace;
+  transition:background .2s,border-color .2s;
+  letter-spacing:.05em;
+}
+button.a:hover{background:rgba(200,150,12,0.2);border-color:rgba(200,150,12,0.6);}
+button.a.primary{
+  background:rgba(200,150,12,0.2);
+  border-color:#c8960c;color:#FFD97A;
+  font-weight:700;
+}
+button.a.primary:hover{background:rgba(200,150,12,0.35);}
+
+/* BAŞLAT / BAŞTAN BUTONLARI */
+.start-overlay{
+  position:absolute;inset:0;
+  background:rgba(8,12,16,0.82);
+  border-radius:6px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;z-index:9;
+}
+.start-overlay.hidden{display:none;}
+.start-big{
+  font-family:'Orbitron',sans-serif;
+  font-size:28px;font-weight:900;color:#FFD97A;
+  letter-spacing:.15em;
+  text-shadow:0 0 20px rgba(255,217,122,0.5);
+  animation:pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.55;}}
+.start-btns{display:flex;gap:10px;}
+
+/* LOGO */
+.logo-area{display:flex;justify-content:center;padding:4px 0 2px;}
+
+/* AÇILIŞ MODALI */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.88);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:16px;
+}
+.modal-overlay.hidden{display:none;}
+.modal-box{
+  background:#0b0e14;
+  border:1px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:22px 20px 18px;
+  max-width:360px;width:100%;
+  display:flex;flex-direction:column;gap:12px;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+.modal-title{
+  font-family:'Orbitron',sans-serif;
+  font-size:20px;font-weight:900;
+  color:#c8960c;text-align:center;letter-spacing:.12em;
+  text-shadow:0 0 12px rgba(200,150,12,0.5);
+}
+.modal-rules{
+  font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.8;
+  border-top:1px solid rgba(200,150,12,0.2);
+  border-bottom:1px solid rgba(200,150,12,0.2);
+  padding:10px 4px;list-style:none;
+}
+.modal-rules li{margin-bottom:4px;padding-left:4px;}
+.modal-rules li::before{content:"▸ ";color:#c8960c;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{
+  background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);
+  border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;
+  color:rgba(247,242,232,0.6);font-family:'Share Tech Mono',monospace;transition:background .2s;
+}
+.modal-close:hover{background:rgba(40,30,10,0.9);}
+.modal-start{
+  background:rgba(140,85,10,0.7);border:1px solid rgba(200,150,12,0.7);
+  border-radius:3px;padding:6px 24px;font-size:12px;cursor:pointer;
+  color:#FFD97A;font-weight:700;font-family:'Share Tech Mono',monospace;transition:background .2s;
+  letter-spacing:.08em;
+}
+.modal-start:hover{background:rgba(180,110,15,0.9);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
+</style>
+</head>
+<body>
+
+<!-- Açılış Modalı -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">CEVAPLARI YAKALA</div>
+    <ul class="modal-rules">
+      <li>Ekranda bir matematik sorusu belirir.</li>
+      <li>Doğru cevabı taşıyan sayıyı platformla yakala.</li>
+      <li>Yanlış sayı yakalanırsa can kaybedersin.</li>
+      <li>Doğru cevap kaçarsa kombo sıfırlanır, can gitmez.</li>
+      <li>Her 5 soruda sayılar biraz daha hızlı düşer.</li>
+      <li>Klavye ← → veya ekrana dokun ile hareket et.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">BAŞLA</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">CEVAPLARI YAKALA</div>
+    <div class="diff-sel">
+      <label>Seviye:</label>
+      <select id="diffSel" onchange="newGame()">
+        <option value="easy">Kolay (İlkokul)</option>
+        <option value="medium" selected>Orta (Ortaokul)</option>
+        <option value="hard">Zor (Lise)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="hud">
+    <div class="hud-box"><div class="l">Puan</div><div class="v" id="scoreDisp">0</div></div>
+    <div class="hud-box"><div class="l">Soru</div><div class="v" id="qDisp">0</div></div>
+    <div class="hud-box"><div class="l">Seri</div><div class="v" id="streakDisp">0</div></div>
+    <div class="hud-box"><div class="l">Hız</div><div class="v" id="speedDisp">1</div></div>
+  </div>
+
+  <div class="question-box">
+    <div class="question-text" id="questionText">— &nbsp; ?</div>
+  </div>
+
+  <div class="lives" id="lives">
+    <span class="heart" id="h1">❤️</span>
+    <span class="heart" id="h2">❤️</span>
+    <span class="heart" id="h3">❤️</span>
+  </div>
+
+  <div class="arena-wrap">
+    <canvas id="gameCanvas"></canvas>
+    <div class="start-overlay" id="startOverlay">
+      <div class="start-big">CEVAPLARI YAKALA</div>
+      <div class="start-btns">
+        <button class="a primary" onclick="startGame()">▶ BAŞLAT</button>
+        <button class="a" onclick="resetGame()">↺ BAŞTAN</button>
+      </div>
+    </div>
+    <div class="result-overlay" id="resultOverlay">
+      <div class="result-title" id="resultTitle">OYUN BİTTİ</div>
+      <div class="result-score" id="resultScore">0</div>
+      <div class="result-detail" id="resultDetail"></div>
+      <button class="a primary" onclick="startGame()" style="margin-top:8px">▶ YENİDEN OYNA</button>
+      <button class="a" onclick="resetGame()" style="margin-top:2px">↺ BAŞTAN</button>
+    </div>
+  </div>
+
+  <div class="msg" id="msg">Seviye seçip BAŞLA'ya basın.</div>
+
+  <div class="br">
+    <button class="a primary" onclick="startGame()">▶ BAŞLAT</button>
+    <button class="a" onclick="resetGame()">↺ BAŞTAN</button>
+    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
+  </div>
+
+  <div class="logo-area">
+    <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+         style="height:24px;opacity:0.30;filter:brightness(1.3);transition:opacity .3s"
+         onmouseover="this.style.opacity='0.6'"
+         onmouseout="this.style.opacity='0.30'">
+  </div>
+</div>
+
+<script>
+// ─── SES SİSTEMİ ───────────────────────────────────────────────
+const AC = (function(){
+  let ctx = null;
+  function get(){if(!ctx) ctx = new (window.AudioContext||window.webkitAudioContext)(); return ctx;}
+  function beep(freq, dur, type='square', vol=0.18){
+    try{
+      const c=get(), o=c.createOscillator(), g=c.createGain();
+      o.type=type; o.frequency.setValueAtTime(freq,c.currentTime);
+      g.gain.setValueAtTime(vol,c.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);
+      o.connect(g); g.connect(c.destination);
+      o.start(c.currentTime); o.stop(c.currentTime+dur);
+    }catch(e){}
+  }
+  return {
+    correct(){ beep(880,0.08,'square',0.2); setTimeout(()=>beep(1100,0.12,'square',0.15),80); },
+    wrong(){ beep(180,0.18,'sawtooth',0.2); setTimeout(()=>beep(140,0.22,'sawtooth',0.15),100); },
+    miss(){ beep(300,0.1,'triangle',0.12); },
+    levelUp(){ beep(660,0.08,'square',0.15); setTimeout(()=>beep(880,0.08,'square',0.15),90); setTimeout(()=>beep(1100,0.15,'square',0.2),180); },
+    gameOver(){ [220,196,165,147].forEach((f,i)=>setTimeout(()=>beep(f,0.18,'sawtooth',0.18),i*110)); },
+    canUp(){ beep(523,0.08,'square',0.18); setTimeout(()=>beep(659,0.08,'square',0.18),90); setTimeout(()=>beep(784,0.08,'square',0.18),180); setTimeout(()=>beep(1047,0.2,'square',0.22),270); }
+  };
+})();
+
+// ─── YARDIMCI MATEMATİK ────────────────────────────────────────
+function r(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function fact(n){ let f=1; for(let i=2;i<=n;i++) f*=i; return f; }
+
+// Üst simge — ^ asla kullanılmaz
+const SUP={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','10':'¹⁰'};
+function sup(n){ return SUP[String(n)]||String(n); }
+
+// Üslü ifade havuzu
+function randPow(level){
+  const pool=[];
+  for(let n=2;n<=9;n++) pool.push({val:1,text:`1${sup(n)}`});
+  for(let n=1;n<=5;n++) pool.push({val:0,text:`0${sup(n)}`});
+  for(let e=2;e<=10;e++) pool.push({val:Math.pow(2,e),text:`2${sup(e)}`});
+  for(let b=3;b<=9;b++) pool.push({val:b*b,text:`${b}${sup(2)}`});
+  if(level==='hard') for(let b=2;b<=4;b++) pool.push({val:b*b*b,text:`${b}${sup(3)}`});
+  return pool[r(0,pool.length-1)];
+}
+
+// ─── SORU ÜRETECİ ──────────────────────────────────────────────
+function makeQuestion(diff){
+
+  // ── İLKOKUL ──
+  if(diff==='easy'){
+    const type=r(0,3);
+    let a,b,ans,text;
+    if(type===0){ a=r(1,20);b=r(1,20);ans=a+b;text=`${a}+${b}`; }
+    else if(type===1){ a=r(5,25);b=r(1,a);ans=a-b;text=`${a}−${b}`; }
+    else if(type===2){ a=r(1,9);b=r(1,9);ans=a*b;text=`${a}×${b}`; }
+    else { b=r(2,9);ans=r(2,9);a=ans*b;text=`${a}÷${b}`; }
+    return {text,ans};
+  }
+
+  // ── ORTAOKUL ──
+  if(diff==='medium'){
+    const type=r(0,9);
+    let a,b,c,ans,text;
+    if(type===0){ a=r(10,60);b=r(10,60);ans=a+b;text=`${a}+${b}`; }
+    else if(type===1){ a=r(20,80);b=r(5,a);ans=a-b;text=`${a}−${b}`; }
+    else if(type===2){ a=r(2,12);b=r(2,12);ans=a*b;text=`${a}×${b}`; }
+    else if(type===3){ ans=r(2,12);b=r(2,12);a=ans*b;text=`${a}÷${b}`; }
+    else if(type===4){
+      const pw=randPow('medium');const n=r(1,20);
+      ans=pw.val+n;text=`${pw.text}+${n}`;
+    }
+    else if(type===5){
+      const pw=randPow('medium');const n=r(1,30);
+      ans=pw.val-n;text=`${pw.text}−${n}`;
+    }
+    else if(type===6){
+      // (a+b)×c veya (a−b)×c — parantez başta
+      a=r(2,12);b=r(2,12);c=r(2,9);
+      const op=r(0,1);
+      ans=op?(a+b)*c:(a-b)*c;
+      text=op?`(${a}+${b})×${c}`:`(${a}−${b})×${c}`;
+    }
+    else if(type===7){
+      // a×(b+c) veya a×(b−c) — parantez sonda
+      a=r(2,9);b=r(2,12);c=r(2,12);
+      const op=r(0,1);
+      ans=op?a*(b+c):a*(b-c);
+      text=op?`${a}×(${b}+${c})`:`${a}×(${b}−${c})`;
+    }
+    else if(type===8){
+      // (a+b)÷c — tam bölünür, parantez başta
+      c=r(2,9);const q=r(2,9);
+      a=r(1,c*q-1);b=c*q-a;
+      ans=q;text=`(${a}+${b})÷${c}`;
+    }
+    else {
+      // a÷b+c veya a÷b−c — parantezsiz işlem önceliği
+      b=r(2,9);const q=r(2,9);a=q*b;c=r(1,20);
+      const op=r(0,1);
+      ans=op?q+c:q-c;
+      text=op?`${a}÷${b}+${c}`:`${a}÷${b}−${c}`;
+    }
+    return {text,ans};
+  }
+
+  // ── LİSE ──
+  const type=r(0,12);
+  let a,b,c,ans,text;
+
+  if(type===0){
+    // (a+b)×c
+    a=r(2,9);b=r(2,9);c=r(2,8);ans=(a+b)*c;text=`(${a}+${b})×${c}`;
+  }
+  else if(type===1){
+    // (a−b)×c — sonuç negatif olabilir
+    a=r(2,12);b=r(2,12);c=r(2,8);ans=(a-b)*c;text=`(${a}−${b})×${c}`;
+  }
+  else if(type===2){
+    // a×(b+c)
+    a=r(2,8);b=r(2,9);c=r(2,9);ans=a*(b+c);text=`${a}×(${b}+${c})`;
+  }
+  else if(type===3){
+    // a×(b−c) — sonuç negatif olabilir
+    a=r(2,8);b=r(2,12);c=r(2,12);ans=a*(b-c);text=`${a}×(${b}−${c})`;
+  }
+  else if(type===4){
+    // (a+b)÷c — tam bölünür, parantez başta
+    c=r(2,9);const q=r(2,9);
+    a=r(1,c*q-1);b=c*q-a;
+    ans=q;text=`(${a}+${b})÷${c}`;
+  }
+  else if(type===5){
+    // a÷(b+c) — tam bölünür, parantez sonda
+    const div=r(2,9);const q=r(2,9);
+    a=div*q;b=r(1,div-1);c=div-b;
+    ans=q;text=`${a}÷(${b}+${c})`;
+  }
+  else if(type===6){
+    // a÷(b−c) — parantez sonda, sonuç negatif olabilir
+    // bölen = b-c ≠ 0; a tam bölünür
+    const bmc=r(1,8)*(r(0,1)?1:-1); // bölen: ±1..±8
+    const q=r(2,9);
+    a=bmc*q; // bölünen
+    b=r(bmc+2,bmc+10); c=b-bmc; // b-c = bmc
+    if(c<1) { b=bmc+r(2,5); c=b-bmc; }
+    ans=q; text=`${a}÷(${b}−${c})`;
+  }
+  else if(type===7){
+    // a+b×c — parantezsiz
+    b=r(2,9);c=r(2,9);a=r(2,20);ans=a+b*c;text=`${a}+${b}×${c}`;
+  }
+  else if(type===8){
+    // a×b−c — parantezsiz
+    a=r(3,9);b=r(3,9);c=r(2,50);ans=a*b-c;text=`${a}×${b}−${c}`;
+  }
+  else if(type===9){
+    // üslü ± doğal sayı (her iki tarafta)
+    const pw=randPow('hard');const n=r(1,30);
+    const side=r(0,1);const op=r(0,1);
+    if(side===0){ ans=op?pw.val+n:pw.val-n; text=op?`${pw.text}+${n}`:`${pw.text}−${n}`; }
+    else { ans=op?n+pw.val:n-pw.val; text=op?`${n}+${pw.text}`:`${n}−${pw.text}`; }
+  }
+  else if(type===10){
+    // faktöriyel ± doğal (0!..4!)
+    const fn=r(0,4);const fv=fact(fn);
+    const k=r(1,30);const op=r(0,1);
+    ans=op?fv+k:fv-k;
+    text=op?`${fn}!+${k}`:`${fn}!−${k}`;
+  }
+  else if(type===11){
+    // doğal ± faktöriyel
+    const fn=r(0,4);const fv=fact(fn);
+    const k=r(1,50);const op=r(0,1);
+    ans=op?k+fv:k-fv;
+    text=op?`${k}+${fn}!`:`${k}−${fn}!`;
+  }
+  else {
+    // üslü ± faktöriyel
+    const pw=randPow('hard');const fn=r(0,4);const fv=fact(fn);
+    const op=r(0,1);
+    ans=op?pw.val+fv:pw.val-fv;
+    text=op?`${pw.text}+${fn}!`:`${pw.text}−${fn}!`;
+  }
+  return {text,ans};
+}
+
+// ─── DİSTRAKTÖR ────────────────────────────────────────────────
+function makeDistractors(ans, count){
+  const dists=new Set([ans]);
+
+  // 1) Cevabın karşıtı
+  if(ans!==0) dists.add(-ans);
+
+  // 2) Rastgele bir yanlışın da karşıtı
+  const offBase=[1,2,3,4,5,6,7,8];
+  const pick=offBase[r(0,offBase.length-1)];
+  const cand=ans+pick;
+  if(!dists.has(cand)) dists.add(cand);
+  if(!dists.has(-cand)) dists.add(-cand);
+
+  // 3) Kalan yerleri offset'lerle doldur
+  const offsets=[1,-1,2,-2,3,-3,5,-5,6,-6,7,-7,10,-10,4,-4];
+  let i=0;
+  while(dists.size<count && i<offsets.length*4){
+    const v=ans+offsets[i%offsets.length]*(Math.floor(i/offsets.length)+1);
+    if(!dists.has(v)) dists.add(v);
+    i++;
+  }
+  let guard=0;
+  while(dists.size<count && guard<50){
+    dists.add(ans+(guard%2===0?1:-1)*(dists.size*3+5));guard++;
+  }
+
+  const arr=[...dists];
+  for(let j=arr.length-1;j>0;j--){const k=r(0,j);[arr[j],arr[k]]=[arr[k],arr[j]];}
+  return arr.slice(0,count);
+}
+
+
+// ─── CANVAS & STATE ────────────────────────────────────────────
+const canvas = document.getElementById('gameCanvas');
+const ctx    = canvas.getContext('2d');
+
+let state = {
+  phase:'idle',
+  lives:3, score:0, qCount:0, correct:0, wrong:0, missed:0,
+  level:1, prevLevel:1,
+  streakCorrect:0,
+  question:null, columns:[],
+  paddle:{x:0,y:0,w:0,h:14},
+  animId:null, lastTime:0,
+  diff:'medium', colCount:4,
+  paddleCol:0, _waiting:false,
+};
+
+function CW(){ return canvas.width / state.colCount; }
+
+function resizeCanvas(){
+  const maxW = Math.min(window.innerWidth-20, 480);
+  canvas.width  = maxW;
+  canvas.height = Math.round(maxW * 1.15);
+}
+
+// Platform tam bir sütun kaplar, sütun ortasına kilitleniyor
+function snapPaddleToCol(col){
+  col = Math.max(0, Math.min(state.colCount-1, col));
+  state.paddleCol = col;
+  const cw = CW();
+  state.paddle.w = cw - 10;   // Her iki yanda 5px boşluk, iyi görünüm + yeterli genişlik
+  state.paddle.x = col * cw + 5;
+  state.paddle.y = canvas.height - state.paddle.h - 8;
+}
+
+// ─── HAZIRLA (başlatmıyor) ─────────────────────────────────────
+function newGame(){
+  if(state.animId){ cancelAnimationFrame(state.animId); state.animId=null; }
+  resizeCanvas();
+  state.diff     = document.getElementById('diffSel').value;
+  state.colCount = state.diff==='hard'?5:4;
+  state.phase    = 'idle';
+  state.lives=3; state.score=0; state.qCount=0;
+  state.correct=0; state.wrong=0; state.missed=0;
+  state.level=1; state.prevLevel=1; state.streakCorrect=0;
+  state.columns=[]; state._waiting=false;
+  snapPaddleToCol(Math.floor(state.colCount/2));
+  document.getElementById('resultOverlay').classList.remove('show');
+  document.getElementById('startOverlay').classList.remove('hidden');
+  document.getElementById('questionText').textContent='— ?';
+  updateHUD(); updateLives();
+  setMsg('Seviyeni seç ve BAŞLAT\'a bas!');
+  drawIdle();
+}
+
+// ─── BAŞLAT ────────────────────────────────────────────────────
+function startGame(){
+  if(state.phase==='running') return;
+  if(state.phase==='over'){
+    // Skor ve istatistikleri koru ama yeni oyun kur
+    newGame();
+    setTimeout(startGame, 50);
+    return;
+  }
+  document.getElementById('startOverlay').classList.add('hidden');
+  document.getElementById('resultOverlay').classList.remove('show');
+  state.phase='running';
+  setMsg('← → veya fare ile yönlendir!');
+  nextQuestion();
+  state.lastTime=performance.now();
+  state.animId=requestAnimationFrame(loop);
+}
+
+function resetGame(){ newGame(); }
+
+// ─── YENİ SORU ─────────────────────────────────────────────────
+function nextQuestion(){
+  if(state.phase!=='running') return;
+  state.question = makeQuestion(state.diff);
+  const {ans}=state.question;
+  const count=state.colCount;
+  const vals=makeDistractors(ans, count);
+  if(!vals.includes(ans)) vals[r(0,count-1)]=ans;
+  const cw=CW();
+  state.columns=vals.map((val,i)=>({
+    val, colIdx:i,
+    x: cw*i+cw/2,
+    y: -40-i*16,
+    w: Math.min(cw*0.80, 68),
+    h: 40,
+    speed: baseSpeed(),
+    active:true, hit:false, hitTimer:0, hitCorrect:false,
+  }));
+  state.qCount++;
+  const newLevel=Math.floor((state.qCount-1)/5)+1;
+  if(newLevel>state.prevLevel){ AC.levelUp(); state.prevLevel=newLevel; }
+  state.level=newLevel;
+  document.getElementById('qDisp').textContent=state.qCount;
+  document.getElementById('speedDisp').textContent=state.level;
+  document.getElementById('questionText').textContent=state.question.text+' = ?';
+}
+
+function baseSpeed(){
+  return (canvas.height*0.0016)*(1+(state.level-1)*0.20);
+}
+
+// ─── DÖNGÜ ─────────────────────────────────────────────────────
+function loop(ts){
+  if(state.phase!=='running') return;
+  const dt=Math.min(ts-state.lastTime,50);
+  state.lastTime=ts;
+  update(dt);
+  draw();
+  state.animId=requestAnimationFrame(loop);
+}
+
+function update(dt){
+  state.columns.forEach(col=>{
+    if(!col.active){
+      if(col.hitTimer>0) col.hitTimer-=dt;
+      return;
+    }
+    col.y+=col.speed*dt*0.1;
+
+    // Çarpışma: platform ile aynı sütunda ve y kesişiyor
+    if(!col.hit){
+      const py=state.paddle.y, ph=state.paddle.h;
+      if(col.y+col.h>=py && col.y<=py+ph && col.colIdx===state.paddleCol){
+        col.hit=true; col.active=false; col.hitTimer=600;
+        col.hitCorrect=(col.val===state.question.ans);
+        col.hitCorrect ? handleCorrect() : handleWrong(col.val);
+        return;
+      }
+    }
+
+    // Ekran dışı
+    if(col.y>canvas.height+20){
+      col.active=false;
+      if(col.val===state.question.ans) handleMiss();
+    }
+  });
+
+  if(!state.columns.some(c=>c.active) && state.phase==='running' && !state._waiting){
+    state._waiting=true;
+    setTimeout(()=>{ state._waiting=false; if(state.phase==='running') nextQuestion(); },480);
+  }
+}
+
+function handleCorrect(){
+  state.score+=100+(state.level-1)*20;
+  state.correct++;
+  state.streakCorrect++;
+  AC.correct();
+  flashQuestion('flash-correct');
+  updateHUD();
+  // Her 8 doğruda can kazan (max 3)
+  if(state.streakCorrect>0 && state.streakCorrect%8===0 && state.lives<3){
+    state.lives++;
+    updateLives();
+    AC.canUp();
+    setMsg('🎉 Harika! Can kazandın! +'+(100+(state.level-1)*20)+' puan');
+  } else {
+    setMsg('✓ Doğru! +'+(100+(state.level-1)*20)+' puan  ['+state.streakCorrect+' üst üste]');
+  }
+  state.columns.forEach(c=>{if(c.active) c.active=false;});
+}
+
+function handleWrong(val){
+  state.wrong++;
+  state.streakCorrect=0;
+  loseLife();
+  AC.wrong();
+  flashQuestion('flash-wrong');
+  setMsg('✗ Yanlış! Doğru cevap: '+state.question.ans);
+  state.columns.forEach(c=>{if(c.active) c.active=false;});
+}
+
+function handleMiss(){
+  state.missed++;
+  AC.miss();
+  setMsg('⚠ Kaçırdın! Doğru cevap: '+state.question.ans);
+}
+
+function loseLife(){
+  state.lives--;
+  updateLives();
+  if(state.lives<=0) endGame();
+}
+
+function endGame(){
+  state.phase='over';
+  cancelAnimationFrame(state.animId);
+  AC.gameOver();
+  document.getElementById('resultTitle').textContent='OYUN BİTTİ';
+  document.getElementById('resultScore').textContent=state.score+' PUAN';
+  document.getElementById('resultDetail').innerHTML=
+    `Doğru: ${state.correct} &nbsp;·&nbsp; Yanlış: ${state.wrong} &nbsp;·&nbsp; Kaçırılan: ${state.missed}<br>`+
+    `Toplam Soru: ${state.qCount} &nbsp;·&nbsp; Doğruluk: ${state.qCount>0?Math.round(state.correct/state.qCount*100):0}%`;
+  document.getElementById('resultOverlay').classList.add('show');
+}
+
+// ─── ÇİZİM ─────────────────────────────────────────────────────
+function drawGrid(){
+  const cw=CW();
+  ctx.strokeStyle='rgba(200,150,12,0.06)'; ctx.lineWidth=1;
+  for(let i=1;i<state.colCount;i++){
+    ctx.beginPath();ctx.moveTo(i*cw,0);ctx.lineTo(i*cw,canvas.height);ctx.stroke();
+  }
+  for(let y=0;y<canvas.height;y+=44){
+    ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke();
+  }
+  // Aktif sütun hafif vurgu
+  ctx.fillStyle='rgba(200,150,12,0.04)';
+  ctx.fillRect(state.paddleCol*cw,0,cw,canvas.height);
+}
+
+function drawIdle(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#0a0e14'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  drawGrid(); drawPaddle();
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='#0a0e14'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  drawGrid();
+
+  state.columns.forEach(col=>{
+    if(!col.active && col.hitTimer<=0) return;
+    const alpha=col.hitTimer>0?Math.min(1,col.hitTimer/300):1;
+
+    ctx.fillStyle=col.hitTimer>0
+      ?(col.hitCorrect?`rgba(80,200,120,${alpha*0.35})`:`rgba(235,87,87,${alpha*0.35})`)
+      :'rgba(22,32,52,0.95)';
+    roundRect(ctx,col.x-col.w/2,col.y,col.w,col.h,8); ctx.fill();
+
+    ctx.strokeStyle=col.hitTimer>0
+      ?(col.hitCorrect?`rgba(80,200,120,${alpha})`:`rgba(235,87,87,${alpha})`)
+      :'rgba(90,140,200,0.6)';
+    ctx.lineWidth=1.5;
+    roundRect(ctx,col.x-col.w/2,col.y,col.w,col.h,8); ctx.stroke();
+
+    ctx.fillStyle=col.hitTimer>0
+      ?(col.hitCorrect?`rgba(80,200,120,${alpha})`:`rgba(235,87,87,${alpha})`)
+      :'rgba(200,220,255,0.95)';
+    ctx.font=`bold ${Math.round(col.h*0.48)}px 'Orbitron',monospace`;
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(col.val,col.x,col.y+col.h/2);
+  });
+
+  drawPaddle();
+}
+
+function drawPaddle(){
+  const {x,y,w,h}=state.paddle;
+  const grad=ctx.createLinearGradient(x,y,x,y+h);
+  grad.addColorStop(0,'rgba(225,175,25,0.98)');
+  grad.addColorStop(1,'rgba(155,105,10,0.8)');
+  ctx.fillStyle=grad;
+  roundRect(ctx,x,y,w,h,4); ctx.fill();
+  ctx.strokeStyle='rgba(255,225,110,0.9)'; ctx.lineWidth=1.5;
+  roundRect(ctx,x,y,w,h,4); ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,0.18)';
+  roundRect(ctx,x+3,y+2,w-6,h*0.4,2); ctx.fill();
+}
+
+function roundRect(c,x,y,w,h,rad){
+  c.beginPath();
+  c.moveTo(x+rad,y);c.lineTo(x+w-rad,y);c.quadraticCurveTo(x+w,y,x+w,y+rad);
+  c.lineTo(x+w,y+h-rad);c.quadraticCurveTo(x+w,y+h,x+w-rad,y+h);
+  c.lineTo(x+rad,y+h);c.quadraticCurveTo(x,y+h,x,y+h-rad);
+  c.lineTo(x,y+rad);c.quadraticCurveTo(x,y,x+rad,y);
+  c.closePath();
+}
+
+// ─── YARDIMCILAR ───────────────────────────────────────────────
+function flashQuestion(cls){
+  const el=document.getElementById('questionText');
+  el.classList.remove('flash-correct','flash-wrong');
+  void el.offsetWidth;
+  el.classList.add(cls);
+  setTimeout(()=>el.classList.remove(cls),400);
+}
+function updateHUD(){
+  document.getElementById('scoreDisp').textContent=state.score;
+  // Streak göstergesi varsa güncelle
+  const sd=document.getElementById('streakDisp');
+  if(sd) sd.textContent=state.streakCorrect;
+}
+function updateLives(){for(let i=1;i<=3;i++) document.getElementById('h'+i).classList.toggle('lost',i>state.lives);}
+function setMsg(t){document.getElementById('msg').textContent=t;}
+
+// ─── KLAVYE — SNAP ─────────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight') e.preventDefault();
+  if(state.phase!=='running') return;
+  if(e.key==='ArrowLeft')  snapPaddleToCol(state.paddleCol-1);
+  if(e.key==='ArrowRight') snapPaddleToCol(state.paddleCol+1);
+});
+
+// ─── FARE ──────────────────────────────────────────────────────
+canvas.addEventListener('mousemove',e=>{
+  if(state.phase!=='running') return;
+  const rect=canvas.getBoundingClientRect();
+  const mx=(e.clientX-rect.left)*(canvas.width/rect.width);
+  snapPaddleToCol(Math.floor(mx/CW()));
+});
+
+// ─── DOKUNMATIK ────────────────────────────────────────────────
+canvas.addEventListener('touchstart',e=>{e.preventDefault();},{passive:false});
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  if(state.phase!=='running') return;
+  const rect=canvas.getBoundingClientRect();
+  const mx=(e.touches[0].clientX-rect.left)*(canvas.width/rect.width);
+  snapPaddleToCol(Math.floor(mx/CW()));
+},{passive:false});
+canvas.addEventListener('touchend',e=>{e.preventDefault();},{passive:false});
+
+// ─── MODAL ─────────────────────────────────────────────────────
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
+
+// ─── RESIZE ────────────────────────────────────────────────────
+window.addEventListener('resize',()=>{
+  if(state.phase!=='running'){
+    resizeCanvas();
+    snapPaddleToCol(state.paddleCol);
+    drawIdle();
+  }
+});
+
+// ─── İLK YÜKLEME ───────────────────────────────────────────────
+resizeCanvas();
+newGame();
+</script>
+</body>
+</html>

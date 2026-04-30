@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koordinatlar</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#12100e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:520px;display:flex;flex-direction:column;gap:8px;margin:auto;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.game-title{font-size:20px;font-weight:700;color:#c8960c;letter-spacing:.06em}
+.infobar{display:flex;gap:6px;}
+.ibox{background:rgba(255,255,255,0.05);border-radius:5px;padding:5px 0;text-align:center;border:1px solid rgba(200,150,12,0.2);width:56px;flex-shrink:0}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.32);margin-bottom:1px;text-transform:uppercase;letter-spacing:.07em}
+.ibox .v{font-size:14px;font-weight:700;color:#FFD97A;font-family:'Courier New',Courier,monospace}
+
+.game-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 5 / 7;
+    background: #1e1a14;
+    border: 3px solid #c8960c;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: crosshair;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+canvas { width: 100%; height: 100%; display: block; }
+
+/* Hedef kutusu — kompakt */
+.target-display {
+    background: rgba(155,53,16,0.12);
+    border: 1px solid rgba(155,53,16,0.5);
+    padding: 6px 12px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.target-label { font-size: 9px; color: rgba(247,242,232,0.4); text-transform: uppercase; letter-spacing: .09em; white-space: nowrap; }
+.target-coords { font-size: 22px; font-weight: bold; color: #FFD97A; font-family: 'Courier New', monospace; letter-spacing: 1px; }
+
+.msg { text-align: center; color: rgba(247,242,232,0.55); font-size: 11px; min-height: 14px; }
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;white-space:nowrap}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+/* WIN OVERLAY */
+.win-overlay{display:none;position:absolute;inset:0;background:rgba(10,8,5,0.9);border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50}
+.win-overlay.show{display:flex}
+.win-title{font-size:20px;font-weight:700;color:#50c878;font-family:Georgia,serif}
+.win-body{font-size:12px;color:rgba(247,242,232,0.55);text-align:center;line-height:1.7}
+.win-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px;}
+.modal-overlay.hidden{display:none;}
+.modal-box{background:#0d0b08;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease;}
+@keyframes modalIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+.modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em;}
+.modal-rules{font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);padding:10px 4px;list-style:none;}
+.modal-rules li{margin-bottom:3px;padding-left:4px;}
+.modal-rules li::before{content:"◈ ";color:#c8960c;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s;}
+.modal-close:hover{background:rgba(40,30,10,0.9);}
+.modal-start{background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s;}
+.modal-start:hover{background:rgba(60,40,5,0.9);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
+</style>
+</head>
+<body>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">KOORDİNATLAR</div>
+    <ul class="modal-rules">
+      <li>Ekranda bir <b style="color:#c8960c">(x, y)</b> koordinat düzlemi gösterilir.</li>
+      <li>Altta koordinatları verilen hedef noktayı koordinat düzleminde bul ve doğru yere <b style="color:#c8960c">tıkla</b> veya dokun.</li>
+      <li><b style="color:#c8960c">x ekseni</b> [−5, +5] ve <b style="color:#c8960c">y ekseni</b> ise [−7, +7] aralığında verilmiştir.</li>
+      <li>Her isabetli seçim <b style="color:#c8960c">10 puan</b> kazandırır.</li>
+      <li>60 saniye içinde mümkün olduğunca çok puan topla!</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+    <div class="top-bar">
+        <div class="game-title">Koordinatlar</div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="infobar">
+            <div class="ibox"><div class="l">Puan</div><div class="v" id="score">0</div></div>
+            <div class="ibox"><div class="l">Süre</div><div class="v" id="timer">60</div></div>
+          </div>
+          <button style="background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;white-space:nowrap;" onmouseenter="this.style.background='rgba(200,150,12,0.2)'" onmouseleave="this.style.background='rgba(200,150,12,0.08)'" onclick="openModal()">&#9432; Kurallar</button>
+        </div>
+    </div>
+
+    <div class="game-container" id="container">
+        <canvas id="gameCanvas"></canvas>
+        <div class="win-overlay" id="winOverlay">
+          <div class="win-title">Süre Doldu!</div>
+          <div class="win-body" id="winBody"></div>
+          <div class="win-btns">
+            <button class="a" onclick="restartGame()">&#8635; Tekrar</button>
+          </div>
+        </div>
+    </div>
+
+    <div class="target-display">
+        <span class="target-label">Hedef Koordinat</span>
+        <span class="target-coords" id="targetCoords">(0, 0)</span>
+    </div>
+
+    <div class="msg" id="msg">Koordinat düzleminde hedefi işaretle!</div>
+
+    <div style="text-align:center;">
+        <button onclick="restartGame()" style="background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;" onmouseenter="this.style.background='rgba(200,150,12,0.2)'" onmouseleave="this.style.background='rgba(200,150,12,0.08)'">&#8635; Yeniden Başlat</button>
+    </div>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const container = document.getElementById('container');
+
+// Eksen aralıkları
+const X_RANGE = 5;  // x: -5 … +5
+const Y_RANGE = 7;  // y: -7 … +7
+
+let score = 0, timeLeft = 60, targetX = 0, targetY = 0;
+let gameActive = false, timerInterval;
+let stepX, stepY;  // piksel başına birim — x ve y için ayrı
+
+function initCanvas() {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width  = w * dpr;
+    canvas.height = h * dpr;
+    ctx.scale(dpr, dpr);
+    canvas.style.width  = w + 'px';
+    canvas.style.height = h + 'px';
+
+    // Kılavuz çizgileri için kenar boşluğu
+    const padX = w * 0.08;
+    const padY = h * 0.06;
+    const innerW = w - padX * 2;
+    const innerH = h - padY * 2;
+
+    stepX = innerW / (X_RANGE * 2);
+    stepY = innerH / (Y_RANGE * 2);
+
+    drawGrid();
+}
+
+function midX(){ return container.clientWidth  * 0.5; }
+function midY(){ return container.clientHeight * 0.5; }
+
+function drawGrid() {
+    const w = container.clientWidth;
+    const h = container.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+    const mx = midX(), my = midY();
+
+    // Kılavuz çizgileri
+    ctx.strokeStyle = 'rgba(200,150,12,0.1)';
+    ctx.lineWidth = 1;
+    for(let i = -X_RANGE; i <= X_RANGE; i++){
+        const px = mx + i * stepX;
+        ctx.beginPath(); ctx.moveTo(px, my - Y_RANGE * stepY); ctx.lineTo(px, my + Y_RANGE * stepY); ctx.stroke();
+    }
+    for(let j = -Y_RANGE; j <= Y_RANGE; j++){
+        const py = my + j * stepY;
+        ctx.beginPath(); ctx.moveTo(mx - X_RANGE * stepX, py); ctx.lineTo(mx + X_RANGE * stepX, py); ctx.stroke();
+    }
+
+    // Eksenler
+    ctx.strokeStyle = '#c8960c';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(mx - X_RANGE * stepX - 8, my); ctx.lineTo(mx + X_RANGE * stepX + 8, my); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(mx, my - Y_RANGE * stepY - 8); ctx.lineTo(mx, my + Y_RANGE * stepY + 8); ctx.stroke();
+
+    // Eksen etiketleri
+    ctx.fillStyle = '#FFD97A';
+    ctx.font = 'bold 11px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    for(let i = -X_RANGE; i <= X_RANGE; i++){
+        if(i === 0) continue;
+        const px = mx + i * stepX;
+        ctx.fillText(i, px, my + 14);
+    }
+    for(let j = -Y_RANGE; j <= Y_RANGE; j++){
+        if(j === 0) continue;
+        const py = my - j * stepY;  // y ekseni yukarı artar
+        ctx.textAlign = 'right';
+        ctx.fillText(j, mx - 8, py);
+    }
+
+    // x, y etiketleri
+    ctx.font = 'bold 13px Georgia';
+    ctx.textAlign = 'center';
+    ctx.fillText('x', mx + X_RANGE * stepX + 16, my - 10);
+    ctx.fillText('y', mx + 14, my - Y_RANGE * stepY - 14);
+}
+
+function generateTarget() {
+    targetX = Math.floor(Math.random() * (X_RANGE * 2 + 1)) - X_RANGE;
+    targetY = Math.floor(Math.random() * (Y_RANGE * 2 + 1)) - Y_RANGE;
+    document.getElementById('targetCoords').textContent = `(${targetX}, ${targetY})`;
+    document.getElementById('msg').textContent = 'Koordinat düzleminde hedefi işaretle!';
+}
+
+function handleTargetClick(e) {
+    if (!gameActive) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx = midX(), my = midY();
+
+    // Touch desteği
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    const clickedX = Math.round((x - mx) / stepX);
+    const clickedY = Math.round((my - y) / stepY);
+
+    if (clickedX === targetX && clickedY === targetY) {
+        score += 10;
+        document.getElementById('score').textContent = score;
+        document.getElementById('msg').textContent = '✓ Tam isabet!';
+        drawPoint(mx + targetX * stepX, my - targetY * stepY, '#1d9e75');
+        setTimeout(() => { drawGrid(); generateTarget(); }, 280);
+    } else {
+        document.getElementById('msg').textContent = `✗ Burası (${clickedX}, ${clickedY})`;
+        drawPoint(x, y, '#9b3510');
+        setTimeout(drawGrid, 280);
+    }
+}
+
+function drawPoint(x, y, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(x, y, 10, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1.5; ctx.stroke();
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.add('hidden');
+    gameActive = true;
+    generateTarget();
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timer').textContent = timeLeft;
+        if (timeLeft <= 0) endGame();
+    }, 1000);
+}
+function openModal() {
+    document.getElementById('modalOverlay').classList.remove('hidden');
+}
+
+function endGame() {
+    gameActive = false;
+    clearInterval(timerInterval);
+    document.getElementById('winBody').innerHTML =
+        `Toplam Puan: <b style="color:#FFD97A">${score}</b>`;
+    document.getElementById('winOverlay').classList.add('show');
+    document.getElementById('msg').textContent = '';
+}
+
+function restartGame() {
+    score = 0; timeLeft = 60; gameActive = false;
+    clearInterval(timerInterval);
+    document.getElementById('score').textContent = '0';
+    document.getElementById('timer').textContent = '60';
+    document.getElementById('winOverlay').classList.remove('show');
+    document.getElementById('msg').textContent = 'Koordinat düzleminde hedefi işaretle!';
+    document.getElementById('targetCoords').textContent = '(0, 0)';
+    drawGrid();
+    // Başla butonuyla yeniden başlatmak için modal göster
+    openModal();
+}
+
+canvas.addEventListener('mousedown', handleTargetClick);
+canvas.addEventListener('touchstart', e => { e.preventDefault(); handleTargetClick(e); }, {passive:false});
+window.addEventListener('resize', initCanvas);
+window.onload = initCanvas;
+</script>
+</body>
+</html>
