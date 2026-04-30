@@ -2,42 +2,86 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Mangala</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#2a1a08;font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;padding:10px}
-.wrap{width:100%;max-width:700px}
-.turn-header{display:flex;justify-content:center;gap:24px;align-items:center;margin-bottom:10px}
-.player-tag{font-size:14px;font-weight:600;color:rgba(247,242,232,0.4);padding:5px 16px;border-radius:16px;border:1.5px solid transparent;transition:all .3s}
-.player-tag.p1.active{font-size:17px;color:#c8845a;border-color:#c8845a;animation:pulse1 1.4s ease-in-out infinite}
-.player-tag.p2.active{font-size:17px;color:#6a9fc0;border-color:#6a9fc0;animation:pulse2 1.4s ease-in-out infinite}
+html,body{
+  min-height:100%;background:#2a1a08;font-family:Georgia,serif;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:8px;overflow-y:auto;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:700px;margin:auto}
+.turn-header{display:flex;justify-content:center;gap:24px;align-items:center;margin-bottom:8px}
+.player-tag{font-size:13px;font-weight:600;color:rgba(247,242,232,0.4);padding:4px 14px;border-radius:16px;border:1.5px solid transparent;transition:all .3s}
+.player-tag.p1.active{font-size:16px;color:#c8845a;border-color:#c8845a;animation:pulse1 1.4s ease-in-out infinite}
+.player-tag.p2.active{font-size:16px;color:#6a9fc0;border-color:#6a9fc0;animation:pulse2 1.4s ease-in-out infinite}
 @keyframes pulse1{0%,100%{box-shadow:0 0 0 0 rgba(200,132,90,0.3)}50%{box-shadow:0 0 0 7px rgba(200,132,90,0)}}
 @keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(106,159,192,0.3)}50%{box-shadow:0 0 0 7px rgba(106,159,192,0)}}
 .vs{font-size:12px;color:rgba(247,242,232,0.2)}
-.scoreboard{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:8px}
-.sc{background:rgba(255,255,255,0.06);border-radius:5px;padding:4px 12px;font-size:11px;color:rgba(247,242,232,0.45);display:flex;gap:6px;align-items:center}
-.sc b{font-size:13px;color:rgba(247,242,232,0.8)}
+.scoreboard{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
+.sc{background:rgba(255,255,255,0.06);border-radius:5px;padding:4px 10px;font-size:11px;color:rgba(247,242,232,0.45);display:flex;gap:6px;align-items:center}
+.sc b{font-size:12px;color:rgba(247,242,232,0.8)}
 .set-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.2);display:inline-block;margin:0 1px}
 .set-dot.win1{background:#c8845a;border-color:#c8845a}
 .set-dot.win2{background:#6a9fc0;border-color:#6a9fc0}
 .set-dot.draw{background:#888;border-color:#888}
-.board{background:#7a5230;border-radius:52px;padding:14px 12px;display:flex;align-items:center;gap:7px}
-.hazine{background:#5a3010;border-radius:32px;width:60px;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.12);gap:3px;padding:7px 4px;flex-shrink:0}
-.hlbl{font-size:9px;color:rgba(255,255,255,0.5);font-weight:600;text-align:center}
-.hcnt{font-size:20px;font-weight:600;color:#FFD97A}
-.pa{flex:1;display:flex;flex-direction:column;gap:7px;min-width:0}
-.row{display:flex;gap:5px;justify-content:center}
-.pit{background:#5a3010;border-radius:50%;width:66px;height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid rgba(255,255,255,0.10);cursor:pointer;transition:background .15s,transform .1s;gap:1px;user-select:none;flex-shrink:0}
+
+/* ── TAHTA — akışkan ── */
+.board{
+  background:#7a5230;border-radius:clamp(28px,6vw,52px);
+  padding:clamp(8px,2vw,14px) clamp(6px,1.5vw,12px);
+  display:flex;align-items:center;
+  gap:clamp(3px,1vw,7px);
+  width:100%;
+}
+
+/* Hazine */
+.hazine{
+  background:#5a3010;
+  border-radius:clamp(18px,4vw,32px);
+  width:clamp(36px,8vw,60px);
+  min-height:clamp(72px,16vw,108px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:2px solid rgba(255,255,255,0.12);
+  gap:3px;padding:5px 3px;flex-shrink:0;
+}
+.hlbl{font-size:clamp(7px,1.6vw,9px);color:rgba(255,255,255,0.5);font-weight:600;text-align:center}
+.hcnt{font-size:clamp(14px,3.5vw,20px);font-weight:600;color:#FFD97A}
+
+/* Kuyu alanı */
+.pa{flex:1;display:flex;flex-direction:column;gap:clamp(4px,1vw,7px);min-width:0}
+.row{display:flex;gap:clamp(2px,0.8vw,5px);justify-content:center}
+
+/* Kuyu — boyutu tamamen akışkan */
+.pit{
+  background:#5a3010;border-radius:50%;
+  width:clamp(36px,10.5vw,66px);
+  height:clamp(36px,10.5vw,66px);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border:2px solid rgba(255,255,255,0.10);
+  cursor:pointer;transition:background .15s,transform .1s;
+  gap:1px;user-select:none;flex-shrink:0;
+}
 .pit:hover{background:#6e3e18;transform:scale(1.07)}
 .pit.empty{opacity:.45;cursor:not-allowed}
-.sw{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:48px}
-.s{width:8px;height:8px;border-radius:50%;background:#c8845a;border:1px solid rgba(0,0,0,0.2);flex-shrink:0}
+
+/* Taşlar */
+.sw{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:clamp(26px,7.5vw,48px)}
+.s{
+  width:clamp(5px,1.5vw,8px);
+  height:clamp(5px,1.5vw,8px);
+  border-radius:50%;background:#c8845a;border:1px solid rgba(0,0,0,0.2);flex-shrink:0
+}
 .s.b{background:#6a9fc0}
-.pcnt{font-size:16px;font-weight:600;color:#FFD97A;line-height:1}
+.pcnt{font-size:clamp(11px,3vw,16px);font-weight:600;color:#FFD97A;line-height:1}
 .rowlbl{text-align:center;font-size:9px;font-weight:600;margin:0 0 1px;color:rgba(255,255,255,0.35);letter-spacing:.04em}
+
+/* Alt bilgi */
 .ip{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
-.ic{background:rgba(255,255,255,0.06);border-radius:5px;padding:6px 10px;flex:1;min-width:75px}
+.ic{background:rgba(255,255,255,0.06);border-radius:5px;padding:5px 8px;flex:1;min-width:70px}
 .ic .l{font-size:10px;color:rgba(247,242,232,0.35);margin-bottom:1px}
 .ic .v{font-size:13px;font-weight:600;color:rgba(247,242,232,0.8)}
 .msg{font-size:11px;color:rgba(247,242,232,0.5);text-align:center;margin-top:5px;min-height:15px}
@@ -48,10 +92,6 @@ html,body{height:100%;background:#2a1a08;font-family:Georgia,serif;display:flex;
 .br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
 button.a{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.45);border-radius:3px;padding:5px 13px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.75);font-family:Georgia,serif;transition:background .2s}
 button.a:hover{background:rgba(155,53,16,0.7)}
-@media(max-width:500px){
-  .pit{width:50px;height:50px}.hazine{width:46px;min-height:86px}
-  .hcnt{font-size:15px}.pcnt{font-size:12px}.s{width:6px;height:6px}.sw{max-width:36px}
-}
 
 /* ── Parıldama Animasyonu ── */
 .pit.glow-p1{
