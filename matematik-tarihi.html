@@ -11,80 +11,17 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <style>
-  /* Bu sayfanın özel renk değişkenleri — common.css değerlerini ezer */
-  :root {
-    --ink:      #1a1208;
-    --parchment:#f5efd8;
-    --aged:     #e8dfc0;
-    --sepia:    #8b6914;
-    --rust:     #a0390a;
-    --gold:     #c8960c;
-    --shadow:   rgba(26,18,8,0.18);
-  }
-  body { background-color: var(--parchment); }
-  h1 { color: var(--parchment); }
-  h1 span { color: var(--gold); font-style: italic; }
-main { max-width:900px; }
-/* ── HEADER ── */
-  
-  
-  
-  .site-link {
-    display: inline-block;
-    font-family: 'Playfair Display', serif;
-    font-size: 0.85rem;
-    letter-spacing: 0.25em;
-    color: var(--gold);
-    text-decoration: none;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    opacity: 0.85;
-    transition: opacity 0.2s;
-  }
-  .site-link:hover { opacity: 1; }
+  main { max-width: 900px; }
 
-  .ornament {
-    display: flex; align-items: center; justify-content: center;
-    gap: 12px; margin-bottom: 16px;
-  }
-  .ornament-line {
-    flex: 1; max-width: 120px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold));
-  }
-  .ornament-line.right {
-    background: linear-gradient(90deg, var(--gold), transparent);
-  }
-  .ornament-diamond {
-    width: 8px; height: 8px;
-    background: var(--gold);
-    transform: rotate(45deg);
-    flex-shrink: 0;
-  }
-
-  
-  
-
-  
-
-  /* ── MAIN ── */
-  
-
-  /* ── INTRO ── */
-  
-  
-  
-
-  /* ── SECTION TITLE ── */
+  /* ── SECTION TITLE (bu sayfaya özgü sınıf adı) ── */
   .section-title {
     display: flex; align-items: center; gap: 14px;
     margin: 48px 0 28px;
   }
   .section-title h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--rust);
-    white-space: nowrap;
+    font-size: 1.5rem; font-weight: 700;
+    color: var(--rust); white-space: nowrap;
   }
   .section-title-line {
     flex: 1; height: 1px;
@@ -92,13 +29,9 @@ main { max-width:900px; }
   }
 
   /* ── TIMELINE ── */
-  .timeline {
-    position: relative;
-    padding-left: 32px;
-  }
+  .timeline { position: relative; padding-left: 32px; }
   .timeline::before {
-    content: '';
-    position: absolute; left: 10px; top: 6px; bottom: 6px;
+    content: ''; position: absolute; left: 10px; top: 6px; bottom: 6px;
     width: 2px;
     background: linear-gradient(180deg, var(--gold), var(--sepia), var(--gold));
     border-radius: 2px;
@@ -111,173 +44,73 @@ main { max-width:900px; }
     border: 1px solid rgba(139,105,20,0.25);
     border-left: 3px solid var(--gold);
     border-radius: 0 6px 6px 0;
-    padding: 22px 24px;
-    margin-bottom: 28px;
+    padding: 22px 24px; margin-bottom: 28px;
     box-shadow: 3px 3px 14px var(--shadow);
     animation: fadeUp 0.5s ease both;
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: default;
   }
-  .card:hover {
-    transform: translateX(4px);
-    box-shadow: 6px 6px 20px var(--shadow);
-    border-left-color: var(--rust);
-  }
+  .card:hover { transform: translateX(4px); box-shadow: 6px 6px 20px var(--shadow); border-left-color: var(--rust); }
   .card::before {
-    content: '';
-    position: absolute; left: -23px; top: 22px;
+    content: ''; position: absolute; left: -23px; top: 22px;
     width: 12px; height: 12px;
     background: var(--gold);
-    border: 2px solid var(--parchment);
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px var(--sepia);
+    border: 2px solid var(--cream);
+    border-radius: 50%; box-shadow: 0 0 0 2px var(--sepia);
   }
-
-  .card-
+  .card-header { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
   .card-date {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--rust);
-    background: rgba(160,57,10,0.09);
-    padding: 2px 9px;
-    border-radius: 2px;
-    flex-shrink: 0;
+    font-family: 'Playfair Display', serif; font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--rust); background: rgba(155,53,16,0.09);
+    padding: 2px 9px; border-radius: 2px; flex-shrink: 0;
   }
-  .card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--ink);
-    line-height: 1.3;
-  }
-  .card h3 em {
-    font-style: italic;
-    color: var(--sepia);
-  }
-  .card-region {
-    font-size: 0.75rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--sepia);
-    opacity: 0.8;
-    margin-left: auto;
-  }
-  .card p {
-    font-size: 0.93rem;
-    line-height: 1.75;
-    color: #3a2e18;
-  }
+  .card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--ink); line-height: 1.3; }
+  .card h3 em { font-style: italic; color: var(--sepia); }
+  .card-region { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sepia); opacity: 0.8; margin-left: auto; }
+  .card p { font-size: 0.93rem; line-height: 1.75; color: #3a2e18; }
   .card p + p { margin-top: 8px; }
-
   .card-highlight {
-    margin-top: 12px;
-    padding: 10px 14px;
-    background: rgba(200,150,12,0.1);
-    border-left: 3px solid var(--gold);
-    border-radius: 0 4px 4px 0;
-    font-size: 0.88rem;
-    font-style: italic;
-    color: var(--sepia);
-    line-height: 1.6;
+    margin-top: 12px; padding: 10px 14px;
+    background: rgba(200,150,12,0.1); border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0; font-size: 0.88rem; font-style: italic;
+    color: var(--sepia); line-height: 1.6;
   }
 
-  /* ── FEATURED (wide card) ── */
-  .card.featured {
-    background: linear-gradient(135deg, var(--ink) 0%, #2e1f06 100%);
-    border-color: var(--gold);
-    border-left-width: 4px;
-    color: var(--parchment);
-  }
+  /* ── FEATURED ── */
+  .card.featured { background: linear-gradient(135deg, var(--ink) 0%, #2e1f06 100%); border-color: var(--gold); border-left-width: 4px; color: var(--cream); }
   .card.featured h3 { color: var(--gold); }
-  .card.featured p  { color: rgba(245,239,216,0.85); }
+  .card.featured p  { color: rgba(247,242,232,0.85); }
   .card.featured .card-date { background: rgba(200,150,12,0.2); color: var(--gold); }
   .card.featured .card-region { color: rgba(200,150,12,0.6); }
-  .card.featured .card-highlight {
-    background: rgba(200,150,12,0.12);
-    color: var(--aged);
-  }
+  .card.featured .card-highlight { background: rgba(200,150,12,0.12); color: var(--aged); }
   .card.featured::before { background: var(--gold); }
 
   /* ── CURIOSITIES ── */
-  .curiosities {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-top: 8px;
-  }
+  .curiosities { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 8px; }
   .curiosity {
     background: linear-gradient(135deg, #fff9ee, var(--aged));
-    border: 1px solid rgba(139,105,20,0.2);
-    border-top: 3px solid var(--rust);
-    border-radius: 0 0 6px 6px;
-    padding: 20px 18px;
-    box-shadow: 2px 3px 10px var(--shadow);
-    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid rgba(139,105,20,0.2); border-top: 3px solid var(--rust);
+    border-radius: 0 0 6px 6px; padding: 20px 18px;
+    box-shadow: 2px 3px 10px var(--shadow); transition: transform 0.2s, box-shadow 0.2s;
   }
-  .curiosity:hover {
-    transform: translateY(-3px);
-    box-shadow: 4px 6px 18px var(--shadow);
-  }
-  .curiosity-icon {
-    font-size: 1.6rem; margin-bottom: 8px;
-    display: block;
-  }
-  .curiosity h4 {
-    font-family: 'Playfair Display', serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--rust);
-    margin-bottom: 6px;
-    line-height: 1.3;
-  }
-  .curiosity p {
-    font-size: 0.85rem;
-    line-height: 1.65;
-    color: #4a3a1e;
-  }
+  .curiosity:hover { transform: translateY(-3px); box-shadow: 4px 6px 18px var(--shadow); }
+  .curiosity-icon { font-size: 1.6rem; margin-bottom: 8px; display: block; }
+  .curiosity h4 { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--rust); margin-bottom: 6px; line-height: 1.3; }
+  .curiosity p   { font-size: 0.85rem; line-height: 1.65; color: #4a3a1e; }
 
-  /* ── FOOTER ── */
-  
-  
-  
-  
+  /* ── ANİMASYON GECİKMELERİ ── */
+  .card:nth-child(1)  { animation-delay: 0.05s; } .card:nth-child(2)  { animation-delay: 0.10s; }
+  .card:nth-child(3)  { animation-delay: 0.15s; } .card:nth-child(4)  { animation-delay: 0.20s; }
+  .card:nth-child(5)  { animation-delay: 0.25s; } .card:nth-child(6)  { animation-delay: 0.30s; }
+  .card:nth-child(7)  { animation-delay: 0.35s; } .card:nth-child(8)  { animation-delay: 0.40s; }
+  .card:nth-child(9)  { animation-delay: 0.45s; } .card:nth-child(10) { animation-delay: 0.50s; }
 
-  /* ── ANIMATION ── */
-  
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .card:nth-child(1)  { animation-delay: 0.05s; }
-  .card:nth-child(2)  { animation-delay: 0.10s; }
-  .card:nth-child(3)  { animation-delay: 0.15s; }
-  .card:nth-child(4)  { animation-delay: 0.20s; }
-  .card:nth-child(5)  { animation-delay: 0.25s; }
-  .card:nth-child(6)  { animation-delay: 0.30s; }
-  .card:nth-child(7)  { animation-delay: 0.35s; }
-  .card:nth-child(8)  { animation-delay: 0.40s; }
-  .card:nth-child(9)  { animation-delay: 0.45s; }
-  .card:nth-child(10) { animation-delay: 0.50s; }
-
-  /* ── RESPONSIVE ── */
   @media (max-width: 600px) {
     .timeline { padding-left: 24px; }
-    .card { padding: 16px 16px; }
-    .card-
+    .card { padding: 16px; }
     .card-region { margin-left: 0; }
   }
-  /* Matematik Tarihi özel header diagonal deseni */
-  header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: repeating-linear-gradient(
-      -45deg,
-      transparent, transparent 8px,
-      rgba(200,150,12,0.06) 8px, rgba(200,150,12,0.06) 9px
-    );
-  }
-  .header-inner { max-width: 900px; padding: 48px 24px 40px; }
 </style>
 </head>
 <body>
@@ -285,10 +118,10 @@ main { max-width:900px; }
 <!-- ══ HEADER ══ -->
 <header>
   <div class="header-inner">
-    <div class="ornament">
-      <div class="ornament-line"></div>
-      <div class="ornament-diamond"></div>
-      <div class="ornament-line right"></div>
+    <div class="logo-band">
+      <div class="logo-line"></div>
+      <div class="logo-diamond"></div>
+      <div class="logo-line r"></div>
     </div>
     <h1>Matematiğin <span>Tarihi</span></h1>
     <p class="header-sub">Sayıların, Şekillerin ve Fikirlerin Büyük Yolculuğu</p>
