@@ -10,19 +10,16 @@ html,body{min-height:100%;background:#0e0e14;font-family:Georgia,serif;display:f
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .wrap{width:100%;max-width:560px;display:flex;flex-direction:column;gap:8px;margin:auto}
 
-/* TOP BAR */
 .top-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
 .game-title{font-size:20px;font-weight:700;color:#c8960c;letter-spacing:.06em}
 .top-right{display:flex;align-items:center;gap:6px}
 button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;white-space:nowrap}
 button.a:hover{background:rgba(200,150,12,0.2)}
 
-/* AYARLAR SATIRI */
 .settings{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .sel-wrap{display:flex;align-items:center;gap:4px;font-size:10px;color:rgba(247,242,232,0.38)}
 .sel-wrap select{background:#16161e;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.75);font-family:Georgia,serif;font-size:10px;padding:3px 5px;cursor:pointer}
 
-/* SKOR */
 .scorebar{display:flex;gap:6px}
 .ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
 .ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:1px}
@@ -30,7 +27,6 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 .ibox .v.p1c{color:#c8845a}
 .ibox .v.p2c{color:#6a9fc0}
 
-/* SIRA GÖSTERGESİ */
 .turn-bar{display:flex;justify-content:center;gap:20px;align-items:center}
 .ptag{font-size:12px;font-weight:600;color:rgba(247,242,232,0.3);padding:4px 14px;border-radius:14px;border:1.5px solid transparent;transition:all .3s}
 .ptag.p1.on{color:#c8845a;border-color:#c8845a;font-size:15px;animation:glow1 1.4s ease-in-out infinite}
@@ -39,21 +35,10 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 @keyframes glow2{0%,100%{box-shadow:0 0 0 0 rgba(106,159,192,.3)}50%{box-shadow:0 0 0 6px rgba(106,159,192,0)}}
 .vsep{font-size:11px;color:rgba(247,242,232,0.18)}
 
-/* YIĞIN ALANI */
-.pile-area{
-  background:#16161e;border:1px solid rgba(200,150,12,0.12);
-  border-radius:10px;padding:16px 12px;
-  display:flex;flex-direction:row;align-items:flex-end;
-  justify-content:center;gap:clamp(8px,3vw,22px);
-  min-height:180px;
-}
-
-/* TEK YIĞIN */
+.pile-area{background:#16161e;border:1px solid rgba(200,150,12,0.12);border-radius:10px;padding:16px 12px;display:flex;flex-direction:row;align-items:flex-end;justify-content:center;gap:clamp(8px,3vw,22px);min-height:180px}
 .pile{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;user-select:none}
 .pile-label{font-size:10px;font-weight:700;color:rgba(247,242,232,0.3);letter-spacing:.05em;margin-bottom:2px}
 .pile-sticks{display:flex;flex-direction:column-reverse;align-items:center;gap:3px;min-height:140px;justify-content:flex-start}
-
-/* KİBRİT (dikey, yığın halinde) */
 .stick-wrap{display:flex;flex-direction:column;align-items:center;gap:0;transition:transform .12s,opacity .12s}
 .stick-wrap.selected{transform:translateX(5px)}
 .stick-wrap.taken{opacity:0;pointer-events:none}
@@ -66,44 +51,87 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 .pile.exhausted .stick-wrap{opacity:0.12;pointer-events:none}
 .pile-count{font-size:11px;font-weight:700;color:rgba(247,242,232,0.5);margin-top:4px}
 
-/* AL BUTONU */
 .action-bar{display:flex;gap:8px;justify-content:center;align-items:center}
 .btn-take{background:#8b2a0a;border:1px solid rgba(200,150,12,0.55);border-radius:5px;padding:7px 26px;font-size:13px;cursor:pointer;color:rgba(247,242,232,0.92);font-family:Georgia,serif;font-weight:700;transition:background .2s}
 .btn-take:hover:not(:disabled){background:#b8400f}
 .btn-take:disabled{background:#1e1e28;border-color:rgba(255,255,255,0.08);color:rgba(247,242,232,0.25);cursor:not-allowed}
 
-/* MESAJ */
 .msg{font-size:11px;color:rgba(247,242,232,0.42);text-align:center;min-height:14px}
 .rule-note{font-size:10px;color:rgba(247,242,232,0.22);text-align:center}
 
-/* WIN BANNER */
 .win-banner{display:none;background:rgba(111,207,151,0.08);border:1px solid rgba(111,207,151,0.3);border-radius:6px;padding:10px 16px;text-align:center}
 .win-banner.show{display:block}
 .win-banner h2{font-size:15px;color:#6fcf97;margin-bottom:3px;font-family:Georgia,serif}
 .win-banner p{font-size:11px;color:rgba(247,242,232,0.48)}
-
 .br{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
 
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+/* ── ORTAK MODAL STILI ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.86);display:flex;align-items:center;justify-content:center;z-index:1000;padding:12px;overflow-y:auto}
 .modal-overlay.hidden{display:none}
-.modal-box{background:#0c0c12;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease}
+.modal-box{background:#0c0c12;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:380px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease;margin:auto}
 @keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 .modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em}
 .modal-rules{font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);padding:10px 4px;list-style:none}
 .modal-rules li{margin-bottom:3px;padding-left:4px}
 .modal-rules li::before{content:"◈ ";color:#c8960c}
-.modal-btns{display:flex;gap:10px;justify-content:center}
+.modal-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .modal-close{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s}
 .modal-close:hover{background:rgba(40,30,10,0.9)}
 .modal-start{background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s}
 .modal-start:hover{background:rgba(60,40,5,0.9)}
 .modal-logo{display:flex;justify-content:center;padding-top:4px}
+
+/* XOR modaline özgü stratejik buton */
+.btn-xor-link{background:rgba(200,150,12,0.07);border:1px solid rgba(200,150,12,0.25);border-radius:3px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(200,150,12,0.75);font-family:Georgia,serif;transition:background .2s;display:flex;align-items:center;gap:5px}
+.btn-xor-link:hover{background:rgba(200,150,12,0.15);color:#c8960c}
+
+/* ── XOR MODAL İÇERİĞİ ── */
+.xor-box{max-width:420px}
+.xor-section{margin-bottom:6px}
+.xor-section-title{font-size:13px;font-weight:700;color:#c8960c;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.xor-section-title::before{content:'';display:inline-block;width:3px;height:13px;background:#c8960c;border-radius:2px;flex-shrink:0}
+.xor-prose{font-size:11.5px;color:rgba(247,242,232,0.65);line-height:1.75}
+.xor-prose b{color:rgba(247,242,232,0.88)}
+.xor-prose em{color:#c8960c;font-style:normal}
+
+/* İkili tablo */
+.bin-table{width:100%;border-collapse:collapse;font-size:11px;margin:8px 0}
+.bin-table th{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:rgba(247,242,232,0.35);padding:3px 6px;border-bottom:1px solid rgba(200,150,12,0.15);text-align:left;font-weight:600}
+.bin-table td{padding:4px 6px;color:rgba(247,242,232,0.7);font-family:'Courier New',monospace;font-size:12px}
+.bin-table tr.xor-row td{color:#FFD97A;border-top:1px solid rgba(200,150,12,0.2);padding-top:5px}
+.bin-table .bit-1{color:#c8960c;font-weight:700}
+.bin-table .dec{text-align:right;color:rgba(247,242,232,0.45);font-family:Georgia,serif;font-size:11px}
+.xor-result{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(200,150,12,0.06);border:1px solid rgba(200,150,12,0.18);border-radius:5px;font-size:12px;margin:6px 0}
+.xor-result .label{color:rgba(247,242,232,0.45);font-size:10px;text-transform:uppercase;letter-spacing:.05em}
+.xor-result .val{font-size:18px;font-weight:700;color:#FFD97A;font-family:'Courier New',monospace;margin:0 4px}
+.xor-result .verdict{font-size:11px;font-weight:600}
+.verdict-lose{color:#eb5757}
+.verdict-win{color:#50c878}
+.xor-divider{height:1px;background:rgba(200,150,12,0.12);margin:10px 0}
+
+/* Etkileşimli hesaplayıcı */
+.calc-wrap{background:rgba(255,255,255,0.03);border:1px solid rgba(200,150,12,0.14);border-radius:6px;padding:12px}
+.calc-title{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:rgba(247,242,232,0.35);margin-bottom:8px}
+.calc-inputs{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.calc-inputs input{width:44px;background:#16161e;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:#FFD97A;font-family:'Courier New',monospace;font-size:14px;text-align:center;padding:5px 2px;outline:none}
+.calc-inputs input:focus{border-color:#c8960c}
+.calc-xor-sym{font-size:13px;color:rgba(200,150,12,0.5);font-weight:700}
+.calc-result{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:5px;font-size:12px;transition:background .25s,border-color .25s;border:1px solid transparent}
+.calc-result.neutral{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.07)}
+.calc-result.lose{background:rgba(235,87,87,0.08);border-color:rgba(235,87,87,0.3)}
+.calc-result.win{background:rgba(80,200,120,0.08);border-color:rgba(80,200,120,0.3)}
+.calc-result .cv{font-size:18px;font-weight:700;font-family:'Courier New',monospace;color:#FFD97A;min-width:28px}
+.calc-result .ct{font-size:11px;font-weight:600}
+.calc-hint{font-size:10px;color:rgba(247,242,232,0.28);margin-top:6px;line-height:1.6}
+.add-pile{background:none;border:1px dashed rgba(200,150,12,0.3);border-radius:3px;color:rgba(200,150,12,0.5);font-size:11px;padding:4px 10px;cursor:pointer;font-family:Georgia,serif;transition:all .2s}
+.add-pile:hover{border-color:#c8960c;color:#c8960c}
+.rm-pile{background:none;border:none;color:rgba(200,150,12,0.4);font-size:14px;cursor:pointer;padding:0 2px;line-height:1}
+.rm-pile:hover{color:#eb5757}
 </style>
 </head>
 <body>
 
-<!-- AÇILIŞ MODALI -->
+<!-- ── AÇILIŞ MODALI ── -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
     <div class="modal-title">NIM</div>
@@ -113,8 +141,10 @@ button.a:hover{background:rgba(200,150,12,0.2)}
       <li><b style="color:#c8960c">Normal kural:</b> Son kibriti almak zorunda kalan kaybeder.</li>
       <li><b style="color:#c8960c">Misère kural:</b> Son kibriti alan kazanır.</li>
       <li>Mod ve zorluk seviyesini üstteki menülerden seçebilirsin.</li>
-      <li><b style="color:#c8960c">İpucu:</b> Yığınların XOR toplamı sıfırsa ikinci oyuncu avantajlıdır.</li>
     </ul>
+    <button class="btn-xor-link" onclick="closeModal();openXorModal()">
+      <span style="font-size:14px">⊕</span> Strateji: XOR nedir, nasıl kullanılır?
+    </button>
     <div class="modal-btns">
       <button class="modal-close" onclick="closeModal()">Kapat</button>
       <button class="modal-start" onclick="startFromModal()">Başla</button>
@@ -127,16 +157,128 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   </div>
 </div>
 
+<!-- ── XOR STRATEJİ MODALI ── -->
+<div class="modal-overlay hidden" id="xorModal">
+  <div class="modal-box xor-box">
+    <div class="modal-title" style="font-size:18px">⊕ Nim Stratejisi</div>
+
+    <!-- KATMAN 1: Sezgisel -->
+    <div class="xor-section">
+      <div class="xor-section-title">Strateji nedir?</div>
+      <p class="xor-prose">
+        Nim'in sırrı şu: Her hamleden sonra rakibine <em>özel bir pozisyon</em> bırakabilirsen, sen her zaman kazanırsın. Bu pozisyonun adı <b>P-pozisyonu</b> (kaybedici pozisyon). Rakibin ne yaparsa yapsın, bir sonraki hamlede yeniden o pozisyona dönebiliyorsun — ta ki son kibrit kalana kadar.
+      </p>
+      <p class="xor-prose" style="margin-top:6px">
+        Peki hangi pozisyonun P-pozisyonu olduğunu nasıl anlarsın? İşte burada <em>XOR</em> devreye girer.
+      </p>
+    </div>
+
+    <div class="xor-divider"></div>
+
+    <!-- KATMAN 2: XOR açıklaması -->
+    <div class="xor-section">
+      <div class="xor-section-title">XOR nedir?</div>
+      <p class="xor-prose">
+        XOR (⊕), sayıları <b>ikili sistemde</b> (0 ve 1) basamak basamak karşılaştırır: iki basamak <em>farklıysa 1</em>, <em>aynıysa 0</em> yazar.
+      </p>
+
+      <!-- Örnek tablo: 3⊕5⊕6 -->
+      <p class="xor-prose" style="margin-top:8px;margin-bottom:4px">Örnek — yığınlar <em>3, 5, 6</em>:</p>
+      <table class="bin-table">
+        <thead>
+          <tr>
+            <th>Yığın</th>
+            <th>İkili (4 bit)</th>
+            <th style="text-align:right">Ondalık</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A</td>
+            <td><span class="bit-1">0</span><span class="bit-1">0</span><span class="bit-1">1</span><span class="bit-1">1</span></td>
+            <td class="dec">3</td>
+          </tr>
+          <tr>
+            <td>B</td>
+            <td><span class="bit-1">0</span><span class="bit-1">1</span><span class="bit-1">0</span><span class="bit-1">1</span></td>
+            <td class="dec">5</td>
+          </tr>
+          <tr>
+            <td>C</td>
+            <td><span class="bit-1">0</span><span class="bit-1">1</span><span class="bit-1">1</span><span class="bit-1">0</span></td>
+            <td class="dec">6</td>
+          </tr>
+          <tr class="xor-row">
+            <td>⊕</td>
+            <td><span class="bit-1">0</span><span class="bit-1">0</span><span class="bit-1">0</span><span class="bit-1">0</span></td>
+            <td class="dec" style="color:#FFD97A;font-family:'Courier New',monospace">= 0</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="xor-result">
+        <div>
+          <div class="label">XOR Toplamı</div>
+          <span class="val">0</span>
+        </div>
+        <div class="verdict verdict-lose">Bu pozisyon P-pozisyonu → Sırası gelen kaybeder!</div>
+      </div>
+
+      <p class="xor-prose" style="margin-top:6px">
+        <b>Kural:</b> XOR toplamı <em>sıfırsa</em> → sırası gelen oyuncu dezavantajlıdır (P-pozisyonu).<br>
+        XOR toplamı <em>sıfır değilse</em> → sırası gelen oyuncu avantajlıdır (N-pozisyonu) ve XOR'u sıfıra düşürecek hamleyi bulabilir.
+      </p>
+    </div>
+
+    <div class="xor-divider"></div>
+
+    <!-- KATMAN 3: Etkileşimli hesaplayıcı -->
+    <div class="xor-section">
+      <div class="xor-section-title">Kendiniz deneyin</div>
+      <div class="calc-wrap">
+        <div class="calc-title">Yığın değerlerini girin</div>
+        <div class="calc-inputs" id="calcInputs">
+          <!-- JS ile doldurulur -->
+        </div>
+        <button class="add-pile" onclick="addCalcPile()">+ Yığın ekle</button>
+        <div style="margin-top:10px">
+          <div class="calc-result neutral" id="calcResult">
+            <div class="cv" id="calcVal">—</div>
+            <div>
+              <div class="label">XOR Toplamı</div>
+              <div class="ct" id="calcVerdict">Değerleri girin</div>
+            </div>
+          </div>
+        </div>
+        <div class="calc-hint">
+          ⊕ simgesi XOR işlemini temsil eder. Yığın sayısı 2-6 arasında olabilir. Değerleri değiştirdikçe sonuç anında güncellenir.
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeXorModal()">Kapat</button>
+      <button class="modal-start" onclick="closeXorModal();openModal()">← Kurallara Dön</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<!-- ── OYUN EKRANI ── -->
 <div class="wrap">
 
   <div class="top-bar">
     <div class="game-title">Nim</div>
     <div class="top-right">
+      <button class="a" onclick="openXorModal()">⊕ Strateji</button>
       <button class="a" onclick="openModal()">&#9432; Kurallar</button>
     </div>
   </div>
 
-  <!-- AYARLAR -->
   <div class="settings">
     <div class="sel-wrap">
       <span>Mod:</span>
@@ -169,24 +311,20 @@ button.a:hover{background:rgba(200,150,12,0.2)}
     </div>
   </div>
 
-  <!-- SKOR -->
   <div class="scorebar">
     <div class="ibox"><div class="l">Oyuncu 1</div><div class="v p1c" id="score1">0</div></div>
     <div class="ibox"><div class="l" id="p2label">Oyuncu 2</div><div class="v p2c" id="score2">0</div></div>
     <div class="ibox"><div class="l">Kalan Kibrit</div><div class="v" id="totalLeft">16</div></div>
   </div>
 
-  <!-- SIRA -->
   <div class="turn-bar">
     <div class="ptag p1" id="tag1">Oyuncu 1</div>
     <div class="vsep">—</div>
     <div class="ptag p2" id="tag2">Oyuncu 2</div>
   </div>
 
-  <!-- YIĞINLAR -->
   <div class="pile-area" id="pileArea"></div>
 
-  <!-- AL BUTONU -->
   <div class="action-bar">
     <button class="btn-take" id="btnTake" disabled onclick="confirmMove()">Al</button>
   </div>
@@ -194,7 +332,6 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   <div class="msg" id="msg">Bir yığından kibrit seçin.</div>
   <div class="rule-note" id="ruleNote"></div>
 
-  <!-- WIN -->
   <div class="win-banner" id="winBanner">
     <h2 id="winTitle"></h2>
     <p  id="winBody"></p>
@@ -207,53 +344,37 @@ button.a:hover{background:rgba(200,150,12,0.2)}
 </div>
 
 <script>
-// ── DÜZEN TANIMLAMALARI ──
-const LAYOUTS = {
-  classic: [1,3,5,7],
-  big:     [2,4,6,8,10],
-  random:  null, // üretilecek
-};
+// ── OYUN MANTIĞI ──
+const LAYOUTS = { classic:[1,3,5,7], big:[2,4,6,8,10], random:null };
 
 function makeRandom(){
-  // 3-5 yığın, her biri 1-9 kibrit, XOR≠0 başlangıç (daha ilginç pozisyon)
-  let piles;
-  do {
-    const n = 3 + Math.floor(Math.random()*3); // 3,4 veya 5
-    piles = Array.from({length:n}, ()=> 1 + Math.floor(Math.random()*9));
-  } while(piles.reduce((a,b)=>a^b,0)===0);
-  return piles;
+  let p;
+  do { const n=3+Math.floor(Math.random()*3); p=Array.from({length:n},()=>1+Math.floor(Math.random()*9)); }
+  while(p.reduce((a,b)=>a^b,0)===0);
+  return p;
 }
 
-// ── DURUM ──
-let rows, rowsInit, turn, scores, selected, won, cpuMode, misere, easyMode;
-let cpuDelay=null;
+let rows,rowsInit,turn,scores,selected,won,cpuMode,misere,easyMode,cpuDelay=null;
 
 function getLayout(){
-  const v = document.getElementById('layoutSelect').value;
-  if(v==='random') return makeRandom();
-  return LAYOUTS[v].slice();
+  const v=document.getElementById('layoutSelect').value;
+  return v==='random'?makeRandom():LAYOUTS[v].slice();
 }
 
 function resetGame(){
   if(cpuDelay) clearTimeout(cpuDelay);
-  rowsInit = getLayout();
-  rows = rowsInit.slice();
-  turn = 0; won = false; selected = null;
-  cpuMode  = document.getElementById('modeSelect').value==='cpu';
-  misere   = document.getElementById('ruleSelect').value==='misere';
-  easyMode = document.getElementById('diffSelect').value==='easy';
-
+  rowsInit=getLayout(); rows=rowsInit.slice();
+  turn=0; won=false; selected=null;
+  cpuMode=document.getElementById('modeSelect').value==='cpu';
+  misere=document.getElementById('ruleSelect').value==='misere';
+  easyMode=document.getElementById('diffSelect').value==='easy';
   document.getElementById('winBanner').classList.remove('show');
   document.getElementById('btnTake').disabled=true;
-  document.getElementById('p2label').textContent = cpuMode ? 'Bilgisayar' : 'Oyuncu 2';
-  document.getElementById('ruleNote').textContent = misere
-    ? 'Misère: son kibriti alan kazanır.'
-    : 'Normal: son kibriti almak zorunda kalan kaybeder.';
-
-  updateTags();
-  renderPiles();
-  updateCounters();
-  setMsg(turnMsg());
+  document.getElementById('p2label').textContent=cpuMode?'Bilgisayar':'Oyuncu 2';
+  document.getElementById('ruleNote').textContent=misere
+    ?'Misère: son kibriti alan kazanır.'
+    :'Normal: son kibriti almak zorunda kalan kaybeder.';
+  updateTags(); renderPiles(); updateCounters(); setMsg(turnMsg());
 }
 
 function onSettingChange(){
@@ -263,187 +384,172 @@ function onSettingChange(){
   resetGame();
 }
 
-// ── ISIMLER ──
-function playerName(t){ return (cpuMode&&t===1)?'Bilgisayar':'Oyuncu '+(t+1); }
+function playerName(t){ return(cpuMode&&t===1)?'Bilgisayar':'Oyuncu '+(t+1); }
 function turnMsg(){
   if(cpuMode&&turn===1) return 'Bilgisayar düşünüyor…';
   return playerName(turn)+', bir yığından kibrit seçin.';
 }
 
-// ── TAG GÜNCELLEMESİ ──
 function updateTags(){
-  const t1=document.getElementById('tag1');
-  const t2=document.getElementById('tag2');
-  t2.textContent = cpuMode?'Bilgisayar':'Oyuncu 2';
+  const t1=document.getElementById('tag1'),t2=document.getElementById('tag2');
+  t2.textContent=cpuMode?'Bilgisayar':'Oyuncu 2';
   t1.className='ptag p1'+((!won&&turn===0)?' on':'');
   t2.className='ptag p2'+((!won&&turn===1)?' on':'');
 }
 
-// ── YIĞIN ÇİZİMİ ──
 function renderPiles(){
-  const area=document.getElementById('pileArea');
-  area.innerHTML='';
+  const area=document.getElementById('pileArea'); area.innerHTML='';
   const labels=['A','B','C','D','E'];
-
   rows.forEach((count,ri)=>{
-    const total=rowsInit[ri];
-    const selCount=(selected&&selected.row===ri)?selected.count:0;
-
-    const pile=document.createElement('div');
-    pile.className='pile'+(count===0?' exhausted':'');
-
-    const lbl=document.createElement('div');
-    lbl.className='pile-label';
-    lbl.textContent=labels[ri];
-    pile.appendChild(lbl);
-
-    const sticks=document.createElement('div');
-    sticks.className='pile-sticks';
-
-    // Kibritleri ALTTAN ÜSTE çiz (index 0 = en alt)
+    const total=rowsInit[ri], selCount=(selected&&selected.row===ri)?selected.count:0;
+    const pile=document.createElement('div'); pile.className='pile'+(count===0?' exhausted':'');
+    const lbl=document.createElement('div'); lbl.className='pile-label'; lbl.textContent=labels[ri]; pile.appendChild(lbl);
+    const sticks=document.createElement('div'); sticks.className='pile-sticks';
     for(let i=0;i<total;i++){
       const sw=document.createElement('div');
-      const isTaken = i >= count;
-      // seçili: en üstteki selCount kibrit seçili
-      const isSelected = !isTaken && i >= (count - selCount);
+      const isTaken=i>=count, isSelected=!isTaken&&i>=(count-selCount);
       sw.className='stick-wrap'+(isTaken?' taken':'')+(isSelected?' selected':'');
-
-      if(!isTaken && !won && !(cpuMode&&turn===1)){
-        sw.addEventListener('click',(function(r,idx,total){
-          return function(){ selectStick(r,idx,total); };
-        })(ri, i, count));
+      if(!isTaken&&!won&&!(cpuMode&&turn===1)){
+        sw.addEventListener('click',(function(r,idx){return function(){selectStick(r,idx,rows[r]);};})(ri,i));
       }
-      const head=document.createElement('div'); head.className='s-head';
-      const body=document.createElement('div'); body.className='s-body';
-      sw.appendChild(head); sw.appendChild(body);
-      sticks.appendChild(sw);
+      const h=document.createElement('div'); h.className='s-head';
+      const b=document.createElement('div'); b.className='s-body';
+      sw.appendChild(h); sw.appendChild(b); sticks.appendChild(sw);
     }
     pile.appendChild(sticks);
-
-    const cnt=document.createElement('div');
-    cnt.className='pile-count';
-    cnt.textContent=count>0?count:'·';
-    pile.appendChild(cnt);
-
+    const cnt=document.createElement('div'); cnt.className='pile-count'; cnt.textContent=count>0?count:'·'; pile.appendChild(cnt);
     area.appendChild(pile);
   });
 }
 
-// ── SEÇİM ──
-// idx = 0 tabanlı, alttan yukarı; seçim en üstten yapılır
-// Tıklanan kibrit: (count-1-idx) kaçıncı üstten → seçilecek miktar = count - idx
-function selectStick(row, idx, total){
-  const count = total - idx; // kaç kibrit seçilir
-  if(selected && selected.row===row && selected.count===count){
-    selected=null;
-  } else {
-    selected={row, count};
-  }
+function selectStick(row,idx,total){
+  const count=total-idx;
+  if(selected&&selected.row===row&&selected.count===count){ selected=null; }
+  else { selected={row,count}; }
   renderPiles();
-  document.getElementById('btnTake').disabled = !selected;
-  if(selected){
-    setMsg(selected.count+' kibrit seçildi ('+('ABCDE'[row])+' yığını). "Al" butonuna basın.');
-  } else {
-    setMsg(turnMsg());
-  }
+  document.getElementById('btnTake').disabled=!selected;
+  setMsg(selected?selected.count+' kibrit seçildi ('+('ABCDE'[row])+' yığını). "Al" butonuna basın.':turnMsg());
 }
 
-function confirmMove(){
-  if(!selected||won) return;
-  applyMove(selected.row, selected.count);
-}
+function confirmMove(){ if(!selected||won) return; applyMove(selected.row,selected.count); }
 
-// ── HAMLEYİ UYGULA ──
-function applyMove(row, count){
-  rows[row]-=count;
-  selected=null;
-  const total=rows.reduce((a,b)=>a+b,0);
-  updateCounters();
-
+function applyMove(row,count){
+  rows[row]-=count; selected=null;
+  const total=rows.reduce((a,b)=>a+b,0); updateCounters();
   if(total===0){
     won=true;
-    let winner = misere ? turn : 1-turn;
+    let winner=misere?turn:1-turn;
     scores[winner]++;
     document.getElementById('score1').textContent=scores[0];
     document.getElementById('score2').textContent=scores[1];
-    updateTags();
-    renderPiles();
-    const wName=playerName(winner);
-    document.getElementById('winTitle').textContent=wName+' kazandı!';
-    document.getElementById('winBody').textContent= misere
-      ? wName+' son kibriti aldı — Misère kuralına göre kazanır!'
-      : playerName(turn)+' son kibriti almak zorunda kaldı — kaybeder!';
+    updateTags(); renderPiles();
+    document.getElementById('winTitle').textContent=playerName(winner)+' kazandı!';
+    document.getElementById('winBody').textContent=misere
+      ?playerName(winner)+' son kibriti aldı — Misère kuralına göre kazanır!'
+      :playerName(turn)+' son kibriti almak zorunda kaldı — kaybeder!';
     document.getElementById('winBanner').classList.add('show');
-    document.getElementById('btnTake').disabled=true;
-    setMsg('');
-    return;
+    document.getElementById('btnTake').disabled=true; setMsg(''); return;
   }
-
-  turn=1-turn;
-  updateTags();
-  renderPiles();
-  document.getElementById('btnTake').disabled=true;
-
-  if(cpuMode&&turn===1){
-    setMsg('Bilgisayar düşünüyor…');
-    const delay = easyMode ? 400+Math.random()*400 : 650;
-    cpuDelay=setTimeout(cpuMove, delay);
-  } else {
-    setMsg(turnMsg());
-  }
+  turn=1-turn; updateTags(); renderPiles(); document.getElementById('btnTake').disabled=true;
+  if(cpuMode&&turn===1){ setMsg('Bilgisayar düşünüyor…'); cpuDelay=setTimeout(cpuMove,easyMode?400+Math.random()*400:650); }
+  else setMsg(turnMsg());
 }
 
-function updateCounters(){
-  document.getElementById('totalLeft').textContent=rows.reduce((a,b)=>a+b,0);
-}
+function updateCounters(){ document.getElementById('totalLeft').textContent=rows.reduce((a,b)=>a+b,0); }
 
-// ── CPU STRATEJİSİ ──
 function nimXor(){ return rows.reduce((a,b)=>a^b,0); }
 
 function cpuMove(){
-  // Kolay mod: %40 ihtimalle rastgele hamle yap
-  if(easyMode && Math.random()<0.40){
-    const available=rows.map((v,i)=>i).filter(i=>rows[i]>0);
-    const r=available[Math.floor(Math.random()*available.length)];
-    const c=1+Math.floor(Math.random()*rows[r]);
-    applyMove(r,c); return;
+  if(easyMode&&Math.random()<0.40){
+    const av=rows.map((v,i)=>i).filter(i=>rows[i]>0);
+    const r=av[Math.floor(Math.random()*av.length)];
+    applyMove(r,1+Math.floor(Math.random()*rows[r])); return;
   }
-
-  let xorVal=nimXor(), moveRow=-1, moveCount=-1;
-
-  if(xorVal!==0){
-    for(let r=0;r<rows.length;r++){
-      const target=rows[r]^xorVal;
-      if(target<rows[r]){ moveRow=r; moveCount=rows[r]-target; break; }
-    }
+  let xv=nimXor(),mr=-1,mc=-1;
+  if(xv!==0){ for(let r=0;r<rows.length;r++){ const t=rows[r]^xv; if(t<rows[r]){mr=r;mc=rows[r]-t;break;} } }
+  const no=rows.filter(v=>v>1).length;
+  if(misere&&no<=1&&mr!==-1&&no===1){
+    const br=rows.findIndex(v=>v>1),oc=rows.filter(v=>v===1).length;
+    mr=br; mc=(oc%2===0)?rows[br]:rows[br]-1; if(mc<=0) mc=rows[br];
   }
-
-  // Misère endgame düzeltmesi
-  const nonOne=rows.filter(v=>v>1).length;
-  if(misere && nonOne<=1 && moveRow!==-1){
-    if(nonOne===1){
-      const bigRow=rows.findIndex(v=>v>1);
-      const onesCount=rows.filter(v=>v===1).length;
-      moveRow=bigRow;
-      moveCount=(onesCount%2===0)?rows[bigRow]:rows[bigRow]-1;
-      if(moveCount<=0) moveCount=rows[bigRow];
-    }
-  }
-
-  if(moveRow===-1){
-    // Kötü pozisyon — en büyük yığından 1 al
-    moveRow=rows.indexOf(Math.max(...rows));
-    moveCount=1;
-  }
-
-  applyMove(moveRow, moveCount);
+  if(mr===-1){ mr=rows.indexOf(Math.max(...rows)); mc=1; }
+  applyMove(mr,mc);
 }
 
-// ── MODAL ──
+function setMsg(t){ document.getElementById('msg').textContent=t; }
+
+// ── MODAL FONKSİYONLARI ──
 function closeModal(){ document.getElementById('modalOverlay').classList.add('hidden'); }
 function openModal(){ document.getElementById('modalOverlay').classList.remove('hidden'); }
 function startFromModal(){ closeModal(); resetGame(); }
-function setMsg(t){ document.getElementById('msg').textContent=t; }
+
+function openXorModal(){
+  initCalc();
+  document.getElementById('xorModal').classList.remove('hidden');
+}
+function closeXorModal(){ document.getElementById('xorModal').classList.add('hidden'); }
+
+// ── HESAPLAYICI ──
+let calcPiles=[3,5,6]; // başlangıç örnekleri
+
+function initCalc(){
+  renderCalcInputs();
+  updateCalc();
+}
+
+function renderCalcInputs(){
+  const cont=document.getElementById('calcInputs');
+  cont.innerHTML='';
+  calcPiles.forEach((v,i)=>{
+    const wrap=document.createElement('div');
+    wrap.style.cssText='display:flex;align-items:center;gap:3px';
+
+    if(i>0){
+      const sym=document.createElement('span');
+      sym.className='calc-xor-sym'; sym.textContent='⊕';
+      cont.appendChild(sym);
+    }
+
+    const inp=document.createElement('input');
+    inp.type='number'; inp.min='0'; inp.max='99'; inp.value=v;
+    inp.addEventListener('input',function(){
+      calcPiles[i]=Math.max(0,Math.min(99,parseInt(this.value)||0));
+      updateCalc();
+    });
+    wrap.appendChild(inp);
+
+    // Silme butonu (en az 2 yığın kalacak şekilde)
+    if(calcPiles.length>2){
+      const rm=document.createElement('button');
+      rm.className='rm-pile'; rm.textContent='×';
+      rm.onclick=function(){ calcPiles.splice(i,1); renderCalcInputs(); updateCalc(); };
+      wrap.appendChild(rm);
+    }
+    cont.appendChild(wrap);
+  });
+}
+
+function addCalcPile(){
+  if(calcPiles.length>=6) return;
+  calcPiles.push(1);
+  renderCalcInputs(); updateCalc();
+}
+
+function updateCalc(){
+  const xv=calcPiles.reduce((a,b)=>a^b,0);
+  const el=document.getElementById('calcResult');
+  document.getElementById('calcVal').textContent=xv;
+  if(xv===0){
+    el.className='calc-result lose';
+    document.getElementById('calcVerdict').textContent='P-pozisyon — sırası gelen kaybeder';
+    document.getElementById('calcVerdict').style.color='#eb5757';
+  } else {
+    el.className='calc-result win';
+    document.getElementById('calcVerdict').textContent='N-pozisyon — sırası gelen kazanabilir';
+    document.getElementById('calcVerdict').style.color='#50c878';
+  }
+  document.getElementById('calcVal').style.color=xv===0?'#eb5757':'#50c878';
+}
 
 scores=[0,0];
 resetGame();
