@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Nim</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#0e0e14;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:560px;display:flex;flex-direction:column;gap:8px;margin:auto}
+
+/* TOP BAR */
+.top-bar{display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap}
+.game-title{font-size:20px;font-weight:700;color:#c8960c;letter-spacing:.06em}
+.top-right{display:flex;align-items:center;gap:6px}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;white-space:nowrap}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+/* AYARLAR SATIRI */
+.settings{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.sel-wrap{display:flex;align-items:center;gap:4px;font-size:10px;color:rgba(247,242,232,0.38)}
+.sel-wrap select{background:#16161e;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.75);font-family:Georgia,serif;font-size:10px;padding:3px 5px;cursor:pointer}
+
+/* SKOR */
+.scorebar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:1px}
+.ibox .v{font-size:14px;font-weight:700;color:#FFD97A}
+.ibox .v.p1c{color:#c8845a}
+.ibox .v.p2c{color:#6a9fc0}
+
+/* SIRA GÖSTERGESİ */
+.turn-bar{display:flex;justify-content:center;gap:20px;align-items:center}
+.ptag{font-size:12px;font-weight:600;color:rgba(247,242,232,0.3);padding:4px 14px;border-radius:14px;border:1.5px solid transparent;transition:all .3s}
+.ptag.p1.on{color:#c8845a;border-color:#c8845a;font-size:15px;animation:glow1 1.4s ease-in-out infinite}
+.ptag.p2.on{color:#6a9fc0;border-color:#6a9fc0;font-size:15px;animation:glow2 1.4s ease-in-out infinite}
+@keyframes glow1{0%,100%{box-shadow:0 0 0 0 rgba(200,132,90,.3)}50%{box-shadow:0 0 0 6px rgba(200,132,90,0)}}
+@keyframes glow2{0%,100%{box-shadow:0 0 0 0 rgba(106,159,192,.3)}50%{box-shadow:0 0 0 6px rgba(106,159,192,0)}}
+.vsep{font-size:11px;color:rgba(247,242,232,0.18)}
+
+/* YIĞIN ALANI */
+.pile-area{
+  background:#16161e;border:1px solid rgba(200,150,12,0.12);
+  border-radius:10px;padding:16px 12px;
+  display:flex;flex-direction:row;align-items:flex-end;
+  justify-content:center;gap:clamp(8px,3vw,22px);
+  min-height:180px;
+}
+
+/* TEK YIĞIN */
+.pile{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;user-select:none}
+.pile-label{font-size:10px;font-weight:700;color:rgba(247,242,232,0.3);letter-spacing:.05em;margin-bottom:2px}
+.pile-sticks{display:flex;flex-direction:column-reverse;align-items:center;gap:3px;min-height:140px;justify-content:flex-start}
+
+/* KİBRİT (dikey, yığın halinde) */
+.stick-wrap{display:flex;flex-direction:column;align-items:center;gap:0;transition:transform .12s,opacity .12s}
+.stick-wrap.selected{transform:translateX(5px)}
+.stick-wrap.taken{opacity:0;pointer-events:none}
+.s-head{width:9px;height:11px;border-radius:50% 50% 25% 25%;background:#e74c3c;transition:background .12s;flex-shrink:0}
+.s-body{width:5px;height:clamp(22px,5vw,34px);background:#c8845a;border-radius:0 0 2px 2px;transition:background .12s;flex-shrink:0}
+.stick-wrap.selected .s-head{background:#ff3333}
+.stick-wrap.selected .s-body{background:#f1c40f}
+.stick-wrap:hover .s-head{background:#ff6060}
+.stick-wrap:hover .s-body{background:#e8c060}
+.pile.exhausted .stick-wrap{opacity:0.12;pointer-events:none}
+.pile-count{font-size:11px;font-weight:700;color:rgba(247,242,232,0.5);margin-top:4px}
+
+/* AL BUTONU */
+.action-bar{display:flex;gap:8px;justify-content:center;align-items:center}
+.btn-take{background:#8b2a0a;border:1px solid rgba(200,150,12,0.55);border-radius:5px;padding:7px 26px;font-size:13px;cursor:pointer;color:rgba(247,242,232,0.92);font-family:Georgia,serif;font-weight:700;transition:background .2s}
+.btn-take:hover:not(:disabled){background:#b8400f}
+.btn-take:disabled{background:#1e1e28;border-color:rgba(255,255,255,0.08);color:rgba(247,242,232,0.25);cursor:not-allowed}
+
+/* MESAJ */
+.msg{font-size:11px;color:rgba(247,242,232,0.42);text-align:center;min-height:14px}
+.rule-note{font-size:10px;color:rgba(247,242,232,0.22);text-align:center}
+
+/* WIN BANNER */
+.win-banner{display:none;background:rgba(111,207,151,0.08);border:1px solid rgba(111,207,151,0.3);border-radius:6px;padding:10px 16px;text-align:center}
+.win-banner.show{display:block}
+.win-banner h2{font-size:15px;color:#6fcf97;margin-bottom:3px;font-family:Georgia,serif}
+.win-banner p{font-size:11px;color:rgba(247,242,232,0.48)}
+
+.br{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.modal-overlay.hidden{display:none}
+.modal-box{background:#0c0c12;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em}
+.modal-rules{font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);padding:10px 4px;list-style:none}
+.modal-rules li{margin-bottom:3px;padding-left:4px}
+.modal-rules li::before{content:"◈ ";color:#c8960c}
+.modal-btns{display:flex;gap:10px;justify-content:center}
+.modal-close{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s}
+.modal-close:hover{background:rgba(40,30,10,0.9)}
+.modal-start{background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s}
+.modal-start:hover{background:rgba(60,40,5,0.9)}
+.modal-logo{display:flex;justify-content:center;padding-top:4px}
+</style>
+</head>
+<body>
+
+<!-- AÇILIŞ MODALI -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">NIM</div>
+    <ul class="modal-rules">
+      <li>Her yığından <b style="color:#c8960c">istediğin kadar</b> kibrit alabilirsin — ama yalnızca <b style="color:#c8960c">tek bir yığından</b>.</li>
+      <li>Bir yığına tıkla: <b style="color:#c8960c">üstten aşağı</b> kaç kibrit almak istediğini seç.</li>
+      <li><b style="color:#c8960c">Normal kural:</b> Son kibriti almak zorunda kalan kaybeder.</li>
+      <li><b style="color:#c8960c">Misère kural:</b> Son kibriti alan kazanır.</li>
+      <li>Mod ve zorluk seviyesini üstteki menülerden seçebilirsin.</li>
+      <li><b style="color:#c8960c">İpucu:</b> Yığınların XOR toplamı sıfırsa ikinci oyuncu avantajlıdır.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="startFromModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../TekinHocaLOGO1.png" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="top-bar">
+    <div class="game-title">Nim</div>
+    <div class="top-right">
+      <button class="a" onclick="openModal()">&#9432; Kurallar</button>
+    </div>
+  </div>
+
+  <!-- AYARLAR -->
+  <div class="settings">
+    <div class="sel-wrap">
+      <span>Mod:</span>
+      <select id="modeSelect" onchange="onSettingChange()">
+        <option value="2p">İki oyuncu</option>
+        <option value="cpu">Bilgisayara karşı</option>
+      </select>
+    </div>
+    <div class="sel-wrap">
+      <span>Zorluk:</span>
+      <select id="diffSelect" onchange="onSettingChange()">
+        <option value="hard">Zor (optimal)</option>
+        <option value="easy">Kolay (hata yapar)</option>
+      </select>
+    </div>
+    <div class="sel-wrap">
+      <span>Kural:</span>
+      <select id="ruleSelect" onchange="onSettingChange()">
+        <option value="normal">Normal (son alan kaybeder)</option>
+        <option value="misere">Misère (son alan kazanır)</option>
+      </select>
+    </div>
+    <div class="sel-wrap">
+      <span>Yığın:</span>
+      <select id="layoutSelect" onchange="onSettingChange()">
+        <option value="classic">Klasik (1-3-5-7)</option>
+        <option value="random">Rastgele</option>
+        <option value="big">Büyük (2-4-6-8-10)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- SKOR -->
+  <div class="scorebar">
+    <div class="ibox"><div class="l">Oyuncu 1</div><div class="v p1c" id="score1">0</div></div>
+    <div class="ibox"><div class="l" id="p2label">Oyuncu 2</div><div class="v p2c" id="score2">0</div></div>
+    <div class="ibox"><div class="l">Kalan Kibrit</div><div class="v" id="totalLeft">16</div></div>
+  </div>
+
+  <!-- SIRA -->
+  <div class="turn-bar">
+    <div class="ptag p1" id="tag1">Oyuncu 1</div>
+    <div class="vsep">—</div>
+    <div class="ptag p2" id="tag2">Oyuncu 2</div>
+  </div>
+
+  <!-- YIĞINLAR -->
+  <div class="pile-area" id="pileArea"></div>
+
+  <!-- AL BUTONU -->
+  <div class="action-bar">
+    <button class="btn-take" id="btnTake" disabled onclick="confirmMove()">Al</button>
+  </div>
+
+  <div class="msg" id="msg">Bir yığından kibrit seçin.</div>
+  <div class="rule-note" id="ruleNote"></div>
+
+  <!-- WIN -->
+  <div class="win-banner" id="winBanner">
+    <h2 id="winTitle"></h2>
+    <p  id="winBody"></p>
+  </div>
+
+  <div class="br">
+    <button class="a" onclick="resetGame()">&#8635; Yeni Oyun</button>
+  </div>
+
+</div>
+
+<script>
+// ── DÜZEN TANIMLAMALARI ──
+const LAYOUTS = {
+  classic: [1,3,5,7],
+  big:     [2,4,6,8,10],
+  random:  null, // üretilecek
+};
+
+function makeRandom(){
+  // 3-5 yığın, her biri 1-9 kibrit, XOR≠0 başlangıç (daha ilginç pozisyon)
+  let piles;
+  do {
+    const n = 3 + Math.floor(Math.random()*3); // 3,4 veya 5
+    piles = Array.from({length:n}, ()=> 1 + Math.floor(Math.random()*9));
+  } while(piles.reduce((a,b)=>a^b,0)===0);
+  return piles;
+}
+
+// ── DURUM ──
+let rows, rowsInit, turn, scores, selected, won, cpuMode, misere, easyMode;
+let cpuDelay=null;
+
+function getLayout(){
+  const v = document.getElementById('layoutSelect').value;
+  if(v==='random') return makeRandom();
+  return LAYOUTS[v].slice();
+}
+
+function resetGame(){
+  if(cpuDelay) clearTimeout(cpuDelay);
+  rowsInit = getLayout();
+  rows = rowsInit.slice();
+  turn = 0; won = false; selected = null;
+  cpuMode  = document.getElementById('modeSelect').value==='cpu';
+  misere   = document.getElementById('ruleSelect').value==='misere';
+  easyMode = document.getElementById('diffSelect').value==='easy';
+
+  document.getElementById('winBanner').classList.remove('show');
+  document.getElementById('btnTake').disabled=true;
+  document.getElementById('p2label').textContent = cpuMode ? 'Bilgisayar' : 'Oyuncu 2';
+  document.getElementById('ruleNote').textContent = misere
+    ? 'Misère: son kibriti alan kazanır.'
+    : 'Normal: son kibriti almak zorunda kalan kaybeder.';
+
+  updateTags();
+  renderPiles();
+  updateCounters();
+  setMsg(turnMsg());
+}
+
+function onSettingChange(){
+  scores=[0,0];
+  document.getElementById('score1').textContent='0';
+  document.getElementById('score2').textContent='0';
+  resetGame();
+}
+
+// ── ISIMLER ──
+function playerName(t){ return (cpuMode&&t===1)?'Bilgisayar':'Oyuncu '+(t+1); }
+function turnMsg(){
+  if(cpuMode&&turn===1) return 'Bilgisayar düşünüyor…';
+  return playerName(turn)+', bir yığından kibrit seçin.';
+}
+
+// ── TAG GÜNCELLEMESİ ──
+function updateTags(){
+  const t1=document.getElementById('tag1');
+  const t2=document.getElementById('tag2');
+  t2.textContent = cpuMode?'Bilgisayar':'Oyuncu 2';
+  t1.className='ptag p1'+((!won&&turn===0)?' on':'');
+  t2.className='ptag p2'+((!won&&turn===1)?' on':'');
+}
+
+// ── YIĞIN ÇİZİMİ ──
+function renderPiles(){
+  const area=document.getElementById('pileArea');
+  area.innerHTML='';
+  const labels=['A','B','C','D','E'];
+
+  rows.forEach((count,ri)=>{
+    const total=rowsInit[ri];
+    const selCount=(selected&&selected.row===ri)?selected.count:0;
+
+    const pile=document.createElement('div');
+    pile.className='pile'+(count===0?' exhausted':'');
+
+    const lbl=document.createElement('div');
+    lbl.className='pile-label';
+    lbl.textContent=labels[ri];
+    pile.appendChild(lbl);
+
+    const sticks=document.createElement('div');
+    sticks.className='pile-sticks';
+
+    // Kibritleri ALTTAN ÜSTE çiz (index 0 = en alt)
+    for(let i=0;i<total;i++){
+      const sw=document.createElement('div');
+      const isTaken = i >= count;
+      // seçili: en üstteki selCount kibrit seçili
+      const isSelected = !isTaken && i >= (count - selCount);
+      sw.className='stick-wrap'+(isTaken?' taken':'')+(isSelected?' selected':'');
+
+      if(!isTaken && !won && !(cpuMode&&turn===1)){
+        sw.addEventListener('click',(function(r,idx,total){
+          return function(){ selectStick(r,idx,total); };
+        })(ri, i, count));
+      }
+      const head=document.createElement('div'); head.className='s-head';
+      const body=document.createElement('div'); body.className='s-body';
+      sw.appendChild(head); sw.appendChild(body);
+      sticks.appendChild(sw);
+    }
+    pile.appendChild(sticks);
+
+    const cnt=document.createElement('div');
+    cnt.className='pile-count';
+    cnt.textContent=count>0?count:'·';
+    pile.appendChild(cnt);
+
+    area.appendChild(pile);
+  });
+}
+
+// ── SEÇİM ──
+// idx = 0 tabanlı, alttan yukarı; seçim en üstten yapılır
+// Tıklanan kibrit: (count-1-idx) kaçıncı üstten → seçilecek miktar = count - idx
+function selectStick(row, idx, total){
+  const count = total - idx; // kaç kibrit seçilir
+  if(selected && selected.row===row && selected.count===count){
+    selected=null;
+  } else {
+    selected={row, count};
+  }
+  renderPiles();
+  document.getElementById('btnTake').disabled = !selected;
+  if(selected){
+    setMsg(selected.count+' kibrit seçildi ('+('ABCDE'[row])+' yığını). "Al" butonuna basın.');
+  } else {
+    setMsg(turnMsg());
+  }
+}
+
+function confirmMove(){
+  if(!selected||won) return;
+  applyMove(selected.row, selected.count);
+}
+
+// ── HAMLEYİ UYGULA ──
+function applyMove(row, count){
+  rows[row]-=count;
+  selected=null;
+  const total=rows.reduce((a,b)=>a+b,0);
+  updateCounters();
+
+  if(total===0){
+    won=true;
+    let winner = misere ? turn : 1-turn;
+    scores[winner]++;
+    document.getElementById('score1').textContent=scores[0];
+    document.getElementById('score2').textContent=scores[1];
+    updateTags();
+    renderPiles();
+    const wName=playerName(winner);
+    document.getElementById('winTitle').textContent=wName+' kazandı!';
+    document.getElementById('winBody').textContent= misere
+      ? wName+' son kibriti aldı — Misère kuralına göre kazanır!'
+      : playerName(turn)+' son kibriti almak zorunda kaldı — kaybeder!';
+    document.getElementById('winBanner').classList.add('show');
+    document.getElementById('btnTake').disabled=true;
+    setMsg('');
+    return;
+  }
+
+  turn=1-turn;
+  updateTags();
+  renderPiles();
+  document.getElementById('btnTake').disabled=true;
+
+  if(cpuMode&&turn===1){
+    setMsg('Bilgisayar düşünüyor…');
+    const delay = easyMode ? 400+Math.random()*400 : 650;
+    cpuDelay=setTimeout(cpuMove, delay);
+  } else {
+    setMsg(turnMsg());
+  }
+}
+
+function updateCounters(){
+  document.getElementById('totalLeft').textContent=rows.reduce((a,b)=>a+b,0);
+}
+
+// ── CPU STRATEJİSİ ──
+function nimXor(){ return rows.reduce((a,b)=>a^b,0); }
+
+function cpuMove(){
+  // Kolay mod: %40 ihtimalle rastgele hamle yap
+  if(easyMode && Math.random()<0.40){
+    const available=rows.map((v,i)=>i).filter(i=>rows[i]>0);
+    const r=available[Math.floor(Math.random()*available.length)];
+    const c=1+Math.floor(Math.random()*rows[r]);
+    applyMove(r,c); return;
+  }
+
+  let xorVal=nimXor(), moveRow=-1, moveCount=-1;
+
+  if(xorVal!==0){
+    for(let r=0;r<rows.length;r++){
+      const target=rows[r]^xorVal;
+      if(target<rows[r]){ moveRow=r; moveCount=rows[r]-target; break; }
+    }
+  }
+
+  // Misère endgame düzeltmesi
+  const nonOne=rows.filter(v=>v>1).length;
+  if(misere && nonOne<=1 && moveRow!==-1){
+    if(nonOne===1){
+      const bigRow=rows.findIndex(v=>v>1);
+      const onesCount=rows.filter(v=>v===1).length;
+      moveRow=bigRow;
+      moveCount=(onesCount%2===0)?rows[bigRow]:rows[bigRow]-1;
+      if(moveCount<=0) moveCount=rows[bigRow];
+    }
+  }
+
+  if(moveRow===-1){
+    // Kötü pozisyon — en büyük yığından 1 al
+    moveRow=rows.indexOf(Math.max(...rows));
+    moveCount=1;
+  }
+
+  applyMove(moveRow, moveCount);
+}
+
+// ── MODAL ──
+function closeModal(){ document.getElementById('modalOverlay').classList.add('hidden'); }
+function openModal(){ document.getElementById('modalOverlay').classList.remove('hidden'); }
+function startFromModal(){ closeModal(); resetGame(); }
+function setMsg(t){ document.getElementById('msg').textContent=t; }
+
+scores=[0,0];
+resetGame();
+</script>
+</body>
+</html>
