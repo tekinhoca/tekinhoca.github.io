@@ -2,15 +2,50 @@
 /* Bu dosyayı tüm sayfalar <link> ile çağırır */
 
 :root {
-  --ink:    #12100e;
-  --cream:  #f7f2e8;
-  --aged:   #ece4cc;
-  --sepia:  #7a5c1e;
-  --gold:   #c8960c;
-  --rust:   #9b3510;
-  --muted:  #5a4a30;
-  --shadow: rgba(18,16,14,0.18);
+  --ink:           #12100e;
+  --cream:         #f7f2e8;
+  --aged:          #ece4cc;
+  --sepia:         #7a5c1e;
+  --gold:          #c8960c;
+  --rust:          #9b3510;
+  --muted:         #5a4a30;
+  --shadow:        rgba(18,16,14,0.18);
+  --card-elevated: #12100e;   /* koyu kartlar — gündüzde --ink ile aynı */
+  /* Sabit değerler — her iki modda da değişmez */
+  --surface-dark:  #12100e;   /* header, footer, nav arka planı */
+  --on-dark:       #f7f2e8;   /* koyu yüzey üzerindeki metin */
 }
+
+/* ── GECE MODU ── */
+[data-theme="dark"] {
+  --ink:           #e8d9b8;
+  --cream:         #16130e;
+  --aged:          #2a2210;
+  --sepia:         #dcc070;
+  --muted:         #c0a878;
+  --shadow:        rgba(0,0,0,0.45);
+  --card-elevated: #2e2412;
+  /* --surface-dark ve --on-dark kasıtlı olarak değiştirilmiyor */
+}
+
+/* Gece modunda noise opacity biraz artar */
+[data-theme="dark"] body {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.09'/%3E%3C/svg%3E");
+}
+
+/* Gece modunda footer logosu biraz daha belirgin */
+[data-theme="dark"] .footer-logo { opacity: 0.88; }
+
+/* Yumuşak geçiş — performansı zorlamadan sadece gerekli property'ler */
+body,
+.game-thumb,
+.sertifika-kart,
+.curiosity,
+.page-link,
+.accordion-header,
+.activity-table tr { transition: background 0.3s, color 0.2s, border-color 0.3s; }
+
+/* Header, footer, nav geçiş YAPMIYOR — her zaman koyu kalır */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -23,9 +58,9 @@ body {
   min-height: 100vh;
 }
 
-/* ── HEADER ── */
+/* ── HEADER — sabit koyu, moddan etkilenmez ── */
 header {
-  background: var(--ink);
+  background: var(--surface-dark);
   position: relative; overflow: hidden;
 }
 header::after {
@@ -43,11 +78,11 @@ header::after {
 .logo-line.r{ background: linear-gradient(90deg, var(--gold), transparent); }
 .logo-diamond { width: 9px; height: 9px; background: var(--gold); transform: rotate(45deg); flex-shrink: 0; }
 
-/* Başlık — tüm sayfalar h1 kullanır */
+/* Başlık — sabit açık renk, header her zaman koyu */
 h1 {
   font-family: 'Playfair Display', serif;
   font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 700; color: var(--cream);
+  font-weight: 700; color: var(--on-dark);
   letter-spacing: 0.04em; line-height: 1.15;
 }
 h1 span { color: var(--gold); font-style: italic; }
@@ -57,7 +92,7 @@ h1 span { color: var(--gold); font-style: italic; }
   color: rgba(247,242,232,0.5);
 }
 
-/* ── NAV ── */
+/* ── NAV — sabit koyu, moddan etkilenmez ── */
 #site-nav {
   background: var(--rust);
   border-top: 2px solid var(--gold);
@@ -73,7 +108,7 @@ h1 span { color: var(--gold); font-style: italic; }
   font-family: 'Source Serif 4', serif;
   font-size: 0.75rem; font-weight: 600;
   letter-spacing: 0.13em; text-transform: uppercase;
-  color: var(--cream); text-decoration: none;
+  color: var(--on-dark); text-decoration: none;
   padding: 13px 16px;
   transition: background 0.2s, color 0.2s;
   position: relative;
@@ -92,7 +127,7 @@ h1 span { color: var(--gold); font-style: italic; }
 #burger {
   display: none;
   background: none; border: none; cursor: pointer;
-  padding: 13px 16px; color: var(--cream);
+  padding: 13px 16px; color: var(--on-dark);
   font-family: 'Source Serif 4', serif;
   font-size: 0.75rem; font-weight: 600;
   letter-spacing: 0.13em; text-transform: uppercase;
@@ -111,16 +146,16 @@ h1 span { color: var(--gold); font-style: italic; }
 /* ── MAIN ── */
 main { margin: 0 auto; padding: 52px 20px 72px; }
 
-/* ── ALINTI KUTUSU (koyu, index tarzı) ── */
+/* ── ALINTI KUTUSU (koyu, index tarzı) — metin sabit açık ── */
 .quote-box {
-  background: linear-gradient(135deg, var(--ink), #241a08);
+  background: linear-gradient(135deg, var(--card-elevated), #241a08);
   border: 1px solid var(--gold); border-radius: 4px;
   padding: 24px 32px; text-align: center; margin-bottom: 40px;
 }
 .quote-text {
   font-family: 'Playfair Display', serif;
   font-size: clamp(1rem, 2.5vw, 1.2rem);
-  font-style: italic; color: var(--cream);
+  font-style: italic; color: var(--on-dark);
   line-height: 1.75; margin-bottom: 10px;
 }
 .quote-attr { font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
@@ -139,8 +174,8 @@ main { margin: 0 auto; padding: 52px 20px 72px; }
 .sec-title h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; color: var(--rust); white-space: nowrap; }
 .sec-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--rust), transparent); }
 
-/* ── FOOTER ── */
-footer { background: var(--ink); border-top: 2px solid var(--gold); padding: 24px 20px; text-align: center; }
+/* ── FOOTER — sabit koyu, moddan etkilenmez ── */
+footer { background: var(--surface-dark); border-top: 2px solid var(--gold); padding: 24px 20px; text-align: center; }
 footer .footer-logo { height: 48px; opacity: 0.75; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; }
 footer p { font-size: 0.76rem; color: rgba(247,242,232,0.4); letter-spacing: 0.08em; line-height: 1.8; }
 footer a { color: rgba(200,150,12,0.7); text-decoration: none; }
@@ -151,7 +186,7 @@ footer a:hover { color: var(--gold); }
   position: fixed; bottom: 28px; right: 24px;
   width: 42px; height: 42px; background: var(--rust);
   border: 1px solid var(--gold); border-radius: 50%;
-  color: var(--cream); font-size: 1.1rem; line-height: 42px;
+  color: var(--on-dark); font-size: 1.1rem; line-height: 42px;
   text-align: center; cursor: pointer;
   opacity: 0; pointer-events: none;
   transition: opacity 0.3s, transform 0.2s;
@@ -159,6 +194,19 @@ footer a:hover { color: var(--gold); }
 }
 #back-to-top.visible { opacity: 1; pointer-events: auto; }
 #back-to-top:hover { transform: translateY(-3px); background: #b8400f; }
+
+/* ── TEMA TOGGLE ── */
+#theme-toggle {
+  position: fixed; bottom: 78px; right: 24px;
+  width: 42px; height: 42px; background: var(--rust);
+  border: 1px solid var(--gold); border-radius: 50%;
+  color: var(--on-dark); font-size: 1rem; line-height: 42px;
+  text-align: center; cursor: pointer;
+  transition: background 0.2s, transform 0.2s, opacity 0.3s;
+  z-index: 999; box-shadow: 0 3px 10px var(--shadow);
+  opacity: 0.82;
+}
+#theme-toggle:hover { transform: translateY(-3px); background: #b8400f; opacity: 1; }
 
 /* ── ANİMASYON ── */
 @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }

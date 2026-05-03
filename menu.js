@@ -13,6 +13,12 @@ const MENU_ITEMS = [
   { label: "Kulüp Dosyaları",      href: "kulup-dosyalari.html" },
 ];
 
+// ── TEMA — localStorage'dan oku, hemen uygula (flash önleme) ──
+(function () {
+  const saved = localStorage.getItem('th-theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+})();
+
 (function () {
   const current = window.location.pathname.split("/").pop() || "index.html";
 
@@ -57,4 +63,27 @@ const MENU_ITEMS = [
       });
     });
   }
+
+  // ── TEMA TOGGLE BUTONU ──
+  const toggle = document.createElement("button");
+  toggle.id = "theme-toggle";
+  toggle.title = "Gece / Gündüz modu";
+  toggle.setAttribute("aria-label", "Gece veya gündüz moduna geç");
+
+  function getTheme() {
+    return document.documentElement.getAttribute("data-theme") || "light";
+  }
+  function setIcon() {
+    toggle.textContent = getTheme() === "dark" ? "☀" : "☾";
+  }
+  setIcon();
+
+  toggle.addEventListener("click", function () {
+    const next = getTheme() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("th-theme", next);
+    setIcon();
+  });
+
+  document.body.appendChild(toggle);
 })();
