@@ -495,21 +495,22 @@ document.querySelectorAll('.toggle-sol').forEach(function(btn){
 
   // TİP 1: Eş mi değil mi?
   var esHavuz=[
-    { soru:'Kenarları 3,4,5 ve 3,4,5 cm olan iki üçgen eş midir?', dogru:'Eş', expl:'Tüm karşılıklı kenarlar eşit → Eştirler.' },
-    { soru:'Kenarları 3,4,5 ve 6,8,10 cm olan iki üçgen eş midir?', dogru:'Eş değil', expl:'Kenarlar eşit değil, orantılı → Eş değil, benzer.' },
-    { soru:'3×5 cm ve 5×3 cm boyutlarındaki iki dikdörtgen eş midir?', dogru:'Eş', expl:'Aynı kenar uzunlukları → Eştirler (döndürülmüş hali).' },
-    { soru:'Tüm kenarları 4 cm olan iki kare eş midir?', dogru:'Eş', expl:'Tüm kenarlar eşit, tüm açılar 90° → Eştirler.' },
-    { soru:'Kenarları 4 cm ve 6 cm olan iki kare eş midir?', dogru:'Eş değil', expl:'Kenar uzunlukları farklı → Eş değil (benzer ancak).' },
-    { soru:'Açıları 60°,60°,60° ve 60°,60°,60° olan iki üçgen eş midir?', dogru:'Eş olmak zorunda değil', expl:'Açılar eşit ama kenarlar farklı olabilir → Eşlik için kenar bilgisi de gerekir.' }
+    { soru:'Kenarları 3, 4, 5 ve 3, 4, 5 cm olan iki üçgen eş midir?', dogru:'Eş',
+      expl:'Tüm karşılıklı kenarlar eşit → Eştirler.' },
+    { soru:'Kenarları 3, 4, 5 ve 6, 8, 10 cm olan iki üçgen eş midir?', dogru:'Eş değil',
+      expl:'Kenarlar eşit değil, orantılı → Eş değil, benzerler.' },
+    { soru:'3×5 cm ve 5×3 cm boyutlarındaki iki dikdörtgen eş midir?', dogru:'Eş',
+      expl:'Aynı kenar uzunlukları → Eştirler (biri döndürülmüş hali).' },
+    { soru:'Tüm kenarları 4 cm olan iki kare eş midir?', dogru:'Eş',
+      expl:'Tüm kenarlar eşit, tüm açılar 90° → Eştirler.' },
+    { soru:'Kenar uzunlukları 4 cm ve 6 cm olan iki farklı kare eş midir?', dogru:'Eş değil',
+      expl:'Kenar uzunlukları farklı → Eş değiller (benzer ancak, çünkü tüm karelerin açıları 90°\'dir).' },
+    { soru:'Kenarları 5, 5, 5 ve 5, 5, 5 cm olan iki eşkenar üçgen eş midir?', dogru:'Eş',
+      expl:'Tüm kenarlar eşit, eşkenar üçgenlerin açıları da 60° → Eştirler.' }
   ];
   function tip1(){
     var h=esHavuz[randInt(0,esHavuz.length-1)];
-    var opts;
-    if(h.dogru==='Eş olmak zorunda değil'){
-      opts=shuffle(['Eş','Eş değil','Eş olmak zorunda değil','Benzer de değil']).map(function(v){return {label:v,correct:v===h.dogru};});
-    } else {
-      opts=shuffle(['Eş','Eş değil','Bilgi yetersiz','Benzer de değil']).map(function(v){return {label:v,correct:v===h.dogru};});
-    }
+    var opts=shuffle(['Eş','Eş değil','Bilgi yetersiz','Ne eş ne benzer']).map(function(v){return {label:v,correct:v===h.dogru};});
     return { text:h.soru, svg:null, choices:opts, expl:h.expl };
   }
 
@@ -547,11 +548,21 @@ document.querySelectorAll('.toggle-sol').forEach(function(btn){
 
   // TİP 4: Eşlik mi benzerlik mi?
   var karsiHavuz=[
-    { durum:'Açıları eşit ama kenarları farklı boyutlarda olan iki dikdörtgen', dogru:'Sadece benzer', expl:'Açılar eşit, kenarlar orantılı ama eşit değil → Sadece benzer.' },
-    { durum:'Tüm kenarları ve açıları birebir aynı olan iki beşgen', dogru:'Hem eş hem benzer', expl:'Eş şekiller aynı zamanda benzerdir (k=1).' },
-    { durum:'Kenarları 2 katı olan iki benzer üçgen', dogru:'Sadece benzer', expl:'k=2 → kenarlar eşit değil → Sadece benzer, eş değil.' },
-    { durum:'Birebir aynı boyutlarda iki kare', dogru:'Hem eş hem benzer', expl:'Tüm kenarlar ve açılar eşit → Hem eş hem benzer.' },
-    { durum:'Kenar oranları eşit olmayan iki dörtgen', dogru:'Ne eş ne benzer', expl:'Kenar oranları eşit değilse ne eşlik ne benzerlik var.' }
+    { durum:'Karşılıklı kenarları orantılı (k=2) ama eşit olmayan iki dikdörtgen',
+      dogru:'Sadece benzer',
+      expl:'Kenarlar orantılı, açılar eşit ama kenarlar eşit değil → Sadece benzer.' },
+    { durum:'Tüm kenarları ve açıları birebir aynı olan iki beşgen',
+      dogru:'Hem eş hem benzer',
+      expl:'Eş şekiller aynı zamanda benzerdir (k=1).' },
+    { durum:'Karşılıklı kenarları 3 katı orantılı olan iki üçgen',
+      dogru:'Sadece benzer',
+      expl:'k=3 → kenarlar orantılı ama eşit değil → Sadece benzer, eş değil.' },
+    { durum:'Birebir aynı boyutlarda iki kare',
+      dogru:'Hem eş hem benzer',
+      expl:'Tüm kenarlar ve açılar eşit → Hem eş hem benzer.' },
+    { durum:'Karşılıklı kenar oranları birbirine eşit olmayan iki dörtgen',
+      dogru:'Ne eş ne benzer',
+      expl:'Kenar oranları eşit değilse ne eşlik ne benzerlik var.' }
   ];
   function tip4(){
     var h=karsiHavuz[randInt(0,karsiHavuz.length-1)];
