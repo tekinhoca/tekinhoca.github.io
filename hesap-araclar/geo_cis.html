@@ -150,6 +150,7 @@ label.field-label{display:block;font-size:0.78rem;font-weight:600;color:var(--te
 .empty-state{text-align:center;padding:40px 20px;color:var(--text-dim);}
 .empty-state .big-icon{font-size:3rem;margin-bottom:10px;}
 .empty-state p{font-size:0.9rem;line-height:1.6;}
+.el-c{font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:600;}
 </style>
 </head>
 <body>
@@ -168,13 +169,13 @@ label.field-label{display:block;font-size:0.78rem;font-weight:600;color:var(--te
       <div class="sec-title">Temel Kavramlar</div>
       <div class="rule-item" style="border-color:var(--accent);">
         <strong>Yüzey Alanı:</strong> Cismin dış yüzeyinin kapladığı alandır.
-<br>Birimler <strong>cm², m²</strong>, ...
+<br>Birimler <strong>mm², cm², dm², m²</strong>, ...
         <br>Toplam yüzey alanı =
 <br><em>Yanal yüzey alanı</em> + <em>taban alan(lar)ı</em>
       </div>
       <div class="rule-item" style="border-color:var(--accent2);">
         <strong>Hacim:</strong> Cismin kapladığı iç uzay miktarıdır.
-<br>Birimler <strong>cm³, m³</strong>, ,,.
+<br>Birimler <strong>mm³, cm³, dm³, m³</strong>, ...
       </div>
       <div class="rule-item" style="border-color:var(--accent3);">
         <strong>Dik Prizma:</strong> Yanal ayrıtlar tabana diktir.<br>
@@ -234,7 +235,7 @@ yanal yüzey bir dikdörtgendir.<br>
           <div class="shape-card koni" onclick="goPage('koni')">
             <div class="sc-icon">🍦</div>
             <div class="sc-title">Dik Koni</div>
-            <div class="sc-sub">r · h · l · açı ilişkileri</div>
+            <div class="sc-sub">r · h · a · α ilişkileri</div>
           </div>
           <div class="shape-card silindir" onclick="goPage('silindir')">
             <div class="sc-icon">🥫</div>
@@ -274,7 +275,7 @@ yanal yüzey bir dikdörtgendir.<br>
         <div class="subshape-row">
           <button class="subshape-btn active" id="btn-prizma-dikdortgen" onclick="selectPrizma('dikdortgen')">Dikdörtgen Taban</button>
           <button class="subshape-btn" id="btn-prizma-kare" onclick="selectPrizma('kare')">Kare Taban</button>
-          <button class="subshape-btn" id="btn-prizma-dutgen" onclick="selectPrizma('dutgen')">Düzgün Üçgen Taban</button>
+          <button class="subshape-btn" id="btn-prizma-dutgen" onclick="selectPrizma('dutgen')">Eşkenar Üçgen Taban</button>
           <button class="subshape-btn" id="btn-prizma-altigen" onclick="selectPrizma('altigen')">Düzgün Altıgen Taban</button>
         </div>
         <div id="form-prizma-dikdortgen">
@@ -325,7 +326,7 @@ yanal yüzey bir dikdörtgendir.<br>
         <div class="subshape-row">
           <button class="subshape-btn active" id="btn-pir-kare" onclick="selectPiramit('kare')">Kare Taban</button>
           <button class="subshape-btn" id="btn-pir-dikdortgen" onclick="selectPiramit('dikdortgen')">Dikdörtgen Taban</button>
-          <button class="subshape-btn" id="btn-pir-dutgen" onclick="selectPiramit('dutgen')">Düzgün Üçgen Taban</button>
+          <button class="subshape-btn" id="btn-pir-dutgen" onclick="selectPiramit('dutgen')">Eşkenar Üçgen Taban</button>
         </div>
         <div id="pir-form-container"></div>
         <div class="input-group" style="margin-top:10px;max-width:160px;"><label>Birim</label><select class="unit-sel" id="pir-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
@@ -526,17 +527,36 @@ function showShapeInfo(type) {
       <tr><td>Hacim</td><td>Taban Alanı × h</td></tr>
     </table><div class="hierarchy-note">📌 Kare tabanlı prizma h=a ise küpe dönüşür.</div>` },
     piramit: { t:'Dik Piramit Formülleri', c:`<table class="prop-table">
-      <tr><td>Yanal Yüzey Alanı</td><td>(Taban Çevresi × l) / 2</td></tr>
-      <tr><td>Toplam Yüzey Alanı</td><td>Yanal + Taban</td></tr>
-      <tr><td>Hacim</td><td>(Taban Alanı × h) / 3</td></tr>
-      <tr><td>Pisagor</td><td>l² = (a/2)² + h²</td></tr>
-    </table><div class="hierarchy-note">📌 l: ana doğru (apothem değil, yüzeyin ortasından tepeye).</div>` },
+      <tr><td>Taban Alanı</td><td>TA<br>
+kare: a²<br>
+üçgen: (a²√3)/4</td></tr>
+      <tr><td>Yanal Yüzey Alanı</td><td>YA<br>
+kare: 2a<span class="el-c">l</span><br>
+dikdörtgen:<br>
+a(<span class="el-c">l</span>a)+b(<span class="el-c">l</span>b)</td></tr>
+      <tr><td>Toplam Yüzey Alanı</td><td>TA + YA</td></tr>
+      <tr><td>Hacim</td><td>(TA × h) / 3</td></tr>
+    </table>
+    <div class="hierarchy-note" style="margin-top:8px;">
+<strong>Pisagor Bağıntıları</strong>:<br>
+      📌 <strong><span class="el-c">l</span></strong>: yan yüz yüksekliği<br>
+      📌 <strong>b</strong>: yan yüz ayrıtı<br>
+      Kare:<br>
+<span class="el-c">l</span>²=(a/2)²+h²<br>
+b²=(a/2)²+<span class="el-c">l</span>²<br>
+      Dikdörtgen:<br>
+(<span class="el-c">l</span>a)²=(b/2)²+h²<br>
+(<span class="el-c">l</span>b)²=(a/2)²+h²<br>
+      Eşkenar üçgen:<br>
+<span class="el-c">l</span>²=k₂²+h²<br>
+b²=k₁²+h²
+    </div>` },
     koni: { t:'Dik Koni Formülleri', c:`<table class="prop-table">
       <tr><td>Yanal Yüzey Alanı</td><td>πra</td></tr>
       <tr><td>Toplam Yüzey Alanı</td><td>πr(r + a)</td></tr>
       <tr><td>Hacim</td><td>πr²h / 3</td></tr>
       <tr><td>Pisagor</td><td>a² = r² + h²</td></tr>
-      <tr><td>Merkez Açısı (α)</td><td>α = (r/a) × 360°</td></tr>
+      <tr><td>Merkez Açısı (α)</td><td>(r/a).360°</td></tr>
     </table>` },
     silindir: { t:'Dik Silindir Formülleri', c:`<table class="prop-table">
       <tr><td>Yanal Yüzey Alanı</td><td>2πrh</td></tr>
@@ -546,8 +566,8 @@ function showShapeInfo(type) {
     kure: { t:'Küre Formülleri', c:`<table class="prop-table">
       <tr><td>Yüzey Alanı</td><td>4πr²</td></tr>
       <tr><td>Hacim</td><td>(4/3)πr³</td></tr>
-      <tr><td>Çap</td><td>d = 2r</td></tr>
-    </table><div class="hierarchy-note">📌 Kürenin yüzey alanı = aynı yarıçaplı 4 dairenin alanı.</div>` },
+      <tr><td>Çap</td><td>R = 2r</td></tr>
+    </table><div class="hierarchy-note">📌 Kürenin yüzey alanı, aynı yarıçaplı 4 dairenin alanları toplamına eşittir.</div>` },
   };
   const info = infos[type] || {t:'Bilgi',c:''};
   title.textContent = info.t;
@@ -583,7 +603,7 @@ function resetPage(page) {
   const ids = {
     kup: ['kup-a'],
     prizma: ['pd-a','pd-b','pd-h','pk-a','pk-h','put-a','put-h','pa-a','pa-h'],
-    piramit: ['pir-a','pir-b','pir-h','pir-l','pir-la','pir-lb'],
+    piramit: ['pir-a','pir-b','pir-h','pir-l','pir-la','pir-lb','pir-c','pir-b-kare','pir-b-esk'],
     koni: ['koni-r','koni-h','koni-l'],
     silindir: ['sil-r','sil-h'],
     kure: ['kure-r'],
@@ -714,7 +734,7 @@ function calcPrizma() {
     yanal=tabanCevre*h; toplam=yanal+2*tabanAlan; hacim=tabanAlan*h;
     const sd=sqrtDisp(3*a*a/4*4); // a²×√3/4 → görüntü için
     const tabanStr = `${fmtN(a)}²√3/4 = ${fmtN(a*a)}√3/4`;
-    title='Düzgün Üçgen Tabanlı Dik Prizma';
+    title='Eşkenar Üçgen Tabanlı Dik Prizma';
     steps=`
       <div class="step-section">Taban (Eşkenar Üçgen)</div>
       <div class="step"><strong>Taban Alanı:</strong> A_t = a²√3/4 = ${tabanStr} ≈ <strong>${fmtR2(tabanAlan)} ${u2}</strong></div>
@@ -770,46 +790,40 @@ function selectPiramit(type) {
   document.getElementById('btn-pir-'+type).classList.add('active');
   document.getElementById('piramit-result').innerHTML='';
   hideErr('piramit-error');
+  document.querySelectorAll('.pis-calc').forEach(el=>{el.classList.remove('pis-calc');el.readOnly=false;el.value='';});
 
   const container = document.getElementById('pir-form-container');
 
   if (type==='kare') {
+    // Kare: a, h, <span class="el-c">l</span>, b — herhangi ikisini gir
     container.innerHTML = `
-      <div class="input-grid" style="margin-top:10px;">
+      <div class="hint" style="margin-bottom:8px;">💡 a, h, <span class="el-c">l</span> (yan yüz yüksekliği) ve b (yan yüz ayrıtı) değerlerinden <strong>herhangi ikisini</strong> girin.</div>
+      <div class="input-grid" style="margin-top:6px;">
         <div class="input-group"><label>a — taban kenarı</label><input type="number" id="pir-a" placeholder="örn: 6" min="0.01" step="any"></div>
-        <div class="input-group">
-          <label>h — yükseklik &nbsp;<em>veya</em>&nbsp; l — yan yüz ayrıtı</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
-            <div class="input-group"><label style="font-size:0.72rem;color:var(--accent3);">h — yükseklik</label><input type="number" id="pir-h" placeholder="örn: 4" min="0.01" step="any"></div>
-            <div class="input-group"><label style="font-size:0.72rem;color:var(--piramit-c);">l — yan yüz ayrıtı</label><input type="number" id="pir-l" placeholder="örn: 5" min="0.01" step="any"></div>
-          </div>
-        </div>
-      </div>
-      <div class="hint">💡 h (yükseklik) <strong>veya</strong> l (yan yüz ayrıtı) girin — ikisinden biri yeterli. İkisini birden girerseniz h öncelikli kullanılır.</div>`;
+        <div class="input-group"><label>h — cisim yüksekliği</label><input type="number" id="pir-h" placeholder="örn: 4" min="0.01" step="any"></div>
+        <div class="input-group"><label><span class="el-c">l</span> — yan yüz yüksekliği</label><input type="number" id="pir-l" placeholder="örn: 5" min="0.01" step="any"></div>
+        <div class="input-group"><label>b — yan yüz ayrıtı</label><input type="number" id="pir-b-kare" placeholder="örn: 5,83" min="0.01" step="any"></div>
+      </div>`;
   } else if (type==='dikdortgen') {
+    // Dikdörtgen: a ve b zorunlu, h veya c'den biri
     container.innerHTML = `
-      <div class="input-grid-3" style="margin-top:10px;">
-        <div class="input-group"><label>a — uzun kenar</label><input type="number" id="pir-a" placeholder="örn: 8" min="0.01" step="any"></div>
-        <div class="input-group"><label>b — kısa kenar</label><input type="number" id="pir-b" placeholder="örn: 6" min="0.01" step="any"></div>
-        <div class="input-group"></div>
-        <div class="input-group"><label style="color:var(--accent3);">h — yükseklik</label><input type="number" id="pir-h" placeholder="örn: 5" min="0.01" step="any"></div>
-        <div class="input-group"><label style="color:var(--piramit-c);">l_a — a yüzü ayrıtı</label><input type="number" id="pir-la" placeholder="h varsa hesaplanır" min="0.01" step="any"></div>
-        <div class="input-group"><label style="color:var(--piramit-c);">l_b — b yüzü ayrıtı</label><input type="number" id="pir-lb" placeholder="h varsa hesaplanır" min="0.01" step="any"></div>
-      </div>
-      <div class="hint">💡 h girilirse l_a ve l_b otomatik hesaplanır. Alternatif: h yerine l_a <strong>ve</strong> l_b girin; h Pisagordan hesaplanır.</div>`;
-  } else { // dutgen
+      <div class="hint" style="margin-bottom:8px;">💡 a ve b taban kenarlarını girin. Ardından h (cisim yüksekliği) <strong>veya</strong> c (yan yüz ayrıtı) girin.</div>
+      <div class="input-grid-3" style="margin-top:6px;">
+        <div class="input-group"><label>a — taban kenarı (uzun)</label><input type="number" id="pir-a" placeholder="örn: 8" min="0.01" step="any"></div>
+        <div class="input-group"><label>b — taban kenarı (kısa)</label><input type="number" id="pir-b" placeholder="örn: 6" min="0.01" step="any"></div>
+        <div class="input-group"><label>h — cisim yüksekliği</label><input type="number" id="pir-h" placeholder="h veya c girin" min="0.01" step="any"></div>
+        <div class="input-group"><label>c — yan yüz ayrıtı</label><input type="number" id="pir-c" placeholder="h veya c girin" min="0.01" step="any"></div>
+      </div>`;
+  } else { // dutgen = eşkenar üçgen
+    // Eşkenar: a, h, <span class="el-c">l</span>, b — herhangi ikisi
     container.innerHTML = `
-      <div class="input-grid" style="margin-top:10px;">
+      <div class="hint" style="margin-bottom:8px;">💡 a, h, <span class="el-c">l</span> (yan yüz yüksekliği) ve b (yan yüz ayrıtı) değerlerinden <strong>herhangi ikisini</strong> girin.</div>
+      <div class="input-grid" style="margin-top:6px;">
         <div class="input-group"><label>a — taban kenarı</label><input type="number" id="pir-a" placeholder="örn: 6" min="0.01" step="any"></div>
-        <div class="input-group">
-          <label>h — yükseklik &nbsp;<em>veya</em>&nbsp; l — yan yüz ayrıtı</label>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
-            <div class="input-group"><label style="font-size:0.72rem;color:var(--accent3);">h — yükseklik</label><input type="number" id="pir-h" placeholder="örn: 4" min="0.01" step="any"></div>
-            <div class="input-group"><label style="font-size:0.72rem;color:var(--piramit-c);">l — yan yüz ayrıtı</label><input type="number" id="pir-l" placeholder="örn: 5" min="0.01" step="any"></div>
-          </div>
-        </div>
-      </div>
-      <div class="hint">💡 h (yükseklik) <strong>veya</strong> l (yan yüz ayrıtı) girin — ikisinden biri yeterli.</div>`;
+        <div class="input-group"><label>h — cisim yüksekliği</label><input type="number" id="pir-h" placeholder="örn: 4" min="0.01" step="any"></div>
+        <div class="input-group"><label><span class="el-c">l</span> — yan yüz yüksekliği</label><input type="number" id="pir-l" placeholder="örn: 4,36" min="0.01" step="any"></div>
+        <div class="input-group"><label>b — yan yüz ayrıtı</label><input type="number" id="pir-b-esk" placeholder="örn: 5,29" min="0.01" step="any"></div>
+      </div>`;
   }
 }
 
@@ -872,168 +886,235 @@ function pirPisagor(type) {
 function calcPiramit() {
   hideErr('piramit-error');
   const unit = document.getElementById('pir-unit').value;
-  const u2=unit+'²', u3=unit+'³';
+  const u2=unit+'\u00b2', u3=unit+'\u00b3';
   const t = currentPiramit;
-  let steps='', title='', cards=[];
+  const EPS = 1e-9;
 
-  // ── YARDIMCI: h veya l'den diğerini hesapla
-  function resolveHL(h_in, l_in, half_kenar) {
-    // half_kenar: kare için a/2, dikdortgen için a/2 veya b/2, dutgen için a√3/3=a/√3
-    const hOk=h_in>0, lOk=l_in>0;
-    if (hOk && lOk) return {h:h_in, l:l_in, src:'ikisi de girildi'};
-    if (hOk && !lOk) {
-      const l=Math.sqrt(h_in*h_in + half_kenar*half_kenar);
-      return {h:h_in, l, src:'l hesaplandı'};
-    }
-    if (!hOk && lOk) {
-      const hk2=l_in*l_in - half_kenar*half_kenar;
-      if (hk2<=0) return null;
-      return {h:Math.sqrt(hk2), l:l_in, src:'h hesaplandı'};
-    }
-    return null;
-  }
+  const gv = id => { const el=document.getElementById(id); return el ? parseFloat(el.value)||0 : 0; };
+  const ok  = v => v > EPS;
+  const FR  = fmtR2;
+  const FN  = fmtN;
+  // köklü gösterim için sqrtDisp
+  const SD  = n => sqrtDisp(n);
 
-  if (t==='kare') {
-    const a=getVal('pir-a'), h_in=getVal('pir-h'), l_in=getVal('pir-l');
-    if (!(a>0)) {showErr('piramit-error','Taban kenarı (a) giriniz.');return;}
-    const res=resolveHL(h_in, l_in, a/2);
-    if (!res) {showErr('piramit-error','h (yükseklik) veya l (yan yüz ayrıtı) giriniz. l, a/2\'den büyük olmalı.');return;}
-    const {h,l} = res;
-    // Yan yüz yüksekliği (apothem) = √(l²-(a/2)²) = h (aynı şey kare taban için)
-    // Yanal alan: 4 × (1/2 × a × apothem) = 4 × (1/2 × a × h_yuz) burada h_yuz = apothem = l değil
-    // NOT: yan yüz ayrıtı l = ikizkenar üçgenin eşit kenarı
-    // Yanal yüzler: 4 eşkenar değil ikizkenar üçgen, taban a, iki eş kenar l
-    // Üçgenin yüksekliği (apothem) = √(l²-(a/2)²)
-    const apothem=Math.sqrt(l*l-(a/2)**2);
-    const taban=a*a, cevre=4*a;
-    const yanal=(cevre*apothem)/2, toplam=yanal+taban, hacim=taban*h/3;
-    const prizmaHacim=taban*h;
-    title='Kare Tabanlı Dik Piramit';
-    cards=[
-      {cls:'yanal', label:'Yanal Yüzey Alanı', val:fmtR2(yanal),  unit:u2},
-      {cls:'toplam',label:'Toplam Yüzey Alanı',val:fmtR2(toplam), unit:u2},
-      {cls:'hacim', label:'Hacim',              val:fmtR2(hacim),  unit:u3},
+  if (t === 'kare') {
+    // Değişkenler: a, h, <span class="el-c">l</span>(l), b(bk)
+    let a=gv('pir-a'), h=gv('pir-h'), l=gv('pir-l'), bk=gv('pir-b-kare');
+    const given = [ok(a),ok(h),ok(l),ok(bk)].filter(Boolean).length;
+    if (!ok(a) && given<2) { showErr('piramit-error','En az iki değer girin.'); return; }
+
+    // Dört bilinmeyenden ikisi ile diğerlerini bul
+    // İlişkiler: <span class="el-c">l</span>²=(a/2)²+h²,  b²=(a/2)²+<span class="el-c">l</span>²,  b²=(k/2)²+h²=(a/2)²*2+h² (k=a√2)
+    // Çözüm sırası: bilinen ikiden diğer ikisini hesapla
+    let resolved = false;
+    // a ve h → <span class="el-c">l</span>, b
+    if (ok(a)&&ok(h)&&!ok(l)&&!ok(bk)) {
+      l=Math.sqrt((a/2)**2+h**2); bk=Math.sqrt((a/2)**2+l**2); resolved=true;
+    }
+    // a ve <span class="el-c">l</span> → h, b
+    else if (ok(a)&&ok(l)&&!ok(h)&&!ok(bk)) {
+      const hk=(a/2)**2; if(l**2<=hk){showErr('piramit-error','<span class="el-c">l</span>, a/2\'den büyük olmalı.');return;}
+      h=Math.sqrt(l**2-(a/2)**2); bk=Math.sqrt((a/2)**2+l**2); resolved=true;
+    }
+    // a ve b → <span class="el-c">l</span>, h
+    else if (ok(a)&&ok(bk)&&!ok(h)&&!ok(l)) {
+      if(bk**2<=(a/2)**2){showErr('piramit-error','b, a/2\'den büyük olmalı.');return;}
+      l=Math.sqrt(bk**2-(a/2)**2); h=Math.sqrt(l**2-(a/2)**2); resolved=true;
+    }
+    // h ve <span class="el-c">l</span> → a, b  (a/2=√(<span class="el-c">l</span>²-h²))
+    else if (ok(h)&&ok(l)&&!ok(a)&&!ok(bk)) {
+      if(l**2<=h**2){showErr('piramit-error','<span class="el-c">l</span>, h\'den büyük olmalı.');return;}
+      a=2*Math.sqrt(l**2-h**2); bk=Math.sqrt((a/2)**2+l**2); resolved=true;
+    }
+    // h ve b → a, <span class="el-c">l</span>  (b²=(a/2)²+<span class="el-c">l</span>², <span class="el-c">l</span>²=(a/2)²+h²  →  b²=2(a/2)²+h² → (a/2)²=(b²-h²)/2)
+    else if (ok(h)&&ok(bk)&&!ok(a)&&!ok(l)) {
+      const akh=(bk**2-h**2)/2; if(akh<=0){showErr('piramit-error','Geçersiz b ve h kombinasyonu.');return;}
+      a=2*Math.sqrt(akh); l=Math.sqrt((a/2)**2+h**2); resolved=true;
+    }
+    // <span class="el-c">l</span> ve b → a, h
+    else if (ok(l)&&ok(bk)&&!ok(a)&&!ok(h)) {
+      if(bk**2<=l**2){showErr('piramit-error','b, <span class="el-c">l</span>\'den büyük olmalı.');return;}
+      a=2*Math.sqrt(bk**2-l**2); h=Math.sqrt(l**2-(a/2)**2); resolved=true;
+    }
+    else if (ok(a)&&ok(h)&&ok(l)&&ok(bk)) { resolved=true; } // hepsi girilmiş
+    else { showErr('piramit-error','En az iki değer girin.'); return; }
+
+    if(!ok(a)||!ok(h)||!ok(l)||!ok(bk)){showErr('piramit-error','Değerler tutarsız veya yetersiz.');return;}
+
+    const k  = a*Math.sqrt(2);
+    const TA = a*a;
+    const YA = 2*a*l;
+    const A  = TA+YA;
+    const V  = a*a*h/3;
+
+    const cards=[
+      {cls:'yanal', label:'Yanal Yüzey Alanı', val:FR(YA),  unit:u2},
+      {cls:'toplam',label:'Toplam Yüzey Alanı',val:FR(A),   unit:u2},
+      {cls:'hacim', label:'Hacim',              val:FR(V),   unit:u3},
     ];
-    steps=`
-      <div class="step-section">Pisagor — Eksik Değer Hesabı</div>
-      <div class="step">l² = (a/2)² + h² &nbsp;→&nbsp; ${fmtR2(l)}² = ${fmtR2(a/2)}² + ${fmtR2(h)}²</div>
-      <div class="step">${res.src==='l hesaplandı'?`<strong>l (yan yüz ayrıtı)</strong> = √((a/2)²+h²) = √(${fmtR2((a/2)**2)}+${fmtR2(h*h)}) = <strong>${fmtR2(l)} ${unit}</strong>`:`<strong>h (yükseklik)</strong> = √(l²-(a/2)²) = √(${fmtR2(l*l)}-${fmtR2((a/2)**2)}) = <strong>${fmtR2(h)} ${unit}</strong>`}</div>
-      <div class="step">Yan yüz yüksekliği (apothem) = √(l²-(a/2)²) = <strong>${fmtR2(apothem)} ${unit}</strong></div>
-      <div class="step" style="margin-top:12px;"><div class="step-section">Yüzey Alanı</div></div>
-      <div class="step"><strong>Taban Alanı:</strong> a² = ${fmtN(a)}² = <strong>${fmtN(taban)} ${u2}</strong></div>
-      <div class="step"><strong>Yanal Yüzey Alanı:</strong> (4a × apothem)/2 = (${fmtN(cevre)} × ${fmtR2(apothem)})/2 = <strong>${fmtR2(yanal)} ${u2}</strong></div>
-      <div class="step"><strong>Toplam Yüzey Alanı:</strong> ${fmtR2(yanal)} + ${fmtN(taban)} = <strong>${fmtR2(toplam)} ${u2}</strong></div>
-      <div class="step" style="margin-top:12px;"><div class="step-section">Hacim</div></div>
-      <div class="step"><strong>Hacim:</strong> (a² × h)/3 = (${fmtN(taban)} × ${fmtR2(h)})/3 = <strong>${fmtR2(hacim)} ${u3}</strong></div>
-      <div style="margin-top:14px;padding:10px 14px;background:rgba(231,111,81,0.07);border:1px solid rgba(231,111,81,0.25);border-left:3px solid var(--piramit-c);border-radius:7px;font-size:0.8rem;color:var(--text-dim);">
-        ℹ️ Bir kare piramitin hacmi, aynı tabana ve yüksekliğe sahip <strong>kare prizma</strong>nın hacminin <strong>1/3</strong>'üne eşittir.
+    const steps=`
+      <div class="step-section">Değişkenler</div>
+      <div class="step">a = ${FN(a)} ${unit} (taban kenarı) &nbsp;|&nbsp; h = ${FR(h)} ${unit} (cisim yüksekliği)</div>
+      <div class="step"><span class="el-c">l</span> = ${FR(l)} ${unit} (yan yüz yüksekliği) &nbsp;|&nbsp; b = ${FR(bk)} ${unit} (yan yüz ayrıtı)</div>
+      <div class="step">k = a√2 = ${FR(a)}×√2 = <strong>${FR(k)} ${unit}</strong> (taban köşegeni)</div>
+      <div class="step-section">Pisagor Bağıntıları (Doğrulama)</div>
+      <div class="step"><span class="el-c">l</span>² = (a/2)² + h² → ${FR(l)}² = ${FR(a/2)}² + ${FR(h)}² → ${FR(l*l)} ≈ ${FR((a/2)**2+h**2)} ${Math.abs(l*l-(a/2)**2-h**2)<0.1?'✓':''}</div>
+      <div class="step">b² = (a/2)² + <span class="el-c">l</span>² → ${FR(bk)}² = ${FR(a/2)}² + ${FR(l)}² → ${FR(bk*bk)} ≈ ${FR((a/2)**2+l*l)} ${Math.abs(bk*bk-(a/2)**2-l*l)<0.1?'✓':''}</div>
+      <div class="step-section">Yüzey Alanı</div>
+      <div class="step"><strong>Taban Alanı:</strong> TA = a² = ${FN(a)}² = <strong>${FN(TA)} ${u2}</strong></div>
+      <div class="step"><strong>Yanal Alan:</strong> YA = 4 × (a × <span class="el-c">l</span> / 2) = 2a<span class="el-c">l</span> = 2 × ${FN(a)} × ${FR(l)} = <strong>${FR(YA)} ${u2}</strong></div>
+      <div class="step"><strong>Toplam Yüzey Alanı:</strong> A = TA + YA = a(b + 2<span class="el-c">l</span>) = ${FN(a)}(${FR(bk)} + 2×${FR(l)}) = ${FN(a)} × ${FR(bk+2*l)} = <strong>${FR(A)} ${u2}</strong></div>
+      <div class="step-section">Hacim</div>
+      <div class="step"><strong>Hacim:</strong> V = a²×h / 3 = ${FN(TA)} × ${FR(h)} / 3 = <strong>${FR(V)} ${u3}</strong></div>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(231,111,81,0.07);border-left:3px solid var(--piramit-c);border-radius:7px;font-size:0.8rem;color:var(--text-dim);">
+        ℹ️ Bu kare piramitin hacmi, aynı tabana ve yüksekliğe sahip kare prizmanın hacminin (V_prizma = ${FR(TA*h)} ${u3}) <strong>1/3</strong>'üne eşittir.
       </div>`;
+    renderResult('piramit-result','Kare Tabanlı Dik Piramit',cards,steps,'var(--piramit-c)');
 
-  } else if (t==='dikdortgen') {
-    const a=getVal('pir-a'), b=getVal('pir-b'), h_in=getVal('pir-h');
-    const la_in=getVal('pir-la'), lb_in=getVal('pir-lb');
-    if (!(a>0&&b>0)) {showErr('piramit-error','a ve b kenarlarını giriniz.');return;}
+  } else if (t === 'dikdortgen') {
+    // a ve b zorunlu; h veya c'den biri
+    let a=gv('pir-a'), b=gv('pir-b'), h=gv('pir-h'), c=gv('pir-c');
+    if (!ok(a)||!ok(b)) { showErr('piramit-error','a ve b taban kenarlarını girin.'); return; }
+    if (!ok(h)&&!ok(c)) { showErr('piramit-error','h (cisim yüksekliği) veya c (yan yüz ayrıtı) girin.'); return; }
 
-    let h, la, lb, srcH='';
-    if (h_in>0) {
-      h=h_in;
-      la=Math.sqrt((a/2)**2+h*h);
-      lb=Math.sqrt((b/2)**2+h*h);
-      srcH='h girildi';
-    } else if (la_in>0 && lb_in>0) {
-      // h'yi ikisinden hesapla (ortalama veya tutarlılık kontrolü)
-      const h_from_la=Math.sqrt(la_in*la_in-(a/2)**2);
-      const h_from_lb=Math.sqrt(lb_in*lb_in-(b/2)**2);
-      if (Math.abs(h_from_la-h_from_lb)>0.01) {
-        showErr('piramit-error',`l_a ve l_b tutarsız (h_a=${fmtR2(h_from_la)}, h_b=${fmtR2(h_from_lb)}). Değerleri kontrol edin.`);return;
-      }
-      h=(h_from_la+h_from_lb)/2; la=la_in; lb=lb_in;
-      srcH='h hesaplandı';
-    } else if (la_in>0) {
-      const hk=la_in*la_in-(a/2)**2; if(hk<=0){showErr('piramit-error','l_a, a/2\'den büyük olmalı.');return;}
-      h=Math.sqrt(hk); la=la_in; lb=Math.sqrt((b/2)**2+h*h); srcH='h, l_a\'dan hesaplandı';
-    } else if (lb_in>0) {
-      const hk=lb_in*lb_in-(b/2)**2; if(hk<=0){showErr('piramit-error','l_b, b/2\'den büyük olmalı.');return;}
-      h=Math.sqrt(hk); lb=lb_in; la=Math.sqrt((a/2)**2+h*h); srcH='h, l_b\'den hesaplandı';
+    // <span class="el-c">l</span>a²=(b/2)²+h², <span class="el-c">l</span>b²=(a/2)²+h², c²=(a/2)²+<span class="el-c">l</span>a²=(b/2)²+<span class="el-c">l</span>b²=(k/2)²+h²
+    let la, lb;
+    if (ok(h)) {
+      la=Math.sqrt((b/2)**2+h**2);
+      lb=Math.sqrt((a/2)**2+h**2);
+      if (!ok(c)) c=Math.sqrt((a/2)**2+la**2);
     } else {
-      showErr('piramit-error','h (yükseklik) veya yan yüz ayrıtlarından (l_a, l_b) en az birini giriniz.');return;
+      // c girilmiş, h yok → c²=(k/2)²+h² → h=√(c²-(k/2)²) k=√(a²+b²)
+      const k2=Math.sqrt(a**2+b**2);
+      const hk=c**2-(k2/2)**2;
+      if(hk<=0){showErr('piramit-error','c değeri taban köşegeninin yarısından büyük olmalı.');return;}
+      h=Math.sqrt(hk);
+      la=Math.sqrt((b/2)**2+h**2);
+      lb=Math.sqrt((a/2)**2+h**2);
     }
-    const apA=Math.sqrt(la*la-(a/2)**2), apB=Math.sqrt(lb*lb-(b/2)**2);
-    const taban=a*b;
-    const yanal_a=2*(a*apA/2), yanal_b=2*(b*apB/2);
-    const yanal=yanal_a+yanal_b, toplam=yanal+taban, hacim=taban*h/3;
-    const prizmaHacim=taban*h;
-    title='Dikdörtgen Tabanlı Dik Piramit';
-    cards=[
-      {cls:'yanal', label:'Yanal Yüzey Alanı', val:fmtR2(yanal),  unit:u2},
-      {cls:'toplam',label:'Toplam Yüzey Alanı',val:fmtR2(toplam), unit:u2},
-      {cls:'hacim', label:'Hacim',              val:fmtR2(hacim),  unit:u3},
-    ];
-    steps=`
-      <div class="step-section">Pisagor — Eksik Değer Hesabı</div>
-      <div class="step">${srcH} → <strong>h = ${fmtR2(h)} ${unit}</strong></div>
-      <div class="step">l_a = √((a/2)²+h²) = √(${fmtR2((a/2)**2)}+${fmtR2(h*h)}) = <strong>${fmtR2(la)} ${unit}</strong></div>
-      <div class="step">l_b = √((b/2)²+h²) = √(${fmtR2((b/2)**2)}+${fmtR2(h*h)}) = <strong>${fmtR2(lb)} ${unit}</strong></div>
-      <div class="step">Apothem_a = √(l_a²-(a/2)²) = <strong>${fmtR2(apA)} ${unit}</strong></div>
-      <div class="step">Apothem_b = √(l_b²-(b/2)²) = <strong>${fmtR2(apB)} ${unit}</strong></div>
-      <div class="step" style="margin-top:12px;"><div class="step-section">Yüzey Alanı</div></div>
-      <div class="step"><strong>Taban Alanı:</strong> a×b = ${fmtN(a)}×${fmtN(b)} = <strong>${fmtN(taban)} ${u2}</strong></div>
-      <div class="step"><strong>Yanal (a yüzleri):</strong> 2×(a×apA/2) = ${fmtN(a)}×${fmtR2(apA)} = ${fmtR2(yanal_a)} ${u2}</div>
-      <div class="step"><strong>Yanal (b yüzleri):</strong> 2×(b×apB/2) = ${fmtN(b)}×${fmtR2(apB)} = ${fmtR2(yanal_b)} ${u2}</div>
-      <div class="step"><strong>Toplam Yanal:</strong> ${fmtR2(yanal_a)}+${fmtR2(yanal_b)} = <strong>${fmtR2(yanal)} ${u2}</strong></div>
-      <div class="step"><strong>Toplam Yüzey:</strong> ${fmtR2(yanal)}+${fmtN(taban)} = <strong>${fmtR2(toplam)} ${u2}</strong></div>
-      <div class="step" style="margin-top:12px;"><div class="step-section">Hacim</div></div>
-      <div class="step"><strong>Hacim:</strong> (a×b×h)/3 = (${fmtN(taban)}×${fmtR2(h)})/3 = <strong>${fmtR2(hacim)} ${u3}</strong></div>
-      <div style="margin-top:14px;padding:10px 14px;background:rgba(231,111,81,0.07);border:1px solid rgba(231,111,81,0.25);border-left:3px solid var(--piramit-c);border-radius:7px;font-size:0.8rem;color:var(--text-dim);">
-        ℹ️ Bir dikdörtgen piramitin hacmi, aynı tabana ve yüksekliğe sahip <strong>dikdörtgen prizma</strong>nın hacminin <strong>1/3</strong>'üne eşittir.
-      </div>`;
+    const k=Math.sqrt(a**2+b**2);
+    const TA=a*b;
+    const YA1=a*la, YA2=b*lb;
+    const YA=YA1+YA2;
+    const A=TA+YA;
+    const V=a*b*h/3;
 
-  } else { // dutgen
-    const a=getVal('pir-a'), h_in=getVal('pir-h'), l_in=getVal('pir-l');
-    if (!(a>0)) {showErr('piramit-error','Taban kenarı (a) giriniz.');return;}
-    // dutgen: yarım kenar için merkez uzaklığı = a/(√3) = a√3/3
-    const halfK=a/Math.sqrt(3);
-    const res=resolveHL(h_in, l_in, halfK);
-    if (!res) {showErr('piramit-error','h (yükseklik) veya l (yan yüz ayrıtı) giriniz.');return;}
-    const {h,l} = res;
-    const apothem=Math.sqrt(l*l-halfK*halfK);
-    const taban=Math.sqrt(3)/4*a*a;
-    const yanal=(3*a*apothem)/2, toplam=yanal+taban, hacim=taban*h/3;
-    const prizmaHacim=taban*h;
-    title='Düzgün Üçgen Tabanlı Dik Piramit';
-    cards=[
-      {cls:'yanal', label:'Yanal Yüzey Alanı', val:fmtR2(yanal),  unit:u2},
-      {cls:'toplam',label:'Toplam Yüzey Alanı',val:fmtR2(toplam), unit:u2},
-      {cls:'hacim', label:'Hacim',              val:fmtR2(hacim),  unit:u3},
+    const cards=[
+      {cls:'yanal', label:'Yanal Yüzey Alanı', val:FR(YA),  unit:u2},
+      {cls:'toplam',label:'Toplam Yüzey Alanı',val:FR(A),   unit:u2},
+      {cls:'hacim', label:'Hacim',              val:FR(V),   unit:u3},
     ];
-    steps=`
-      <div class="step-section">Pisagor — Eksik Değer Hesabı</div>
-      <div class="step">Merkez uzaklığı = a/√3 = ${fmtR2(a)}/√3 = <strong>${fmtR2(halfK)} ${unit}</strong></div>
-      <div class="step">${res.src==='l hesaplandı'?`<strong>l</strong> = √((a/√3)²+h²) = <strong>${fmtR2(l)} ${unit}</strong>`:`<strong>h</strong> = √(l²-(a/√3)²) = <strong>${fmtR2(h)} ${unit}</strong>`}</div>
-      <div class="step">Apothem = √(l²-(a/√3)²) = <strong>${fmtR2(apothem)} ${unit}</strong></div>
-      <div class="step" style="margin-top:12px;"><div class="step-section">Yüzey Alanı</div></div>
-      <div class="step"><strong>Taban Alanı:</strong> a²√3/4 ≈ <strong>${fmtR2(taban)} ${u2}</strong></div>
-      <div class="step"><strong>Yanal:</strong> (3a×apothem)/2 = (3×${fmtN(a)}×${fmtR2(apothem)})/2 = <strong>${fmtR2(yanal)} ${u2}</strong></div>
-      <div class="step"><strong>Toplam:</strong> ${fmtR2(yanal)}+${fmtR2(taban)} = <strong>${fmtR2(toplam)} ${u2}</strong></div>
-      <div class="step" style="margin-top:12px;"><div class="step-section">Hacim</div></div>
-      <div class="step"><strong>Hacim:</strong> (A_t×h)/3 ≈ (${fmtR2(taban)}×${fmtR2(h)})/3 = <strong>${fmtR2(hacim)} ${u3}</strong></div>
-      <div style="margin-top:14px;padding:10px 14px;background:rgba(231,111,81,0.07);border:1px solid rgba(231,111,81,0.25);border-left:3px solid var(--piramit-c);border-radius:7px;font-size:0.8rem;color:var(--text-dim);">
-        ℹ️ Bir üçgen piramitin hacmi, aynı tabana ve yüksekliğe sahip <strong>üçgen prizma</strong>nın hacminin <strong>1/3</strong>'üne eşittir.
+    const steps=`
+      <div class="step-section">Değişkenler</div>
+      <div class="step">a = ${FN(a)} ${unit}, b = ${FN(b)} ${unit} (taban kenarları) &nbsp;|&nbsp; h = ${FR(h)} ${unit} (cisim yüksekliği)</div>
+      <div class="step">k = √(a²+b²) = √(${FN(a**2)}+${FN(b**2)}) = <strong>${FR(k)} ${unit}</strong> (taban köşegeni)</div>
+      <div class="step"><span class="el-c">l</span>a = ${FR(la)} ${unit} (a yüzü yük.) &nbsp;|&nbsp; <span class="el-c">l</span>b = ${FR(lb)} ${unit} (b yüzü yük.) &nbsp;|&nbsp; c = ${FR(c)} ${unit} (yan yüz ayrıtı)</div>
+      <div class="step-section">Pisagor Bağıntıları</div>
+      <div class="step"><span class="el-c">l</span>a² = (b/2)² + h² = ${FR((b/2)**2)} + ${FR(h**2)} = ${FR(la**2)} → <span class="el-c">l</span>a = <strong>${FR(la)} ${unit}</strong></div>
+      <div class="step"><span class="el-c">l</span>b² = (a/2)² + h² = ${FR((a/2)**2)} + ${FR(h**2)} = ${FR(lb**2)} → <span class="el-c">l</span>b = <strong>${FR(lb)} ${unit}</strong></div>
+      <div class="step">c² = (a/2)² + <span class="el-c">l</span>a² = ${FR((a/2)**2)} + ${FR(la**2)} = ${FR(c**2)} → c = <strong>${FR(c)} ${unit}</strong></div>
+      <div class="step-section">Yüzey Alanı</div>
+      <div class="step"><strong>Taban Alanı:</strong> TA = a × b = ${FN(a)} × ${FN(b)} = <strong>${FN(TA)} ${u2}</strong></div>
+      <div class="step"><strong>YA₁</strong> (a tabanlı 2 üçgen) = 2 × (a × <span class="el-c">l</span>a / 2) = a × <span class="el-c">l</span>a = ${FN(a)} × ${FR(la)} = ${FR(YA1)} ${u2}</div>
+      <div class="step"><strong>YA₂</strong> (b tabanlı 2 üçgen) = 2 × (b × <span class="el-c">l</span>b / 2) = b × <span class="el-c">l</span>b = ${FN(b)} × ${FR(lb)} = ${FR(YA2)} ${u2}</div>
+      <div class="step"><strong>Yanal Alan:</strong> YA = a<span class="el-c">l</span>a + b<span class="el-c">l</span>b = ${FR(YA1)} + ${FR(YA2)} = <strong>${FR(YA)} ${u2}</strong></div>
+      <div class="step"><strong>Toplam Yüzey Alanı:</strong> A = TA + YA = ${FN(TA)} + ${FR(YA)} = <strong>${FR(A)} ${u2}</strong></div>
+      <div class="step-section">Hacim</div>
+      <div class="step"><strong>Hacim:</strong> V = (a × b × h) / 3 = (${FN(a)} × ${FN(b)} × ${FR(h)}) / 3 = <strong>${FR(V)} ${u3}</strong></div>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(231,111,81,0.07);border-left:3px solid var(--piramit-c);border-radius:7px;font-size:0.8rem;color:var(--text-dim);">
+        ℹ️ Bu dikdörtgen piramitin hacmi, aynı tabana ve yüksekliğe sahip dikdörtgen prizmanın hacminin (V_prizma = ${FR(TA*h)} ${u3}) <strong>1/3</strong>'üne eşittir.
       </div>`;
-  }
+    renderResult('piramit-result','Dikdörtgen Tabanlı Dik Piramit',cards,steps,'var(--piramit-c)');
 
-  function resolveHL(h_in, l_in, half_kenar) {
-    const hOk=h_in>0, lOk=l_in>0;
-    if (hOk) { const l=Math.sqrt(h_in*h_in+half_kenar*half_kenar); return {h:h_in,l,src:'l hesaplandı'}; }
-    if (lOk) {
-      const hk2=l_in*l_in-half_kenar*half_kenar;
-      if(hk2<=0) return null;
-      return {h:Math.sqrt(hk2),l:l_in,src:'h hesaplandı'};
+  } else { // eşkenar üçgen
+    let a=gv('pir-a'), h=gv('pir-h'), l=gv('pir-l'), be=gv('pir-b-esk');
+    const given=[ok(a),ok(h),ok(l),ok(be)].filter(Boolean).length;
+    if(given<2){showErr('piramit-error','En az iki değer girin.');return;}
+
+    // k=a√3/2 (taban yük.), k1=a√3/3 (köşe uzak.), k2=a√3/6 (kenar uzak.)
+    // Pisagor: <span class="el-c">l</span>²=k2²+h², b²=(a/2)²+<span class="el-c">l</span>², b²=k1²+h²
+    // b²=k1²+h²=(a√3/3)²+h²=a²/3+h²
+    // <span class="el-c">l</span>²=k2²+h²=(a√3/6)²+h²=a²/12+h²
+
+    let resolved=false;
+    // a ve h → <span class="el-c">l</span>, b
+    if(ok(a)&&ok(h)&&!ok(l)&&!ok(be)){
+      l=Math.sqrt(a**2/12+h**2); be=Math.sqrt(a**2/3+h**2); resolved=true;
     }
-    return null;
-  }
+    // a ve <span class="el-c">l</span> → h, b
+    else if(ok(a)&&ok(l)&&!ok(h)&&!ok(be)){
+      const a2_12=a**2/12; if(l**2<=a2_12){showErr('piramit-error','<span class="el-c">l</span> değeri çok küçük.');return;}
+      h=Math.sqrt(l**2-a2_12); be=Math.sqrt(a**2/3+h**2); resolved=true;
+    }
+    // a ve b → h, <span class="el-c">l</span>
+    else if(ok(a)&&ok(be)&&!ok(h)&&!ok(l)){
+      const a2_3=a**2/3; if(be**2<=a2_3){showErr('piramit-error','b değeri çok küçük.');return;}
+      h=Math.sqrt(be**2-a2_3); l=Math.sqrt(a**2/12+h**2); resolved=true;
+    }
+    // h ve <span class="el-c">l</span> → a, b  (<span class="el-c">l</span>²=a²/12+h² → a=√(12(<span class="el-c">l</span>²-h²)))
+    else if(ok(h)&&ok(l)&&!ok(a)&&!ok(be)){
+      if(l**2<=h**2){showErr('piramit-error','<span class="el-c">l</span>, h\'den büyük olmalı.');return;}
+      a=Math.sqrt(12*(l**2-h**2)); be=Math.sqrt(a**2/3+h**2); resolved=true;
+    }
+    // h ve b → a, <span class="el-c">l</span>  (b²=a²/3+h² → a=√(3(b²-h²)))
+    else if(ok(h)&&ok(be)&&!ok(a)&&!ok(l)){
+      if(be**2<=h**2){showErr('piramit-error','b, h\'den büyük olmalı.');return;}
+      a=Math.sqrt(3*(be**2-h**2)); l=Math.sqrt(a**2/12+h**2); resolved=true;
+    }
+    // <span class="el-c">l</span> ve b → a, h  (b²=(a/2)²+<span class="el-c">l</span>² → a=2√(b²-<span class="el-c">l</span>²); h=√(<span class="el-c">l</span>²-a²/12))
+    else if(ok(l)&&ok(be)&&!ok(a)&&!ok(h)){
+      if(be**2<=l**2){showErr('piramit-error','b, <span class="el-c">l</span>\'den büyük olmalı.');return;}
+      a=2*Math.sqrt(be**2-l**2); h=Math.sqrt(l**2-a**2/12); resolved=true;
+    }
+    else if(ok(a)&&ok(h)&&ok(l)&&ok(be)){resolved=true;}
+    else{showErr('piramit-error','En az iki değer girin.');return;}
 
-  renderResult('piramit-result', title, cards, steps, 'var(--piramit-c)');
+    if(!ok(a)||!ok(h)||!ok(l)||!ok(be)){showErr('piramit-error','Değerler tutarsız.');return;}
+
+    const k_tab=a*Math.sqrt(3)/2;   // taban yüksekliği
+    const k1=a*Math.sqrt(3)/3;      // ağırlık mrk → köşe
+    const k2=a*Math.sqrt(3)/6;      // ağırlık mrk → kenar
+
+    // a=b durumu: düzgün dörtyüzlü
+    const isDortYuzlu = Math.abs(a-be)<1e-9*Math.max(a,be);
+
+    const TA=Math.sqrt(3)/4*a**2;
+    const YA=3*a*l/2;
+    const A=TA+YA;
+    const V=a**2*h*Math.sqrt(3)/12;
+
+    const cards=[
+      {cls:'yanal', label:'Yanal Yüzey Alanı', val:FR(YA),  unit:u2},
+      {cls:'toplam',label:'Toplam Yüzey Alanı',val:FR(A),   unit:u2},
+      {cls:'hacim', label:'Hacim',              val:FR(V),   unit:u3},
+    ];
+    const dortYuzluNot = isDortYuzlu
+      ? `<div style="margin-top:10px;padding:8px 12px;background:rgba(45,106,79,0.08);border-left:3px solid var(--accent);border-radius:7px;font-size:0.8rem;color:var(--text-dim);">
+          📌 a = b olduğundan bu cisim bir <strong>düzgün dörtyüzlü</strong>dür — tüm yüzleri eşkenar üçgendir.
+        </div>` : '';
+    const steps=`
+      <div class="step-section">Değişkenler</div>
+      <div class="step">a = ${FR(a)} ${unit} (taban kenarı) &nbsp;|&nbsp; h = ${FR(h)} ${unit} (cisim yüksekliği)</div>
+      <div class="step"><span class="el-c">l</span> = ${FR(l)} ${unit} (yan yüz yük.) &nbsp;|&nbsp; b = ${FR(be)} ${unit} (yan yüz ayrıtı)</div>
+      <div class="step">k = (a√3)/2 = <strong>${FR(k_tab)} ${unit}</strong> (taban yüksekliği)</div>
+      <div class="step">k₁ = (a√3)/3 = <strong>${FR(k1)} ${unit}</strong> (tabanda ağırlık mrk → köşe)<br>
+k₂ = (a√3)/6 = <strong>${FR(k2)} ${unit}</strong> (tabanda ağırlık mrk → kenar)</div>
+      <div class="step-section">Pisagor Bağıntıları</div>
+      <div class="step"><span class="el-c">l</span>² = k₂² + h² = ${FR(k2**2)} + ${FR(h**2)} = ${FR(l**2)} → <span class="el-c">l</span> = <strong>${FR(l)} ${unit}</strong></div>
+      <div class="step">b² = k₁² + h² = ${FR(k1**2)} + ${FR(h**2)} = ${FR(be**2)} → b = <strong>${FR(be)} ${unit}</strong></div>
+      <div class="step">b² = (a/2)² + <span class="el-c">l</span>² = ${FR((a/2)**2)} + ${FR(l**2)} = ${FR((a/2)**2+l**2)} ${Math.abs(be**2-(a/2)**2-l**2)<0.1?'✓':''}</div>
+      ${dortYuzluNot}
+      <div class="step-section">Yüzey Alanı</div>
+      <div class="step"><strong>Taban Alanı:</strong> TA = (a²√3)/4 = ${FR(a**2)}×√3/4 ≈ <strong>${FR(TA)} ${u2}</strong></div>
+      <div class="step"><strong>Yanal Alan:</strong> YA = 3 × (a × <span class="el-c">l</span> / 2) = 3 × ${FR(a)} × ${FR(l)} / 2 = <strong>${FR(YA)} ${u2}</strong></div>
+      <div class="step"><strong>Toplam Yüzey Alanı:</strong> A = TA + YA = ${FR(TA)} + ${FR(YA)} = <strong>${FR(A)} ${u2}</strong></div>
+      <div class="step-section">Hacim</div>
+      <div class="step"><strong>Hacim:</strong> V = h×(a²√3) / 12 = ${FR(h)} × ${FR(a**2)} × √3 / 12 ≈ <strong>${FR(V)} ${u3}</strong></div>
+      <div style="margin-top:12px;padding:10px 14px;background:rgba(231,111,81,0.07);border-left:3px solid var(--piramit-c);border-radius:7px;font-size:0.8rem;color:var(--text-dim);">
+        ℹ️ Bu üçgen piramitin hacmi, aynı tabana ve yüksekliğe sahip üçgen prizmanın hacminin (V_prizma = ${FR(TA*h)} ${u3}) <strong>1/3</strong>'üne eşittir.
+      </div>`;
+    renderResult('piramit-result','Eşkenar Üçgen Tabanlı Dik Piramit',cards,steps,'var(--piramit-c)');
+  }
 }
 
 // ════════════════════════════════════════════════════════
@@ -1087,7 +1168,7 @@ function koniPisagor() {
     angDisp.innerHTML=`<div style="background:rgba(155,93,229,0.07);border:1px solid rgba(155,93,229,0.25);
       border-left:3px solid var(--koni-c);border-radius:7px;padding:10px 14px;font-size:0.82rem;line-height:2;color:var(--text-dim);">
       <strong style="color:var(--koni-c);">Açı Bilgileri:</strong><br>
-      <strong>Merkez Açısı (α):</strong> r/l × 360° = ${fmtR2(rV)}/${fmtR2(lV)} × 360° ≈ <strong>${fmtR2(merkez)}°</strong><br>
+      <strong>Merkez Açısı (α):</strong> r/a × 360° = ${fmtR2(rV)}/${fmtR2(lV)} × 360° ≈ <strong>${fmtR2(merkez)}°</strong><br>
       <span style="font-size:0.75rem;color:var(--text-dim);">(Koninin açınımındaki yanal yüzeyi oluşturan daire diliminin merkez açısı)</span>
     </div>`;
   } else { angDisp.innerHTML=''; }
@@ -1170,7 +1251,7 @@ function calcKoni() {
   document.getElementById('koni-angle-display').innerHTML=`<div style="background:rgba(155,93,229,0.07);border:1px solid rgba(155,93,229,0.25);
     border-left:3px solid var(--koni-c);border-radius:7px;padding:10px 14px;font-size:0.82rem;line-height:2;color:var(--text-dim);">
     <strong style="color:var(--koni-c);">Açı Bilgileri:</strong><br>
-    <strong>Merkez Açısı (α):</strong> r/l × 360° = ${fmtR2(r)}/${fmtR2(l)} × 360° ≈ <strong>${fmtR2(merkez)}°</strong><br>
+    <strong>Merkez Açısı (α):</strong> r/a × 360° = ${fmtR2(r)}/${fmtR2(l)} × 360° ≈ <strong>${fmtR2(merkez)}°</strong><br>
     <span style="font-size:0.75rem;color:var(--text-dim);">(Koninin açınımındaki yanal yüzeyi oluşturan daire diliminin merkez açısı)</span>
   </div>`;
 }
