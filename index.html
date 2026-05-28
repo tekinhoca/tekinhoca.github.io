@@ -22,14 +22,14 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <style>
 main { max-width:760px; }
-
-
-
-
-
-
-
-
+.announcement{background:linear-gradient(135deg,var(--card-elevated) 0%,#241a08 100%);border:1px solid var(--gold);border-radius:4px;padding:28px 28px 24px;margin-bottom:28px;position:relative;overflow:hidden;animation:fadeUp 0.5s ease both;}
+.announcement::before{content:'★';position:absolute;right:20px;top:16px;font-size:3.5rem;color:rgba(200,150,12,0.07);line-height:1;}
+.announcement-tag{display:inline-block;font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(200,150,12,0.4);padding:3px 10px;border-radius:2px;margin-bottom:12px;}
+.announcement h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--on-dark);line-height:1.4;margin-bottom:10px;}
+.announcement p{font-size:0.9rem;color:rgba(247,242,232,0.72);line-height:1.75;}
+.video-wrap{margin-bottom:32px;border:1px solid rgba(122,92,30,0.25);border-radius:4px;overflow:hidden;box-shadow:2px 4px 14px var(--shadow);animation:fadeUp 0.5s ease both;}
+.video-wrap iframe{display:block;width:100%;aspect-ratio:16/9;border:none;}
+.video-caption{background:var(--surface-dark);padding:10px 16px;font-size:0.8rem;color:rgba(247,242,232,0.55);font-style:italic;}
 .page-links{display:flex;flex-direction:column;gap:8px;margin-bottom:36px;}
 .page-link{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(90deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.18);border-radius:3px;text-decoration:none;color:var(--ink);font-size:0.88rem;transition:background 0.2s,border-color 0.2s,transform 0.2s;box-shadow:1px 2px 6px var(--shadow);animation:fadeUp 0.5s ease both;}
 .page-link:hover{background:linear-gradient(90deg,var(--aged),var(--cream));border-color:rgba(155,53,16,0.35);transform:translateX(4px);}
@@ -56,69 +56,6 @@ main { max-width:760px; }
 .yt-btn{display:flex;align-items:center;gap:8px;background:#ff0000;color:#fff;padding:10px 16px;border-radius:3px;text-decoration:none;font-size:0.82rem;font-weight:600;margin-top:12px;transition:background 0.2s;justify-content:center;}
 .yt-btn:hover{background:#cc0000;}
 .page-link:nth-child(1){animation-delay:0.05s;}.page-link:nth-child(2){animation-delay:0.10s;}.page-link:nth-child(3){animation-delay:0.15s;}.page-link:nth-child(4){animation-delay:0.20s;}
-
-/* ── MATEMATİK HESAPLAMA ARAÇLARI ── */
-.hsa-section { }
-.hsa-heading {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--sepia);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(122,92,30,0.25);
-}
-.hsa-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-@media (max-width: 540px) { .hsa-grid { grid-template-columns: repeat(2, 1fr); } }
-.hsa-card, .hsa-card--future {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 16px 10px 14px;
-  background: linear-gradient(135deg, var(--cream), var(--aged));
-  border: 1px solid rgba(122,92,30,0.22);
-  border-radius: 4px;
-  text-decoration: none;
-  color: var(--ink);
-  min-height: 110px;
-  box-shadow: 1px 2px 6px var(--shadow);
-  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.18s, box-shadow 0.18s;
-}
-.hsa-card:hover {
-  background: linear-gradient(135deg, var(--aged), var(--cream));
-  border-color: rgba(155,53,16,0.4);
-  transform: translateY(-3px);
-  box-shadow: 2px 5px 14px var(--shadow);
-}
-.hsa-card--future {
-  opacity: 0.52;
-  cursor: default;
-  border-style: dashed;
-}
-.hsa-card__title {
-  font-family: 'Playfair Display', serif;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--rust);
-  letter-spacing: 0.04em;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
-
-[data-theme="dark"] .hsa-card__title {
-  color: var(--gold);
-}
-[data-theme="dark"] .hsa-card {
-  border-color: rgba(200,150,12,0.2);
-}
 </style>
 </head>
 <body>
@@ -137,56 +74,15 @@ main { max-width:760px; }
       <p class="quote-attr">Mustafa Kemal ATATÜRK</p>
     </div>
 
-
-    <div class="hsa-section" style="animation:fadeUp 0.55s ease both 0.1s;margin-bottom:32px;">
-      <h2 class="hsa-heading">Matematik Hesaplama Araçları</h2>
-      <div class="hsa-grid">
-        <a href="hesap-araclar/cok_lab.html" target="_blank" rel="noopener" class="hsa-card">
-          <div style="width:54px;height:54px;margin:0 auto 10px;"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;"><polygon points="50,8 92,35 92,75 50,92 8,75 8,35" fill="none" stroke="var(--gold)" stroke-width="4"/><line x1="50" y1="8" x2="92" y2="75" stroke="var(--gold)" stroke-width="2" opacity="0.5"/><line x1="50" y1="8" x2="8" y2="75" stroke="var(--gold)" stroke-width="2" opacity="0.5"/><line x1="92" y1="35" x2="8" y2="75" stroke="var(--gold)" stroke-width="2" opacity="0.5"/></svg></div>
-          <span class="hsa-card__title">ÇOKGENLERDE AÇILAR KÖŞEGENLER</span>
-          
-        </a>
-        <a href="hesap-araclar/alan_cevre.html" target="_blank" rel="noopener" class="hsa-card">
-          <div style="width:54px;height:54px;margin:0 auto 10px;"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;"><rect x="18" y="30" width="64" height="46" rx="3" fill="none" stroke="var(--gold)" stroke-width="4"/><line x1="18" y1="30" x2="82" y2="30" stroke="var(--rust)" stroke-width="3"/><line x1="82" y1="30" x2="82" y2="76" stroke="var(--rust)" stroke-width="3"/><text x="50" y="58" text-anchor="middle" font-size="13" fill="var(--gold)" font-family="serif">A = a×b</text></svg></div>
-          <span class="hsa-card__title">ÇOKGENLERDE ALAN ÇEVRE</span>
-          
-        </a>
-        <a href="hesap-araclar/geo_cis.html" target="_blank" rel="noopener" class="hsa-card">
-          <div style="width:54px;height:54px;margin:0 auto 10px;"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;"><rect x="28" y="44" width="50" height="40" fill="none" stroke="var(--gold)" stroke-width="3.5"/><parallelogram/><line x1="28" y1="44" x2="14" y2="28" stroke="var(--gold)" stroke-width="3"/><line x1="78" y1="44" x2="64" y2="28" stroke="var(--gold)" stroke-width="3"/><line x1="14" y1="28" x2="64" y2="28" stroke="var(--gold)" stroke-width="3"/><line x1="64" y1="28" x2="78" y2="44" stroke="var(--gold)" stroke-width="3"/><line x1="14" y1="28" x2="28" y2="44" stroke="var(--gold)" stroke-width="1.5" opacity="0.5"/></svg></div>
-          <span class="hsa-card__title">CISIMLERDE ALAN HACIM</span>
-          
-        </a>
-        <a href="hesap-araclar/ola_sim.html" target="_blank" rel="noopener" class="hsa-card">
-          <div style="width:54px;height:54px;margin:0 auto 10px;"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;"><circle cx="50" cy="50" r="36" fill="none" stroke="var(--gold)" stroke-width="4"/><path d="M50 14 L50 50 L78 68" stroke="var(--rust)" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="4" fill="var(--gold)"/></svg></div>
-          <span class="hsa-card__title">OLASILIK SIMÜLATÖRÜ</span>
-          <span style="display:block;font-size:0.68rem;color:var(--muted);margin-top:3px;text-transform:none;font-style:italic;">Deneysel / Teorik</span>
-        </a>
-        <a href="hesap-araclar/veri_anlz.html" target="_blank" rel="noopener" class="hsa-card">
-          <div style="width:54px;height:54px;margin:0 auto 10px;"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;"><line x1="18" y1="82" x2="82" y2="82" stroke="var(--gold)" stroke-width="3"/><line x1="18" y1="82" x2="18" y2="18" stroke="var(--gold)" stroke-width="3"/><rect x="26" y="52" width="12" height="30" fill="var(--rust)" opacity="0.8"/><rect x="44" y="38" width="12" height="44" fill="var(--gold)" opacity="0.8"/><rect x="62" y="28" width="12" height="54" fill="var(--rust)" opacity="0.6"/></svg></div>
-          <span class="hsa-card__title">VERI ANALIZI GRAFIK</span>
-          
-        </a>
-        <a href="hesap-araclar/mer_eglm.html" target="_blank" rel="noopener" class="hsa-card">
-          <div style="width:54px;height:54px;margin:0 auto 10px;"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;"><polyline points="16,70 30,45 44,38 58,44 72,32 84,50" fill="none" stroke="var(--gold)" stroke-width="3.5" stroke-linejoin="round"/><line x1="44" y1="20" x2="44" y2="82" stroke="var(--rust)" stroke-width="2" stroke-dasharray="4,3"/><circle cx="44" cy="38" r="4" fill="var(--rust)"/><line x1="16" y1="82" x2="84" y2="82" stroke="var(--gold)" stroke-width="2" opacity="0.4"/></svg></div>
-          <span class="hsa-card__title">MERKEZÎ EĞILIM VE YAYILMA</span>
-          
-        </a>
-        <a href="hesap-araclar/dog_grfk.html" target="_blank" rel="noopener" class="hsa-card">
-          <div style="width:54px;height:54px;margin:0 auto 10px;"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;"><line x1="14" y1="86" x2="86" y2="14" stroke="var(--rust)" stroke-width="3.5" stroke-linecap="round"/><line x1="14" y1="22" x2="86" y2="80" stroke="var(--gold)" stroke-width="3.5" stroke-linecap="round"/><circle cx="54" cy="46" r="5" fill="var(--rust)"/><line x1="14" y1="50" x2="86" y2="50" stroke="var(--gold)" stroke-width="1.5" opacity="0.3"/><line x1="50" y1="14" x2="50" y2="86" stroke="var(--gold)" stroke-width="1.5" opacity="0.3"/></svg></div>
-          <span class="hsa-card__title">DENKLEM SISTEMLERI GRAFIK</span>
-          
-        </a>
-        <a href="hesap-araclar/per_kom.html" target="_blank" rel="noopener" class="hsa-card">
-          <div style="width:54px;height:54px;margin:0 auto 10px;"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;"><circle cx="28" cy="30" r="9" fill="none" stroke="var(--gold)" stroke-width="3"/><circle cx="72" cy="30" r="9" fill="none" stroke="var(--gold)" stroke-width="3"/><circle cx="28" cy="70" r="9" fill="none" stroke="var(--rust)" stroke-width="3"/><circle cx="72" cy="70" r="9" fill="none" stroke="var(--rust)" stroke-width="3"/><line x1="37" y1="30" x2="63" y2="30" stroke="var(--gold)" stroke-width="2"/><line x1="28" y1="39" x2="28" y2="61" stroke="var(--gold)" stroke-width="2"/><line x1="37" y1="30" x2="63" y2="70" stroke="var(--gold)" stroke-width="1.5" opacity="0.5"/><line x1="37" y1="70" x2="63" y2="30" stroke="var(--rust)" stroke-width="1.5" opacity="0.5"/></svg></div>
-          <span class="hsa-card__title">PERMÜTASYON KOMBINASYON</span>
-          
-        </a>
-        <div class="hsa-card hsa-card--future">
-          <div style="width:54px;height:54px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;"><span style="font-size:2.4rem;color:var(--gold);opacity:0.55;font-family:serif;">?</span></div>
-          <span class="hsa-card__title">?</span>
-          
-        </div>
-      </div>
+    <div class="announcement" style="margin-bottom:28px;">
+      <span class="announcement-tag">2025–2026 Öğretim Yılı</span>
+      <h3>Matematik ve Zekâ Oyunları Kulübü</h3>
+      <p>Bahar döneminde kulübümüzün üçüncü konusu <strong style="color:var(--gold)">RESFEBE BULMACALARI</strong>. Aşağıdaki özet videosunu izleyerek RESFEBE bulmacalarının eğlenceli dünyasına bir adım atabilirsiniz.</p>
+      <p>Hazırladığım diğer belge ve özet videolara ulaşmak için <strong style="color:var(--gold)">KULÜP DOSYALARI</strong> sayfasını ziyaret edebilirsiniz.</p>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/n7-Otxdsn-8" title="RESFEBE" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <div class="video-caption">Matematik ve Zekâ Oyunları Kulübü — 2025-2026</div>
     </div>
     </div>
   
