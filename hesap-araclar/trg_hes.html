@@ -734,8 +734,9 @@ async function reserveRowHeight(){
   await retypeset(m);
   const h=Math.ceil(m.getBoundingClientRect().height+16);
   document.documentElement.style.setProperty("--reserved-row-h",h+"px");
-  document.querySelectorAll("#trigTable td").forEach(td=>{td.style.minHeight=h+"px";td.style.height=h+"px";});
-  m.remove();
+const scaleV=1+0.30*Math.sin(Math.PI*t);
+ghost.style.transform=`translate(${cx-ghost.offsetWidth/2-sl}px,${cy-ghost.offsetHeight/2-st-par}px) scale(${scaleV})`;
+ghost.style.filter=`drop-shadow(0 0 ${Math.round(8*Math.sin(Math.PI*t))}px rgba(180,120,0,${(0.85*Math.sin(Math.PI*t)).toFixed(2)}))`;  m.remove();
 }
 
 function lerp(a,b,t){ return a+(b-a)*t; }
@@ -753,7 +754,9 @@ function animateGhost(ghost,start,finish,dur){
       const ease=t<0.5?2*t*t:-1+(4-2*t)*t;
       const cx=start.x+dx*ease,cy=start.y+dy*ease;
       const par=4*arc*(t-t*t);
-      ghost.style.transform=`translate(${cx-ghost.offsetWidth/2-sl}px,${cy-ghost.offsetHeight/2-st-par}px)`;
+      const scaleV=1+0.30*Math.sin(Math.PI*t);
+      ghost.style.transform=`translate(${cx-ghost.offsetWidth/2-sl}px,${cy-ghost.offsetHeight/2-st-par}px) scale(${scaleV})`;
+      ghost.style.filter=`drop-shadow(0 0 ${Math.round(8*Math.sin(Math.PI*t))}px rgba(180,120,0,${(0.85*Math.sin(Math.PI*t)).toFixed(2)}))`;
       if(t<1) requestAnimationFrame(step); else resolve();
     }
     requestAnimationFrame(step);
@@ -956,9 +959,7 @@ async function runSteps(){
 
 startBtn.addEventListener("click",async()=>{
   if(ctrl.running)return;
-  startBtn.disabled=true; startBtn.textContent="HAZIRLANIYOR…";
-  await reserveRowHeight(); await retypeset();
-  startBtn.textContent="ÇALIŞIYOR";
+startBtn.disabled=true; startBtn.textContent="ÇALIŞIYOR";
   ctrl.running=true; ctrl.cancelled=false;
   enableControls("running");
   runSteps().catch(e=>{ console.warn(e); ctrl.running=false; enableControls("stopped"); });
