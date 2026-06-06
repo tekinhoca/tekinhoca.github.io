@@ -652,7 +652,8 @@ input[type="range"] {
         <div class="error-box" id="invError"></div>
         <div class="inv-result" id="invResult">—</div>
         <p style="font-size:0.68rem;color:var(--text-dim);margin-top:6px;line-height:1.5;">
-          Sonuç asal değer aralığında verilir:<br>
+          Bu soruların sonsuz sayıda çözümü vardır.<br>
+          Buraya sadece belli değer aralığındaki cevap yazılmıştır.<br>
           arcsin: [−90°, 90°] &nbsp;·&nbsp; arccos: [0°, 180°] &nbsp;·&nbsp; arctan: (−90°, 90°)
         </p>
       </div>
@@ -925,7 +926,7 @@ async function runSteps(){
       if(ctrl.cancelled)break;
       enableControls("running");
       stepDesc.innerHTML=stepDescs[i]||"";
-      stepCounter.textContent=`Adım ${i+1}/${steps.length}`;
+      stepCounter.textContent = i < 8 ? `Adım ${i+1}/8` : "";
       await steps[i]();
       if(ctrl.cancelled)break;
       if(i<steps.length-1){ enableControls("waiting"); await waitForNext(); }
