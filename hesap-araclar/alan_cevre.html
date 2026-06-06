@@ -165,13 +165,14 @@ footer p {
     <div class="panel">
       <div class="sec-title">Temel Kavramlar</div>
       <div class="rule-item gen">
-        <strong>Alan:</strong> Bir şeklin kapladığı yüzey miktarıdır. Birimi <strong>cm², m²</strong> gibi uzunluk biriminin karesidir.
+        <strong>Çevre:</strong> Şeklin kenar uzunluklarının toplamıdır.<br>Uzunluk ölçüleri: <strong>mm, cm, dm, m, ...</strong>
       </div>
       <div class="rule-item gen">
-        <strong>Çevre:</strong> Şeklin kenar uzunluklarının toplamıdır. Birimi <strong>cm, m</strong> gibi uzunluk birimidir.
+        <strong>Alan:</strong> Bir şeklin kapladığı yüzey miktarıdır.<br>Alan ölçüleri: <strong>mm², cm², dm², m², ...</strong>
       </div>
       <div class="rule-item tri">
         <strong>Üçgenlerde Alan:</strong><br>
+        Bir kenar (taban) ve yükseklik biliniyorsa:<br>
         <span class="formula-chip">A = (taban × yükseklik) / 2</span><br>
         Üç kenar biliniyorsa:<br>
         <span class="formula-chip">A = √[s(s-a)(s-b)(s-c)]</span><br>
@@ -180,7 +181,9 @@ footer p {
       <div class="rule-item quad">
         <strong>Dörtgenlerde Alan:</strong><br>
         Yükseklik veya köşegen uzunlukları alan hesabında temel rol oynar.<br>
-        <span class="formula-chip">Yamuk: (a+c)×h/2</span><br>
+        <span class="formula-chip">Kare: a × a = a²</span><br>
+        <span class="formula-chip">Dikdörtgen: a × b</span><br>
+        <span class="formula-chip">Yamuk: [(a+c)×h]/2</span><br>
         <span class="formula-chip">Eşkenar dörtgen: (d₁×d₂)/2</span>
       </div>
       <div class="rule-item circ">
@@ -190,7 +193,7 @@ footer p {
         π ≈ 3,14159…
       </div>
       <div class="rule-item gen" style="border-color:var(--accent4);">
-        <strong>Hatırlatma:</strong> Aynı çevreye sahip şekillerin alanları farklı olabilir. En büyük alanı daire verir.
+        <strong>Hatırlatma:</strong><br>Çevresi eşit olan şekillerin alanları farklı olabilir.<br>En büyük alanı daire verir.
       </div>
     </div>
 
@@ -239,7 +242,7 @@ footer p {
 
         <!-- Genel üçgen girişi -->
         <div id="form-tri-genel">
-          <div class="hint">💡 Üç kenar uzunluğunu girin. Eşkenar, ikizkenar veya dik üçgen otomatik tespit edilecek.</div>
+          <div class="hint">💡 Üç kenarın uzunluklarını girin.<br>💡 Eşkenar, ikizkenar veya dik üçgen otomatik tespit edilir.<br>💡 Ayrıca üçgen eşitsizliğine aykırı sayılar girilirse uyarılırsınız.</div>
           <div class="input-grid">
             <div class="input-group"><label>a kenarı</label><input type="number" id="tri-a" placeholder="örn: 5" min="0.01" step="any"></div>
             <div class="input-group"><label>b kenarı</label><input type="number" id="tri-b" placeholder="örn: 6" min="0.01" step="any"></div>
@@ -252,7 +255,7 @@ footer p {
 
         <!-- Dik üçgen girişi -->
         <div id="form-tri-dik" style="display:none;">
-          <div class="hint">💡 İki dik kenarı (a ve b) girin. Hipotenüs ve alan otomatik hesaplanır.</div>
+          <div class="hint">💡 İki dik kenarı (a ve b) girin. Hipotenüs otomatik hesaplanır.</div>
           <div class="input-grid">
             <div class="input-group"><label>a — dik kenar 1</label><input type="number" id="trid-a" placeholder="örn: 3" min="0.01" step="any"></div>
             <div class="input-group"><label>b — dik kenar 2</label><input type="number" id="trid-b" placeholder="örn: 4" min="0.01" step="any"></div>
@@ -438,7 +441,7 @@ function showShapeInfo(type) {
         <tr><td>Çevre</td><td>a + b + c</td></tr>
       </table>
       <div class="hierarchy-note" style="margin-top:10px;">
-        📌 <strong>Özel durumlar:</strong> Eşkenar üçgende 3 kenar eşit, her açı 60°. İkizkenar üçgende 2 kenar eşit. Dik üçgende Pisagor bağıntısı: <strong>c² = a² + b²</strong>
+        📌 <strong>Özel durumlar:</strong><br>Eşkenar üçgende 3 kenar uzunluğu eşit, her açı 60°dir.<br>Dik üçgende Pisagor bağıntısı:<br><strong>c² = a² + b²</strong>
       </div>`;
   } else if (type === 'quad') {
     title.textContent = 'Dörtgen Özellikleri';
@@ -720,7 +723,7 @@ function calcTriGenel() {
     const y1Eq      = isInt(rawVal) ? '=' : '≈';
     eskStep1 = `
     <div class="step" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);"><strong>Alan Hesaplamak İçin İki Yöntem:</strong></div>
-    <div class="step"><strong>1. Yöntem:</strong></div>
+    <div class="step"><strong>1. Yöntem (Eşkenar Üçgenin Alanı):</strong></div>
     <div class="step" style="font-family:monospace;">A = a²√3/4 = ${fmtN(a)}²×√3/4 = ${fmtN(a2)}√3/4 = ${y1Disp} ${y1Eq} <strong>${y1Exact!==null ? fmtN(y1Exact) : y1Approx} ${unit}²</strong></div>
     <div class="step" style="margin-top:6px;"><strong>2. Yöntem (Heron):</strong></div>`;
   }
@@ -771,7 +774,7 @@ function calcTriDik() {
   }
 
   const steps = `
-    <div class="step"><strong>Pisagor — Hipotenüs:</strong> c² = a² + b² = ${fmtN(a)}² + ${fmtN(b)}² = ${fmtN(a*a)} + ${fmtN(b*b)} = ${fmtN(c2)}</div>
+    <div class="step"><strong>Pisagor bağıntısı kullanılarak Hipotenüs bulunur:</strong><br>c² = a² + b² = ${fmtN(a)}² + ${fmtN(b)}² = ${fmtN(a*a)} + ${fmtN(b*b)} = ${fmtN(c2)}</div>
     <div class="step">c = √${fmtN(c2)}${cDisp.expr !== '√'+fmtN(c2) ? ' = '+cDisp.expr : ''} ${cExact ? `= <strong>${cDisp.expr} ${unit}</strong>` : `≈ <strong>${cDisp.approx} ${unit}</strong>`}</div>
     <div class="step"><strong>Çevre:</strong> ${cevreSatir}</div>
     <div class="step"><strong>Alan:</strong> A = (a × b) / 2 = (${fmtN(a)} × ${fmtN(b)}) / 2 ${alanEq} <strong>${alanDisp} ${unit}²</strong></div>`;
@@ -1078,10 +1081,10 @@ function buildAltigenBonus(a, unit, triAlan) {
     <div class="bonus-card">
       <div class="bc-title">⬡ Bağlantı: Düzgün Altıgen</div>
       <div class="bc-body">
-        Bu eşkenar üçgeni <strong>6 kez</strong> yan yana birleştirince bir <strong>düzgün altıgen</strong> elde edilir.<br><br>
-        <strong>Düzgün altıgen alanı</strong> = 6 × eşkenar üçgen alanı<br>
+        Bu eşkenar üçgenden <strong>6 tanesini</strong> bir araya getirerek bir <strong>düzgün altıgen</strong> elde edebiliriz.<br><br>
+        <strong>Düzgün altıgenin alanı</strong> = 6 × eşkenar üçgenin alanı<br>
         = 6 × ${altAlanExact ? fmtN(triAlan) : fmtR2(triAlan)} ${altEq} <strong>${altAlanStr} ${unit}²</strong><br><br>
-        <strong>Düzgün altıgen çevresi</strong> = 6 × a = 6 × ${fmtN(a)} = <strong>${fmtN(altCevre)} ${unit}</strong><br><br>
+        <strong>Düzgün altıgenin çevresi</strong> = 6 × a = 6 × ${fmtN(a)} = <strong>${fmtN(altCevre)} ${unit}</strong><br><br>
         <canvas id="altigenCanvas" class="bonus-canvas" height="140"></canvas>
       </div>
     </div>`;
