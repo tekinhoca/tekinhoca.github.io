@@ -423,7 +423,31 @@ function renderRight(s) {
   const fmtO   = v => isIntV(v) ? v.toString() : v.toFixed(2).replace('.',',');
   const approxEq = (a,b) => Math.abs(a+b-180) < 0.01 ? '= 180°' : '≈ 180°';
   const polyNameLower = (NAMES[n]||n+'-gen').charAt(0).toUpperCase() + (NAMES[n]||n+'-gen').slice(1).toLowerCase();
-  const ozetL1 = `${polyNameLower}in iç açılarının toplamı <strong>${s.sumInt}°</strong>, dış açılarının toplamı <strong>360°</strong> ve köşegen sayısı <strong>${s.diagonals}</strong> olur.`;
+
+  // Türkçe -dır/-dir/-dur/-dür eki
+  const dirEki = sayi => {
+    const s = Math.abs(sayi);
+    // Sıfırla biten özel durumlar (onluklar)
+    if(s % 10 === 0){
+      const onlukEkler = {10:"'dur",20:"'dir",30:"'dur",40:"'tır",50:"'dir",
+                          60:"'tır",70:"'tir",80:"'dir",90:"'dır",
+                          100:"'dür",200:"'dür",300:"'dür",400:"'dür",
+                          500:"'tir",600:"'dür",700:"'dür",800:"'dür",900:"'dür",
+                          1000:"'dir"};
+      // İki basamaklı onlukların katları: 20,40,60,... gibi son iki haneye bak
+      const sonIki = s % 100;
+      if(sonIki !== 0 && onlukEkler[sonIki]) return onlukEkler[sonIki];
+      // Tam yüzler: 100,200,...
+      const sonUc = s % 1000;
+      if(sonUc !== 0 && onlukEkler[sonUc]) return onlukEkler[sonUc];
+      if(onlukEkler[s]) return onlukEkler[s];
+    }
+    // Genel kural: son rakama göre
+    const ekler = ["'dır","'dir","'dir","'tür","'tür","'tir","'dır","'dir","'dir","'dur"];
+    return ekler[s % 10];
+  };
+
+  const ozetL1 = `${polyNameLower}in iç açılarının toplamı <strong>${s.sumInt}°</strong>, dış açılarının toplamı <strong>360°</strong> ve köşegen sayısı <strong>${s.diagonals}</strong>${dirEki(s.diagonals)}.`;
   const ozetL2 = `Düzgün ${(NAMES[n]||n+'-gen').toLowerCase()}de her bir iç açı <strong>${fmtO(s.oneInt)}°</strong> ve her bir dış açı <strong>${fmtO(s.oneExt)}°</strong> olur.`;
   const ozetL3 = `${fmtO(s.oneInt)}° + ${fmtO(s.oneExt)}° ${approxEq(s.oneInt,s.oneExt)} (bir köşedeki iç açı ile dış açının toplamı 180°'dir.)`;
   const ozet = `${ozetL1}<br>${ozetL2}<br>${ozetL3}`;
