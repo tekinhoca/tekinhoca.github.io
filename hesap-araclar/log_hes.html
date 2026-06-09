@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logaritma Hesap Aracı — TekinHoca</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+  --bg:       #f4f1eb;
+  --surface:  #fdfcf9;
+  --surface2: #eee9df;
+  --border:   #d8d0c0;
+  --accent:   #2d6a4f;
+  --accent2:  #e76f51;
+  --accent3:  #457b9d;
+  --accent4:  #e9c46a;
+  --text:     #1a1a1a;
+  --text-dim: #6b6456;
+  --radius:   12px;
+  --shadow:   0 4px 24px rgba(0,0,0,0.08);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(45,106,79,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(69,123,157,0.06) 0%, transparent 50%);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+}
+
+/* ── HEADER ── */
+header {
+  max-width: 1200px;
+  margin: 0 auto 28px;
+  display: flex; align-items: center; gap: 18px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--border);
+}
+header img { height: 44px; width: auto; }
+header .titles h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.75rem);
+  font-weight: 700; color: var(--accent);
+}
+header .titles p { font-size: 0.85rem; color: var(--text-dim); margin-top: 3px; }
+
+/* ── ANA DÜZEN ── */
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 860px) { .app { grid-template-columns: 1fr; } }
+
+/* ── PANEL ── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.panel + .panel { margin-top: 16px; }
+
+.sec-title {
+  font-family: 'Lora', serif;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── SOL PANEL ── */
+.formula-block { margin-bottom: 14px; }
+.formula-block h4 {
+  font-family: 'Lora', serif;
+  font-size: 0.82rem; font-weight: 700;
+  color: var(--accent); margin-bottom: 6px;
+}
+.formula-block p { font-size: 0.83rem; color: var(--text-dim); line-height: 1.6; }
+.formula-math {
+  font-size: 0.85rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  line-height: 1.9;
+  color: var(--text);
+}
+.formula-math .mj { display: block; margin: 2px 0; }
+
+/* ── BUTONLAR ── */
+.tbl-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  letter-spacing: 1px; cursor: pointer;
+  background: var(--surface2); color: var(--text-dim);
+  transition: background 0.2s, color 0.2s;
+}
+.tbl-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tbl-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.tbl-btn:not(:disabled):hover { filter: brightness(0.93); }
+
+/* ── GİRİŞ ── */
+.input-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.input-row label { font-size: 0.83rem; color: var(--text-dim); white-space: nowrap; }
+.inp {
+  padding: 7px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  background: var(--surface2);
+  color: var(--text);
+  width: 100px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.inp:focus { border-color: var(--accent); }
+.inp.wide { width: 160px; }
+
+/* ── SONUÇ KUTUSU ── */
+.result-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  min-height: 56px;
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+.result-box.empty { color: var(--text-dim); font-style: italic; }
+
+/* ── UYARI ── */
+.warn-box {
+  display: none;
+  background: #fffbe6;
+  border: 1px solid var(--accent4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  color: #7a6000;
+  margin-top: 10px;
+}
+
+/* ── ADIM KUTUSU ── */
+.step-box {
+  margin-top: 12px;
+  border-left: 3px solid var(--accent);
+  padding-left: 14px;
+}
+.step-line {
+  font-size: 0.86rem;
+  line-height: 1.8;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.step-line span.hl { color: var(--accent); font-weight: 600; }
+
+/* ── KURAL TABLOSU ── */
+.rule-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+@media (max-width: 600px) { .rule-grid { grid-template-columns: 1fr; } }
+.rule-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.rule-card .rule-title {
+  font-size: 0.75rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--text-dim); margin-bottom: 6px;
+}
+.rule-card .rule-formula { font-size: 0.88rem; color: var(--text); margin-bottom: 6px; }
+.rule-card .rule-result { font-size: 0.84rem; color: var(--accent); font-weight: 600; }
+
+/* ── TABAN DÖNÜŞÜM ── */
+.conv-row {
+  display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+  margin-top: 10px;
+}
+.conv-card {
+  flex: 1; min-width: 160px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.conv-card .conv-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 8px; }
+.conv-card .conv-formula { font-size: 0.85rem; color: var(--text-dim); margin-bottom: 4px; }
+.conv-card .conv-val { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+
+/* ── GRAFİK ── */
+#grafik-canvas {
+  display: block;
+  width: 100%;
+  max-width: 620px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  margin-top: 12px;
+}
+.slider-row {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.slider-row label { font-size: 0.84rem; color: var(--text-dim); }
+input[type=range] { accent-color: var(--accent); cursor: pointer; }
+.slider-val {
+  font-size: 0.95rem; font-weight: 700; color: var(--accent);
+  min-width: 32px;
+}
+
+/* ── FOOTER ── */
+footer {
+  max-width: 1200px;
+  margin: 40px auto 0;
+  padding-top: 16px;
+  border-top: 2px solid var(--border);
+  text-align: center;
+}
+footer p {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+  padding-bottom: 20px;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <img src="../img/THlogo1.png" alt="TekinHoca Logo"
+       style="max-width:100%;display:block;margin:0 auto 0 0;border-radius:10px;">
+  <div class="titles" style="text-align:right;">
+    <h1>Logaritma Hesap Aracı</h1>
+    <p>Hesaplayıcı · Kural göstericisi · Taban dönüşümü · Grafik</p>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- ═══ SOL PANEL ═══ -->
+  <div>
+    <div class="panel">
+      <div class="sec-title">Temel Tanım</div>
+      <div class="formula-block">
+        <div class="formula-math">
+          \(\log_a b = c \iff a^c = b\)
+          <br>
+          <span style="font-size:0.8rem;color:var(--text-dim)">a &gt; 0, a ≠ 1, b &gt; 0</span>
+        </div>
+      </div>
+      <div class="formula-block">
+        <h4>Özel Değerler</h4>
+        <div class="formula-math">
+          \(\log_a 1 = 0\)<br>
+          \(\log_a a = 1\)<br>
+          \(\ln e = 1\)<br>
+          \(\log 10 = 1\)
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="sec-title">Logaritma Kuralları</div>
+      <div class="formula-block">
+        <h4>Çarpma Kuralı</h4>
+        <div class="formula-math">\(\log_a (m \cdot n) = \log_a m + \log_a n\)</div>
+      </div>
+      <div class="formula-block">
+        <h4>Bölme Kuralı</h4>
+        <div class="formula-math">\(\log_a \dfrac{m}{n} = \log_a m - \log_a n\)</div>
+      </div>
+      <div class="formula-block">
+        <h4>Üs Kuralı</h4>
+        <div class="formula-math">\(\log_a m^k = k \cdot \log_a m\)</div>
+      </div>
+      <div class="formula-block">
+        <h4>Taban Dönüşümü</h4>
+        <div class="formula-math">\(\log_a b = \dfrac{\log b}{\log a} = \dfrac{\ln b}{\ln a}\)</div>
+      </div>
+      <div class="formula-block">
+        <h4>Ek Özellikler</h4>
+        <div class="formula-math">
+          \(a^{\log_a b} = b\)<br>
+          \(\log_a b \cdot \log_b c = \log_a c\)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SAĞ PANEL ═══ -->
+  <div>
+
+    <!-- 1. Hesaplayıcı -->
+    <div class="panel">
+      <div class="sec-title">Hesaplayıcı</div>
+      <div class="input-row">
+        <label>Taban (a):</label>
+        <input class="inp" id="hTaban" type="number" value="2" min="1" step="1" placeholder="2">
+        <label>Sayı (b):</label>
+        <input class="inp" id="hSayi" type="number" value="8" min="1" step="1" placeholder="8">
+        <button class="tbl-btn primary" onclick="hesapla()">HESAPLA</button>
+      </div>
+      <div class="warn-box" id="hWarn"></div>
+      <div class="result-box empty" id="hResult">Taban ve sayı girip Hesapla'ya basın.</div>
+      <div class="step-box" id="hSteps" style="display:none; margin-top:14px;"></div>
+    </div>
+
+    <!-- 2. Kural Göstericisi -->
+    <div class="panel">
+      <div class="sec-title">Kural Göstericisi</div>
+      <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:12px;">
+        Logaritma kurallarının uygulanışını görmek için aşağıya BİR TABAN (a), İKİ SAYI (m ve n) ve BİR KUVVET (k) değeri girin.
+      </p>
+      <div class="input-row">
+        <label>Taban (a):</label>
+        <input class="inp" id="kTaban" type="number" value="2" min="1" step="1">
+        <label>m:</label>
+        <input class="inp" id="kM" type="number" value="4" min="1" step="1">
+        <label>n:</label>
+        <input class="inp" id="kN" type="number" value="2" min="1" step="1">
+        <label>k (üs):</label>
+        <input class="inp" id="kK" type="number" value="3" step="1">
+        <button class="tbl-btn primary" onclick="kuralGoster()">GÖSTER</button>
+      </div>
+      <div class="warn-box" id="kWarn"></div>
+      <div class="rule-grid" id="kGrid" style="display:none"></div>
+    </div>
+
+    <!-- 3. Taban Dönüşümü -->
+    <div class="panel">
+      <div class="sec-title">Taban Dönüşümü</div>
+      <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:12px;">
+        \(\log_a b\) değerini log₁₀ ve ln cinsinden adım adım gösterir.
+      </p>
+      <div class="input-row">
+        <label>Taban (a):</label>
+        <input class="inp" id="dTaban" type="number" value="3" min="1" step="1">
+        <label>Sayı (b):</label>
+        <input class="inp" id="dSayi" type="number" value="81" min="1" step="1">
+        <button class="tbl-btn primary" onclick="tabanDonusumu()">DÖNÜŞTÜR</button>
+      </div>
+      <div class="warn-box" id="dWarn"></div>
+      <div class="conv-row" id="dResult" style="display:none"></div>
+      <div class="step-box" id="dSteps" style="display:none; margin-top:14px;"></div>
+    </div>
+
+    <!-- 4. Grafik -->
+    <div class="panel">
+      <div class="sec-title">
+        y = log<sub>a</sub> x &nbsp;/&nbsp; y = log<sub>b</sub> x<br>
+        <span style="font-weight:400;letter-spacing:1px;">İki Logaritma Karşılaştırma Grafiği</span>
+      </div>
+      <div style="display:flex; gap:48px; flex-wrap:wrap; margin-bottom:12px;">
+        <div style="display:flex; flex-direction:column; align-items:center; gap:6px; min-width:200px;">
+          <span style="font-size:0.78rem; color:var(--text-dim); text-align:center; line-height:1.6;">Birinci eğride taban:<br><strong style="color:#2d6a4f; font-size:1.05rem;">a</strong></span>
+          <div style="display:flex; align-items:center; gap:8px; width:100%;">
+            <input type="range" id="gSlider" min="1.05" max="10" step="0.05" value="2" oninput="grafikGuncelle()" style="accent-color:#2d6a4f; flex:1;">
+            <span class="slider-val" id="gVal" style="color:#2d6a4f;">2</span>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:6px; min-width:200px;">
+          <span style="font-size:0.78rem; color:var(--text-dim); text-align:center; line-height:1.6;">İkinci eğride taban:<br><strong style="color:#c0392b; font-size:1.05rem;">b</strong></span>
+          <div style="display:flex; align-items:center; gap:8px; width:100%;">
+            <input type="range" id="gSlider2" min="1.05" max="10" step="0.05" value="10" oninput="grafikGuncelle()" style="accent-color:#c0392b; flex:1;">
+            <span class="slider-val" id="gVal2" style="color:#c0392b;">10</span>
+          </div>
+        </div>
+      </div>
+      <canvas id="grafik-canvas" width="620" height="360"></canvas>
+      <p style="font-size:0.78rem;color:var(--text-dim);margin-top:8px;">
+        <span style="color:#2d6a4f;">&#9644;</span> log<sub>a</sub> x &nbsp;·&nbsp;
+        <span style="color:#c0392b;">&#9644;</span> log<sub>b</sub> x &nbsp;·&nbsp;
+        Kesişim noktası: (1, 0)
+      </p>
+    </div>
+
+  </div><!-- sag -->
+</div><!-- app -->
+
+<footer>
+  <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+
+<script>
+/* ── YARDIMCI ── */
+function fmt(v, d=4){
+  if(!isFinite(v)) return v>0?"∞":"-∞";
+  return parseFloat(v.toFixed(d)).toString().replace(".",",");
+}
+function log(base, x){ return Math.log(x)/Math.log(base); }
+function showWarn(id, msg){ const el=document.getElementById(id); el.textContent=msg; el.style.display="block"; }
+function hideWarn(id){ document.getElementById(id).style.display="none"; }
+
+/* ══════════════════════════════════
+   1. HESAPLAYICI
+══════════════════════════════════ */
+function hesapla(){
+  hideWarn("hWarn");
+  const a = parseFloat(document.getElementById("hTaban").value);
+  const b = parseFloat(document.getElementById("hSayi").value);
+  const res = document.getElementById("hResult");
+  const steps = document.getElementById("hSteps");
+
+  if(isNaN(a)||isNaN(b)){ showWarn("hWarn","⚠️ Lütfen geçerli sayılar girin."); return; }
+  if(a<=0||a===1){ showWarn("hWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
+  if(b<=0){ showWarn("hWarn","⚠️ Sayı b > 0 olmalıdır."); return; }
+
+  const aFmt = fmt(a,6).replace(/,?0+$/,"");
+  const bFmt = fmt(b,6).replace(/,?0+$/,"");
+
+  // Soru kutusunu göster
+  res.className = "result-box";
+  res.innerHTML = `<span style="color:var(--text-dim);font-size:0.85rem;">SORU:</span> \\(\\log_{${aFmt}} ${bFmt} = ?\\)`;
+
+  const sonuc = log(a, b);
+  const tamSayi = Math.abs(sonuc - Math.round(sonuc)) < 1e-9;
+  const c = Math.round(sonuc);
+
+  steps.style.display = "block";
+  steps.innerHTML = "";
+
+  let adimlar;
+  if(tamSayi){
+    // Tam sayı: 2 adım — a^c = b olduğuna göre + sonuç
+    adimlar = [
+      `\\(${aFmt}^{${c}} = ${bFmt}\\) olduğuna göre,`,
+      `\\(\\Rightarrow \\log_{${aFmt}} ${bFmt} = ${c}\\)`
+    ];
+  } else {
+    // Kesir: taban dönüşümü (2,3,4 — eski sıralama)
+    adimlar = [
+      `<b>Taban dönüşümü kullanılır:</b> \\(c = \\dfrac{\\ln ${bFmt}}{\\ln ${aFmt}}\\)`,
+      `\\(c = \\dfrac{${fmt(Math.log(b))}}{${fmt(Math.log(a))}}\\)`,
+      `\\(c = ${fmt(sonuc)}\\)`
+    ];
+  }
+
+  adimlar.forEach((t,i)=>{
+    const d=document.createElement("div"); d.className="step-line";
+    // Tam sayı senaryosunda numara yok, sadece içerik
+    d.innerHTML= tamSayi ? t : `<span class="hl">${i+1}.</span> ${t}`;
+    steps.appendChild(d);
+  });
+
+  if(window.MathJax) MathJax.typesetPromise([res, steps]).catch(()=>{});
+}
+
+/* ══════════════════════════════════
+   2. KURAL GÖSTERİCİSİ
+══════════════════════════════════ */
+function kuralGoster(){
+  hideWarn("kWarn");
+  const a = parseFloat(document.getElementById("kTaban").value);
+  const m = parseFloat(document.getElementById("kM").value);
+  const n = parseFloat(document.getElementById("kN").value);
+  const k = parseFloat(document.getElementById("kK").value);
+  const grid = document.getElementById("kGrid");
+
+  if([a,m,n,k].some(isNaN)){ showWarn("kWarn","⚠️ Tüm alanları doldurun."); return; }
+  if(a<=0||a===1){ showWarn("kWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
+  if(m<=0||n<=0){ showWarn("kWarn","⚠️ m ve n pozitif olmalıdır."); return; }
+
+  const A=fmt(a,0), M=fmt(m,0), N=fmt(n,0), K=fmt(k,0);
+  const lm  = log(a,m), ln_ = log(a,n);
+  const lmn_v = log(a,m*n), lmd_v = log(a,m/n), lmk_v = log(a,Math.pow(m,k));
+  const lmF=fmt(lm), lnF=fmt(ln_);
+
+  // Her kural için 3 satır: [sol sütun satırı, sağ sütun satırı]
+  // Çarpma
+  const carp = [
+    [`\\(\\log_{${A}}(${M} \\cdot ${N}) = \\log_{${A}} ${fmt(m*n)} = ${fmt(lmn_v)}\\) ✓`,
+     `\\(\\log_{${A}}\\!\\left(\\dfrac{${M}}{${N}}\\right) = \\log_{${A}} ${fmt(m/n)} = ${fmt(lmd_v)}\\) ✓`],
+    [`\\(\\log_{${A}} ${M} + \\log_{${A}} ${N} = ${lmF} + ${lnF} = ${fmt(lm+ln_)}\\) ✓`,
+     `\\(\\log_{${A}} ${M} - \\log_{${A}} ${N} = ${lmF} - ${lnF} = ${fmt(lm-ln_)}\\) ✓`],
+    [`\\(\\Rightarrow \\log_{${A}}(${M} \\cdot ${N}) = \\log_{${A}} ${M} + \\log_{${A}} ${N}\\)`,
+     `\\(\\Rightarrow \\log_{${A}}\\!\\left(\\dfrac{${M}}{${N}}\\right) = \\log_{${A}} ${M} - \\log_{${A}} ${N}\\)`]
+  ];
+
+  // Üs & Taban Dönüşümü
+  const us = [
+    [`\\(\\log_{${A}} ${M}^{${K}} = \\log_{${A}} ${fmt(Math.pow(m,k))} = ${fmt(lmk_v)}\\) ✓`,
+     `\\(\\log_{${A}} ${M} = ${fmt(lm)}\\) ✓`],
+    [`\\(${K} \\cdot \\log_{${A}} ${M} = ${K} \\cdot ${lmF} = ${fmt(k*lm)}\\) ✓`,
+     `\\(\\dfrac{\\log ${M}}{\\log ${A}} = \\dfrac{${fmt(Math.log10(m))}}{${fmt(Math.log10(a))}} = ${fmt(Math.log10(m)/Math.log10(a))}\\) ✓`],
+    [`\\(\\Rightarrow \\log_{${A}} ${M}^{${K}} = ${K} \\cdot \\log_{${A}} ${M}\\)`,
+     `\\(\\Rightarrow \\log_{${A}} ${M} = \\dfrac{\\log ${M}}{\\log ${A}}\\)`]
+  ];
+
+  // Tablo HTML üret
+  function satirOlustur(solIcerik, sagIcerik, baslik=false){
+    const bg = baslik ? "background:var(--surface2);" : "background:var(--surface);";
+    const stil = baslik
+      ? `style="${bg}font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);padding:8px 14px 6px;border-bottom:1px solid var(--border);"`
+      : `style="${bg}padding:10px 14px;font-size:0.88rem;vertical-align:middle;border-bottom:1px solid var(--border);"`;
+    return `<tr>
+      <td ${stil}>${solIcerik}</td>
+      <td ${stil} style="${bg}padding:10px 14px;font-size:0.88rem;vertical-align:middle;border-bottom:1px solid var(--border);border-left:1px solid var(--border);">${sagIcerik}</td>
+    </tr>`;
+  }
+
+  grid.style.display = "block";
+  grid.innerHTML = `
+  <table style="width:100%;border-collapse:collapse;table-layout:fixed;">
+    <colgroup><col style="width:50%"><col style="width:50%"></colgroup>
+    <tbody>
+      ${satirOlustur("ÇARPMA KURALI","BÖLME KURALI",true)}
+      ${satirOlustur(carp[0][0], carp[0][1])}
+      ${satirOlustur(carp[1][0], carp[1][1])}
+      ${satirOlustur(carp[2][0], carp[2][1])}
+      <tr><td colspan="2" style="padding:6px 0;border-top:1px solid var(--border);"></td></tr>
+      ${satirOlustur("ÜS KURALI","TABAN DÖNÜŞÜMÜ",true)}
+      ${satirOlustur(us[0][0], us[0][1])}
+      ${satirOlustur(us[1][0], us[1][1])}
+      ${satirOlustur(us[2][0], us[2][1])}
+    </tbody>
+  </table>`;
+
+  if(window.MathJax) MathJax.typesetPromise([grid]).catch(()=>{});
+}
+
+/* ══════════════════════════════════
+   3. TABAN DÖNÜŞÜMÜ
+══════════════════════════════════ */
+function tabanDonusumu(){
+  hideWarn("dWarn");
+  const a = parseFloat(document.getElementById("dTaban").value);
+  const b = parseFloat(document.getElementById("dSayi").value);
+  const res = document.getElementById("dResult");
+  const steps = document.getElementById("dSteps");
+
+  if(isNaN(a)||isNaN(b)){ showWarn("dWarn","⚠️ Lütfen geçerli sayılar girin."); return; }
+  if(a<=0||a===1){ showWarn("dWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
+  if(b<=0){ showWarn("dWarn","⚠️ Sayı b > 0 olmalıdır."); return; }
+
+  const doğal = Math.log(b)/Math.log(a);
+  const onluk = Math.log10(b)/Math.log10(a);
+  const doğalFmt = fmt(doğal);
+  const onlukFmt = fmt(onluk);
+
+  // Sonuç tam sayı mı?
+  const tamSayi = Math.abs(doğal - Math.round(doğal)) < 1e-9;
+  const c = Math.round(doğal);
+
+  // Özgün çözüm kartı — sadece tam sayı sonuçlarda
+  let ozgunKart = "";
+  if(tamSayi){
+    // b = a^c mi doğrula (güzel gösterim için)
+    ozgunKart = `
+    <div class="conv-card" style="grid-column:1/-1; background:var(--surface); border:2px solid var(--accent);">
+      <div class="conv-label" style="color:var(--accent);">Özgün Çözüm</div>
+      <div class="conv-formula" style="line-height:2;">
+        \\(${fmt(b,0)} = ${fmt(a,0)}^{${c}}\\)<br>
+        \\(\\log_{${fmt(a,0)}} ${fmt(b,0)} = \\log_{${fmt(a,0)}} ${fmt(a,0)}^{${c}}\\)<br>
+        \\(\\Rightarrow \\log_{${fmt(a,0)}} ${fmt(b,0)} = ${c}\\)
+      </div>
+    </div>`;
+  }
+
+  // Kartlar satırı
+  res.style.display = "grid";
+  res.style.gridTemplateColumns = tamSayi ? "1fr" : "1fr 1fr";
+  res.style.gap = "10px";
+  res.innerHTML = ozgunKart + `
+    <div class="conv-card">
+      <div class="conv-label">log<sub>10</sub> Kullanarak</div>
+      <div class="conv-formula">
+        \\(\\log_{${fmt(a,0)}} ${fmt(b,0)} = \\dfrac{\\log ${fmt(b,0)}}{\\log ${fmt(a,0)}}\\)<br><br>
+        \\(= \\dfrac{${fmt(Math.log10(b))}}{${fmt(Math.log10(a))}} = ${onlukFmt}\\)
+      </div>
+    </div>
+    <div class="conv-card">
+      <div class="conv-label">ln Kullanarak</div>
+      <div class="conv-formula">
+        \\(\\log_{${fmt(a,0)}} ${fmt(b,0)} = \\dfrac{\\ln ${fmt(b,0)}}{\\ln ${fmt(a,0)}}\\)<br><br>
+        \\(= \\dfrac{${fmt(Math.log(b))}}{${fmt(Math.log(a))}} = ${doğalFmt}\\)
+      </div>
+    </div>`;
+
+  steps.style.display = "none";
+  steps.innerHTML = "";
+
+  if(window.MathJax) MathJax.typesetPromise([res]).catch(()=>{});
+}
+
+/* ══════════════════════════════════
+   4. GRAFİK
+══════════════════════════════════ */
+function grafikGuncelle(){
+  const a1 = parseFloat(document.getElementById("gSlider").value);
+  const a2 = parseFloat(document.getElementById("gSlider2").value);
+  document.getElementById("gVal").textContent  = fmt(a1,2);
+  document.getElementById("gVal2").textContent = fmt(a2,2);
+  cizGrafik(a1, a2);
+}
+
+function cizGrafik(a1, a2){
+  const canvas = document.getElementById("grafik-canvas");
+  const W = canvas.width, H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,W,H);
+
+  // Koordinat sistemi: x 0.05'ten başlıyor (log tanım alanı), y ekseni x=0'da
+  const xMin=-0.5, xMax=12, yMin=-3.5, yMax=3.5;
+  const toX = x => (x-xMin)/(xMax-xMin)*W;
+  const toY = y => H - (y-yMin)/(yMax-yMin)*H;
+
+  // Arka plan
+  ctx.fillStyle = "#fdfcf9";
+  ctx.fillRect(0,0,W,H);
+
+  // Izgara
+  ctx.strokeStyle = "#e8e3d8"; ctx.lineWidth = 1;
+  for(let gx=1; gx<=11; gx++){
+    ctx.beginPath(); ctx.moveTo(toX(gx),0); ctx.lineTo(toX(gx),H); ctx.stroke();
+  }
+  for(let gy=-3; gy<=3; gy++){
+    ctx.beginPath(); ctx.moveTo(0,toY(gy)); ctx.lineTo(W,toY(gy)); ctx.stroke();
+  }
+
+  // x ekseni (y=0)
+  ctx.strokeStyle = "#b0a898"; ctx.lineWidth = 1.8; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(0,toY(0)); ctx.lineTo(W,toY(0)); ctx.stroke();
+
+  // y ekseni (x=0)
+  ctx.beginPath(); ctx.moveTo(toX(0),0); ctx.lineTo(toX(0),H); ctx.stroke();
+
+  // Eksen etiketleri — x
+  ctx.fillStyle = "#8a7f72"; ctx.font = "11px DM Sans, sans-serif"; ctx.textAlign="center";
+  for(let gx=1; gx<=11; gx+=1){
+    if(gx===0) continue;
+    ctx.fillText(gx, toX(gx), toY(0)+14);
+  }
+  // Eksen etiketleri — y (y ekseninin soluna)
+  ctx.textAlign="right";
+  for(let gy=-3; gy<=3; gy++){
+    if(gy!==0) ctx.fillText(gy, toX(0)-5, toY(gy)+4);
+  }
+
+  // Eğri çizme
+  function cizEgri(a, renk){
+    ctx.strokeStyle = renk; ctx.lineWidth = 2.5; ctx.setLineDash([]);
+    ctx.beginPath(); let started=false;
+    for(let px=0; px<W; px++){
+      const x = xMin + (px/W)*(xMax-xMin);
+      if(x<=0.001) continue;
+      const y = Math.log(x)/Math.log(a);
+      if(!isFinite(y)||y<yMin||y>yMax){ started=false; continue; }
+      const sx=px, sy=toY(y);
+      if(!started){ ctx.moveTo(sx,sy); started=true; } else ctx.lineTo(sx,sy);
+    }
+    ctx.stroke();
+  }
+
+  cizEgri(a1, "#2d6a4f");
+  cizEgri(a2, "#c0392b");
+
+  // (1,0) noktası
+  ctx.fillStyle="#e76f51";
+  ctx.beginPath(); ctx.arc(toX(1),toY(0),5,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle="#fff"; ctx.lineWidth=1.5; ctx.stroke();
+
+  // Etiketler
+  ctx.font="bold 12px DM Sans, sans-serif"; ctx.setLineDash([]);
+  const y1At8 = Math.log(8)/Math.log(a1);
+  const y2At8 = Math.log(8)/Math.log(a2);
+  ctx.fillStyle="#2d6a4f"; ctx.textAlign="left";
+  if(y1At8>=yMin && y1At8<=yMax)
+    ctx.fillText(`log_a(x)  a=${fmt(a1,2)}`, toX(7.5), toY(y1At8)-8);
+  ctx.fillStyle="#c0392b";
+  if(y2At8>=yMin && y2At8<=yMax)
+    ctx.fillText(`log_b(x)  b=${fmt(a2,2)}`, toX(7.5), toY(y2At8)+16);
+}
+
+/* ── BAŞLAT ── */
+window.addEventListener("load", ()=>{
+  grafikGuncelle();
+  if(window.MathJax) MathJax.typesetPromise().catch(()=>{});
+});
+</script>
+</body>
+</html>

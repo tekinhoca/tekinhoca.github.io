@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Türev & İntegral Hesap Aracı — TekinHoca</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.8.0/math.js"></script>
+<style>
+:root {
+  --bg:       #f4f1eb;
+  --surface:  #fdfcf9;
+  --surface2: #eee9df;
+  --border:   #d8d0c0;
+  --accent:   #2d6a4f;
+  --accent2:  #e76f51;
+  --accent3:  #457b9d;
+  --accent4:  #e9c46a;
+  --text:     #1a1a1a;
+  --text-dim: #6b6456;
+  --radius:   12px;
+  --shadow:   0 4px 24px rgba(0,0,0,0.08);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(45,106,79,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(69,123,157,0.06) 0%, transparent 50%);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+}
+
+/* ── HEADER ── */
+header {
+  max-width: 1200px;
+  margin: 0 auto 28px;
+  display: flex; align-items: center; gap: 18px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--border);
+}
+header img { height: 44px; width: auto; }
+header .titles h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.75rem);
+  font-weight: 700; color: var(--accent);
+}
+header .titles p { font-size: 0.85rem; color: var(--text-dim); margin-top: 3px; }
+
+/* ── ANA DÜZEN ── */
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 860px) { .app { grid-template-columns: 1fr; } }
+
+/* ── PANEL ── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.panel + .panel { margin-top: 16px; }
+
+.sec-title {
+  font-family: 'Lora', serif;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── SOL PANEL ── */
+.formula-block { margin-bottom: 14px; }
+.formula-block h4 {
+  font-family: 'Lora', serif;
+  font-size: 0.82rem; font-weight: 700;
+  color: var(--accent); margin-bottom: 6px;
+}
+.formula-math {
+  font-size: 0.85rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  line-height: 2.1;
+  color: var(--text);
+}
+
+/* ── SEKMELER ── */
+.tab-bar {
+  display: flex; gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 20px;
+}
+.tab-btn {
+  padding: 10px 28px;
+  border: none; background: transparent;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem; font-weight: 600;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* ── BUTONLAR ── */
+.tbl-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  letter-spacing: 1px; cursor: pointer;
+  background: var(--surface2); color: var(--text-dim);
+  transition: background 0.2s, color 0.2s;
+}
+.tbl-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tbl-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.tbl-btn:not(:disabled):hover { filter: brightness(0.93); }
+
+/* ── GİRİŞ ── */
+.input-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.input-row label { font-size: 0.83rem; color: var(--text-dim); white-space: nowrap; }
+.inp {
+  padding: 7px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  background: var(--surface2);
+  color: var(--text);
+  width: 110px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.inp:focus { border-color: var(--accent); }
+select.inp { width: auto; min-width: 200px; cursor: pointer; }
+.inp.wide { width: 180px; }
+
+/* ── UYARI ── */
+.warn-box {
+  display: none;
+  background: #fffbe6;
+  border: 1px solid var(--accent4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  color: #7a6000;
+  margin-bottom: 10px;
+}
+
+/* ── SONUÇ / ADIM KUTUSU ── */
+.result-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  min-height: 48px;
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: var(--text);
+  margin-top: 12px;
+}
+.result-box.empty { color: var(--text-dim); font-style: italic; }
+
+.step-box {
+  margin-top: 14px;
+  border-left: 3px solid var(--accent);
+  padding-left: 14px;
+}
+.step-line {
+  font-size: 0.86rem; line-height: 1.9;
+  color: var(--text); margin-bottom: 2px;
+}
+.step-line .hl { color: var(--accent); font-weight: 700; }
+
+/* ── KURAL KARTLARI ── */
+.kural-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+@media (max-width: 640px) { .kural-grid { grid-template-columns: 1fr; } }
+.kural-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.kural-card .kc-title {
+  font-size: 0.74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--text-dim); margin-bottom: 6px;
+}
+.kural-card .kc-formula { font-size: 0.88rem; color: var(--text); }
+.kural-card .kc-ornek { font-size: 0.82rem; color: var(--accent); margin-top: 5px; }
+
+/* ── GRAFİK ── */
+canvas.grafik {
+  display: block; width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  margin-top: 12px;
+}
+
+/* ── SLIDER ── */
+.slider-row {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.slider-row label { font-size: 0.84rem; color: var(--text-dim); }
+input[type=range] { accent-color: var(--accent); cursor: pointer; }
+.slider-val { font-size: 0.95rem; font-weight: 700; color: var(--accent); min-width: 40px; }
+
+/* ── RİEMANN ── */
+.riemann-info {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  margin-top: 10px;
+}
+.ri-card {
+  flex: 1; min-width: 130px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: center;
+}
+.ri-card .ri-label {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--text-dim);
+  line-height: 1.6; margin-bottom: 8px;
+}
+.ri-card .ri-val { font-size: 1.05rem; font-weight: 700; color: var(--accent); }
+
+/* ── FOOTER ── */
+footer {
+  max-width: 1200px;
+  margin: 40px auto 0;
+  padding-top: 16px;
+  border-top: 2px solid var(--border);
+  text-align: center;
+}
+footer p {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+  padding-bottom: 20px;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <img src="../img/THlogo1.png" alt="TekinHoca Logo"
+       style="max-width:100%;display:block;margin:0 auto 0 0;border-radius:10px;">
+  <div class="titles" style="text-align:right;">
+    <h1>Türev &amp; İntegral Hesap Aracı</h1>
+    <p>Türev & İntegral Kuralları · Teğet doğrusu · Riemann Toplamı · Alan & Hacim Hesabı</p>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- ═══ SOL PANEL ═══ -->
+
+  <div>
+    <div class="panel">
+      <div class="sec-title">Türev Tanımı</div>
+      <div class="formula-block">
+        <div class="formula-math">
+          \(f'(x) = \lim_{h \to 0} \dfrac{f(x+h)-f(x)}{h}\)
+        </div>
+      </div>
+      <div class="formula-block">
+        <h4>Temel Kurallar</h4>
+        <div class="formula-math">
+Sabit terimin türevi:<br>
+          \((c)' = 0\)<br>
+Üslü ifadenin türevi:<br>
+          \((x^n)' = nx^{n-1}\)<br>
+Çarpımın türevi:<br>
+          \((f \cdot g)' = f'g + fg'\)<br>
+Bölümün türevi:<br>
+          \(\left(\dfrac{f}{g}\right)' = \dfrac{f'g - fg'}{g^2}\)<br>
+Bileşke fonkiyonun türevi:<br>
+          \((f(g))' = f'(g)\cdot g'\)
+        </div>
+      </div>
+      <div class="formula-block">
+        <h4>Türev Tablosu</h4>
+        <div class="formula-math">
+          \((\sin x)' = \cos x\)<br>
+          \((\cos x)' = -\sin x\)<br>
+          \((\tan x)' = \dfrac{1}{\cos^2 x}\)<br>
+          \((e^x)' = e^x\)<br>
+          \((\ln x)' = \dfrac{1}{x}\)<br>
+          \((a^x)' = a^x \ln a\)
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="sec-title">İntegral Tanımı</div>
+      <div class="formula-block">
+        <div class="formula-math">
+          \(f'(x) = F(x)\) olmak üzere<br>
+Belirsiz İntegral:<br>
+          \(\int F(x)\,dx = f(x) + c\)<br>
+Belirli İntegral:<br>
+          \(\int_a^b F(x)\,dx = f(b) - f(a)\)<br>
+        </div>
+      </div>
+      <div class="formula-block">
+        <h4>Temel İntegraller</h4>
+        <div class="formula-math">
+          \(\int x^n dx = \dfrac{x^{n+1}}{n+1} + c\)<br>
+          \(\int \sin x\,dx = -\cos x + c\)<br>
+          \(\int \cos x\,dx = \sin x + c\)<br>
+          \(\int e^x dx = e^x + c\)<br>
+          \(\int \dfrac{1}{x} dx = \ln|x| + c\)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="panel">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="sekmeAc('turev',this)">📐 Türev</button>
+        <button class="tab-btn" onclick="sekmeAc('integral',this)">∫ İntegral</button>
+      </div>
+
+      <div class="tab-pane active" id="tab-turev">
+
+        <div class="sec-title">Kural Göstericisi</div>
+        <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:12px;">
+          Fonksiyon seçin; hangi türev kuralının uygulandığı gerekçeli gösterilir.
+        </p>
+        <div class="input-row">
+          <label>f(x) =</label>
+          <select class="inp" id="kFonk">
+            <option value="poly3">3x⁴ − 5x² + 2</option>
+            <option value="poly2">x³ + 4x</option>
+            <option value="sincos">sin(x)·cos(x)</option>
+            <option value="frac">x² / (x+1)</option>
+            <option value="zincir_sin">sin(3x²)</option>
+            <option value="zincir_exp">e^(x²)</option>
+            <option value="ln_x">ln(x²+1)</option>
+            <option value="tan_x">tan(5x)</option>
+          </select>
+          <button class="tbl-btn primary" onclick="kuralGoster()">TÜREV AL</button>
+        </div>
+        <div class="warn-box" id="kWarn"></div>
+        <div id="kKuralBox" style="display:none; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius); padding:14px 18px; margin-bottom:16px;">
+          <div style="font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;" id="kKuralAd"></div>
+          <div style="font-size:1.05rem;" id="kKuralTex"></div>
+        </div>
+        <div id="kCozumWrap" style="display:none;">
+          <div class="sec-title" style="margin-bottom:10px;">Çözüm Aşamaları</div>
+          <div class="step-box" id="kSteps" style="margin-top:0;"></div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:22px 0;">
+
+        <div class="sec-title">Teğet Doğrusu</div>
+        <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:12px;">
+          Fonksiyon ve x₀ noktası seçin; teğet denklemi hesaplanır ve grafik çizilir.
+        </p>
+        <div class="input-row">
+          <label>f(x) =</label>
+          <select class="inp" id="tFonk" onchange="tegetCiz()">
+            <option value="x2">x²</option>
+            <option value="x3">x³</option>
+            <option value="sinx">sin(x)</option>
+            <option value="cosx">cos(x)</option>
+            <option value="ex">eˣ</option>
+            <option value="lnx">ln(x)</option>
+          </select>
+          <label>x₀ =</label>
+          <input class="inp" id="tX0" type="number" value="1" step="0.1" style="width:80px" oninput="tegetCiz()">
+        </div>
+        <div class="result-box" id="tResult" style="min-height:36px;"></div>
+        <canvas class="grafik" id="tCanvas" width="580" height="300"></canvas>
+
+      </div>
+
+      <div class="tab-pane" id="tab-integral">
+
+        <div class="sec-title">Riemann Toplamı Göstericisi</div>
+        <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:14px;">
+          Açılır listedeki fonksiyonları kullanmak için <strong>HAZIR SEÇİM</strong><br>Elle fonksiyon girmek için (math.js formatında) <strong>DİNAMİK GİRİŞ</strong><br>Dikdörtgen sayısı arttıkça gerçek alana yaklaştığınızı gözlemleyin.<br><strong>NOT:</strong> Açılır listedeki fonksiyonların belirli integralleri sonraki bölümde adım adım hesaplanır.
+        </p>
+        
+        <div style="display:flex;gap:10px;margin-bottom:14px;">
+          <button class="tbl-btn" id="rModHazir" onclick="rModSec('hazir')" style="background:var(--accent);color:#fff;border-color:var(--accent);">Hazır Seçim</button>
+          <button class="tbl-btn" id="rModElle" onclick="rModSec('elle')">Dinamik Giriş (math.js)</button>
+        </div>
+
+        <div id="rHazirRow" class="input-row">
+          <label>f(x) =</label>
+          <select class="inp" id="rFonk" onchange="riemannCiz()">
+            <option value="xpow">x</option>
+            <option value="x2">x²</option>
+            <option value="x3">x³</option>
+            <option value="x3m4x2p5x">x³ − 4x² + 5x</option>
+            <option value="sqrt">√x</option>
+            <option value="sinx">sin(x)</option>
+            <option value="cosx">cos(x)</option>
+            <option value="ex">eˣ</option>
+          </select>
+        </div>
+
+        <div id="rElleRow" style="display:none;margin-bottom:14px;">
+          <div class="input-row">
+            <label>f(x) =</label>
+            <input class="inp wide" id="rElleF" type="text" value="x^2 - 2*x + 2" oninput="riemannCiz()">
+          </div>
+          <p style="font-size:0.78rem;color:var(--text-dim);">Örn: x^2, sin(x), x^3 - x, sqrt(x), cos(x) + 1</p>
+        </div>
+
+        <div class="input-row">
+          <label>Sınırlar: a =</label>
+          <input class="inp" id="rA" type="number" value="0" step="0.5" style="width:70px" oninput="riemannCiz()">
+          <label>b =</label>
+          <input class="inp" id="rB" type="number" value="3" step="0.5" style="width:70px" oninput="riemannCiz()">
+        </div>
+        <div class="slider-row">
+          <label>Dikdörtgen sayısı n =</label>
+          <input type="range" id="rN" min="1" max="100" value="5" oninput="riemannGuncelle()">
+          <span class="slider-val" id="rNVal">5</span>
+        </div>
+        <div class="warn-box" id="rWarn"></div>
+        <div class="riemann-info">
+          <div class="ri-card">
+            <div class="ri-label" id="riSumLabel">N DİKDÖRTGEN<br>YARDIMIYLA HESAPLANAN<br>YAKLAŞIK ALAN</div>
+            <div class="ri-val" id="riSum">—</div>
+          </div>
+          <div class="ri-card">
+            <div class="ri-label">10.000 DİKDÖRTGEN<br>YARDIMIYLA HESAPLANAN<br>YAKLAŞIK ALAN</div>
+            <div class="ri-val" id="riTrue">—</div>
+          </div>
+          <div class="ri-card">
+            <div class="ri-label">BELİRLİ İNTEGRAL<br>YARDIMIYLA HESAPLANAN<br>GERÇEK ALAN</div>
+            <div class="ri-val" id="riExact">—</div>
+          </div>
+        </div>
+        <canvas class="grafik" id="rCanvas" width="580" height="300"></canvas>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:22px 0;">
+
+        <div class="sec-title">Belirli İntegral Hesaplayıcı</div>
+        <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:12px;">
+          Fonksiyon ve sınırlar seçilince belirli integral adım adım hesaplanır.
+        </p>
+        <div class="input-row">
+          <label>f(x) =</label>
+          <select class="inp" id="iFonk">
+            <option value="xpow">x</option>
+            <option value="x2">x²</option>
+            <option value="x3">x³</option>
+            <option value="x3m4x2p5x">x³ − 4x² + 5x</option>
+            <option value="sqrt">√x</option>
+            <option value="sinx">sin(x)</option>
+            <option value="cosx">cos(x)</option>
+            <option value="ex">eˣ</option>
+          </select>
+          <label>a =</label>
+          <input class="inp" id="iA" type="number" value="0" step="0.5" style="width:70px">
+          <label>b =</label>
+          <input class="inp" id="iB" type="number" value="3" step="0.5" style="width:70px">
+          <button class="tbl-btn primary" onclick="integralHesapla()">HESAPLA</button>
+        </div>
+        <div class="warn-box" id="iWarn"></div>
+        <div class="result-box empty" id="iResult" style="display:none;"></div>
+        <div class="step-box" id="iSteps" style="display:none"></div>
+
+        <hr style="border:none;border-top:1px solid var(--border);margin:22px 0;">
+
+        <div class="sec-title">İki Fonksiyon Arasındaki Alan &amp; Dönel Nesne Hacim Hesaplayıcı</div>
+        <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:10px;">
+          İki fonksiyon arasında kalan bölgenin alanı ve bu bölgenin \(x\)-ekseni etrafında döndürülmesiyle meydana gelen dönel nesnenin hacmi adım adım hesaplanır.
+        </p>
+
+        <div style="display:flex;gap:10px;margin-bottom:14px;">
+          <button class="tbl-btn" id="aModHazir" onclick="aModSec('hazir')" style="background:var(--accent);color:#fff;border-color:var(--accent);">Hazır Fonksiyonlar</button>
+          <button class="tbl-btn" id="aModElle" onclick="aModSec('elle')">Gelişmiş Dinamik Giriş (math.js)</button>
+        </div>
+
+        <div id="aHazirRow" class="input-row">
+          <label>Fonksiyon çifti:</label>
+          <select class="inp" id="aFonkCift" onchange="aAralikGuncelle()" style="min-width:260px;">
+            <option value="sinx|cosx">sin(x)  ve  cos(x)</option>
+            <option value="x2|x3mx">x²  ve  x³ − x</option>
+            <option value="x2m1|sinx">x² − 1  ve  sin(x)</option>
+            <option value="sinx|x3mx">sin(x)  ve  x³ − x</option>
+            <option value="x2|cosx">x²  ve  cos(x)</option>
+          </select>
+        </div>
+
+        <div id="aElleRow" style="display:none;margin-bottom:14px;">
+          <div class="input-row" style="margin-bottom:6px;">
+            <label>f(x) =</label>
+            <input class="inp wide" id="aElleF" type="text" value="x" placeholder="Örn: x^2" style="width:180px">
+            <label style="margin-left:10px;">g(x) =</label>
+            <input class="inp wide" id="aElleG" type="text" value="x^3" placeholder="Örn: x" style="width:180px">
+          </div>
+          <p style="font-size:0.78rem;color:var(--text-dim);">Doğal matematik dili desteklenir: sin(x), cos(x), x^2, sqrt(x), exp(x)</p>
+        </div>
+
+        <div class="input-row">
+          <label>Kesişim Arama Sınırları: x ∈ [</label>
+          <input class="inp" id="aXMin" type="number" value="-5" step="0.5" style="width:70px">
+          <label>,</label>
+          <input class="inp" id="aXMax" type="number" value="5" step="0.5" style="width:70px">
+          <label>]</label>
+          
+          <label style="margin-left:10px;">Hesaplama Amacı:</label>
+          <select class="inp" id="aHesapTuru" style="min-width:140px;">
+            <option value="alan">Sadece Alan Hesabı</option>
+            <option value="alanVeHacim">Alan &amp; x-Ekseni Etrafında Hacim</option>
+          </select>
+          
+          <button class="tbl-btn primary" onclick="alanHacimHesapla()">HESAPLA</button>
+        </div>
+
+        <div class="warn-box" id="aWarn"></div>
+        
+        <div id="aCozumWrap" style="display:none; margin-top:14px;">
+          <div class="sec-title" style="margin-bottom:10px; color:var(--accent);">Alan &amp; Hacim Çözüm Aşamaları</div>
+          <div class="step-box" id="aSteps" style="margin-top:0; background: rgba(45,106,79,0.03); padding: 14px; border-radius: 8px;"></div>
+        </div>
+
+        <div class="result-box empty" id="aResult">Fonksiyonları seçip Hesapla'ya basın.</div>
+        <canvas class="grafik" id="aCanvas" width="580" height="280"></canvas>
+
+      </div></div></div></div><footer>
+  <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+
+<script>
+/* ══════════════════════════════════
+   YARDIMCI FONKSİYONLAR
+══════════════════════════════════ */
+function fmt(v,d=4){ return isFinite(v)?parseFloat(v.toFixed(d)).toString().replace(".",","):v>0?"∞":"-∞"; }
+function showWarn(id,msg){ const e=document.getElementById(id); e.textContent=msg; e.style.display="block"; }
+function hideWarn(id){ document.getElementById(id).style.display="none"; }
+
+function sekmeAc(id, btn){
+  document.querySelectorAll(".tab-pane").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tab-"+id).classList.add("active");
+  btn.classList.add("active");
+  if(id==='integral') { riemannCiz(); } else { tegetCiz(); }
+}
+
+function rModSec(mod){
+  document.getElementById("rHazirRow").style.display = mod==="hazir"?"flex":"none";
+  document.getElementById("rElleRow").style.display  = mod==="elle" ?"block":"none";
+  document.getElementById("rModHazir").style.background = mod==="hazir"?"var(--accent)":"";
+  document.getElementById("rModHazir").style.color      = mod==="hazir"?"#fff":"";
+  document.getElementById("rModElle").style.background  = mod==="elle" ?"var(--accent)":"";
+  document.getElementById("rModElle").style.color       = mod==="elle" ?"#fff":"";
+  riemannCiz();
+}
+
+/* Fonksiyon sabit tanımları */
+const FN = {
+  x2:    { fn: x=>x*x,            d: x=>2*x,            F: x=>x*x*x/3,              tex:"x^2",       dtex:"2x",                    Ftex:"\\dfrac{x^3}{3}",        fAdim: x0=>`${fmt(x0)}^2 = ${fmt(x0*x0)}`, dAdim: x0=>`2 \\cdot ${fmt(x0)} = ${fmt(2*x0)}` },
+  x3:    { fn: x=>x*x*x,          d: x=>3*x*x,          F: x=>x*x*x*x/4,            tex:"x^3",       dtex:"3x^2",                  Ftex:"\\dfrac{x^4}{4}",        fAdim: x0=>`${fmt(x0)}^3 = ${fmt(x0*x0*x0)}`, dAdim: x0=>`3 \\cdot ${fmt(x0)}^2 = ${fmt(3*x0*x0)}` },
+  sinx:  { fn: x=>Math.sin(x),    d: x=>Math.cos(x),    F: x=>-Math.cos(x),         tex:"\\sin x",   dtex:"\\cos x",               Ftex:"-\\cos x",               fAdim: x0=>`\\sin(${fmt(x0)}) = ${fmt(Math.sin(x0))}`, dAdim: x0=>`\\cos(${fmt(x0)}) = ${fmt(Math.cos(x0))}` },
+  cosx:  { fn: x=>Math.cos(x),    d: x=>-Math.sin(x),   F: x=>Math.sin(x),          tex:"\\cos x",   dtex:"-\\sin x",              Ftex:"\\sin x",                fAdim: x0=>`\\cos(${fmt(x0)}) = ${fmt(Math.cos(x0))}`, dAdim: x0=>`-\\sin(${fmt(x0)}) = ${fmt(-Math.sin(x0))}` },
+  ex:    { fn: x=>Math.exp(x),    d: x=>Math.exp(x),    F: x=>Math.exp(x),          tex:"e^x",       dtex:"e^x",                   Ftex:"e^x",                    fAdim: x0=>`e^{${fmt(x0)}} = ${fmt(Math.exp(x0))}`, dAdim: x0=>`e^{${fmt(x0)}} = ${fmt(Math.exp(x0))}` },
+  lnx:   { fn: x=>Math.log(x),    d: x=>1/x,            F: x=>x*Math.log(x)-x,      tex:"\\ln x",    dtex:"\\dfrac{1}{x}",         Ftex:"x\\ln x - x",            fAdim: x0=>`\\ln(${fmt(x0)}) = ${fmt(Math.log(x0))}`, dAdim: x0=>`\\dfrac{1}{${fmt(x0)}} = ${fmt(1/x0)}` },
+  x:     { fn: x=>x,              d: x=>1,              F: x=>x*x/2,               tex:"x",          dtex:"1",                     Ftex:"\\dfrac{x^2}{2}",        fAdim: x0=>`${fmt(x0)}`, dAdim: x0=>`1` },
+  x3mx:  { fn: x=>x*x*x-x,       d: x=>3*x*x-1,        F: x=>x*x*x*x/4-x*x/2,    tex:"x^3-x",     dtex:"3x^2-1",                Ftex:"\\dfrac{x^4}{4}-\\dfrac{x^2}{2}", fAdim: x0=>`${fmt(x0)}^3 - ${fmt(x0)} = ${fmt(x0*x0*x0-x0)}`, dAdim: x0=>`3 \\cdot ${fmt(x0)}^2 - 1 = ${fmt(3*x0*x0-1)}` },
+  sqrt:  { fn: x=>Math.sqrt(x),   d: x=>0.5/Math.sqrt(x), F: x=>2*Math.sqrt(x*x*x)/3, tex:"\\sqrt{x}", dtex:"\\dfrac{1}{2\\sqrt{x}}", Ftex:"\\dfrac{2}{3}x^{3/2}",     fAdim: x0=>`\\sqrt{${fmt(x0)}} = ${fmt(Math.sqrt(x0))}`, dAdim: x0=>`\\dfrac{1}{2\\sqrt{${fmt(x0)}}} = ${fmt(0.5/Math.sqrt(x0))}` },
+  xpow:  { fn: x=>x,              d: x=>1,              F: x=>x*x/2,               tex:"x",          dtex:"1",                     Ftex:"\\dfrac{x^2}{2}",        fAdim: x0=>`${fmt(x0)}`, dAdim: x0=>`1` },
+  x2m1:  { fn: x=>x*x-1,         d: x=>2*x,            F: x=>x*x*x/3-x,           tex:"x^2-1",      dtex:"2x",                    Ftex:"\\dfrac{x^3}{3}-x",      fAdim: x0=>`${fmt(x0)}^2 - 1 = ${fmt(x0*x0-1)}`, dAdim: x0=>`2 \\cdot ${fmt(x0)} = ${fmt(2*x0)}` },
+  x3m4x2p5x: { fn: x=>x*x*x-4*x*x+5*x, d: x=>3*x*x-8*x+5, F: x=>x*x*x*x/4-4*x*x*x/3+5*x*x/2, tex:"x^3-4x^2+5x", dtex:"3x^2-8x+5", Ftex:"\\dfrac{x^4}{4}-\\dfrac{4x^3}{3}+\\dfrac{5x^2}{2}", fAdim: x0=>`${fmt(x0)}^3-4\\cdot${fmt(x0)}^2+5\\cdot${fmt(x0)}=${fmt(x0*x0*x0-4*x0*x0+5*x0)}`, dAdim: x0=>`3\\cdot${fmt(x0)}^2-8\\cdot${fmt(x0)}+5=${fmt(3*x0*x0-8*x0+5)}` }
+};
+
+/* ══════════════════════════════════
+   1. KURAL GÖSTERİCİSİ
+══════════════════════════════════ */
+const KURALLAR = {
+  poly3: { ad:"Üs + Toplam Kuralı", kuralTex:"(x^n)' = nx^{n-1}, \\quad (f+g)' = f'+g'", fonk:"3x^4 - 5x^2 + 2", turev:"12x^3 - 10x", adimlar:[ "Her terimin ayrı ayrı türevi alınır ve toplanır. (toplam kuralı)", "\\((3x^4)' = 4 \\cdot 3x^{4-1} = 12x^3\\) &nbsp;(üs kuralı)", "\\((5x^2)' = 2 \\cdot 5x^{2-1} = 10x\\) &nbsp;(üs kuralı)", "\\((2)' = 0\\) &nbsp;(sabit terim kuralı)", "Sonuç: \\(f'(x) = 12x^3 - 10x\\)" ] },
+  poly2: { ad:"Üs + Toplam Kuralı", kuralTex:"(x^n)' = nx^{n-1}, \\quad (f+g)' = f'+g'", fonk:"x^3 + 4x", turev:"3x^2 + 4", adimlar:[ "Her terimin ayrı ayrı türevi alınır ve toplanır. (toplam kuralı)", "\\((x^3)' = 3x^2\\) &nbsp;(üs kuralı)", "\\((4x)' = 4\\)", "Sonuç: \\(f'(x) = 3x^2 + 4\\)" ] },
+  sincos: { ad:"Çarpım Kuralı", kuralTex:"(f \\cdot g)' = f'g + fg'", fonk:"\\sin x \\cdot \\cos x", turev:"\\cos^2 x - \\sin^2 x = \\cos 2x", adimlar:[ "f = sin x → f′ = cos x", "g = cos x → g′ = −sin x", "\\((f \\cdot g)' = \\cos x \\cdot \\cos x + \\sin x \\cdot (-\\sin x)\\)", "\\(= \\cos^2 x - \\sin^2 x = \\cos 2x\\)" ] },
+  frac: { ad:"Bölüm Kuralı", kuralTex:"\\left(\\dfrac{f}{g}\right)' = \\dfrac{f'g - fg'}{g^2}", fonk:"\\dfrac{x^2}{x+1}", turev:"\\dfrac{x^2+2x}{(x+1)^2}", adimlar:[ "f = x² → f′ = 2x", "g = x+1 → g′ = 1", "\\(\\left(\\dfrac{f}{g}\right)' = \\dfrac{2x(x+1) - x^2 \\cdot 1}{(x+1)^2}\\)", "\\(= \\dfrac{2x^2+2x-x^2}{(x+1)^2} = \\dfrac{x^2+2x}{(x+1)^2}\\)" ] },
+  zincir_sin: { ad:"Zincir Kuralı", kuralTex:"(f(g))' = f'(g) \\cdot g'", fonk:"\\sin(3x^2)", turev:"6x\\cos(3x^2)", adimlar:[ "Dış fonksiyon: sin(u), iç fonksiyon: u = 3x²", "sin′(u) = cos(u)", "u′ = (3x²)′ = 6x", "\\((\\sin(3x^2))' = \\cos(3x^2) \\cdot 6x = 6x\\cos(3x^2)\\)" ] },
+  zincir_exp: { ad:"Zincir Kuralı", kuralTex:"(f(g))' = f'(g) \\cdot g'", fonk:"e^{x^2}", turev:"2x \\cdot e^{x^2}", adimlar:[ "Dış fonksiyon: eᵘ, iç fonksiyon: u = x²", "(eᵘ)′ = eᵘ", "u′ = 2x", "\\((e^{x^2})' = e^{x^2} \\cdot 2x\\)" ] },
+  ln_x: { ad:"Zincir Kuralı", kuralTex:"(f(g))' = f'(g) \\cdot g'", fonk:"\\ln(x^2+1)", turev:"\\dfrac{2x}{x^2+1}", adimlar:[ "Dış fonksiyon: ln(u), iç fonksiyon: u = x²+1", "(ln u)′ = 1/u", "u′ = 2x", "\\((\\ln(x^2+1))' = \\dfrac{1}{x^2+1} \\cdot 2x = \\dfrac{2x}{x^2+1}\\)" ] },
+  tan_x: { ad:"Zincir Kuralı", kuralTex:"(f(g))' = f'(g) \\cdot g'", fonk:"\\tan(5x)", turev:"\\dfrac{5}{\\cos^2(5x)}", adimlar:[ "Dış fonksiyon: tan(u), iç fonksiyon: u = 5x", "(tan u)′ = 1/cos²(u)", "u′ = 5", "\\((\\tan(5x))' = \\dfrac{5}{\\cos^2(5x)}\\)" ] }
+};
+
+function kuralGoster(){
+  const sec = document.getElementById("kFonk").value;
+  const k = KURALLAR[sec];
+  if(!k) return;
+  const kuralBox = document.getElementById("kKuralBox");
+  kuralBox.style.display = "block";
+  document.getElementById("kKuralAd").textContent = k.ad + " kullanılır:";
+  document.getElementById("kKuralTex").innerHTML = `\\(${k.kuralTex}\\)`;
+  document.getElementById("kCozumWrap").style.display = "block";
+  const steps = document.getElementById("kSteps");
+  steps.innerHTML = "";
+  k.adimlar.forEach((a,i)=>{
+    const d=document.createElement("div"); d.className="step-line";
+    d.innerHTML=`<span class="hl">${i+1}.</span> ${a}`;
+    steps.appendChild(d);
+  });
+  if(window.MathJax) MathJax.typesetPromise([kuralBox, steps]).catch(()=>{});
+}
+
+/* ══════════════════════════════════
+   2. TEĞET DOĞRUSU
+══════════════════════════════════ */
+function tegetCiz(){
+  const sec = document.getElementById("tFonk").value;
+  const x0 = parseFloat(document.getElementById("tX0").value);
+  const fonk = FN[sec]; if(!fonk) return;
+  if(isNaN(x0)) return;
+
+  const y0 = fonk.fn(x0);
+  const m  = fonk.d(x0);
+  if(!isFinite(y0)||!isFinite(m)) return;
+
+  const b = y0 - m*x0;
+  const x0Str = fmt(x0);
+  const y0Str = fmt(y0);
+  const mStr  = fmt(m);
+  const bAbs  = fmt(Math.abs(b));
+  const bKisim = b >= 0 ? `+ ${fmt(b)}` : `- ${bAbs}`;
+  const x0Tex  = x0 >= 0 ? x0Str : `(${x0Str})`;
+
+  const res = document.getElementById("tResult");
+  res.className = "result-box";
+  res.innerHTML = `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:14px;font-size:0.9rem;">
+      Teğet Doğrusunun Denklemi: &nbsp;\\((y - y_0) = m \\cdot (x - x_0)\\)
+    </div>
+    <div style="font-size:0.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Çözüm Aşamaları</div>
+    <div style="line-height:2.2;font-size:0.9rem;">
+      \\(x_0 = ${x0Str}\\)<br>
+      \\(y_0 = f(x_0) = ${fonk.fAdim(x0)}\\)<br>
+      \\(f'(x) = ${fonk.dtex}\\)<br>
+      \\(m = f'(x_0) = f'(${x0Str}) = ${fonk.dAdim(x0)}\\)
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:0.9rem;">
+      \\(\\Rightarrow (y - ${y0Str}) = ${mStr} \\cdot (x - ${x0Tex}) \\;\\rightarrow\\; y = ${mStr}x ${bKisim}\\)
+    </div>`;
+
+  const canvas=document.getElementById("tCanvas");
+  const W=canvas.width, H=canvas.height;
+  const ctx=canvas.getContext("2d");
+  ctx.clearRect(0,0,W,H);
+
+  const xR=4, yR=Math.max(4, Math.abs(y0)+3);
+  const xMin=x0-xR, xMax=x0+xR;
+  const yMid=y0, yMin=yMid-yR, yMax=yMid+yR;
+  const toX=x=>(x-xMin)/(xMax-xMin)*W;
+  const toY=y=>H-(y-yMin)/(yMax-yMin)*H;
+
+  ctx.fillStyle="#fdfcf9"; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle="#e8e3d8"; ctx.lineWidth=1;
+  for(let i=0;i<=8;i++){
+    const gx=xMin+i*(xMax-xMin)/8;
+    ctx.beginPath(); ctx.moveTo(toX(gx),0); ctx.lineTo(toX(gx),H); ctx.stroke();
+  }
+  for(let i=0;i<=6;i++){
+    const gy=yMin+i*(yMax-yMin)/6;
+    ctx.beginPath(); ctx.moveTo(0,toY(gy)); ctx.lineTo(W,toY(gy)); ctx.stroke();
+  }
+
+  ctx.strokeStyle="#b0a898"; ctx.lineWidth=1.5;
+  if(yMin<0&&yMax>0){ ctx.beginPath(); ctx.moveTo(0,toY(0)); ctx.lineTo(W,toY(0)); ctx.stroke(); }
+  if(xMin<0&&xMax>0){ ctx.beginPath(); ctx.moveTo(toX(0),0); ctx.lineTo(toX(0),H); ctx.stroke(); }
+
+  ctx.strokeStyle="#2d6a4f"; ctx.lineWidth=2.5; ctx.setLineDash([]);
+  ctx.beginPath(); let started=false;
+  for(let px=0;px<W;px++){
+    const x=xMin+(px/W)*(xMax-xMin);
+    if(sec==="lnx"&&x<=0){ started=false; continue; }
+    const y=fonk.fn(x);
+    if(!isFinite(y)||y<yMin-5||y>yMax+5){ started=false; continue; }
+    const sy=toY(y);
+    if(!started){ ctx.moveTo(px,sy); started=true; } else ctx.lineTo(px,sy);
+  }
+  ctx.stroke();
+
+  ctx.strokeStyle="#e76f51"; ctx.lineWidth=2; ctx.setLineDash([6,3]);
+  ctx.beginPath(); ctx.moveTo(0, toY(m*xMin+b)); ctx.lineTo(W, toY(m*xMax+b)); ctx.stroke(); ctx.setLineDash([]);
+
+  ctx.beginPath(); ctx.arc(toX(x0),toY(y0),5,0,Math.PI*2);
+  ctx.fillStyle="#e76f51"; ctx.fill();
+  ctx.strokeStyle="#fff"; ctx.lineWidth=1.5; ctx.stroke();
+
+  ctx.strokeStyle="#e9c46a"; ctx.lineWidth=1; ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(toX(x0),toY(y0)); ctx.lineTo(toX(x0),toY(0)); ctx.stroke(); ctx.setLineDash([]);
+
+  if(window.MathJax) MathJax.typesetPromise([res]).catch(()=>{});
+}
+
+/* ══════════════════════════════════
+   3. RİEMANN GÖSTERİCİSİ (DİNAMİK)
+══════════════════════════════════ */
+function riemannGuncelle(){
+  document.getElementById("rNVal").textContent=document.getElementById("rN").value;
+  riemannCiz();
+}
+
+function riemannCiz() {
+  hideWarn("rWarn");
+  const mod = document.getElementById("rElleRow").style.display === "none" ? "hazir" : "elle";
+  const a = parseFloat(document.getElementById("rA").value);
+  const b = parseFloat(document.getElementById("rB").value);
+  const n = parseInt(document.getElementById("rN").value);
+
+  if (isNaN(a) || isNaN(b) || a >= b) {
+    showWarn("rWarn", "⚠️ Geçerli sınır değerleri girin (a < b).");
+    return;
+  }
+
+  let fnCalc;
+  let sec = null;
+  if (mod === "hazir") {
+    sec = document.getElementById("rFonk").value;
+    fnCalc = FN[sec].fn;
+  } else {
+    const expr = document.getElementById("rElleF").value.trim();
+    if (!expr) { showWarn("rWarn", "⚠️ Fonksiyon ifadesi boş bırakılamaz."); return; }
+    try {
+      const node = math.parse(expr);
+      const code = node.compile();
+      fnCalc = (x) => code.evaluate({ x: x });
+      fnCalc(a); // Test
+    } catch (e) {
+      showWarn("rWarn", "⚠️ Fonksiyon yazımı geçersiz. Örn: x^2 - 2*x");
+      return;
+    }
+  }
+
+  const dx = (b - a) / n;
+  let sum = 0;
+  for (let i = 0; i < n; i++) {
+    const val = fnCalc(a + i * dx);
+    if (isFinite(val)) sum += val * dx;
+  }
+
+  const N2 = 10000; const dx2 = (b - a) / N2;
+  let trueVal = 0;
+  for (let i = 0; i < N2; i++) {
+    const val = fnCalc(a + i * dx2);
+    if (isFinite(val)) trueVal += val * dx2;
+  }
+
+  document.getElementById("riSumLabel").innerHTML = `${n} DİKDÖRTGEN<br>YARDIMIYLA HESAPLANAN<br>YAKLAŞIK ALAN`;
+  document.getElementById("riSum").textContent = fmt(sum);
+  document.getElementById("riTrue").textContent = fmt(trueVal);
+
+  // Üçüncü kutu: kesin veya Simpson ile hassas değer
+  if(sec && FN[sec] && FN[sec].F){
+    document.getElementById("riExact").textContent = fmt(FN[sec].F(b) - FN[sec].F(a));
+  } else {
+    // Elle giriş: Simpson yöntemi (n=10000)
+    const Ns=10000, hs=(b-a)/Ns;
+    let simp = fnCalc(a) + fnCalc(b);
+    for(let i=1;i<Ns;i++){
+      const xs = a + i*hs;
+      const vs = fnCalc(xs);
+      if(isFinite(vs)) simp += (i%2===0 ? 2 : 4) * vs;
+    }
+    simp *= hs/3;
+    document.getElementById("riExact").textContent = fmt(simp);
+  }
+  // Grafik Çizimi
+  const canvas = document.getElementById("rCanvas");
+  const W = canvas.width, H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const ys = [];
+  for (let i = 0; i <= W; i++) {
+    const x = a - 0.5 + (i / W) * (b - a + 1);
+    try { const y = fnCalc(x); if (isFinite(y)) ys.push(y); } catch(e){}
+  }
+  const yMin = Math.min(...ys, 0) - 0.5;
+  const yMax = Math.max(...ys, 2) + 0.5;
+  const xMin = a - 0.3, xMax = b + 0.3;
+  
+  const toX = x => (x - xMin) / (xMax - xMin) * W;
+  const toY = y => H - (y - yMin) / (yMax - yMin) * H;
+
+  ctx.fillStyle = "#fdfcf9"; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = "#e8e3d8"; ctx.lineWidth = 1;
+  for (let i = 0; i <= 6; i++) {
+    const gy = yMin + i * (yMax - yMin) / 6;
+    ctx.beginPath(); ctx.moveTo(0, toY(gy)); ctx.lineTo(W, toY(gy)); ctx.stroke();
+  }
+  ctx.strokeStyle = "#b0a898"; ctx.lineWidth = 1.5;
+  if (yMin < 0 && yMax > 0) { ctx.beginPath(); ctx.moveTo(0, toY(0)); ctx.lineTo(W, toY(0)); ctx.stroke(); }
+
+  // Dikdörtgelerin Çizilmesi
+  for (let i = 0; i < n; i++) {
+    const xi = a + i * dx;
+    const yi = fnCalc(xi);
+    if (!isFinite(yi)) continue;
+    ctx.fillStyle = yi >= 0 ? "rgba(45,106,79,0.25)" : "rgba(231,111,81,0.25)";
+    ctx.strokeStyle = yi >= 0 ? "rgba(45,106,79,0.6)" : "rgba(231,111,81,0.6)";
+    ctx.lineWidth = 0.8;
+    const rx = toX(xi), rw = toX(xi + dx) - toX(xi);
+    const ry = toY(Math.max(yi, 0)), rh = Math.abs(toY(yi) - toY(0));
+    ctx.fillRect(rx, ry, rw, yi >= 0 ? rh : -rh);
+    ctx.strokeRect(rx, toY(Math.max(yi, 0)), rw, Math.abs(toY(yi) - toY(0)));
+  }
+
+  // Fonksiyon Eğrisi
+  ctx.strokeStyle = "#2d6a4f"; ctx.lineWidth = 2.5; ctx.beginPath();
+  let st = false;
+  for (let i = 0; i <= W; i++) {
+    const x = xMin + (i / W) * (xMax - xMin);
+    try {
+      const y = fnCalc(x);
+      if (!isFinite(y) || y < yMin - 5 || y > yMax + 5) { st = false; continue; }
+      if (!st) { ctx.moveTo(i, toY(y)); st = true; } else ctx.lineTo(i, toY(y));
+    } catch (e) { st = false; }
+  }
+  ctx.stroke();
+
+  ctx.fillStyle = "#6b6456"; ctx.font = "bold 11px DM Sans,sans-serif"; ctx.textAlign = "center";
+  ctx.fillText("a=" + fmt(a, 2), toX(a), H - 4);
+  ctx.fillText("b=" + fmt(b, 2), toX(b), H - 4);
+}
+
+/* ══════════════════════════════════
+   4. BELİRLİ İNTEGRAL HESAPLAYICI
+══════════════════════════════════ */
+function integralHesapla(){
+  hideWarn("iWarn");
+  const sec=document.getElementById("iFonk").value;
+  const a=parseFloat(document.getElementById("iA").value);
+  const b=parseFloat(document.getElementById("iB").value);
+  const fonk=FN[sec];
+  if(isNaN(a)||isNaN(b)){ showWarn("iWarn","⚠️ Geçerli sınır değerleri girin."); return; }
+  if(a>=b){ showWarn("iWarn","⚠️ a < b olmalıdır."); return; }
+  if(sec==="lnx"&&a<=0){ showWarn("iWarn","⚠️ ln(x) için a > 0 olmalıdır."); return; }
+  if(sec==="sqrt"&&a<0){ showWarn("iWarn","⚠️ √x için a ≥ 0 olmalıdır."); return; }
+
+  const Fa=fonk.F(a), Fb=fonk.F(b), sonuc=Fb-Fa;
+  const res=document.getElementById("iResult");
+  const steps=document.getElementById("iSteps");
+
+  function ebob(x,y){ x=Math.abs(Math.round(x)); y=Math.abs(Math.round(y)); while(y){[x,y]=[y,x%y];} return x||1; }
+  function kesirStr(pay, payda){
+    if(payda===1||pay%payda===0) return `${pay/payda}`;
+    const e=ebob(Math.abs(pay),payda);
+    return `\\dfrac{${pay/e}}{${payda/e}}`;
+  }
+
+  const polinom = { xpow: {us:2, payda:2}, x: {us:2, payda:2}, x2: {us:3, payda:3}, x3: {us:4, payda:4} };
+
+  function gosterFx(xVal){
+    if(sec==="ex") return `e^{${fmt(xVal)}} = ${fmt(fonk.F(xVal))}`;
+    if(polinom[sec]){
+      const {us, payda} = polinom[sec];
+      const pay = Math.pow(xVal, us);
+      return pay===0 ? `0 + c` : `\\dfrac{${xVal}^{${us}}}{${payda}} + c = ${kesirStr(pay,payda)} + c`;
+    }
+    return `${fmt(fonk.F(xVal))} + c`;
+  }
+
+  function sonucKesir(){
+    if(polinom[sec]){
+      const {us, payda} = polinom[sec];
+      const payB = Math.pow(b, us);
+      const payA = Math.pow(a, us);
+      const FbTex = payB===0 ? "0" : kesirStr(payB, payda);
+      const FaTex = payA===0 ? "0" : kesirStr(payA, payda);
+      return `F(${fmt(b)}) - F(${fmt(a)}) = ${FbTex} - ${FaTex} = ${kesirStr(payB - payA, payda)}`;
+    }
+    return `F(${fmt(b)}) - F(${fmt(a)}) = ${fmt(Fb)} - ${fmt(Fa)} = ${fmt(sonuc)}`;
+  }
+
+  const FxTex   = sec==="ex" ? `e^x` : (polinom[sec] ? `\\dfrac{x^{${polinom[sec].us}}}{${polinom[sec].payda}}` : fonk.Ftex);
+  steps.style.display="block";
+  steps.innerHTML=`
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:14px;font-size:0.9rem;">
+      Belirli İntegral Formülü: &nbsp;\\(\\displaystyle\\int_a^b f'(x)\\,dx = f(b) - f(a)\\)
+    </div>
+    <div style="font-size:0.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Çözüm Aşamaları</div>
+    <div style="font-size:0.9rem;">
+      <div style="margin-bottom:14px;">Belirsiz İntegral: &nbsp;\\(\\int ${fonk.tex}\\,dx = ${fonk.Ftex} + c\\)</div>
+      <div style="margin-bottom:14px;">\\(f(x) = ${FxTex} + c\\)</div>
+      <div style="margin-bottom:14px;">\\(f(${fmt(b)}) = ${gosterFx(b)}\\)</div>
+      <div style="margin-bottom:14px;">\\(f(${fmt(a)}) = ${gosterFx(a)}\\)</div>
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:0.9rem;">
+      \\(\\Rightarrow \\displaystyle\\int_{${fmt(a)}}^{${fmt(b)}} ${fonk.tex}\\,dx = ${sonucKesir().replace(/F\(/g,'f(')}\\)
+    </div>`;
+
+  if(window.MathJax) MathJax.typesetPromise([steps]).catch(()=>{});
+}
+
+/* ══════════════════════════════════
+   5. İKİ FONKSİYON ARASI ALAN & HACİM
+══════════════════════════════════ */
+const ALAN_CIFTLER = {
+  "sinx|cosx":  { f1:"sinx", f2:"cosx",  aralik:[-4, 5] },
+  "x2|x3mx":   { f1:"x2",   f2:"x3mx",  aralik:[-2, 3] },
+  "x2m1|sinx": { f1:"x2m1", f2:"sinx",  aralik:[-3, 3] },
+  "sinx|x3mx": { f1:"sinx", f2:"x3mx",  aralik:[-3, 3] },
+  "x2|cosx":   { f1:"x2",   f2:"cosx",  aralik:[-2, 2] },
+};
+
+function aAralikGuncelle(){
+  const cift = document.getElementById("aFonkCift").value;
+  const veri = ALAN_CIFTLER[cift];
+  if(veri){
+    document.getElementById("aXMin").value = veri.aralik[0];
+    document.getElementById("aXMax").value = veri.aralik[1];
+  }
+}
+
+function aModSec(mod){
+  document.getElementById("aHazirRow").style.display = mod==="hazir"?"flex":"none";
+  document.getElementById("aElleRow").style.display  = mod==="elle" ?"block":"none";
+  document.getElementById("aModHazir").style.background = mod==="hazir"?"var(--accent)":"";
+  document.getElementById("aModHazir").style.color      = mod==="hazir"?"#fff":"";
+  document.getElementById("aModElle").style.background  = mod==="elle" ?"var(--accent)":"";
+  document.getElementById("aModElle").style.color       = mod==="elle" ?"#fff":"";
+}
+
+function alanHacimHesapla() {
+  hideWarn("aWarn");
+  const mod = document.getElementById("aElleRow").style.display === "none" ? "hazir" : "elle";
+  const xA = parseFloat(document.getElementById("aXMin").value);
+  const xB = parseFloat(document.getElementById("aXMax").value);
+  const hesapTuru = document.getElementById("aHesapTuru").value;
+
+  if (isNaN(xA) || isNaN(xB) || xA >= xB) {
+    showWarn("aWarn", "⚠️ Geçerli bir arama aralığı girin (xMin < xMax).");
+    return;
+  }
+
+  let fn1, fn2, tex1, tex2;
+
+  try {
+    if (mod === "hazir") {
+      const cift = document.getElementById("aFonkCift").value;
+      const veri = ALAN_CIFTLER[cift];
+      fn1 = FN[veri.f1].fn; fn2 = FN[veri.f2].fn;
+      tex1 = FN[veri.f1].tex; tex2 = FN[veri.f2].tex;
+    } else {
+      const exprF = document.getElementById("aElleF").value.trim();
+      const exprG = document.getElementById("aElleG").value.trim();
+      if (!exprF || !exprG) { showWarn("aWarn", "⚠️ İki ifadeyi de doldurun."); return; }
+      
+      const nodeF = math.parse(exprF);
+      const codeF = nodeF.compile();
+      fn1 = (x) => codeF.evaluate({ x: x });
+
+      const nodeG = math.parse(exprG);
+      const codeG = nodeG.compile();
+      fn2 = (x) => codeG.evaluate({ x: x });
+
+      tex1 = nodeF.toTex(); tex2 = nodeG.toTex();
+    }
+    fn1(xA); fn2(xA);
+  } catch (err) {
+    showWarn("aWarn", "⚠️ Fonksiyon yazımı geçersiz veya tanım kümesi dışı.");
+    return;
+  }
+
+  // Sayısal Kesişim Noktaları Bulma (Bisection Destekli)
+  const N = 4000, dx = (xB - xA) / N;
+  const kesisimler = [];
+  let prev = fn1(xA) - fn2(xA);
+  
+  for (let i = 1; i <= N; i++) {
+    const x = xA + i * dx;
+    const cur = fn1(x) - fn2(x);
+    if (!isFinite(cur)) { prev = cur; continue; }
+    if (isFinite(prev) && prev * cur < 0) {
+      let lo = x - dx, hi = x;
+      for (let j = 0; j < 30; j++) {
+        const mid = (lo + hi) / 2;
+        const vm = fn1(mid) - fn2(mid);
+        if (Math.abs(vm) < 1e-10) break;
+        if ((fn1(lo) - fn2(lo)) * vm < 0) hi = mid; else lo = mid;
+      }
+      const xi = (lo + hi) / 2;
+      if (kesisimler.length === 0 || Math.abs(xi - kesisimler[kesisimler.length - 1]) > 1e-3) {
+        kesisimler.push(xi);
+      }
+    }
+    prev = cur;
+  }
+
+  if (kesisimler.length < 2) {
+    showWarn("aWarn", "⚠️ Belirtilen arama sınırları içerisinde en az iki kesişim noktası saptanamadı. Lütfen aralığı genişletin.");
+    document.getElementById("aResult").className = "result-box empty";
+    document.getElementById("aResult").textContent = "Kesişim bölgesi bulunamadı.";
+    document.getElementById("aCozumWrap").style.display = "none";
+    return;
+  }
+
+  const a = kesisimler[0];
+  const b = kesisimler[kesisimler.length - 1];
+  const NA = 5000, dxA = (b - a) / NA;
+  let alan = 0;
+  let hacimX = 0;
+
+  for (let i = 0; i < NA; i++) {
+    const x = a + i * dxA;
+    const y1 = fn1(x); const y2 = fn2(x);
+    if (isFinite(y1) && isFinite(y2)) {
+      alan += Math.abs(y1 - y2) * dxA;
+      hacimX += Math.abs(y1 * y1 - y2 * y2) * dxA;
+    }
+  }
+  hacimX = hacimX * Math.PI;
+
+  // Çözüm Aşamalarının Kurgulanması
+  document.getElementById("aCozumWrap").style.display = "block";
+  const stepsPanel = document.getElementById("aSteps");
+  const kesStrTex = kesisimler.map(k => fmt(k, 3)).join(",\\; ");
+  
+  let adimHtml = `
+    <div class="step-line"><span class="hl">1. İki Fonksiyonun Kesiştiği Noktaların Bulunması:</span><br>İki fonksiyon arasında bir bölge oluşması için fonksiyonların en az iki noktada kesişmeleri gerekir.<br>Verilen aralıkta \\(f(x) = g(x)\\) denkleminin kökleri: \\(x \\in \\{ ${kesStrTex} \\}\\) olarak bulunur.<br>Belirli integralin sınırlarını \\(a = ${fmt(a,3)}\\) ve \\(b = ${fmt(b,3)}\\) alalım.</div>
+    <div class="step-line"><span class="hl">2. Alan Hesabı İçin Belirli İntegral:</span><br>Arada kalan bölgenin alanı, eğrilerin farkının mutlak değerinin belirli integralidir:</div>
+    <div style="margin: 6px 0 12px 20px;">\\(A = \\int_{${fmt(a,3)}}^{${fmt(b,3)}} |f(x) - g(x)|\\,dx = \\int_{${fmt(a,3)}}^{${fmt(b,3)}} |(${tex1}) - (${tex2})|\\,dx\\)</div>
+    <div class="step-line">Sayısal integral hesabı sonucunda alan: <span class="hl">\\(A \\approx ${fmt(alan,4)}\\text{ br}^2\\)</span> olarak hesaplanır.</div>
+  `;
+
+  if (hesapTuru === "alanVeHacim") {
+    adimHtml += `
+      <hr style="border:none; border-top:1px dashed var(--border); margin:10px 0;">
+      <div class="step-line"><span class="hl">3. Dönel Nesnenin Hacmi İçin Belirli İntegral:</span><br>Bölgenin (\\(x\\)-ekseni) etrafında \\(360°\\) döndürülmesiyle oluşan nesnenin hacim formülü:</div>
+      <div style="margin: 6px 0 12px 20px;">\\(V = \\pi \\int_{a}^{b} |f(x)^2 - g(x)^2|\\,dx = \\pi \\int_{${fmt(a,3)}}^{${fmt(b,3)}} |(${tex1})^2 - (${tex2})^2|\\,dx\\)</div>
+      <div class="step-line">Kareler farkının integrali alındığında dönel cismin hacmi: <span class="hl">\\(V \\approx ${fmt(hacimX,4)}\\text{ br}^3\\)</span> bulunur.</div>
+    `;
+  }
+  stepsPanel.innerHTML = adimHtml;
+
+  // Sonuç Özeti
+  const res = document.getElementById("aResult");
+  res.className = "result-box";
+  let sonucHtml = `Kesişim Sınırları: \\([${fmt(a,3)}, ${fmt(b,3)}]\\)<br>Hesaplanan Alan: \\(A \\approx ${fmt(alan,4)}\\text{ br}^2\\)`;
+  if (hesapTuru === "alanVeHacim") {
+    sonucHtml += `<br>Dönel Hacim (\\(x\\)-ekseni): \\(V \\approx ${fmt(hacimX,4)}\\text{ br}^3\\)`;
+  }
+  res.innerHTML = sonucHtml;
+
+  // Grafik Gösterimi
+  const canvas = document.getElementById("aCanvas");
+  const W = canvas.width, H = canvas.height;
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, W, H);
+
+  const xPad = Math.max(0.5, (b - a) * 0.15);
+  const xMin = a - xPad, xMax = b + xPad;
+  const ysAll = [];
+  for (let i = 0; i <= 200; i++) {
+    const x = xMin + (i / 200) * (xMax - xMin);
+    try {
+      const y1 = fn1(x); const y2 = fn2(x);
+      if (isFinite(y1)) ysAll.push(y1);
+      if (isFinite(y2)) ysAll.push(y2);
+    } catch(e){}
+  }
+  const yMin = Math.min(...ysAll, 0) - 0.5;
+  const yMax = Math.max(...ysAll, 0) + 0.5;
+  const toX = x => (x - xMin) / (xMax - xMin) * W;
+  const toY = y => H - (y - yMin) / (yMax - yMin) * H;
+
+  ctx.fillStyle = "#fdfcf9"; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = "#e8e3d8"; ctx.lineWidth = 1;
+  for (let i = 0; i <= 6; i++) {
+    const gy = yMin + i * (yMax - yMin) / 6;
+    ctx.beginPath(); ctx.moveTo(0, toY(gy)); ctx.lineTo(W, toY(gy)); ctx.stroke();
+  }
+  ctx.strokeStyle = "#b0a898"; ctx.lineWidth = 1.5;
+  if (yMin < 0 && yMax > 0) { ctx.beginPath(); ctx.moveTo(0, toY(0)); ctx.lineTo(W, toY(0)); ctx.stroke(); }
+  if (xMin < 0 && xMax > 0) { ctx.beginPath(); ctx.moveTo(toX(0), 0); ctx.lineTo(toX(0), H); ctx.stroke(); }
+
+  // Alan Tarama
+  ctx.fillStyle = hesapTuru === "alan" ? "rgba(69,123,157,0.18)" : "rgba(231,111,81,0.15)";
+  ctx.beginPath(); ctx.moveTo(toX(a), toY(fn1(a)));
+  for (let i = 0; i <= 200; i++) {
+    const x = a + (i / 200) * (b - a);
+    ctx.lineTo(toX(x), toY(fn1(x)));
+  }
+  for (let i = 200; i >= 0; i--) {
+    const x = a + (i / 200) * (b - a);
+    ctx.lineTo(toX(x), toY(fn2(x)));
+  }
+  ctx.closePath(); ctx.fill();
+
+  function cizEgri(fn, renk) {
+    ctx.strokeStyle = renk; ctx.lineWidth = 2.5; ctx.beginPath();
+    let s = false;
+    for (let i = 0; i <= W; i++) {
+      const x = xMin + (i / W) * (xMax - xMin);
+      try {
+        const y = fn(x);
+        if (!isFinite(y) || y < yMin - 5 || y > yMax + 5) { s = false; continue; }
+        if (!s) { ctx.moveTo(i, toY(y)); s = true; } else ctx.lineTo(i, toY(y));
+      } catch (e) { s = false; }
+    }
+    ctx.stroke();
+  }
+  cizEgri(fn1, "#2d6a4f");
+  cizEgrid = cizEgri(fn2, "#457b9d");
+
+  kesisimler.forEach(xi => {
+    ctx.beginPath(); ctx.arc(toX(xi), toY(fn1(xi)), 5, 0, Math.PI * 2);
+    ctx.fillStyle = "#e76f51"; ctx.fill();
+    ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.5; ctx.stroke();
+  });
+
+  if (window.MathJax) MathJax.typesetPromise([res, stepsPanel]).catch(() => {});
+}
+
+/* ── SAYFA YÜKLENİNCE BAŞLATMA ── */
+window.addEventListener("load",()=>{
+  tegetCiz();
+  riemannCiz();
+  aAralikGuncelle();
+  if(window.MathJax) MathJax.typesetPromise().catch(()=>{});
+});
+</script>
+</body>
+</html>

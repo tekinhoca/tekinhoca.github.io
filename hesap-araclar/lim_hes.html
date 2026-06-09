@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limit Hesap Aracı — TekinHoca</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+  --bg:       #f4f1eb;
+  --surface:  #fdfcf9;
+  --surface2: #eee9df;
+  --border:   #d8d0c0;
+  --accent:   #2d6a4f;
+  --accent2:  #e76f51;
+  --accent3:  #457b9d;
+  --accent4:  #e9c46a;
+  --text:     #1a1a1a;
+  --text-dim: #6b6456;
+  --radius:   12px;
+  --shadow:   0 4px 24px rgba(0,0,0,0.08);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(45,106,79,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(69,123,157,0.06) 0%, transparent 50%);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+}
+
+/* ── HEADER ── */
+header {
+  max-width: 1200px;
+  margin: 0 auto 28px;
+  display: flex; align-items: center; gap: 18px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--border);
+}
+header img { height: 44px; width: auto; }
+header .titles h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.75rem);
+  font-weight: 700; color: var(--accent);
+}
+header .titles p { font-size: 0.85rem; color: var(--text-dim); margin-top: 3px; }
+
+/* ── ANA DÜZEN ── */
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 860px) { .app { grid-template-columns: 1fr; } }
+
+/* ── PANEL ── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.panel + .panel { margin-top: 16px; }
+
+.sec-title {
+  font-family: 'Lora', serif;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 14px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── SOL PANEL ── */
+.formula-block { margin-bottom: 14px; }
+.formula-block h4 {
+  font-family: 'Lora', serif;
+  font-size: 0.82rem; font-weight: 700;
+  color: var(--accent); margin-bottom: 6px;
+}
+.formula-math {
+  font-size: 0.85rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  line-height: 2;
+  color: var(--text);
+}
+
+/* ── BUTONLAR ── */
+.tbl-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  letter-spacing: 1px; cursor: pointer;
+  background: var(--surface2); color: var(--text-dim);
+  transition: background 0.2s, color 0.2s;
+}
+.tbl-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.tbl-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.tbl-btn:not(:disabled):hover { filter: brightness(0.93); }
+
+/* ── GİRİŞ ── */
+.input-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.input-row label { font-size: 0.83rem; color: var(--text-dim); white-space: nowrap; }
+.inp {
+  padding: 7px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  background: var(--surface2);
+  color: var(--text);
+  width: 110px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.inp:focus { border-color: var(--accent); }
+.inp.wide { width: 200px; }
+
+/* ── SELECT ── */
+select.inp {
+  width: auto; min-width: 110px; cursor: pointer;
+}
+
+/* ── UYARI ── */
+.warn-box {
+  display: none;
+  background: #fffbe6;
+  border: 1px solid var(--accent4);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  color: #7a6000;
+  margin-bottom: 10px;
+}
+
+/* ── YAKLAŞIM TABLOSU ── */
+.yakl-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+  margin-top: 12px;
+}
+.yakl-table th {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 7px 10px;
+  text-align: center;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+.yakl-table td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface);
+}
+.yakl-table tr.sol td { background: #eef5f1; }
+.yakl-table tr.sag td { background: #eef1f5; }
+.yakl-table tr.limit-row td {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+.yakl-table tr.undef td { color: var(--accent2); font-style: italic; }
+
+/* ── SONUÇ KUTUSU ── */
+.result-box {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  min-height: 48px;
+  font-size: 0.92rem;
+  line-height: 1.8;
+  color: var(--text);
+  margin-top: 12px;
+}
+.result-box.empty { color: var(--text-dim); font-style: italic; }
+
+/* ── BELİRSİZLİK KARTI ── */
+.belirsiz-card {
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  padding: 14px 16px;
+  margin-top: 12px;
+  background: var(--surface2);
+}
+.belirsiz-card .bc-type {
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+.belirsiz-card .bc-desc {
+  font-size: 0.84rem; color: var(--text-dim); line-height: 1.7;
+}
+.belirsiz-card .bc-yol {
+  margin-top: 10px;
+  font-size: 0.85rem; color: var(--text);
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+  line-height: 1.8;
+}
+
+/* ── GRAFİK ── */
+canvas.grafik {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  margin-top: 12px;
+}
+
+/* ── ÖZEL LİMİT GALERİSİ ── */
+.galeri-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 12px;
+}
+.galeri-kart {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.galeri-kart .gk-title {
+  font-family: 'Lora', serif;
+  font-size: 0.9rem; font-weight: 700;
+  color: var(--accent); margin-bottom: 12px;
+  text-align: center;
+}
+.galeri-kart table {
+  width: 100%; border-collapse: collapse;
+  font-size: 0.82rem; margin-bottom: 10px;
+}
+.galeri-kart th {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 6px 10px; text-align: center;
+  color: var(--text-dim); font-weight: 600;
+}
+.galeri-kart td {
+  border: 1px solid var(--border);
+  padding: 6px 10px; text-align: center;
+  background: var(--surface); color: var(--text);
+}
+.galeri-kart td.sol-x { color: var(--accent3); }
+.galeri-kart td.sag-x { color: var(--accent2); }
+.galeri-kart .gk-sonuc {
+  font-size: 0.9rem; font-weight: 700;
+  color: var(--accent); text-align: center;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── FOOTER ── */
+footer {
+  max-width: 1200px;
+  margin: 40px auto 0;
+  padding-top: 16px;
+  border-top: 2px solid var(--border);
+  text-align: center;
+}
+footer p {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+  padding-bottom: 20px;
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <img src="../img/THlogo1.png" alt="TekinHoca Logo"
+       style="max-width:100%;display:block;margin:0 auto 0 0;border-radius:10px;">
+  <div class="titles" style="text-align:right;">
+    <h1>Limit Hesap Aracı</h1>
+    <p>Sayısal yaklaşım · Grafik · Belirsizlik analizi · Özel limitler</p>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- ═══ SOL PANEL ═══ -->
+  <div>
+    <div class="panel">
+      <div class="sec-title">Temel Tanım</div>
+      <div class="formula-block">
+        <div class="formula-math">
+          \(\lim_{x \to a} f(x) = L\)<br>
+          <span style="font-size:0.78rem;color:var(--text-dim)">x, a değerine yaklaşırken<br>f(x), L değerine yaklaşır.</span>
+        </div>
+      </div>
+      <div class="formula-block">
+        <h4>Soldan ve Sağdan Limit</h4>
+        <div class="formula-math">
+          Soldan: \(\lim_{x \to a^-} f(x)\)<br>
+          Sağdan: \(\lim_{x \to a^+} f(x)\)<br>
+          <span style="font-size:0.78rem;color:var(--text-dim)">Fonksiyonun limitinin olabilmesi için soldan limit ile sağdan limit birbirine eşit olmalıdır.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="sec-title">Belirsizlik Türleri</div>
+      <div class="formula-block">
+        <div class="formula-math" style="line-height:2.1">
+          \(\dfrac{0}{0}\) ,  \(\dfrac{\infty}{\infty}\) ,  \(0 \cdot \infty\)<br>
+<p style="line-height: 3;">
+          \(\infty - \infty\) ,  \(0^0\) ,  \(1^\infty\) ,  \(\infty^0\)
+        </div>
+      </div>
+      <div class="formula-block">
+        <h4>L'Hôpital Kuralı</h4>
+        <div class="formula-math">
+          \(\dfrac{0}{0}\) veya \(\dfrac{\infty}{\infty}\) durumunda:<br>
+<p style="line-height: 3.5;">
+          \(\lim \dfrac{f}{g} = \lim \dfrac{f'}{g'}\)
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="sec-title">Özel Limitler</div>
+      <div class="formula-block">
+        <div class="formula-math" style="line-height:2.2">
+          \(\lim_{x \to 0} \dfrac{\sin x}{x} = 1\)
+<p style="line-height: 4.5;">
+          \(\lim_{x \to 0} \dfrac{1-\cos x}{x} = 0\)
+<p style="line-height: 1.5;">
+          \(\lim_{n \to \infty}\!\left(1+\dfrac{1}{n}\right)^{\!n} = e\)
+<p style="line-height: 3.5;">
+          \(\lim_{x \to 0}(1+x)^{1/x} = e\)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SAĞ PANEL ═══ -->
+  <div>
+
+    <!-- 1. Sayısal Yaklaşım Tablosu -->
+    <div class="panel">
+      <div class="sec-title">Sayısal Yaklaşım Tablosu</div>
+      <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:14px;">
+        Fonksiyon ve yaklaşılan nokta girin. x soldan ve sağdan yaklaşırken f(x) değerleri tabloda gösterilir.
+      </p>
+      <div class="input-row">
+        <label>f(x) =</label>
+        <select class="inp" id="yFonk" onchange="yFonkSecildi()">
+          <option value="sinx_x">sin(x) / x</option>
+          <option value="x2m1_xm1">(x²−1) / (x−1)</option>
+          <option value="x3mx_x">(x³−x) / x</option>
+          <option value="ex_x">(eˣ−1) / x</option>
+          <option value="ln1px_x">ln(1+x) / x</option>
+          <option value="ozel">Özel giriş…</option>
+        </select>
+        <label>x →</label>
+        <input class="inp" id="yA" type="number" value="0" step="any">
+        <button class="tbl-btn primary" onclick="yaklaşımTablosu()">HESAPLA</button>
+      </div>
+      <div id="yOzelRow" style="display:none; margin-bottom:12px;">
+        <div class="input-row">
+          <label>f(x) = </label>
+          <input class="inp wide" id="yOzel" type="text" placeholder="Örn: (x*x - 1) / (x - 1)">
+          <span style="font-size:0.78rem;color:var(--text-dim)">JS ifadesi: Math.sin(x), Math.exp(x), Math.log(x)</span>
+        </div>
+      </div>
+      <div class="warn-box" id="yWarn"></div>
+      <div id="yTablo"></div>
+      <div class="result-box empty" id="yResult">Fonksiyon seçip Hesapla'ya basın.</div>
+    </div>
+
+    <!-- 2. Belirsizlik Analizi -->
+    <div class="panel">
+      <div class="sec-title">Belirsizlik Analizi</div>
+      <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:14px;">
+        Fonksiyonu seçin; x → a noktasında hangi belirsizlik türü oluştuğunu ve çözüm yolunu gösterir.
+      </p>
+      <div class="input-row">
+        <label>Fonksiyon:</label>
+        <select class="inp" id="bFonk">
+          <option value="sinx_x">sin(x) / x  (x→0)</option>
+          <option value="x2m1_xm1">(x²−1)/(x−1)  (x→1)</option>
+          <option value="ex_x">(eˣ−1)/x  (x→0)</option>
+          <option value="ln1px_x">ln(1+x)/x  (x→0)</option>
+          <option value="x2_inf">x²/(x²+1)  (x→∞)</option>
+          <option value="xsinx">x·sin(1/x)  (x→0⁺)</option>
+        </select>
+        <button class="tbl-btn primary" onclick="belirsizlikAnalizi()">ANALİZ ET</button>
+      </div>
+      <div id="bResult"></div>
+    </div>
+
+    <!-- 3. Grafik -->
+    <div class="panel">
+      <div class="sec-title">Grafik — Limite Görsel Yaklaşım</div>
+      <div class="input-row">
+        <label>Fonksiyon:</label>
+        <select class="inp" id="gFonk" onchange="grafikCiz()">
+          <option value="sinx_x">sin(x) / x</option>
+          <option value="x2m1_xm1">(x²−1) / (x−1)</option>
+          <option value="ex_x">(eˣ−1) / x</option>
+          <option value="ln1px_x">ln(1+x) / x</option>
+          <option value="x2_inf">x² / (x²+1)</option>
+        </select>
+        <button class="tbl-btn" onclick="grafikCiz()">YENİLE</button>
+      </div>
+      <canvas class="grafik" id="gCanvas" width="620" height="340"></canvas>
+      <p style="font-size:0.78rem;color:var(--text-dim);margin-top:8px;" id="gAciklama"></p>
+    </div>
+
+    <!-- 4. Özel Limitler Galerisi -->
+    <div class="panel">
+      <div class="sec-title">Özel Limitler Galerisi</div>
+      <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:4px;">
+        Klasik özel limitlerin sayısal doğrulaması.
+      </p>
+      <div class="galeri-grid" id="galeriGrid"></div>
+    </div>
+
+  </div><!-- sag -->
+</div><!-- app -->
+
+<footer>
+  <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+
+<script>
+/* ══════════════════════════════════
+   YARDIMCI
+══════════════════════════════════ */
+function fmt(v, d=6){
+  if(!isFinite(v)) return v>0?"∞":"-∞";
+  return parseFloat(v.toFixed(d)).toString();
+}
+function showWarn(id,msg){ const e=document.getElementById(id); e.textContent=msg; e.style.display="block"; }
+function hideWarn(id){ document.getElementById(id).style.display="none"; }
+
+/* Fonksiyon tanımları */
+const FONKLAR = {
+  sinx_x:     { fn: x => Math.sin(x)/x,           a: 0,        label:"sin(x)/x",         lim:"1",   latexF:"\\dfrac{\\sin x}{x}", latexA:"0" },
+  x2m1_xm1:   { fn: x => (x*x-1)/(x-1),           a: 1,        label:"(x²−1)/(x−1)",     lim:"2",   latexF:"\\dfrac{x^2-1}{x-1}", latexA:"1" },
+  x3mx_x:     { fn: x => (x*x*x - x)/x,            a: 0,        label:"(x³−x)/x",         lim:"−1",  latexF:"\\dfrac{x^3-x}{x}",   latexA:"0" },
+  ex_x:       { fn: x => (Math.exp(x)-1)/x,        a: 0,        label:"(eˣ−1)/x",         lim:"1",   latexF:"\\dfrac{e^x-1}{x}",   latexA:"0" },
+  ln1px_x:    { fn: x => Math.log(1+x)/x,          a: 0,        label:"ln(1+x)/x",        lim:"1",   latexF:"\\dfrac{\\ln(1+x)}{x}",latexA:"0" },
+  x2_inf:     { fn: x => x*x/(x*x+1),              a: Infinity, label:"x²/(x²+1)",        lim:"1",   latexF:"\\dfrac{x^2}{x^2+1}", latexA:"\\infty" },
+  xsinx:      { fn: x => x*Math.sin(1/x),          a: 0,        label:"x·sin(1/x)",       lim:"0",   latexF:"x\\sin\\dfrac{1}{x}", latexA:"0^+" }
+};
+
+const BELİRSİZLİK = {
+  sinx_x:   { tur:"0/0", acik:"x=0'da pay sin(0)=0, payda 0 olur.", yol:"L'Hôpital uygulanır: (sin x)' = cos x, (x)' = 1 → lim cos(x)/1 = cos(0) = 1", sonuc:"1" },
+  x2m1_xm1: { tur:"0/0", acik:"x=1'de pay 0, payda 0 olur.", yol:"Pay çarpanlara ayrılır: x²−1 = (x−1)(x+1). (x−1) sadeleşir → lim (x+1) = 2", sonuc:"2" },
+  ex_x:     { tur:"0/0", acik:"x=0'da (e⁰−1)=0, payda 0 olur.", yol:"L'Hôpital uygulanır: (eˣ−1)' = eˣ, (x)' = 1 → lim eˣ = e⁰ = 1", sonuc:"1" },
+  ln1px_x:  { tur:"0/0", acik:"x=0'da ln(1+0)=0, payda 0 olur.", yol:"L'Hôpital uygulanır: (ln(1+x))' = 1/(1+x), (x)' = 1 → lim 1/(1+x) = 1", sonuc:"1" },
+  x2_inf:   { tur:"∞/∞", acik:"x→∞'da hem pay hem payda ∞ olur.", yol:"Pay ve payda x² ile bölünür: 1/(1+1/x²) → x→∞'da 1/x²→0 → lim = 1", sonuc:"1" },
+  xsinx:    { tur:"0·∞", acik:"x→0⁺'da x→0, sin(1/x) sınırsız salınır.", yol:"|sin(1/x)| ≤ 1 olduğundan |x·sin(1/x)| ≤ |x| → 0. Sıkıştırma teoremi ile limit = 0.", sonuc:"0" }
+};
+
+/* ══════════════════════════════════
+   1. YAKLAŞIM TABLOSU
+══════════════════════════════════ */
+function yFonkSecildi(){
+  const v = document.getElementById("yFonk").value;
+  document.getElementById("yOzelRow").style.display = v==="ozel" ? "block" : "none";
+  if(v!=="ozel" && FONKLAR[v]){
+    document.getElementById("yA").value = isFinite(FONKLAR[v].a) ? FONKLAR[v].a : 100;
+  }
+}
+
+function yaklaşımTablosu(){
+  hideWarn("yWarn");
+  const sec = document.getElementById("yFonk").value;
+  const aVal = parseFloat(document.getElementById("yA").value);
+  if(isNaN(aVal)){ showWarn("yWarn","⚠️ Geçerli bir a değeri girin."); return; }
+
+  let fn;
+  if(sec==="ozel"){
+    const expr = document.getElementById("yOzel").value.trim();
+    if(!expr){ showWarn("yWarn","⚠️ Fonksiyon ifadesi girin."); return; }
+    try { fn = new Function("x", `return ${expr};`); fn(aVal+0.1); }
+    catch(e){ showWarn("yWarn","⚠️ Geçersiz fonksiyon ifadesi."); return; }
+  } else {
+    if(!FONKLAR[sec]){ showWarn("yWarn","⚠️ Fonksiyon bulunamadı."); return; }
+    fn = FONKLAR[sec].fn;
+  }
+
+  // Soldan: a'ya yaklaşan değerler — büyükten küçüğe (a-0.1, a-0.01, ..., a-0.000001)
+  // Sağdan: a'dan uzaklaşan değerler — küçükten büyüğe (a+0.000001, ..., a+0.1)
+  const adimlar = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6];
+  const tablo = document.getElementById("yTablo");
+  const result = document.getElementById("yResult");
+
+  // Sol satırlar: a-0.1 → a-0.000001 (giderek yaklaşıyor)
+  let solSatirlar = "";
+  let solSon;
+  adimlar.forEach(d=>{
+    const xs = aVal - d;
+    const ys = fn(xs);
+    solSon = ys;
+    solSatirlar += `<tr class="sol"><td>SOLDAN</td><td>${fmt(xs,7)}</td><td>${isFinite(ys)?fmt(ys):"tanımsız"}</td></tr>`;
+  });
+
+  // Sağ satırlar: a+0.000001 → a+0.1 (giderek uzaklaşıyor — a'dan başlayıp büyüyor)
+  let sagSatirlar = "";
+  let sagSon;
+  [...adimlar].reverse().forEach(d=>{
+    const xs = aVal + d;
+    const ys = fn(xs);
+    if(d === adimlar[adimlar.length-1]) sagSon = fn(aVal + adimlar[adimlar.length-1]); // en küçük adım = en yakın
+    sagSatirlar += `<tr class="sag"><td>SAĞDAN</td><td>${fmt(xs,7)}</td><td>${isFinite(ys)?fmt(ys):"tanımsız"}</td></tr>`;
+  });
+
+  // sagSon = a'ya en yakın sağ değer = en küçük adım
+  sagSon = fn(aVal + adimlar[adimlar.length-1]);
+
+  const solStr = isFinite(solSon)?fmt(solSon):"∞";
+  const sagStr = isFinite(sagSon)?fmt(sagSon):"∞";
+  const esit = isFinite(solSon)&&isFinite(sagSon)&&Math.abs(solSon-sagSon)<1e-4;
+
+  let html = `<table class="yakl-table"><thead><tr>
+    <th>Yön</th><th>x</th><th>f(x)</th>
+  </tr></thead><tbody>`;
+  html += solSatirlar;
+  html += sagSatirlar;
+  html += `<tr class="limit-row"><td colspan="2">Limit tahmini</td>
+    <td>${esit ? fmt((solSon+sagSon)/2) : "Sol: "+solStr+" / Sağ: "+sagStr}</td></tr>`;
+  html += `</tbody></table>`;
+  tablo.innerHTML = html;
+
+  result.className = "result-box";
+  if(esit){
+    const L = (solSon+sagSon)/2;
+    result.innerHTML = `Sol limit ≈ Sağ limit ≈ <strong>${fmt(L)}</strong> → İki yönlü limit <strong>mevcut</strong>.`;
+  } else {
+    result.innerHTML = `Sol limit (${solStr}) ≠ Sağ limit (${sagStr}) → İki yönlü limit <strong>mevcut değil</strong>.`;
+  }
+}
+
+/* ══════════════════════════════════
+   2. BELİRSİZLİK ANALİZİ
+══════════════════════════════════ */
+function belirsizlikAnalizi(){
+  const sec = document.getElementById("bFonk").value;
+  const veri = BELİRSİZLİK[sec];
+  const fonk = FONKLAR[sec];
+  const res = document.getElementById("bResult");
+  if(!veri||!fonk){ res.innerHTML=""; return; }
+
+  res.innerHTML = `
+    <div class="belirsiz-card">
+      <div class="bc-type">Belirsizlik türü: ${veri.tur}</div>
+      <div class="bc-desc">
+        <strong>Fonksiyon:</strong> \\(${fonk.latexF}\\), &nbsp; \\(x \\to ${fonk.latexA}\\)<br>
+        ${veri.acik}
+      </div>
+      <div class="bc-yol">
+        <strong>Çözüm yolu:</strong><br>${veri.yol}<br><br>
+        <strong>Limit = ${veri.sonuc}</strong>
+      </div>
+    </div>`;
+
+  if(window.MathJax) MathJax.typesetPromise([res]).catch(()=>{});
+}
+
+/* ══════════════════════════════════
+   3. GRAFİK
+══════════════════════════════════ */
+const GRAFİK_AYAR = {
+  sinx_x:   { xMin:-2*Math.PI, xMax:2*Math.PI, yMin:-0.5, yMax:1.3, a:0, label:"sin(x)/x → 1 (x→0)" },
+  x2m1_xm1: { xMin:-1, xMax:3, yMin:-1, yMax:5, a:1, label:"(x²−1)/(x−1) → 2 (x→1)" },
+  ex_x:     { xMin:-2, xMax:2, yMin:-0.5, yMax:3, a:0, label:"(eˣ−1)/x → 1 (x→0)" },
+  ln1px_x:  { xMin:-0.9, xMax:3, yMin:-0.5, yMax:2, a:0, label:"ln(1+x)/x → 1 (x→0)" },
+  x2_inf:   { xMin:-20, xMax:20, yMin:-0.2, yMax:1.5, a:null, label:"x²/(x²+1) → 1 (x→∞)" }
+};
+
+function grafikCiz(){
+  const sec = document.getElementById("gFonk").value;
+  const ayar = GRAFİK_AYAR[sec];
+  const fonk = FONKLAR[sec];
+  if(!ayar||!fonk) return;
+
+  const canvas = document.getElementById("gCanvas");
+  const W=canvas.width, H=canvas.height;
+  const ctx=canvas.getContext("2d");
+  ctx.clearRect(0,0,W,H);
+
+  const {xMin,xMax,yMin,yMax,a} = ayar;
+  const toX = x=>(x-xMin)/(xMax-xMin)*W;
+  const toY = y=>H-(y-yMin)/(yMax-yMin)*H;
+
+  // Arka plan
+  ctx.fillStyle="#fdfcf9"; ctx.fillRect(0,0,W,H);
+
+  // Izgara
+  ctx.strokeStyle="#e8e3d8"; ctx.lineWidth=1;
+  const xStep = (xMax-xMin)/8, yStep = (yMax-yMin)/6;
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax; gx+=xStep){
+    ctx.beginPath(); ctx.moveTo(toX(gx),0); ctx.lineTo(toX(gx),H); ctx.stroke();
+  }
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    ctx.beginPath(); ctx.moveTo(0,toY(gy)); ctx.lineTo(W,toY(gy)); ctx.stroke();
+  }
+
+  // Eksenler
+  ctx.strokeStyle="#b0a898"; ctx.lineWidth=1.5;
+  if(yMin<0&&yMax>0){ ctx.beginPath(); ctx.moveTo(0,toY(0)); ctx.lineTo(W,toY(0)); ctx.stroke(); }
+  if(xMin<0&&xMax>0){ ctx.beginPath(); ctx.moveTo(toX(0),0); ctx.lineTo(toX(0),H); ctx.stroke(); }
+
+  // Limit değeri yatay kesikli çizgi
+  const limVal = parseFloat(fonk.lim);
+  if(isFinite(limVal) && limVal>=yMin && limVal<=yMax){
+    ctx.strokeStyle="#e9c46a"; ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(0,toY(limVal)); ctx.lineTo(W,toY(limVal)); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle="#e9c46a"; ctx.font="bold 11px DM Sans,sans-serif"; ctx.textAlign="left";
+    ctx.fillText(`L = ${fonk.lim}`, 6, toY(limVal)-5);
+  }
+
+  // x=a dikey kesikli çizgi
+  if(a!==null && isFinite(a) && a>=xMin && a<=xMax){
+    ctx.strokeStyle="#e76f51"; ctx.lineWidth=1.2; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(toX(a),0); ctx.lineTo(toX(a),H); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle="#e76f51"; ctx.font="bold 11px DM Sans,sans-serif"; ctx.textAlign="center";
+    ctx.fillText(`x = ${a}`, toX(a), H-6);
+  }
+
+  // Eğri
+  ctx.strokeStyle="#2d6a4f"; ctx.lineWidth=2.5; ctx.setLineDash([]);
+  ctx.beginPath(); let started=false;
+  const N=W*2;
+  for(let i=0; i<=N; i++){
+    const x=xMin+(i/N)*(xMax-xMin);
+    if(a!==null && Math.abs(x-a)<(xMax-xMin)/N*2){ started=false; continue; }
+    const y=fonk.fn(x);
+    if(!isFinite(y)||y<yMin-1||y>yMax+1){ started=false; continue; }
+    const sx=toX(x), sy=toY(y);
+    if(!started){ ctx.moveTo(sx,sy); started=true; } else ctx.lineTo(sx,sy);
+  }
+  ctx.stroke();
+
+  // x=a'da delik (tanımsız nokta)
+  if(a!==null && isFinite(a) && isFinite(limVal)){
+    const px=toX(a), py=toY(limVal);
+    ctx.beginPath(); ctx.arc(px,py,5,0,Math.PI*2);
+    ctx.fillStyle="#fdfcf9"; ctx.fill();
+    ctx.strokeStyle="#2d6a4f"; ctx.lineWidth=2; ctx.stroke();
+  }
+
+  // Eksen etiketleri
+  ctx.fillStyle="#8a7f72"; ctx.font="10px DM Sans,sans-serif"; ctx.textAlign="center";
+  for(let gx=Math.ceil(xMin/xStep)*xStep; gx<=xMax+0.01; gx+=xStep){
+    const lbl=parseFloat(gx.toFixed(2));
+    if(yMin<0&&yMax>0) ctx.fillText(lbl,toX(gx),toY(0)+13);
+  }
+  ctx.textAlign="right";
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax+0.01; gy+=yStep){
+    const lbl=parseFloat(gy.toFixed(2));
+    if(xMin<0&&xMax>0) ctx.fillText(lbl,toX(0)-4,toY(gy)+4);
+  }
+
+  document.getElementById("gAciklama").textContent = ayar.label;
+}
+
+/* ══════════════════════════════════
+   4. ÖZEL LİMİTLER GALERİSİ
+══════════════════════════════════ */
+const GALERİ = [
+  {
+    title: "\\(\\lim_{x \\to 0} \\dfrac{\\sin x}{x} = 1\\)",
+    fn: x => Math.sin(x)/x,
+    xlar: [0.5, 0.1, 0.01, 0.001],
+    sonuc: "1",
+    solDan: true  // x=0'a hem soldan hem sağdan yaklaşılabilir
+  },
+  {
+    title: "\\(\\lim_{x \\to 0} \\dfrac{1-\\cos x}{x} = 0\\)",
+    fn: x => (1-Math.cos(x))/x,
+    xlar: [0.5, 0.1, 0.01, 0.001],
+    sonuc: "0",
+    solDan: true
+  },
+  {
+    title: "\\(\\lim_{n \\to \\infty} \\left(1+\\dfrac{1}{n}\\right)^{\\!n} = e\\)",
+    fn: n => Math.pow(1+1/n, n),
+    xlar: [1, 10, 100, 1000, 10000],
+    sonuc: "e ≈ 2,71828…",
+    solDan: false  // n→∞: sadece pozitif taraftan
+  },
+  {
+    title: "\\(\\lim_{x \\to 0} (1+x)^{1/x} = e\\)",
+    fn: x => Math.pow(1+x, 1/x),
+    xlar: [0.5, 0.1, 0.01, 0.001],
+    sonuc: "e ≈ 2,71828…",
+    solDan: true
+  }
+];
+
+function galeriOlustur(){
+  const grid = document.getElementById("galeriGrid");
+  grid.innerHTML = "";
+
+  GALERİ.forEach(g=>{
+    const kart = document.createElement("div");
+    kart.className = "galeri-kart";
+
+    let baslik, satirlar;
+
+    if(g.solDan){
+      // 4 sütunlu tablo: x(soldan) | f(x) sol | f(x) sağ | x(sağdan)
+      // Satırlar en yakından en uzağa doğru sıralanır
+      const n = g.xlar.length;
+      baslik = `<thead><tr>
+        <th style="color:var(--accent3)">x (soldan)</th>
+        <th>f(x)</th>
+        <th>f(x)</th>
+        <th style="color:var(--accent2)">x (sağdan)</th>
+      </tr></thead>`;
+
+      satirlar = "";
+      // En yakından (küçük d) en uzağa (büyük d)
+      for(let i=n-1; i>=0; i--){
+        const d = g.xlar[i];
+        const xSol = -d, xSag = d;
+        const ySol = g.fn(xSol), ySag = g.fn(xSag);
+        satirlar += `<tr>
+          <td class="sol-x">${fmt(xSol,4)}</td>
+          <td>${isFinite(ySol)?fmt(ySol,6):"tanımsız"}</td>
+          <td>${isFinite(ySag)?fmt(ySag,6):"tanımsız"}</td>
+          <td class="sag-x">${fmt(xSag,4)}</td>
+        </tr>`;
+      }
+    } else {
+      // Tek yönlü (n→∞): 2 sütun
+      baslik = `<thead><tr>
+        <th>n</th><th>f(n)</th>
+      </tr></thead>`;
+      satirlar = "";
+      g.xlar.forEach(x=>{
+        const y = g.fn(x);
+        satirlar += `<tr><td>${fmt(x,0)}</td><td>${isFinite(y)?fmt(y,6):"tanımsız"}</td></tr>`;
+      });
+    }
+
+    kart.innerHTML = `
+      <div class="gk-title">${g.title}</div>
+      <table>${baslik}<tbody>${satirlar}</tbody></table>
+      <div class="gk-sonuc">Limit → ${g.sonuc}</div>`;
+    grid.appendChild(kart);
+  });
+
+  if(window.MathJax) MathJax.typesetPromise([grid]).catch(()=>{});
+}
+
+/* ── BAŞLAT ── */
+window.addEventListener("load", ()=>{
+  grafikCiz();
+  galeriOlustur();
+  if(window.MathJax) MathJax.typesetPromise().catch(()=>{});
+});
+</script>
+</body>
+</html>
