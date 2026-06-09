@@ -197,7 +197,7 @@ header .titles p { font-size: 0.85rem; color: var(--text-dim); margin-top: 3px; 
   width: 100%; height: 100%;
   box-sizing: border-box;
 }
-.math-temp { opacity: 0; transition: opacity 220ms ease; display: inline-block; }
+.math-temp { opacity: 0; transition: opacity 600ms ease; display: inline-block; }
 .math-visible { opacity: 1; }
 .fade-cell-in  { animation: fadeCellIn  .45s ease forwards; }
 .fade-cell-out { animation: fadeCellOut .45s ease forwards; }
@@ -858,7 +858,7 @@ async function runSteps(){
       if(ctrl.cancelled)return;
       setCell(sinCells[i],raw[i]);
       await retypeset(document.getElementById(sinCells[i]));
-      await sleep(200);
+      await sleep(500);
     }
   });
 
@@ -866,7 +866,7 @@ async function runSteps(){
     for(let i=0;i<5;i++){
       if(ctrl.cancelled)return;
       await buildRoot(sinCells[i],i);
-      await sleep(110);
+      await sleep(350);
     }
   });
 
@@ -874,7 +874,7 @@ async function runSteps(){
     for(let i=0;i<5;i++){
       if(ctrl.cancelled)return;
       await buildFraction(sinCells[i],`\\(\\sqrt{${i}}\\)`,"\\(2\\)");
-      await sleep(140);
+      await sleep(400);
     }
   });
 
@@ -887,7 +887,7 @@ async function runSteps(){
   });
 
   steps.push(async()=>{
-    const map=[["s0","c90"],["s30","c60"],["s45","c45"],["s60","c30"],["s90","c0"]];
+    const map=[["s90","c0"],["s60","c30"],["s45","c45"],["s30","c60"],["s0","c90"]];
     for(const p of map){
       if(ctrl.cancelled)return;
       await flyElement(p[0],p[1],900);
