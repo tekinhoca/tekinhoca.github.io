@@ -155,8 +155,8 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
       </div>
       <div class="rule-item" style="border-color:var(--accent3);">
         <strong>Eğim (m):</strong><br>
-        \(m > 0\) → artan · \(m < 0\) → azalan<br>
-        \(m = 0\) → yatay · \(b = 0\) → dikey
+        \(m > 0\) ⟹ artan · \(m < 0\) ⟹ azalan<br>
+        \(m = 0\) ⟹ yatay · \(b = 0\) ⟹ dikey
       </div>
       <div class="rule-item" style="border-color:var(--accent4);">
         <strong>Eksen Kesim Noktaları:</strong><br>
@@ -165,15 +165,15 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
       </div>
       <div class="rule-item" style="border-color:var(--kesisim-c);">
         <strong>İki Doğrunun Durumu:</strong><br>
-        \(m_1 \neq m_2\) → kesişir (tek çözüm)<br>
-        \(m_1 = m_2, n_1 \neq n_2\) → paralel<br>
-        \(m_1 = m_2, n_1 = n_2\) → çakışık
+        \(m_1 \neq m_2\) ⟹ kesişir (tek çözüm)<br>
+        \(m_1 = m_2, n_1 \neq n_2\) ⟹ paralel<br>
+        \(m_1 = m_2, n_1 = n_2\) ⟹ çakışık
       </div>
       <div class="rule-h">Eşitsizlik — Bölge Kuralları</div>
       <div class="rule-item" style="border-color:var(--accent);">
         <strong>Sınır Doğrusu:</strong><br>
-        \(\geqslant,\;\leqslant\) → tam çizgi (dahil)<br>
-        \(>,\;<\) → kesik çizgi (dahil değil)
+        \(\geqslant,\;\leqslant\) ⟹ tam çizgi (dahil)<br>
+        \(>,\;<\) ⟹ kesik çizgi (dahil değil)
       </div>
       <div class="rule-item" style="border-color:var(--accent2);">
         <strong>Çözüm Bölgesi:</strong><br>
@@ -203,7 +203,7 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
       <!-- ══ DENKLEM SEKMESİ ══ -->
       <div class="tab-content active" id="tc-denklem">
         <div class="hint" style="margin-bottom:12px;">
-          Birinci denklem girişi zorunludur. İkinci denklemi de doldurursanız araç otomatik olarak <strong>denklem sistemini</strong> çözer; yalnızca birinci satırı doldurursanız <strong>tek denklem</strong> analizi yapılır.
+          Yalnızca birinci satırı doldurursanız <strong>bir denklemin</strong> analizi yapılır.<br>İkinci satırı da doldurursanız araç otomatik olarak <strong>denklem sistemini</strong> çözer. 
         </div>
 
         <!-- Birinci denklem -->
@@ -243,7 +243,7 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
       <!-- ══ EŞİTSİZLİK SEKMESİ ══ -->
       <div class="tab-content" id="tc-esitsizlik">
         <div class="hint" style="margin-bottom:12px;">
-          Birinci eşitsizlik zorunludur. İkinci satırı da doldurursanız <strong>iki eşitsizlikli sistem</strong> olarak çözülür; yalnızca birinci satır girilirse <strong>tek eşitsizlik</strong> analizi yapılır.
+          Yalnızca birinci satırı doldurursanız <strong>bir eşitsizliğin</strong> analizi yapılır.<br>İkinci satırı da doldurursanız araç otomatik olarak <strong>eşitsizlik sistemini</strong> çözer. 
         </div>
 
         <!-- Birinci eşitsizlik -->
@@ -459,22 +459,22 @@ function calcTekCore(a,b,c){
   let steps=`<div class="step"><strong>Verilen denklem:</strong> ${u2}</div>
     <div class="step-section">Açık Form Dönüşümü</div>`;
   if(!s.dikey){
-    steps+=`<div class="step">by = −ax − c &nbsp;→&nbsp; y = (−a/b)x + (−c/b)</div>
+    steps+=`<div class="step">by = −ax − c &nbsp;⟹&nbsp; y = (−a/b)x + (−c/b)</div>
     <div class="step"><strong>Eğim:</strong> m = −a/b = −(${fmtN(a)})/(${fmtN(b)}) = <strong>${fmtR2(s.m)}</strong></div>
     <div class="step"><strong>y-kesim (n):</strong> n = −c/b = −(${fmtN(c)})/(${fmtN(b)}) = <strong>${fmtR2(s.n)}</strong></div>
     <div class="step"><strong>Açık form:</strong> ${u3}</div>
     <div class="step-section">Eksen Kesim Noktaları</div>
-    <div class="step"><strong>y eksenini kestiği nokta</strong> (x=0): y = ${fmtR2(s.m)}×0 + ${fmtR2(s.n)} = <strong>${fmtR2(yKesim)}</strong> → <strong>A(0, ${fmtR2(yKesim)})</strong></div>`;
+    <div class="step"><strong>y eksenini kestiği nokta</strong> (x=0): y = ${fmtR2(s.m)}×0 + ${fmtR2(s.n)} = <strong>${fmtR2(yKesim)}</strong> ⟹ <strong>A(0, ${fmtR2(yKesim)})</strong></div>`;
     if(xKesim!==null){
-      steps+=`<div class="step"><strong>x eksenini kestiği nokta</strong> (y=0): 0 = ${fmtR2(s.m)}x + ${fmtR2(s.n)} → x = ${fmtR2(-s.n)}/${fmtR2(s.m)} = <strong>${fmtR2(xKesim)}</strong> → <strong>B(${fmtR2(xKesim)}, 0)</strong></div>`;
+      steps+=`<div class="step"><strong>x eksenini kestiği nokta</strong> (y=0): 0 = ${fmtR2(s.m)}x + ${fmtR2(s.n)} ⟹ x = ${fmtR2(-s.n)}/${fmtR2(s.m)} = <strong>${fmtR2(xKesim)}</strong> ⟹ <strong>B(${fmtR2(xKesim)}, 0)</strong></div>`;
     } else {
       steps+=`<div class="step"><strong>x eksenini kesmez</strong> (m=0, yatay doğru y=${fmtR2(s.n)})</div>`;
     }
     if(s.m===1)steps+=`<div class="step" style="color:var(--accent3);">📐 Eğim=1: Doğru 45° açı yapar</div>`;
     else if(s.m===-1)steps+=`<div class="step" style="color:var(--accent3);">📐 Eğim=−1: Doğru −45° açı yapar</div>`;
-    else if(s.m>0)steps+=`<div class="step" style="color:var(--accent);">📈 Eğim pozitif → x arttıkça y artar</div>`;
-    else if(s.m<0)steps+=`<div class="step" style="color:var(--accent2);">📉 Eğim negatif → x arttıkça y azalır</div>`;
-    else steps+=`<div class="step" style="color:var(--accent3);">↔ Eğim=0 → yatay doğru</div>`;
+    else if(s.m>0)steps+=`<div class="step" style="color:var(--accent);">📈 Eğim pozitif ⟹ x arttıkça y artar</div>`;
+    else if(s.m<0)steps+=`<div class="step" style="color:var(--accent2);">📉 Eğim negatif ⟹ x arttıkça y azalır</div>`;
+    else steps+=`<div class="step" style="color:var(--accent3);">↔ Eğim=0 ⟹ yatay doğru</div>`;
   } else {
     steps+=`<div class="step">b=0 olduğundan denklem <strong>dikey doğrudur.</strong></div>
     <div class="step"><strong>Doğru denklemi:</strong> x = ${fmtR2(s.xVal)}</div>
@@ -543,14 +543,14 @@ function calcSistemCore(a1,b1,c1,a2,b2,c2){
       html+=`<div class="step">x=0 &nbsp;⟹&nbsp; ${denklemSatir(0,b,c)} &nbsp;⟹&nbsp; y=${fmtK(yKes)}</div>`;
       html+=`<div class="step">⟹ ${no===1?'①':'②'} no'lu doğrunun y-eksenini kestiği nokta: <strong>${label[0]}(0, ${fmtK(yKes)})</strong></div>`;
     } else {
-      html+=`<div class="step">b=0 → y eksenine paralel, kesmiyor.</div>`;
+      html+=`<div class="step">b=0 ⟹ y eksenine paralel, kesmiyor.</div>`;
     }
     const xKes=a!==0?-c/a:null;
     if(xKes!==null){
       html+=`<div class="step" style="margin-top:6px;">y=0 &nbsp;⟹&nbsp; ${denklemSatir(a,0,c)} &nbsp;⟹&nbsp; x=${fmtK(xKes)}</div>`;
       html+=`<div class="step">⟹ ${no===1?'①':'②'} no'lu doğrunun x-eksenini kestiği nokta: <strong>${label[1]}(${fmtK(xKes)}, 0)</strong></div>`;
     } else {
-      html+=`<div class="step">a=0 → x eksenine paralel, kesmiyor.</div>`;
+      html+=`<div class="step">a=0 ⟹ x eksenine paralel, kesmiyor.</div>`;
     }
     return{html,yKes,xKes};
   }
@@ -826,7 +826,7 @@ function calcEsit(){
       <div class="step-section">SINIR DOĞRUSUNUN BULUNMASI</div>
       <div class="step">Eşitsizlik işaretini "=" ile değiştiririz: <strong>${denklemSatir(a,b,c)}</strong></div>`;
     const dahil=(op==='gte'||op==='lte');
-    html+=`<div class="step">İşaret "${opSembol[op]}" → sınır doğrusu çözüme <strong>${dahil?'dahildir (tam çizgi ile gösterilir)':'dahil değildir (kesik çizgi ile gösterilir)'}</strong>.</div>`;
+    html+=`<div class="step">İşaret "${opSembol[op]}" ⟹ sınır doğrusu çözüme <strong>${dahil?'dahildir (tam çizgi ile gösterilir)':'dahil değildir (kesik çizgi ile gösterilir)'}</strong>.</div>`;
     return html;
   }
 
@@ -839,9 +839,9 @@ function calcEsit(){
     let html=`<div class="step-section">SINIR DOĞRUSUNUN EKSENLERİ KESTİĞİ NOKTALAR</div>`;
     if(!s.dikey){
       const yK=b!==0?-c/b:null, xK=s.m!==0?-s.n/s.m:null;
-      if(yK!==null) html+=`<div class="step">x = 0 ⟹ ${denklemSatir(0,b,c)} ⟹ y = ${fmtR2(yK)} &nbsp;→&nbsp; <strong>A(0, ${fmtR2(yK)})</strong></div>`;
+      if(yK!==null) html+=`<div class="step">x = 0 ⟹ ${denklemSatir(0,b,c)} ⟹ y = ${fmtR2(yK)} &nbsp;⟹&nbsp; <strong>A(0, ${fmtR2(yK)})</strong></div>`;
       else html+=`<div class="step">b = 0 ⟹ Sınır doğrusu dikeydir ⟹ y eksenini kesmez.</div>`;
-      if(xK!==null) html+=`<div class="step">y = 0 ⟹ ${denklemSatir(a,0,c)} ⟹ x = ${fmtR2(xK)} &nbsp;→&nbsp; <strong>B(${fmtR2(xK)}, 0)</strong></div>`;
+      if(xK!==null) html+=`<div class="step">y = 0 ⟹ ${denklemSatir(a,0,c)} ⟹ x = ${fmtR2(xK)} &nbsp;⟹&nbsp; <strong>B(${fmtR2(xK)}, 0)</strong></div>`;
       else if(s.m===0) html+=`<div class="step">Eğim = 0 ⟹ Sınır doğrusu yataydır ⟹ x eksenini kesmez.</div>`;
       // Orijinden geçip geçmediğini burada belirt
       if(orijinSinirdaMi(a,b,c)){
