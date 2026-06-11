@@ -3,62 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Doğru Denklem Grafikleyici</title>
+<title>Doğru Denklem ve Eşitsizlik — TekinHoca</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
-:root {
-  --bg:#f4f1eb; --surface:#fdfcf9; --surface2:#eee9df; --border:#d8d0c0;
-  --accent:#2d6a4f; --accent2:#e76f51; --accent3:#457b9d; --accent4:#e9c46a;
-  --d1-c:#e76f51; --d2-c:#457b9d; --kesisim-c:#9b5de5;
-  --text:#1a1a1a; --text-dim:#6b6456; --radius:12px; --shadow:0 4px 24px rgba(0,0,0,0.08);
+:root{
+  --bg:#f4f1eb;--surface:#fdfcf9;--surface2:#eee9df;--border:#d8d0c0;
+  --accent:#2d6a4f;--accent2:#e76f51;--accent3:#457b9d;--accent4:#e9c46a;
+  --d1-c:#e76f51;--d2-c:#457b9d;--kesisim-c:#9b5de5;--esit-c:#2d6a4f;
+  --text:#1a1a1a;--text-dim:#6b6456;--radius:12px;--shadow:0 4px 24px rgba(0,0,0,0.08);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding:20px;
   background-image:radial-gradient(circle at 10% 20%,rgba(45,106,79,0.06) 0%,transparent 50%),
   radial-gradient(circle at 90% 80%,rgba(69,123,157,0.06) 0%,transparent 50%);}
+
 header{max-width:1200px;margin:0 auto 24px;display:flex;align-items:center;gap:18px;
   padding-bottom:18px;border-bottom:2px solid var(--border);}
 header img{height:44px;width:auto;}
+header .titles{text-align:right;}
 header .titles h1{font-family:'Lora',serif;font-size:clamp(1.1rem,2.5vw,1.75rem);font-weight:700;color:var(--accent);}
 header .titles p{font-size:0.85rem;color:var(--text-dim);margin-top:3px;}
+
 .app{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;}
 @media(max-width:860px){.app{grid-template-columns:1fr;}}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
 .panel+.panel{margin-top:16px;}
-.sec-title{font-family:'Lora',serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+.sec-title{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
   color:var(--text-dim);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
 
-/* ── SOL PANEL ── */
+/* SOL PANEL */
 .rule-item{margin-bottom:11px;padding:9px 12px;background:var(--surface2);border-radius:8px;
-  border-left:4px solid transparent;font-size:0.8rem;line-height:1.7;color:var(--text-dim);}
+  border-left:4px solid transparent;font-size:0.82rem;line-height:1.85;color:var(--text-dim);}
 .rule-item strong{color:var(--text);}
-.fc{font-family:monospace;font-size:0.8rem;background:var(--surface);border:1px solid var(--border);
-  border-radius:4px;padding:1px 7px;display:inline-block;margin:1px 0;}
+.rule-h{font-family:'Lora',serif;font-size:0.82rem;font-weight:700;color:var(--accent);
+  margin:14px 0 6px;padding-bottom:4px;border-bottom:1px dashed var(--border);}
 
-/* ── ANA SAYFA KARTLARI ── */
-.shape-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
-.shape-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);
-  padding:22px 18px;cursor:pointer;text-align:center;transition:all 0.2s;box-shadow:var(--shadow);}
-.shape-card:hover{transform:translateY(-3px);}
-.shape-card .sc-icon{font-size:2.5rem;margin-bottom:10px;}
-.shape-card .sc-title{font-family:'Lora',serif;font-size:1rem;font-weight:700;line-height:1.3;}
-.shape-card .sc-keys{font-size:0.75rem;color:var(--text-dim);margin-top:8px;font-style:italic;}
-.shape-card.tek:hover{border-color:var(--d1-c);background:rgba(231,111,81,0.05);}
-.shape-card.tek .sc-title{color:var(--d1-c);}
-.shape-card.sistem:hover{border-color:var(--d2-c);background:rgba(69,123,157,0.05);}
-.shape-card.sistem .sc-title{color:var(--d2-c);}
+/* ANA SEKMELER */
+.main-tabs{display:flex;gap:0;margin-bottom:0;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;border:2px solid var(--border);border-bottom:none;}
+.main-tab{flex:1;padding:14px 10px;cursor:pointer;font-family:'Lora',serif;font-weight:700;
+  font-size:0.92rem;text-align:center;background:var(--surface2);color:var(--text-dim);
+  border:none;transition:all 0.18s;line-height:1.3;}
+.main-tab:not(:last-child){border-right:2px solid var(--border);}
+.main-tab:hover{background:var(--surface);color:var(--text);}
+.main-tab.active.denklem{background:var(--surface);color:var(--d1-c);border-bottom:3px solid var(--d1-c);}
+.main-tab.active.esitsizlik{background:var(--surface);color:var(--esit-c);border-bottom:3px solid var(--esit-c);}
+.tab-content{display:none;border:2px solid var(--border);border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);background:var(--surface);padding:20px;box-shadow:var(--shadow);}
+.tab-content.active{display:block;}
 
-/* ── NAVİGASYON ── */
-.page{display:none;}.page.active{display:block;}
-.btn-back{display:inline-flex;align-items:center;gap:6px;background:transparent;
-  border:1px solid var(--border);border-radius:8px;padding:7px 14px;cursor:pointer;
-  font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.82rem;color:var(--text-dim);
-  transition:all 0.15s;margin-bottom:16px;}
-.btn-back:hover{border-color:var(--accent);color:var(--accent);}
-
-/* ── GİRİŞ ── */
-label.field-label{display:block;font-size:0.78rem;font-weight:600;color:var(--text-dim);
-  margin-bottom:5px;margin-top:12px;text-transform:uppercase;letter-spacing:0.8px;}
+/* İKİNCİ SATIR (opsiyonel) */
+.opt-row{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);}
+.opt-label{font-size:0.78rem;font-weight:700;margin-bottom:6px;}
 .coeff-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;}
 .coeff-box{display:flex;flex-direction:column;align-items:center;gap:3px;}
 .coeff-box label{font-size:0.72rem;color:var(--text-dim);font-weight:600;}
@@ -66,788 +68,558 @@ label.field-label{display:block;font-size:0.78rem;font-weight:600;color:var(--te
   color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.92rem;padding:8px;
   outline:none;text-align:center;transition:border-color 0.18s;}
 .coeff-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,106,79,0.12);}
-.coeff-sep{font-size:1.2rem;color:var(--text-dim);font-weight:700;padding-top:18px;}
+.coeff-sep{font-size:1.15rem;color:var(--text-dim);font-weight:700;padding-top:18px;}
+.esit-select{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:1.05rem;padding:7px 10px;
+  outline:none;cursor:pointer;transition:border-color 0.18s;margin-top:18px;}
+.esit-select:focus{border-color:var(--accent);}
 .denklem-preview{margin-top:10px;padding:8px 14px;background:rgba(45,106,79,0.07);
   border:1px solid rgba(45,106,79,0.25);border-radius:8px;font-family:monospace;font-size:0.95rem;
   color:var(--accent);font-weight:700;min-height:32px;}
+.hint{font-size:0.73rem;color:var(--text-dim);margin-top:5px;line-height:1.5;}
 .btn-calc{width:100%;margin-top:14px;background:var(--accent);border:none;border-radius:10px;
   color:#fff;font-family:'Lora',serif;font-weight:700;font-size:1rem;padding:12px;
   cursor:pointer;transition:background 0.18s,transform 0.1s;}
 .btn-calc:hover{background:#1f4e38;transform:translateY(-1px);}
-.btn-calc.d2{background:var(--d2-c);}
-.btn-calc.d2:hover{background:#2d5a7a;}
+.btn-calc.cb{background:var(--esit-c);}
+.btn-calc.cb:hover{background:#1f4e38;}
 .btn-reset-sm{width:100%;margin-top:8px;background:transparent;border:1px solid var(--border);
   border-radius:10px;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-weight:600;
   font-size:0.85rem;padding:9px;cursor:pointer;transition:background 0.15s;}
 .btn-reset-sm:hover{background:var(--surface2);color:var(--text);}
 .error-box{display:none;background:rgba(231,111,81,0.1);border:1px solid rgba(231,111,81,0.4);
   border-radius:8px;padding:10px 13px;font-size:0.82rem;color:#c0392b;margin-top:10px;line-height:1.5;}
-.hint{font-size:0.73rem;color:var(--text-dim);margin-top:5px;line-height:1.5;}
 
-/* ── SONUÇ ── */
+/* SONUÇ */
 .right-col{display:flex;flex-direction:column;gap:16px;}
 .result-section{display:flex;flex-direction:column;gap:14px;}
-
-/* stat kartları */
 .stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
 @media(max-width:600px){.stat-strip{grid-template-columns:repeat(2,1fr);}}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
-  padding:12px 14px;box-shadow:var(--shadow);}
-.st-label{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;
-  color:var(--text-dim);margin-bottom:4px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;box-shadow:var(--shadow);}
+.st-label{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;color:var(--text-dim);margin-bottom:4px;}
 .st-val{font-family:'Lora',serif;font-size:1.3rem;font-weight:700;line-height:1;}
 .st-sub{font-size:0.72rem;color:var(--text-dim);margin-top:3px;}
-
-/* steps */
 .steps-box{background:var(--surface2);border-radius:8px;padding:12px 15px;
-  font-size:0.82rem;line-height:1.95;color:var(--text-dim);border-left:4px solid var(--accent4);}
+  font-size:0.83rem;line-height:2;color:var(--text-dim);border-left:4px solid var(--accent4);}
 .steps-box strong{color:var(--text);}
 .step{margin-bottom:1px;}
-.step-section{margin-top:8px;padding-top:6px;border-top:1px dashed var(--border);
-  font-size:0.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-dim);}
-
-/* tablo */
+.step-section{margin-top:10px;padding-top:7px;border-top:1px dashed var(--border);
+  font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-dim);}
 .tbl-wrap{overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:0.86rem;}
 thead th{background:var(--surface2);color:var(--text-dim);font-size:0.68rem;letter-spacing:1.5px;
-  text-transform:uppercase;padding:8px 12px;text-align:center;font-weight:700;
-  border-bottom:2px solid var(--border);}
+  text-transform:uppercase;padding:8px 12px;text-align:center;font-weight:700;border-bottom:2px solid var(--border);}
 tbody tr{border-bottom:1px solid var(--border);transition:background 0.12s;}
 tbody tr:hover{background:var(--surface2);}
 tbody td{padding:7px 12px;text-align:center;font-family:monospace;font-size:0.88rem;}
 tbody tr.highlight-row td{background:rgba(45,106,79,0.08);font-weight:700;color:var(--accent);}
-
-/* grafik */
-canvas.graf-canvas{display:block;width:100%;border-radius:8px;background:#fdfcf9;
-  border:1px solid var(--border);}
-
-/* kesişim kartı */
+canvas.graf-canvas{display:block;width:100%;border-radius:8px;background:#fdfcf9;border:1px solid var(--border);}
 .kesisim-card{background:rgba(155,93,229,0.07);border:1px solid rgba(155,93,229,0.3);
   border-left:4px solid var(--kesisim-c);border-radius:10px;padding:14px 18px;}
 .kc-title{font-family:'Lora',serif;font-size:0.85rem;font-weight:700;color:var(--kesisim-c);margin-bottom:8px;}
 .kc-val{font-family:'Lora',serif;font-size:1.3rem;font-weight:700;color:var(--kesisim-c);}
+.esit-result-card{background:rgba(45,106,79,0.07);border:1px solid rgba(45,106,79,0.3);
+  border-left:4px solid var(--accent);border-radius:10px;padding:14px 18px;}
+.esit-result-card .kc-title{color:var(--accent);}
 
-/* sistem çözüm ── */
-.metod-tabs{display:flex;gap:8px;margin-bottom:14px;}
-.metod-tab{background:var(--surface2);border:2px solid var(--border);border-radius:9px;
-  padding:7px 16px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;
-  font-size:0.82rem;color:var(--text-dim);transition:all 0.15s;}
-.metod-tab:hover,.metod-tab.active{border-color:var(--d2-c);background:rgba(69,123,157,0.08);color:var(--d2-c);}
-
-/* denklem sistemi giriş satırı */
-.eq-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 0;
-  border-bottom:1px solid var(--border);}
-.eq-row:last-child{border-bottom:none;}
-.eq-label{font-size:0.75rem;font-weight:700;color:var(--text-dim);min-width:24px;}
-.eq-inp{width:60px;background:var(--surface2);border:1px solid var(--border);border-radius:7px;
-  color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.9rem;padding:7px;
-  outline:none;text-align:center;transition:border-color 0.18s;}
-.eq-inp:focus{border-color:var(--d2-c);}
-.eq-sep{font-size:1rem;color:var(--text-dim);font-weight:700;}
-.eq-preview{font-family:monospace;font-size:0.85rem;color:var(--d2-c);font-weight:700;
-  margin-left:8px;min-width:120px;}
-/* ── FOOTER ── */
-footer {
-  max-width: 1200px;
-  margin: 40px auto 0;
-  padding-top: 16px;
-  border-top: 2px solid var(--border);
-  text-align: center;
-}
-footer p {
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  font-family: 'DM Sans', sans-serif;
-  padding-bottom: 20px;
-}
+footer{max-width:1200px;margin:40px auto 0;padding-top:16px;border-top:2px solid var(--border);text-align:center;}
+footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-serif;padding-bottom:20px;}
 </style>
 </head>
 <body>
+
 <header>
   <img src="../img/THlogo1.png" alt="TekinHoca Logo"
        style="max-width:100%;display:block;margin:0 auto 0 0;border-radius:10px;">
-  <div class="titles" style="text-align:right;">
-    <h1>Doğru Denklem Grafikleyici</h1>
-    <p>Denklem gir · Eğimi hesapla · Tabloyu oluştur · Grafiği çiz · Sistemi çöz</p>
+  <div class="titles">
+    <h1>Doğru Denklem ve Eşitsizlik</h1>
+    <p>Denklem · Denklem Sistemi · Eşitsizlik · Grafik</p>
   </div>
 </header>
 
 <div class="app">
-  <!-- ── SOL PANEL ── -->
-  <div id="leftPanel">
+
+  <!-- SOL PANEL -->
+  <div id="leftCol">
     <div class="panel">
       <div class="sec-title">Temel Kavramlar</div>
       <div class="rule-item" style="border-color:var(--d1-c);">
-        <strong>Genel Form:</strong> ax + by + c = 0<br>
-        a, b, c gerçel sayılardır.<br>a ve b aynı anda sıfır olamaz.
+        <strong>Genel Form:</strong><br>
+        \(ax + by + c = 0\)<br>
+        <span style="font-size:0.78rem;">a ve b aynı anda sıfır olamaz.</span>
       </div>
       <div class="rule-item" style="border-color:var(--accent);">
-        <strong>Açık Form:</strong> y = mx + n<br>
-        <span class="fc">m = −a/b</span> &nbsp; (eğim)<br>
-        <span class="fc">n = −c/b</span> &nbsp; (y-kesim noktası)
+        <strong>Açık Form:</strong><br>
+        \(y = mx + n\)<br>
+        \(m = -\dfrac{a}{b}\) · \(n = -\dfrac{c}{b}\)
       </div>
       <div class="rule-item" style="border-color:var(--accent3);">
-        <strong>Eğim (m):</strong> Doğrunun x eksenine göre yükselme/ilerleme oranı.<br>
-        m &gt; 0 → artan grafik<br>m &lt; 0 → azalan grafik<br>
-        m = 0 → x eksenine paraleldir<br>⚠️ x eksenine dik doğruların eğimi tanımsızdır.
+        <strong>Eğim (m):</strong><br>
+        \(m > 0\) → artan · \(m < 0\) → azalan<br>
+        \(m = 0\) → yatay · \(b = 0\) → dikey
       </div>
       <div class="rule-item" style="border-color:var(--accent4);">
         <strong>Eksen Kesim Noktaları:</strong><br>
-        x = 0 → y eksenini keser: (0, n)<br>
-        y = 0 → x eksenini keser: (−n/m, 0)
+        \(x=0 \Rightarrow A\!\left(0,-\dfrac{c}{b}\right)\)<br>
+        \(y=0 \Rightarrow B\!\left(-\dfrac{c}{a},0\right)\)
       </div>
       <div class="rule-item" style="border-color:var(--kesisim-c);">
-        <strong>İki Doğrunun Kesişimi:</strong><br>
-        İki denklem sistemi çözülerek bulunur.<br>
-        Paralelse kesişmez (m₁ = m₂, n₁ ≠ n₂)<br>
-        Çakışıksa sonsuz çözüm (m₁ = m₂, n₁ = n₂)
+        <strong>İki Doğrunun Durumu:</strong><br>
+        \(m_1 \neq m_2\) → kesişir (tek çözüm)<br>
+        \(m_1 = m_2, n_1 \neq n_2\) → paralel<br>
+        \(m_1 = m_2, n_1 = n_2\) → çakışık
       </div>
-    </div>
-    <div class="panel" id="leftInfoPanel" style="display:none;">
-      <div class="sec-title" id="leftInfoTitle">Denklem Bilgisi</div>
-      <div id="leftInfoContent"></div>
+      <div class="rule-h">Eşitsizlik — Bölge Kuralları</div>
+      <div class="rule-item" style="border-color:var(--accent);">
+        <strong>Sınır Doğrusu:</strong><br>
+        \(\geqslant,\;\leqslant\) → tam çizgi (dahil)<br>
+        \(>,\;<\) → kesik çizgi (dahil değil)
+      </div>
+      <div class="rule-item" style="border-color:var(--accent2);">
+        <strong>Çözüm Bölgesi:</strong><br>
+        Sınır doğrusu orijinden <em>geçmiyorsa</em> test noktası olarak \((0,0)\) seçilir; eşitsizliği sağlıyorsa orijin tarafı çözümdür.
+      </div>
+      <div class="rule-item" style="border-color:var(--accent3);">
+        <strong>İki Eşitsizlikli Sistem:</strong><br>
+        Ortak çözüm = iki bölgenin <em>kesişimi</em>
+      </div>
     </div>
   </div>
 
-  <!-- ── SAĞ PANEL ── -->
+  <!-- SAĞ PANEL -->
   <div class="right-col">
 
-    <!-- ANA SAYFA -->
-    <div id="page0" class="page active">
-      <div class="panel">
-        <div class="sec-title">Bir denklem mi iki denklem mi?</div>
-        <div class="shape-grid">
-          <div class="shape-card tek" onclick="goPage('tek')">
-            <div class="sc-icon">📈</div>
-            <div class="sc-title">Birinci Dereceden İki Bilinmeyenli<br>Bir Denklem</div>
-            <div class="sc-keys">eğim · eksen kesim noktaları · tablo · grafik</div>
+    <!-- ANA SEKMELER -->
+    <div>
+      <div class="main-tabs">
+        <button class="main-tab denklem active" id="tab-denklem" onclick="switchTab('denklem')">
+          📈 Denklem
+        </button>
+        <button class="main-tab esitsizlik" id="tab-esitsizlik" onclick="switchTab('esitsizlik')">
+          📐 Eşitsizlik
+        </button>
+      </div>
+
+      <!-- ══ DENKLEM SEKMESİ ══ -->
+      <div class="tab-content active" id="tc-denklem">
+        <div class="hint" style="margin-bottom:12px;">
+          Birinci denklem girişi zorunludur. İkinci denklemi de doldurursanız araç otomatik olarak <strong>denklem sistemini</strong> çözer; yalnızca birinci satırı doldurursanız <strong>tek denklem</strong> analizi yapılır.
+        </div>
+
+        <!-- Birinci denklem -->
+        <div style="font-size:0.78rem;font-weight:700;color:var(--d1-c);margin-bottom:6px;">① Birinci Denklem</div>
+        <div class="coeff-row">
+          <div class="coeff-box"><label>a₁</label><input type="number" id="d-a1" value="1" step="any" oninput="denkPreview()"></div>
+          <div class="coeff-sep">x +</div>
+          <div class="coeff-box"><label>b₁</label><input type="number" id="d-b1" value="-1" step="any" oninput="denkPreview()"></div>
+          <div class="coeff-sep">y +</div>
+          <div class="coeff-box"><label>c₁</label><input type="number" id="d-c1" value="0" step="any" oninput="denkPreview()"></div>
+          <div class="coeff-sep">= 0</div>
+        </div>
+        <div class="denklem-preview" id="denk-preview1" style="border-color:rgba(231,111,81,0.35);color:var(--d1-c);">x − y = 0</div>
+
+        <!-- İkinci denklem (opsiyonel) -->
+        <div class="opt-row">
+          <div class="opt-label" style="color:var(--d2-c);">
+            ② İkinci Denklem
+            <span style="font-weight:400;color:var(--text-dim);">(opsiyonel — denklem sistemi için)</span>
           </div>
-          <div class="shape-card sistem" onclick="goPage('sistem')">
-            <div class="sc-icon">🔗</div>
-            <div class="sc-title">Birinci Dereceden İki Bilinmeyenli<br>Denklem Sistemi</div>
-            <div class="sc-keys">yok etme · yerine yazma · grafik</div>
+          <div class="coeff-row">
+            <div class="coeff-box"><label>a₂</label><input type="number" id="d-a2" value="" step="any" oninput="denkPreview()" placeholder="0"></div>
+            <div class="coeff-sep">x +</div>
+            <div class="coeff-box"><label>b₂</label><input type="number" id="d-b2" value="" step="any" oninput="denkPreview()" placeholder="0"></div>
+            <div class="coeff-sep">y +</div>
+            <div class="coeff-box"><label>c₂</label><input type="number" id="d-c2" value="" step="any" oninput="denkPreview()" placeholder="0"></div>
+            <div class="coeff-sep">= 0</div>
           </div>
+          <div class="denklem-preview" id="denk-preview2" style="border-color:rgba(69,123,157,0.35);color:var(--d2-c);display:none;"></div>
         </div>
+
+        <div class="error-box" id="denk-error"></div>
+        <button class="btn-calc" onclick="calcDenk()">📊 Hesapla ve Çiz</button>
+        <button class="btn-reset-sm" onclick="resetDenk()">↺ Sıfırla</button>
       </div>
-    </div>
 
-    <!-- TEK DENKLEM SAYFASI -->
-    <div id="pageTek" class="page">
-      <button class="btn-back" onclick="goPage('home')">← Ana Sayfaya Dön</button>
-      <div class="panel">
-        <div class="sec-title">📈 Denklem Girişi — ax + by + c = 0</div>
-        <div class="hint">Katsayıları girin. b = 0 ise denklem x = k biçiminde dikey doğrudur.</div>
-        <div class="coeff-row">
-          <div class="coeff-box"><label>a</label><input type="number" id="tek-a" value="1" step="any" oninput="tekPreview()"></div>
-          <div class="coeff-sep">x +</div>
-          <div class="coeff-box"><label>b</label><input type="number" id="tek-b" value="-1" step="any" oninput="tekPreview()"></div>
-          <div class="coeff-sep">y +</div>
-          <div class="coeff-box"><label>c</label><input type="number" id="tek-c" value="0" step="any" oninput="tekPreview()"></div>
-          <div class="coeff-sep">= 0</div>
+      <!-- ══ EŞİTSİZLİK SEKMESİ ══ -->
+      <div class="tab-content" id="tc-esitsizlik">
+        <div class="hint" style="margin-bottom:12px;">
+          Birinci eşitsizlik zorunludur. İkinci satırı da doldurursanız <strong>iki eşitsizlikli sistem</strong> olarak çözülür; yalnızca birinci satır girilirse <strong>tek eşitsizlik</strong> analizi yapılır.
         </div>
-        <div class="denklem-preview" id="tek-preview">y = x</div>
-        <div class="error-box" id="tek-error"></div>
-        <button class="btn-calc" onclick="calcTek()">📊 Hesapla ve Çiz</button>
-        <button class="btn-reset-sm" onclick="resetTek()">↺ Sıfırla</button>
+
+        <!-- Birinci eşitsizlik -->
+        <div style="font-size:0.78rem;font-weight:700;color:var(--accent);margin-bottom:6px;">① Birinci Eşitsizlik</div>
+        <div class="coeff-row">
+          <div class="coeff-box"><label>a₁</label><input type="number" id="e-a1" value="1" step="any" oninput="esitPreview()"></div>
+          <div class="coeff-sep">x +</div>
+          <div class="coeff-box"><label>b₁</label><input type="number" id="e-b1" value="-1" step="any" oninput="esitPreview()"></div>
+          <div class="coeff-sep">y +</div>
+          <div class="coeff-box"><label>c₁</label><input type="number" id="e-c1" value="0" step="any" oninput="esitPreview()"></div>
+          <select class="esit-select" id="e-op1" onchange="esitPreview()">
+            <option value="gt">&gt;</option>
+            <option value="gte" selected>≥</option>
+            <option value="lt">&lt;</option>
+            <option value="lte">≤</option>
+          </select>
+          <div class="coeff-sep" style="padding-top:18px;">0</div>
+        </div>
+        <div class="denklem-preview" id="esit-preview1" style="border-color:rgba(45,106,79,0.3);">x − y ≥ 0</div>
+
+        <!-- İkinci eşitsizlik (opsiyonel) -->
+        <div class="opt-row">
+          <div class="opt-label" style="color:var(--d2-c);">
+            ② İkinci Eşitsizlik
+            <span style="font-weight:400;color:var(--text-dim);">(opsiyonel — iki eşitsizlik sistemi için)</span>
+          </div>
+          <div class="coeff-row">
+            <div class="coeff-box"><label>a₂</label><input type="number" id="e-a2" value="" step="any" oninput="esitPreview()" placeholder="0"></div>
+            <div class="coeff-sep">x +</div>
+            <div class="coeff-box"><label>b₂</label><input type="number" id="e-b2" value="" step="any" oninput="esitPreview()" placeholder="0"></div>
+            <div class="coeff-sep">y +</div>
+            <div class="coeff-box"><label>c₂</label><input type="number" id="e-c2" value="" step="any" oninput="esitPreview()" placeholder="0"></div>
+            <select class="esit-select" id="e-op2" onchange="esitPreview()">
+              <option value="gt">&gt;</option>
+              <option value="gte">≥</option>
+              <option value="lt">&lt;</option>
+              <option value="lte" selected>≤</option>
+            </select>
+            <div class="coeff-sep" style="padding-top:18px;">0</div>
+          </div>
+          <div class="denklem-preview" id="esit-preview2" style="border-color:rgba(69,123,157,0.3);color:var(--d2-c);display:none;"></div>
+        </div>
+
+        <div class="error-box" id="esit-error"></div>
+        <button class="btn-calc cb" onclick="calcEsit()">📐 Çözüm Bölgesini Göster</button>
+        <button class="btn-reset-sm" onclick="resetEsit()">↺ Sıfırla</button>
       </div>
-      <div id="tek-result"></div>
-    </div>
 
-    <!-- SİSTEM SAYFASI -->
-    <div id="pageSistem" class="page">
-      <button class="btn-back" onclick="goPage('home')">← Ana Sayfaya Dön</button>
-      <div class="panel">
-        <div class="sec-title">🔗 Denklem Sistemi — iki denklem girin</div>
-        <div class="hint">Her denklem ax + by + c = 0 formatında olacak şekilde kutuları doldurun.</div>
+    </div><!-- sekme kapsayıcı -->
 
-        <!-- Denklem 1 -->
-        <div style="margin-top:12px;font-size:0.78rem;font-weight:700;color:var(--d1-c);margin-bottom:6px;">① Birinci Denklem</div>
-        <div class="coeff-row">
-          <div class="coeff-box"><label>a₁</label><input type="number" id="s-a1" value="2" step="any" oninput="sistemPreview()" class="eq-inp" style="width:72px;"></div>
-          <div class="coeff-sep">x +</div>
-          <div class="coeff-box"><label>b₁</label><input type="number" id="s-b1" value="1" step="any" oninput="sistemPreview()" class="eq-inp" style="width:72px;"></div>
-          <div class="coeff-sep">y +</div>
-          <div class="coeff-box"><label>c₁</label><input type="number" id="s-c1" value="-5" step="any" oninput="sistemPreview()" class="eq-inp" style="width:72px;"></div>
-          <div class="coeff-sep">= 0</div>
+    <!-- SONUÇ ALANLARI -->
+    <div id="denk-result"></div>
+    <div id="esit-result" style="display:none;"></div>
 
-        </div>
+  </div><!-- .right-col -->
+</div><!-- .app -->
 
-        <!-- Denklem 2 -->
-        <div style="margin-top:14px;font-size:0.78rem;font-weight:700;color:var(--d2-c);margin-bottom:6px;">② İkinci Denklem</div>
-        <div class="coeff-row">
-          <div class="coeff-box"><label>a₂</label><input type="number" id="s-a2" value="1" step="any" oninput="sistemPreview()" class="eq-inp" style="width:72px;"></div>
-          <div class="coeff-sep">x +</div>
-          <div class="coeff-box"><label>b₂</label><input type="number" id="s-b2" value="-1" step="any" oninput="sistemPreview()" class="eq-inp" style="width:72px;"></div>
-          <div class="coeff-sep">y +</div>
-          <div class="coeff-box"><label>c₂</label><input type="number" id="s-c2" value="-1" step="any" oninput="sistemPreview()" class="eq-inp" style="width:72px;"></div>
-          <div class="coeff-sep">= 0</div>
-
-        </div>
-
-        <div class="error-box" id="sistem-error"></div>
-        <button class="btn-calc d2" onclick="calcSistem()">🔗 Sistemi Çöz ve Çiz</button>
-        <button class="btn-reset-sm" onclick="resetSistem()">↺ Sıfırla</button>
-      </div>
-      <div id="sistem-result"></div>
-    </div>
-
-  </div>
-</div>
+<footer><p>© Tekin CANITEZ — Matematik Öğretmeni</p></footer>
 
 <script>
 // ════════════════════════════════════════════════════════
 //  YARDIMCI
 // ════════════════════════════════════════════════════════
-const fmtN = v => {
-  if (!isFinite(v)) return '?';
-  if (Number.isInteger(v)) return v.toString();
-  return parseFloat(v.toFixed(4)).toString().replace('.', ',');
-};
-const fmtR2 = v => {
-  if (!isFinite(v)) return '?';
-  if (Number.isInteger(v)) return v.toString();
-  return (Math.round(v*100)/100).toString().replace('.', ',');
-};
-const fmtK = v => {
-  if (!isFinite(v)) return '?';
-  if (Number.isInteger(v)) return v.toString();
-  const tol = 1e-9;
-  for (let d=2;d<=100;d++) {
-    const n = v*d;
-    if (Math.abs(n-Math.round(n)) < tol) return Math.round(n)+'/'+d;
-  }
+const fmtN  = v => { if(!isFinite(v))return'?'; if(Number.isInteger(v))return v.toString(); return parseFloat(v.toFixed(4)).toString().replace('.',','); };
+const fmtR2 = v => { if(!isFinite(v))return'?'; if(Number.isInteger(v))return v.toString(); return (Math.round(v*100)/100).toString().replace('.',','); };
+const fmtK  = v => {
+  if(!isFinite(v))return'?';
+  if(Number.isInteger(v))return v.toString();
+  const tol=1e-9;
+  for(let d=2;d<=200;d++){const n=v*d;if(Math.abs(n-Math.round(n))<tol)return Math.round(n)+'/'+d;}
   return fmtR2(v);
 };
-function denklemSatir(a,b,c) {
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
+function lcm(a,b){return a&&b?Math.abs(a*b)/gcd(a,b):0;}
+
+function denklemSatir(a,b,c){
   let parts=[];
-  const addTerm = (coef, varName, isFirst) => {
-    if (coef===0) return;
-    const absC = Math.abs(coef);
-    const sign = coef<0 ? (isFirst?'−':' − ') : (isFirst?'':' + ');
-    const cStr = varName==='' ? fmtK(absC) : (absC===1 ? '' : fmtK(absC));
-    parts.push(sign + cStr + varName);
+  const addT=(coef,varN,isFirst)=>{
+    if(coef===0)return;
+    const abs=Math.abs(coef);
+    const sgn=coef<0?(isFirst?'−':' − '):(isFirst?'':' + ');
+    const cStr=varN===''?fmtK(abs):(abs===1?'':fmtK(abs));
+    parts.push(sgn+cStr+varN);
   };
-  let isFirst=true;
-  if (a!==0){addTerm(a,'x',isFirst);isFirst=false;}
-  if (b!==0){addTerm(b,'y',isFirst);isFirst=false;}
-  if (c!==0){addTerm(c,'',isFirst);isFirst=false;}
-  if (parts.length===0) return '0 = 0';
-  return parts.join('') + ' = 0';
-}
-const getN = id => parseFloat(document.getElementById(id).value);
-const showErr = (id, msg) => { const e=document.getElementById(id); e.innerHTML='⚠️ '+msg; e.style.display='block'; };
-const hideErr = id => { document.getElementById(id).style.display='none'; };
-
-// Denklem ax+by+c=0 → metin gösterimi
-function denklemText(a, b, c, color) {
-  if (a===0 && b===0) return '0 = 0 (geçersiz)';
-  let parts = [];
-  if (a!==0) parts.push((a===1?'':a===-1?'−':fmtN(a))+'x');
-  if (b!==0) {
-    const bAbs = Math.abs(b), bStr = (bAbs===1?'':fmtN(bAbs))+'y';
-    parts.push((b>0 && parts.length>0 ? '+ ' : b<0 ? '− ' : '') + bStr);
-  }
-  if (c!==0) parts.push((c>0 && parts.length>0 ? '+ ' : c<0 ? '− ' : '') + Math.abs(c));
-  return parts.join(' ') + ' = 0';
+  let f=true;
+  if(a!==0){addT(a,'x',f);f=false;}
+  if(b!==0){addT(b,'y',f);f=false;}
+  if(c!==0){addT(c,'',f);f=false;}
+  if(parts.length===0)return'0 = 0';
+  return parts.join('')+' = 0';
 }
 
-// ax+by+c=0 → y=mx+n bilgisi
-function toSlope(a, b, c) {
-  if (b===0) {
-    // x = -c/a (dikey doğru)
-    if (a===0) return null;
-    return { dikey: true, xVal: -c/a };
-  }
-  const m = -a/b, n = -c/b;
-  return { dikey: false, m, n };
+function denklemText(a,b,c){
+  if(a===0&&b===0)return'0 = 0 (geçersiz)';
+  let parts=[];
+  if(a!==0)parts.push((a===1?'':a===-1?'−':fmtN(a))+'x');
+  if(b!==0){const bAbs=Math.abs(b),bStr=(bAbs===1?'':fmtN(bAbs))+'y';
+    parts.push((b>0&&parts.length>0?'+ ':b<0?'− ':'')+ bStr);}
+  if(c!==0)parts.push((c>0&&parts.length>0?'+ ':c<0?'− ':'')+ Math.abs(c));
+  return parts.join(' ')+' = 0';
 }
 
-function acikForm(a, b, c) {
-  const s = toSlope(a, b, c);
-  if (!s) return '(geçersiz)';
-  if (s.dikey) return `x = ${fmtR2(s.xVal)}`;
-  const mStr = fmtR2(s.m);
-  const nAbs = Math.abs(s.n);
-  const nSign = s.n >= 0 ? ' + ' : ' − ';
-  if (s.n === 0) return `y = ${mStr}x`;
-  if (s.m === 0) return `y = ${fmtR2(s.n)}`;
-  return `y = ${mStr}x${nSign}${fmtN(nAbs)}`;
+function esitsizlikText(a,b,c,op){
+  const lhs=denklemText(a,b,c).replace(' = 0','');
+  const opStr={gt:'>',gte:'≥',lt:'<',lte:'≤'}[op]||'≥';
+  return lhs+' '+opStr+' 0';
+}
+
+function toSlope(a,b,c){
+  if(b===0){if(a===0)return null;return{dikey:true,xVal:-c/a};}
+  return{dikey:false,m:-a/b,n:-c/b};
+}
+
+function acikForm(a,b,c){
+  const s=toSlope(a,b,c);
+  if(!s)return'(geçersiz)';
+  if(s.dikey)return`x = ${fmtR2(s.xVal)}`;
+  const mStr=fmtR2(s.m),nAbs=Math.abs(s.n),nSign=s.n>=0?' + ':' − ';
+  if(s.n===0)return`y = ${mStr}x`;
+  if(s.m===0)return`y = ${fmtR2(s.n)}`;
+  return`y = ${mStr}x${nSign}${fmtN(nAbs)}`;
+}
+
+const getN  = id => { const v=parseFloat(document.getElementById(id).value); return isNaN(v)?0:v; };
+const showErr=(id,msg)=>{ const e=document.getElementById(id); e.innerHTML='⚠️ '+msg; e.style.display='block'; };
+const hideErr=id=>{ const e=document.getElementById(id); if(e)e.style.display='none'; };
+function mjRender(el){if(window.MathJax&&MathJax.typesetPromise)MathJax.typesetPromise([el]);}
+
+// ════════════════════════════════════════════════════════
+//  SEKME GEÇİŞİ
+// ════════════════════════════════════════════════════════
+let activeTab = 'denklem';
+function switchTab(tab){
+  activeTab = tab;
+  ['denklem','esitsizlik'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('tc-'+t).classList.toggle('active', t===tab);
+  });
+  document.getElementById('denk-result').style.display  = tab==='denklem'   ? '' : 'none';
+  document.getElementById('esit-result').style.display  = tab==='esitsizlik' ? '' : 'none';
 }
 
 // ════════════════════════════════════════════════════════
-//  SAYFA GEÇİŞİ
+//  DENKLEM — ÖNİZLEME
 // ════════════════════════════════════════════════════════
-function goPage(page) {
-  ['page0','pageTek','pageSistem'].forEach(p=>document.getElementById(p).classList.remove('active'));
-  const map={home:'page0',tek:'pageTek',sistem:'pageSistem'};
-  document.getElementById(map[page]||'page0').classList.add('active');
-  const ip=document.getElementById('leftInfoPanel');
-  if (page==='home') ip.style.display='none';
-  else { ip.style.display=''; showLeftInfo(page); }
-  if (page==='tek') tekPreview();
-  if (page==='sistem') sistemPreview();
+function denkPreview(){
+  const a1=getN('d-a1'),b1=getN('d-b1'),c1=getN('d-c1');
+  document.getElementById('denk-preview1').textContent = denklemText(a1,b1,c1);
+
+  const a2=getN('d-a2'),b2=getN('d-b2'),c2=getN('d-c2');
+  const p2=document.getElementById('denk-preview2');
+  const has2 = document.getElementById('d-a2').value!=='' ||
+               document.getElementById('d-b2').value!=='' ||
+               document.getElementById('d-c2').value!=='';
+  if(has2){ p2.style.display='block'; p2.textContent=denklemText(a2,b2,c2); }
+  else { p2.style.display='none'; }
 }
 
-function showLeftInfo(page) {
-  const title=document.getElementById('leftInfoTitle');
-  const content=document.getElementById('leftInfoContent');
-  if (page==='tek') {
-    title.textContent='Tek Denklem — Formüller';
-    content.innerHTML=`
-      <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
-        <tr><td style="padding:5px 8px;color:var(--text-dim);font-weight:600;">Eğim</td><td style="padding:5px 8px;font-family:monospace;color:var(--accent);">m = −a/b</td></tr>
-        <tr><td style="padding:5px 8px;color:var(--text-dim);font-weight:600;">y-kesim</td><td style="padding:5px 8px;font-family:monospace;color:var(--accent);">n = −c/b</td></tr>
-        <tr><td style="padding:5px 8px;color:var(--text-dim);font-weight:600;">x-kesim</td><td style="padding:5px 8px;font-family:monospace;color:var(--accent);">k = −c/a</td></tr>
-        <tr><td style="padding:5px 8px;color:var(--text-dim);font-weight:600;">y=0 iken x</td><td style="padding:5px 8px;font-family:monospace;color:var(--accent);">x = −n/m</td></tr>
-      </table>`;
+// Herhangi bir ikinci satır alanının dolu olup olmadığını kontrol et
+function hasSecondDenk(){
+  return document.getElementById('d-a2').value!=='' ||
+         document.getElementById('d-b2').value!=='' ||
+         document.getElementById('d-c2').value!=='';
+}
+
+// ════════════════════════════════════════════════════════
+//  DENKLEM — HESAPLA (tek veya sistem)
+// ════════════════════════════════════════════════════════
+function calcDenk(){
+  hideErr('denk-error');
+  const a1=getN('d-a1'),b1=getN('d-b1'),c1=getN('d-c1');
+  if(a1===0&&b1===0){ showErr('denk-error','Birinci denklemde a ve b aynı anda sıfır olamaz.'); return; }
+
+  if(hasSecondDenk()){
+    // SİSTEM MODU
+    const a2=getN('d-a2'),b2=getN('d-b2'),c2=getN('d-c2');
+    if(a2===0&&b2===0){ showErr('denk-error','İkinci denklemde a ve b aynı anda sıfır olamaz.'); return; }
+    calcSistemCore(a1,b1,c1,a2,b2,c2);
   } else {
-    title.textContent='Sistem — Çözüm Yöntemleri';
-    content.innerHTML=`
-      <div style="font-size:0.78rem;color:var(--text-dim);line-height:1.7;">
-        <p><strong style="color:var(--d2-c);">Yok etme:</strong> Bir değişkeni yok etmek için denklemleri uygun katsayılarla çarpıp topla ya da çıkar.</p>
-        <br>
-        <p><strong style="color:var(--d2-c);">Yerine yazma:</strong> Bir denklemden bir değişkeni ifade et, diğer denkleme yaz.</p>
-        <br>
-        <p><strong style="color:var(--kesisim-c);">Grafik:</strong> İki doğrunun kesişim noktası, denklem sisteminin çözümüdür.</p>
-      </div>`;
+    // TEK DENKLEM MODU
+    calcTekCore(a1,b1,c1);
   }
 }
 
 // ════════════════════════════════════════════════════════
-//  TEK DENKLEM — ÖNİZLEME
+//  TEK DENKLEM CORE
 // ════════════════════════════════════════════════════════
-function tekPreview() {
-  const a=getN('tek-a')||0, b=getN('tek-b')||0, c=getN('tek-c')||0;
-  const el=document.getElementById('tek-preview');
-  el.textContent = denklemText(a,b,c) + '   →   ' + acikForm(a,b,c);
-}
+function calcTekCore(a,b,c){
+  const s=toSlope(a,b,c);
+  const u2=denklemText(a,b,c), u3=acikForm(a,b,c);
+  let xKesim=null, yKesim=null;
+  if(!s.dikey){ yKesim=s.n; xKesim=s.m!==0?-s.n/s.m:null; }
+  else { xKesim=s.xVal; }
 
-// ════════════════════════════════════════════════════════
-//  TEK DENKLEM — HESAPLA
-// ════════════════════════════════════════════════════════
-function calcTek() {
-  hideErr('tek-error');
-  const a=getN('tek-a'), b=getN('tek-b'), c=getN('tek-c');
-  if (a===0 && b===0) { showErr('tek-error','a ve b aynı anda sıfır olamaz.'); return; }
-
-  const s = toSlope(a, b, c);
-  const u2 = denklemText(a, b, c);
-  const u3 = acikForm(a, b, c);
-
-  // Eksen kesim noktaları
-  let xKesim = null, yKesim = null;
-  if (!s.dikey) {
-    yKesim = s.n; // x=0 → y = n
-    xKesim = s.m !== 0 ? -s.n / s.m : null; // y=0 → x = -n/m
-  } else {
-    xKesim = s.xVal; // x = xVal her zaman
-  }
-
-  // Tablo için x değerleri: tam sayı x'lerden seç
-  // Kural: y tam sayı verebilen x'leri tercih et (y=mx+n, m=p/q → x=q*k)
-  // Pos: y>0 olan orijine en yakın 3 tam sayı x (pozitif yönde)
-  // Neg: y>0 olan orijine en yakın 3 tam sayı x (negatif yönde)
-  // Orijin: x=0 varsa ekle
-  // Ayrıca eksen kesim noktaları tam sayıysa tabloya ekle
+  // Değerler tablosu
   let xVals;
-  if (s.dikey) {
-    xVals = null;
-  } else {
-    function buildTableX(slope, intercept, xKesimPt) {
-      const chosen = new Set();
-
-      // x=0 her zaman ekle (y eksenini kestiği nokta)
-      chosen.add(0);
-      // x eksenini kestiği nokta tam sayıysa ekle
-      if (xKesimPt !== null && Number.isInteger(xKesimPt)) chosen.add(xKesimPt);
-
-      // y TAM SAYI olan x'leri bul
-      // m = p/q rasyonel sayı ise y = m*x + n tam sayı olur ⟺ x = q*k için
-      // Pratik yaklaşım: x = 1..50 arasında y tam sayı olanları topla
-      let posCount = 0;
-      for (let x = 1; x <= 200 && posCount < 3; x++) {
-        const y = slope * x + intercept;
-        if (Math.abs(y - Math.round(y)) < 1e-9) { chosen.add(x); posCount++; }
-      }
-      let negCount = 0;
-      for (let x = -1; x >= -200 && negCount < 3; x--) {
-        const y = slope * x + intercept;
-        if (Math.abs(y - Math.round(y)) < 1e-9) { chosen.add(x); negCount++; }
-      }
-      // Hiç tam sayı y yoksa en yakın ±3 x
-      if (posCount === 0 && negCount === 0) {
-        for (let x = 1; x <= 3; x++) chosen.add(x);
-        for (let x = -1; x >= -3; x--) chosen.add(x);
-      }
-
-      return [...chosen].sort((a,b) => a-b);
+  if(s.dikey){ xVals=null; }
+  else{
+    function buildTableX(slope,intercept,xKesimPt){
+      const chosen=new Set(); chosen.add(0);
+      if(xKesimPt!==null&&Number.isInteger(xKesimPt))chosen.add(xKesimPt);
+      let posC=0;
+      for(let x=1;x<=200&&posC<3;x++){const y=slope*x+intercept;if(Math.abs(y-Math.round(y))<1e-9){chosen.add(x);posC++;}}
+      let negC=0;
+      for(let x=-1;x>=-200&&negC<3;x--){const y=slope*x+intercept;if(Math.abs(y-Math.round(y))<1e-9){chosen.add(x);negC++;}}
+      if(posC===0&&negC===0){for(let x=1;x<=3;x++)chosen.add(x);for(let x=-1;x>=-3;x--)chosen.add(x);}
+      return[...chosen].sort((a,b)=>a-b);
     }
-    xVals = buildTableX(s.m, s.n, xKesim);
+    xVals=buildTableX(s.m,s.n,xKesim);
   }
 
-  // Adım adım hesap
-  let steps = `
-    <div class="step"><strong>Verilen denklem:</strong> ${u2}</div>
+  // Adımlar
+  let steps=`<div class="step"><strong>Verilen denklem:</strong> ${u2}</div>
     <div class="step-section">Açık Form Dönüşümü</div>`;
-
-  if (!s.dikey) {
-    steps += `
-    <div class="step">by = −ax − c &nbsp;→&nbsp; y = (−a/b)x + (−c/b)</div>
+  if(!s.dikey){
+    steps+=`<div class="step">by = −ax − c &nbsp;→&nbsp; y = (−a/b)x + (−c/b)</div>
     <div class="step"><strong>Eğim:</strong> m = −a/b = −(${fmtN(a)})/(${fmtN(b)}) = <strong>${fmtR2(s.m)}</strong></div>
     <div class="step"><strong>y-kesim (n):</strong> n = −c/b = −(${fmtN(c)})/(${fmtN(b)}) = <strong>${fmtR2(s.n)}</strong></div>
     <div class="step"><strong>Açık form:</strong> ${u3}</div>
     <div class="step-section">Eksen Kesim Noktaları</div>
-    <div class="step"><strong>y eksenini kestiği nokta</strong> (x = 0): y = ${fmtR2(s.m)}×0 + ${fmtR2(s.n)} = <strong>${fmtR2(yKesim)}</strong> &nbsp;→&nbsp; <strong>A(0, ${fmtR2(yKesim)})</strong></div>`;
-    if (xKesim !== null) {
-      steps += `<div class="step"><strong>x eksenini kestiği nokta</strong> (y = 0): 0 = ${fmtR2(s.m)}x + ${fmtR2(s.n)} &nbsp;→&nbsp; x = ${fmtR2(-s.n)}/${fmtR2(s.m)} = <strong>${fmtR2(xKesim)}</strong> &nbsp;→&nbsp; <strong>B(${fmtR2(xKesim)}, 0)</strong></div>`;
+    <div class="step"><strong>y eksenini kestiği nokta</strong> (x=0): y = ${fmtR2(s.m)}×0 + ${fmtR2(s.n)} = <strong>${fmtR2(yKesim)}</strong> → <strong>A(0, ${fmtR2(yKesim)})</strong></div>`;
+    if(xKesim!==null){
+      steps+=`<div class="step"><strong>x eksenini kestiği nokta</strong> (y=0): 0 = ${fmtR2(s.m)}x + ${fmtR2(s.n)} → x = ${fmtR2(-s.n)}/${fmtR2(s.m)} = <strong>${fmtR2(xKesim)}</strong> → <strong>B(${fmtR2(xKesim)}, 0)</strong></div>`;
     } else {
-      steps += `<div class="step"><strong>x eksenini kesmez</strong> (m = 0, yatay doğru y = ${fmtR2(s.n)})</div>`;
+      steps+=`<div class="step"><strong>x eksenini kesmez</strong> (m=0, yatay doğru y=${fmtR2(s.n)})</div>`;
     }
-    if (s.m === 1) steps += `<div class="step" style="color:var(--accent3);">📐 Eğim = 1: Doğru 45° açı yapar (x eksenine göre)</div>`;
-    else if (s.m === -1) steps += `<div class="step" style="color:var(--accent3);">📐 Eğim = −1: Doğru −45° açı yapar</div>`;
-    else if (s.m > 0) steps += `<div class="step" style="color:var(--accent);">📈 Eğim pozitif → x arttıkça y artar</div>`;
-    else if (s.m < 0) steps += `<div class="step" style="color:var(--accent2);">📉 Eğim negatif → x arttıkça y azalır</div>`;
-    else steps += `<div class="step" style="color:var(--accent3);">↔ Eğim = 0 → x eksenine paralel yatay doğru</div>`;
+    if(s.m===1)steps+=`<div class="step" style="color:var(--accent3);">📐 Eğim=1: Doğru 45° açı yapar</div>`;
+    else if(s.m===-1)steps+=`<div class="step" style="color:var(--accent3);">📐 Eğim=−1: Doğru −45° açı yapar</div>`;
+    else if(s.m>0)steps+=`<div class="step" style="color:var(--accent);">📈 Eğim pozitif → x arttıkça y artar</div>`;
+    else if(s.m<0)steps+=`<div class="step" style="color:var(--accent2);">📉 Eğim negatif → x arttıkça y azalır</div>`;
+    else steps+=`<div class="step" style="color:var(--accent3);">↔ Eğim=0 → yatay doğru</div>`;
   } else {
-    steps += `<div class="step">b = 0 olduğundan denklem dikey doğrudur.</div>
+    steps+=`<div class="step">b=0 olduğundan denklem <strong>dikey doğrudur.</strong></div>
     <div class="step"><strong>Doğru denklemi:</strong> x = ${fmtR2(s.xVal)}</div>
-    <div class="step">Bu doğru x eksenini (${fmtR2(s.xVal)}, 0) noktasında keser, y eksenini kesmez.</div>`;
+    <div class="step">x eksenini (${fmtR2(s.xVal)}, 0) noktasında keser.</div>`;
   }
 
-  // Tablo HTML
-  let tableHTML = '';
-  if (xVals && !s.dikey) {
-    const rows = xVals.map(x => {
-      const y = s.m * x + s.n;
-      const isKeyX = (x===0) || (xKesim!==null && Math.abs(x-xKesim)<0.001);
-      const isKeyY = (yKesim!==null && Math.abs(y-yKesim)<0.001);
-      const isKey  = isKeyX || isKeyY;
-      // y değeri: tam sayıysa tam göster, değilse virgüllü (eksen kesim satırları hariç virgüllü)
-      const yDisp  = Number.isInteger(y) ? y.toString() : fmtR2(y);
-      return `<tr class="${isKey?'highlight-row':''}"><td>${x}</td><td>${yDisp}</td></tr>`;
+  // Tablo
+  let tableHTML='';
+  if(xVals&&!s.dikey){
+    const rows=xVals.map(x=>{
+      const y=s.m*x+s.n;
+      const isKey=(x===0)||(xKesim!==null&&Math.abs(x-xKesim)<0.001);
+      return`<tr class="${isKey?'highlight-row':''}"><td>${x}</td><td>${Number.isInteger(y)?y:fmtR2(y)}</td></tr>`;
     }).join('');
-    tableHTML = `
-      <div class="panel">
-        <div class="sec-title">Değerler Tablosu</div>
-        <div class="tbl-wrap">
-          <table>
-            <thead><tr><th>x</th><th>y</th></tr></thead>
-            <tbody>${rows}</tbody>
-          </table>
-        </div>
-        <div class="hint" style="margin-top:6px;">Eksenlerden birini kestiği nokta, YEŞİL satır ile ifade edilmiştir.</div>
-      </div>`;
+    tableHTML=`<div class="panel"><div class="sec-title">Değerler Tablosu</div>
+      <div class="tbl-wrap"><table><thead><tr><th>x</th><th>y</th></tr></thead><tbody>${rows}</tbody></table></div>
+      <div class="hint" style="margin-top:6px;">Eksen kesim noktaları yeşil satırla gösterilmiştir.</div></div>`;
   }
 
-  // Stat kartları
-  const statHTML = s.dikey ? `
+  const statHTML=s.dikey?`
     <div class="stat-strip">
-      <div class="stat-card"><div class="st-label">Denklem Türü</div><div class="st-val" style="color:var(--d1-c);font-size:1rem;">Dikey Doğru</div></div>
-      <div class="stat-card"><div class="st-label">x Değeri</div><div class="st-val" style="color:var(--d1-c);">x = ${fmtR2(s.xVal)}</div></div>
-    </div>` : `
+      <div class="stat-card"><div class="st-label">Tür</div><div class="st-val" style="color:var(--d1-c);font-size:1rem;">Dikey Doğru</div></div>
+      <div class="stat-card"><div class="st-label">Denklem</div><div class="st-val" style="color:var(--d1-c);">x=${fmtR2(s.xVal)}</div></div>
+    </div>`:`
     <div class="stat-strip">
-      <div class="stat-card"><div class="st-label">Eğim (m)</div><div class="st-val" style="color:var(--d1-c);">${fmtR2(s.m)}</div><div class="st-sub">−a/b = −${fmtN(a)}/${fmtN(b)}</div></div>
-      <div class="stat-card"><div class="st-label">y Kesim (A)</div><div class="st-val" style="color:var(--accent);">(0, ${fmtR2(yKesim)})</div><div class="st-sub">x = 0 iken</div></div>
-      <div class="stat-card"><div class="st-label">x Kesim (B)</div><div class="st-val" style="color:var(--accent3);">${xKesim!==null?'('+fmtR2(xKesim)+', 0)':'—'}</div><div class="st-sub">y = 0 iken</div></div>
+      <div class="stat-card"><div class="st-label">Eğim (m)</div><div class="st-val" style="color:var(--d1-c);">${fmtR2(s.m)}</div><div class="st-sub">−a/b</div></div>
+      <div class="stat-card"><div class="st-label">y Kesim A</div><div class="st-val" style="color:var(--accent);">(0, ${fmtR2(yKesim)})</div></div>
+      <div class="stat-card"><div class="st-label">x Kesim B</div><div class="st-val" style="color:var(--accent3);">${xKesim!==null?'('+fmtR2(xKesim)+', 0)':'—'}</div></div>
     </div>`;
 
-  document.getElementById('tek-result').innerHTML = `
-    <div class="result-section">
-      ${statHTML}
-      <div class="panel"><div class="sec-title">Hesaplama Adımları</div><div class="steps-box">${steps}</div></div>
-      ${tableHTML}
-      <div class="panel"><div class="sec-title">Grafik</div><canvas id="tekCanvas" class="graf-canvas" height="380"></canvas></div>
-    </div>`;
+  const resultEl=document.getElementById('denk-result');
+  resultEl.innerHTML=`<div class="result-section">
+    ${statHTML}
+    <div class="panel"><div class="sec-title">Hesaplama Adımları</div><div class="steps-box">${steps}</div></div>
+    ${tableHTML}
+    <div class="panel"><div class="sec-title">Grafik</div><canvas id="tekCanvas" class="graf-canvas" height="380"></canvas></div>
+  </div>`;
 
-  requestAnimationFrame(() => {
-    const cv = document.getElementById('tekCanvas');
-    if (cv) {
-      cv.width = cv.parentElement.clientWidth - 40;
-      cv.height = 380;
-      drawTekGrafik(cv, a, b, c, s, xKesim, yKesim);
-    }
+  requestAnimationFrame(()=>{
+    const cv=document.getElementById('tekCanvas');
+    if(cv){cv.width=cv.parentElement.clientWidth-40;cv.height=380;drawTekGrafik(cv,a,b,c,s,xKesim,yKesim);}
   });
 }
 
 // ════════════════════════════════════════════════════════
-//  TEK DENKLEM GRAFİK
+//  SİSTEM CORE
 // ════════════════════════════════════════════════════════
-function drawTekGrafik(canvas, a, b, c, s, xKesim, yKesim) {
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  ctx.fillStyle = '#fdfcf9'; ctx.fillRect(0,0,W,H);
-
-  // Eksen aralığını akıllıca belirle
-  let xMin=-8, xMax=8, yMin=-8, yMax=8;
-  if (!s.dikey) {
-    // Önemli noktaları kapsayacak aralık
-    const pts = [0, s.n, xKesim||0];
-    const allY = pts.map(x => s.m*x+s.n);
-    const margin = 3;
-    xMin = Math.min(-6, (xKesim||0) - margin);
-    xMax = Math.max(6, (xKesim||0) + margin);
-    yMin = Math.min(-6, Math.min(...allY) - margin);
-    yMax = Math.max(6, Math.max(...allY) + margin);
-  } else {
-    xMin = s.xVal - 6; xMax = s.xVal + 6;
-  }
-
-  const PAD = {top:30, right:20, bottom:30, left:40};
-  const cW = W-PAD.left-PAD.right, cH = H-PAD.top-PAD.bottom;
-  // Eşit ölçek: birim uzunluk x ve y için aynı olsun
-  const scaleX = cW / (xMax-xMin);
-  const scaleY = cH / (yMax-yMin);
-  const scale  = Math.min(scaleX, scaleY);
-  // Merkezde tut
-  const drawW  = (xMax-xMin)*scale;
-  const drawH  = (yMax-yMin)*scale;
-  const offX   = PAD.left + (cW-drawW)/2;
-  const offY   = PAD.top  + (cH-drawH)/2;
-  const toX = v => offX + (v-xMin)*scale;
-  const toY = v => offY + drawH - (v-yMin)*scale;
-
-  // Grid
-  ctx.strokeStyle='#e8e2d8'; ctx.lineWidth=1;
-  for (let x=Math.ceil(xMin);x<=Math.floor(xMax);x++) {
-    ctx.beginPath(); ctx.moveTo(toX(x),PAD.top); ctx.lineTo(toX(x),PAD.top+cH); ctx.stroke();
-  }
-  for (let y=Math.ceil(yMin);y<=Math.floor(yMax);y++) {
-    ctx.beginPath(); ctx.moveTo(PAD.left,toY(y)); ctx.lineTo(PAD.left+cW,toY(y)); ctx.stroke();
-  }
-
-  // Eksenler
-  const x0=toX(0), y0=toY(0);
-  ctx.strokeStyle='#6b6456'; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(PAD.left,y0); ctx.lineTo(PAD.left+cW,y0); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x0,PAD.top); ctx.lineTo(x0,PAD.top+cH); ctx.stroke();
-
-  // Eksen etiketleri
-  ctx.fillStyle='#8b8074'; ctx.font='10px DM Sans,sans-serif'; ctx.textAlign='center';
-  for (let x=Math.ceil(xMin);x<=Math.floor(xMax);x++) {
-    if(x===0) continue;
-    ctx.fillText(x, toX(x), y0+14);
-  }
-  ctx.textAlign='right';
-  for (let y=Math.ceil(yMin);y<=Math.floor(yMax);y++) {
-    if(y===0) continue;
-    ctx.fillText(y, x0-4, toY(y)+4);
-  }
-
-  // Doğruyu çiz
-  ctx.strokeStyle='#e76f51'; ctx.lineWidth=2.5;
-  ctx.beginPath();
-  if (s.dikey) {
-    ctx.moveTo(toX(s.xVal), PAD.top);
-    ctx.lineTo(toX(s.xVal), PAD.top+cH);
-  } else {
-    ctx.moveTo(toX(xMin), toY(s.m*xMin+s.n));
-    ctx.lineTo(toX(xMax), toY(s.m*xMax+s.n));
-  }
-  ctx.stroke();
-
-  // Eksen kesim noktaları
-  function drawKesim(px, py, label) {
-    ctx.fillStyle='#2d6a4f';
-    ctx.beginPath(); ctx.arc(toX(px),toY(py),5,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#fff';
-    ctx.beginPath(); ctx.arc(toX(px),toY(py),2,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#2d6a4f'; ctx.font='bold 10px DM Sans,sans-serif'; ctx.textAlign='left';
-    ctx.fillText(label, toX(px)+8, toY(py)-6);
-  }
-  if (!s.dikey) {
-    drawKesim(0, yKesim, `A(0,${fmtR2(yKesim)})`);
-    if (xKesim!==null) drawKesim(xKesim, 0, `B(${fmtR2(xKesim)},0)`);
-  } else {
-    drawKesim(s.xVal, 0, `(${fmtR2(s.xVal)},0)`);
-  }
-
-  // Eğim üçgeni (yatay değilse)
-  if (!s.dikey && s.m!==0) {
-    const x1=0, y1=s.m*x1+s.n, x2=1, y2=s.m*x2+s.n;
-    ctx.strokeStyle='rgba(69,123,157,0.5)'; ctx.lineWidth=1; ctx.setLineDash([4,3]);
-    ctx.beginPath(); ctx.moveTo(toX(x1),toY(y1)); ctx.lineTo(toX(x2),toY(y1)); ctx.lineTo(toX(x2),toY(y2)); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle='#457b9d'; ctx.font='9px DM Sans,sans-serif'; ctx.textAlign='center';
-    ctx.fillText('1', toX((x1+x2)/2), toY(y1)+14);
-    ctx.textAlign='left';
-    ctx.fillText(`m=${fmtR2(s.m)}`, toX(x2)+4, toY((y1+y2)/2)+4);
-  }
-
-  // Denklem etiketi
-  ctx.fillStyle='#e76f51'; ctx.font='bold 12px Lora,serif'; ctx.textAlign='right';
-  ctx.fillText(acikForm(a,b,c), PAD.left+cW, PAD.top+16);
-}
-
-// ════════════════════════════════════════════════════════
-//  TEK DENKLEM SIFIRLA
-// ════════════════════════════════════════════════════════
-function resetTek() {
-  document.getElementById('tek-a').value='1';
-  document.getElementById('tek-b').value='-1';
-  document.getElementById('tek-c').value='0';
-  document.getElementById('tek-result').innerHTML='';
-  hideErr('tek-error');
-  tekPreview();
-}
-
-// ════════════════════════════════════════════════════════
-//  SİSTEM — ÖNİZLEME
-// ════════════════════════════════════════════════════════
-function sistemPreview() {
-  // Önizleme kaldırıldı
-}
-
-// ════════════════════════════════════════════════════════
-//  SİSTEM — HESAPLA
-// ════════════════════════════════════════════════════════
-function calcSistem() {
-  hideErr('sistem-error');
-  const a1=getN('s-a1'), b1=getN('s-b1'), c1=getN('s-c1');
-  const a2=getN('s-a2'), b2=getN('s-b2'), c2=getN('s-c2');
-
-  if ((a1===0&&b1===0)||(a2===0&&b2===0)) {
-    showErr('sistem-error','Her denklemde en az bir katsayı sıfırdan farklı olmalı.');return;
-  }
-
-  const det = a1*b2 - a2*b1;
-  const D1  = denklemSatir(a1,b1,c1);
-  const D2  = denklemSatir(a2,b2,c2);
-  const s1  = toSlope(a1,b1,c1);
-  const s2  = toSlope(a2,b2,c2);
-
-  // Eğimleri hesapla
-  const m1 = (!s1||s1.dikey) ? null : s1.m;
-  const m2 = (!s2||s2.dikey) ? null : s2.m;
-  const m1Str = m1===null ? '(dikey doğru)' : fmtK(m1);
-  const m2Str = m2===null ? '(dikey doğru)' : fmtK(m2);
-
-  // Açık form dönüşüm gösterimi
-  function acikFormAdim(a,b,c,no) {
-    if (b===0) {
-      const xv = a!==0 ? -c/a : 0;
-      return `<div class="step">① ${denklemSatir(a,b,c)} &nbsp;⟹&nbsp; x = ${fmtK(xv)} &nbsp;⟹&nbsp; m = (dikey doğru)</div>`;
-    }
-    const m=-a/b, n=-c/b;
-    const mStr2=fmtK(m), nStr=fmtK(Math.abs(n));
-    const nPart = n===0?'':(n>0?' + '+nStr:' − '+nStr);
-    let acik;
-    if (m===0) acik=`y = ${fmtK(n)}`;
-    else acik=`y = (${mStr2})x${nPart}`;
-    return `<div class="step">② ${denklemSatir(a,b,c)} &nbsp;⟹&nbsp; ${acik} &nbsp;⟹&nbsp; m = ${mStr2}</div>`.replace('②','@NO@').replace('@NO@', no===1?'①':'②');
-  }
-
-  // Eksen kesim noktaları hesabı (her iki doğru için)
-  function eksenKesim(a,b,c,no,label) {
-    let html2='';
-    html2+=`<div class="step" style="margin-top:8px;"><strong>② ${denklemSatir(a,b,c)} doğrusuna bakalım;</strong></div>`.replace('②',no===1?'①':'②');
-    // y eksenini kesmesi (x=0)
-    const yKes = b!==0 ? -c/b : null;
-    if (yKes!==null) {
-      html2+=`<div class="step">x = 0 &nbsp;⟹&nbsp; ${denklemSatir(0,b,c)} &nbsp;⟹&nbsp; y = ${fmtK(yKes)}</div>`;
-      html2+=`<div class="step">⟹ ${no===1?'①':'②'} no'lu doğrunun y − eksenini kestiği nokta: <strong>${label[0]}(0, ${fmtK(yKes)})</strong></div>`;
-    } else {
-      html2+=`<div class="step">b = 0 → y eksenine paralel, kesmiyor.</div>`;
-    }
-    // x eksenini kesmesi (y=0)
-    const xKes = a!==0 ? -c/a : null;
-    if (xKes!==null) {
-      html2+=`<div class="step" style="margin-top:6px;">y = 0 &nbsp;⟹&nbsp; ${denklemSatir(a,0,c)} &nbsp;⟹&nbsp; x = ${fmtK(xKes)}</div>`;
-      html2+=`<div class="step">⟹ ${no===1?'①':'②'} no'lu doğrunun x − eksenini kestiği nokta: <strong>${label[1]}(${fmtK(xKes)}, 0)</strong></div>`;
-    } else {
-      html2+=`<div class="step">a = 0 → x eksenine paralel, kesmiyor.</div>`;
-    }
-    return {html:html2, yKes, xKes};
-  }
-
+function calcSistemCore(a1,b1,c1,a2,b2,c2){
+  const det=a1*b2-a2*b1;
+  const s1=toSlope(a1,b1,c1), s2=toSlope(a2,b2,c2);
   let card1HTML='', card2HTML='', cozumKartHTML='';
   let grafik_x=null, grafik_y=null;
 
-  if (det===0) {
-    // EĞİMLER EŞİT → paralel veya çakışık
-    // Kart 1: Eğim karşılaştırması
-    card1HTML = `
+  function acikFormAdim(a,b,c,no){
+    if(b===0){const xv=a!==0?-c/a:0;return`<div class="step">${no===1?'①':'②'} ${denklemSatir(a,b,c)} &nbsp;⟹&nbsp; x=${fmtK(xv)} &nbsp;⟹&nbsp; m=(dikey doğru)</div>`;}
+    const m=-a/b,n=-c/b,mStr=fmtK(m),nStr=fmtK(Math.abs(n));
+    const nPart=n===0?'':(n>0?' + '+nStr:' − '+nStr);
+    const acik=m===0?`y=${fmtK(n)}`:`y=(${mStr})x${nPart}`;
+    return`<div class="step">${no===1?'①':'②'} ${denklemSatir(a,b,c)} &nbsp;⟹&nbsp; ${acik} &nbsp;⟹&nbsp; m=${mStr}</div>`;
+  }
+
+  function eksenKesim(a,b,c,no,label){
+    let html=`<div class="step" style="margin-top:8px;"><strong>${no===1?'①':'②'} ${denklemSatir(a,b,c)} doğrusuna bakalım;</strong></div>`;
+    const yKes=b!==0?-c/b:null;
+    if(yKes!==null){
+      html+=`<div class="step">x=0 &nbsp;⟹&nbsp; ${denklemSatir(0,b,c)} &nbsp;⟹&nbsp; y=${fmtK(yKes)}</div>`;
+      html+=`<div class="step">⟹ ${no===1?'①':'②'} no'lu doğrunun y-eksenini kestiği nokta: <strong>${label[0]}(0, ${fmtK(yKes)})</strong></div>`;
+    } else {
+      html+=`<div class="step">b=0 → y eksenine paralel, kesmiyor.</div>`;
+    }
+    const xKes=a!==0?-c/a:null;
+    if(xKes!==null){
+      html+=`<div class="step" style="margin-top:6px;">y=0 &nbsp;⟹&nbsp; ${denklemSatir(a,0,c)} &nbsp;⟹&nbsp; x=${fmtK(xKes)}</div>`;
+      html+=`<div class="step">⟹ ${no===1?'①':'②'} no'lu doğrunun x-eksenini kestiği nokta: <strong>${label[1]}(${fmtK(xKes)}, 0)</strong></div>`;
+    } else {
+      html+=`<div class="step">a=0 → x eksenine paralel, kesmiyor.</div>`;
+    }
+    return{html,yKes,xKes};
+  }
+
+  if(det===0){
+    card1HTML=`
       <div class="step">① ${denklemSatir(a1,b1,c1)}</div>
       <div class="step">② ${denklemSatir(a2,b2,c2)}</div>
-      <div class="step-section">Her iki denklemi de (y = mx + n) formatında yazarak eğimleri belirleyelim;</div>
+      <div class="step-section">Her iki denklemi de (y=mx+n) formatında yazarak eğimleri belirleyelim;</div>
       ${acikFormAdim(a1,b1,c1,1)}
       ${acikFormAdim(a2,b2,c2,2)}
       <div class="step" style="margin-top:8px;">⟹ Eğimler eşit çıktığına göre <strong>bu iki doğru PARALELDİR.</strong></div>
       <div class="step">⟹ Bu denklem sistemi <strong>ÇÖZÜMSÜZDÜR.</strong></div>`;
-
-    // Kart 2: Eksen kesim noktaları
-    const k1 = eksenKesim(a1,b1,c1,1,['A','B']);
-    const k2 = eksenKesim(a2,b2,c2,2,['C','D']);
-
-    // Çakışık mı? Tüm kesim noktaları aynıysa
-    const yEsit = Math.abs((k1.yKes||0)-(k2.yKes||0))<1e-9 && k1.yKes!==null && k2.yKes!==null;
-    const xEsit = Math.abs((k1.xKes||0)-(k2.xKes||0))<1e-9 && k1.xKes!==null && k2.xKes!==null;
-    const cakisik = yEsit && xEsit;
-
-    card2HTML = `
-      <div class="step">✓ Her iki doğrunun da eksenleri kestiği noktaları belirleyelim;</div>
-      ${k1.html}
-      ${k2.html}`;
-
-    if (cakisik) {
-      card2HTML += `
-        <div class="step" style="margin-top:10px;">✓ Her iki doğrunun da eksenleri kestiği noktalar aynı.</div>
+    const k1=eksenKesim(a1,b1,c1,1,['A','B']);
+    const k2=eksenKesim(a2,b2,c2,2,['C','D']);
+    const yEsit=Math.abs((k1.yKes||0)-(k2.yKes||0))<1e-9&&k1.yKes!==null&&k2.yKes!==null;
+    const xEsit=Math.abs((k1.xKes||0)-(k2.xKes||0))<1e-9&&k1.xKes!==null&&k2.xKes!==null;
+    const cakisik=yEsit&&xEsit;
+    card2HTML=`<div class="step">✓ Her iki doğrunun da eksenleri kestiği noktaları belirleyelim;</div>${k1.html}${k2.html}`;
+    if(cakisik){
+      card2HTML+=`<div class="step" style="margin-top:10px;">✓ Her iki doğrunun da eksenleri kestiği noktalar aynı.</div>
         <div class="step">⟹ Bu iki doğru <strong>ÇAKIŞAN DOĞRULARDIR.</strong></div>
         <div class="step">⟹ Bu denklem sisteminin <strong>sonsuz sayıda çözümü</strong> vardır.</div>`;
-      cozumKartHTML = `<div class="kesisim-card"><div class="kc-title">♾️ Sonsuz Çözüm — Çakışan Doğrular</div>
-        <div style="font-size:0.85rem;color:var(--text-dim);">Doğrular çakışıktır. Doğru üzerindeki her nokta çözümdür.</div></div>`;
+      cozumKartHTML=`<div class="kesisim-card"><div class="kc-title">♾️ Sonsuz Çözüm — Çakışan Doğrular</div>
+        <div style="font-size:0.85rem;color:var(--text-dim);">Doğrular çakışıktır; doğru üzerindeki her nokta çözümdür.</div></div>`;
     } else {
-      cozumKartHTML = `<div class="kesisim-card" style="border-color:var(--accent2);background:rgba(231,111,81,0.07);">
+      cozumKartHTML=`<div class="kesisim-card" style="border-color:var(--accent2);background:rgba(231,111,81,0.07);">
         <div class="kc-title" style="color:var(--accent2);">⚠️ Çözüm Yok — Paralel Doğrular</div>
-        <div style="font-size:0.85rem;color:var(--text-dim);">Doğrular paraleldir, kesişmez. Sistemin çözümü yoktur.</div></div>`;
+        <div style="font-size:0.85rem;color:var(--text-dim);">Doğrular paraleldir, kesişmez.</div></div>`;
     }
-
-    document.getElementById('sistem-result').innerHTML = `
-      <div class="result-section">
-        <div class="panel"><div class="sec-title">Eğim Karşılaştırması</div><div class="steps-box">${card1HTML}</div></div>
-        <div class="panel"><div class="sec-title">Eksen Kesim Noktaları</div><div class="steps-box">${card2HTML}</div></div>
-        ${cozumKartHTML}
-        <div class="panel"><div class="sec-title">Grafik — İki Doğru</div>
-          <canvas id="sistemCanvas" class="graf-canvas" height="420"></canvas>
-        </div>
-      </div>`;
-
+    document.getElementById('denk-result').innerHTML=`<div class="result-section">
+      <div class="panel"><div class="sec-title">Eğim Karşılaştırması</div><div class="steps-box">${card1HTML}</div></div>
+      <div class="panel"><div class="sec-title">Eksen Kesim Noktaları</div><div class="steps-box">${card2HTML}</div></div>
+      ${cozumKartHTML}
+      <div class="panel"><div class="sec-title">Grafik — İki Doğru</div><canvas id="sistemCanvas" class="graf-canvas" height="420"></canvas></div>
+    </div>`;
   } else {
-    // NORMAL ÇÖZÜM: Yok etme + Yerine yazma
-    const x = (-c1*b2+c2*b1)/det;
-    const y = (-a1*c2+a2*c1)/det;
+    const x=(-c1*b2+c2*b1)/det;
+    const y=(-a1*c2+a2*c1)/det;
     grafik_x=x; grafik_y=y;
 
-    // Yok etme yöntemi
-    const lcmA = a1!==0&&a2!==0 ? lcm(Math.abs(a1),Math.abs(a2)) : 0;
-    let m1y = lcmA>0?lcmA/Math.abs(a1):1;
-    let m2y = lcmA>0?lcmA/Math.abs(a2):1;
-    const sameSign = (a1>0&&a2>0)||(a1<0&&a2<0);
-    const res_b = sameSign ? b1*m1y-b2*m2y : b1*m1y+b2*m2y;
-    const res_c = sameSign ? c1*m1y-c2*m2y : c1*m1y+c2*m2y;
-
-    const yokEtmeHTML = `
+    // Yok etme
+    const lcmA=a1!==0&&a2!==0?lcm(Math.abs(a1),Math.abs(a2)):0;
+    let m1y=lcmA>0?lcmA/Math.abs(a1):1, m2y=lcmA>0?lcmA/Math.abs(a2):1;
+    const sameSign=(a1>0&&a2>0)||(a1<0&&a2<0);
+    const res_b=sameSign?b1*m1y-b2*m2y:b1*m1y+b2*m2y;
+    const res_c=sameSign?c1*m1y-c2*m2y:c1*m1y+c2*m2y;
+    const yokEtmeHTML=`
       <div class="step">① ${denklemSatir(a1,b1,c1)}</div>
       <div class="step">② ${denklemSatir(a2,b2,c2)}</div>
       <div class="step-section">X'İ YOK ETME</div>
-      <div class="step">✓ ① no'lu denklemi ${fmtK(m1y)} ile, ② no'lu denklemi ${fmtK(m2y)} ile genişleterek x'lerin katsayılarını eşitleyelim;</div>
-      <div class="step">① ${denklemSatir(a1*m1y, b1*m1y, c1*m1y)}</div>
-      <div class="step">② ${denklemSatir(a2*m2y, b2*m2y, c2*m2y)}</div>
+      <div class="step">✓ ① no'lu denklemi ${fmtK(m1y)} ile, ② no'lu denklemi ${fmtK(m2y)} ile genişleterek x katsayılarını eşitleyelim;</div>
+      <div class="step">① ${denklemSatir(a1*m1y,b1*m1y,c1*m1y)}</div>
+      <div class="step">② ${denklemSatir(a2*m2y,b2*m2y,c2*m2y)}</div>
       <div class="step">✓ ${sameSign?'Çıkarma':'Toplama'} işlemi yaparak x'i yok edelim;</div>
-      <div class="step">⟹ ${denklemSatir(0, res_b, res_c)}</div>
+      <div class="step">⟹ ${denklemSatir(0,res_b,res_c)}</div>
       <div class="step">⟹ y = ${fmtK(-res_c)}/${fmtK(res_b)} ⟹ <strong>y = ${fmtR2(y)}</strong></div>
       <div class="step-section">X'İ BULALIM</div>
       <div class="step">✓ Bulduğumuz y değerini ① no'lu denklemde kullanalım:</div>
       <div class="step">${denklemSatir(a1,b1,c1)} ⟹ ${fmtK(a1)}x + ${fmtK(b1)}(${fmtR2(y)}) + ${fmtK(c1)} = 0</div>
       <div class="step">⟹ ${fmtK(a1)}x = ${fmtR2(-b1*y-c1)} ⟹ <strong>x = ${fmtR2(x)}</strong></div>`;
 
-    // Yerine yazma — hangi denklem seçilecek?
+    // Yerine yazma
     function isNiceDiv(num,den){if(den===0)return false;const r=num/den;return Math.abs(r-Math.round(r))<1e-9;}
     const nice1=a1!==0&&isNiceDiv(b1,a1)&&isNiceDiv(c1,a1);
     const nice2=a2!==0&&isNiceDiv(b2,a2)&&isNiceDiv(c2,a2);
-    let useEq=1;
-    if(!nice1&&nice2) useEq=2;
-    const ua=useEq===1?a1:a2, ub=useEq===1?b1:b2, uc=useEq===1?c1:c2;
-    const va=useEq===1?a2:a1, vb=useEq===1?b2:b1, vc=useEq===1?c2:c1;
+    let useEq=1; if(!nice1&&nice2)useEq=2;
+    const ua=useEq===1?a1:a2,ub=useEq===1?b1:b2,uc=useEq===1?c1:c2;
+    const va=useEq===1?a2:a1,vb=useEq===1?b2:b1,vc=useEq===1?c2:c1;
     const uNo=useEq, vNo=useEq===1?2:1;
     const xCoefY=-ub/ua, xConst=-uc/ua;
     const xCoefYStr=xCoefY===0?'':((Math.abs(xCoefY)===1?(xCoefY<0?'−':''):(fmtK(xCoefY)))+'y');
@@ -855,8 +627,7 @@ function calcSistem() {
     const xExprStr=(xCoefYStr+xConstStr)||'0';
     const newCoefY=va*xCoefY+vb, newConst=va*xConst+vc;
     const yFromYer=-newConst/newCoefY;
-
-    const yerineHTML = `
+    const yerineHTML=`
       <div class="step">① ${denklemSatir(a1,b1,c1)}</div>
       <div class="step">② ${denklemSatir(a2,b2,c2)}</div>
       <div class="step-section">${uNo} NO'LU DENKLEMİ KULLANARAK x DEĞERİNİ YALNIZ BIRAKALIM</div>
@@ -864,141 +635,425 @@ function calcSistem() {
       <div class="step-section">BULDUĞUMUZ İFADEYİ ${vNo} NO'LU DENKLEMDE YERİNE YAZALIM</div>
       <div class="step">${denklemSatir(va,vb,vc)}</div>
       <div class="step">⟹ ${fmtK(va)}×(${xExprStr}) ${vb>=0?'+ '+fmtK(vb)+'y':'− '+fmtK(Math.abs(vb))+'y'} + ${fmtK(vc)} = 0</div>
-      <div class="step">⟹ ${denklemSatir(0, newCoefY, newConst)}</div>
+      <div class="step">⟹ ${denklemSatir(0,newCoefY,newConst)}</div>
       <div class="step">⟹ <strong>y = ${fmtR2(yFromYer)}</strong></div>
       <div class="step-section">BU DEĞERİ YENİDEN ${uNo} NOLU DENKLEMDE KULLANARAK DİĞER BİLİNMEYENİ BULALIM</div>
       <div class="step">${denklemSatir(ua,ub,uc)} ⟹ ${fmtK(ua)}x + ${fmtK(ub)}×(${fmtR2(yFromYer)}) + ${fmtK(uc)} = 0</div>
       <div class="step">⟹ ${fmtK(ua)}x = ${fmtR2(-ub*yFromYer-uc)} ⟹ <strong>x = ${fmtR2(x)}</strong></div>`;
 
     const k1c=a1*x+b1*y+c1, k2c=a2*x+b2*y+c2;
-    cozumKartHTML = `
+    cozumKartHTML=`
       <div class="kesisim-card">
         <div class="kc-title">✅ Çözüm — Kesişim Noktası</div>
         <div class="kc-val">x = ${fmtR2(x)} &nbsp;,&nbsp; y = ${fmtR2(y)}</div>
-        <div style="font-size:0.8rem;color:var(--text-dim);margin-top:6px;">Kesişim Noktası: K(${fmtR2(x)}, ${fmtR2(y)})</div>
+        <div style="font-size:0.8rem;color:var(--text-dim);margin-top:6px;">K(${fmtR2(x)}, ${fmtR2(y)})</div>
       </div>
       <div class="panel" style="margin-top:10px;background:rgba(45,106,79,0.05);border-color:rgba(45,106,79,0.25);">
         <div class="sec-title">Doğrulama</div>
         <div class="steps-box">
-          <div class="step">① ${denklemSatir(a1,b1,c1)}: ${fmtK(a1)}×${fmtR2(x)} + ${fmtK(b1)}×${fmtR2(y)} + ${fmtK(c1)} = ${fmtR2(k1c)} ${Math.abs(k1c)<0.001?'  ⟹ 0 = 0 ✓':'⚠️'}</div>
-          <div class="step">② ${denklemSatir(a2,b2,c2)}: ${fmtK(a2)}×${fmtR2(x)} + ${fmtK(b2)}×${fmtR2(y)} + ${fmtK(c2)} = ${fmtR2(k2c)} ${Math.abs(k2c)<0.001?'  ⟹ 0 = 0 ✓':'⚠️'}</div>
+          <div class="step">① ${denklemSatir(a1,b1,c1)}: ${fmtK(a1)}×${fmtR2(x)} + ${fmtK(b1)}×${fmtR2(y)} + ${fmtK(c1)} = ${fmtR2(k1c)} ${Math.abs(k1c)<0.001?'⟹ 0=0 ✓':'⚠️'}</div>
+          <div class="step">② ${denklemSatir(a2,b2,c2)}: ${fmtK(a2)}×${fmtR2(x)} + ${fmtK(b2)}×${fmtR2(y)} + ${fmtK(c2)} = ${fmtR2(k2c)} ${Math.abs(k2c)<0.001?'⟹ 0=0 ✓':'⚠️'}</div>
         </div>
       </div>`;
 
-    document.getElementById('sistem-result').innerHTML = `
-      <div class="result-section">
-        <div class="panel"><div class="sec-title">Yok Etme Yöntemi</div><div class="steps-box">${yokEtmeHTML}</div></div>
-        <div class="panel"><div class="sec-title">Yerine Yazma Yöntemi</div><div class="steps-box">${yerineHTML}</div></div>
-        ${cozumKartHTML}
-        <div class="panel"><div class="sec-title">Grafik — İki Doğru</div>
-          <canvas id="sistemCanvas" class="graf-canvas" height="420"></canvas>
-        </div>
-      </div>`;
+    document.getElementById('denk-result').innerHTML=`<div class="result-section">
+      <div class="panel"><div class="sec-title">Yok Etme Yöntemi</div><div class="steps-box">${yokEtmeHTML}</div></div>
+      <div class="panel"><div class="sec-title">Yerine Yazma Yöntemi</div><div class="steps-box">${yerineHTML}</div></div>
+      ${cozumKartHTML}
+      <div class="panel"><div class="sec-title">Grafik — İki Doğru</div><canvas id="sistemCanvas" class="graf-canvas" height="420"></canvas></div>
+    </div>`;
   }
 
-  requestAnimationFrame(() => {
+  requestAnimationFrame(()=>{
     const cv=document.getElementById('sistemCanvas');
-    if(cv){ cv.width=cv.parentElement.clientWidth-40; cv.height=420;
-      drawSistemGrafik(cv,a1,b1,c1,s1,a2,b2,c2,s2,grafik_x,grafik_y); }
+    if(cv){cv.width=cv.parentElement.clientWidth-40;cv.height=420;
+      drawSistemGrafik(cv,a1,b1,c1,s1,a2,b2,c2,s2,grafik_x,grafik_y);}
   });
 }
 
-function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
-function lcm(a,b){return a&&b?Math.abs(a*b)/gcd(a,b):0;}
-
-// EBOB/EKOK yardımcı
-function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
-function lcm(a,b){return a&&b?Math.abs(a*b)/gcd(a,b):0;}
-
 // ════════════════════════════════════════════════════════
-//  SİSTEM GRAFİK
+//  GRAFİK — TEK DENKLEM
 // ════════════════════════════════════════════════════════
-function drawSistemGrafik(canvas, a1,b1,c1,s1,a2,b2,c2,s2,kx,ky) {
-  const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
-  ctx.fillStyle = '#fdfcf9'; ctx.fillRect(0,0,W,H);
-
-  // Akıllı aralık: kesişim noktasını merkeze al
-  let cx0 = kx||0, cy0 = ky||0;
-  const range = 8;
-  let xMin=cx0-range, xMax=cx0+range, yMin=cy0-range, yMax=cy0+range;
-  // En az ±6 aralık
-  if (xMax-xMin < 12) { xMin=cx0-6; xMax=cx0+6; }
-  if (yMax-yMin < 12) { yMin=cy0-6; yMax=cy0+6; }
-
+function drawTekGrafik(canvas,a,b,c,s,xKesim,yKesim){
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.fillStyle='#fdfcf9';ctx.fillRect(0,0,W,H);
+  let xMin=-8,xMax=8,yMin=-8,yMax=8;
+  if(!s.dikey){
+    const margin=3;
+    xMin=Math.min(-6,(xKesim||0)-margin);xMax=Math.max(6,(xKesim||0)+margin);
+    const allY=[s.n,s.m*(xKesim||0)+s.n];
+    yMin=Math.min(-6,Math.min(...allY)-margin);yMax=Math.max(6,Math.max(...allY)+margin);
+  } else {xMin=s.xVal-6;xMax=s.xVal+6;}
   const PAD={top:30,right:20,bottom:30,left:40};
-  const cW=W-PAD.left-PAD.right, cH=H-PAD.top-PAD.bottom;
-  const scaleX2=cW/(xMax-xMin), scaleY2=cH/(yMax-yMin);
-  const scale2=Math.min(scaleX2,scaleY2);
-  const drawW2=(xMax-xMin)*scale2, drawH2=(yMax-yMin)*scale2;
-  const offX2=PAD.left+(cW-drawW2)/2, offY2=PAD.top+(cH-drawH2)/2;
-  const toX=v=>offX2+(v-xMin)*scale2;
-  const toY=v=>offY2+drawH2-(v-yMin)*scale2;
-
-  // Grid
-  ctx.strokeStyle='#e8e2d8'; ctx.lineWidth=1;
+  const cW=W-PAD.left-PAD.right,cH=H-PAD.top-PAD.bottom;
+  const scale=Math.min(cW/(xMax-xMin),cH/(yMax-yMin));
+  const drawW=(xMax-xMin)*scale,drawH=(yMax-yMin)*scale;
+  const offX=PAD.left+(cW-drawW)/2,offY=PAD.top+(cH-drawH)/2;
+  const toX=v=>offX+(v-xMin)*scale;
+  const toY=v=>offY+drawH-(v-yMin)*scale;
+  ctx.strokeStyle='#e8e2d8';ctx.lineWidth=1;
   for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){ctx.beginPath();ctx.moveTo(toX(x),PAD.top);ctx.lineTo(toX(x),PAD.top+cH);ctx.stroke();}
   for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){ctx.beginPath();ctx.moveTo(PAD.left,toY(y));ctx.lineTo(PAD.left+cW,toY(y));ctx.stroke();}
-
-  // Eksenler
-  const x0=toX(0), y0=toY(0);
-  ctx.strokeStyle='#6b6456'; ctx.lineWidth=1.5;
+  const x0=toX(0),y0=toY(0);
+  ctx.strokeStyle='#6b6456';ctx.lineWidth=1.5;
   ctx.beginPath();ctx.moveTo(PAD.left,y0);ctx.lineTo(PAD.left+cW,y0);ctx.stroke();
   ctx.beginPath();ctx.moveTo(x0,PAD.top);ctx.lineTo(x0,PAD.top+cH);ctx.stroke();
   ctx.fillStyle='#8b8074';ctx.font='10px DM Sans,sans-serif';ctx.textAlign='center';
   for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){if(x===0)continue;ctx.fillText(x,toX(x),y0+14);}
   ctx.textAlign='right';
   for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){if(y===0)continue;ctx.fillText(y,x0-4,toY(y)+4);}
+  ctx.strokeStyle='#e76f51';ctx.lineWidth=2.5;ctx.beginPath();
+  if(s.dikey){ctx.moveTo(toX(s.xVal),PAD.top);ctx.lineTo(toX(s.xVal),PAD.top+cH);}
+  else{ctx.moveTo(toX(xMin),toY(s.m*xMin+s.n));ctx.lineTo(toX(xMax),toY(s.m*xMax+s.n));}
+  ctx.stroke();
+  function drawKesim(px,py,label){
+    ctx.fillStyle='#2d6a4f';ctx.beginPath();ctx.arc(toX(px),toY(py),5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(toX(px),toY(py),2,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#2d6a4f';ctx.font='bold 10px DM Sans,sans-serif';ctx.textAlign='left';
+    ctx.fillText(label,toX(px)+8,toY(py)-6);
+  }
+  if(!s.dikey){
+    drawKesim(0,yKesim,`A(0,${fmtR2(yKesim)})`);
+    if(xKesim!==null)drawKesim(xKesim,0,`B(${fmtR2(xKesim)},0)`);
+  } else {drawKesim(s.xVal,0,`(${fmtR2(s.xVal)},0)`);}
+  if(!s.dikey&&s.m!==0){
+    const x1=0,y1=s.m*x1+s.n,x2=1,y2=s.m*x2+s.n;
+    ctx.strokeStyle='rgba(69,123,157,0.5)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(toX(x1),toY(y1));ctx.lineTo(toX(x2),toY(y1));ctx.lineTo(toX(x2),toY(y2));ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle='#457b9d';ctx.font='9px DM Sans,sans-serif';ctx.textAlign='center';
+    ctx.fillText('1',toX((x1+x2)/2),toY(y1)+14);
+    ctx.textAlign='left';ctx.fillText(`m=${fmtR2(s.m)}`,toX(x2)+4,toY((y1+y2)/2)+4);
+  }
+  ctx.fillStyle='#e76f51';ctx.font='bold 12px Lora,serif';ctx.textAlign='right';
+  ctx.fillText(acikForm(a,b,c),PAD.left+cW,PAD.top+16);
+}
 
-  // Doğru çiz
-  function drawLine(s, color, label) {
-    ctx.strokeStyle=color; ctx.lineWidth=2.5;
-    ctx.beginPath();
-    if (s&&s.dikey){ctx.moveTo(toX(s.xVal),PAD.top);ctx.lineTo(toX(s.xVal),PAD.top+cH);}
+// ════════════════════════════════════════════════════════
+//  GRAFİK — SİSTEM
+// ════════════════════════════════════════════════════════
+function drawSistemGrafik(canvas,a1,b1,c1,s1,a2,b2,c2,s2,kx,ky){
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.fillStyle='#fdfcf9';ctx.fillRect(0,0,W,H);
+  let cx0=kx||0,cy0=ky||0;
+  const range=8;
+  let xMin=cx0-range,xMax=cx0+range,yMin=cy0-range,yMax=cy0+range;
+  const PAD={top:30,right:20,bottom:30,left:40};
+  const cW=W-PAD.left-PAD.right,cH=H-PAD.top-PAD.bottom;
+  const scale=Math.min(cW/(xMax-xMin),cH/(yMax-yMin));
+  const drawW=(xMax-xMin)*scale,drawH=(yMax-yMin)*scale;
+  const offX=PAD.left+(cW-drawW)/2,offY=PAD.top+(cH-drawH)/2;
+  const toX=v=>offX+(v-xMin)*scale;
+  const toY=v=>offY+drawH-(v-yMin)*scale;
+  ctx.strokeStyle='#e8e2d8';ctx.lineWidth=1;
+  for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){ctx.beginPath();ctx.moveTo(toX(x),PAD.top);ctx.lineTo(toX(x),PAD.top+cH);ctx.stroke();}
+  for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){ctx.beginPath();ctx.moveTo(PAD.left,toY(y));ctx.lineTo(PAD.left+cW,toY(y));ctx.stroke();}
+  const x0=toX(0),y0=toY(0);
+  ctx.strokeStyle='#6b6456';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(PAD.left,y0);ctx.lineTo(PAD.left+cW,y0);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x0,PAD.top);ctx.lineTo(x0,PAD.top+cH);ctx.stroke();
+  ctx.fillStyle='#8b8074';ctx.font='10px DM Sans,sans-serif';ctx.textAlign='center';
+  for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){if(x===0)continue;ctx.fillText(x,toX(x),y0+14);}
+  ctx.textAlign='right';
+  for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){if(y===0)continue;ctx.fillText(y,x0-4,toY(y)+4);}
+  function drawLine(s,color,label){
+    ctx.strokeStyle=color;ctx.lineWidth=2.5;ctx.beginPath();
+    if(s&&s.dikey){ctx.moveTo(toX(s.xVal),PAD.top);ctx.lineTo(toX(s.xVal),PAD.top+cH);}
     else if(s){ctx.moveTo(toX(xMin),toY(s.m*xMin+s.n));ctx.lineTo(toX(xMax),toY(s.m*xMax+s.n));}
     ctx.stroke();
-    if(label){ctx.fillStyle=color;ctx.font='bold 11px Lora,serif';ctx.textAlign='right';ctx.fillText(label,PAD.left+cW,PAD.top+18+(label==='D₁'?0:18));}
+    if(label){ctx.fillStyle=color;ctx.font='bold 11px Lora,serif';ctx.textAlign='right';
+      ctx.fillText(label,PAD.left+cW,PAD.top+(label==='D₁'?18:36));}
   }
   drawLine(s1,'#e76f51','D₁');
   drawLine(s2,'#457b9d','D₂');
-
-  // Kesişim noktası
-  if (kx!==null && ky!==null) {
-    ctx.fillStyle='#9b5de5';
-    ctx.beginPath();ctx.arc(toX(kx),toY(ky),7,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#fff';
-    ctx.beginPath();ctx.arc(toX(kx),toY(ky),3,0,Math.PI*2);ctx.fill();
+  if(kx!==null&&ky!==null){
+    ctx.fillStyle='#9b5de5';ctx.beginPath();ctx.arc(toX(kx),toY(ky),7,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(toX(kx),toY(ky),3,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#9b5de5';ctx.font='bold 11px DM Sans,sans-serif';ctx.textAlign='left';
-    ctx.fillText(`K(${fmtR2(kx)}, ${fmtR2(ky)})`,toX(kx)+9,toY(ky)-7);
+    ctx.fillText(`K(${fmtR2(kx)},${fmtR2(ky)})`,toX(kx)+9,toY(ky)-7);
   }
 }
 
 // ════════════════════════════════════════════════════════
-//  SİSTEM SIFIRLA
+//  EŞİTSİZLİK
 // ════════════════════════════════════════════════════════
-function resetSistem() {
-  ['s-a1','s-b1','s-c1','s-a2','s-b2','s-c2'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.value='';
-  });
-  document.getElementById('sistem-result').innerHTML='';
-  document.getElementById('s-prev1').textContent='';
-  document.getElementById('s-prev2').textContent='';
-  hideErr('sistem-error');
+const opSembol={gt:'>',gte:'≥',lt:'<',lte:'≤'};
+
+function esitPreview(){
+  const a1=getN('e-a1'),b1=getN('e-b1'),c1=getN('e-c1');
+  const op1=document.getElementById('e-op1').value;
+  document.getElementById('esit-preview1').textContent=esitsizlikText(a1,b1,c1,op1);
+  const a2=getN('e-a2'),b2=getN('e-b2'),c2=getN('e-c2');
+  const op2=document.getElementById('e-op2').value;
+  const p2=document.getElementById('esit-preview2');
+  const has2=document.getElementById('e-a2').value!==''||
+             document.getElementById('e-b2').value!==''||
+             document.getElementById('e-c2').value!=='';
+  if(has2){p2.style.display='block';p2.textContent=esitsizlikText(a2,b2,c2,op2);}
+  else{p2.style.display='none';}
 }
 
-// ── BAŞLANGIÇ
-window.addEventListener('DOMContentLoaded', () => {
-  tekPreview();
-  sistemPreview();
-});
-window.addEventListener('resize', () => {
-  const tc=document.getElementById('tekCanvas');
-  const sc=document.getElementById('sistemCanvas');
-  if(tc){ tc.width=tc.parentElement.clientWidth-40; drawTekGrafik(tc,...window._lastTekArgs||[]); }
-});
+function testEsit(a,b,c,op,px,py){
+  const val=a*px+b*py+c;
+  if(op==='gt')return val>0;if(op==='gte')return val>=0;
+  if(op==='lt')return val<0;if(op==='lte')return val<=0;
+  return false;
+}
+
+function hasSecondEsit(){
+  return document.getElementById('e-a2').value!==''||
+         document.getElementById('e-b2').value!==''||
+         document.getElementById('e-c2').value!=='';
+}
+
+function calcEsit(){
+  hideErr('esit-error');
+  const a1=getN('e-a1'),b1=getN('e-b1'),c1=getN('e-c1');
+  const op1=document.getElementById('e-op1').value;
+  if(a1===0&&b1===0){showErr('esit-error','a ve b aynı anda sıfır olamaz.');return;}
+  const hasSecond=hasSecondEsit();
+  const a2=getN('e-a2'),b2=getN('e-b2'),c2=getN('e-c2');
+  const op2=document.getElementById('e-op2').value;
+  if(hasSecond&&a2===0&&b2===0){showErr('esit-error','İkinci eşitsizlikte a ve b aynı anda sıfır olamaz.');return;}
+  const s1=toSlope(a1,b1,c1);
+  const s2=hasSecond?toSlope(a2,b2,c2):null;
+
+  function sinirAcik(a,b,c,op,no){
+    const sn=no===1?'birinci':'ikinci';
+    let html=`<div class="step"><strong>Verilen ${sn} eşitsizlik:</strong> ${esitsizlikText(a,b,c,op)}</div>
+      <div class="step-section">SINIR DOĞRUSUNUN BULUNMASI</div>
+      <div class="step">Eşitsizlik işaretini "=" ile değiştiririz: <strong>${denklemSatir(a,b,c)}</strong></div>`;
+    const dahil=(op==='gte'||op==='lte');
+    html+=`<div class="step">İşaret "${opSembol[op]}" → sınır doğrusu çözüme <strong>${dahil?'dahildir (tam çizgi ile gösterilir)':'dahil değildir (kesik çizgi ile gösterilir)'}</strong>.</div>`;
+    return html;
+  }
+
+  // Orijinin sınır doğrusu üzerinde olup olmadığını kontrol eder (c=0 ise üzerinde)
+  function orijinSinirdaMi(a,b,c){
+    return Math.abs(a*0+b*0+c)<1e-9;
+  }
+
+  function eksenKesimAcik(a,b,c,s){
+    let html=`<div class="step-section">SINIR DOĞRUSUNUN EKSENLERİ KESTİĞİ NOKTALAR</div>`;
+    if(!s.dikey){
+      const yK=b!==0?-c/b:null, xK=s.m!==0?-s.n/s.m:null;
+      if(yK!==null) html+=`<div class="step">x = 0 ⟹ ${denklemSatir(0,b,c)} ⟹ y = ${fmtR2(yK)} &nbsp;→&nbsp; <strong>A(0, ${fmtR2(yK)})</strong></div>`;
+      else html+=`<div class="step">b = 0 ⟹ Sınır doğrusu dikeydir ⟹ y eksenini kesmez.</div>`;
+      if(xK!==null) html+=`<div class="step">y = 0 ⟹ ${denklemSatir(a,0,c)} ⟹ x = ${fmtR2(xK)} &nbsp;→&nbsp; <strong>B(${fmtR2(xK)}, 0)</strong></div>`;
+      else if(s.m===0) html+=`<div class="step">Eğim = 0 ⟹ Sınır doğrusu yataydır ⟹ x eksenini kesmez.</div>`;
+      // Orijinden geçip geçmediğini burada belirt
+      if(orijinSinirdaMi(a,b,c)){
+        html+=`<div class="step" style="color:var(--accent2);">⚠️ Sınır doğrusu <strong>orijinden geçiyor</strong> ⟹ Test noktası olarak orijin <em>kullanılamaz</em>.</div>`;
+      }
+    } else {
+      html+=`<div class="step">Dikey doğru: x = ${fmtR2(s.xVal)}</div>`;
+      if(Math.abs(s.xVal)<1e-9){
+        html+=`<div class="step" style="color:var(--accent2);">⚠️ Sınır doğrusu y ekseni ⟹ <strong>orijinden geçiyor</strong> ⟹ Test noktası olarak orijin <em>kullanılamaz</em>.</div>`;
+      }
+    }
+    return html;
+  }
+
+  function testAcik(a,b,c,op,s){
+    const opStr=opSembol[op];
+    const orijindeVar=orijinSinirdaMi(a,b,c);
+    let html=`<div class="step-section">TEST NOKTASI İLE ÇÖZÜM BULMA</div>`;
+
+    if(orijindeVar){
+      // Orijin sınır doğrusu üzerinde — doğrudan T(1,0) seç
+      html+=`<div class="step">Sınır doğrusu orijinden geçtiği için test noktası olarak <strong>T(1, 0)</strong>'ı deneyelim.</div>`;
+      const v2=a*1+b*0+c;
+      html+=`<div class="step">x=1, y=0 değerlerini eşitsizliğe yazalım: ${esitsizlikText(a,b,c,op).replace(/[<>≥≤].*/,'')}⟹ ${fmtK(a)}×1 + ${fmtK(b)}×0 + ${fmtK(c)} = <strong>${fmtK(v2)}</strong></div>`;
+      html+=`<div class="step">${fmtK(v2)} ${opStr} 0 &nbsp;⟹&nbsp; Bu ifade <strong>${testEsit(a,b,c,op,1,0)?'DOĞRUDUR ✓':'YANLIŞTIR ✗'}</strong></div>`;
+      html+=`<div class="step"><strong>${testEsit(a,b,c,op,1,0)?'Dolayısıyla T(1,0) noktasının bulunduğu bölge çözüm bölgesidir.':'Dolayısıyla T(1,0) noktasının bulunduğu bölge çözüm değildir; karşı bölge çözüm bölgesidir.'}</strong></div>`;
+    } else {
+      // Orijin sınır doğrusu üzerinde değil — T(0,0) seç
+      html+=`<div class="step">Sınır doğrusu orijinden geçmediği için test noktası olarak <strong>T(0, 0)</strong> orijinini deneyelim.</div>`;
+      html+=`<div class="step">x=0, y=0 değerlerini eşitsizliğe yazalım: ${fmtK(a)}×0 + ${fmtK(b)}×0 + ${fmtK(c)} = <strong>${fmtK(c)}</strong></div>`;
+      const sag=testEsit(a,b,c,op,0,0);
+      html+=`<div class="step">${fmtK(c)} ${opStr} 0 &nbsp;⟹&nbsp; Bu ifade <strong>${sag?'DOĞRUDUR ✓':'YANLIŞTIR ✗'}</strong></div>`;
+      html+=`<div class="step"><strong>${sag?'Dolayısıyla orijinin bulunduğu bölge çözüm bölgesidir.':'Dolayısıyla orijinin bulunduğu bölge çözüm değildir; karşı bölge çözüm bölgesidir.'}</strong></div>`;
+    }
+    return html;
+  }
+
+  // Yeni sıralama: sinirAcik → eksenKesimAcik → testAcik
+  let stepsHTML=sinirAcik(a1,b1,c1,op1,1)+eksenKesimAcik(a1,b1,c1,s1)+testAcik(a1,b1,c1,op1,s1);
+  let stepsHTML2='';
+  if(hasSecond){
+    stepsHTML2=sinirAcik(a2,b2,c2,op2,2)+eksenKesimAcik(a2,b2,c2,s2)+testAcik(a2,b2,c2,op2,s2);
+    stepsHTML2+=`<div class="step-section">SONUÇ</div>
+      <div class="step">Her iki eşitsizliği aynı anda sağlayan noktalar kümesi iki çözüm bölgesinin <strong>kesişimidir.</strong></div>
+      <div class="step">Grafik üzerinde çift taralı bölge ortak çözüm kümesini göstermektedir.</div>`;
+  }
+
+  const sonucKarti=`<div class="esit-result-card">
+    <div class="kc-title">📐 Çözüm Bölgesi</div>
+    <div style="font-size:0.83rem;color:var(--text-dim);margin-top:4px;">
+      ${hasSecond
+        ?`<strong>${esitsizlikText(a1,b1,c1,op1)}</strong> ve <strong>${esitsizlikText(a2,b2,c2,op2)}</strong> eşitsizliklerinin ortak çözüm bölgesi gösterilmiştir.`
+        :`<strong>${esitsizlikText(a1,b1,c1,op1)}</strong> eşitsizliğinin çözüm bölgesi gösterilmiştir.`}
+    </div>
+  </div>`;
+
+  document.getElementById('esit-result').innerHTML=`<div class="result-section">
+    <div class="panel"><div class="sec-title">① Birinci Eşitsizlik — Adımlar</div><div class="steps-box">${stepsHTML}</div></div>
+    ${hasSecond?`<div class="panel"><div class="sec-title">② İkinci Eşitsizlik — Adımlar</div><div class="steps-box">${stepsHTML2}</div></div>`:''}
+    ${sonucKarti}
+    <div class="panel"><div class="sec-title">Grafik — Çözüm Bölgesi</div><canvas id="esitCanvas" class="graf-canvas" height="440"></canvas></div>
+  </div>`;
+
+  requestAnimationFrame(()=>{
+    const cv=document.getElementById('esitCanvas');
+    if(cv){cv.width=cv.parentElement.clientWidth-40;cv.height=440;
+      drawEsitGrafik(cv,a1,b1,c1,op1,s1,a2,b2,c2,op2,s2,hasSecond);}
+  });
+}
+
+// ════════════════════════════════════════════════════════
+//  GRAFİK — EŞİTSİZLİK
+// ════════════════════════════════════════════════════════
+function drawEsitGrafik(canvas,a1,b1,c1,op1,s1,a2,b2,c2,op2,s2,hasSecond){
+  const ctx=canvas.getContext('2d');
+  const W=canvas.width,H=canvas.height;
+  ctx.fillStyle='#fdfcf9';ctx.fillRect(0,0,W,H);
+  const range=10;
+  const xMin=-range,xMax=range,yMin=-range,yMax=range;
+  const PAD={top:30,right:20,bottom:30,left:44};
+  const cW=W-PAD.left-PAD.right,cH=H-PAD.top-PAD.bottom;
+  const scale=Math.min(cW/(xMax-xMin),cH/(yMax-yMin));
+  const drawW=(xMax-xMin)*scale,drawH=(yMax-yMin)*scale;
+  const offX=PAD.left+(cW-drawW)/2,offY=PAD.top+(cH-drawH)/2;
+  const toX=v=>offX+(v-xMin)*scale;
+  const toY=v=>offY+drawH-(v-yMin)*scale;
+  ctx.strokeStyle='#e8e2d8';ctx.lineWidth=1;
+  for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){ctx.beginPath();ctx.moveTo(toX(x),PAD.top);ctx.lineTo(toX(x),PAD.top+cH);ctx.stroke();}
+  for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){ctx.beginPath();ctx.moveTo(PAD.left,toY(y));ctx.lineTo(PAD.left+cW,toY(y));ctx.stroke();}
+  // Tarama
+  const imgData=ctx.createImageData(W,H);
+  const step=2;
+  for(let px=Math.floor(offX);px<Math.floor(offX+drawW);px+=step){
+    for(let py=Math.floor(offY);py<Math.floor(offY+drawH);py+=step){
+      const rx=xMin+(px-offX)/scale,ry=yMin+(drawH-(py-offY))/scale;
+      const ok1=testEsit(a1,b1,c1,op1,rx,ry);
+      const ok2=!hasSecond||testEsit(a2,b2,c2,op2,rx,ry);
+      for(let dx=0;dx<step;dx++){for(let dy=0;dy<step;dy++){
+        const idx=4*((py+dy)*W+(px+dx));
+        if(ok1&&ok2){imgData.data[idx]=69;imgData.data[idx+1]=123;imgData.data[idx+2]=157;imgData.data[idx+3]=55;}
+        else if(ok1&&hasSecond){imgData.data[idx]=231;imgData.data[idx+1]=111;imgData.data[idx+2]=81;imgData.data[idx+3]=35;}
+        else if(ok2&&hasSecond){imgData.data[idx]=69;imgData.data[idx+1]=123;imgData.data[idx+2]=157;imgData.data[idx+3]=35;}
+      }}
+    }
+  }
+  ctx.putImageData(imgData,0,0);
+  const x0=toX(0),y0=toY(0);
+  ctx.strokeStyle='#6b6456';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(PAD.left,y0);ctx.lineTo(PAD.left+cW,y0);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x0,PAD.top);ctx.lineTo(x0,PAD.top+cH);ctx.stroke();
+  ctx.fillStyle='#8b8074';ctx.font='10px DM Sans,sans-serif';ctx.textAlign='center';
+  for(let x=Math.ceil(xMin);x<=Math.floor(xMax);x++){if(x===0)continue;ctx.fillText(x,toX(x),y0+14);}
+  ctx.textAlign='right';
+  for(let y=Math.ceil(yMin);y<=Math.floor(yMax);y++){if(y===0)continue;ctx.fillText(y,x0-4,toY(y)+4);}
+  // Sınır doğrusunu canvas sınırlarına göre kırparak çizen yardımcı
+  function clipLine(slope, intercept, isVertical, xValV, color, dashed, label, labelY){
+    ctx.strokeStyle=color; ctx.lineWidth=2.5;
+    if(dashed) ctx.setLineDash([8,5]); else ctx.setLineDash([]);
+    ctx.beginPath();
+    if(isVertical){
+      ctx.moveTo(toX(xValV), PAD.top);
+      ctx.lineTo(toX(xValV), PAD.top+cH);
+    } else {
+      // Doğruyu dört canvas kenarı ile kesiştir, geçerli noktaları bul
+      const pts=[];
+      // sol kenar: x=xMin
+      const yL=slope*xMin+intercept;
+      if(yL>=yMin&&yL<=yMax) pts.push([xMin,yL]);
+      // sağ kenar: x=xMax
+      const yR=slope*xMax+intercept;
+      if(yR>=yMin&&yR<=yMax) pts.push([xMax,yR]);
+      // alt kenar: y=yMin
+      if(Math.abs(slope)>1e-12){
+        const xB=(yMin-intercept)/slope;
+        if(xB>=xMin&&xB<=xMax) pts.push([xB,yMin]);
+      }
+      // üst kenar: y=yMax
+      if(Math.abs(slope)>1e-12){
+        const xT=(yMax-intercept)/slope;
+        if(xT>=xMin&&xT<=xMax) pts.push([xT,yMax]);
+      }
+      if(Math.abs(slope)<1e-12){
+        // yatay doğru: tüm x aralığı
+        pts.push([xMin,intercept],[xMax,intercept]);
+      }
+      // Tekrar eden noktaları temizle, x'e göre sırala
+      const uniq=[...new Map(pts.map(p=>[Math.round(p[0]*1e6)+','+Math.round(p[1]*1e6),p])).values()];
+      uniq.sort((a,b)=>a[0]-b[0]);
+      if(uniq.length>=2){
+        ctx.moveTo(toX(uniq[0][0]),toY(uniq[0][1]));
+        ctx.lineTo(toX(uniq[uniq.length-1][0]),toY(uniq[uniq.length-1][1]));
+      }
+    }
+    ctx.stroke(); ctx.setLineDash([]);
+    if(label){
+      ctx.fillStyle=color; ctx.font='bold 11px Lora,serif'; ctx.textAlign='right';
+      ctx.fillText(label, PAD.left+cW, labelY);
+    }
+  }
+
+  const dahil1=(op1==='gte'||op1==='lte');
+  clipLine(s1.dikey?0:s1.m, s1.dikey?0:s1.n, s1.dikey, s1.dikey?s1.xVal:0, '#e76f51', !dahil1, 'D₁', PAD.top+18);
+  if(hasSecond&&s2){
+    const dahil2=(op2==='gte'||op2==='lte');
+    clipLine(s2.dikey?0:s2.m, s2.dikey?0:s2.n, s2.dikey, s2.dikey?s2.xVal:0, '#457b9d', !dahil2, 'D₂', PAD.top+36);
+  }
+  if(!s1.dikey){
+    const yK=b1!==0?-c1/b1:null,xK=s1.m!==0?-s1.n/s1.m:null;
+    function dot(px,py,lbl,col){
+      ctx.fillStyle=col;ctx.beginPath();ctx.arc(toX(px),toY(py),4,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(toX(px),toY(py),2,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=col;ctx.font='9px DM Sans,sans-serif';ctx.textAlign='left';
+      ctx.fillText(lbl,toX(px)+6,toY(py)-5);
+    }
+    if(yK!==null)dot(0,yK,`A(0,${fmtR2(yK)})`,'#e76f51');
+    if(xK!==null)dot(xK,0,`B(${fmtR2(xK)},0)`,'#e76f51');
+  }
+  // Legand
+  ctx.font='bold 10px DM Sans,sans-serif';ctx.textAlign='left';
+  const lx=PAD.left+8,ly=PAD.top+16;
+  ctx.fillStyle='rgba(69,123,157,0.7)';ctx.fillRect(lx,ly-10,12,12);
+  ctx.fillStyle='#2d6a4f';ctx.fillText(hasSecond?'Ortak Çözüm':'Çözüm Bölgesi',lx+16,ly);
+  if(hasSecond){
+    ctx.fillStyle='rgba(231,111,81,0.5)';ctx.fillRect(lx,ly+14,12,12);
+    ctx.fillStyle='#e76f51';ctx.fillText('Yalnız D₁',lx+16,ly+24);
+    ctx.fillStyle='rgba(69,123,157,0.5)';ctx.fillRect(lx,ly+28,12,12);
+    ctx.fillStyle='#457b9d';ctx.fillText('Yalnız D₂',lx+16,ly+38);
+  }
+}
+
+// ════════════════════════════════════════════════════════
+//  SIFIRLA
+// ════════════════════════════════════════════════════════
+function resetDenk(){
+  document.getElementById('d-a1').value='1';document.getElementById('d-b1').value='-1';document.getElementById('d-c1').value='0';
+  ['d-a2','d-b2','d-c2'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('denk-preview2').style.display='none';
+  document.getElementById('denk-result').innerHTML='';hideErr('denk-error');denkPreview();
+}
+function resetEsit(){
+  document.getElementById('e-a1').value='1';document.getElementById('e-b1').value='-1';document.getElementById('e-c1').value='0';
+  document.getElementById('e-op1').value='gte';
+  ['e-a2','e-b2','e-c2'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('e-op2').value='lte';
+  document.getElementById('esit-preview2').style.display='none';
+  document.getElementById('esit-result').innerHTML='';hideErr('esit-error');esitPreview();
+}
+
+// ════════════════════════════════════════════════════════
+//  BAŞLANGIÇ
+// ════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded',()=>{denkPreview();esitPreview();});
 </script>
-<footer>
-  <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
-</footer>
 </body>
 </html>
