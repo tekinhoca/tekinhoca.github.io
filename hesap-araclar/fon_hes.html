@@ -238,13 +238,13 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
 
           <div class="shape-card ikd" onclick="goPage('ikd')">
             <div class="sc-icon">📉</div>
-            <div class="sc-title">İkinci Derece Fonksiyon</div>
+            <div class="sc-title">İkinci Dereceden Fonksiyon</div>
             <div class="sc-keys">diskriminant · kökler · Vieta · tepe noktası · grafik</div>
           </div>
 
           <div class="shape-card fon" onclick="goPage('fon')">
             <div class="sc-icon">🔬</div>
-            <div class="sc-title">Fonksiyon Analizi</div>
+            <div class="sc-title">Ayrıntılı Fonksiyon Analizi</div>
             <div class="sc-keys">tanım/görüntü kümesi · simetri · kesim noktaları · monotonluk</div>
           </div>
 
@@ -277,7 +277,7 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
     <div id="pageFon" class="page">
       <button class="btn-back" onclick="goPage('home')">← Ana Sayfaya Dön</button>
       <div class="panel">
-        <div class="sec-title">🔬 Fonksiyon Analizi — İkinci Derece</div>
+        <div class="sec-title">🔬 İkinci Dereceden Bir Fonksiyonun Ayrıntılı Analizi</div>
         <div class="hint">a, b, c katsayılarını girin. a ≠ 0 olmalıdır.</div>
         <div class="coeff-row">
           <div class="coeff-box"><label>a</label><input type="number" id="fon-a" value="1" step="any" oninput="fonPreview()"></div>
@@ -481,9 +481,9 @@ function calcIkd() {
     if (delta > 1e-9) {
       steps += `<div class="step">\\(\\Rightarrow\\; x_1 = \\dfrac{${fmtR(-b)} + \\sqrt{${deltaStr}}}{2 \\cdot ${aStr}} = ${fmtR(kokler[0])}\\)</div>`;
       steps += `<div class="step">\\(\\Rightarrow\\; x_2 = \\dfrac{${fmtR(-b)} - \\sqrt{${deltaStr}}}{2 \\cdot ${aStr}} = ${fmtR(kokler[1])}\\)</div>`;
-      steps += `<div class="step-section">KÖKLER TOPLAMI ve KÖKLER ÇARPIMI BAĞINTILARI</div>`;
-      steps += `<div class="step">Köklerin toplamı &emsp; \\(\\left\\{\\begin{array}{l} x_1+x_2 = -\\dfrac{b}{a} = -\\dfrac{${bStr}}{${aStr}} = ${fmtR(-b/a)} \\\\[6pt] x_1+x_2 = ${fmtR(kokler[0])}+${fmtR(kokler[1])} = ${fmtR(kokler[0]+kokler[1])} \\end{array}\\right.\\)</div>`;
-      steps += `<div class="step">Köklerin çarpımı &emsp; \\(\\left\\{\\begin{array}{l} x_1 \\cdot x_2 = \\dfrac{c}{a} = \\dfrac{${cStr2}}{${aStr}} = ${fmtFrac(c,a)} \\\\[6pt] x_1 \\cdot x_2 = ${fmtR(kokler[0])} \\cdot ${fmtR(kokler[1])} = ${fmtR(kokler[0]*kokler[1])} \\end{array}\\right.\\)</div>`;
+      steps += `<div class="step-section">KÖKLER TOPLAMI ve KÖKLER ÇARPIMI BAĞINTILARI İLE<br>BULDUĞUMUZ KÖKLERİN KARŞILAŞTIRILMASI — SAĞLAMA</div>`;
+      steps += `<div class="step">✓ Köklerin toplamı &emsp; \\(\\left\\{\\begin{array}{l} x_1+x_2 = -\\dfrac{b}{a} = -\\dfrac{${bStr}}{${aStr}} = ${fmtR(-b/a)} \\\\[6pt] x_1+x_2 = ${fmtR(kokler[0])}+${fmtR(kokler[1])} = ${fmtR(kokler[0]+kokler[1])} \\end{array}\\right.\\)</div>`;
+      steps += `<div class="step">✓ Köklerin çarpımı &emsp; \\(\\left\\{\\begin{array}{l} x_1 \\cdot x_2 = \\dfrac{c}{a} = \\dfrac{${cStr2}}{${aStr}} = ${fmtFrac(c,a)} \\\\[6pt] x_1 \\cdot x_2 = ${fmtR(kokler[0])} \\cdot ${fmtR(kokler[1])} = ${fmtR(kokler[0]*kokler[1])} \\end{array}\\right.\\)</div>`;
     } else {
       steps += `<div class="step">\\(x = -\\dfrac{b}{2a} = -\\dfrac{${bStr}}{2 \\cdot ${aStr}} = ${fmtR(xT)}\\)</div>`;
     }
