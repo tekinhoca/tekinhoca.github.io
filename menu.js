@@ -8,7 +8,6 @@ const MENU_ITEMS = [
   { label: "Estetik Matematik",    href: "estetik-matematik.html" },
   { label: "Matematik Hikayeleri", href: "matematik-hikayeleri.html" },
   { label: "HTML Zekâ Oyunları",   href: "html-oyunlar.html" },
-  { label: "Flash Zekâ Oyunları",  href: "matematik-oyunlari.html" },
   { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html" },
   { label: "Kulüp Dosyaları",      href: "kulup-dosyalari.html" },
 ];
