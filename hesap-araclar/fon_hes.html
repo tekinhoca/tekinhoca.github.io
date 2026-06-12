@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İkinci Derece Fonksiyon Analizi — TekinHoca</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root{
+  --bg:#f4f1eb;--surface:#fdfcf9;--surface2:#eee9df;--border:#d8d0c0;
+  --accent:#2d6a4f;--accent2:#e76f51;--accent3:#457b9d;--accent4:#e9c46a;
+  --text:#1a1a1a;--text-dim:#6b6456;--radius:12px;--shadow:0 4px 24px rgba(0,0,0,0.08);
+  --c-ikd:#e76f51;--c-fon:#9b5de5;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;
+  min-height:100vh;padding:20px;
+  background-image:
+    radial-gradient(circle at 10% 20%,rgba(45,106,79,0.06) 0%,transparent 50%),
+    radial-gradient(circle at 90% 80%,rgba(69,123,157,0.06) 0%,transparent 50%);
+}
+
+/* HEADER */
+header{max-width:1200px;margin:0 auto 24px;display:flex;align-items:center;gap:18px;
+  padding-bottom:18px;border-bottom:2px solid var(--border);}
+header img{height:44px;width:auto;}
+header .titles{text-align:right;}
+header .titles h1{font-family:'Lora',serif;font-size:clamp(1.1rem,2.5vw,1.75rem);font-weight:700;color:var(--accent);}
+header .titles p{font-size:0.85rem;color:var(--text-dim);margin-top:3px;}
+
+/* DÜZEN */
+.app{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:290px 1fr;gap:20px;align-items:start;}
+@media(max-width:860px){.app{grid-template-columns:1fr;}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;box-shadow:var(--shadow);}
+.panel+.panel{margin-top:16px;}
+.sec-title{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+
+/* SOL PANEL */
+.rule-item{margin-bottom:10px;padding:9px 12px;background:var(--surface2);border-radius:8px;
+  border-left:4px solid transparent;font-size:0.82rem;line-height:1.9;color:var(--text-dim);}
+.rule-item strong{color:var(--text);}
+.rule-h{font-family:'Lora',serif;font-size:0.82rem;font-weight:700;color:var(--accent);
+  margin:14px 0 6px;padding-bottom:4px;border-bottom:1px dashed var(--border);}
+
+/* ANA SAYFA KARTLARI */
+.shape-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:600px){.shape-grid{grid-template-columns:1fr;}}
+.shape-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--radius);
+  padding:20px 14px;cursor:pointer;text-align:center;transition:all 0.2s;box-shadow:var(--shadow);}
+.shape-card:hover{transform:translateY(-3px);}
+.shape-card .sc-icon{font-size:2.2rem;margin-bottom:10px;}
+.shape-card .sc-title{font-family:'Lora',serif;font-size:0.92rem;font-weight:700;line-height:1.4;}
+.shape-card .sc-keys{font-size:0.72rem;color:var(--text-dim);margin-top:8px;font-style:italic;}
+.shape-card.ikd:hover{border-color:var(--c-ikd);background:rgba(231,111,81,0.05);}
+.shape-card.ikd .sc-title{color:var(--c-ikd);}
+.shape-card.kok:hover{border-color:var(--c-kok);background:rgba(69,123,157,0.05);}
+.shape-card.kok .sc-title{color:var(--c-kok);}
+.shape-card.fon:hover{border-color:var(--c-fon);background:rgba(155,93,229,0.05);}
+.shape-card.fon .sc-title{color:var(--c-fon);}
+.shape-card.graf:hover{border-color:var(--c-graf);background:rgba(45,106,79,0.05);}
+.shape-card.graf .sc-title{color:var(--c-graf);}
+
+/* NAVİGASYON */
+.page{display:none;}.page.active{display:block;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:transparent;
+  border:1px solid var(--border);border-radius:8px;padding:7px 14px;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.82rem;color:var(--text-dim);
+  transition:all 0.15s;margin-bottom:16px;}
+.btn-back:hover{border-color:var(--accent);color:var(--accent);}
+
+/* GİRİŞ */
+.coeff-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.coeff-box{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.coeff-box label{font-size:0.72rem;color:var(--text-dim);font-weight:600;}
+.coeff-box input[type=number],.coeff-box input[type=text]{
+  width:78px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.92rem;padding:8px;
+  outline:none;text-align:center;transition:border-color 0.18s;}
+.coeff-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,106,79,0.12);}
+.coeff-sep{font-size:1.1rem;color:var(--text-dim);font-weight:700;padding-top:18px;}
+.full-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.92rem;padding:9px 12px;
+  outline:none;margin-top:8px;transition:border-color 0.18s;}
+.full-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,106,79,0.12);}
+.hint{font-size:0.73rem;color:var(--text-dim);margin-top:5px;line-height:1.5;}
+.denklem-preview{margin-top:10px;padding:8px 14px;background:rgba(45,106,79,0.07);
+  border:1px solid rgba(45,106,79,0.25);border-radius:8px;font-size:0.95rem;
+  color:var(--accent);font-weight:700;min-height:32px;}
+.btn-calc{width:100%;margin-top:14px;background:var(--accent);border:none;border-radius:10px;
+  color:#fff;font-family:'Lora',serif;font-weight:700;font-size:1rem;padding:12px;
+  cursor:pointer;transition:background 0.18s,transform 0.1s;}
+.btn-calc:hover{background:#1f4e38;transform:translateY(-1px);}
+.btn-calc.b2{background:var(--c-kok);}
+.btn-calc.b2:hover{background:#2d5a7a;}
+.btn-calc.b3{background:var(--c-fon);}
+.btn-calc.b3:hover{background:#7a3db8;}
+.btn-calc.b4{background:var(--c-graf);}
+.btn-calc.b4:hover{background:#1f4e38;}
+.btn-reset-sm{width:100%;margin-top:8px;background:transparent;border:1px solid var(--border);
+  border-radius:10px;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-weight:600;
+  font-size:0.85rem;padding:9px;cursor:pointer;transition:background 0.15s;}
+.btn-reset-sm:hover{background:var(--surface2);color:var(--text);}
+.error-box{display:none;background:rgba(231,111,81,0.1);border:1px solid rgba(231,111,81,0.4);
+  border-radius:8px;padding:10px 13px;font-size:0.82rem;color:#c0392b;margin-top:10px;line-height:1.5;}
+
+/* SONUÇ */
+.right-col{display:flex;flex-direction:column;gap:16px;}
+.result-section{display:flex;flex-direction:column;gap:14px;}
+.stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:600px){.stat-strip{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+  padding:12px 14px;box-shadow:var(--shadow);}
+.st-label{font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;
+  color:var(--text-dim);margin-bottom:4px;}
+.st-val{font-family:'Lora',serif;font-size:1.25rem;font-weight:700;line-height:1.2;}
+.st-sub{font-size:0.72rem;color:var(--text-dim);margin-top:3px;}
+.steps-box{background:var(--surface2);border-radius:8px;padding:14px 16px;
+  font-size:0.83rem;line-height:1.6;color:var(--text-dim);border-left:4px solid var(--accent4);}
+.steps-box strong{color:var(--text);}
+.step{margin-bottom:10px;}
+.step:last-child{margin-bottom:0;}
+.step .MJX-TEX{font-size:1rem;}
+.step-section{margin-top:14px;margin-bottom:6px;padding-top:8px;border-top:1px dashed var(--border);
+  font-size:0.7rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-dim);}
+canvas.graf-canvas{display:block;width:100%;border-radius:8px;background:#fdfcf9;border:1px solid var(--border);}
+
+/* İŞARET TABLOSU */
+.sign-table{width:100%;border-collapse:collapse;font-size:0.84rem;margin-top:8px;}
+.sign-table th{background:var(--surface2);color:var(--text-dim);font-size:0.68rem;
+  letter-spacing:1.2px;text-transform:uppercase;padding:7px 10px;text-align:center;
+  border-bottom:2px solid var(--border);}
+.sign-table td{padding:7px 10px;text-align:center;border-bottom:1px solid var(--border);font-family:monospace;}
+.sign-table tr:hover td{background:var(--surface2);}
+.sign-pos{color:var(--accent);font-weight:700;}
+.sign-neg{color:var(--accent2);font-weight:700;}
+.sign-zero{color:var(--text-dim);}
+
+/* SONUÇ KARTI */
+.result-card{border-radius:10px;padding:14px 18px;border-left:4px solid;}
+.result-card.green{background:rgba(45,106,79,0.07);border-color:var(--accent);}
+.result-card.orange{background:rgba(231,111,81,0.07);border-color:var(--accent2);}
+.result-card.blue{background:rgba(69,123,157,0.07);border-color:var(--accent3);}
+.result-card.purple{background:rgba(155,93,229,0.07);border-color:var(--c-fon);}
+.rc-title{font-family:'Lora',serif;font-size:0.85rem;font-weight:700;margin-bottom:8px;}
+.rc-val{font-family:'Lora',serif;font-size:1.15rem;font-weight:700;}
+
+/* DERECELİ GİRİŞ */
+.degree-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.degree-row label{font-size:0.78rem;font-weight:700;color:var(--text-dim);}
+.degree-row select{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;padding:7px 10px;
+  outline:none;cursor:pointer;}
+.degree-row select:focus{border-color:var(--accent);}
+
+/* FOOTER */
+footer{max-width:1200px;margin:40px auto 0;padding-top:16px;border-top:2px solid var(--border);text-align:center;}
+footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-serif;padding-bottom:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="../img/THlogo1.png" alt="TekinHoca Logo"
+       style="max-width:100%;display:block;margin:0 auto 0 0;border-radius:10px;">
+  <div class="titles">
+    <h1>İkinci Derece Fonksiyon Analizi</h1>
+    <p>Diskriminant · Kökler · Tepe noktası · Fonksiyon özellikleri · Grafik</p>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- SOL PANEL -->
+  <div id="leftCol">
+    <div class="panel">
+      <div class="sec-title">İkinci Derece Fonksiyon</div>
+      <div class="rule-item" style="border-color:var(--c-ikd);">
+        <strong>Genel form:</strong><br>
+        \(f(x) = ax^2 + bx + c \quad (a \neq 0)\)
+      </div>
+      <div class="rule-item" style="border-color:var(--c-ikd);">
+        <strong>Diskriminant:</strong><br>
+        \(\Delta = b^2 - 4ac\)<br>
+        \(\Delta > 0\) → iki farklı gerçel kök<br>
+        \(\Delta = 0\) → bir çift (çakışık) kök<br>
+        \(\Delta < 0\) → gerçel kök yok
+      </div>
+      <div class="rule-item" style="border-color:var(--c-ikd);">
+        <strong>Kökler:</strong><br>
+        \(x_{1,2} = \dfrac{-b \pm \sqrt{\Delta}}{2a}\)
+      </div>
+      <div class="rule-item" style="border-color:var(--c-ikd);">
+        <strong>Tepe noktası:</strong><br>
+        \(x_T = -\dfrac{b}{2a}\) ,&ensp; \(y_T = -\dfrac{\Delta}{4a}\)<br>
+        \(T\!\left(-\dfrac{b}{2a},\,-\dfrac{\Delta}{4a}\right)\)
+      </div>
+      <div class="rule-item" style="border-color:var(--c-ikd);">
+        <strong>Vieta bağıntıları:</strong><br>
+        \(x_1 + x_2 = -\dfrac{b}{a}\)<br>
+        \(x_1 \cdot x_2 = \dfrac{c}{a}\)
+      </div>
+
+      <div class="rule-h">Fonksiyon Özellikleri</div>
+      <div class="rule-item" style="border-color:var(--c-fon);">
+        <strong>Çift fonksiyon:</strong><br>
+        \(f(-x) = f(x)\) → y eksenine göre simetrik
+      </div>
+      <div class="rule-item" style="border-color:var(--c-fon);">
+        <strong>Tek fonksiyon:</strong><br>
+        \(f(-x) = -f(x)\) → orijine göre simetrik
+      </div>
+      <div class="rule-item" style="border-color:var(--c-fon);">
+        <strong>Görüntü kümesi:</strong><br>
+        \(a > 0\): \(\left[-\dfrac{\Delta}{4a}, +\infty\right)\)<br>
+        \(a < 0\): \(\left(-\infty, -\dfrac{\Delta}{4a}\right]\)
+      </div>
+    </div>
+  </div>
+
+  <!-- SAĞ PANEL -->
+  <div class="right-col">
+
+    <!-- ANA SAYFA -->
+    <div id="page0" class="page active">
+      <div class="panel">
+        <div class="sec-title">Araç Seçin</div>
+        <div class="shape-grid" style="grid-template-columns:1fr 1fr;">
+
+          <div class="shape-card ikd" onclick="goPage('ikd')">
+            <div class="sc-icon">📉</div>
+            <div class="sc-title">İkinci Derece Fonksiyon</div>
+            <div class="sc-keys">diskriminant · kökler · Vieta · tepe noktası · grafik</div>
+          </div>
+
+          <div class="shape-card fon" onclick="goPage('fon')">
+            <div class="sc-icon">🔬</div>
+            <div class="sc-title">Fonksiyon Analizi</div>
+            <div class="sc-keys">tanım/görüntü kümesi · simetri · kesim noktaları · monotonluk</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- İKİNCİ DERECE FONKSİYON -->
+    <div id="pageIkd" class="page">
+      <button class="btn-back" onclick="goPage('home')">← Ana Sayfaya Dön</button>
+      <div class="panel">
+        <div class="sec-title">📉 İkinci Derece Fonksiyon — \(f(x) = ax^2 + bx + c\)</div>
+        <div class="hint">a katsayısı sıfır olamaz.</div>
+        <div class="coeff-row">
+          <div class="coeff-box"><label>a</label><input type="number" id="ikd-a" value="1" step="any" oninput="ikdPreview()"></div>
+          <div class="coeff-sep">x² +</div>
+          <div class="coeff-box"><label>b</label><input type="number" id="ikd-b" value="-3" step="any" oninput="ikdPreview()"></div>
+          <div class="coeff-sep">x +</div>
+          <div class="coeff-box"><label>c</label><input type="number" id="ikd-c" value="2" step="any" oninput="ikdPreview()"></div>
+        </div>
+        <div class="denklem-preview" id="ikd-preview">f(x) = x² − 3x + 2</div>
+        <div class="error-box" id="ikd-error"></div>
+        <button class="btn-calc" onclick="calcIkd()">📊 Analiz Et ve Çiz</button>
+        <button class="btn-reset-sm" onclick="resetIkd()">↺ Sıfırla</button>
+      </div>
+      <div id="ikd-result"></div>
+    </div>
+
+    <!-- FONKSİYON ANALİZİ -->
+    <div id="pageFon" class="page">
+      <button class="btn-back" onclick="goPage('home')">← Ana Sayfaya Dön</button>
+      <div class="panel">
+        <div class="sec-title">🔬 Fonksiyon Analizi — İkinci Derece</div>
+        <div class="hint">a, b, c katsayılarını girin. a ≠ 0 olmalıdır.</div>
+        <div class="coeff-row">
+          <div class="coeff-box"><label>a</label><input type="number" id="fon-a" value="1" step="any" oninput="fonPreview()"></div>
+          <div class="coeff-sep">x² +</div>
+          <div class="coeff-box"><label>b</label><input type="number" id="fon-b" value="0" step="any" oninput="fonPreview()"></div>
+          <div class="coeff-sep">x +</div>
+          <div class="coeff-box"><label>c</label><input type="number" id="fon-c" value="-4" step="any" oninput="fonPreview()"></div>
+        </div>
+        <div class="denklem-preview" id="fon-preview">f(x) = x² − 4</div>
+        <div class="error-box" id="fon-error"></div>
+        <button class="btn-calc b3" onclick="calcFon()">🔬 Fonksiyonu Analiz Et</button>
+        <button class="btn-reset-sm" onclick="resetFon()">↺ Sıfırla</button>
+      </div>
+      <div id="fon-result"></div>
+    </div>
+
+  </div><!-- .right-col -->
+</div><!-- .app -->
+
+<footer><p>© Tekin CANITEZ — Matematik Öğretmeni</p></footer>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  YARDIMCI
+// ══════════════════════════════════════════════════════════
+const getN = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? 0 : v; };
+const showErr = (id, msg) => { const e = document.getElementById(id); e.innerHTML = '⚠️ ' + msg; e.style.display = 'block'; };
+const hideErr = id => { const e = document.getElementById(id); if (e) e.style.display = 'none'; };
+const fmtN = v => { if (!isFinite(v)) return '?'; if (Number.isInteger(v)) return v.toString(); return parseFloat(v.toFixed(6)).toString().replace('.', ','); };
+const fmtR = (v, d = 4) => { if (!isFinite(v)) return '?'; if (Math.abs(v) < 1e-9) return '0'; const r = Math.round(v * Math.pow(10, d)) / Math.pow(10, d); return r.toString().replace('.', ','); };
+
+function fmtFrac(num, den) {
+  if (den === 0) return '?';
+  if (Math.abs(num) < 1e-9) return '0';
+  const g = gcd(Math.abs(Math.round(num * 1e9)), Math.abs(Math.round(den * 1e9)));
+  const n2 = Math.round(num * 1e9) / g;
+  const d2 = Math.round(den * 1e9) / g;
+  if (d2 === 1) return n2.toString();
+  if (d2 === -1) return (-n2).toString();
+  return (d2 < 0 ? (-n2) + '/' + (-d2) : n2 + '/' + d2);
+}
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); while (b) { [a, b] = [b, a % b]; } return a || 1; }
+
+function polyStr(coeffs) {
+  // coeffs: [a_n, ..., a_1, a_0]  highest degree first
+  const deg = coeffs.length - 1;
+  let parts = [], first = true;
+  for (let i = 0; i <= deg; i++) {
+    const c = coeffs[i];
+    const power = deg - i;
+    if (Math.abs(c) < 1e-9) continue;
+    const neg = c < 0;
+    const abs = Math.abs(c);
+    let term = '';
+    if (power === 0) term = fmtR(abs);
+    else if (power === 1) term = (abs === 1 ? '' : fmtR(abs)) + 'x';
+    else term = (abs === 1 ? '' : fmtR(abs)) + 'x' + sup(power);
+    if (first) { parts.push((neg ? '−' : '') + term); first = false; }
+    else { parts.push((neg ? ' − ' : ' + ') + term); }
+  }
+  return parts.length ? parts.join('') : '0';
+}
+
+function sup(n) {
+  const map = { '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹', '-': '⁻' };
+  return n.toString().split('').map(c => map[c] || c).join('');
+}
+
+function mjRender(el) { if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]); }
+
+// ══════════════════════════════════════════════════════════
+//  SAYFA GEÇİŞİ
+// ══════════════════════════════════════════════════════════
+function goPage(page) {
+  ['page0', 'pageIkd', 'pageFon'].forEach(p => {
+    const el = document.getElementById(p);
+    if (el) el.classList.remove('active');
+  });
+  const map = { home: 'page0', ikd: 'pageIkd', fon: 'pageFon' };
+  const target = document.getElementById(map[page] || 'page0');
+  if (target) target.classList.add('active');
+  if (page === 'ikd') ikdPreview();
+  if (page === 'fon') fonPreview();
+}
+
+// ══════════════════════════════════════════════════════════
+//  GRAFİK YARDIMCI
+// ══════════════════════════════════════════════════════════
+function buildAxes(ctx, W, H, xMin, xMax, yMin, yMax, PAD) {
+  const cW = W - PAD.left - PAD.right, cH = H - PAD.top - PAD.bottom;
+  const scale = Math.min(cW / (xMax - xMin), cH / (yMax - yMin));
+  const drawW = (xMax - xMin) * scale, drawH = (yMax - yMin) * scale;
+  const offX = PAD.left + (cW - drawW) / 2, offY = PAD.top + (cH - drawH) / 2;
+  const toX = v => offX + (v - xMin) * scale;
+  const toY = v => offY + drawH - (v - yMin) * scale;
+
+  ctx.fillStyle = '#fdfcf9'; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = '#e8e2d8'; ctx.lineWidth = 1;
+  for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+    ctx.beginPath(); ctx.moveTo(toX(x), PAD.top); ctx.lineTo(toX(x), PAD.top + cH); ctx.stroke();
+  }
+  for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+    ctx.beginPath(); ctx.moveTo(PAD.left, toY(y)); ctx.lineTo(PAD.left + cW, toY(y)); ctx.stroke();
+  }
+  const x0 = toX(0), y0 = toY(0);
+  ctx.strokeStyle = '#6b6456'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(PAD.left, y0); ctx.lineTo(PAD.left + cW, y0); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x0, PAD.top); ctx.lineTo(x0, PAD.top + cH); ctx.stroke();
+  ctx.fillStyle = '#8b8074'; ctx.font = '10px DM Sans,sans-serif'; ctx.textAlign = 'center';
+  for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+    if (x === 0) continue; ctx.fillText(x, toX(x), y0 + 14);
+  }
+  ctx.textAlign = 'right';
+  for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+    if (y === 0) continue; ctx.fillText(y, x0 - 4, toY(y) + 4);
+  }
+  return { toX, toY, scale, drawW, drawH, offX, offY, cW, cH };
+}
+
+function drawDot(ctx, toX, toY, px, py, color, label, labelPos) {
+  ctx.fillStyle = color;
+  ctx.beginPath(); ctx.arc(toX(px), toY(py), 5, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(toX(px), toY(py), 2, 0, Math.PI * 2); ctx.fill();
+  if (label) {
+    ctx.fillStyle = color;
+    ctx.font = 'bold 10px DM Sans,sans-serif';
+    ctx.textAlign = labelPos === 'left' ? 'right' : 'left';
+    ctx.fillText(label, toX(px) + (labelPos === 'left' ? -8 : 8), toY(py) - 7);
+  }
+}
+
+// TeX formatında polinom string (MathJax için)
+function polyStrTex(coeffs) {
+  const deg = coeffs.length - 1;
+  let parts = [], first = true;
+  for (let i = 0; i <= deg; i++) {
+    const cf = coeffs[i], power = deg - i;
+    if (Math.abs(cf) < 1e-9) continue;
+    const neg = cf < 0, abs = Math.abs(cf);
+    let term = '';
+    if (power === 0) term = fmtR(abs);
+    else if (power === 1) term = (abs === 1 ? '' : fmtR(abs)) + 'x';
+    else term = (abs === 1 ? '' : fmtR(abs)) + 'x^{' + power + '}';
+    if (first) { parts.push((neg ? '-' : '') + term); first = false; }
+    else parts.push((neg ? ' - ' : ' + ') + term);
+  }
+  return parts.length ? parts.join('') : '0';
+}
+
+// ══════════════════════════════════════════════════════════
+//  İKİNCİ DERECE FONKSİYON
+// ══════════════════════════════════════════════════════════
+function ikdPreview() {
+  const a = getN('ikd-a'), b = getN('ikd-b'), c = getN('ikd-c');
+  document.getElementById('ikd-preview').textContent = 'f(x) = ' + polyStr([a, b, c]);
+}
+
+function calcIkd() {
+  hideErr('ikd-error');
+  const a = getN('ikd-a'), b = getN('ikd-b'), c = getN('ikd-c');
+  if (Math.abs(a) < 1e-9) { showErr('ikd-error', 'a katsayısı sıfır olamaz; bu durumda fonksiyon birinci dereceden olur.'); return; }
+
+  const delta = b * b - 4 * a * c;
+  const xT = -b / (2 * a);
+  const yT = -delta / (4 * a);
+  const yKes = c; // x=0
+
+  // Kökler
+  let kokler = [], kokStr = '';
+  if (delta > 0) {
+    const x1 = (-b - Math.sqrt(delta)) / (2 * a);
+    const x2 = (-b + Math.sqrt(delta)) / (2 * a);
+    kokler = [Math.min(x1, x2), Math.max(x1, x2)];
+    kokStr = `x₁ = ${fmtR(kokler[0])} , x₂ = ${fmtR(kokler[1])}`;
+  } else if (Math.abs(delta) < 1e-9) {
+    kokler = [xT];
+    kokStr = `x₁ = x₂ = ${fmtR(xT)} (çakışık kök)`;
+  } else {
+    kokStr = 'Gerçel kök yok (Δ < 0)';
+  }
+
+  // Görüntü kümesi
+  let goruntuStr;
+  if (a > 0) goruntuStr = `[${fmtR(yT)}, +∞)`;
+  else goruntuStr = `(−∞, ${fmtR(yT)}]`;
+
+  // Adımlar — MathJax
+  const bStr = fmtR(b), aStr = fmtR(a), cStr2 = fmtR(c);
+  const deltaStr = fmtR(delta);
+
+  let steps = `<div class="step"><strong>Fonksiyon:</strong> \\(f(x) = ${polyStrTex([a,b,c])}\\)</div>
+    <div class="step-section">DİSKRİMİNANT</div>
+    <div class="step">\\(\\Delta = b^2 - 4ac = (${bStr})^2 - 4 \\cdot ${aStr} \\cdot ${cStr2}\\)</div>
+    <div class="step">\\(\\Rightarrow\\; \\Delta = ${fmtR(b*b)} - ${fmtR(4*a*c)} = ${deltaStr}\\)</div>
+    <div class="step">\\(\\Rightarrow\\; \\Delta ${delta > 1e-9 ? '> 0' : Math.abs(delta)<1e-9 ? '= 0' : '< 0'} \\Rightarrow\\) <strong>${delta > 1e-9 ? 'İki farklı gerçel kök vardır' : Math.abs(delta)<1e-9 ? 'Çakışık (tek) kök vardır' : 'Gerçel kök yoktur'}</strong></div>`;
+
+  if (delta >= -1e-9) {
+    steps += `<div class="step-section">KÖKLERİN BULUNMASI</div>
+      <div class="step">\\(x = \\dfrac{-b \\pm \\sqrt{\\Delta}}{2a}\\)</div>`;
+    if (delta > 1e-9) {
+      steps += `<div class="step">\\(\\Rightarrow\\; x_1 = \\dfrac{${fmtR(-b)} + \\sqrt{${deltaStr}}}{2 \\cdot ${aStr}} = ${fmtR(kokler[0])}\\)</div>`;
+      steps += `<div class="step">\\(\\Rightarrow\\; x_2 = \\dfrac{${fmtR(-b)} - \\sqrt{${deltaStr}}}{2 \\cdot ${aStr}} = ${fmtR(kokler[1])}\\)</div>`;
+      steps += `<div class="step-section">KÖKLER TOPLAMI ve KÖKLER ÇARPIMI BAĞINTILARI</div>`;
+      steps += `<div class="step">Köklerin toplamı &emsp; \\(\\left\\{\\begin{array}{l} x_1+x_2 = -\\dfrac{b}{a} = -\\dfrac{${bStr}}{${aStr}} = ${fmtR(-b/a)} \\\\[6pt] x_1+x_2 = ${fmtR(kokler[0])}+${fmtR(kokler[1])} = ${fmtR(kokler[0]+kokler[1])} \\end{array}\\right.\\)</div>`;
+      steps += `<div class="step">Köklerin çarpımı &emsp; \\(\\left\\{\\begin{array}{l} x_1 \\cdot x_2 = \\dfrac{c}{a} = \\dfrac{${cStr2}}{${aStr}} = ${fmtFrac(c,a)} \\\\[6pt] x_1 \\cdot x_2 = ${fmtR(kokler[0])} \\cdot ${fmtR(kokler[1])} = ${fmtR(kokler[0]*kokler[1])} \\end{array}\\right.\\)</div>`;
+    } else {
+      steps += `<div class="step">\\(x = -\\dfrac{b}{2a} = -\\dfrac{${bStr}}{2 \\cdot ${aStr}} = ${fmtR(xT)}\\)</div>`;
+    }
+  }
+
+  steps += `<div class="step-section">TEPE NOKTASININ BULUNMASI</div>
+    <div class="step">\\(x_T = -\\dfrac{b}{2a} = -\\dfrac{${bStr}}{2 \\cdot ${aStr}} = ${fmtR(xT)}\\)</div>
+    <div class="step">\\(y_T = -\\dfrac{\\Delta}{4a} = -\\dfrac{${deltaStr}}{4 \\cdot ${aStr}} = ${fmtR(yT)}\\)</div>
+    <div class="step">\\(\\Rightarrow\\) Tepe noktası: \\(T(${fmtR(xT)},\\;${fmtR(yT)})\\)</div>
+    <div class="step">\\(\\Rightarrow\\) Simetri ekseni: \\(x = ${fmtR(xT)}\\)</div>
+    <div class="step-section">EKSEN KESİM NOKTALARI</div>
+    <div class="step">✓ y eksenini kestiği nokta: \\(f(0) = ${aStr} \\cdot 0^2 ${b>=0?'+':''} ${bStr} \\cdot 0 ${c>=0?'+':''} ${cStr2} = ${fmtR(c)} \\Rightarrow C(0,\\;${fmtR(c)})\\)</div>`;
+
+  if (kokler.length === 2) {
+    steps += `<div class="step">✓ x eksenini kestiği noktalar: \\(A(${fmtR(kokler[0])},\\;0)\\) ve \\(B(${fmtR(kokler[1])},\\;0)\\)</div>`;
+  } else if (kokler.length === 1) {
+    steps += `<div class="step">✓ x eksenini kestiği nokta (tepe): \\(A(${fmtR(kokler[0])},\\;0)\\)</div>`;
+  } else {
+    steps += `<div class="step">✓ x ekseni ile kesişme yok (\\(\\Delta < 0\\))</div>`;
+  }
+
+  steps += `<div class="step-section">GÖRÜNTÜ KÜMESİ</div>
+    <div class="step">\\(a = ${aStr} ${a>0?'> 0':'< 0'} \\Rightarrow\\) parabol ${a>0?'yukarı':'aşağı'} açık</div>
+    <div class="step"><em>Görüntü kümesi:</em> \\(${a>0?`\\left[-\\dfrac{\\Delta}{4a},\\;+\\infty\\right) = [${fmtR(yT)},\\;+\\infty)` : `\\left(-\\infty,\\;-\\dfrac{\\Delta}{4a}\\right] = (-\\infty,\\;${fmtR(yT)}]`}\\)</div>`;
+
+  // Stat kartları
+  const statHTML = `<div class="stat-strip">
+    <div class="stat-card"><div class="st-label">Diskriminant Δ</div>
+      <div class="st-val" style="color:${delta > 1e-9 ? 'var(--accent)' : Math.abs(delta) < 1e-9 ? 'var(--accent3)' : 'var(--accent2)'};">${fmtR(delta)}</div>
+      <div class="st-sub">${delta > 1e-9 ? 'İki kök' : Math.abs(delta) < 1e-9 ? 'Çakışık kök' : 'Kök yok'}</div></div>
+    <div class="stat-card"><div class="st-label">Tepe Noktası T</div>
+      <div class="st-val" style="color:var(--c-ikd);">(${fmtR(xT)}, ${fmtR(yT)})</div>
+      <div class="st-sub">x = ${fmtR(xT)} ekseni</div></div>
+    <div class="stat-card"><div class="st-label">Açılma Yönü</div>
+      <div class="st-val" style="color:var(--accent3);">${a > 0 ? '↑ Yukarı' : '↓ Aşağı'}</div>
+      <div class="st-sub">a = ${fmtR(a)}</div></div>
+  </div>`;
+
+  const resultEl = document.getElementById('ikd-result');
+  resultEl.innerHTML = `<div class="result-section">
+    ${statHTML}
+    <div class="panel"><div class="sec-title">Hesaplama Adımları</div><div class="steps-box" id="ikd-steps">${steps}</div></div>
+    <div class="panel"><div class="sec-title">Grafik</div><canvas id="ikdCanvas" class="graf-canvas" height="400"></canvas></div>
+  </div>`;
+
+  requestAnimationFrame(() => {
+    const cv = document.getElementById('ikdCanvas');
+    if (cv) { cv.width = cv.parentElement.clientWidth - 40; drawIkdGrafik(cv, a, b, c, xT, yT, kokler); }
+  });
+  mjRender(document.getElementById('ikd-steps'));
+}
+
+function drawIkdGrafik(canvas, a, b, c, xT, yT, kokler) {
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const margin = 3;
+  const pts = [xT, 0, ...kokler];
+  const xMin = Math.min(-8, Math.min(...pts) - margin);
+  const xMax = Math.max(8, Math.max(...pts) + margin);
+  const ys = pts.map(x => a * x * x + b * x + c);
+  const yMin = Math.min(-8, Math.min(...ys) - margin);
+  const yMax = Math.max(8, Math.max(...ys) + margin);
+  const PAD = { top: 30, right: 20, bottom: 30, left: 44 };
+  const ax = buildAxes(ctx, W, H, xMin, xMax, yMin, yMax, PAD);
+
+  // Parabol
+  ctx.strokeStyle = '#e76f51'; ctx.lineWidth = 2.5; ctx.beginPath();
+  let first2 = true;
+  for (let px = 0; px <= W; px++) {
+    const rx = xMin + (px - ax.offX) / ax.scale;
+    const ry = a * rx * rx + b * rx + c;
+    const screenX = ax.toX(rx), screenY = ax.toY(ry);
+    if (first2) { ctx.moveTo(screenX, screenY); first2 = false; } else ctx.lineTo(screenX, screenY);
+  }
+  ctx.stroke();
+
+  // Simetri ekseni
+  ctx.strokeStyle = 'rgba(69,123,157,0.5)'; ctx.lineWidth = 1; ctx.setLineDash([6, 4]);
+  ctx.beginPath(); ctx.moveTo(ax.toX(xT), PAD.top); ctx.lineTo(ax.toX(xT), PAD.top + ax.cH); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Tepe noktası
+  drawDot(ctx, ax.toX, ax.toY, xT, yT, '#9b5de5', `T(${fmtR(xT)},${fmtR(yT)})`, xT >= 0 ? 'left' : 'right');
+  // y-kesim
+  drawDot(ctx, ax.toX, ax.toY, 0, c, '#2d6a4f', `A(0,${fmtR(c)})`);
+  // Kökler
+  kokler.forEach((k, i) => drawDot(ctx, ax.toX, ax.toY, k, 0, '#457b9d', `${i === 0 ? 'B' : 'C'}(${fmtR(k)},0)`));
+
+  // Etiket
+  ctx.fillStyle = '#e76f51'; ctx.font = 'bold 12px Lora,serif'; ctx.textAlign = 'right';
+  ctx.fillText('f(x) = ' + polyStr([a, b, c]), PAD.left + ax.cW, PAD.top + 16);
+}
+
+function resetIkd() {
+  document.getElementById('ikd-a').value = '1';
+  document.getElementById('ikd-b').value = '-3';
+  document.getElementById('ikd-c').value = '2';
+  document.getElementById('ikd-result').innerHTML = '';
+  hideErr('ikd-error'); ikdPreview();
+}
+
+// ══════════════════════════════════════════════════════════
+//  FONKSİYON ANALİZİ
+// ══════════════════════════════════════════════════════════
+function fonPreview() {
+  const a = getN('fon-a'), b = getN('fon-b'), c = getN('fon-c');
+  document.getElementById('fon-preview').textContent = 'f(x) = ' + polyStr([a, b, c]);
+}
+
+function calcFon() {
+  hideErr('fon-error');
+  const a = getN('fon-a'), b = getN('fon-b'), c = getN('fon-c');
+  if (Math.abs(a) < 1e-9) { showErr('fon-error', 'a katsayısı sıfır olamaz.'); return; }
+
+  const delta = b * b - 4 * a * c;
+  const xT = -b / (2 * a);
+  const yT = -delta / (4 * a);
+  const aStr = fmtR(a), bStr = fmtR(b), cStr = fmtR(c);
+  const xTStr = fmtR(xT), yTStr = fmtR(yT), deltaStr = fmtR(delta);
+
+  // Simetri analizi
+  let simetriStr, simetriAdim;
+  if (Math.abs(b) < 1e-9) {
+    simetriStr = 'Çift fonksiyon';
+    simetriAdim = `\\(b = 0\\) olduğundan \\(f(-x) = ${polyStrTex([a,0,c])} = f(x)\\) → çift fonksiyon, y eksenine göre simetrik.`;
+  } else {
+    simetriStr = 'Ne çift ne tek';
+    simetriAdim = `\\(f(-x) = ${polyStrTex([a,-b,c])} \\neq f(x)\\) ve \\(\\neq -f(x)\\). Fonksiyon ne çift ne de tektir. Eksen simetrisi: \\(x = ${xTStr}\\).`;
+  }
+
+  // Kökler
+  let kokler = [];
+  if (delta > 1e-9) {
+    kokler = [(-b - Math.sqrt(delta)) / (2 * a), (-b + Math.sqrt(delta)) / (2 * a)].sort((x, y) => x - y);
+  } else if (Math.abs(delta) < 1e-9) {
+    kokler = [xT];
+  }
+
+  // Görüntü kümesi
+  const goruntuStr = a > 0 ? `[${yTStr}, +∞)` : `(−∞, ${yTStr}]`;
+
+  // Monotonluk
+  const monotonStr = a > 0
+    ? `\\((-\\infty,\\;${xTStr}]\\) aralığında azalan &emsp; · &emsp; \\([${xTStr},\\;+\\infty)\\) aralığında artan`
+    : `\\((-\\infty,\\;${xTStr}]\\) aralığında artan &emsp; · &emsp; \\([${xTStr},\\;+\\infty)\\) aralığında azalan`;
+
+  let steps = `<div class="step">\\(f(x) = ${polyStrTex([a,b,c])}\\)</div>
+    <div class="step-section">TANIM VE GÖRÜNTÜ KÜMESİ</div>
+    <div class="step"><strong>Tanım kümesi:</strong> \\(\\mathbb{R}\\) — ikinci dereceden polinom tüm gerçel sayılarda tanımlıdır.</div>
+    <div class="step"><strong>Görüntü kümesi:</strong> \\(${a > 0 ? `\\left[-\\dfrac{\\Delta}{4a},\\;+\\infty\\right) = [${yTStr},\\;+\\infty)` : `\\left(-\\infty,\\;-\\dfrac{\\Delta}{4a}\\right] = (-\\infty,\\;${yTStr}]`}\\)</div>
+    <div class="step">\\(a = ${aStr} ${a > 0 ? '> 0' : '< 0'} \\Rightarrow\\) parabol ${a > 0 ? 'yukarı açık → minimum değer \\(y_T\\)' : 'aşağı açık → maksimum değer \\(y_T\\)'}</div>
+    <div class="step-section">SİMETRİ</div>
+    <div class="step"><strong>${simetriStr}</strong></div>
+    <div class="step">${simetriAdim}</div>
+    <div class="step-section">KESİM NOKTALARI</div>
+    <div class="step"><strong>y ekseni kesimi</strong> \\((x=0)\\): \\(f(0) = ${cStr} \\Rightarrow C(0,\\;${cStr})\\)</div>`;
+
+  if (kokler.length === 2) {
+    steps += `<div class="step"><strong>x ekseni kesimleri:</strong> \\(A(${fmtR(kokler[0])},\\;0)\\) ve \\(B(${fmtR(kokler[1])},\\;0)\\)</div>`;
+  } else if (kokler.length === 1) {
+    steps += `<div class="step"><strong>x ekseni kesimi (tepe noktasında):</strong> \\(A(${fmtR(kokler[0])},\\;0)\\)</div>`;
+  } else {
+    steps += `<div class="step">x ekseni ile kesişme yok \\((\\Delta < 0)\\)</div>`;
+  }
+
+  steps += `<div class="step-section">TEPE NOKTASI ve EKSTREMUM</div>
+    <div class="step">\\(x_T = -\\dfrac{b}{2a} = -\\dfrac{${bStr}}{2 \\cdot ${aStr}} = ${xTStr}\\)</div>
+    <div class="step">\\(y_T = -\\dfrac{\\Delta}{4a} = -\\dfrac{${deltaStr}}{4 \\cdot ${aStr}} = ${yTStr}\\)</div>
+    <div class="step">\\(\\Rightarrow T(${xTStr},\\;${yTStr})\\) — ${a > 0 ? 'minimum noktası' : 'maksimum noktası'}</div>
+    <div class="step">Simetri ekseni: \\(x = ${xTStr}\\)</div>
+    <div class="step-section">MONOTONLUK</div>
+    <div class="step">${monotonStr}</div>`;
+
+  const statHTML = `<div class="stat-strip">
+    <div class="stat-card"><div class="st-label">Tanım Kümesi</div><div class="st-val" style="color:var(--c-fon);font-size:1rem;">ℝ</div></div>
+    <div class="stat-card"><div class="st-label">Görüntü Kümesi</div><div class="st-val" style="color:var(--c-fon);font-size:0.9rem;">${goruntuStr}</div></div>
+    <div class="stat-card"><div class="st-label">Simetri</div><div class="st-val" style="color:var(--accent3);font-size:0.85rem;">${simetriStr}</div></div>
+  </div>`;
+
+  const resultEl = document.getElementById('fon-result');
+  resultEl.innerHTML = `<div class="result-section">
+    ${statHTML}
+    <div class="panel"><div class="sec-title">Analiz Adımları</div><div class="steps-box" id="fon-steps">${steps}</div></div>
+    <div class="panel"><div class="sec-title">Grafik</div><canvas id="fonCanvas" class="graf-canvas" height="400"></canvas></div>
+  </div>`;
+
+  requestAnimationFrame(() => {
+    const cv = document.getElementById('fonCanvas');
+    if (cv) { cv.width = cv.parentElement.clientWidth - 40; drawIkdGrafik(cv, a, b, c, xT, yT, kokler); }
+  });
+  mjRender(document.getElementById('fon-steps'));
+}
+
+function resetFon() {
+  document.getElementById('fon-a').value = '1';
+  document.getElementById('fon-b').value = '0';
+  document.getElementById('fon-c').value = '-4';
+  document.getElementById('fon-result').innerHTML = '';
+  hideErr('fon-error'); fonPreview();
+}
+
+// ══════════════════════════════════════════════════════════
+//  BAŞLANGIÇ
+// ══════════════════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  ikdPreview(); fonPreview();
+});
+</script>
+</body>
+</html>
