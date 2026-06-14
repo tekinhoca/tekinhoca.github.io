@@ -5,6 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Çevre ve Alan Hesap Aracı</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [["\\(","\\)"],["\\[","\\]"]] },
+  svg: { fontCache: "global" }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 :root {
@@ -108,8 +115,8 @@ label.field-label{display:block;font-size:0.78rem;font-weight:600;color:var(--te
 .rb-val-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;}
 .rb-unit-inline{font-size:0.88rem;color:var(--text-dim);font-weight:600;}
 /* adım adım */
-.steps-box{background:var(--surface2);border-radius:8px;padding:12px 15px;margin-top:14px;
-  font-size:0.82rem;line-height:1.9;color:var(--text-dim);border-left:4px solid var(--accent4);}
+.steps-box{background:var(--surface2);border-radius:8px;padding:16px 20px;margin-top:14px;
+  font-size:0.83rem;line-height:2.6;color:var(--text-dim);border-left:4px solid var(--accent4);}
 .steps-box strong{color:var(--text);}
 .steps-box .step{margin-bottom:3px;}
 .steps-box .step-final{font-family:'Lora',serif;font-size:1rem;font-weight:700;color:var(--accent);margin-top:6px;}
@@ -174,23 +181,23 @@ footer p {
       <div class="rule-item tri">
         <strong>Üçgenlerde Alan:</strong><br>
         Bir kenar (taban) ve yükseklik biliniyorsa:<br>
-        <span class="formula-chip">A = (taban × yükseklik) / 2</span><br>
+        <span class="formula-chip">\( A = \dfrac{t \times h}{2} \)</span><br>
         Üç kenar biliniyorsa:<br>
-        <span class="formula-chip">A = √[s(s-a)(s-b)(s-c)]</span><br>
-        <span style="font-size:0.74rem;">s = (a+b+c)/2 &nbsp;(yarı çevre)</span>
+        <span class="formula-chip">\( A = \sqrt{s(s-a)(s-b)(s-c)} \)</span><br>
+        <span style="font-size:0.80rem;">\( s = \dfrac{a+b+c}{2} \) &nbsp;(yarı çevre)</span>
       </div>
       <div class="rule-item quad">
         <strong>Dörtgenlerde Alan:</strong><br>
         Yükseklik veya köşegen uzunlukları alan hesabında temel rol oynar.<br>
-        <span class="formula-chip">Kare: a × a = a²</span><br>
-        <span class="formula-chip">Dikdörtgen: a × b</span><br>
-        <span class="formula-chip">Yamuk: [(a+c)×h]/2</span><br>
-        <span class="formula-chip">Eşkenar dörtgen: (d₁×d₂)/2</span>
+        <span class="formula-chip">Kare: \( A = a^2 \)</span><br>
+        <span class="formula-chip">Dikdörtgen: \( A = a \times b \)</span><br>
+        <span class="formula-chip">Yamuk: \( A = \dfrac{(a+c) \times h}{2} \)</span><br>
+        <span class="formula-chip">Eşkenar dörtgen: \( A = \dfrac{d_1 \times d_2}{2} \)</span>
       </div>
       <div class="rule-item circ">
         <strong>Dairede Alan ve Çevre:</strong><br>
-        <span class="formula-chip">Alan = π × r²</span><br>
-        <span class="formula-chip">Çevre = 2 × π × r</span><br>
+        <span class="formula-chip">\( A = \pi r^2 \)</span><br>
+        <span class="formula-chip">\( Ç = 2\pi r \)</span><br>
         π ≈ 3,14159…
       </div>
       <div class="rule-item gen" style="border-color:var(--accent4);">
@@ -245,9 +252,9 @@ footer p {
         <div id="form-tri-genel">
           <div class="hint">💡 Üç kenarın uzunluklarını girin.<br>💡 Eşkenar, ikizkenar veya dik üçgen otomatik tespit edilir.<br>💡 Ayrıca üçgen eşitsizliğine aykırı sayılar girilirse uyarılırsınız.</div>
           <div class="input-grid">
-            <div class="input-group"><label>a kenarı</label><input type="number" id="tri-a" placeholder="örn: 5" min="0.01" step="any"></div>
-            <div class="input-group"><label>b kenarı</label><input type="number" id="tri-b" placeholder="örn: 6" min="0.01" step="any"></div>
-            <div class="input-group"><label>c kenarı</label><input type="number" id="tri-c" placeholder="örn: 7" min="0.01" step="any"></div>
+            <div class="input-group"><label>a kenarı</label><input type="number" id="tri-a" placeholder="örn: 5" min="1" step="1"></div>
+            <div class="input-group"><label>b kenarı</label><input type="number" id="tri-b" placeholder="örn: 6" min="1" step="1"></div>
+            <div class="input-group"><label>c kenarı</label><input type="number" id="tri-c" placeholder="örn: 7" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label>
               <select class="unit-sel" id="tri-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select>
             </div>
@@ -258,8 +265,8 @@ footer p {
         <div id="form-tri-dik" style="display:none;">
           <div class="hint">💡 İki dik kenarı (a ve b) girin. Hipotenüs otomatik hesaplanır.</div>
           <div class="input-grid">
-            <div class="input-group"><label>a — dik kenar 1</label><input type="number" id="trid-a" placeholder="örn: 3" min="0.01" step="any"></div>
-            <div class="input-group"><label>b — dik kenar 2</label><input type="number" id="trid-b" placeholder="örn: 4" min="0.01" step="any"></div>
+            <div class="input-group"><label>a — dik kenar 1</label><input type="number" id="trid-a" placeholder="örn: 3" min="1" step="1"></div>
+            <div class="input-group"><label>b — dik kenar 2</label><input type="number" id="trid-b" placeholder="örn: 4" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label>
               <select class="unit-sel" id="trid-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select>
             </div>
@@ -288,43 +295,43 @@ footer p {
 
         <div id="form-quad-kare">
           <div class="input-grid">
-            <div class="input-group"><label>a — kenar</label><input type="number" id="kare-a" placeholder="örn: 5" min="0.01" step="any"></div>
+            <div class="input-group"><label>a — kenar</label><input type="number" id="kare-a" placeholder="örn: 5" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label><select class="unit-sel" id="kare-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
           </div>
         </div>
         <div id="form-quad-dikdortgen" style="display:none;">
           <div class="input-grid">
-            <div class="input-group"><label>a — uzun kenar</label><input type="number" id="dik-a" placeholder="örn: 8" min="0.01" step="any"></div>
-            <div class="input-group"><label>b — kısa kenar</label><input type="number" id="dik-b" placeholder="örn: 5" min="0.01" step="any"></div>
+            <div class="input-group"><label>a — uzun kenar</label><input type="number" id="dik-a" placeholder="örn: 8" min="1" step="1"></div>
+            <div class="input-group"><label>b — kısa kenar</label><input type="number" id="dik-b" placeholder="örn: 5" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label><select class="unit-sel" id="dik-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
           </div>
         </div>
         <div id="form-quad-paralel" style="display:none;">
           <div class="hint">💡 Taban, yan kenar ve yüksekliği girin.</div>
           <div class="input-grid">
-            <div class="input-group"><label>a — taban</label><input type="number" id="par-a" placeholder="örn: 8" min="0.01" step="any"></div>
-            <div class="input-group"><label>b — yan kenar</label><input type="number" id="par-b" placeholder="örn: 5" min="0.01" step="any"></div>
-            <div class="input-group"><label>h — yükseklik</label><input type="number" id="par-h" placeholder="örn: 4" min="0.01" step="any"></div>
+            <div class="input-group"><label>a — taban</label><input type="number" id="par-a" placeholder="örn: 8" min="1" step="1"></div>
+            <div class="input-group"><label>b — yan kenar</label><input type="number" id="par-b" placeholder="örn: 5" min="1" step="1"></div>
+            <div class="input-group"><label>h — yükseklik</label><input type="number" id="par-h" placeholder="örn: 4" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label><select class="unit-sel" id="par-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
           </div>
         </div>
         <div id="form-quad-yamuk" style="display:none;">
           <div class="hint">💡 İki paralel kenar (a, c), iki yan kenar (b, d) ve yüksekliği girin.</div>
           <div class="input-grid">
-            <div class="input-group"><label>a — alt taban</label><input type="number" id="yam-a" placeholder="örn: 10" min="0.01" step="any"></div>
-            <div class="input-group"><label>c — üst taban</label><input type="number" id="yam-c" placeholder="örn: 6" min="0.01" step="any"></div>
-            <div class="input-group"><label>b — sol yan kenar</label><input type="number" id="yam-b" placeholder="örn: 5" min="0.01" step="any"></div>
-            <div class="input-group"><label>d — sağ yan kenar</label><input type="number" id="yam-d" placeholder="örn: 5" min="0.01" step="any"></div>
-            <div class="input-group"><label>h — yükseklik</label><input type="number" id="yam-h" placeholder="örn: 4" min="0.01" step="any"></div>
+            <div class="input-group"><label>a — alt taban</label><input type="number" id="yam-a" placeholder="örn: 10" min="1" step="1"></div>
+            <div class="input-group"><label>c — üst taban</label><input type="number" id="yam-c" placeholder="örn: 6" min="1" step="1"></div>
+            <div class="input-group"><label>b — sol yan kenar</label><input type="number" id="yam-b" placeholder="örn: 5" min="1" step="1"></div>
+            <div class="input-group"><label>d — sağ yan kenar</label><input type="number" id="yam-d" placeholder="örn: 5" min="1" step="1"></div>
+            <div class="input-group"><label>h — yükseklik</label><input type="number" id="yam-h" placeholder="örn: 4" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label><select class="unit-sel" id="yam-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
           </div>
         </div>
         <div id="form-quad-eskenar" style="display:none;">
           <div class="hint">💡 Kenar uzunluğu ve iki köşegen uzunluğunu girin.</div>
           <div class="input-grid">
-            <div class="input-group"><label>a — kenar</label><input type="number" id="esk-a" placeholder="örn: 5" min="0.01" step="any"></div>
-            <div class="input-group"><label>d₁ — köşegen 1</label><input type="number" id="esk-d1" placeholder="örn: 8" min="0.01" step="any"></div>
-            <div class="input-group"><label>d₂ — köşegen 2</label><input type="number" id="esk-d2" placeholder="örn: 6" min="0.01" step="any"></div>
+            <div class="input-group"><label>a — kenar</label><input type="number" id="esk-a" placeholder="örn: 5" min="1" step="1"></div>
+            <div class="input-group"><label>d₁ — köşegen 1</label><input type="number" id="esk-d1" placeholder="örn: 8" min="1" step="1"></div>
+            <div class="input-group"><label>d₂ — köşegen 2</label><input type="number" id="esk-d2" placeholder="örn: 6" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label><select class="unit-sel" id="esk-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
           </div>
         </div>
@@ -347,13 +354,13 @@ footer p {
         </div>
         <div id="form-circ-daire">
           <div class="input-grid">
-            <div class="input-group"><label>r — yarıçap</label><input type="number" id="daire-r" placeholder="örn: 5" min="0.01" step="any"></div>
+            <div class="input-group"><label>r — yarıçap</label><input type="number" id="daire-r" placeholder="örn: 5" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label><select class="unit-sel" id="daire-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
           </div>
         </div>
         <div id="form-circ-yari" style="display:none;">
           <div class="input-grid">
-            <div class="input-group"><label>r — yarıçap</label><input type="number" id="yari-r" placeholder="örn: 5" min="0.01" step="any"></div>
+            <div class="input-group"><label>r — yarıçap</label><input type="number" id="yari-r" placeholder="örn: 5" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label><select class="unit-sel" id="yari-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
           </div>
         </div>
@@ -437,12 +444,12 @@ function showShapeInfo(type) {
         <tr><td>İç açılar toplamı</td><td>180°</td></tr>
         <tr><td>Kenar sayısı</td><td>3</td></tr>
         <tr><td>Köşegen sayısı</td><td>0</td></tr>
-        <tr><td>Alan formülü (Heron)</td><td>√[s(s-a)(s-b)(s-c)]</td></tr>
-        <tr><td>Alan formülü (taban-yük.)</td><td>(t × h) / 2</td></tr>
+        <tr><td>Alan formülü (Heron)</td><td>\\( \\sqrt{s(s-a)(s-b)(s-c)} \\)</td></tr>
+        <tr><td>Alan formülü (taban-yük.)</td><td>\\( \\dfrac{t \\times h}{2} \\)</td></tr>
         <tr><td>Çevre</td><td>a + b + c</td></tr>
       </table>
       <div class="hierarchy-note" style="margin-top:10px;">
-        📌 <strong>Özel durumlar:</strong><br>Eşkenar üçgende 3 kenar uzunluğu eşit, her açı 60°dir.<br>Dik üçgende Pisagor bağıntısı:<br><strong>c² = a² + b²</strong>
+        📌 <strong>Özel durumlar:</strong><br>Eşkenar üçgende 3 kenar uzunluğu eşit, her açı 60°dir.<br>Dik üçgende Pisagor bağıntısı: \\( c^2 = a^2 + b^2 \\)
       </div>`;
   } else if (type === 'quad') {
     title.textContent = 'Dörtgen Özellikleri';
@@ -462,14 +469,17 @@ function showShapeInfo(type) {
     content.innerHTML = `
       <table class="prop-table">
         <tr><td>π (pi) değeri</td><td>≈ 3,14159</td></tr>
-        <tr><td>Alan</td><td>π × r²</td></tr>
-        <tr><td>Çevre (çap)</td><td>2 × π × r</td></tr>
-        <tr><td>Yarım daire alanı</td><td>π × r² / 2</td></tr>
-        <tr><td>Yarım daire çevresi</td><td>π × r + 2r</td></tr>
+        <tr><td>Alan</td><td>\\( \\pi r^2 \\)</td></tr>
+        <tr><td>Çevre (çap)</td><td>\\( 2\\pi r \\)</td></tr>
+        <tr><td>Yarım daire alanı</td><td>\\( \\dfrac{\\pi r^2}{2} \\)</td></tr>
+        <tr><td>Yarım daire çevresi</td><td>\\( \\pi r + 2r \\)</td></tr>
       </table>
       <div class="hierarchy-note" style="margin-top:10px;">
         📌 Aynı çevreye sahip tüm şekiller arasında en büyük alanı <strong>daire</strong> kapsar.
       </div>`;
+  }
+  if (window.MathJax && MathJax.typesetPromise) {
+    setTimeout(function(){ MathJax.typesetPromise([document.getElementById('shapeInfoContent')]); }, 50);
   }
 }
 
@@ -618,6 +628,11 @@ function renderResult(containerId, title, alan, cevre, unit, steps, drawFn, extr
       <div class="steps-box">${steps}</div>
     </div>
     ${extraHTML || ''}`;
+  if (window.MathJax && MathJax.typesetPromise) {
+    setTimeout(function(){
+      MathJax.typesetPromise([document.getElementById(containerId)]);
+    }, 50);
+  }
 }
 
 // ════════════════════════════════════════
@@ -725,7 +740,7 @@ function calcTriGenel() {
     eskStep1 = `
     <div class="step" style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);"><strong>Alan Hesaplamak İçin İki Yöntem:</strong></div>
     <div class="step"><strong>1. Yöntem (Eşkenar Üçgenin Alanı):</strong></div>
-    <div class="step" style="font-family:monospace;">A = a²√3/4 = ${fmtN(a)}²×√3/4 = ${fmtN(a2)}√3/4 = ${y1Disp} ${y1Eq} <strong>${y1Exact!==null ? fmtN(y1Exact) : y1Approx} ${unit}²</strong></div>
+    <div class="step" style="font-family:monospace;">\\( A = \\dfrac{a^2\\sqrt{3}}{4} = \\dfrac{${fmtN(a)}^2 \\times \\sqrt{3}}{4} = \\dfrac{${fmtN(a2)}\\sqrt{3}}{4} = ${y1Disp} \\) ${y1Eq} <strong>${y1Exact!==null ? fmtN(y1Exact) : y1Approx} ${unit}²</strong></div>
     <div class="step" style="margin-top:6px;"><strong>2. Yöntem (Heron):</strong></div>`;
   }
 
@@ -734,10 +749,10 @@ function calcTriGenel() {
     <div class="step"><strong>Çevre:</strong> ${fmtN(a)} + ${fmtN(b)} + ${fmtN(c)} = <strong>${fmtN(cevre)} ${unit}</strong></div>
     ${isDik ? `<div class="step" style="color:var(--accent2);">Pisagor: ${fmtN(sides[0])}² + ${fmtN(sides[1])}² = ${fmtN(Math.round(sides[0]**2))} + ${fmtN(Math.round(sides[1]**2))} = ${fmtN(Math.round(sides[2]**2))} = ${fmtN(sides[2])}² ✓</div>` : ''}
     ${eskStep1}
-    <div class="step"><strong>${isEsk ? 'Yarı çevre:' : 'Alan — Yarı çevre:'}</strong> s = (${fmtN(a)} + ${fmtN(b)} + ${fmtN(c)}) / 2 = <strong>${fmtN(s)}</strong></div>
-    <div class="step"><strong>Heron formülü:</strong> A = √[s(s−a)(s−b)(s−c)]</div>
-    <div class="step">= √[${fmtN(s)} × ${fmtN(s-a)} × ${fmtN(s-b)} × ${fmtN(s-c)}]</div>
-    <div class="step">= √${fmtN(Math.round(inner*1e6)/1e6)}${!sqrtDisp.exact && sqrtDisp.expr !== '√'+fmtN(Math.round(inner*1e6)/1e6) ? ' = '+sqrtDisp.expr : ''} ${eqSign} <strong>${alanStr} ${unit}²</strong></div>`;
+    <div class="step"><strong>${isEsk ? 'Yarı çevre:' : 'Alan — Yarı çevre:'}</strong> \\( s = \\dfrac{${fmtN(a)}+${fmtN(b)}+${fmtN(c)}}{2} \\) = <strong>${fmtN(s)}</strong></div>
+    <div class="step"><strong>Heron formülü:</strong> \\( A = \\sqrt{s(s-a)(s-b)(s-c)} \\)</div>
+    <div class="step">\\( = \\sqrt{${fmtN(s)} \\times ${fmtN(s-a)} \\times ${fmtN(s-b)} \\times ${fmtN(s-c)}} \\)</div>
+    <div class="step">${eqSign} <strong>${alanStr} ${unit}²</strong></div>`;
 
   const bonusHTML = isEsk ? buildAltigenBonus(a, unit, alan) : '';
   renderResult('tri-result', turKenar + turAci, alan, cevre, unit, steps, null, bonusHTML);
@@ -775,10 +790,10 @@ function calcTriDik() {
   }
 
   const steps = `
-    <div class="step"><strong>Pisagor bağıntısı kullanılarak Hipotenüs bulunur:</strong><br>c² = a² + b² = ${fmtN(a)}² + ${fmtN(b)}² = ${fmtN(a*a)} + ${fmtN(b*b)} = ${fmtN(c2)}</div>
+    <div class="step"><strong>Pisagor bağıntısı:</strong> \\( c^2 = a^2 + b^2 \\) = ${fmtN(a)}² + ${fmtN(b)}² = ${fmtN(a*a)} + ${fmtN(b*b)} = ${fmtN(c2)}</div>
     <div class="step">c = √${fmtN(c2)}${cDisp.expr !== '√'+fmtN(c2) ? ' = '+cDisp.expr : ''} ${cExact ? `= <strong>${cDisp.expr} ${unit}</strong>` : `≈ <strong>${cDisp.approx} ${unit}</strong>`}</div>
     <div class="step"><strong>Çevre:</strong> ${cevreSatir}</div>
-    <div class="step"><strong>Alan:</strong> A = (a × b) / 2 = (${fmtN(a)} × ${fmtN(b)}) / 2 ${alanEq} <strong>${alanDisp} ${unit}²</strong></div>`;
+    <div class="step"><strong>Alan:</strong> \\( A = \\dfrac{a \\times b}{2} = \\dfrac{${fmtN(a)} \\times ${fmtN(b)}}{2} \\) ${alanEq} <strong>${alanDisp} ${unit}²</strong></div>`;
 
   const cevreDisplay = cExact ? (isInt(a+b+parseFloat(cDisp.expr)) ? a+b+parseFloat(cDisp.expr) : cevre) : cevre;
   renderResult('tri-result', 'Dik Üçgen', alan, cevreDisplay, unit, steps, null, '');
@@ -796,8 +811,8 @@ function calcKare() {
   const diagDisp = sqrtDisplay(2*a*a, unit);
 
   const steps = `
-    <div class="step"><strong>Çevre:</strong> Ç = 4 × a = 4 × ${fmtN(a)} = <strong>${fmtN(cevre)} ${unit}</strong></div>
-    <div class="step"><strong>Alan:</strong> A = a² = ${fmtN(a)}² = <strong>${fmtN(alan)} ${unit}²</strong></div>
+    <div class="step"><strong>Çevre:</strong> \\( Ç = 4a = 4 \\times ${fmtN(a)} \\) = <strong>${fmtN(cevre)} ${unit}</strong></div>
+    <div class="step"><strong>Alan:</strong> \\( A = a^2 = ${fmtN(a)}^2 \\) = <strong>${fmtN(alan)} ${unit}²</strong></div>
     <div class="step" style="color:var(--accent3);">Köşegen: d = √(2 × a²) = √(2 × ${fmtN(a*a)}) = √${fmtN(2*a*a)} = ${diagDisp.expr} ${diagDisp.exact ? '' : `≈ <strong>${diagDisp.approx} ${unit}</strong>`}${diagDisp.exact ? `= <strong>${diagDisp.expr} ${unit}</strong>` : ''}</div>`;
 
   const araziHTML = unit === 'm' ? buildAraziCard(alan) : '';
@@ -812,9 +827,9 @@ function calcDikdortgen() {
   const diagDisp = sqrtDisplay(Math.round((a*a+b*b)*1e9)/1e9, unit);
 
   const steps = `
-    <div class="step"><strong>Çevre:</strong> Ç = 2 × (a + b) = 2 × (${fmtN(a)} + ${fmtN(b)}) = <strong>${fmtN(cevre)} ${unit}</strong></div>
-    <div class="step"><strong>Alan:</strong> A = a × b = ${fmtN(a)} × ${fmtN(b)} = <strong>${fmtN(alan)} ${unit}²</strong></div>
-    <div class="step" style="color:var(--accent3);">Köşegen: d = √(a² + b²) = √(${fmtN(a*a)} + ${fmtN(b*b)}) = √${fmtN(a*a+b*b)} = ${diagDisp.expr} ${diagDisp.exact ? `= <strong>${diagDisp.expr} ${unit}</strong>` : `≈ <strong>${diagDisp.approx} ${unit}</strong>`}</div>`;
+    <div class="step"><strong>Çevre:</strong> \\( Ç = 2(a+b) = 2 \\times (${fmtN(a)}+${fmtN(b)}) \\) = <strong>${fmtN(cevre)} ${unit}</strong></div>
+    <div class="step"><strong>Alan:</strong> \\( A = a \\times b = ${fmtN(a)} \\times ${fmtN(b)} \\) = <strong>${fmtN(alan)} ${unit}²</strong></div>
+    <div class="step" style="color:var(--accent3);">Köşegen: \\( d = \\sqrt{a^2+b^2} = \\sqrt{${fmtN(a*a)}+${fmtN(b*b)}} \\) = ${diagDisp.expr} ${diagDisp.exact ? `= <strong>${diagDisp.expr} ${unit}</strong>` : `≈ <strong>${diagDisp.approx} ${unit}</strong>`}</div>`;
 
   const araziHTML = unit === 'm' ? buildAraziCard(alan) : '';
   renderResult('quad-result', 'Dikdörtgen', alan, cevre, unit, steps, null, araziHTML);
@@ -827,8 +842,8 @@ function calcParalel() {
   if (h > b) throw new Error('Yükseklik yan kenardan büyük olamaz.');
   const alan = a*h, cevre = 2*(a+b);
   const steps = `
-    <div class="step"><strong>Çevre:</strong> Ç = 2 × (a + b) = 2 × (${fmtN(a)} + ${fmtN(b)}) = <strong>${fmtN(cevre)} ${unit}</strong></div>
-    <div class="step"><strong>Alan:</strong> A = taban × yükseklik = ${fmtN(a)} × ${fmtN(h)} = <strong>${fmtN(alan)} ${unit}²</strong></div>`;
+    <div class="step"><strong>Çevre:</strong> \\( Ç = 2(a+b) = 2 \\times (${fmtN(a)}+${fmtN(b)}) \\) = <strong>${fmtN(cevre)} ${unit}</strong></div>
+    <div class="step"><strong>Alan:</strong> \\( A = t \\times h = ${fmtN(a)} \\times ${fmtN(h)} \\) = <strong>${fmtN(alan)} ${unit}²</strong></div>`;
   renderResult('quad-result', 'Paralelkenar', alan, cevre, unit, steps, null, '');
 }
 
@@ -840,8 +855,8 @@ function calcYamuk() {
   const alan = (a+c)*h/2, cevre = a+b+c+d;
   const steps = `
     <div class="step"><strong>Çevre:</strong> Ç = a + b + c + d = ${fmtN(a)} + ${fmtN(b)} + ${fmtN(c)} + ${fmtN(d)} = <strong>${fmtN(cevre)} ${unit}</strong></div>
-    <div class="step"><strong>Alan:</strong> A = (a + c) × h / 2</div>
-    <div class="step">= (${fmtN(a)} + ${fmtN(c)}) × ${fmtN(h)} / 2 = ${fmtN(a+c)} × ${fmtN(h)} / 2 = <strong>${fmtN(alan)} ${unit}²</strong></div>`;
+    <div class="step"><strong>Alan:</strong> \\( A = \\dfrac{(a+c) \\times h}{2} \\)</div>
+    <div class="step">= \\( \\dfrac{(${fmtN(a)}+${fmtN(c)}) \\times ${fmtN(h)}}{2} = \\dfrac{${fmtN(a+c)} \\times ${fmtN(h)}}{2} \\) = <strong>${fmtN(alan)} ${unit}²</strong></div>`;
   renderResult('quad-result', 'Yamuk', alan, cevre, unit, steps, null, '');
 }
 
@@ -852,8 +867,8 @@ function calcEskenar() {
   if (d1/2 > a || d2/2 > a) throw new Error('Köşegen yarısı kenardan büyük olamaz (geçersiz eşkenar dörtgen).');
   const alan = (d1*d2)/2, cevre = 4*a;
   const steps = `
-    <div class="step"><strong>Çevre:</strong> Ç = 4 × a = 4 × ${fmtN(a)} = <strong>${fmtN(cevre)} ${unit}</strong></div>
-    <div class="step"><strong>Alan:</strong> A = (d₁ × d₂) / 2 = (${fmtN(d1)} × ${fmtN(d2)}) / 2 = <strong>${fmtN(alan)} ${unit}²</strong></div>
+    <div class="step"><strong>Çevre:</strong> \\( Ç = 4a = 4 \\times ${fmtN(a)} \\) = <strong>${fmtN(cevre)} ${unit}</strong></div>
+    <div class="step"><strong>Alan:</strong> \\( A = \\dfrac{d_1 \\times d_2}{2} = \\dfrac{${fmtN(d1)} \\times ${fmtN(d2)}}{2} \\) = <strong>${fmtN(alan)} ${unit}²</strong></div>
     <div class="step" style="color:var(--accent3);">Köşegenler birbirini dik açıyla ikiye böler.</div>`;
   renderResult('quad-result', 'Eşkenar Dörtgen', alan, cevre, unit, steps, null, '');
 }
@@ -878,8 +893,8 @@ function calcDaire() {
   const cevreEq    = cevreExact ? '=' : '≈';
   const steps = `
     <div class="step"><strong>Seçilen π değeri:</strong> π = ${piStr}</div>
-    <div class="step"><strong>Çevre:</strong> Ç = 2 × π × r = 2 × ${piStr} × ${fmtN(r)} = 2 × ${fmtN(pi*r)} ${cevreEq} <strong>${cevreDisp} ${unit}</strong></div>
-    <div class="step"><strong>Alan:</strong> A = π × r² = ${piStr} × ${fmtN(r)}² = ${piStr} × ${fmtN(r*r)} ${alanEq} <strong>${alanDisp} ${unit}²</strong></div>
+    <div class="step"><strong>Çevre:</strong> \\( Ç = 2\\pi r = 2 \\times ${piStr} \\times ${fmtN(r)} \\) = ${cevreEq} <strong>${cevreDisp} ${unit}</strong></div>
+    <div class="step"><strong>Alan:</strong> \\( A = \\pi r^2 = ${piStr} \\times ${fmtN(r)}^2 = ${piStr} \\times ${fmtN(r*r)} \\) ${alanEq} <strong>${alanDisp} ${unit}²</strong></div>
     <div class="step" style="color:var(--text-dim);">Çap: d = 2r = ${fmtN(2*r)} ${unit}</div>`;
   renderResult('circ-result', 'Daire', alan, cevre, unit, steps, null, '');
 }
