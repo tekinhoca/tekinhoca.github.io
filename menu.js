@@ -2,7 +2,7 @@
 // Yeni sayfa eklenince sadece bu dosyayı güncelle.
 
 const MENU_ITEMS = [
-  { label: "Ana Sayfa",            href: "index.html" },
+  { label: "Ana Sayfa",            href: "https://tekinhoca.github.io/" },
   { label: "Atatürk ve Matematik", href: "ataturk-matematik.html" },
   { label: "Matematik Tarihi",     href: "matematik-tarihi.html" },
   { label: "Estetik Matematik",    href: "estetik-matematik.html" },
