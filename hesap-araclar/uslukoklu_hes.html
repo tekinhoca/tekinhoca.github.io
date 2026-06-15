@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Üslü & Köklü Sayılar Hesap Aracı</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- MathJax yapılandırması ÖNCE gelir -->
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(','\\)'],['\\[','\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+<style>
+:root {
+  --bg:       #f4f1eb;
+  --surface:  #fdfcf9;
+  --surface2: #eee9df;
+  --border:   #d8d0c0;
+  --accent:   #2d6a4f;
+  --accent2:  #e76f51;
+  --accent3:  #457b9d;
+  --accent4:  #e9c46a;
+  --text:     #1a1a1a;
+  --text-dim: #6b6456;
+  --radius:   12px;
+  --shadow:   0 4px 24px rgba(0,0,0,0.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(45,106,79,0.06) 0%, transparent 50%),
+    radial-gradient(circle at 90% 80%, rgba(69,123,157,0.06) 0%, transparent 50%);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+}
+
+header {
+  max-width: 1200px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--border);
+}
+header img { height: 44px; width: auto; }
+header .titles { text-align: right; margin-left: auto; }
+header .titles h1 {
+  font-family: 'Lora', serif;
+  font-size: clamp(1.1rem, 2.5vw, 1.75rem);
+  font-weight: 700;
+  color: var(--accent);
+}
+header .titles p { font-size: 0.85rem; color: var(--text-dim); margin-top: 3px; }
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+@media (max-width: 860px) { .app { grid-template-columns: 1fr; } }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.panel + .panel { margin-top: 16px; }
+
+.sec-title {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.rule-item {
+  font-size: 0.83rem;
+  margin-bottom: 10px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+.rule-item strong { color: var(--text); }
+
+.rule-group {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.rule-group:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.rule-group-title {
+  font-family: 'Lora', serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+/* Sekme */
+.tab-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.tab-btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  background: var(--surface2);
+  color: var(--text-dim);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.tab-btn.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Araç bölümü */
+.tool-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.tool-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.tool-section-title {
+  font-family: 'Lora', serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.input-group label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+.input-group input, .input-group select {
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1.5px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  background: var(--surface2);
+  color: var(--text);
+  width: 90px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-group input:focus, .input-group select:focus {
+  border-color: var(--accent);
+}
+.input-group select { width: 110px; cursor: pointer; }
+
+.tbl-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  cursor: pointer;
+  background: var(--surface2);
+  color: var(--text-dim);
+  transition: background 0.2s, color 0.2s;
+  align-self: flex-end;
+}
+.tbl-btn.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.tbl-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.steps-box {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 0.83rem;
+  line-height: 1.6;
+  color: var(--text-dim);
+  border-left: 4px solid var(--accent4);
+  margin-top: 10px;
+}
+.steps-box strong { color: var(--text); }
+.step { margin-bottom: 10px; }
+.step:last-child { margin-bottom: 0; }
+
+.warn-box {
+  background: #fffbea;
+  border: 1px solid #f0d060;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: #7a6020;
+  margin-top: 10px;
+}
+
+.info-box {
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--text-dim);
+  border-left: 4px solid var(--accent3);
+  margin-top: 10px;
+}
+.info-box .info-title {
+  font-family: 'Lora', serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent3);
+  margin-bottom: 6px;
+}
+
+footer {
+  max-width: 1200px;
+  margin: 40px auto 0;
+  padding-top: 16px;
+  border-top: 2px solid var(--border);
+  text-align: center;
+}
+footer p {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+  padding-bottom: 20px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="../img/THlogo1.png" alt="TekinHoca Logo">
+  <div class="titles">
+    <h1>Üslü &amp; Köklü Sayılar Hesap Aracı</h1>
+    <p>Üs hesaplayıcı · Bilimsel gösterim · Kök sadeleştirici · Katsayı işlemleri</p>
+  </div>
+</header>
+
+<div class="app">
+
+  <!-- SOL PANEL -->
+  <div id="leftCol">
+    <!-- İçerik JS ile değişecek -->
+  </div>
+
+  <!-- SAĞ PANEL -->
+  <div>
+    <div class="panel">
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('uslu')">Üslü Sayılar</button>
+        <button class="tab-btn" onclick="switchTab('koklu')">Köklü Sayılar</button>
+      </div>
+
+      <!-- ÜSLÜ SAYILAR SEKMESİ -->
+      <div id="tab-uslu" class="tab-content active">
+
+        <!-- 1. Üs Hesaplayıcı -->
+        <div class="tool-section">
+          <div class="tool-section-title">Üs Hesaplayıcı</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Taban (a)</label>
+              <input type="number" id="us-taban" value="2" step="1" oninput="usHesapla()">
+            </div>
+            <div class="input-group">
+              <label>Üs (n)</label>
+              <input type="number" id="us-ust" value="3" step="1" oninput="usHesapla()">
+            </div>
+          </div>
+          <div id="us-result" class="steps-box" style="display:none"></div>
+        </div>
+
+        <!-- 2. Kural Göstericisi -->
+        <div class="tool-section">
+          <div class="tool-section-title">Kural Göstericisi</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Taban (a)</label>
+              <input type="number" id="kural-taban" value="2" step="1" oninput="kuralGoster()">
+            </div>
+            <div class="input-group">
+              <label>m</label>
+              <input type="number" id="kural-m" value="3" step="1" oninput="kuralGoster()">
+            </div>
+            <div class="input-group">
+              <label>n</label>
+              <input type="number" id="kural-n" value="2" step="1" oninput="kuralGoster()">
+            </div>
+          </div>
+          <div id="kural-result" class="steps-box" style="display:none"></div>
+        </div>
+
+        <!-- 3. Bilimsel Gösterim -->
+        <div class="tool-section">
+          <div class="tool-section-title">Bilimsel Gösterim</div>
+          <div class="input-row">
+            <div class="input-group" style="flex:1;min-width:200px;">
+              <label>Sayı (pozitif)</label>
+              <input type="number" id="bilim-sayi" value="300000000" step="any"
+                     style="width:100%;" oninput="bilimselGoster()">
+            </div>
+          </div>
+          <div id="bilim-result" class="steps-box" style="display:none"></div>
+        </div>
+
+      </div><!-- /tab-uslu -->
+
+      <!-- KÖKLÜ SAYILAR SEKMESİ -->
+      <div id="tab-koklu" class="tab-content">
+
+        <!-- 1. "a√b" Şeklinde Yazma (Sadeleştirme) -->
+        <div class="tool-section">
+          <div class="tool-section-title">Köklü İfadenin "a√b" Şeklinde Yazılması</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Sayı (N)</label>
+              <input type="number" id="sad-sayi" value="72" min="1" step="1" oninput="sadele()">
+            </div>
+            <div class="input-group">
+              <label>Kök derecesi</label>
+              <select id="sad-derece" onchange="sadele()">
+                <option value="2" selected>Kare kök (√)</option>
+                <option value="3">Küp kök (∛)</option>
+              </select>
+            </div>
+          </div>
+          <div id="sad-result" class="steps-box" style="display:none"></div>
+        </div>
+
+        <!-- 2. Katsayıyı Kök İçine Alma -->
+        <div class="tool-section">
+          <div class="tool-section-title">"a√b" İfadesinde Katsayının Kök İçine Alınması</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Katsayı (a)</label>
+              <input type="number" id="kat-a" value="3" min="1" step="1" oninput="katsayiIcine()">
+            </div>
+            <div class="input-group">
+              <label>Kök altı (b)</label>
+              <input type="number" id="kat-b" value="5" min="1" step="1" oninput="katsayiIcine()">
+            </div>
+            <div class="input-group">
+              <label>Kök derecesi</label>
+              <select id="kat-derece" onchange="katsayiIcine()">
+                <option value="2" selected>Kare kök</option>
+                <option value="3">Küp kök</option>
+              </select>
+            </div>
+          </div>
+          <div id="kat-result" class="steps-box" style="display:none"></div>
+        </div>
+
+        <!-- 3. Kök Hesaplayıcı -->
+        <div class="tool-section">
+          <div class="tool-section-title">Kök Hesaplayıcı</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Sayı</label>
+              <input type="number" id="kok-sayi" value="144" step="any" oninput="kokHesapla()">
+            </div>
+            <div class="input-group">
+              <label>Kök derecesi</label>
+              <select id="kok-derece" onchange="kokHesapla()">
+                <option value="2" selected>Kare kök (√)</option>
+                <option value="3">Küp kök (∛)</option>
+              </select>
+            </div>
+          </div>
+          <div id="kok-result" class="steps-box" style="display:none"></div>
+        </div>
+
+        <!-- 4. Kural Doğrulayıcı -->
+        <div class="tool-section">
+          <div class="tool-section-title">Çarpma &amp; Bölme Kuralı Doğrulayıcı</div>
+          <div class="input-row">
+            <div class="input-group">
+              <label>a</label>
+              <input type="number" id="kdor-a" value="8" min="1" step="1" oninput="kuralDorula()">
+            </div>
+            <div class="input-group">
+              <label>b</label>
+              <input type="number" id="kdor-b" value="18" min="1" step="1" oninput="kuralDorula()">
+            </div>
+          </div>
+          <div id="kdor-result" class="steps-box" style="display:none"></div>
+        </div>
+
+      </div><!-- /tab-koklu -->
+
+    </div><!-- /panel -->
+  </div><!-- /sağ col -->
+</div><!-- /app -->
+
+<footer>
+  <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+
+<script>
+// ─── YARDIMCI FONKSİYONLAR ─────────────────────────────────────────────────
+
+function mjRender(el) {
+  if (window.MathJax && MathJax.typesetPromise) MathJax.typesetPromise([el]);
+}
+
+// Tam sayı mı?
+function isInt(x) { return Number.isFinite(x) && Math.round(x) === x; }
+
+// Sayıyı güzel yaz: tam sayıysa tam, değilse en fazla 6 basamak
+function fmtN(x) {
+  if (isInt(x)) return x.toString();
+  return parseFloat(x.toFixed(6)).toString();
+}
+
+// Üs yazımı için üst indis karakterleri (görsel)
+const supMap = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
+function toSup(n) { return String(n).split('').map(c => supMap[c]||c).join(''); }
+
+// Bir sayının asal çarpanlarına ayır
+function primeFactors(n) {
+  const factors = {};
+  let d = 2;
+  while (d * d <= n) {
+    while (n % d === 0) { factors[d] = (factors[d]||0)+1; n = Math.floor(n/d); }
+    d++;
+  }
+  if (n > 1) factors[n] = (factors[n]||0)+1;
+  return factors;
+}
+
+// √N → {out: a, inn: b}  yani a√b
+function simplifyRoot2(N) {
+  if (N < 0) return null;
+  if (N === 0) return {out:0, inn:0};
+  const f = primeFactors(N);
+  let out = 1, inn = 1;
+  for (const [p, e] of Object.entries(f)) {
+    const pr = parseInt(p);
+    out *= Math.pow(pr, Math.floor(e/2));
+    inn *= Math.pow(pr, e % 2);
+  }
+  return {out, inn};
+}
+
+// ∛N → {out: a, inn: b} yani a∛b
+function simplifyRoot3(N) {
+  if (N < 0) return null;
+  if (N === 0) return {out:0, inn:0};
+  const f = primeFactors(N);
+  let out = 1, inn = 1;
+  for (const [p, e] of Object.entries(f)) {
+    const pr = parseInt(p);
+    out *= Math.pow(pr, Math.floor(e/3));
+    inn *= Math.pow(pr, e % 3);
+  }
+  return {out, inn};
+}
+
+// Ondalık sayıyı p/q kesrine çevir (basit)
+function decimalToFrac(x) {
+  const s = x.toString();
+  const dec = s.indexOf('.');
+  if (dec === -1) return {p: x, q: 1};
+  const decimals = s.length - dec - 1;
+  const q = Math.pow(10, decimals);
+  const p = Math.round(x * q);
+  const g = gcd(Math.abs(p), q);
+  return {p: p/g, q: q/g};
+}
+
+function gcd(a, b) { return b === 0 ? a : gcd(b, a%b); }
+
+// ─── SOL PANEL ─────────────────────────────────────────────────────────────
+
+function buildLeftPanel(tab) {
+  const col = document.getElementById('leftCol');
+  if (tab === 'uslu') {
+    col.innerHTML = `
+<div class="panel">
+  <div class="sec-title">Üslü Sayılar — Kurallar</div>
+
+  <div class="rule-group">
+    <div class="rule-group-title">Temel Tanım</div>
+    <div class="rule-item">\\(a^n = \\underbrace{a \\cdot a \\cdots a}_{n}\\)</div>
+    <div class="rule-item">\\(a \\neq 0,\\; n \\in \\mathbb{N}\\)</div>
+  </div>
+
+  <div class="rule-group">
+    <div class="rule-group-title">İşlem Kuralları</div>
+    <div class="rule-item"><strong>Çarpma:</strong><br>\\(a^m \\cdot a^n = a^{m+n}\\)</div>
+    <div class="rule-item"><strong>Bölme:</strong><br>\\(a^m \\div a^n = a^{m-n}\\)</div>
+    <div class="rule-item"><strong>Üs alma:</strong><br>\\((a^m)^n = a^{m \\cdot n}\\)</div>
+    <div class="rule-item"><strong>Çarpımın üssü:</strong><br>\\((a \\cdot b)^n = a^n \\cdot b^n\\)</div>
+  </div>
+
+  <div class="rule-group">
+    <div class="rule-group-title">Özel Durumlar</div>
+    <div class="rule-item"><strong>Sıfır üs:</strong><br>\\(a^0 = 1 \\quad (a \\neq 0)\\)</div>
+    <div class="rule-item"><strong>Negatif üs:</strong><br>\\(a^{-n} = \\dfrac{1}{a^n}\\)</div>
+    <div class="rule-item"><strong>Kesirli üs:</strong><br>\\(a^{1/n} = \\sqrt[n]{a}\\)</div>
+  </div>
+
+  <div class="rule-group">
+    <div class="rule-group-title">Bilimsel Gösterim</div>
+    <div class="rule-item">\\(a \\times 10^n\\) biçiminde yazılır;<br>\\(1 \\le a < 10\\) koşulu sağlanır.</div>
+    <div class="rule-item"><strong>Büyük sayı:</strong><br>\\(3\\,000\\,000 = 3 \\times 10^6\\)</div>
+    <div class="rule-item"><strong>Küçük sayı:</strong><br>\\(0{,}000005 = 5 \\times 10^{-6}\\)</div>
+  </div>
+</div>`;
+  } else {
+    col.innerHTML = `
+<div class="panel">
+  <div class="sec-title">Köklü Sayılar — Kurallar</div>
+
+  <div class="rule-group">
+    <div class="rule-group-title">Temel Tanım</div>
+    <div class="rule-item">\\(\\sqrt[n]{a} = b \\;\\Leftrightarrow\\; b^n = a\\)</div>
+    <div class="rule-item">\\(\\sqrt{a^2} = |a|\\)</div>
+  </div>
+
+  <div class="rule-group">
+    <div class="rule-group-title">İşlem Kuralları</div>
+    <div class="rule-item"><strong>Çarpma:</strong><br>\\(\\sqrt{a}\\cdot\\sqrt{b} = \\sqrt{a \\cdot b}\\)</div>
+    <div class="rule-item"><strong>Bölme:</strong><br>\\(\\dfrac{\\sqrt{a}}{\\sqrt{b}} = \\sqrt{\\dfrac{a}{b}}\\)</div>
+    <div class="rule-item"><strong>Katsayı dışa alma:</strong><br>\\(\\sqrt{a^2 \\cdot b} = a\\sqrt{b}\\)</div>
+    <div class="rule-item"><strong>Katsayı içe alma:</strong><br>\\(a\\sqrt{b} = \\sqrt{a^2 \\cdot b}\\)</div>
+    <div class="rule-item"><strong>Üs–kök:</strong><br>\\(\\sqrt[n]{a^m} = a^{m/n}\\)</div>
+  </div>
+
+  <div class="rule-group">
+    <div class="rule-group-title">Toplama &amp; Çıkarma</div>
+    <div class="rule-item">Yalnızca kök altı aynı olan terimler toplanıp çıkarılabilir:<br>\\(a\\sqrt{k} \\pm b\\sqrt{k} = (a\\pm b)\\sqrt{k}\\)</div>
+  </div>
+</div>
+
+`;
+  }
+  mjRender(col);
+}
+
+// ─── SEKME GEÇİŞİ ──────────────────────────────────────────────────────────
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (i===0 && tab==='uslu') || (i===1 && tab==='koklu'));
+  });
+  document.getElementById('tab-uslu').classList.toggle('active', tab==='uslu');
+  document.getElementById('tab-koklu').classList.toggle('active', tab==='koklu');
+  buildLeftPanel(tab);
+  if (tab==='uslu') { usHesapla(); kuralGoster(); bilimselGoster(); }
+  else { sadele(); katsayiIcine(); kokHesapla(); kuralDorula(); }
+}
+
+// ─── ÜSLÜ: ÜS HESAPLAYICI ──────────────────────────────────────────────────
+
+function usHesapla() {
+  const el = document.getElementById('us-result');
+  const a = parseFloat(document.getElementById('us-taban').value);
+  const n = parseInt(document.getElementById('us-ust').value);
+  if (!isFinite(a) || !isFinite(n)) { el.style.display='none'; return; }
+
+  let steps = `<div class="step"><strong>Verilen:</strong> \\(${a}^{${n}}\\)</div>`;
+
+  if (n === 0) {
+    // ── Sıfır üs ──
+    if (a === 0) {
+      steps += `<div class="step" style="color:var(--accent2)">⚠️ \\(0^0\\) tanımsızdır.</div>`;
+    } else {
+      steps += `<div class="step"><strong>Sıfır Üs Kuralı:</strong> \\(a^0 = 1\\)</div>`;
+      steps += `<div class="step">\\(${a}^{0} = 1\\)</div>`;
+      steps += `<div class="step" style="font-size:0.78rem;color:var(--text-dim)">Sıfır hariç her sayının sıfırıncı kuvveti 1'e eşittir.</div>`;
+    }
+  } else if (n < 0) {
+    // ── Negatif üs ──
+    const posN = -n;
+    const payda = Math.pow(a, posN);
+    const sonuc = Math.pow(a, n);
+    steps += `<div class="step"><strong>Negatif Üs Kuralı:</strong> \\(a^{-n} = \\dfrac{1}{a^n}\\)</div>`;
+    steps += `<div class="step">\\(${a}^{${n}} = \\dfrac{1}{${a}^{${posN}}} = \\dfrac{1}{${fmtN(payda)}}\\)</div>`;
+    steps += `<div class="step"><strong>Sonuç:</strong> \\(${fmtN(sonuc)}\\)</div>`;
+  } else {
+    // ── Pozitif üs ──
+    const sonuc = Math.pow(a, n);
+    if (n === 1) {
+      steps += `<div class="step">Herhangi bir sayının 1. kuvveti kendisidir.</div>`;
+    } else if (n <= 8) {
+      const acilim = Array(n).fill(a).join(' \\cdot ');
+      steps += `<div class="step">\\(= ${acilim}\\)</div>`;
+    }
+    steps += `<div class="step"><strong>Sonuç:</strong> \\(${a}^{${n}} = ${fmtN(sonuc)}\\)</div>`;
+  }
+
+  el.innerHTML = steps;
+  el.style.display = 'block';
+  mjRender(el);
+}
+
+// ─── ÜSLÜ: KURAL GÖSTERİCİSİ ───────────────────────────────────────────────
+
+function kuralGoster() {
+  const el = document.getElementById('kural-result');
+  const a = parseFloat(document.getElementById('kural-taban').value);
+  const m = parseInt(document.getElementById('kural-m').value);
+  const n = parseInt(document.getElementById('kural-n').value);
+  if (!isFinite(a) || !isFinite(m) || !isFinite(n)) { el.style.display='none'; return; }
+
+  const c1 = Math.pow(a, m), c2 = Math.pow(a, n);
+  const steps = `
+<div class="step"><strong>Çarpma Kuralı:</strong> \\(a^m \\cdot a^n = a^{m+n}\\)</div>
+<div class="step">\\(${a}^{${m}} \\cdot ${a}^{${n}} = ${a}^{${m}+${n}} = ${a}^{${m+n}} = ${fmtN(Math.pow(a,m+n))}\\)</div>
+<div class="step">Doğrulama: \\(${fmtN(c1)} \\cdot ${fmtN(c2)} = ${fmtN(c1*c2)}\\) ✓</div>
+<div class="step" style="margin-top:8px"><strong>Bölme Kuralı:</strong> \\(a^m \\div a^n = a^{m-n}\\)</div>
+<div class="step">\\(${a}^{${m}} \\div ${a}^{${n}} = ${a}^{${m}-${n}} = ${a}^{${m-n}} = ${fmtN(Math.pow(a,m-n))}\\)</div>
+<div class="step">Doğrulama: \\(${fmtN(c1)} \\div ${fmtN(c2)} = ${fmtN(c1/c2)}\\) ✓</div>
+<div class="step" style="margin-top:8px"><strong>Üs Alma Kuralı:</strong> \\((a^m)^n = a^{m \\cdot n}\\)</div>
+<div class="step">\\((${a}^{${m}})^{${n}} = ${a}^{${m} \\cdot ${n}} = ${a}^{${m*n}} = ${fmtN(Math.pow(a,m*n))}\\)</div>`;
+
+  el.innerHTML = steps;
+  el.style.display = 'block';
+  mjRender(el);
+}
+
+// ─── ÜSLÜ: BİLİMSEL GÖSTERİM ──────────────────────────────────────────────
+
+function bilimselGoster() {
+  const el = document.getElementById('bilim-result');
+  const val = parseFloat(document.getElementById('bilim-sayi').value);
+  if (!isFinite(val) || val <= 0) {
+    el.innerHTML = '<span style="color:var(--accent2)">⚠️ Lütfen pozitif bir sayı giriniz.</span>';
+    el.style.display = 'block'; return;
+  }
+
+  // a × 10^n bul
+  const exp = Math.floor(Math.log10(val));
+  const a = val / Math.pow(10, exp);
+  const aRounded = parseFloat(a.toFixed(10));
+
+  let tip = '';
+  if (exp >= 6) tip = 'Çok büyük pozitif sayı';
+  else if (exp <= -4) tip = 'Çok küçük pozitif sayı';
+  else tip = 'Standart aralık';
+
+  // Tam sayı veya virgüllü gösterim
+  const aStr = parseFloat(aRounded.toFixed(6)).toString().replace('.', '{,}');
+
+  let steps = `<div class="step"><strong>Verilen:</strong> \\(${val.toLocaleString('tr-TR')}\\)</div>`;
+  steps += `<div class="step"><strong>Tür:</strong> ${tip}</div>`;
+  steps += `<div class="step">Virgülü ${Math.abs(exp)} basamak ${exp >= 0 ? 'sola' : 'sağa'} kaydır.</div>`;
+  steps += `<div class="step"><strong>Bilimsel Gösterim:</strong> \\(${aStr} \\times 10^{${exp}}\\)</div>`;
+  steps += `<div class="step" style="font-size:0.78rem;color:var(--text-dim)">Koşul: \\(1 \\le ${aStr} < 10\\) ✓</div>`;
+
+  el.innerHTML = steps;
+  el.style.display = 'block';
+  mjRender(el);
+}
+
+// ─── KÖKLÜ: SADELEŞTİRİCİ ─────────────────────────────────────────────────
+
+function sadele() {
+  const el = document.getElementById('sad-result');
+  const N = parseInt(document.getElementById('sad-sayi').value);
+  const deg = parseInt(document.getElementById('sad-derece').value);
+  if (!isFinite(N) || N < 0) { el.style.display='none'; return; }
+
+  const f = primeFactors(N);
+  const fStr = Object.entries(f).map(([p,e]) => e===1 ? p : `${p}^{${e}}`).join(' \\cdot ');
+  const rootSym = deg === 2 ? '\\sqrt' : '\\sqrt[3]';
+  const koksym = deg === 2 ? '√' : '∛';
+
+  let steps = `<div class="step"><strong>Verilen:</strong> \\(${rootSym}{${N}}\\)</div>`;
+  if (Object.keys(f).length > 0 && N > 1) {
+    steps += `<div class="step">Asal çarpanlara ayır: \\(${N} = ${fStr}\\)</div>`;
+  }
+
+  if (deg === 2) {
+    const {out, inn} = simplifyRoot2(N);
+    if (inn === 1) {
+      steps += `<div class="step">Tüm çarpanlar tam kare → \\(${rootSym}{${N}} = ${out}\\)</div>`;
+      steps += `<div class="step"><strong>Sonuç:</strong> \\(${out}\\)</div>`;
+    } else if (out === 1) {
+      steps += `<div class="step">Dışa alınacak tam kare çarpan yok.</div>`;
+      steps += `<div class="step"><strong>Sonuç:</strong> \\(\\sqrt{${inn}}\\)</div>`;
+    } else {
+      steps += `<div class="step">\\(= \\sqrt{${out*out} \\cdot ${inn}} = \\sqrt{${out*out}} \\cdot \\sqrt{${inn}}\\)</div>`;
+      steps += `<div class="step">\\(= ${out} \\cdot \\sqrt{${inn}}\\)</div>`;
+      steps += `<div class="step"><strong>Sonuç:</strong> \\(${out}\\sqrt{${inn}}\\)</div>`;
+    }
+  } else {
+    const {out, inn} = simplifyRoot3(N);
+    if (inn === 1) {
+      steps += `<div class="step">Tüm çarpanlar tam küp → \\(${rootSym}{${N}} = ${out}\\)</div>`;
+      steps += `<div class="step"><strong>Sonuç:</strong> \\(${out}\\)</div>`;
+    } else if (out === 1) {
+      steps += `<div class="step">Dışa alınacak tam küp çarpan yok.</div>`;
+      steps += `<div class="step"><strong>Sonuç:</strong> \\(\\sqrt[3]{${inn}}\\)</div>`;
+    } else {
+      steps += `<div class="step">\\(= \\sqrt[3]{${out*out*out} \\cdot ${inn}} = \\sqrt[3]{${out*out*out}} \\cdot \\sqrt[3]{${inn}}\\)</div>`;
+      steps += `<div class="step">\\(= ${out} \\cdot \\sqrt[3]{${inn}}\\)</div>`;
+      steps += `<div class="step"><strong>Sonuç:</strong> \\(${out}\\sqrt[3]{${inn}}\\)</div>`;
+    }
+  }
+
+  el.innerHTML = steps;
+  el.style.display = 'block';
+  mjRender(el);
+}
+
+// ─── KÖKLÜ: KATSAYI İÇİNE ALMA ────────────────────────────────────────────
+
+function katsayiIcine() {
+  const el = document.getElementById('kat-result');
+  const a = parseInt(document.getElementById('kat-a').value);
+  const b = parseInt(document.getElementById('kat-b').value);
+  const deg = parseInt(document.getElementById('kat-derece').value);
+  if (!isFinite(a)||!isFinite(b)||a<1||b<1) { el.style.display='none'; return; }
+
+  const rootSym = deg === 2 ? '\\sqrt' : '\\sqrt[3]';
+  const apow = Math.pow(a, deg);
+  const result = apow * b;
+
+  let steps = `<div class="step"><strong>Verilen:</strong> \\(${a}${rootSym}{${b}}\\)</div>`;
+  steps += `<div class="step">Katsayı \\(${a}\\) kök içine alınır: \\(a^{${deg}} \\cdot b\\) kök altına yazılır.</div>`;
+  steps += `<div class="step">\\(${a} = ${rootSym}{${a}^{${deg}}} = ${rootSym}{${apow}}\\)</div>`;
+  steps += `<div class="step">\\(${a}${rootSym}{${b}} = ${rootSym}{${apow}} \\cdot ${rootSym}{${b}} = ${rootSym}{${apow} \\cdot ${b}}\\)</div>`;
+  steps += `<div class="step"><strong>Sonuç:</strong> \\(${rootSym}{${result}}\\)</div>`;
+
+  el.innerHTML = steps;
+  el.style.display = 'block';
+  mjRender(el);
+}
+
+// ─── KÖKLÜ: KÖK HESAPLAYICI ────────────────────────────────────────────────
+
+// Bir tam sayının tam kare olup olmadığını güvenli kontrol
+function isPerfectSquare(n) {
+  if (n < 0) return false;
+  const s = Math.round(Math.sqrt(n));
+  return s * s === n;
+}
+
+// Ondalık sayıyı virgüllü Türkçe gösterime çevir (MathJax için)
+function trFmt(x) {
+  return String(x).replace('.', '{,}');
+}
+
+// Sondaki sıfır sayısını bul (tam sayılar için)
+function trailingZeros(n) {
+  let count = 0;
+  while (n % 10 === 0 && n > 0) { n = n / 10; count++; }
+  return count;
+}
+
+function kokHesapla() {
+  const el = document.getElementById('kok-result');
+  // Sola yaslı stil — ondalık ve tüm durumlar için
+  el.style.textAlign = 'left';
+
+  const rawInput = document.getElementById('kok-sayi').value.trim();
+  const raw = rawInput.replace(',', '.');
+  const N = parseFloat(raw);
+  const deg = parseInt(document.getElementById('kok-derece').value);
+
+  if (!isFinite(N) || rawInput === '') { el.style.display = 'none'; return; }
+
+  if (N < 0) {
+    el.innerHTML = `<div class="step" style="color:var(--accent2)">⚠️ Negatif sayıların karekökü gerçek sayılar kümesinde tanımlı değildir. (Ortaokul kapsamı dışı)</div>`;
+    el.style.display = 'block';
+    mjRender(el);
+    return;
+  }
+
+  const rootSym = deg === 2 ? '\\sqrt' : '\\sqrt[3]';
+  const nDisp   = trFmt(N);
+  let steps = `<div class="step"><strong>Verilen:</strong> \\(${rootSym}{${nDisp}}\\)</div>`;
+
+  // ── YARDIMCI: a√b string üret ──────────────────────────────────────────
+  function rootStr(out, inn) {
+    if (inn === 1) return `${out}`;
+    if (out === 1) return `\\sqrt{${inn}}`;
+    return `${out}\\sqrt{${inn}}`;
+  }
+
+  // ── ONDALIK SAYI ─────────────────────────────────────────────────────────
+  const isDecimal = raw.includes('.');
+
+  if (isDecimal) {
+    const decCount = raw.split('.')[1].length;
+    const qRaw    = Math.pow(10, decCount);
+    const pRaw    = Math.round(N * qRaw);
+
+    // Adım 1: kesir gösterimi
+    steps += `<div class="step">\\(${nDisp} = \\dfrac{${pRaw}}{${qRaw}}\\)</div>`;
+    // Adım 2: kök içine al
+    steps += `<div class="step">\\(= \\sqrt{\\dfrac{${pRaw}}{${qRaw}}} = \\dfrac{\\sqrt{${pRaw}}}{\\sqrt{${qRaw}}}\\)</div>`;
+
+    const sqQ  = Math.round(Math.sqrt(qRaw));
+    const perfQ = sqQ * sqQ === qRaw;  // payda tam kare mi? (çift basamakta evet)
+    const sqP  = Math.round(Math.sqrt(pRaw));
+    const perfP = sqP * sqP === pRaw;
+
+    if (perfQ) {
+      // Payda tam kare: √qRaw = sqQ
+      if (perfP) {
+        // Pay de tam kare → sonuç ondalık
+        const result = sqP / sqQ;
+        steps += `<div class="step">\\(= \\dfrac{${sqP}}{${sqQ}}\\)</div>`;
+        steps += `<div class="step"><strong>Sonuç:</strong> \\(${trFmt(result)}\\)</div>`;
+        steps += `<div class="step"><strong>NOT:</strong> ${pRaw} sayısı tam karedir. ${nDisp} sayısında virgülden sonra ÇİFT sayıda basamak olduğundan ${nDisp} de tam karedir. Cevap bir rasyonel sayıdır.</div>`;
+      } else {
+        // Pay tam kare değil → a√b / sqQ
+        const {out: outP, inn: innP} = simplifyRoot2(pRaw);
+        const g1  = gcd(outP, sqQ);
+        const numS = innP === 1 ? `${outP/g1}` : (outP/g1===1 ? `\\sqrt{${innP}}` : `${outP/g1}\\sqrt{${innP}}`);
+        const denS = `${sqQ/g1}`;
+        const midStr = outP===1 ? `\\sqrt{${innP}}` : `${outP}\\sqrt{${innP}}`;
+        steps += `<div class="step">\\(= \\dfrac{${midStr}}{${sqQ}}\\)</div>`;
+        if (g1 > 1) steps += `<div class="step">\\(= \\dfrac{${numS}}{${denS}}\\)</div>`;
+        steps += `<div class="step"><strong>Sonuç:</strong> \\(\\dfrac{${numS}}{${denS}}\\)</div>`;
+      }
+    } else {
+      // Payda tam kare değil (tek basamak) → rasyonelleştir
+      // √pRaw / √qRaw — önce √qRaw'ı sadeleştir (örn √10 = √10, ama genel)
+      const g0  = gcd(pRaw, qRaw);
+      const ps  = pRaw / g0;
+      const qs  = qRaw / g0;
+
+      // √ps / √qs — payda ile genişlet
+      // √ps · √qs = √(ps·qs)
+      const {out: outR, inn: innR} = simplifyRoot2(ps * qs);
+      const g2  = gcd(outR, qs);
+      const numF = innR===1 ? `${outR/g2}` : (outR/g2===1 ? `\\sqrt{${innR}}` : `${outR/g2}\\sqrt{${innR}}`);
+      const denF = qs / g2;
+
+      // Göster: sadeleşmiş kesir varsa ekle
+      if (ps !== pRaw) {
+        steps += `<div class="step">\\(= \\dfrac{\\sqrt{${ps}}}{\\sqrt{${qs}}}\\)</div>`;
+      }
+      steps += `<div class="step">\\(= \\dfrac{\\sqrt{${ps}}}{\\sqrt{${qs}}} \\cdot \\dfrac{\\sqrt{${qs}}}{\\sqrt{${qs}}} = \\dfrac{\\sqrt{${ps*qs}}}{${qs}}\\)</div>`;
+      if (outR > 1 || innR !== ps*qs) {
+        steps += `<div class="step">\\(= \\dfrac{${outR===1?'':outR}\\sqrt{${innR}}}{${qs}}\\)</div>`;
+      }
+      if (g2 > 1) {
+        steps += `<div class="step">\\(= \\dfrac{${numF}}{${denF}}\\)</div>`;
+      }
+      steps += `<div class="step"><strong>Sonuç:</strong> \\(\\dfrac{${numF}}{${denF}}\\)</div>`;
+    }
+
+  // ── TAM SAYI ─────────────────────────────────────────────────────────────
+  } else {
+    const Nint = Math.round(N);
+
+    if (deg === 2) {
+      const tz   = trailingZeros(Nint);
+      const core = Nint / Math.pow(10, tz);
+
+      if (tz > 0) {
+        const pow10 = Math.pow(10, tz);
+        // Adım: çarpanlara ayır
+        steps += `<div class="step">\\(= \\sqrt{${core} \\cdot ${pow10}} = \\sqrt{${core}} \\cdot \\sqrt{${pow10}}\\)</div>`;
+
+        const {out: outC, inn: innC} = simplifyRoot2(core);
+        const {out: outZ, inn: innZ} = simplifyRoot2(pow10);
+        // innZ: çift sıfırda 1, tek sıfırda 10
+
+        const coreLabel = rootStr(outC, innC);
+        const zLabel    = rootStr(outZ, innZ);
+
+        if (tz % 2 === 0) {
+          // ÇİFT sıfır → pow10 tam kare
+
+          if (innC === 1) {
+            // Çekirdek de tam kare → kesin rasyonel
+            const sonuc = outC * outZ;
+            steps += `<div class="step"><strong>Sonuç:</strong> \\(${outC} \\cdot ${outZ} = ${sonuc}\\)</div>`;
+            steps += `<div class="step"><strong>NOT:</strong> ${core} sayısı tam karedir. ${Nint} sayısının sonunda ÇİFT sayıda sıfır olduğundan ${Nint} de tam karedir. Cevap bir rasyonel sayıdır.</div>`;
+          } else {
+            // Çekirdek tam kare değil → irrasyonel, NOT gerekli (beklenmedik)
+            const totalOut = outC * outZ;
+            steps += `<div class="step">\\(\\sqrt{${core}} = ${coreLabel}\\)</div>`;
+            steps += `<div class="step"><strong>NOT:</strong> ${Nint} sayısının sonunda ÇİFT sayıda sıfır olsa da çekirdek sayı ${core} tam kare değildir. Cevap bir irrasyonel sayıdır.</div>`;
+            steps += `<div class="step"><strong>Sonuç:</strong> \\(${totalOut}\\sqrt{${innC}}\\)</div>`;
+          }
+        } else {
+          // TEK sıfır → pow10 tam kare değil, sonuç kesin irrasyonel
+          steps += `<div class="step">\\(\\sqrt{${pow10}} = ${zLabel}\\)</div>`;
+
+          // Çekirdek sadeleştir
+          if (innC === 1) {
+            // √core tam kare → sadece zLabel ile çarp
+            steps += `<div class="step">\\(\\sqrt{${core}} = ${outC}\\)</div>`;
+            // outC * outZ√innZ
+            const grandOut = outC * outZ;
+            steps += `<div class="step">\\(${outC} \\cdot ${zLabel} = ${grandOut}\\sqrt{${innZ}}\\)</div>`;
+            steps += `<div class="step"><strong>Sonuç:</strong> \\(${grandOut}\\sqrt{${innZ}}\\)</div>`;
+          } else {
+            // Hem çekirdek hem pow10 irrasyonel
+            steps += `<div class="step">\\(\\sqrt{${core}} = ${coreLabel}\\)</div>`;
+            // Çarp: (outC√innC) · (outZ√innZ) = outC·outZ · √(innC·innZ)
+            const {out: outF, inn: innF} = simplifyRoot2(innC * innZ);
+            const grandOut = outC * outZ * outF;
+            steps += `<div class="step">\\(${coreLabel} \\cdot ${zLabel} = ${grandOut}\\sqrt{${innF}}\\)</div>`;
+            steps += `<div class="step"><strong>Sonuç:</strong> \\(${grandOut}\\sqrt{${innF}}\\)</div>`;
+          }
+        }
+
+      } else {
+        // Sona sıfır yok → standart asal çarpan yöntemi
+        const {out, inn} = simplifyRoot2(Nint);
+        const f = primeFactors(Nint);
+        if (Nint > 1) {
+          const fStr = Object.entries(f).map(([p,e]) => e===1?p:`${p}^{${e}}`).join(' \\cdot ');
+          steps += `<div class="step">Asal çarpanlar: \\(${Nint} = ${fStr}\\)</div>`;
+        }
+        if (inn === 1) {
+          steps += `<div class="step">Tüm çarpanlar tam kare.</div>`;
+          steps += `<div class="step"><strong>Sonuç:</strong> \\(${out}\\)</div>`;
+        } else if (out === 1) {
+          steps += `<div class="step">Dışa alınacak tam kare çarpan yok.</div>`;
+          steps += `<div class="step"><strong>Sonuç:</strong> \\(\\sqrt{${inn}}\\)</div>`;
+        } else {
+          steps += `<div class="step">\\(= \\sqrt{${out*out}} \\cdot \\sqrt{${inn}} = ${out}\\sqrt{${inn}}\\)</div>`;
+          steps += `<div class="step"><strong>Sonuç:</strong> \\(${out}\\sqrt{${inn}}\\)</div>`;
+        }
+      }
+
+    } else {
+      // Küp kök
+      const {out, inn} = simplifyRoot3(Nint);
+      if (inn === 1) {
+        steps += `<div class="step"><strong>Sonuç:</strong> \\(${out}\\)</div>`;
+      } else if (out === 1) {
+        steps += `<div class="step"><strong>Sonuç:</strong> \\(\\sqrt[3]{${inn}}\\)</div>`;
+      } else {
+        steps += `<div class="step">\\(= ${out}\\sqrt[3]{${inn}}\\)</div>`;
+        steps += `<div class="step"><strong>Sonuç:</strong> \\(${out}\\sqrt[3]{${inn}}\\)</div>`;
+      }
+    }
+  }
+
+  el.innerHTML = steps;
+  el.style.display = 'block';
+  mjRender(el);
+}
+
+// ─── KÖKLÜ: ÇARPMA & BÖLME KURAL DOĞRULAYICI ──────────────────────────────
+
+function kuralDorula() {
+  const el = document.getElementById('kdor-result');
+  const a  = parseInt(document.getElementById('kdor-a').value);
+  const b  = parseInt(document.getElementById('kdor-b').value);
+  if (!isFinite(a)||!isFinite(b)||a<1||b<1) { el.style.display='none'; return; }
+
+  // Yardımcı: a√b string
+  function rs(out, inn) {
+    if (inn===1) return `${out}`;
+    if (out===1) return `\\sqrt{${inn}}`;
+    return `${out}\\sqrt{${inn}}`;
+  }
+
+  const {out: oA,  inn: iA}  = simplifyRoot2(a);
+  const {out: oB,  inn: iB}  = simplifyRoot2(b);
+  const {out: oAB, inn: iAB} = simplifyRoot2(a*b);
+
+  const sadA  = rs(oA, iA);
+  const sadB  = rs(oB, iB);
+  const sadAB = rs(oAB, iAB);
+
+  // Ayrı ayrı çarpma sonucu: sadA · sadB
+  // (oA√iA)(oB√iB) = oA·oB · √(iA·iB) → sadeleştir
+  const {out: oAyrıA, inn: iAyrıA} = simplifyRoot2(iA * iB);
+  const carpimAyri = rs(oA * oB * oAyrıA, iAyrıA);
+
+  // ── Bölme: √a / √b ──────────────────────────────────────────────────────
+  const g   = gcd(a, b);
+  const ap  = a/g, bp = b/g;
+
+  // √(ap/bp) → √ap / √bp
+  const {out: oAP, inn: iAP} = simplifyRoot2(ap);
+  const {out: oBP, inn: iBP} = simplifyRoot2(bp);
+  const sqBP = Math.round(Math.sqrt(bp));
+  const perfBP = sqBP * sqBP === bp;
+
+  let bolumKural = '';     // Bölme Kuralı satırı: √a/√b = √(a/b) [= √(ap/bp)]
+  let bolumSonuc = '';     // Son basitleştirilmiş form
+
+  if (g > 1) {
+    bolumKural = `\\dfrac{\\sqrt{${a}}}{\\sqrt{${b}}} = \\sqrt{\\dfrac{${a}}{${b}}} = \\sqrt{\\dfrac{${ap}}{${bp}}}`;
+  } else {
+    bolumKural = `\\dfrac{\\sqrt{${a}}}{\\sqrt{${b}}} = \\sqrt{\\dfrac{${a}}{${b}}}`;
+  }
+
+  if (perfBP) {
+    // Payda tam kare
+    const numStr = iAP===1 ? `${oAP}` : (oAP===1?`\\sqrt{${iAP}}`:`${oAP}\\sqrt{${iAP}}`);
+    bolumSonuc = `\\dfrac{${numStr}}{${sqBP}}`;
+  } else {
+    // Rasyonelleştir
+    const {out: oR, inn: iR} = simplifyRoot2(ap * bp);
+    const g2  = gcd(oR, bp);
+    const numS = iR===1 ? `${oR/g2}` : (oR/g2===1?`\\sqrt{${iR}}`:`${oR/g2}\\sqrt{${iR}}`);
+    bolumSonuc = `\\dfrac{${numS}}{${bp/g2}}`;
+  }
+
+  // Ayrı ayrı bölme: sadA / sadB
+  // (oA√iA) / (oB√iB) → ama görseldeki gibi: sadA / sadB biçiminde yaz
+  const ayriB_num = rs(oA, iA);
+  const ayriB_den = rs(oB, iB);
+
+  let steps = `
+<div class="step" style="border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:10px">
+  <strong>Çarpma Kuralı Kullanarak Çözüm:</strong><br>
+  \\(\\sqrt{a} \\cdot \\sqrt{b} = \\sqrt{a \\cdot b}\\)<br>
+  \\(\\Rightarrow \\sqrt{${a}} \\cdot \\sqrt{${b}} = \\sqrt{${a} \\cdot ${b}} = \\sqrt{${a*b}} = ${sadAB}\\)
+</div>
+<div class="step" style="border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:10px">
+  <strong>Ayrı Ayrı \\(a\\sqrt{b}\\) Şeklinde Yazarak Çözüm:</strong><br>
+  \\(\\sqrt{${a}} = ${sadA}\\)<br>
+  \\(\\sqrt{${b}} = ${sadB}\\)<br>
+  \\(${sadA} \\cdot ${sadB} = ${carpimAyri}\\)
+</div>
+<div class="step" style="border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:10px">
+  <strong>Bölme Kuralı Kullanarak Çözüm:</strong><br>
+  \\(\\dfrac{\\sqrt{a}}{\\sqrt{b}} = \\sqrt{\\dfrac{a}{b}}\\)<br>
+  \\(${bolumKural} = ${bolumSonuc}\\)
+</div>
+<div class="step">
+  <strong>Ayrı Ayrı \\(a\\sqrt{b}\\) Şeklinde Yazarak Çözüm:</strong><br>
+  \\(\\sqrt{${a}} = ${sadA}\\)<br>
+  \\(\\sqrt{${b}} = ${sadB}\\)<br>
+  \\(\\dfrac{${ayriB_num}}{${ayriB_den}} = ${bolumSonuc}\\)
+</div>`;
+
+  el.innerHTML = steps;
+  el.style.display = 'block';
+  mjRender(el);
+}
+
+// ─── BAŞLANGIÇ ──────────────────────────────────────────────────────────────
+buildLeftPanel('uslu');
+usHesapla();
+kuralGoster();
+bilimselGoster();
+</script>
+</body>
+</html>
