@@ -1,0 +1,2453 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Dikkat Testi</title>
+<style>
+  :root{
+    --bg-deep:#0e0e0a;--accent-cyan:#c8960c;--accent-violet:#FFD97A;
+    --accent-pink:#e8d5a0;--text-dim:rgba(247,242,232,0.45);--text-bright:rgba(247,242,232,0.92);
+    --danger:#eb5757;--success:#50c878;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;font-family:Georgia,serif;
+    background:var(--bg-deep);
+    color:var(--text-bright);overflow-x:hidden;min-height:100dvh;
+    display:flex;flex-direction:column;
+    overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;}
+  html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;}
+  .stage{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:32px 20px;}
+  .panel{width:100%;max-width:560px;text-align:center;}
+  .eyebrow{letter-spacing:.35em;text-transform:uppercase;font-size:12px;color:var(--text-dim);margin-bottom:18px;}
+  .glow-title{font-size:clamp(26px,6vw,40px);font-weight:800;margin:0 0 8px;
+    background:linear-gradient(90deg,var(--accent-cyan),var(--accent-violet),var(--accent-pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:1px;}
+  .subtitle{color:var(--text-dim);font-size:14px;margin-bottom:28px;line-height:1.6;}
+
+  /* Zorluk seçim kartları */
+  .difficulty-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
+  .diff-card{padding:16px 12px;border-radius:16px;border:1.5px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.04);cursor:pointer;transition:all .2s ease;text-align:center;}
+  .diff-card:hover{border-color:var(--accent-cyan);box-shadow:0 0 20px rgba(79,227,255,.15);transform:translateY(-2px);}
+  .diff-card.selected{border-color:var(--accent-violet);background:rgba(176,107,255,.12);
+    box-shadow:0 0 24px rgba(176,107,255,.25);}
+  .diff-card .diff-name{font-size:15px;font-weight:700;color:var(--text-bright);margin-bottom:6px;}
+  .diff-card .diff-detail{font-size:11px;color:var(--text-dim);line-height:1.5;}
+  .diff-card .diff-pts{font-size:11px;color:var(--accent-cyan);margin-top:4px;font-weight:600;}
+
+  /* Sayı kartı */
+  .number-card{position:relative;padding:34px 20px;border-radius:22px;
+    background:linear-gradient(160deg,rgba(79,227,255,.07),rgba(176,107,255,.05));
+    border:1px solid rgba(176,107,255,.35);
+    box-shadow:0 0 60px rgba(79,227,255,.08),inset 0 0 40px rgba(176,107,255,.06);
+    margin-bottom:24px;}
+  .number-card::before,.number-card::after{content:'';position:absolute;width:10px;height:10px;
+    border-radius:50%;background:var(--accent-cyan);box-shadow:0 0 12px var(--accent-cyan);}
+  .number-card::before{top:-5px;left:18%;}
+  .number-card::after{bottom:-5px;right:18%;background:var(--accent-pink);box-shadow:0 0 12px var(--accent-pink);}
+  .digit-display{font-size:clamp(28px,8vw,58px);font-weight:800;letter-spacing:8px;
+    font-family:'Consolas','Courier New',monospace;color:var(--text-bright);
+    text-shadow:0 0 8px var(--accent-cyan),0 0 22px rgba(79,227,255,.6),0 0 46px rgba(176,107,255,.4);
+    word-break:break-all;}
+  .countdown-display{font-size:clamp(48px,12vw,80px);font-weight:800;color:var(--accent-violet);
+    text-shadow:0 0 20px var(--accent-violet),0 0 50px rgba(176,107,255,.5);}
+  .timer-bar-wrap{width:100%;height:8px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden;margin-top:16px;}
+  .timer-bar{height:100%;width:100%;background:linear-gradient(90deg,var(--accent-cyan),var(--accent-pink));
+    transform-origin:left;box-shadow:0 0 10px var(--accent-cyan);}
+
+  /* Geri sayım bilgi metni */
+  .trivia-text{font-size:13px;color:var(--text-dim);line-height:1.65;
+    min-height:40px;padding:0 8px;margin-top:4px;font-style:italic;}
+
+  /* Cevap ekranı */
+  .question-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--text-dim);margin-bottom:16px;}
+  .question-meta b{color:var(--accent-cyan);}
+  .answer-prompt{color:var(--text-dim);font-size:13px;margin-bottom:12px;}
+  input.answer-input{width:100%;font-size:clamp(22px,6vw,36px);letter-spacing:8px;text-align:center;
+    font-family:'Consolas','Courier New',monospace;padding:14px 8px;border-radius:16px;
+    border:1.5px solid rgba(79,227,255,.45);background:rgba(255,255,255,.04);
+    color:var(--text-bright);outline:none;caret-color:var(--accent-cyan);}
+  input.answer-input:focus{border-color:var(--accent-violet);box-shadow:0 0 0 4px rgba(176,107,255,.15);}
+
+  /* Butonlar */
+  .btn{appearance:none;border:1px solid rgba(200,150,12,0.6);cursor:pointer;font-size:14px;font-weight:700;
+    padding:10px 24px;border-radius:4px;color:var(--accent-cyan);
+    background:rgba(200,150,12,0.18);font-family:Georgia,serif;letter-spacing:.04em;
+    transition:background .2s ease;margin-top:18px;}
+  .btn:hover{background:rgba(200,150,12,0.32);}
+  .btn:active{transform:none;}
+  .btn:disabled{opacity:.35;cursor:not-allowed;}
+  .btn.secondary{background:rgba(200,150,12,0.08);color:var(--text-bright);
+    border:1px solid rgba(200,150,12,0.3);}
+  .btn.secondary:hover{background:rgba(200,150,12,0.2);}
+  .row-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+  /* Sonuç ekranı */
+  .feedback-digits{display:flex;gap:var(--box-gap,6px);justify-content:center;margin:14px 0;flex-wrap:nowrap;}
+  .digit-box{width:var(--box-size,40px);height:calc(var(--box-size,40px) * 1.25);border-radius:10px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    font-family:'Consolas','Courier New',monospace;font-size:var(--box-font,20px);font-weight:700;
+    background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.15);}  .digit-box.correct{color:var(--success);border-color:var(--success);box-shadow:0 0 14px rgba(95,255,176,.4);}
+  .digit-box.wrong{color:var(--danger);border-color:var(--danger);box-shadow:0 0 14px rgba(255,95,109,.4);}
+  .score-pill{display:inline-block;font-size:15px;padding:8px 18px;border-radius:999px;
+    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);margin-top:12px;}
+  .score-pill b{color:var(--accent-cyan);font-size:18px;}
+  .level-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;
+    border-radius:999px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
+  .badge-easy{background:rgba(95,255,176,.12);color:var(--success);border:1px solid rgba(95,255,176,.3);}
+  .badge-medium{background:rgba(79,227,255,.12);color:var(--accent-cyan);border:1px solid rgba(79,227,255,.3);}
+  .badge-hard{background:rgba(176,107,255,.12);color:var(--accent-violet);border:1px solid rgba(176,107,255,.3);}
+  .badge-progressive{background:rgba(255,95,176,.12);color:var(--accent-pink);border:1px solid rgba(255,95,176,.3);}
+
+  /* Final ekranı */
+  .final-score{font-size:clamp(54px,14vw,90px);font-weight:800;margin:8px 0 4px;
+    background:linear-gradient(90deg,var(--accent-cyan),var(--accent-violet),var(--accent-pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:pulseGlow 1.8s ease-in-out infinite;}
+  .final-max{font-size:14px;color:var(--text-dim);margin-bottom:16px;}
+  @keyframes pulseGlow{
+    0%,100%{filter:drop-shadow(0 0 8px rgba(79,227,255,.4));}
+    50%{filter:drop-shadow(0 0 26px rgba(176,107,255,.7));}}
+  .per-question-recap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0;}
+  .recap-chip{font-size:12px;padding:7px 11px;border-radius:10px;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:var(--text-dim);}
+  .recap-chip b{color:var(--text-bright);}
+  .recap-chip .chip-cat{font-size:10px;display:block;margin-top:2px;}
+
+  .hidden{display:none!important;}
+  .fade-in{animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  @media(prefers-reduced-motion:reduce){.final-score{animation:none;}.btn{transition:none;}}
+
+  /* ── RENK OYUNU ─────────────────────────────────────────── */
+  .color-word-list{display:flex;flex-direction:column;gap:10px;align-items:center;}
+  .color-word{font-size:clamp(20px,5.5vw,30px);font-weight:800;letter-spacing:2px;
+    color:var(--text-bright);text-transform:uppercase;
+    text-shadow:0 0 8px rgba(241,243,255,.35);}
+
+  .color-slots{display:flex;gap:var(--cbox-gap,8px);justify-content:center;margin:16px 0;
+    flex-wrap:wrap;row-gap:10px;}
+  .color-slot{width:var(--cbox-size,42px);height:var(--cbox-size,42px);border-radius:10px;
+    border:1.5px dashed rgba(255,255,255,.25);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.03);}
+  .color-slot.filled{border-style:solid;border-color:rgba(255,255,255,.3);}
+
+  .color-palette{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+    max-width:280px;margin:18px auto 0;}
+  .color-swatch{aspect-ratio:1;width:100%;border-radius:12px;cursor:pointer;border:2px solid rgba(255,255,255,.18);
+    transition:transform .12s ease,box-shadow .12s ease;}
+  .color-swatch:hover{transform:translateY(-3px) scale(1.06);}
+  .color-swatch:active{transform:translateY(0) scale(.96);}
+
+  .cw-kirmizi{background:#ff3b30;}
+  .cw-turuncu{background:#ff8a00;}
+  .cw-sari{background:#ffd60a;}
+  .cw-yesil{background:#34c759;}
+  .cw-mavi{background:#3a8dff;}
+  .cw-mor{background:#8b5cf6;}
+  .cw-beyaz{background:#f1f3ff;}
+
+  .color-feedback{flex-wrap:wrap!important;}
+  .color-feedback .digit-box{width:var(--cresult-box-size,34px);height:var(--cresult-box-size,34px);
+    border-radius:8px;gap:var(--cresult-box-gap,6px);}
+
+  /* ── SEMBOL OYUNU ───────────────────────────────────────── */
+  .symbol-display{display:flex;flex-wrap:wrap;gap:14px 18px;justify-content:center;align-items:center;}
+  .symbol-display .sym-item{font-size:clamp(34px,9vw,52px);font-weight:700;color:var(--text-bright);
+    font-family:'Consolas','Courier New',monospace;
+    text-shadow:0 0 8px var(--accent-cyan),0 0 22px rgba(79,227,255,.5);}
+
+  .symbol-slots{display:flex;flex-wrap:wrap;gap:10px;row-gap:10px;justify-content:center;margin:16px 0;}
+  .symbol-slot{width:48px;height:48px;border-radius:10px;border:1.5px dashed rgba(255,255,255,.25);
+    display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.03);
+    font-size:24px;font-family:'Consolas','Courier New',monospace;color:var(--text-bright);}
+  .symbol-slot.filled{border-style:solid;border-color:rgba(79,227,255,.45);
+    background:rgba(79,227,255,.08);box-shadow:0 0 12px rgba(79,227,255,.18);}
+
+  /* Palet: mobilde 2 satırda 5'er (grid 5 sütun), masaüstünde tek satır */
+  .symbol-palette{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;
+    max-width:340px;margin:18px auto 0;}
+  .symbol-swatch{aspect-ratio:1;border-radius:12px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;font-weight:700;color:var(--text-bright);
+    font-family:'Consolas','Courier New',monospace;
+    background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.18);
+    transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;}
+  .symbol-swatch:hover{transform:translateY(-3px) scale(1.05);border-color:var(--accent-cyan);
+    box-shadow:0 0 16px rgba(79,227,255,.25);}
+  .symbol-swatch:active{transform:translateY(0) scale(.95);}
+
+  .symbol-feedback{flex-wrap:wrap!important;}
+  .symbol-feedback .digit-box{width:var(--sresult-box-size,34px);height:var(--sresult-box-size,34px);
+    border-radius:8px;font-size:var(--sresult-box-font,16px);
+    font-family:'Consolas','Courier New',monospace;}
+
+  @media (min-width:480px){
+    .symbol-palette{grid-template-columns:repeat(10,1fr);max-width:560px;}
+    .color-palette{grid-template-columns:repeat(7,1fr);max-width:420px;}
+  }
+
+  /* ── ZAMANLAMA OYUNU ────────────────────────────────────── */
+  .timing-ring-wrap{display:flex;justify-content:center;align-items:center;margin:24px 0;}
+  .timing-ring{width:min(72vw,260px);height:min(72vw,260px);
+    filter:drop-shadow(0 0 18px rgba(79,227,255,.45));}
+  .ring-track{fill:none;stroke:rgba(255,255,255,.10);stroke-width:10;}
+  .ring-progress{fill:none;stroke:url(#ringGradient);stroke-width:10;stroke-linecap:round;
+    transform-origin:100px 100px;transform:rotate(-90deg);
+    stroke-dasharray:527.79; /* 2*pi*84 */
+    stroke-dashoffset:527.79;}
+
+  .timing-target{
+    appearance:none;border:none;cursor:pointer;
+    width:min(58vw,220px);height:min(58vw,220px);
+    border-radius:50%;
+    margin:18px auto 0;display:block;
+    font-size:18px;font-weight:800;letter-spacing:1px;
+    color:var(--bg-deep);
+    background:radial-gradient(circle at 35% 30%, #7fefff, var(--accent-cyan) 55%, var(--accent-violet) 100%);
+    box-shadow:0 0 36px rgba(79,227,255,.4), 0 10px 30px rgba(0,0,0,.35);
+    transition:transform .08s ease, box-shadow .08s ease;
+    -webkit-user-select:none;user-select:none;touch-action:none;
+  }
+  .timing-target:active,.timing-target.pressed{
+    transform:scale(.94);
+    box-shadow:0 0 50px rgba(176,107,255,.6), inset 0 0 30px rgba(0,0,0,.25);
+  }
+
+  /* ── REFLEKS OYUNU ──────────────────────────────────────── */
+  .reflex-target{
+    appearance:none;border:none;cursor:pointer;
+    width:min(70vw,260px);height:min(70vw,260px);
+    border-radius:50%;
+    margin:24px auto 0;display:block;
+    font-size:20px;font-weight:800;letter-spacing:1px;
+    color:var(--text-bright);
+    background:radial-gradient(circle at 35% 30%, #5a5f78, #3a3d52 60%, #2a2c3d 100%);
+    box-shadow:0 8px 26px rgba(0,0,0,.4);
+    transition:background .08s ease, box-shadow .08s ease, transform .08s ease;
+    -webkit-user-select:none;user-select:none;touch-action:none;
+  }
+  .reflex-target.go{
+    background:radial-gradient(circle at 35% 30%, #9dffce, var(--success) 55%, #2fae7a 100%);
+    box-shadow:0 0 50px rgba(95,255,176,.6), 0 10px 30px rgba(0,0,0,.35);
+  }
+  .reflex-target:active{
+    transform:scale(.95);
+  }
+
+  .timing-result-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:18px 0 6px;}
+  .timing-result-box{flex:1 1 140px;max-width:200px;
+    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
+    border-radius:16px;padding:16px 10px;}
+  .timing-result-label{font-size:12px;color:var(--text-dim);margin-bottom:6px;
+    text-transform:uppercase;letter-spacing:.08em;}
+  .timing-result-value{font-size:clamp(22px,6vw,30px);font-weight:800;
+    font-family:'Consolas','Courier New',monospace;color:var(--text-bright);
+    text-shadow:0 0 10px rgba(79,227,255,.4);}
+
+  /* ── KONUM HAFIZASI OYUNU ───────────────────────────────── */
+  .spatial-grid-wrap{display:flex;justify-content:center;margin:18px 0;}
+  .spatial-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-template-rows:repeat(4,1fr);
+    gap:8px;
+    width:min(82vw,300px);
+    height:min(82vw,300px);
+  }
+  .spatial-cell{
+    position:relative;
+    border-radius:12px;
+    background:rgba(255,255,255,.05);
+    border:1.5px solid rgba(255,255,255,.14);
+    cursor:pointer;
+    transition:background .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .spatial-cell .coord-label{
+    position:absolute;top:4px;right:6px;
+    font-size:10px;color:rgba(241,243,255,.28);
+    font-family:'Consolas','Courier New',monospace;
+    pointer-events:none;
+    letter-spacing:.5px;
+  }
+  .spatial-cell.lit{
+    background:rgba(79,227,255,.35);
+    border-color:var(--accent-cyan);
+    box-shadow:0 0 22px rgba(79,227,255,.55), inset 0 0 14px rgba(79,227,255,.3);
+  }
+  .spatial-cell.correct-flash{
+    background:rgba(95,255,176,.35)!important;
+    border-color:var(--success)!important;
+    box-shadow:0 0 22px rgba(95,255,176,.55), inset 0 0 14px rgba(95,255,176,.3)!important;
+  }
+  .spatial-cell.wrong-flash{
+    background:rgba(255,95,109,.35)!important;
+    border-color:var(--danger)!important;
+    box-shadow:0 0 22px rgba(255,95,109,.55), inset 0 0 14px rgba(255,95,109,.3)!important;
+  }
+  .spatial-cell.locked{
+    cursor:not-allowed;
+  }
+  .coord-feedback .digit-box{
+    font-size:13px;font-family:'Consolas','Courier New',monospace;
+  }
+
+
+</style>
+</head>
+<body>
+<div class="stage">
+<div class="panel">
+
+  <!-- ANA MENÜ -->
+  <div id="screen-menu" class="fade-in">
+    <h1 class="glow-title">DİKKAT TESTİ</h1>
+    <p class="subtitle">Dikkat seviyeni hangisinde test etmek istersin?</p>
+    <div class="row-buttons" style="flex-direction:column;align-items:center;">
+      <button class="btn" id="btn-menu-numbers" style="width:100%;max-width:320px;">🔢 SAYILAR</button>
+      <button class="btn" id="btn-menu-colors" style="width:100%;max-width:320px;">🎨 RENKLER</button>
+      <button class="btn" id="btn-menu-symbols" style="width:100%;max-width:320px;">Σ SEMBOLLER</button>
+      <button class="btn" id="btn-menu-spatial" style="width:100%;max-width:320px;">▦ KONUM HAFIZASI</button>
+      <button class="btn" id="btn-menu-reflex" style="width:100%;max-width:320px;">⚡ REFLEKS</button>
+      <button class="btn" id="btn-menu-timing" style="width:100%;max-width:320px;">⏱ ZAMANLAMA</button>
+    </div>
+  </div>
+
+  <!-- BAŞLANGIÇ -->
+  <div id="screen-start" class="hidden">
+   <!-- <div class="eyebrow">Sayı Hafızası</div> -->
+    <h1 class="glow-title">RAKAMLARI EZBERLEME OYUNU</h1>
+    <p class="subtitle">Ekranda beliren sayıyı ezberle,<br>geriye sayımın ardından yeniden yaz.</p>
+    <div class="difficulty-grid">
+      <div class="diff-card" data-level="easy">
+        <div class="diff-name">🟢 Kolay</div>
+        <div class="diff-detail">6 basamak · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">10 puan / basamak · maks. 300</div>
+      </div>
+      <div class="diff-card" data-level="medium">
+        <div class="diff-name">🔵 Orta</div>
+        <div class="diff-detail">8 basamak · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">15 puan / basamak · maks. 600</div>
+      </div>
+      <div class="diff-card" data-level="hard">
+        <div class="diff-name">🟣 Zor</div>
+        <div class="diff-detail">10 basamak · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">20 puan / basamak · maks. 1000</div>
+      </div>
+      <div class="diff-card" data-level="progressive">
+        <div class="diff-name">🌈 Kademeli</div>
+        <div class="diff-detail">6→8→8→10→10 basamak<br>5 soru</div>
+        <div class="diff-pts">Karma puanlama · maks. 700</div>
+      </div>
+    </div>
+    <button class="btn" id="btn-start" disabled>Seviye Seç</button>
+    <div class="row-buttons">
+      <button class="btn secondary" id="btn-start-back">← Ana Menü</button>
+    </div>
+  </div>
+
+  <!-- EZBERLEME -->
+  <div id="screen-memorize" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="memorize-qnum">1</b> / <b id="memorize-total">5</b></span>
+      <span id="memorize-badge"></span>
+    </div>
+    <div class="number-card">
+      <div class="digit-display" id="memorize-number"></div>
+    </div>
+    <div class="timer-bar-wrap"><div class="timer-bar" id="memorize-bar"></div></div>
+    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Sayıyı dikkatlice incele.</p>
+  </div>
+
+  <!-- GERİ SAYIM -->
+  <div id="screen-countdown" class="hidden">
+    <div class="eyebrow">Hazırlan</div>
+    <div class="number-card">
+      <div class="countdown-display" id="countdown-number">3</div>
+    </div>
+    <p class="trivia-text" id="trivia-display"></p>
+  </div>
+
+  <!-- CEVAP -->
+  <div id="screen-answer" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="answer-qnum">1</b> / <b id="answer-total">5</b></span>
+      <span id="answer-badge"></span>
+    </div>
+    <p class="answer-prompt" id="answer-prompt"></p>
+    <input type="text" inputmode="numeric" class="answer-input" id="answer-input" autocomplete="off">
+    <div class="row-buttons">
+      <button class="btn" id="btn-submit" disabled>Cevabı Gönder</button>
+    </div>
+  </div>
+
+  <!-- SORU SONUCU -->
+  <div id="screen-result" class="hidden fade-in">
+    <div class="eyebrow">Soru Sonucu</div>
+    <div id="result-badge-wrap"></div>
+    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sayı</h2>
+    <div class="feedback-digits" id="feedback-correct"></div>
+    <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
+    <div class="feedback-digits" id="feedback-user"></div>
+    <div class="score-pill">Bu sorudan: <b id="result-score">0</b> puan</div>
+    <div class="row-buttons">
+      <button class="btn" id="btn-next">Sıradaki Soru</button>
+    </div>
+  </div>
+
+  <!-- SET SONU -->
+  <div id="screen-final" class="hidden fade-in">
+    <div class="eyebrow">Set Tamamlandı</div>
+    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
+    <div class="final-score" id="final-score">0</div>
+    <div class="final-max" id="final-max"></div>
+    <div class="per-question-recap" id="final-recap"></div>
+    <p class="subtitle">Ne yapmak istersin?</p>
+    <div class="row-buttons">
+      <button class="btn" id="btn-restart">Yeni Set</button>
+      <button class="btn secondary" id="btn-goto-menu">Ana Menü</button>
+      <button class="btn secondary" id="btn-quit">Oyunu Bitir</button>
+    </div>
+  </div>
+
+  <!-- RENK ZORLUK SEÇİMİ -->
+  <div id="screen-color-start" class="hidden">
+    <h1 class="glow-title">RENKLERİ EZBERLEME OYUNU</h1>
+    <p class="subtitle">Ekranda beliren renk listesini ezberle,<br>geriye sayımın ardından renklere doğru sırayla dokun.</p>
+    <div class="difficulty-grid">
+      <div class="diff-card" data-clevel="easy">
+        <div class="diff-name">🟢 Kolay</div>
+        <div class="diff-detail">4 renk · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">10 puan / renk · maks. 200</div>
+      </div>
+      <div class="diff-card" data-clevel="medium">
+        <div class="diff-name">🔵 Orta</div>
+        <div class="diff-detail">6 renk · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">15 puan / renk · maks. 450</div>
+      </div>
+      <div class="diff-card" data-clevel="hard">
+        <div class="diff-name">🟣 Zor</div>
+        <div class="diff-detail">8 renk · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">20 puan / renk · maks. 800</div>
+      </div>
+      <div class="diff-card" data-clevel="progressive">
+        <div class="diff-name">🌈 Kademeli</div>
+        <div class="diff-detail">4→6→6→8→8 renk<br>5 soru</div>
+        <div class="diff-pts">Karma puanlama · maks. 510</div>
+      </div>
+    </div>
+    <button class="btn" id="btn-color-start" disabled>Seviye Seç</button>
+    <div class="row-buttons">
+      <button class="btn secondary" id="btn-color-start-back">← Ana Menü</button>
+    </div>
+  </div>
+
+  <!-- RENK EZBERLEME -->
+  <div id="screen-color-memorize" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="cmemorize-qnum">1</b> / <b id="cmemorize-total">5</b></span>
+      <span id="cmemorize-badge"></span>
+    </div>
+    <div class="number-card">
+      <div class="color-word-list" id="cmemorize-list"></div>
+    </div>
+    <div class="timer-bar-wrap"><div class="timer-bar" id="cmemorize-bar"></div></div>
+    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Renk sırasını dikkatlice incele.</p>
+  </div>
+
+  <!-- RENK CEVAP -->
+  <div id="screen-color-answer" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="canswer-qnum">1</b> / <b id="canswer-total">5</b></span>
+      <span id="canswer-badge"></span>
+    </div>
+    <p class="answer-prompt" id="canswer-prompt"></p>
+    <div class="color-slots" id="color-slots"></div>
+    <div class="color-palette" id="color-palette"></div>
+    <div class="row-buttons">
+      <button class="btn secondary" id="btn-color-undo">⌫ Son Rengi Sil</button>
+      <button class="btn" id="btn-color-submit" disabled>Cevabı Gönder</button>
+    </div>
+  </div>
+
+  <!-- RENK SONUÇ -->
+  <div id="screen-color-result" class="hidden fade-in">
+    <div class="eyebrow">Soru Sonucu</div>
+    <div id="cresult-badge-wrap"></div>
+    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sıra</h2>
+    <div class="feedback-digits color-feedback" id="cfeedback-correct"></div>
+    <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
+    <div class="feedback-digits color-feedback" id="cfeedback-user"></div>
+    <div class="score-pill">Bu sorudan: <b id="cresult-score">0</b> puan</div>
+    <div class="row-buttons">
+      <button class="btn" id="btn-color-next">Sıradaki Soru</button>
+    </div>
+  </div>
+
+  <!-- RENK SET SONU -->
+  <div id="screen-color-final" class="hidden fade-in">
+    <div class="eyebrow">Set Tamamlandı</div>
+    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
+    <div class="final-score" id="cfinal-score">0</div>
+    <div class="final-max" id="cfinal-max"></div>
+    <div class="per-question-recap" id="cfinal-recap"></div>
+    <p class="subtitle">Ne yapmak istersin?</p>
+    <div class="row-buttons">
+      <button class="btn" id="btn-color-restart">Yeni Set</button>
+      <button class="btn secondary" id="btn-color-menu">Ana Menü</button>
+      <button class="btn secondary" id="btn-color-quit">Oyunu Bitir</button>
+    </div>
+  </div>
+
+  <!-- SEMBOL ZORLUK SEÇİMİ -->
+  <div id="screen-symbol-start" class="hidden">
+    <h1 class="glow-title">SEMBOLLERİ EZBERLEME OYUNU</h1>
+    <p class="subtitle">Ekranda beliren semboller dizisini ezberle,<br>geriye sayımın ardından sembollere doğru sırayla dokun.</p>
+    <div class="difficulty-grid">
+      <div class="diff-card" data-slevel="easy">
+        <div class="diff-name">🟢 Kolay</div>
+        <div class="diff-detail">4 sembol · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">10 puan / sembol · maks. 200</div>
+      </div>
+      <div class="diff-card" data-slevel="medium">
+        <div class="diff-name">🔵 Orta</div>
+        <div class="diff-detail">6 sembol · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">15 puan / sembol · maks. 450</div>
+      </div>
+      <div class="diff-card" data-slevel="hard">
+        <div class="diff-name">🟣 Zor</div>
+        <div class="diff-detail">8 sembol · 3 saniye<br>5 soru</div>
+        <div class="diff-pts">20 puan / sembol · maks. 800</div>
+      </div>
+      <div class="diff-card" data-slevel="progressive">
+        <div class="diff-name">🌈 Kademeli</div>
+        <div class="diff-detail">4→6→6→8→8 sembol<br>5 soru</div>
+        <div class="diff-pts">Karma puanlama · maks. 510</div>
+      </div>
+    </div>
+    <button class="btn" id="btn-symbol-start" disabled>Seviye Seç</button>
+    <div class="row-buttons">
+      <button class="btn secondary" id="btn-symbol-start-back">← Ana Menü</button>
+    </div>
+  </div>
+
+  <!-- SEMBOL EZBERLEME -->
+  <div id="screen-symbol-memorize" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="smemorize-qnum">1</b> / <b id="smemorize-total">5</b></span>
+      <span id="smemorize-badge"></span>
+    </div>
+    <div class="number-card">
+      <div class="symbol-display" id="smemorize-list"></div>
+    </div>
+    <div class="timer-bar-wrap"><div class="timer-bar" id="smemorize-bar"></div></div>
+    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Sembol sırasını dikkatlice incele.</p>
+  </div>
+
+  <!-- SEMBOL CEVAP -->
+  <div id="screen-symbol-answer" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="sanswer-qnum">1</b> / <b id="sanswer-total">5</b></span>
+      <span id="sanswer-badge"></span>
+    </div>
+    <p class="answer-prompt" id="sanswer-prompt"></p>
+    <div class="symbol-slots" id="symbol-slots"></div>
+    <div class="symbol-palette" id="symbol-palette"></div>
+    <div class="row-buttons">
+      <button class="btn secondary" id="btn-symbol-undo">⌫ Son Sembolü Sil</button>
+      <button class="btn" id="btn-symbol-submit" disabled>Cevabı Gönder</button>
+    </div>
+  </div>
+
+  <!-- SEMBOL SONUÇ -->
+  <div id="screen-symbol-result" class="hidden fade-in">
+    <div class="eyebrow">Soru Sonucu</div>
+    <div id="sresult-badge-wrap"></div>
+    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sıra</h2>
+    <div class="feedback-digits symbol-feedback" id="sfeedback-correct"></div>
+    <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
+    <div class="feedback-digits symbol-feedback" id="sfeedback-user"></div>
+    <div class="score-pill">Bu sorudan: <b id="sresult-score">0</b> puan</div>
+    <div class="row-buttons">
+      <button class="btn" id="btn-symbol-next">Sıradaki Soru</button>
+    </div>
+  </div>
+
+  <!-- SEMBOL SET SONU -->
+  <div id="screen-symbol-final" class="hidden fade-in">
+    <div class="eyebrow">Set Tamamlandı</div>
+    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
+    <div class="final-score" id="sfinal-score">0</div>
+    <div class="final-max" id="sfinal-max"></div>
+    <div class="per-question-recap" id="sfinal-recap"></div>
+    <p class="subtitle">Ne yapmak istersin?</p>
+    <div class="row-buttons">
+      <button class="btn" id="btn-symbol-restart">Yeni Set</button>
+      <button class="btn secondary" id="btn-symbol-menu">Ana Menü</button>
+      <button class="btn secondary" id="btn-symbol-quit">Oyunu Bitir</button>
+    </div>
+  </div>
+
+  <!-- REFLEKS AÇIKLAMA -->
+  <div id="screen-reflex-start" class="hidden">
+    <h1 class="glow-title">REFLEKS TESTİ</h1>
+    <p class="subtitle">Ekranda <strong>gri daire</strong> varken bekle<br>sakın ekrana dokunma.<br>
+    Daire <strong>yeşile</strong> döndüğü anda<br>olabildiğince hızlı dokun.<br>
+    Erken dokunursan o sorudan sıfır puan alırsın.<br>
+    5 soruluk bir set seni bekliyor.</p>
+    <button class="btn" id="btn-reflex-start">Oyuna Başla</button>
+    <div class="row-buttons">
+      <button class="btn secondary" id="btn-reflex-start-back">← Ana Menü</button>
+    </div>
+  </div>
+
+  <!-- REFLEKS: BEKLEME / SİNYAL -->
+  <div id="screen-reflex-wait" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="rwait-qnum">1</b> / <b id="rwait-total">5</b></span>
+      <span style="color:var(--text-dim);font-size:12px;">Bekle</span>
+    </div>
+    <p class="answer-prompt" id="reflex-instruction">Yeşili bekle, henüz dokunma...</p>
+    <button class="reflex-target" id="reflex-target-btn">BEKLE</button>
+  </div>
+
+  <!-- REFLEKS: ERKEN BASMA UYARISI -->
+  <div id="screen-reflex-early" class="hidden fade-in">
+    <div class="eyebrow">Çok Erken!</div>
+    <h2 class="glow-title" style="font-size:24px;">Yeşili Beklemeliydin</h2>
+    <p class="subtitle">Gri daireye dokundun.<br>Bu soru <strong>0 puan</strong> olarak kaydedildi.</p>
+    <div class="score-pill">Bu sorudan: <b>0</b> puan</div>
+    <div class="row-buttons">
+      <button class="btn" id="btn-reflex-early-next">Sıradaki Soru</button>
+    </div>
+  </div>
+
+  <!-- REFLEKS SONUÇ -->
+  <div id="screen-reflex-result" class="hidden fade-in">
+    <div class="eyebrow">Soru Sonucu</div>
+    <div class="timing-result-row">
+      <div class="timing-result-box">
+        <div class="timing-result-label">Tepki Süren</div>
+        <div class="timing-result-value" id="rresult-time">0 ms</div>
+      </div>
+    </div>
+    <p class="hint-text" id="rresult-comment" style="margin:10px 0;"></p>
+    <div class="score-pill">Bu sorudan: <b id="rresult-score">0</b> puan</div>
+    <div class="row-buttons">
+      <button class="btn" id="btn-reflex-next">Sıradaki Soru</button>
+    </div>
+  </div>
+
+  <!-- REFLEKS SET SONU -->
+  <div id="screen-reflex-final" class="hidden fade-in">
+    <div class="eyebrow">Set Tamamlandı</div>
+    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
+    <div class="final-score" id="rfinal-score">0</div>
+    <div class="final-max" id="rfinal-max">/ 500 puan</div>
+    <div class="per-question-recap" id="rfinal-recap"></div>
+    <p class="subtitle">Ne yapmak istersin?</p>
+    <div class="row-buttons">
+      <button class="btn" id="btn-reflex-restart">Yeni Set</button>
+      <button class="btn secondary" id="btn-reflex-menu">Ana Menü</button>
+      <button class="btn secondary" id="btn-reflex-quit">Oyunu Bitir</button>
+    </div>
+  </div>
+
+  <!-- ZAMANLAMA AÇIKLAMA -->
+  <div id="screen-timing-start" class="hidden">
+    <h1 class="glow-title">ZAMANLAMA HASSASİYETİ</h1>
+    <p class="subtitle">Ekranda dairesel bir animasyon göreceksin.<br>
+    Animasyonun süresini belirlemeye çalış<br>Daha sonra ekrana basılı tutarak<br>aynı süreyi bir kez de sen<br>
+    tekrar etmeye çalışacaksın.<br>
+    5 soruluk bir set seni bekliyor.</p>
+    <button class="btn" id="btn-timing-start">Oyuna Başla</button>
+    <div class="row-buttons">
+      <button class="btn secondary" id="btn-timing-start-back">← Ana Menü</button>
+    </div>
+  </div>
+
+  <!-- ZAMANLAMA: ANİMASYON İZLEME -->
+  <div id="screen-timing-watch" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="twatch-qnum">1</b> / <b id="twatch-total">5</b></span>
+      <span style="color:var(--text-dim);font-size:12px;">İzle</span>
+    </div>
+    <div class="timing-ring-wrap">
+      <svg class="timing-ring" id="timing-ring-svg" viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4fe3ff"/>
+            <stop offset="50%" stop-color="#b06bff"/>
+            <stop offset="100%" stop-color="#ff5fb0"/>
+          </linearGradient>
+        </defs>
+        <circle class="ring-track" cx="100" cy="100" r="84"/>
+        <circle class="ring-progress" id="ring-progress" cx="100" cy="100" r="84"/>
+      </svg>
+    </div>
+    <p class="trivia-text" style="margin-top:14px;color:var(--text-dim);font-style:normal;font-size:13px;">Halkanın dönüşünü dikkatlice izle.</p>
+  </div>
+
+  <!-- ZAMANLAMA: HAZIR OL -->
+  <div id="screen-timing-ready" class="hidden">
+    <div class="eyebrow">Hazırlan</div>
+    <div class="number-card">
+      <div class="countdown-display" id="timing-ready-text">HAZIR OL</div>
+    </div>
+    <p class="trivia-text" id="timing-trivia-display"></p>
+  </div>
+
+  <!-- ZAMANLAMA: CEVAP -->
+  <div id="screen-timing-answer" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="tanswer-qnum">1</b> / <b id="tanswer-total">5</b></span>
+      <span style="color:var(--text-dim);font-size:12px;">Basılı tut</span>
+    </div>
+    <p class="answer-prompt">Hedefe basılı tutarak az önce izlediğin süreyi tekrarla:</p>
+    <button class="timing-target" id="timing-target-btn">BAS &amp; TUT</button>
+    <p class="trivia-text" style="margin-top:14px;color:var(--text-dim);font-style:normal;font-size:12px;" id="timing-live-readout"></p>
+  </div>
+
+  <!-- ZAMANLAMA SONUÇ -->
+  <div id="screen-timing-result" class="hidden fade-in">
+    <div class="eyebrow">Soru Sonucu</div>
+    <div class="timing-result-row">
+      <div class="timing-result-box">
+        <div class="timing-result-label">Hedef Süre</div>
+        <div class="timing-result-value" id="tresult-target">0,00 sn</div>
+      </div>
+      <div class="timing-result-box">
+        <div class="timing-result-label">Senin Süren</div>
+        <div class="timing-result-value" id="tresult-user">0,00 sn</div>
+      </div>
+    </div>
+    <p class="hint-text" id="tresult-diff" style="margin:10px 0;"></p>
+    <div class="score-pill">Bu sorudan: <b id="tresult-score">0</b> puan</div>
+    <div class="row-buttons">
+      <button class="btn" id="btn-timing-next">Sıradaki Soru</button>
+    </div>
+  </div>
+
+  <!-- ZAMANLAMA SET SONU -->
+  <div id="screen-timing-final" class="hidden fade-in">
+    <div class="eyebrow">Set Tamamlandı</div>
+    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
+    <div class="final-score" id="tfinal-score">0</div>
+    <div class="final-max" id="tfinal-max">/ 500 puan</div>
+    <div class="per-question-recap" id="tfinal-recap"></div>
+    <p class="subtitle">Ne yapmak istersin?</p>
+    <div class="row-buttons">
+      <button class="btn" id="btn-timing-restart">Yeni Set</button>
+      <button class="btn secondary" id="btn-timing-menu">Ana Menü</button>
+      <button class="btn secondary" id="btn-timing-quit">Oyunu Bitir</button>
+    </div>
+  </div>
+
+  <!-- KONUM ZORLUK SEÇİMİ -->
+  <div id="screen-spatial-start" class="hidden">
+    <h1 class="glow-title">KONUM HAFIZASI</h1>
+    <p class="subtitle">Izgarada sırayla yanıp sönen hücreleri ezberle,<br>
+    geriye sayımın ardından aynı sırayla dokunarak tekrarla.<br>
+    Her dokunuş kaydedilir.</p>
+    <div class="difficulty-grid">
+      <div class="diff-card" data-glevel="easy">
+        <div class="diff-name">🟢 Kolay</div>
+        <div class="diff-detail">4 hücre<br>5 soru</div>
+        <div class="diff-pts">10 puan / hücre · maks. 200</div>
+      </div>
+      <div class="diff-card" data-glevel="medium">
+        <div class="diff-name">🔵 Orta</div>
+        <div class="diff-detail">6 hücre<br>5 soru</div>
+        <div class="diff-pts">15 puan / hücre · maks. 450</div>
+      </div>
+      <div class="diff-card" data-glevel="hard">
+        <div class="diff-name">🟣 Zor</div>
+        <div class="diff-detail">8 hücre<br>5 soru</div>
+        <div class="diff-pts">20 puan / hücre · maks. 800</div>
+      </div>
+      <div class="diff-card" data-glevel="progressive">
+        <div class="diff-name">🌈 Kademeli</div>
+        <div class="diff-detail">4→6→6→8→8 hücre<br>5 soru</div>
+        <div class="diff-pts">Karma puanlama · maks. 510</div>
+      </div>
+    </div>
+    <button class="btn" id="btn-spatial-start" disabled>Seviye Seç</button>
+    <div class="row-buttons">
+      <button class="btn secondary" id="btn-spatial-start-back">← Ana Menü</button>
+    </div>
+  </div>
+
+  <!-- KONUM EZBERLEME -->
+  <div id="screen-spatial-memorize" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="gmemorize-qnum">1</b> / <b id="gmemorize-total">5</b></span>
+      <span id="gmemorize-badge"></span>
+    </div>
+    <div class="spatial-grid-wrap">
+      <div class="spatial-grid" id="spatial-grid-memorize"></div>
+    </div>
+    <div class="timer-bar-wrap"><div class="timer-bar" id="gmemorize-bar"></div></div>
+    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Yanıp sönen hücrelerin sırasını dikkatlice izle.</p>
+  </div>
+
+  <!-- KONUM CEVAP -->
+  <div id="screen-spatial-answer" class="hidden">
+    <div class="question-meta">
+      <span>Soru <b id="ganswer-qnum">1</b> / <b id="ganswer-total">5</b></span>
+      <span id="ganswer-badge"></span>
+    </div>
+    <p class="answer-prompt" id="ganswer-prompt"></p>
+    <p class="hint-text" style="margin-bottom:10px;">Dokunuş: <b id="ganswer-progress" style="color:var(--accent-cyan);">0</b> / <b id="ganswer-progress-total">4</b></p>
+    <div class="spatial-grid-wrap">
+      <div class="spatial-grid" id="spatial-grid-answer"></div>
+    </div>
+  </div>
+
+  <!-- KONUM SONUÇ -->
+  <div id="screen-spatial-result" class="hidden fade-in">
+    <div class="eyebrow">Soru Sonucu</div>
+    <div id="gresult-badge-wrap"></div>
+    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sıra</h2>
+    <div class="feedback-digits coord-feedback" id="gfeedback-correct"></div>
+    <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
+    <div class="feedback-digits coord-feedback" id="gfeedback-user"></div>
+    <div class="score-pill">Bu sorudan: <b id="gresult-score">0</b> puan</div>
+    <div class="row-buttons">
+      <button class="btn" id="btn-spatial-next">Sıradaki Soru</button>
+    </div>
+  </div>
+
+  <!-- KONUM SET SONU -->
+  <div id="screen-spatial-final" class="hidden fade-in">
+    <div class="eyebrow">Set Tamamlandı</div>
+    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
+    <div class="final-score" id="gfinal-score">0</div>
+    <div class="final-max" id="gfinal-max"></div>
+    <div class="per-question-recap" id="gfinal-recap"></div>
+    <p class="subtitle">Ne yapmak istersin?</p>
+    <div class="row-buttons">
+      <button class="btn" id="btn-spatial-restart">Yeni Set</button>
+      <button class="btn secondary" id="btn-spatial-menu">Ana Menü</button>
+      <button class="btn secondary" id="btn-spatial-quit">Oyunu Bitir</button>
+    </div>
+  </div>
+
+  <!-- ÇIKIŞ -->
+  <div id="screen-bye" class="hidden fade-in">
+    <div class="eyebrow">Görüşmek Üzere</div>
+    <h1 class="glow-title">Teşekkürler!</h1>
+    <p class="subtitle">Belleğini test etmeye geldiğinde buradayız.</p>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+
+/* ── ZORLUK TANIMLARI ─────────────────────────────────────── */
+const LEVELS = {
+  easy:        { label:'Kolay',    badge:'badge-easy',    pts:10, questions:[{digits:6,ms:3000},'','',' ',''] },
+  medium:      { label:'Orta',     badge:'badge-medium',  pts:15, questions:[{digits:8,ms:3000},'','','',''] },
+  hard:        { label:'Zor',      badge:'badge-hard',    pts:20, questions:[{digits:10,ms:3000},'','','',''] },
+  progressive: { label:'Kademeli', badge:'badge-progressive', pts:null,
+    questions:[
+      {digits:6, ms:4000, pts:10, sub:'easy',   subLabel:'Kolay'},
+      {digits:8, ms:3000, pts:15, sub:'medium',  subLabel:'Orta'},
+      {digits:8, ms:3000, pts:15, sub:'medium',  subLabel:'Orta'},
+      {digits:10,ms:3000, pts:20, sub:'hard',    subLabel:'Zor'},
+      {digits:10,ms:3000, pts:20, sub:'hard',    subLabel:'Zor'},
+    ]}
+};
+const TOTAL_QUESTIONS = 5;
+const COUNTDOWN_START = 4;
+
+/* ── RENK TANIMLARI ───────────────────────────────────────── */
+const COLOR_NAMES = {
+  kirmizi:'Kırmızı', turuncu:'Turuncu', sari:'Sarı', yesil:'Yeşil',
+  mavi:'Mavi', mor:'Mor', beyaz:'Beyaz'
+};
+const COLOR_KEYS = Object.keys(COLOR_NAMES);
+
+const COLOR_LEVELS = {
+  easy:        { label:'Kolay',    badge:'badge-easy',    pts:10, questions:[{count:4,ms:3000}] },
+  medium:      { label:'Orta',     badge:'badge-medium',  pts:15, questions:[{count:6,ms:3000}] },
+  hard:        { label:'Zor',      badge:'badge-hard',    pts:20, questions:[{count:8,ms:3000}] },
+  progressive: { label:'Kademeli', badge:'badge-progressive', pts:null,
+    questions:[
+      {count:4, ms:3000, pts:10, sub:'easy',   subLabel:'Kolay'},
+      {count:6, ms:3000, pts:15, sub:'medium', subLabel:'Orta'},
+      {count:6, ms:3000, pts:15, sub:'medium', subLabel:'Orta'},
+      {count:8, ms:3000, pts:20, sub:'hard',   subLabel:'Zor'},
+      {count:8, ms:3000, pts:20, sub:'hard',   subLabel:'Zor'},
+    ]}
+};
+
+/* ── SEMBOL TANIMLARI ─────────────────────────────────────── */
+const SYMBOL_KEYS = ['Π','€','£','®','@','Δ','Σ','Ω','◊','¥'];
+
+const SYMBOL_LEVELS = {
+  easy:        { label:'Kolay',    badge:'badge-easy',    pts:10, questions:[{count:4,ms:3000}] },
+  medium:      { label:'Orta',     badge:'badge-medium',  pts:15, questions:[{count:6,ms:3000}] },
+  hard:        { label:'Zor',      badge:'badge-hard',    pts:20, questions:[{count:8,ms:3000}] },
+  progressive: { label:'Kademeli', badge:'badge-progressive', pts:null,
+    questions:[
+      {count:4, ms:3000, pts:10, sub:'easy',   subLabel:'Kolay'},
+      {count:6, ms:3000, pts:15, sub:'medium', subLabel:'Orta'},
+      {count:6, ms:3000, pts:15, sub:'medium', subLabel:'Orta'},
+      {count:8, ms:3000, pts:20, sub:'hard',   subLabel:'Zor'},
+      {count:8, ms:3000, pts:20, sub:'hard',   subLabel:'Zor'},
+    ]}
+};
+/* ── BİLGİ CÜMLELERİ (40 adet) ───────────────────────────── */
+const ALL_TRIVIA = [
+  "Ahtapotların üç kalbi vardır; ikisi solungaçlara, biri ise vücudun geri kalanına kan pompalar.",
+  "Isaac Newton, başyapıtı Principia'yı yazmadan önce 18 ay boyunca neredeyse hiç uyumadığını belirtmiştir.",
+  "Bir karınca, kendi vücut ağırlığının yaklaşık 50 katı kadar yük taşıyabilir.",
+  "Nikola Tesla, dinamo için gerekli hesaplamaları zihninde yapıyor; kağıda hiç dökmüyordu.",
+  "Zürafaların dilleri yaklaşık 45 cm uzunluğundadır ve yoğun mor pigment içerir; bu renk güneşten koruma işlevi görür.",
+  "Marie Curie, hem fizik hem de kimya alanında Nobel ödülü kazanan tek kişidir.",
+  "Bir ördek, her iki gözüyle aynı anda farklı yönlere bakabilir ve beyninin yalnızca yarısını uyuturken uyanık kalabilir.",
+  "Albert Einstein, çocukluğunda konuşmayı geç öğrenmiş; ailesi bir süre zihinsel gelişiminden endişe etmiştir.",
+  "Denizatları, en sadık çiftler arasında sayılır; ömür boyu tek eşle yaşarlar.",
+  "Srinivasa Ramanujan, hiçbir formal matematik eğitimi almadan, düşlerinde gördüğü formülleri not ederek modern analizin temel teoremlerini keşfetti.",
+  "Fil, kulak kepçelerindeki damarlar aracılığıyla vücut ısısını düşürerek sıcak savanlarda hayatta kalır.",
+  "Galileo Galilei, Katolik Kilisesi tarafından aforoz edilmemek için dünyanın döndüğüne ilişkin savını kamuoyu önünde geri almak zorunda kalmıştır.",
+  "Gökdoğan, saatte 320 km'ye ulaşabilen dalış hızıyla dünyanın en hızlı hayvanıdır.",
+  "Alan Turing, modern bilgisayar biliminin temellerini attığı dönemde aynı zamanda İkinci Dünya Savaşı'nda Alman şifre makinesi Enigma'yı kırmıştır.",
+  "Kutup ayılarının tüyleri aslında şeffaftır; beyaz görünmeleri ışığı yansıtmalarından kaynaklanır.",
+  "Mme. Lavoisier, kocası Antoine Lavoisier'nin deneylerini kaydetmekle kalmayıp kimya tarihinin önemli illüstrasyonlarını bizzat çizmiştir.",
+  "Bir bal arısı, bir kaşık bal üretebilmek için hayatı boyunca yaklaşık 1.600 km uçar.",
+  "Leonhard Euler, ömrünün son 17 yılında neredeyse tamamen kör olmasına rağmen en verimli matematik çalışmalarını bu dönemde yazmıştır.",
+  "Ahtapotlar, renk körü olmalarına karşın derilerindeki özel hücreler sayesinde çevrelerinin rengine uyum sağlayabilir.",
+  "Nikola Tesla, 3-6-9 örüntüsüne karşı takıntılı bir bağlılık duyardı; kapı kollarını üç kez çevirmedikçe içeri girmezdi.",
+  "Bir timsah, yıllarca aç kalabilir; metabolizmasını o denli yavaşlatır ki neredeyse tamamen durma noktasına gelir.",
+  "Hypatia of Alexandria, MS 4. yüzyılda antik dünyanın önde gelen matematikçilerinden biri olarak konik kesitler üzerine önemli şerhler yazmıştır.",
+  "Bir sincap, kışa hazırladığı fındıkların yaklaşık yüzde yirmi beşini nereye gömdüğünü unutur; bu davranış kasıtsız olarak ormanlık alanların genişlemesine katkıda bulunur.",
+  "Charles Darwin, Beagle yolculuğu sırasında 1.529 farklı türden 5.436 adet örnek toplamış ve bunları özenle etiketleyerek İngiltere'ye göndermiştir.",
+  "Bir mantis karidesi, gözündeki 16 farklı renk reseptörü sayesinde insanların göremediği ultraviyole ve kızılötesi ışığı algılayabilir.",
+  "Sofia Kovalevskaya, kadınların üniversiteye kabul edilmediği Rusya'dan kaçmak için sahte bir evlilik yaparak matematiği Avrupa'da tahsil etmiştir.",
+  "Gergedan balığı, neredeyse 200 milyon yıldır değişmeden varlığını sürdürmekte; bu nedenle 'yaşayan fosil' olarak anılmaktadır.",
+  "Richard Feynman, fizik problemlerini çözerken çoğunlukla bir barda oturur, kağıt peçeteye formüller çizerdi.",
+  "Bir karga, insan yüzlerini yıllarca hatırlayabilir ve kendisine zarar veren kişiyi diğer kargalara 'tarif edebilir'.",
+  "Emmy Noether, matematikteki soyut cebirin temellerini atmasına rağmen yıllarca ücretsiz ders vermek zorunda bırakılmış; Einstein onu 'tarihte yetişmiş en önemli matematikçi' olarak tanımlamıştır.",
+  "Fillerin hamilelik süresi yaklaşık 22 aydır; bu, kara hayvanları arasındaki en uzun gebelik dönemidir.",
+  "Blaise Pascal, 19 yaşındayken babasının vergi hesaplamalarını kolaylaştırmak amacıyla mekanik bir hesap makinesi tasarlamıştır.",
+  "Grönland köpekbalığı, 250-500 yıl arası bir ömre sahip olabilir; bu özelliğiyle omurgalılar arasındaki en uzun yaşayan tür unvanını taşır.",
+  "Rosalind Franklin'in çektiği X-ışını fotoğrafı, DNA'nın çift sarmal yapısının keşfinde belirleyici olmuş; ancak bu katkısı Nobel ödülünden önce ölümü nedeniyle resmî olarak tanınamamıştır.",
+  "Pelikan, gagasındeki kesesi sayesinde suyu dışarı akıtırken balıkları içeride tutabilir; kesenin kapasitesi midesiyle yarışır.",
+  "Paul Erdős, evsiz bir insan gibi yaşamış; bavulunu taşıyarak dünya genelinde 500'den fazla matematikçiyle birlikte çalışmış ve tarihin en üretken matematikçilerinden biri olmuştur.",
+  "Amur leoparı, dünyada en az kalan büyük kedi türlerinden biridir; vahşi doğada 100'den az bireyiyle varlık mücadelesi vermektedir.",
+  "Matematiğin prensi Carl Friedrich Gauss'un, henüz 3 yaşındayken babasının bordro hesaplarındaki hatayı bulup düzelttiği söylenir.",
+  "Yılan balığı, binlerce kilometre yüzerek Sargasso Denizi'nde ürer ve hiç yemek yemeden bu yolculuğu tamamlar.",
+  "Katherine Johnson, NASA'nın ilk uzay uçuşlarındaki yörünge hesaplamalarını elle yapmış; astronot John Glenn bilgisayar sonuçlarını ona onaylatmadan uçmayı reddetmiştir."
+];
+
+/* ── YARDIMCI: Fisher-Yates karıştırma ───────────────────── */
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* ── DURUM ────────────────────────────────────────────────── */
+let state={
+  level: null,
+  currentQuestion: 0,
+  questions: [],          // her soru için {digits, ms, pts, sub, subLabel}
+  scores: [],
+  currentNumber: '',
+  triviaQueue: [],        // setin geri kalan trivia listesi
+};
+
+let cstate={
+  level: null,
+  currentQuestion: 0,
+  questions: [],          // her soru için {count, ms, pts, sub, subLabel}
+  scores: [],
+  currentColors: [],      // bu sorunun doğru renk dizisi (key listesi)
+  userColors: [],         // kullanıcının girdiği renkler
+  triviaQueue: [],
+};
+
+let sstate={
+  level: null,
+  currentQuestion: 0,
+  questions: [],          // her soru için {count, ms, pts, sub, subLabel}
+  scores: [],
+  currentSymbols: [],     // bu sorunun doğru sembol dizisi
+  userSymbols: [],        // kullanıcının girdiği semboller
+  triviaQueue: [],
+};
+
+/* ── ZAMANLAMA SABİTLERİ VE DURUMU ────────────────────────── */
+const TIMING_MIN_MS = 1500;
+const TIMING_MAX_MS = 4000;
+const TIMING_TOLERANCE_MS = 100; // ±100ms içinde tam puan
+const TIMING_MAX_PTS_PER_Q = 100;
+
+let tstate={
+  currentQuestion: 0,
+  scores: [],            // {score, targetMs, userMs}
+  targetMs: 0,
+  triviaQueue: [],
+  pressStart: 0,
+  isPressed: false,
+  liveInterval: null,
+};
+
+/* ── REFLEKS SABİTLERİ VE DURUMU ───────────────────────────── */
+const REFLEX_MIN_DELAY_MS = 1500;
+const REFLEX_MAX_DELAY_MS = 4000;
+const REFLEX_BEST_MS = 150;   // bu ve altı: tam puan
+const REFLEX_WORST_MS = 600;  // bu ve üstü: 0 puan
+const REFLEX_MAX_PTS_PER_Q = 100;
+
+let rstate={
+  currentQuestion: 0,
+  scores: [],          // {score, reactionMs}
+  signalTime: 0,
+  waitTimeoutId: null,
+  awaitingSignal: false, // true: sinyal henüz gelmedi, erken basma kontrolü aktif
+};
+
+/* ── KONUM HAFIZASI TANIMLARI ─────────────────────────────── */
+const GRID_ROWS = 4, GRID_COLS = 4; // toplam 16 hücre
+const COORD_LABELS = []; // a1, a2, a3, a4, b1, b2, ... şeklinde 16 etiket
+(function(){
+  const rowLetters=['a','b','c','d'];
+  for(let r=0;r<GRID_ROWS;r++){
+    for(let c=0;c<GRID_COLS;c++){
+      COORD_LABELS.push(rowLetters[r]+(c+1));
+    }
+  }
+})();
+
+const SPATIAL_LEVELS = {
+  easy:        { label:'Kolay',    badge:'badge-easy',    pts:10, questions:[{count:4,ms:3000}] },
+  medium:      { label:'Orta',     badge:'badge-medium',  pts:15, questions:[{count:6,ms:3000}] },
+  hard:        { label:'Zor',      badge:'badge-hard',    pts:20, questions:[{count:8,ms:3000}] },
+  progressive: { label:'Kademeli', badge:'badge-progressive', pts:null,
+    questions:[
+      {count:4, ms:3000, pts:10, sub:'easy',   subLabel:'Kolay'},
+      {count:6, ms:3000, pts:15, sub:'medium', subLabel:'Orta'},
+      {count:6, ms:3000, pts:15, sub:'medium', subLabel:'Orta'},
+      {count:8, ms:3000, pts:20, sub:'hard',   subLabel:'Zor'},
+      {count:8, ms:3000, pts:20, sub:'hard',   subLabel:'Zor'},
+    ]}
+};
+
+let gstate={
+  level: null,
+  currentQuestion: 0,
+  questions: [],
+  scores: [],
+  currentCells: [],     // bu sorunun doğru hücre indeks dizisi (0-15)
+  userCells: [],        // kullanıcının dokunduğu hücre indeksleri
+  triviaQueue: [],
+  inputLocked: false,   // yanıp sönme anında girişi kilitler
+};
+
+/* ── EKRANLAR ─────────────────────────────────────────────── */
+const screens={
+  menu:     document.getElementById('screen-menu'),
+  start:    document.getElementById('screen-start'),
+  memorize: document.getElementById('screen-memorize'),
+  countdown:document.getElementById('screen-countdown'),
+  answer:   document.getElementById('screen-answer'),
+  result:   document.getElementById('screen-result'),
+  final:    document.getElementById('screen-final'),
+  bye:      document.getElementById('screen-bye'),
+  colorStart:    document.getElementById('screen-color-start'),
+  colorMemorize: document.getElementById('screen-color-memorize'),
+  colorAnswer:   document.getElementById('screen-color-answer'),
+  colorResult:   document.getElementById('screen-color-result'),
+  colorFinal:    document.getElementById('screen-color-final'),
+  symbolStart:    document.getElementById('screen-symbol-start'),
+  symbolMemorize: document.getElementById('screen-symbol-memorize'),
+  symbolAnswer:   document.getElementById('screen-symbol-answer'),
+  symbolResult:   document.getElementById('screen-symbol-result'),
+  symbolFinal:    document.getElementById('screen-symbol-final'),
+  reflexStart:  document.getElementById('screen-reflex-start'),
+  reflexWait:   document.getElementById('screen-reflex-wait'),
+  reflexEarly:  document.getElementById('screen-reflex-early'),
+  reflexResult: document.getElementById('screen-reflex-result'),
+  reflexFinal:  document.getElementById('screen-reflex-final'),
+  timingStart:  document.getElementById('screen-timing-start'),
+  timingWatch:  document.getElementById('screen-timing-watch'),
+  timingReady:  document.getElementById('screen-timing-ready'),
+  timingAnswer: document.getElementById('screen-timing-answer'),
+  timingResult: document.getElementById('screen-timing-result'),
+  timingFinal:  document.getElementById('screen-timing-final'),
+  spatialStart:    document.getElementById('screen-spatial-start'),
+  spatialMemorize: document.getElementById('screen-spatial-memorize'),
+  spatialAnswer:   document.getElementById('screen-spatial-answer'),
+  spatialResult:   document.getElementById('screen-spatial-result'),
+  spatialFinal:    document.getElementById('screen-spatial-final'),
+};
+function showScreen(name){
+  Object.values(screens).forEach(el=>el.classList.add('hidden'));
+  screens[name].classList.remove('hidden');
+}
+
+/* ── BADGE HTML ───────────────────────────────────────────── */
+function badgeHTML(levelKey, label){
+  const cfg=LEVELS[levelKey];
+  return `<span class="level-badge ${cfg.badge}">${label||cfg.label}</span>`;
+}
+
+/* ── SORU PLANI OLUŞTUR ───────────────────────────────────── */
+function buildQuestions(levelKey){
+  const cfg=LEVELS[levelKey];
+  if(levelKey==='progressive') return cfg.questions;
+  const q=cfg.questions[0]; // {digits,ms}
+  return Array(TOTAL_QUESTIONS).fill(null).map(()=>({
+    digits: q.digits,
+    ms:     q.ms,
+    pts:    cfg.pts,
+    sub:    levelKey,
+    subLabel: cfg.label,
+  }));
+}
+
+/* ── MAX PUAN ─────────────────────────────────────────────── */
+function maxScore(questions){
+  return questions.reduce((s,q)=>s+q.digits*q.pts,0);
+}
+
+/* ── OYUN BAŞLAT ──────────────────────────────────────────── */
+function startGame(){
+  state.currentQuestion=0;
+  state.scores=[];
+  state.questions=buildQuestions(state.level);
+  state.triviaQueue=shuffle(ALL_TRIVIA).slice(0,TOTAL_QUESTIONS);
+  nextQuestion();
+}
+
+/* ── SONRAKİ SORU ─────────────────────────────────────────── */
+function nextQuestion(){
+  state.currentQuestion++;
+  if(state.currentQuestion>TOTAL_QUESTIONS){ showFinal(); return; }
+  const q=state.questions[state.currentQuestion-1];
+  state.currentNumber=randomDigits(q.digits);
+  runMemorizePhase(q);
+}
+
+function randomDigits(n){
+  let s='';
+  for(let i=0;i<n;i++) s+=Math.floor(Math.random()*10);
+  return s;
+}
+
+/* ── EZBERLEME ────────────────────────────────────────────── */
+function runMemorizePhase(q){
+  document.getElementById('memorize-qnum').textContent=state.currentQuestion;
+  document.getElementById('memorize-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('memorize-number').textContent=state.currentNumber;
+  document.getElementById('memorize-badge').innerHTML=badgeHTML(q.sub,q.subLabel);
+
+  // input maxlength ayarı
+  const inp=document.getElementById('answer-input');
+  inp.maxLength=q.digits;
+  inp.placeholder='·'.repeat(q.digits);
+
+  showScreen('memorize');
+
+  const bar=document.getElementById('memorize-bar');
+  bar.style.transition='none';
+  bar.style.transform='scaleX(1)';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    bar.style.transition=`transform ${q.ms}ms linear`;
+    bar.style.transform='scaleX(0)';
+  }));
+
+  setTimeout(()=>{
+    const handler=(qq)=>runAnswerPhase(qq);
+    handler.mode='number';
+    runCountdownPhase(q, state.currentQuestion-1, handler);
+  }, q.ms);
+}
+
+/* ── GERİ SAYIM (her iki mod için ortak) ──────────────────── */
+function runCountdownPhase(q, triviaIndex, onDone){
+  showScreen('countdown');
+
+  let queue;
+  if(onDone.mode==='color') queue=cstate.triviaQueue;
+  else if(onDone.mode==='symbol') queue=sstate.triviaQueue;
+  else if(onDone.mode==='spatial') queue=gstate.triviaQueue;
+  else queue=state.triviaQueue;
+
+  const trivia = queue[triviaIndex] || '';
+  document.getElementById('trivia-display').textContent = trivia;
+
+  let remaining=COUNTDOWN_START;
+  const el=document.getElementById('countdown-number');
+  el.textContent=remaining;
+
+  const interval=setInterval(()=>{
+    remaining--;
+    if(remaining<=0){ clearInterval(interval); onDone(q); }
+    else el.textContent=remaining;
+  },1000);
+}
+
+/* ── CEVAP AŞAMASI ────────────────────────────────────────── */
+function runAnswerPhase(q){
+  document.getElementById('answer-qnum').textContent=state.currentQuestion;
+  document.getElementById('answer-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('answer-badge').innerHTML=badgeHTML(q.sub,q.subLabel);
+  document.getElementById('answer-prompt').textContent=
+    `Az önce gördüğün ${q.digits} basamaklı sayıyı yaz:`;
+
+  const inp=document.getElementById('answer-input');
+  inp.value='';
+  const submitBtn=document.getElementById('btn-submit');
+  submitBtn.disabled=true;
+  showScreen('answer');
+  setTimeout(()=>inp.focus(),50);
+}
+
+/* ── PUAN HESAPLA ─────────────────────────────────────────── */
+function calculateScore(correct,user,ptsPerDigit){
+  let matches=0;
+  for(let i=0;i<correct.length;i++){
+    if(user[i]!==undefined && user[i]===correct[i]) matches++;
+  }
+  return matches*ptsPerDigit;
+}
+
+/* ── CEVABI GÖNDER ────────────────────────────────────────── */
+function submitAnswer(){
+  const submitBtn=document.getElementById('btn-submit');
+  if(submitBtn.disabled) return;
+  submitBtn.disabled=true;
+
+  const inp=document.getElementById('answer-input');
+  inp.blur();
+  const q=state.questions[state.currentQuestion-1];
+  const userAnswer=inp.value.trim().slice(0,q.digits);
+  const score=calculateScore(state.currentNumber,userAnswer,q.pts);
+  state.scores.push({score,q});
+  renderResult(state.currentNumber,userAnswer,score,q);
+}
+
+/* ── SONUÇ EKRANI ─────────────────────────────────────────── */
+function renderResult(correct,userAnswer,score,q){
+  // Kutu boyutunu ekran genişliği ve basamak sayısına göre hesapla
+  const panelWidth = Math.min(window.innerWidth - 40, 560);
+  const n = correct.length;
+  const maxBoxSize = 40;
+  const minBoxSize = 24;
+  // gap = boxSize * 0.18 olarak orantılandır
+  // n * boxSize + (n-1) * gap = panelWidth - 32 (panel yatay padding)
+  // n * boxSize + (n-1) * boxSize * 0.18 = available
+  const available = panelWidth - 32;
+  const computed = Math.floor(available / (n + (n - 1) * 0.18));
+  const boxSize = Math.max(minBoxSize, Math.min(maxBoxSize, computed));
+  const boxGap = Math.max(3, Math.round(boxSize * 0.15));
+  const boxFont = Math.max(12, Math.round(boxSize * 0.52));
+
+  const root = document.documentElement;
+  root.style.setProperty('--box-size', boxSize + 'px');
+  root.style.setProperty('--box-gap',  boxGap  + 'px');
+  root.style.setProperty('--box-font', boxFont + 'px');
+
+  const cWrap=document.getElementById('feedback-correct');
+  const uWrap=document.getElementById('feedback-user');
+  cWrap.innerHTML=''; uWrap.innerHTML='';
+
+  for(let i=0;i<correct.length;i++){
+    const match=userAnswer[i]===correct[i];
+    const cBox=document.createElement('div');
+    cBox.className='digit-box '+(match?'correct':'wrong');
+    cBox.textContent=correct[i];
+    cWrap.appendChild(cBox);
+
+    const uBox=document.createElement('div');
+    uBox.className='digit-box '+(match?'correct':'wrong');
+    uBox.textContent=userAnswer[i]!==undefined?userAnswer[i]:'–';
+    uWrap.appendChild(uBox);
+  }
+
+  document.getElementById('result-score').textContent=score;
+  document.getElementById('result-badge-wrap').innerHTML=badgeHTML(q.sub,q.subLabel);
+
+  const nextBtn=document.getElementById('btn-next');
+  const isLast=state.currentQuestion>=TOTAL_QUESTIONS;
+  nextBtn.textContent=isLast?'Seti Tamamla':'Sıradaki Soru';
+  nextBtn.disabled=true;
+  setTimeout(()=>{ nextBtn.disabled=false; },600);
+
+  showScreen('result');
+}
+
+/* ── SET SONU ─────────────────────────────────────────────── */
+function showFinal(){
+  const total=state.scores.reduce((s,o)=>s+o.score,0);
+  const max=maxScore(state.questions);
+  document.getElementById('final-score').textContent=total;
+  document.getElementById('final-max').textContent=`/ ${max} puan`;
+
+  const recapWrap=document.getElementById('final-recap');
+  recapWrap.innerHTML='';
+  state.scores.forEach((o,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='recap-chip';
+    chip.innerHTML=`<b>Soru ${idx+1}: ${o.score} puan</b>
+      <span class="chip-cat">${o.q.subLabel} · ${o.q.digits} basamak</span>`;
+    recapWrap.appendChild(chip);
+  });
+
+  showScreen('final');
+}
+
+/* ── ZORLUK SEÇİMİ ────────────────────────────────────────── */
+document.querySelectorAll('.diff-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    document.querySelectorAll('.diff-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.level=card.dataset.level;
+    const btn=document.getElementById('btn-start');
+    btn.disabled=false;
+    btn.textContent='Oyuna Başla';
+  });
+});
+
+/* ── EVENT LİSTENERLAR ────────────────────────────────────── */
+document.getElementById('btn-start').addEventListener('click',()=>{
+  if(!state.level) return;
+  startGame();
+});
+
+document.getElementById('btn-submit').addEventListener('click',submitAnswer);
+
+document.getElementById('answer-input').addEventListener('keydown',(e)=>{
+  if(e.key==='Enter'){
+    e.stopPropagation();
+    if(!document.getElementById('btn-submit').disabled) submitAnswer();
+  }
+});
+
+document.getElementById('answer-input').addEventListener('input',(e)=>{
+  e.target.value=e.target.value.replace(/[^0-9]/g,'');
+  const q=state.questions[state.currentQuestion-1];
+  const needed=q?q.digits:8;
+  document.getElementById('btn-submit').disabled=(e.target.value.length!==needed);
+});
+
+document.getElementById('btn-next').addEventListener('click',()=>{
+  if(!screens.result.classList.contains('hidden')) nextQuestion();
+});
+
+document.addEventListener('keyup',(e)=>{
+  const nextBtn=document.getElementById('btn-next');
+  if(e.key==='Enter'&&!screens.result.classList.contains('hidden')&&!nextBtn.disabled){
+    nextQuestion();
+  }
+});
+
+document.getElementById('btn-restart').addEventListener('click',()=>{
+  // Seviye seçimini koru, tekrar başlat
+  showScreen('start');
+});
+
+document.getElementById('btn-goto-menu').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-quit').addEventListener('click',()=>showScreen('bye'));
+
+/* ── ANA MENÜ NAVİGASYONU ─────────────────────────────────── */
+document.getElementById('btn-menu-numbers').addEventListener('click',()=>showScreen('start'));
+document.getElementById('btn-menu-colors').addEventListener('click',()=>showScreen('colorStart'));
+document.getElementById('btn-menu-symbols').addEventListener('click',()=>showScreen('symbolStart'));
+document.getElementById('btn-start-back').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-color-start-back').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-symbol-start-back').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-menu-timing').addEventListener('click',()=>showScreen('timingStart'));
+document.getElementById('btn-timing-start-back').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-menu-reflex').addEventListener('click',()=>showScreen('reflexStart'));
+document.getElementById('btn-reflex-start-back').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-menu-spatial').addEventListener('click',()=>showScreen('spatialStart'));
+document.getElementById('btn-spatial-start-back').addEventListener('click',()=>showScreen('menu'));
+
+/* ════════════════════════════════════════════════════════════
+   RENK OYUNU
+   ════════════════════════════════════════════════════════════ */
+
+function cBadgeHTML(levelKey, label){
+  const cfg=COLOR_LEVELS[levelKey];
+  return `<span class="level-badge ${cfg.badge}">${label||cfg.label}</span>`;
+}
+
+function buildColorQuestions(levelKey){
+  const cfg=COLOR_LEVELS[levelKey];
+  if(levelKey==='progressive') return cfg.questions;
+  const q=cfg.questions[0];
+  return Array(TOTAL_QUESTIONS).fill(null).map(()=>({
+    count: q.count,
+    ms:    q.ms,
+    pts:   cfg.pts,
+    sub:   levelKey,
+    subLabel: cfg.label,
+  }));
+}
+
+function colorMaxScore(questions){
+  return questions.reduce((s,q)=>s+q.count*q.pts,0);
+}
+
+function randomColors(n){
+  const arr=[];
+  for(let i=0;i<n;i++){
+    arr.push(COLOR_KEYS[Math.floor(Math.random()*COLOR_KEYS.length)]);
+  }
+  return arr;
+}
+
+function startColorGame(){
+  cstate.currentQuestion=0;
+  cstate.scores=[];
+  cstate.questions=buildColorQuestions(cstate.level);
+  cstate.triviaQueue=shuffle(ALL_TRIVIA).slice(0,TOTAL_QUESTIONS);
+  nextColorQuestion();
+}
+
+function nextColorQuestion(){
+  cstate.currentQuestion++;
+  if(cstate.currentQuestion>TOTAL_QUESTIONS){ showColorFinal(); return; }
+  const q=cstate.questions[cstate.currentQuestion-1];
+  cstate.currentColors=randomColors(q.count);
+  runColorMemorizePhase(q);
+}
+
+function runColorMemorizePhase(q){
+  document.getElementById('cmemorize-qnum').textContent=cstate.currentQuestion;
+  document.getElementById('cmemorize-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('cmemorize-badge').innerHTML=cBadgeHTML(q.sub,q.subLabel);
+
+  const listEl=document.getElementById('cmemorize-list');
+  listEl.innerHTML='';
+  cstate.currentColors.forEach(key=>{
+    const div=document.createElement('div');
+    div.className='color-word';
+    div.textContent=COLOR_NAMES[key];
+    listEl.appendChild(div);
+  });
+
+  showScreen('colorMemorize');
+
+  const bar=document.getElementById('cmemorize-bar');
+  bar.style.transition='none';
+  bar.style.transform='scaleX(1)';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    bar.style.transition=`transform ${q.ms}ms linear`;
+    bar.style.transform='scaleX(0)';
+  }));
+
+  setTimeout(()=>{
+    const handler=(qq)=>runColorAnswerPhase(qq);
+    handler.mode='color';
+    runCountdownPhase(q, cstate.currentQuestion-1, handler);
+  }, q.ms);
+}
+
+function renderColorSlots(count, filledColors){
+  const wrap=document.getElementById('color-slots');
+  wrap.innerHTML='';
+  for(let i=0;i<count;i++){
+    const slot=document.createElement('div');
+    const key=filledColors[i];
+    slot.className='color-slot'+(key?' filled':'');
+    if(key){
+      slot.classList.add('cw-'+key);
+    }
+    wrap.appendChild(slot);
+  }
+}
+
+function runColorAnswerPhase(q){
+  document.getElementById('canswer-qnum').textContent=cstate.currentQuestion;
+  document.getElementById('canswer-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('canswer-badge').innerHTML=cBadgeHTML(q.sub,q.subLabel);
+  document.getElementById('canswer-prompt').textContent=
+    `Az önce gördüğün ${q.count} renklik diziyi sırasıyla seç:`;
+
+  cstate.userColors=[];
+  renderColorSlots(q.count, cstate.userColors);
+  document.getElementById('btn-color-submit').disabled=true;
+
+  // Palet butonlarını bir kez oluştur (her soruda aynı 7 renk)
+  const palette=document.getElementById('color-palette');
+  palette.innerHTML='';
+  COLOR_KEYS.forEach(key=>{
+    const sw=document.createElement('div');
+    sw.className='color-swatch cw-'+key;
+    sw.title=COLOR_NAMES[key];
+    sw.addEventListener('click',()=>{
+      if(cstate.userColors.length>=q.count) return;
+      cstate.userColors.push(key);
+      renderColorSlots(q.count, cstate.userColors);
+      document.getElementById('btn-color-submit').disabled=(cstate.userColors.length!==q.count);
+    });
+    palette.appendChild(sw);
+  });
+
+  showScreen('colorAnswer');
+}
+
+function calculateColorScore(correct,user,ptsPerColor){
+  let matches=0;
+  for(let i=0;i<correct.length;i++){
+    if(user[i]!==undefined && user[i]===correct[i]) matches++;
+  }
+  return matches*ptsPerColor;
+}
+
+function submitColorAnswer(){
+  const submitBtn=document.getElementById('btn-color-submit');
+  if(submitBtn.disabled) return;
+  submitBtn.disabled=true;
+
+  const q=cstate.questions[cstate.currentQuestion-1];
+  const score=calculateColorScore(cstate.currentColors, cstate.userColors, q.pts);
+  cstate.scores.push({score,q});
+  renderColorResult(cstate.currentColors, cstate.userColors, score, q);
+}
+
+function renderColorResult(correct,userAnswer,score,q){
+  const panelWidth = Math.min(window.innerWidth - 40, 560);
+  const n = correct.length;
+  const maxBoxSize = 34, minBoxSize = 20;
+  const available = panelWidth - 32;
+  const computed = Math.floor(available / (n + (n - 1) * 0.18));
+  const boxSize = Math.max(minBoxSize, Math.min(maxBoxSize, computed));
+  const boxGap = Math.max(3, Math.round(boxSize * 0.15));
+
+  const root = document.documentElement;
+  root.style.setProperty('--cresult-box-size', boxSize + 'px');
+  root.style.setProperty('--cresult-box-gap',  boxGap  + 'px');
+
+  const cWrap=document.getElementById('cfeedback-correct');
+  const uWrap=document.getElementById('cfeedback-user');
+  cWrap.innerHTML=''; uWrap.innerHTML='';
+  cWrap.style.gap = boxGap+'px';
+  uWrap.style.gap = boxGap+'px';
+
+  for(let i=0;i<correct.length;i++){
+    const match=userAnswer[i]===correct[i];
+    const cBox=document.createElement('div');
+    cBox.className='digit-box cw-'+correct[i]+' '+(match?'correct':'wrong');
+    cBox.style.width=boxSize+'px'; cBox.style.height=boxSize+'px';
+    cWrap.appendChild(cBox);
+
+    const uBox=document.createElement('div');
+    const uKey=userAnswer[i];
+    uBox.className='digit-box '+(uKey?('cw-'+uKey):'')+' '+(match?'correct':'wrong');
+    uBox.style.width=boxSize+'px'; uBox.style.height=boxSize+'px';
+    if(!uKey) uBox.textContent='–';
+    uWrap.appendChild(uBox);
+  }
+
+  document.getElementById('cresult-score').textContent=score;
+  document.getElementById('cresult-badge-wrap').innerHTML=cBadgeHTML(q.sub,q.subLabel);
+
+  const nextBtn=document.getElementById('btn-color-next');
+  const isLast=cstate.currentQuestion>=TOTAL_QUESTIONS;
+  nextBtn.textContent=isLast?'Seti Tamamla':'Sıradaki Soru';
+  nextBtn.disabled=true;
+  setTimeout(()=>{ nextBtn.disabled=false; },600);
+
+  showScreen('colorResult');
+}
+
+function showColorFinal(){
+  const total=cstate.scores.reduce((s,o)=>s+o.score,0);
+  const max=colorMaxScore(cstate.questions);
+  document.getElementById('cfinal-score').textContent=total;
+  document.getElementById('cfinal-max').textContent=`/ ${max} puan`;
+
+  const recapWrap=document.getElementById('cfinal-recap');
+  recapWrap.innerHTML='';
+  cstate.scores.forEach((o,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='recap-chip';
+    chip.innerHTML=`<b>Soru ${idx+1}: ${o.score} puan</b>
+      <span class="chip-cat">${o.q.subLabel} · ${o.q.count} renk</span>`;
+    recapWrap.appendChild(chip);
+  });
+
+  showScreen('colorFinal');
+}
+
+/* ── RENK ZORLUK SEÇİMİ ───────────────────────────────────── */
+document.querySelectorAll('#screen-color-start .diff-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    document.querySelectorAll('#screen-color-start .diff-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    cstate.level=card.dataset.clevel;
+    const btn=document.getElementById('btn-color-start');
+    btn.disabled=false;
+    btn.textContent='Oyuna Başla';
+  });
+});
+
+document.getElementById('btn-color-start').addEventListener('click',()=>{
+  if(!cstate.level) return;
+  startColorGame();
+});
+
+document.getElementById('btn-color-submit').addEventListener('click',submitColorAnswer);
+
+document.getElementById('btn-color-undo').addEventListener('click',()=>{
+  if(cstate.userColors.length===0) return;
+  cstate.userColors.pop();
+  const q=cstate.questions[cstate.currentQuestion-1];
+  renderColorSlots(q.count, cstate.userColors);
+  document.getElementById('btn-color-submit').disabled=(cstate.userColors.length!==q.count);
+});
+
+document.getElementById('btn-color-next').addEventListener('click',()=>{
+  if(!screens.colorResult.classList.contains('hidden')) nextColorQuestion();
+});
+
+document.addEventListener('keyup',(e)=>{
+  const nextBtn=document.getElementById('btn-color-next');
+  if(e.key==='Enter'&&!screens.colorResult.classList.contains('hidden')&&!nextBtn.disabled){
+    nextColorQuestion();
+  }
+});
+
+document.getElementById('btn-color-restart').addEventListener('click',()=>{
+  showScreen('colorStart');
+});
+document.getElementById('btn-color-menu').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-color-quit').addEventListener('click',()=>showScreen('bye'));
+
+/* ════════════════════════════════════════════════════════════
+   SEMBOL OYUNU
+   ════════════════════════════════════════════════════════════ */
+
+function sBadgeHTML(levelKey, label){
+  const cfg=SYMBOL_LEVELS[levelKey];
+  return `<span class="level-badge ${cfg.badge}">${label||cfg.label}</span>`;
+}
+
+function buildSymbolQuestions(levelKey){
+  const cfg=SYMBOL_LEVELS[levelKey];
+  if(levelKey==='progressive') return cfg.questions;
+  const q=cfg.questions[0];
+  return Array(TOTAL_QUESTIONS).fill(null).map(()=>({
+    count: q.count,
+    ms:    q.ms,
+    pts:   cfg.pts,
+    sub:   levelKey,
+    subLabel: cfg.label,
+  }));
+}
+
+function symbolMaxScore(questions){
+  return questions.reduce((s,q)=>s+q.count*q.pts,0);
+}
+
+function randomSymbols(n){
+  const arr=[];
+  for(let i=0;i<n;i++){
+    arr.push(SYMBOL_KEYS[Math.floor(Math.random()*SYMBOL_KEYS.length)]);
+  }
+  return arr;
+}
+
+function startSymbolGame(){
+  sstate.currentQuestion=0;
+  sstate.scores=[];
+  sstate.questions=buildSymbolQuestions(sstate.level);
+  sstate.triviaQueue=shuffle(ALL_TRIVIA).slice(0,TOTAL_QUESTIONS);
+  nextSymbolQuestion();
+}
+
+function nextSymbolQuestion(){
+  sstate.currentQuestion++;
+  if(sstate.currentQuestion>TOTAL_QUESTIONS){ showSymbolFinal(); return; }
+  const q=sstate.questions[sstate.currentQuestion-1];
+  sstate.currentSymbols=randomSymbols(q.count);
+  runSymbolMemorizePhase(q);
+}
+
+function runSymbolMemorizePhase(q){
+  document.getElementById('smemorize-qnum').textContent=sstate.currentQuestion;
+  document.getElementById('smemorize-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('smemorize-badge').innerHTML=sBadgeHTML(q.sub,q.subLabel);
+
+  const listEl=document.getElementById('smemorize-list');
+  listEl.innerHTML='';
+  sstate.currentSymbols.forEach(sym=>{
+    const div=document.createElement('div');
+    div.className='sym-item';
+    div.textContent=sym;
+    listEl.appendChild(div);
+  });
+
+  showScreen('symbolMemorize');
+
+  const bar=document.getElementById('smemorize-bar');
+  bar.style.transition='none';
+  bar.style.transform='scaleX(1)';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    bar.style.transition=`transform ${q.ms}ms linear`;
+    bar.style.transform='scaleX(0)';
+  }));
+
+  setTimeout(()=>{
+    const handler=(qq)=>runSymbolAnswerPhase(qq);
+    handler.mode='symbol';
+    runCountdownPhase(q, sstate.currentQuestion-1, handler);
+  }, q.ms);
+}
+
+function renderSymbolSlots(count, filledSymbols){
+  const wrap=document.getElementById('symbol-slots');
+  wrap.innerHTML='';
+  for(let i=0;i<count;i++){
+    const slot=document.createElement('div');
+    const sym=filledSymbols[i];
+    slot.className='symbol-slot'+(sym?' filled':'');
+    slot.textContent=sym||'';
+    wrap.appendChild(slot);
+  }
+}
+
+function runSymbolAnswerPhase(q){
+  document.getElementById('sanswer-qnum').textContent=sstate.currentQuestion;
+  document.getElementById('sanswer-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('sanswer-badge').innerHTML=sBadgeHTML(q.sub,q.subLabel);
+  document.getElementById('sanswer-prompt').textContent=
+    `Az önce gördüğün ${q.count} sembollük diziyi sırasıyla seç:`;
+
+  sstate.userSymbols=[];
+  renderSymbolSlots(q.count, sstate.userSymbols);
+  document.getElementById('btn-symbol-submit').disabled=true;
+
+  const palette=document.getElementById('symbol-palette');
+  palette.innerHTML='';
+  SYMBOL_KEYS.forEach(sym=>{
+    const sw=document.createElement('div');
+    sw.className='symbol-swatch';
+    sw.textContent=sym;
+    sw.addEventListener('click',()=>{
+      if(sstate.userSymbols.length>=q.count) return;
+      sstate.userSymbols.push(sym);
+      renderSymbolSlots(q.count, sstate.userSymbols);
+      document.getElementById('btn-symbol-submit').disabled=(sstate.userSymbols.length!==q.count);
+    });
+    palette.appendChild(sw);
+  });
+
+  showScreen('symbolAnswer');
+}
+
+function calculateSymbolScore(correct,user,ptsPerSymbol){
+  let matches=0;
+  for(let i=0;i<correct.length;i++){
+    if(user[i]!==undefined && user[i]===correct[i]) matches++;
+  }
+  return matches*ptsPerSymbol;
+}
+
+function submitSymbolAnswer(){
+  const submitBtn=document.getElementById('btn-symbol-submit');
+  if(submitBtn.disabled) return;
+  submitBtn.disabled=true;
+
+  const q=sstate.questions[sstate.currentQuestion-1];
+  const score=calculateSymbolScore(sstate.currentSymbols, sstate.userSymbols, q.pts);
+  sstate.scores.push({score,q});
+  renderSymbolResult(sstate.currentSymbols, sstate.userSymbols, score, q);
+}
+
+function renderSymbolResult(correct,userAnswer,score,q){
+  const panelWidth = Math.min(window.innerWidth - 40, 560);
+  const n = correct.length;
+  const maxBoxSize = 38, minBoxSize = 26;
+  const available = panelWidth - 32;
+  const computed = Math.floor(available / (n + (n - 1) * 0.18));
+  const boxSize = Math.max(minBoxSize, Math.min(maxBoxSize, computed));
+  const boxGap = Math.max(3, Math.round(boxSize * 0.15));
+  const boxFont = Math.max(13, Math.round(boxSize * 0.5));
+
+  const root = document.documentElement;
+  root.style.setProperty('--sresult-box-size', boxSize + 'px');
+  root.style.setProperty('--sresult-box-font', boxFont + 'px');
+
+  const cWrap=document.getElementById('sfeedback-correct');
+  const uWrap=document.getElementById('sfeedback-user');
+  cWrap.innerHTML=''; uWrap.innerHTML='';
+  cWrap.style.gap = boxGap+'px';
+  uWrap.style.gap = boxGap+'px';
+
+  for(let i=0;i<correct.length;i++){
+    const match=userAnswer[i]===correct[i];
+    const cBox=document.createElement('div');
+    cBox.className='digit-box '+(match?'correct':'wrong');
+    cBox.textContent=correct[i];
+    cWrap.appendChild(cBox);
+
+    const uBox=document.createElement('div');
+    uBox.className='digit-box '+(match?'correct':'wrong');
+    uBox.textContent=userAnswer[i]!==undefined?userAnswer[i]:'–';
+    uWrap.appendChild(uBox);
+  }
+
+  document.getElementById('sresult-score').textContent=score;
+  document.getElementById('sresult-badge-wrap').innerHTML=sBadgeHTML(q.sub,q.subLabel);
+
+  const nextBtn=document.getElementById('btn-symbol-next');
+  const isLast=sstate.currentQuestion>=TOTAL_QUESTIONS;
+  nextBtn.textContent=isLast?'Seti Tamamla':'Sıradaki Soru';
+  nextBtn.disabled=true;
+  setTimeout(()=>{ nextBtn.disabled=false; },600);
+
+  showScreen('symbolResult');
+}
+
+function showSymbolFinal(){
+  const total=sstate.scores.reduce((s,o)=>s+o.score,0);
+  const max=symbolMaxScore(sstate.questions);
+  document.getElementById('sfinal-score').textContent=total;
+  document.getElementById('sfinal-max').textContent=`/ ${max} puan`;
+
+  const recapWrap=document.getElementById('sfinal-recap');
+  recapWrap.innerHTML='';
+  sstate.scores.forEach((o,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='recap-chip';
+    chip.innerHTML=`<b>Soru ${idx+1}: ${o.score} puan</b>
+      <span class="chip-cat">${o.q.subLabel} · ${o.q.count} sembol</span>`;
+    recapWrap.appendChild(chip);
+  });
+
+  showScreen('symbolFinal');
+}
+
+/* ── SEMBOL ZORLUK SEÇİMİ ──────────────────────────────────── */
+document.querySelectorAll('#screen-symbol-start .diff-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    document.querySelectorAll('#screen-symbol-start .diff-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    sstate.level=card.dataset.slevel;
+    const btn=document.getElementById('btn-symbol-start');
+    btn.disabled=false;
+    btn.textContent='Oyuna Başla';
+  });
+});
+
+document.getElementById('btn-symbol-start').addEventListener('click',()=>{
+  if(!sstate.level) return;
+  startSymbolGame();
+});
+
+document.getElementById('btn-symbol-submit').addEventListener('click',submitSymbolAnswer);
+
+document.getElementById('btn-symbol-undo').addEventListener('click',()=>{
+  if(sstate.userSymbols.length===0) return;
+  sstate.userSymbols.pop();
+  const q=sstate.questions[sstate.currentQuestion-1];
+  renderSymbolSlots(q.count, sstate.userSymbols);
+  document.getElementById('btn-symbol-submit').disabled=(sstate.userSymbols.length!==q.count);
+});
+
+document.getElementById('btn-symbol-next').addEventListener('click',()=>{
+  if(!screens.symbolResult.classList.contains('hidden')) nextSymbolQuestion();
+});
+
+document.addEventListener('keyup',(e)=>{
+  const nextBtn=document.getElementById('btn-symbol-next');
+  if(e.key==='Enter'&&!screens.symbolResult.classList.contains('hidden')&&!nextBtn.disabled){
+    nextSymbolQuestion();
+  }
+});
+
+document.getElementById('btn-symbol-restart').addEventListener('click',()=>{
+  showScreen('symbolStart');
+});
+document.getElementById('btn-symbol-menu').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-symbol-quit').addEventListener('click',()=>showScreen('bye'));
+
+/* ════════════════════════════════════════════════════════════
+   ZAMANLAMA OYUNU
+   ════════════════════════════════════════════════════════════ */
+
+function formatSeconds(ms){
+  // "2,08 sn" formatı
+  const sec = ms/1000;
+  return sec.toFixed(2).replace('.', ',') + ' sn';
+}
+
+function startTimingGame(){
+  tstate.currentQuestion=0;
+  tstate.scores=[];
+  tstate.triviaQueue=shuffle(ALL_TRIVIA).slice(0,TOTAL_QUESTIONS);
+  nextTimingQuestion();
+}
+
+function nextTimingQuestion(){
+  tstate.currentQuestion++;
+  if(tstate.currentQuestion>TOTAL_QUESTIONS){ showTimingFinal(); return; }
+  tstate.targetMs = Math.round(TIMING_MIN_MS + Math.random()*(TIMING_MAX_MS-TIMING_MIN_MS));
+  runTimingWatchPhase();
+}
+
+function runTimingWatchPhase(){
+  document.getElementById('twatch-qnum').textContent=tstate.currentQuestion;
+  document.getElementById('twatch-total').textContent=TOTAL_QUESTIONS;
+  showScreen('timingWatch');
+
+  const ring=document.getElementById('ring-progress');
+  const fullDash=527.79;
+  ring.style.transition='none';
+  ring.style.strokeDashoffset=fullDash;
+
+  // Halka, hedef süre boyunca tam tur (0 -> dolu) döner
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    ring.style.transition=`stroke-dashoffset ${tstate.targetMs}ms linear`;
+    ring.style.strokeDashoffset='0';
+  }));
+
+  setTimeout(runTimingReadyPhase, tstate.targetMs);
+}
+
+function runTimingReadyPhase(){
+  showScreen('timingReady');
+  const trivia = tstate.triviaQueue[tstate.currentQuestion-1] || '';
+  document.getElementById('timing-trivia-display').textContent = trivia;
+  document.getElementById('timing-ready-text').textContent='HAZIR OL';
+
+  setTimeout(runTimingAnswerPhase, 1200);
+}
+
+function runTimingAnswerPhase(){
+  document.getElementById('tanswer-qnum').textContent=tstate.currentQuestion;
+  document.getElementById('tanswer-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('timing-live-readout').textContent='';
+  const btn=document.getElementById('timing-target-btn');
+  btn.classList.remove('pressed');
+  tstate.isPressed=false;
+  showScreen('timingAnswer');
+}
+
+function timingPressStart(e){
+  e.preventDefault();
+  if(tstate.isPressed) return;
+  tstate.isPressed=true;
+  tstate.pressStart=performance.now();
+  document.getElementById('timing-target-btn').classList.add('pressed');
+
+  const readout=document.getElementById('timing-live-readout');
+  tstate.liveInterval=setInterval(()=>{
+    const elapsed=performance.now()-tstate.pressStart;
+    readout.textContent=formatSeconds(elapsed);
+  },50);
+}
+
+function timingPressEnd(e){
+  e.preventDefault();
+  if(!tstate.isPressed) return;
+  tstate.isPressed=false;
+  const userMs=performance.now()-tstate.pressStart;
+  clearInterval(tstate.liveInterval);
+  document.getElementById('timing-target-btn').classList.remove('pressed');
+  submitTimingAnswer(userMs);
+}
+
+function submitTimingAnswer(userMs){
+  const targetMs=tstate.targetMs;
+  const diff=Math.abs(userMs-targetMs);
+  // Puan: tolerans içinde tam puan, sonra orantılı düşer, 0'ın altına inmez
+  // Tolerans (±100ms) içinde tam puan (100); sonra fark arttıkça puan
+  // doğrusal olarak azalır ve toleransın 5 katında (500ms farkta) sıfırlanır.
+  let rawScore;
+  if(diff<=TIMING_TOLERANCE_MS){
+    rawScore = TIMING_MAX_PTS_PER_Q;
+  } else {
+    const overshoot = diff - TIMING_TOLERANCE_MS;
+    const decayRange = TIMING_TOLERANCE_MS*10; // 1000ms ek mesafede 0'a iner
+    rawScore = TIMING_MAX_PTS_PER_Q * (1 - overshoot/decayRange);
+  }
+  const score = Math.round(Math.max(0, Math.min(TIMING_MAX_PTS_PER_Q, rawScore)));
+
+  tstate.scores.push({score, targetMs, userMs});
+  renderTimingResult(targetMs, userMs, diff, score);
+}
+
+function renderTimingResult(targetMs, userMs, diff, score){
+  document.getElementById('tresult-target').textContent=formatSeconds(targetMs);
+  document.getElementById('tresult-user').textContent=formatSeconds(userMs);
+
+  const diffEl=document.getElementById('tresult-diff');
+  const diffSec=(diff/1000).toFixed(2).replace('.', ',');
+  if(diff<=TIMING_TOLERANCE_MS){
+    diffEl.textContent=`Mükemmel! Fark sadece ${diffSec} sn.`;
+  } else {
+    diffEl.textContent=`Fark: ${diffSec} sn`;
+  }
+
+  document.getElementById('tresult-score').textContent=score;
+
+  const nextBtn=document.getElementById('btn-timing-next');
+  const isLast=tstate.currentQuestion>=TOTAL_QUESTIONS;
+  nextBtn.textContent=isLast?'Seti Tamamla':'Sıradaki Soru';
+  nextBtn.disabled=true;
+  setTimeout(()=>{ nextBtn.disabled=false; },600);
+
+  showScreen('timingResult');
+}
+
+function showTimingFinal(){
+  const total=tstate.scores.reduce((s,o)=>s+o.score,0);
+  const max=TOTAL_QUESTIONS*TIMING_MAX_PTS_PER_Q;
+  document.getElementById('tfinal-score').textContent=total;
+  document.getElementById('tfinal-max').textContent=`/ ${max} puan`;
+
+  const recapWrap=document.getElementById('tfinal-recap');
+  recapWrap.innerHTML='';
+  tstate.scores.forEach((o,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='recap-chip';
+    chip.innerHTML=`<b>Soru ${idx+1}: ${o.score} puan</b>
+      <span class="chip-cat">Hedef ${formatSeconds(o.targetMs)} · Sen ${formatSeconds(o.userMs)}</span>`;
+    recapWrap.appendChild(chip);
+  });
+
+  showScreen('timingFinal');
+}
+
+/* ── ZAMANLAMA EVENT LİSTENERLAR ───────────────────────────── */
+document.getElementById('btn-timing-start').addEventListener('click', startTimingGame);
+
+const timingBtn=document.getElementById('timing-target-btn');
+timingBtn.addEventListener('mousedown', timingPressStart);
+timingBtn.addEventListener('mouseup', timingPressEnd);
+timingBtn.addEventListener('mouseleave', (e)=>{ if(tstate.isPressed) timingPressEnd(e); });
+timingBtn.addEventListener('touchstart', timingPressStart, {passive:false});
+timingBtn.addEventListener('touchend', timingPressEnd, {passive:false});
+timingBtn.addEventListener('touchcancel', timingPressEnd, {passive:false});
+
+document.getElementById('btn-timing-next').addEventListener('click',()=>{
+  if(!screens.timingResult.classList.contains('hidden')) nextTimingQuestion();
+});
+
+document.addEventListener('keyup',(e)=>{
+  const nextBtn=document.getElementById('btn-timing-next');
+  if(e.key==='Enter'&&!screens.timingResult.classList.contains('hidden')&&!nextBtn.disabled){
+    nextTimingQuestion();
+  }
+});
+
+document.getElementById('btn-timing-restart').addEventListener('click',()=>{
+  showScreen('timingStart');
+});
+document.getElementById('btn-timing-menu').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-timing-quit').addEventListener('click',()=>showScreen('bye'));
+
+/* ════════════════════════════════════════════════════════════
+   KONUM HAFIZASI OYUNU
+   ════════════════════════════════════════════════════════════ */
+
+function gBadgeHTML(levelKey, label){
+  const cfg=SPATIAL_LEVELS[levelKey];
+  return `<span class="level-badge ${cfg.badge}">${label||cfg.label}</span>`;
+}
+
+function buildSpatialQuestions(levelKey){
+  const cfg=SPATIAL_LEVELS[levelKey];
+  if(levelKey==='progressive') return cfg.questions;
+  const q=cfg.questions[0];
+  return Array(TOTAL_QUESTIONS).fill(null).map(()=>({
+    count: q.count,
+    ms:    q.ms,
+    pts:   cfg.pts,
+    sub:   levelKey,
+    subLabel: cfg.label,
+  }));
+}
+
+function spatialMaxScore(questions){
+  return questions.reduce((s,q)=>s+q.count*q.pts,0);
+}
+
+function randomCells(n){
+  // Diğer modüllerle tutarlı: aynı hücre dizide birden fazla kez geçebilir
+  const arr=[];
+  for(let i=0;i<n;i++){
+    arr.push(Math.floor(Math.random()*GRID_ROWS*GRID_COLS));
+  }
+  return arr;
+}
+
+function buildGridDOM(containerId){
+  const grid=document.getElementById(containerId);
+  grid.innerHTML='';
+  for(let i=0;i<GRID_ROWS*GRID_COLS;i++){
+    const cell=document.createElement('div');
+    cell.className='spatial-cell';
+    cell.dataset.index=i;
+    const label=document.createElement('span');
+    label.className='coord-label';
+    label.textContent=COORD_LABELS[i];
+    cell.appendChild(label);
+    grid.appendChild(cell);
+  }
+  return grid;
+}
+
+function startSpatialGame(){
+  gstate.currentQuestion=0;
+  gstate.scores=[];
+  gstate.questions=buildSpatialQuestions(gstate.level);
+  gstate.triviaQueue=shuffle(ALL_TRIVIA).slice(0,TOTAL_QUESTIONS);
+  nextSpatialQuestion();
+}
+
+function nextSpatialQuestion(){
+  gstate.currentQuestion++;
+  if(gstate.currentQuestion>TOTAL_QUESTIONS){ showSpatialFinal(); return; }
+  const q=gstate.questions[gstate.currentQuestion-1];
+  gstate.currentCells=randomCells(q.count);
+  runSpatialMemorizePhase(q);
+}
+
+function sleep(ms){ return new Promise(res=>setTimeout(res,ms)); }
+
+async function runSpatialMemorizePhase(q){
+  document.getElementById('gmemorize-qnum').textContent=gstate.currentQuestion;
+  document.getElementById('gmemorize-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('gmemorize-badge').innerHTML=gBadgeHTML(q.sub,q.subLabel);
+
+  const grid=buildGridDOM('spatial-grid-memorize');
+  showScreen('spatialMemorize');
+
+  const perCellMs = 600;
+  const bar=document.getElementById('gmemorize-bar');
+  bar.style.transition='none';
+  bar.style.transform='scaleX(1)';
+
+  const cells=grid.querySelectorAll('.spatial-cell');
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    bar.style.transition=`transform ${perCellMs*q.count}ms linear`;
+    bar.style.transform='scaleX(0)';
+  }));
+
+  // Her hücreyi sırayla yanıp söndür
+  for(let i=0;i<gstate.currentCells.length;i++){
+    const idx=gstate.currentCells[i];
+    const cellEl=cells[idx];
+    cellEl.classList.add('lit');
+    await sleep(perCellMs*0.7);
+    cellEl.classList.remove('lit');
+    await sleep(perCellMs*0.3);
+  }
+
+  const handler=(qq)=>runSpatialAnswerPhase(qq);
+  handler.mode='spatial';
+  runCountdownPhase(q, gstate.currentQuestion-1, handler);
+}
+
+function runSpatialAnswerPhase(q){
+  document.getElementById('ganswer-qnum').textContent=gstate.currentQuestion;
+  document.getElementById('ganswer-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('ganswer-badge').innerHTML=gBadgeHTML(q.sub,q.subLabel);
+  document.getElementById('ganswer-prompt').textContent=
+    `Az önce yanıp sönen ${q.count} hücreyi sırasıyla seç:`;
+  document.getElementById('ganswer-progress').textContent='0';
+  document.getElementById('ganswer-progress-total').textContent=q.count;
+
+  gstate.userCells=[];
+  gstate.inputLocked=false;
+
+  const grid=buildGridDOM('spatial-grid-answer');
+  const cells=grid.querySelectorAll('.spatial-cell');
+
+  cells.forEach(cellEl=>{
+    cellEl.addEventListener('click', ()=>{
+      if(gstate.inputLocked) return;
+      if(gstate.userCells.length>=q.count) return;
+
+      const idx=parseInt(cellEl.dataset.index,10);
+      const expected=gstate.currentCells[gstate.userCells.length];
+      const isCorrect = (idx===expected);
+
+      gstate.inputLocked=true;
+      cells.forEach(c=>c.classList.add('locked'));
+      cellEl.classList.add(isCorrect?'correct-flash':'wrong-flash');
+
+      gstate.userCells.push(idx);
+      document.getElementById('ganswer-progress').textContent=gstate.userCells.length;
+
+      setTimeout(()=>{
+        cellEl.classList.remove('correct-flash','wrong-flash');
+        cells.forEach(c=>c.classList.remove('locked'));
+        gstate.inputLocked=false;
+
+        if(gstate.userCells.length>=q.count){
+          submitSpatialAnswer(q);
+        }
+      }, 320);
+    });
+  });
+
+  showScreen('spatialAnswer');
+}
+
+function calculateSpatialScore(correct,user,ptsPerCell){
+  let matches=0;
+  for(let i=0;i<correct.length;i++){
+    if(user[i]!==undefined && user[i]===correct[i]) matches++;
+  }
+  return matches*ptsPerCell;
+}
+
+function submitSpatialAnswer(q){
+  const score=calculateSpatialScore(gstate.currentCells, gstate.userCells, q.pts);
+  gstate.scores.push({score,q});
+  renderSpatialResult(gstate.currentCells, gstate.userCells, score, q);
+}
+
+function renderSpatialResult(correct,userAnswer,score,q){
+  const panelWidth = Math.min(window.innerWidth - 40, 560);
+  const n = correct.length;
+  const maxBoxSize = 44, minBoxSize = 30;
+  const available = panelWidth - 32;
+  const computed = Math.floor(available / (n + (n - 1) * 0.18));
+  const boxSize = Math.max(minBoxSize, Math.min(maxBoxSize, computed));
+  const boxGap = Math.max(3, Math.round(boxSize * 0.15));
+
+  const cWrap=document.getElementById('gfeedback-correct');
+  const uWrap=document.getElementById('gfeedback-user');
+  cWrap.innerHTML=''; uWrap.innerHTML='';
+  cWrap.style.gap = boxGap+'px';
+  uWrap.style.gap = boxGap+'px';
+
+  for(let i=0;i<correct.length;i++){
+    const match=userAnswer[i]===correct[i];
+
+    const cBox=document.createElement('div');
+    cBox.className='digit-box '+(match?'correct':'wrong');
+    cBox.style.width=boxSize+'px'; cBox.style.height=boxSize+'px';
+    cBox.textContent=COORD_LABELS[correct[i]];
+    cWrap.appendChild(cBox);
+
+    const uBox=document.createElement('div');
+    uBox.className='digit-box '+(match?'correct':'wrong');
+    uBox.style.width=boxSize+'px'; uBox.style.height=boxSize+'px';
+    uBox.textContent=userAnswer[i]!==undefined?COORD_LABELS[userAnswer[i]]:'–';
+    uWrap.appendChild(uBox);
+  }
+
+  document.getElementById('gresult-score').textContent=score;
+  document.getElementById('gresult-badge-wrap').innerHTML=gBadgeHTML(q.sub,q.subLabel);
+
+  const nextBtn=document.getElementById('btn-spatial-next');
+  const isLast=gstate.currentQuestion>=TOTAL_QUESTIONS;
+  nextBtn.textContent=isLast?'Seti Tamamla':'Sıradaki Soru';
+  nextBtn.disabled=true;
+  setTimeout(()=>{ nextBtn.disabled=false; },600);
+
+  showScreen('spatialResult');
+}
+
+function showSpatialFinal(){
+  const total=gstate.scores.reduce((s,o)=>s+o.score,0);
+  const max=spatialMaxScore(gstate.questions);
+  document.getElementById('gfinal-score').textContent=total;
+  document.getElementById('gfinal-max').textContent=`/ ${max} puan`;
+
+  const recapWrap=document.getElementById('gfinal-recap');
+  recapWrap.innerHTML='';
+  gstate.scores.forEach((o,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='recap-chip';
+    chip.innerHTML=`<b>Soru ${idx+1}: ${o.score} puan</b>
+      <span class="chip-cat">${o.q.subLabel} · ${o.q.count} hücre</span>`;
+    recapWrap.appendChild(chip);
+  });
+
+  showScreen('spatialFinal');
+}
+
+/* ── KONUM ZORLUK SEÇİMİ ───────────────────────────────────── */
+document.querySelectorAll('#screen-spatial-start .diff-card').forEach(card=>{
+  card.addEventListener('click',()=>{
+    document.querySelectorAll('#screen-spatial-start .diff-card').forEach(c=>c.classList.remove('selected'));
+    card.classList.add('selected');
+    gstate.level=card.dataset.glevel;
+    const btn=document.getElementById('btn-spatial-start');
+    btn.disabled=false;
+    btn.textContent='Oyuna Başla';
+  });
+});
+
+document.getElementById('btn-spatial-start').addEventListener('click',()=>{
+  if(!gstate.level) return;
+  startSpatialGame();
+});
+
+document.getElementById('btn-spatial-next').addEventListener('click',()=>{
+  if(!screens.spatialResult.classList.contains('hidden')) nextSpatialQuestion();
+});
+
+document.addEventListener('keyup',(e)=>{
+  const nextBtn=document.getElementById('btn-spatial-next');
+  if(e.key==='Enter'&&!screens.spatialResult.classList.contains('hidden')&&!nextBtn.disabled){
+    nextSpatialQuestion();
+  }
+});
+
+document.getElementById('btn-spatial-restart').addEventListener('click',()=>{
+  showScreen('spatialStart');
+});
+document.getElementById('btn-spatial-menu').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-spatial-quit').addEventListener('click',()=>showScreen('bye'));
+
+/* ════════════════════════════════════════════════════════════
+   REFLEKS OYUNU
+   ════════════════════════════════════════════════════════════ */
+
+function startReflexGame(){
+  rstate.currentQuestion=0;
+  rstate.scores=[];
+  nextReflexQuestion();
+}
+
+function nextReflexQuestion(){
+  rstate.currentQuestion++;
+  if(rstate.currentQuestion>TOTAL_QUESTIONS){ showReflexFinal(); return; }
+  runReflexWaitPhase();
+}
+
+function runReflexWaitPhase(){
+  document.getElementById('rwait-qnum').textContent=rstate.currentQuestion;
+  document.getElementById('rwait-total').textContent=TOTAL_QUESTIONS;
+  document.getElementById('reflex-instruction').textContent='Sinyali bekle, henüz dokunma...';
+
+  const btn=document.getElementById('reflex-target-btn');
+  btn.classList.remove('go');
+  btn.textContent='BEKLE';
+
+  rstate.awaitingSignal=true;
+  showScreen('reflexWait');
+
+  const delay = Math.round(REFLEX_MIN_DELAY_MS + Math.random()*(REFLEX_MAX_DELAY_MS-REFLEX_MIN_DELAY_MS));
+  rstate.waitTimeoutId=setTimeout(()=>{
+    rstate.awaitingSignal=false;
+    rstate.signalTime=performance.now();
+    btn.classList.add('go');
+    btn.textContent='ŞİMDİ DOKUN!';
+    document.getElementById('reflex-instruction').textContent='DOKUN!';
+  }, delay);
+}
+
+function handleReflexPress(e){
+  e.preventDefault();
+  if(rstate.awaitingSignal){
+    // Erken basma: sinyal gelmeden dokundu
+    clearTimeout(rstate.waitTimeoutId);
+    rstate.scores.push({score:0, reactionMs:null, early:true});
+    showScreen('reflexEarly');
+    return;
+  }
+  // Geçerli tepki
+  const reactionMs = performance.now() - rstate.signalTime;
+  const score = calculateReflexScore(reactionMs);
+  rstate.scores.push({score, reactionMs, early:false});
+  renderReflexResult(reactionMs, score);
+}
+
+function calculateReflexScore(reactionMs){
+  if(reactionMs<=REFLEX_BEST_MS) return REFLEX_MAX_PTS_PER_Q;
+  if(reactionMs>=REFLEX_WORST_MS) return 0;
+  const ratio = 1 - (reactionMs-REFLEX_BEST_MS)/(REFLEX_WORST_MS-REFLEX_BEST_MS);
+  return Math.round(REFLEX_MAX_PTS_PER_Q*ratio);
+}
+
+function renderReflexResult(reactionMs, score){
+  document.getElementById('rresult-time').textContent=Math.round(reactionMs)+' ms';
+
+  const commentEl=document.getElementById('rresult-comment');
+  if(reactionMs<=REFLEX_BEST_MS) commentEl.textContent='Olağanüstü bir refleks!';
+  else if(reactionMs<=250) commentEl.textContent='Çok iyi bir tepki süresi.';
+  else if(reactionMs<=400) commentEl.textContent='Ortalama bir tepki süresi.';
+  else commentEl.textContent='Biraz daha hızlı olabilirsin.';
+
+  document.getElementById('rresult-score').textContent=score;
+
+  const nextBtn=document.getElementById('btn-reflex-next');
+  const isLast=rstate.currentQuestion>=TOTAL_QUESTIONS;
+  nextBtn.textContent=isLast?'Seti Tamamla':'Sıradaki Soru';
+  nextBtn.disabled=true;
+  setTimeout(()=>{ nextBtn.disabled=false; },600);
+
+  showScreen('reflexResult');
+}
+
+function showReflexFinal(){
+  const total=rstate.scores.reduce((s,o)=>s+o.score,0);
+  const max=TOTAL_QUESTIONS*REFLEX_MAX_PTS_PER_Q;
+  document.getElementById('rfinal-score').textContent=total;
+  document.getElementById('rfinal-max').textContent=`/ ${max} puan`;
+
+  const recapWrap=document.getElementById('rfinal-recap');
+  recapWrap.innerHTML='';
+  rstate.scores.forEach((o,idx)=>{
+    const chip=document.createElement('div');
+    chip.className='recap-chip';
+    const detail = o.early ? 'Erken basıldı' : `${Math.round(o.reactionMs)} ms`;
+    chip.innerHTML=`<b>Soru ${idx+1}: ${o.score} puan</b>
+      <span class="chip-cat">${detail}</span>`;
+    recapWrap.appendChild(chip);
+  });
+
+  showScreen('reflexFinal');
+}
+
+/* ── REFLEKS EVENT LİSTENERLAR ─────────────────────────────── */
+document.getElementById('btn-reflex-start').addEventListener('click', startReflexGame);
+
+const reflexBtn=document.getElementById('reflex-target-btn');
+reflexBtn.addEventListener('mousedown', handleReflexPress);
+reflexBtn.addEventListener('touchstart', handleReflexPress, {passive:false});
+
+document.getElementById('btn-reflex-early-next').addEventListener('click',()=>{
+  nextReflexQuestion();
+});
+
+document.getElementById('btn-reflex-next').addEventListener('click',()=>{
+  if(!screens.reflexResult.classList.contains('hidden')) nextReflexQuestion();
+});
+
+document.addEventListener('keyup',(e)=>{
+  const nextBtn=document.getElementById('btn-reflex-next');
+  if(e.key==='Enter'&&!screens.reflexResult.classList.contains('hidden')&&!nextBtn.disabled){
+    nextReflexQuestion();
+  }
+});
+
+document.getElementById('btn-reflex-restart').addEventListener('click',()=>{
+  showScreen('reflexStart');
+});
+document.getElementById('btn-reflex-menu').addEventListener('click',()=>showScreen('menu'));
+document.getElementById('btn-reflex-quit').addEventListener('click',()=>showScreen('bye'));
+
+})();
+</script>
+<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
+  <img src="../img/THlogo.png" alt="Tekin Hoca Logo"
+       style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
+       onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
+</div>
+</body>
+</html>
