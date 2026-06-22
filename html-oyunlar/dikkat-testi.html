@@ -309,7 +309,7 @@
     <div class="row-buttons" style="flex-direction:column;align-items:center;">
       <button class="btn" id="btn-menu-numbers" style="width:100%;max-width:320px;">🔢 SAYILAR</button>
       <button class="btn" id="btn-menu-colors" style="width:100%;max-width:320px;">🎨 RENKLER</button>
-      <button class="btn" id="btn-menu-symbols" style="width:100%;max-width:320px;">Σ SEMBOLLER</button>
+      <button class="btn" id="btn-menu-symbols" style="width:100%;max-width:320px;">⇆ OKLAR</button>
       <button class="btn" id="btn-menu-spatial" style="width:100%;max-width:320px;">▦ KONUM HAFIZASI</button>
       <button class="btn" id="btn-menu-reflex" style="width:100%;max-width:320px;">⚡ REFLEKS</button>
       <button class="btn" id="btn-menu-timing" style="width:100%;max-width:320px;">⏱ ZAMANLAMA</button>
@@ -504,27 +504,27 @@
 
   <!-- SEMBOL ZORLUK SEÇİMİ -->
   <div id="screen-symbol-start" class="hidden">
-    <h1 class="glow-title">SEMBOLLERİ EZBERLEME OYUNU</h1>
-    <p class="subtitle">Ekranda beliren semboller dizisini ezberle,<br>geriye sayımın ardından sembollere doğru sırayla dokun.</p>
+    <h1 class="glow-title">OKLARI EZBERLEME OYUNU</h1>
+    <p class="subtitle">Ekranda beliren dizideki okların yönlerini ezberle,<br>geriye sayımın ardından doğru sırayla oklara dokun.</p>
     <div class="difficulty-grid">
       <div class="diff-card" data-slevel="easy">
         <div class="diff-name">🟢 Kolay</div>
-        <div class="diff-detail">4 sembol · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">10 puan / sembol · maks. 200</div>
+        <div class="diff-detail">4 ok · 4 saniye<br>5 soru</div>
+        <div class="diff-pts">10 puan / ok · maks. 200</div>
       </div>
       <div class="diff-card" data-slevel="medium">
         <div class="diff-name">🔵 Orta</div>
-        <div class="diff-detail">6 sembol · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">15 puan / sembol · maks. 450</div>
+        <div class="diff-detail">6 ok · 5 saniye<br>5 soru</div>
+        <div class="diff-pts">15 puan / ok · maks. 450</div>
       </div>
       <div class="diff-card" data-slevel="hard">
         <div class="diff-name">🟣 Zor</div>
-        <div class="diff-detail">8 sembol · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">20 puan / sembol · maks. 800</div>
+        <div class="diff-detail">8 ok · 6 saniye<br>5 soru</div>
+        <div class="diff-pts">20 puan / ok · maks. 800</div>
       </div>
       <div class="diff-card" data-slevel="progressive">
         <div class="diff-name">🌈 Kademeli</div>
-        <div class="diff-detail">4→6→6→8→8 sembol<br>5 soru</div>
+        <div class="diff-detail">4→6→6→8→8 ok<br>5 soru</div>
         <div class="diff-pts">Karma puanlama · maks. 510</div>
       </div>
     </div>
@@ -544,7 +544,7 @@
       <div class="symbol-display" id="smemorize-list"></div>
     </div>
     <div class="timer-bar-wrap"><div class="timer-bar" id="smemorize-bar"></div></div>
-    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Sembol sırasını dikkatlice incele.</p>
+    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Okların yönlerini dikkatlice incele.</p>
   </div>
 
   <!-- SEMBOL CEVAP -->
@@ -557,7 +557,7 @@
     <div class="symbol-slots" id="symbol-slots"></div>
     <div class="symbol-palette" id="symbol-palette"></div>
     <div class="row-buttons">
-      <button class="btn secondary" id="btn-symbol-undo">⌫ Son Sembolü Sil</button>
+      <button class="btn secondary" id="btn-symbol-undo">⌫ Son Oku Sil</button>
       <button class="btn" id="btn-symbol-submit" disabled>Cevabı Gönder</button>
     </div>
   </div>
@@ -566,7 +566,7 @@
   <div id="screen-symbol-result" class="hidden fade-in">
     <div class="eyebrow">Soru Sonucu</div>
     <div id="sresult-badge-wrap"></div>
-    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sıra</h2>
+    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sıralama</h2>
     <div class="feedback-digits symbol-feedback" id="sfeedback-correct"></div>
     <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
     <div class="feedback-digits symbol-feedback" id="sfeedback-user"></div>
@@ -887,19 +887,19 @@ const COLOR_LEVELS = {
 };
 
 /* ── SEMBOL TANIMLARI ─────────────────────────────────────── */
-const SYMBOL_KEYS = ['Π','€','£','®','@','Δ','Σ','Ω','◊','¥'];
+const SYMBOL_KEYS = ['⇐','⇑','⇒','⇓','⇖','⇗','⇘','⇙','⇔','⇕'];
 
 const SYMBOL_LEVELS = {
-  easy:        { label:'Kolay',    badge:'badge-easy',    pts:10, questions:[{count:4,ms:3000}] },
-  medium:      { label:'Orta',     badge:'badge-medium',  pts:15, questions:[{count:6,ms:3000}] },
-  hard:        { label:'Zor',      badge:'badge-hard',    pts:20, questions:[{count:8,ms:3000}] },
+  easy:        { label:'Kolay',    badge:'badge-easy',    pts:10, questions:[{count:4,ms:4000}] },
+  medium:      { label:'Orta',     badge:'badge-medium',  pts:15, questions:[{count:6,ms:5000}] },
+  hard:        { label:'Zor',      badge:'badge-hard',    pts:20, questions:[{count:8,ms:6000}] },
   progressive: { label:'Kademeli', badge:'badge-progressive', pts:null,
     questions:[
-      {count:4, ms:3000, pts:10, sub:'easy',   subLabel:'Kolay'},
-      {count:6, ms:3000, pts:15, sub:'medium', subLabel:'Orta'},
-      {count:6, ms:3000, pts:15, sub:'medium', subLabel:'Orta'},
-      {count:8, ms:3000, pts:20, sub:'hard',   subLabel:'Zor'},
-      {count:8, ms:3000, pts:20, sub:'hard',   subLabel:'Zor'},
+      {count:4, ms:4000, pts:10, sub:'easy',   subLabel:'Kolay'},
+      {count:6, ms:5000, pts:15, sub:'medium', subLabel:'Orta'},
+      {count:6, ms:5000, pts:15, sub:'medium', subLabel:'Orta'},
+      {count:8, ms:6000, pts:20, sub:'hard',   subLabel:'Zor'},
+      {count:8, ms:6000, pts:20, sub:'hard',   subLabel:'Zor'},
     ]}
 };
 /* ── BİLGİ CÜMLELERİ (40 adet) ───────────────────────────── */
