@@ -1908,16 +1908,32 @@ function runTimingWatchPhase(){
 
   const ring=document.getElementById('ring-progress');
   const fullDash=527.79;
-  ring.style.transition='none';
+  ring.style.transition='none'; // CSS transition tamamen devre dışı; ilerleme tek tek JS ile çiziliyor
   ring.style.strokeDashoffset=fullDash;
 
-  // Halka, hedef süre boyunca tam tur (0 -> dolu) döner
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    ring.style.transition=`stroke-dashoffset ${tstate.targetMs}ms linear`;
-    ring.style.strokeDashoffset='0';
-  }));
+  // Animasyon ilerlemesi ve "bitti" kararı AYNI performance.now() saatine
+  // bağlı tek bir requestAnimationFrame döngüsünde hesaplanır. Böylece
+  // görsel ilerlemeyle zaman ölçümü arasında senkronizasyon farkı oluşmaz;
+  // CSS transition'ın cihaza/tarayıcıya göre değişen render davranışından
+  // bağımsızlaşır.
+  const targetMs = tstate.targetMs;
+  let startTime = null;
+  let rafId = null;
 
-  setTimeout(runTimingReadyPhase, tstate.targetMs);
+  function step(now){
+    if(startTime===null) startTime = now;
+    const elapsed = now - startTime;
+    const progress = Math.min(1, elapsed / targetMs); // 0 -> 1
+
+    ring.style.strokeDashoffset = String(fullDash * (1 - progress));
+
+    if(progress < 1){
+      rafId = requestAnimationFrame(step);
+    } else {
+      runTimingReadyPhase();
+    }
+  }
+  rafId = requestAnimationFrame(step);
 }
 
 function runTimingReadyPhase(){
