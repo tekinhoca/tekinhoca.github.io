@@ -1911,30 +1911,13 @@ function runTimingWatchPhase(){
   ring.style.transition='none';
   ring.style.strokeDashoffset=fullDash;
 
-  let advanced=false; // runTimingReadyPhase'in birden fazla kez tetiklenmesini önler
-  function advanceOnce(){
-    if(advanced) return;
-    advanced=true;
-    ring.removeEventListener('transitionend', onTransitionEnd);
-    clearTimeout(fallbackId);
-    runTimingReadyPhase();
-  }
-  function onTransitionEnd(e){
-    // Sadece stroke-dashoffset geçişini dinle (başka transition varsa karışmasın)
-    if(e.propertyName==='stroke-dashoffset') advanceOnce();
-  }
-  ring.addEventListener('transitionend', onTransitionEnd);
-
-  // Güvenlik ağı: transitionend bir nedenle tetiklenmezse (örn. sekme arka
-  // plandayken throttling, tarayıcı tutarsızlığı), targetMs + güvenlik payı
-  // sonunda yine de ilerlesin.
-  const fallbackId=setTimeout(advanceOnce, tstate.targetMs + 400);
-
   // Halka, hedef süre boyunca tam tur (0 -> dolu) döner
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     ring.style.transition=`stroke-dashoffset ${tstate.targetMs}ms linear`;
     ring.style.strokeDashoffset='0';
   }));
+
+  setTimeout(runTimingReadyPhase, tstate.targetMs);
 }
 
 function runTimingReadyPhase(){
