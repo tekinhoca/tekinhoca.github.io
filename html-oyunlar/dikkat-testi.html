@@ -2360,10 +2360,17 @@ function runReflexWaitPhase(){
   const delay = Math.round(REFLEX_MIN_DELAY_MS + Math.random()*(REFLEX_MAX_DELAY_MS-REFLEX_MIN_DELAY_MS));
   rstate.waitTimeoutId=setTimeout(()=>{
     rstate.awaitingSignal=false;
-    rstate.signalTime=performance.now();
+    rstate.signalTime=null; // rAF henüz çalışmadı; bu pencerede basışı erken-basma gibi ele alma riskini önler
     btn.classList.add('go');
     btn.textContent='ŞİMDİ DOKUN!';
     document.getElementById('reflex-instruction').textContent='DOKUN!';
+    // signalTime, stil değişikliğinin DOM'a yazılmasından hemen sonra ama
+    // tarayıcının bir sonraki boyamasından (paint) hemen önceki noktada
+    // kaydedilir. Böylece "düğme görsel olarak yeşil oldu" anıyla "saat
+    // başladı" anı birbirine mümkün olan en yakın noktada hizalanır.
+    requestAnimationFrame(()=>{
+      rstate.signalTime=performance.now();
+    });
   }, delay);
 }
 
@@ -2372,6 +2379,14 @@ function handleReflexPress(e){
   if(rstate.awaitingSignal){
     // Erken basma: sinyal gelmeden dokundu
     clearTimeout(rstate.waitTimeoutId);
+    rstate.scores.push({score:0, reactionMs:null, early:true});
+    showScreen('reflexEarly');
+    return;
+  }
+  if(rstate.signalTime===null){
+    // Son ihtimal: sinyal rengi ekrana yansımadan (rAF tetiklenmeden) önce
+    // basıldı. İnsan refleksiyle imkansıza yakın olsa da, ölçüm güvenilir
+    // olmayacağı için bu basışı da erken-basma gibi ele alıyoruz.
     rstate.scores.push({score:0, reactionMs:null, early:true});
     showScreen('reflexEarly');
     return;
