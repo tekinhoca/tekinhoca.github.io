@@ -1494,7 +1494,10 @@ document.getElementById('btn-color-start-back').addEventListener('click',()=>sho
 document.getElementById('btn-symbol-start-back').addEventListener('click',()=>showScreen('menu'));
 document.getElementById('btn-menu-timing').addEventListener('click',()=>showScreen('timingStart'));
 document.getElementById('btn-timing-start-back').addEventListener('click',()=>showScreen('menu'));
-document.getElementById('btn-menu-simon').addEventListener('click',()=>showScreen('simonStart'));
+document.getElementById('btn-menu-simon').addEventListener('click',()=>{
+  resetSimonSoundChoice();
+  showScreen('simonStart');
+});
 document.getElementById('btn-simon-start-back').addEventListener('click',()=>showScreen('menu'));
 document.getElementById('btn-menu-reflex').addEventListener('click',()=>showScreen('reflexStart'));
 document.getElementById('btn-reflex-start-back').addEventListener('click',()=>showScreen('menu'));
@@ -2653,6 +2656,15 @@ function buildSimonGridDOM(){
   return grid;
 }
 
+function resetSimonSoundChoice(){
+  // Önceki seçimin görsel ve mantıksal izini tamamen temizler:
+  // kartlardaki 'selected' işaretini kaldırır, butonu yeniden pasif yapar.
+  document.querySelectorAll('#screen-simon-start .diff-card').forEach(c=>c.classList.remove('selected'));
+  const btn=document.getElementById('btn-simon-start');
+  btn.disabled=true;
+  btn.textContent='Önce Bir Seçim Yap';
+}
+
 function startSimonGame(){
   simonState.sequence=[];
   simonState.userIndex=0;
@@ -2783,7 +2795,10 @@ document.getElementById('simon-grid').addEventListener('click',(e)=>{
   handleSimonCellClick(cellEl);
 });
 
-document.getElementById('btn-simon-restart').addEventListener('click', startSimonGame);
+document.getElementById('btn-simon-restart').addEventListener('click',()=>{
+  resetSimonSoundChoice();
+  showScreen('simonStart');
+});
 document.getElementById('btn-simon-menu').addEventListener('click',()=>showScreen('menu'));
 document.getElementById('btn-simon-quit').addEventListener('click',()=>showScreen('bye'));
 
