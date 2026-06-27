@@ -334,6 +334,9 @@
     filter:brightness(1.35) saturate(1.3);
   }
   .simon-cell.locked{ cursor:not-allowed; }
+  .simon-cell.faded{ opacity:.28; filter:saturate(.35) brightness(.8); transition:opacity .18s, filter .18s; }
+  .simon-cell.correct-hint{ box-shadow:0 0 0 4px var(--danger), 0 0 55px 10px var(--danger); opacity:1!important; filter:none!important; animation:simonCorrectPulse .55s ease-in-out infinite; }
+  @keyframes simonCorrectPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.04); } }
 
   .simon-cell.yellow{ background:radial-gradient(circle at 35% 30%, #fff3a0, #ffcc00 60%, #b38600 100%); }
   .simon-cell.yellow.lit{ box-shadow:0 0 40px rgba(255,204,0,.85); }
@@ -2624,6 +2627,27 @@ function playTone(freq, durationMs){
   }
 }
 
+function playErrorTone(durationMs){
+  // Hatalı tıklamada çalan, doğru tonlardan ayırt edilebilir, kısa ve düşük perdeli "buzzer" sesi
+  if(!simonState.soundEnabled) return;
+  try{
+    const ctx=getAudioCtx();
+    const osc=ctx.createOscillator();
+    const gain=ctx.createGain();
+    osc.type='square';
+    osc.frequency.value=110;
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.22, ctx.currentTime+0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+durationMs/1000);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + durationMs/1000 + 0.02);
+  }catch(err){
+    // Ses çalışmazsa görsel uyarı yine de gösterilir
+  }
+}
+
 function simonShowMsForRound(round){
   // Her SIMON_SPEEDUP_EVERY turda bir kademeli hızlanma, alt sınırla korumalı
   const steps = Math.floor((round-1) / SIMON_SPEEDUP_EVERY);
@@ -2703,10 +2727,33 @@ async function playSimonSequence(){
   armSimonUserTimeout();
 }
 
+function showSimonMistake(statusText, hintText){
+  simonState.locked=true;
+  const grid=document.getElementById('simon-grid');
+  grid.classList.add('locked');
+
+  // SWF orijinalindeki davranış: hücreler soluklaşır, doğru olması gereken hücre parlar, hata sesi çalar
+  playErrorTone(420);
+  document.getElementById('simon-status').textContent=statusText;
+  document.getElementById('simon-hint').textContent=hintText;
+
+  const expectedColor=simonState.sequence[simonState.userIndex];
+  const cells=grid.querySelectorAll('.simon-cell');
+  const correctCellEl=[...cells].find(c=>c.dataset.color===expectedColor);
+  cells.forEach(c=>{ if(c!==correctCellEl) c.classList.add('faded'); });
+  if(correctCellEl) correctCellEl.classList.add('correct-hint');
+
+  setTimeout(()=>{
+    endSimonGame();
+  }, 900);
+}
+
 function armSimonUserTimeout(){
   clearTimeout(simonState.userTimeoutId);
   simonState.userTimeoutId=setTimeout(()=>{
-    if(!simonState.locked) endSimonGame();
+    if(!simonState.locked){
+      showSimonMistake('Süre doldu!', 'Yanan hücre, sırada beklenen renkti.');
+    }
   }, SIMON_USER_TIMEOUT_MS);
 }
 
@@ -2722,16 +2769,17 @@ function handleSimonCellClick(cellEl){
   simonState.locked=true;
   const grid=document.getElementById('simon-grid');
   grid.classList.add('locked');
+
+  if(!isCorrect){
+    showSimonMistake('Yanlış!', 'Yanan hücre, sırada beklenen renkti.');
+    return;
+  }
+
   cellEl.classList.add('lit');
   playTone(SIMON_FREQUENCIES[clickedColor], 220);
 
   setTimeout(()=>{
     cellEl.classList.remove('lit');
-
-    if(!isCorrect){
-      endSimonGame();
-      return;
-    }
 
     simonState.userIndex++;
     grid.classList.remove('locked');
