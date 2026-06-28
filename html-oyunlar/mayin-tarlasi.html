@@ -21,7 +21,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .ibox .v.danger{color:#e74c3c}
 .board-outer{display:flex;justify-content:center;overflow-x:auto}
 .board{display:inline-grid;border:2px solid rgba(200,150,12,0.5);border-radius:4px;overflow:hidden;user-select:none}
-.cell{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:Georgia,serif;cursor:pointer;border-right:1px solid rgba(200,150,12,0.1);border-bottom:1px solid rgba(200,150,12,0.1);background:#1a1810;transition:background .1s}
+.cell{width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:Georgia,serif;cursor:pointer;border-right:1px solid rgba(200,150,12,0.1);border-bottom:1px solid rgba(200,150,12,0.1);background:#1a1810;transition:background .1s;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
 .cell:hover:not(.open):not(.flagged){background:#2a2618}
 .cell.open{background:#0e0c08;cursor:default}
 .cell.flagged{background:#2a1208}
@@ -260,11 +260,11 @@ const MT = (function(){
       } else if(flag[r][c]){el.classList.add('flagged');el.textContent='🚩';}
       const rr=r,cc=c;
       el.addEventListener('click',()=>revealCell(rr,cc));
-      el.addEventListener('contextmenu',e=>{e.preventDefault();toggleFlag(rr,cc);});
-      let pt;
-      el.addEventListener('touchstart',e=>{pt=setTimeout(()=>{e.preventDefault();toggleFlag(rr,cc);},500);},{passive:false});
-      el.addEventListener('touchend',()=>clearTimeout(pt));
-      el.addEventListener('touchmove',()=>clearTimeout(pt));
+      el.addEventListener('contextmenu',e=>{e.preventDefault();if(!e.pointerType||e.pointerType==='mouse'){toggleFlag(rr,cc);}});
+      let pt,ptFired=false;
+      el.addEventListener('touchstart',e=>{e.preventDefault();ptFired=false;pt=setTimeout(()=>{ptFired=true;toggleFlag(rr,cc);},500);},{passive:false});
+      el.addEventListener('touchend',e=>{e.preventDefault();clearTimeout(pt);if(!ptFired){revealCell(rr,cc);}},{passive:false});
+      el.addEventListener('touchmove',()=>{clearTimeout(pt);});
       bd.appendChild(el);
     }
   }
