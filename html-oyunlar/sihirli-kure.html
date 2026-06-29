@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Sihirli Küre</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#0e0a14;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto}
+.wrap{width:100%;max-width:860px;display:flex;flex-direction:column;gap:12px;margin:auto}
+.game-title{font-size:24px;font-weight:700;color:#c8960c;letter-spacing:.07em;text-align:center;margin-bottom:8px}
+.msg{font-size:13px;color:rgba(247,242,232,0.85);text-align:center;min-height:18px}
+
+.info-modal{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.info-box{background:#1a1428;border:2px solid #c8960c;border-radius:12px;padding:28px 24px;max-width:460px;width:100%;color:#f5e8c7;box-shadow:0 0 30px rgba(200,150,12,0.4)}
+.info-box h3{color:#FFD97A;margin-bottom:16px}
+.info-box p{margin-bottom:12px;line-height:1.6}
+
+.table-area{display:grid;grid-template-columns:repeat(auto-fit, minmax(56px, 1fr));gap:7px;justify-content:center;background:rgba(20,15,35,0.75);padding:16px;border-radius:12px;border:1px solid rgba(200,150,12,0.4)}
+@media (min-width: 768px) {
+  .table-area { grid-template-columns: repeat(10, 1fr); }
+}
+@media (max-width: 767px) {
+  .table-area { grid-template-columns: repeat(5, 1fr); }
+}
+.num-item{display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);padding:7px 3px;border-radius:6px;cursor:default;transition:all .2s;font-size:13px;font-weight:700;color:#f0d38a;box-shadow:0 2px 8px rgba(0,0,0,0.3);min-height:68px; aspect-ratio: 1 / 1.1;}
+.num-item:hover{transform:scale(1.05);background:rgba(255,255,255,0.12)}
+.symbol{font-size:24px;margin-top:3px;line-height:1;color:#ffe68f}
+
+.oracle-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:1100;padding:16px}
+.oracle-overlay.show { display: flex !important; }
+.oracle-box{background:#120d22;border:1px solid rgba(170,120,230,0.6);border-radius:14px;padding:32px 26px;max-width:360px;width:100%;text-align:center}
+.orb{width:130px;height:130px;border-radius:50%;margin:0 auto 24px;background:radial-gradient(circle at 38% 32%,rgba(255,255,255,0.65),rgba(160,100,230,0.65) 48%,rgba(45,15,75,0.95) 82%);box-shadow:0 0 45px 15px rgba(160,100,230,0.55),0 0 90px 30px rgba(90,45,150,0.45);animation:orbPulse 1.25s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-size:58px}
+@keyframes orbPulse{0%,100%{transform:scale(1)} 50%{transform:scale(1.09)}}
+.result-symbol{font-size:72px;margin:18px 0;color:#ffe68f}
+button.a{background:rgba(200,150,12,0.12);border:1.5px solid rgba(200,150,12,0.55);border-radius:6px;padding:10px 26px;font-size:14px;font-weight:700;cursor:pointer;color:#FFD97A;transition:background .2s;margin-top:12px}
+button.a:hover{background:rgba(200,150,12,0.35)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="game-title">SİHİRLİ KÜRE</div>
+  <div class="msg" id="mainMsg"></div>
+  <div class="table-area" id="numberTable" style="display:none"></div>
+  <div style="text-align:center" id="proceedContainer" style="display:none">
+    <button class="a" onclick="startOracle()">Sembolümü Aklımda Tuttum → Küreye Sor</button>
+  </div>
+</div>
+
+<div class="info-modal" id="infoModal">
+  <div class="info-box">
+    <h3>Aklınızdan iki basamaklı bir sayı tutun.</h3>
+    <p><strong>Örnek:</strong> 45</p>
+    <p>Bu sayının rakamlarını toplayın: <strong>4 + 5 = 9</strong></p>
+    <p>Tuttuğunuz sayıdan bu toplamı çıkarın: <strong>45 - 9 = 36</strong></p>
+    <p><strong>Elde ettiğiniz sonucu aşağıdaki tabloda bulun ve yanındaki sembolü aklınızda tutun.</strong></p>
+    <div style="text-align:center;margin-top:24px">
+      <button class="a" onclick="closeInfoModal()">Sayı Hazır, Sembolleri Göster</button>
+    </div>
+  </div>
+</div>
+
+<div class="oracle-overlay" id="oracleOverlay">
+  <div class="oracle-box">
+    <div class="orb" id="orb">🌌</div>
+    <div id="oracleText" style="color:#d4b8ff;font-size:15px;margin-bottom:16px">Sihirli Küre odaklanıyor...</div>
+    <div id="resultArea" style="display:none">
+      <div style="color:#c8960c;font-size:16px;margin-bottom:8px">Aklınızdaki sembol:</div>
+      <div class="result-symbol" id="resultSymbol"></div>
+    </div>
+    <button class="a" onclick="playAgain()">Tekrar Oyna</button>
+  </div>
+</div>
+
+<script>
+const symbolsPool = ['✦','✧','✪','✫','✬','✭','✮','✯','❈','❉','❊','❋','✵','✶','✷','✸','☾','☽','☀','☼','⚝','⚜','☯','☘','♠','♣','♥','♦','♛','♜','♞','⚑','★','✴','🌙'];
+let magicSymbol = '';
+let numberSymbols = {};
+
+function generateSymbols() {
+  const multiplesOf9 = [0,9,18,27,36,45,54,63,72,81,90,99];
+  magicSymbol = symbolsPool[Math.floor(Math.random() * symbolsPool.length)];
+  numberSymbols = {};
+  multiplesOf9.forEach(n => numberSymbols[n] = magicSymbol);
+  const others = symbolsPool.filter(s => s !== magicSymbol);
+  for(let i = 0; i <= 99; i++) {
+    if (!numberSymbols[i]) numberSymbols[i] = others[Math.floor(Math.random() * others.length)];
+  }
+}
+
+function renderTable() {
+  const table = document.getElementById('numberTable');
+  table.innerHTML = '';
+  for(let i = 99; i >= 0; i--) {
+    const div = document.createElement('div');
+    div.className = 'num-item';
+    div.innerHTML = `<div>${i}</div><div class="symbol">${numberSymbols[i]}</div>`;
+    table.appendChild(div);
+  }
+}
+
+function closeInfoModal() {
+  document.getElementById('infoModal').style.display = 'none';
+  document.getElementById('numberTable').style.display = 'grid';
+  document.getElementById('proceedContainer').style.display = 'block';
+  document.getElementById('mainMsg').textContent = 'Sembolünüzü aklınızda tutun ve sihirli küreye sorun.';
+}
+
+function startOracle() {
+  const overlay = document.getElementById('oracleOverlay');
+  overlay.classList.add('show');
+  document.getElementById('resultArea').style.display = 'none';
+  document.getElementById('orb').textContent = '🌌';
+  document.getElementById('oracleText').textContent = 'Sihirli Küre odaklanıyor...';
+  setTimeout(() => {
+    document.getElementById('orb').textContent = magicSymbol;
+    document.getElementById('oracleText').textContent = 'Bulduk!';
+    document.getElementById('resultArea').style.display = 'block';
+    document.getElementById('resultSymbol').textContent = magicSymbol;
+  }, 2600);
+}
+
+function playAgain() {
+  document.getElementById('oracleOverlay').classList.remove('show');
+  initGame();
+}
+
+function initGame() {
+  generateSymbols();
+  renderTable();
+  document.getElementById('infoModal').style.display = 'flex';
+  document.getElementById('numberTable').style.display = 'none';
+  document.getElementById('proceedContainer').style.display = 'none';
+  document.getElementById('mainMsg').textContent = '';
+}
+
+initGame();
+</script>
+</body>
+</html>

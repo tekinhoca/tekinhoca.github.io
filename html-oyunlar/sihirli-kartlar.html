@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Sihirli Kartlar</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#0e0a14;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:720px;display:flex;flex-direction:column;gap:9px;margin:auto}
+
+/* Mobil mod: sayfa tam ekran yüksekliğine sığar, kaydırma gerekmez.
+   "mm" sınıfı sadece JS tarafından mobil moda geçildiğinde <html>'e eklenir. */
+html.mm,html.mm body{height:100dvh;overflow:hidden}
+html.mm body{align-items:stretch;padding:6px}
+html.mm .wrap{height:100%;max-width:420px;margin:0 auto;gap:5px;padding-bottom:max(6px,env(safe-area-inset-bottom))}
+html.mm .top-bar{flex-shrink:0}
+html.mm .game-title{font-size:14px}
+html.mm .msg{flex-shrink:0;font-size:10px;min-height:0;line-height:1.3}
+html.mm button.a{padding:4px 9px;font-size:10px}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.top-actions{display:flex;gap:5px;flex-wrap:wrap}
+
+/* ── KARTLAR (masaüstü: hepsi aynı anda, 2 satır halinde 3+3) ── */
+.cards-area{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(110px,128px));
+  gap:10px;
+  justify-content:center;
+}
+
+.mcard{
+  width:100%;
+  border-radius:8px;
+  padding:8px 6px 10px;
+  cursor:pointer;
+  border:2px solid;
+  transition:transform .12s,box-shadow .12s;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.mcard:hover{transform:translateY(-2px)}
+.mcard.picked{box-shadow:0 0 0 3px rgba(255,255,255,0.25) inset, 0 4px 14px rgba(0,0,0,0.5);transform:translateY(-3px)}
+
+.mcard-head{
+  text-align:center;font-size:11px;font-weight:700;
+  letter-spacing:.06em;margin-bottom:6px;opacity:.85;
+}
+.mcard-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-template-rows:repeat(8,1fr);
+  gap:2px;
+}
+.mcard-cell{
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;
+  border-radius:2px;
+  aspect-ratio:1.05/1;
+}
+/* Masaüstünde (kartlar aynı anda gösterildiğinde) Georgia fontunun rakamları
+   eşit boyut/hizada göstermemesi sorunu için sadece bu ızgaradaki sayılarda
+   farklı, rakamları tutarlı çizen bir font kullanılır. Mobil kartlar bu
+   kuralın dışındadır, oradaki görünüm değişmez. */
+.cards-area .mcard-cell{
+  font-family:'Trebuchet MS',Verdana,Arial,sans-serif;
+  font-variant-numeric:lining-nums tabular-nums;
+}
+
+/* Kart temaları */
+.theme-1{background:#241405;border-color:#c8960c}
+.theme-1 .mcard-head{color:#FFD97A}
+.theme-1 .mcard-cell{background:rgba(200,150,12,0.14);color:#FFD97A}
+
+.theme-2{background:#04201f;border-color:#1abc9c}
+.theme-2 .mcard-head{color:#5ee8d2}
+.theme-2 .mcard-cell{background:rgba(26,188,156,0.14);color:#5ee8d2}
+
+.theme-3{background:#0c2008;border-color:#4caf50}
+.theme-3 .mcard-head{color:#8be08e}
+.theme-3 .mcard-cell{background:rgba(76,175,80,0.14);color:#8be08e}
+
+.theme-4{background:#240a1c;border-color:#e91e8c}
+.theme-4 .mcard-head{color:#ff8fc8}
+.theme-4 .mcard-cell{background:rgba(233,30,140,0.14);color:#ff8fc8}
+
+.theme-5{background:#07142a;border-color:#3498db}
+.theme-5 .mcard-head{color:#7fc3f0}
+.theme-5 .mcard-cell{background:rgba(52,152,219,0.14);color:#7fc3f0}
+
+.theme-6{background:#2a1205;border-color:#e67e22}
+.theme-6 .mcard-head{color:#ffb066}
+.theme-6 .mcard-cell{background:rgba(230,126,34,0.14);color:#ffb066}
+
+/* ── MOBİL MOD (tek kart, VAR/YOK) ──
+   Kartın boyutu JS ile hesaplanmaz; aspect-ratio (4 sütun / 8 satır) ve
+   clamp() tabanlı font boyutları sayesinde mevcut yüksekliğe otomatik sığar. */
+.mobile-stage{display:none;flex-direction:column;align-items:center;gap:6px;width:100%;flex:1;min-height:0;justify-content:space-between}
+.mobile-stage.show{display:flex}
+.mobile-progress{font-size:11px;color:rgba(247,242,232,0.4);letter-spacing:.06em;flex-shrink:0}
+.mobile-card{
+  flex:1;min-height:0;width:auto;max-width:300px;
+  aspect-ratio:4/8.6;
+  margin:0 auto;
+  display:flex;flex-direction:column;
+}
+.mobile-card .mcard-grid{flex:1;min-height:0}
+.mobile-card .mcard-head{font-size:clamp(9px,2.6vh,13px);margin-bottom:clamp(2px,0.8vh,6px)}
+.mobile-card .mcard-cell{font-size:clamp(9px,2.8vh,15px);aspect-ratio:auto}
+.mobile-question{font-size:clamp(10px,2vh,12px);color:rgba(247,242,232,0.55);text-align:center;flex-shrink:0}
+.var-yok-btns{display:flex;gap:14px;flex-shrink:0;padding-bottom:4px}
+.vy-btn{
+  min-width:96px;padding:12px 20px;border-radius:6px;
+  font-size:15px;font-weight:700;cursor:pointer;
+  font-family:Georgia,serif;transition:background .15s,transform .1s;
+  border:1.5px solid;
+}
+.vy-btn:active{transform:scale(.96)}
+.vy-btn.yes{background:rgba(80,200,120,0.12);border-color:#50c878;color:#7fe3a3}
+.vy-btn.yes:hover{background:rgba(80,200,120,0.25)}
+.vy-btn.no{background:rgba(235,87,87,0.1);border-color:#eb5757;color:#f59a9a}
+.vy-btn.no:hover{background:rgba(235,87,87,0.22)}
+
+/* ── Masaüstü "Tamamlandı" butonu ── */
+.confirm-wrap{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+.confirm-btn{
+  background:rgba(200,150,12,0.18);border:1.5px solid rgba(200,150,12,0.65);
+  border-radius:5px;padding:9px 26px;font-size:13px;font-weight:700;
+  cursor:pointer;color:#FFD97A;font-family:Georgia,serif;transition:background .2s;
+}
+.confirm-btn:hover{background:rgba(200,150,12,0.32)}
+
+/* ── SONUÇ MODALI (küre + cevap, ekranın ortasında) ── */
+.oracle-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.82);
+  display:none;align-items:center;justify-content:center;
+  z-index:1100;padding:16px;
+}
+.oracle-overlay.show{display:flex}
+.oracle-box{
+  background:#0c0816;
+  border:1px solid rgba(170,120,230,0.45);
+  border-radius:10px;
+  padding:26px 24px 22px;
+  max-width:340px;width:100%;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  animation:modalIn .3s ease;
+}
+.orb{
+  width:80px;height:80px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,0.55),rgba(150,90,220,0.55) 40%,rgba(40,10,70,0.85) 75%);
+  box-shadow:0 0 30px 8px rgba(150,90,220,0.45),0 0 60px 18px rgba(80,40,140,0.25);
+  animation:orbPulse 1.1s ease-in-out infinite;
+  flex-shrink:0;
+}
+@keyframes orbPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 30px 8px rgba(150,90,220,0.45),0 0 60px 18px rgba(80,40,140,0.25)}
+  50%{transform:scale(1.07);box-shadow:0 0 40px 14px rgba(180,120,240,0.6),0 0 80px 26px rgba(100,50,160,0.35)}
+}
+.oracle-text{font-size:12px;color:rgba(220,190,255,0.75);letter-spacing:.06em;text-align:center;min-height:16px}
+.result-block{display:none;flex-direction:column;align-items:center;gap:4px}
+.result-block.show{display:flex}
+.result-block h2{font-size:13px;color:rgba(220,190,255,0.75);letter-spacing:.05em;font-weight:700}
+.result-number{font-size:46px;font-weight:700;color:#FFD97A;text-shadow:0 0 20px rgba(255,217,122,0.5);line-height:1}
+.result-sub{font-size:11px;color:rgba(247,242,232,0.45);text-align:center;margin-top:2px}
+.oracle-close-btn{
+  margin-top:4px;
+  background:rgba(90,40,130,0.6);border:1px solid rgba(200,150,12,0.6);
+  border-radius:4px;padding:7px 22px;font-size:12px;font-weight:600;
+  color:#c8960c;cursor:pointer;font-family:Georgia,serif;transition:background .2s;
+  display:none;
+}
+.oracle-close-btn.show{display:inline-block}
+.oracle-close-btn:hover{background:rgba(120,55,170,0.8)}
+
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+/* ── Açılış Modalı ── */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:16px;
+}
+.modal-overlay.hidden{display:none;}
+.modal-box{
+  background:#0b0712;
+  border:1px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:22px 20px 18px;
+  max-width:360px;width:100%;
+  display:flex;flex-direction:column;gap:12px;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94);}
+  to{opacity:1;transform:scale(1);}
+}
+.modal-title{
+  font-size:22px;font-weight:700;
+  color:#c8960c;text-align:center;
+  letter-spacing:.06em;
+}
+.modal-rules{
+  font-size:11.5px;
+  color:rgba(247,242,232,0.72);
+  line-height:1.75;
+  border-top:1px solid rgba(200,150,12,0.2);
+  border-bottom:1px solid rgba(200,150,12,0.2);
+  padding:10px 4px;
+  list-style:none;
+}
+.modal-rules li{margin-bottom:3px;padding-left:4px;}
+.modal-rules li::before{content:"✦ ";color:#c8960c;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{
+  background:rgba(18,16,14,0.7);
+  border:1px solid rgba(200,150,12,0.35);
+  border-radius:3px;padding:6px 18px;
+  font-size:12px;cursor:pointer;
+  color:rgba(247,242,232,0.6);
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-close:hover{background:rgba(40,20,55,0.9);}
+.modal-start{
+  background:rgba(90,40,130,0.6);
+  border:1px solid rgba(200,150,12,0.6);
+  border-radius:3px;padding:6px 22px;
+  font-size:12px;cursor:pointer;
+  color:#c8960c;font-weight:600;
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-start:hover{background:rgba(120,55,170,0.8);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
+</style>
+</head>
+<body>
+<!-- Açılış Modalı -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">SİHİRLİ KARTLAR</div>
+    <ul class="modal-rules">
+      <li><strong>1'DEN 63'E KADAR BİR SAYI TUTUN.</strong></li>
+      <li>Tuttuğunuz sayının göründüğü kartları işaretleyin<br>(Tablet/PC'de tıklayarak, telefonda VAR/YOK ile).</li>
+      <li>Sayı birden fazla kartta görünebilir;<br>göründüğü her kartı işaretlemelisiniz.</li>
+      <li>Tüm kartlar işaretlendiğinde sihirli küreyi çağırın,<br>tuttuğunuz sayıyı bulup söylesin.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Sihirli Kartlar</div>
+    <div class="top-actions">
+      <button class="a" onclick="resetGame()">&#8635; Yeniden Başla</button>
+      <button class="a" onclick="openModal()">&#9432; Kurallar</button>
+    </div>
+  </div>
+
+  <div class="msg" id="msg">1'den 63'e kadar bir sayı tutun, sonra doğru kartları işaretleyin.</div>
+
+  <!-- MASAÜSTÜ: Tüm kartlar aynı anda -->
+  <div class="cards-area" id="cardsArea"></div>
+  <div class="confirm-wrap" id="confirmWrap">
+    <button class="confirm-btn" onclick="onConfirmDesktop()">&#10003; Tamamladım. Hadi Sayıyı Söyle</button>
+  </div>
+
+  <!-- MOBİL: Tek kart, VAR/YOK -->
+  <div class="mobile-stage" id="mobileStage">
+    <div class="mobile-progress" id="mobileProgress">Kart 1 / 6</div>
+    <div class="mobile-card" id="mobileCard"></div>
+    <div class="mobile-question">TUTTUĞUNUZ SAYI BU KARTTA VAR MI?</div>
+    <div class="var-yok-btns">
+      <button class="vy-btn yes" onclick="onMobileAnswer(true)">VAR</button>
+      <button class="vy-btn no" onclick="onMobileAnswer(false)">YOK</button>
+    </div>
+  </div>
+
+  <!-- SONUÇ MODALI (küre + cevap) -->
+  <div class="oracle-overlay" id="oracleOverlay">
+    <div class="oracle-box">
+      <div class="orb"></div>
+      <div class="oracle-text" id="oracleText">Sihirli Küre Düşünüyor…</div>
+      <div class="result-block" id="resultBlock">
+        <h2>TUTTUĞUNUZ SAYI</h2>
+        <div class="result-number" id="resultNumber">0</div>
+        <div class="result-sub" id="resultSub"></div>
+      </div>
+      <button class="oracle-close-btn" id="oracleCloseBtn" onclick="playAgain()">&#8635; TEKRAR OYNA</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── KART VERİSİ ──
+   Her kart, ikili sistemde bir basamağa (1,2,4,8,16,32) karşılık gelir.
+   Kartın değeri = o basamağın 1 olduğu tüm sayılar (1-63).
+   Görsel düzen: 8 satır x 4 sütun (32 hücre). */
+const CARD_VALUES = [1,2,4,8,16,32];
+const THEMES = ['theme-1','theme-2','theme-3','theme-4','theme-5','theme-6'];
+
+function buildCardNumbers(bitValue){
+  const nums=[];
+  for(let n=1;n<=63;n++){ if(n & bitValue) nums.push(n); }
+  return nums; // 32 adet, küçükten büyüğe
+}
+
+let cards; // [{value, numbers, theme, picked}]
+let mode; // 'desktop' | 'mobile'
+let mobileOrder = []; // kart indeksleri, karışık sıra
+let mobileStep = 0;
+let mobilePicked = []; // her kart için true/false (VAR/YOK)
+let finished = false;
+
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function detectMode(){
+  return window.innerWidth <= 650 ? 'mobile' : 'desktop';
+}
+
+function resetGame(){
+  cards = CARD_VALUES.map((v,i)=>({
+    value:v,
+    numbers:buildCardNumbers(v),
+    theme:THEMES[i],
+    picked:false
+  }));
+  mode = detectMode();
+  finished = false;
+  document.documentElement.classList.toggle('mm', mode==='mobile');
+
+  document.getElementById('oracleOverlay').classList.remove('show');
+  document.getElementById('resultBlock').classList.remove('show');
+  document.getElementById('oracleCloseBtn').classList.remove('show');
+  setMsg("1'den 63'e kadar bir sayı tutun, sonra doğru kartları işaretleyin.");
+
+  if(mode==='desktop'){
+    document.getElementById('mobileStage').classList.remove('show');
+    document.getElementById('cardsArea').style.display='grid';
+    document.getElementById('confirmWrap').style.display='flex';
+    renderDesktopCards();
+  } else {
+    document.getElementById('cardsArea').style.display='none';
+    document.getElementById('confirmWrap').style.display='none';
+    document.getElementById('mobileStage').classList.add('show');
+    mobileOrder = shuffle(cards.map((c,i)=>i));
+    mobileStep = 0;
+    mobilePicked = new Array(cards.length).fill(false);
+    renderMobileCard();
+  }
+}
+
+function buildCardGridHTML(card){
+  let html = '<div class="mcard-grid">';
+  card.numbers.forEach(n=>{
+    html += '<div class="mcard-cell">'+n+'</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+/* ── MASAÜSTÜ RENDER ── */
+function renderDesktopCards(){
+  const area=document.getElementById('cardsArea');
+  area.innerHTML='';
+  cards.forEach((card,idx)=>{
+    const el=document.createElement('div');
+    el.className='mcard '+card.theme+(card.picked?' picked':'');
+    el.innerHTML = '<div class="mcard-head">KART '+(idx+1)+'</div>' + buildCardGridHTML(card);
+    el.addEventListener('click',()=>{
+      card.picked=!card.picked;
+      renderDesktopCards();
+    });
+    area.appendChild(el);
+  });
+}
+
+function onConfirmDesktop(){
+  if(finished) return;
+  let total=0;
+  cards.forEach(c=>{ if(c.picked) total+=c.value; });
+  revealResult(total);
+}
+
+/* ── MOBİL RENDER ──
+   Kart boyutu artık CSS aspect-ratio + clamp() ile otomatik ayarlanır;
+   JS tarafında ekran ölçümü/hesaplama yapılmasına gerek yoktur. */
+function renderMobileCard(){
+  const idx = mobileOrder[mobileStep];
+  const card = cards[idx];
+  document.getElementById('mobileProgress').textContent = 'Kart '+(mobileStep+1)+' / '+cards.length;
+  const wrap=document.getElementById('mobileCard');
+  wrap.className='mobile-card '+card.theme;
+  wrap.innerHTML = '<div class="mcard-head">KART '+(mobileStep+1)+'</div>' + buildCardGridHTML(card);
+}
+
+
+function onMobileAnswer(isYes){
+  if(finished) return;
+  const idx = mobileOrder[mobileStep];
+  mobilePicked[idx] = isYes;
+  mobileStep++;
+  if(mobileStep >= mobileOrder.length){
+    let total=0;
+    cards.forEach((c,i)=>{ if(mobilePicked[i]) total += c.value; });
+    document.getElementById('mobileStage').classList.remove('show');
+    revealResult(total);
+  } else {
+    renderMobileCard();
+  }
+}
+
+/* ── SONUÇ / BÜYÜ EFEKTİ (ortalanmış overlay modal içinde) ── */
+function revealResult(total){
+  finished = true;
+  setMsg('');
+
+  const overlay=document.getElementById('oracleOverlay');
+  const oracleText=document.getElementById('oracleText');
+  const resultBlock=document.getElementById('resultBlock');
+  const closeBtn=document.getElementById('oracleCloseBtn');
+
+  resultBlock.classList.remove('show');
+  closeBtn.classList.remove('show');
+  overlay.classList.add('show');
+
+  const thinkingLines=[
+    'SİHİRLİ KÜRE DÜŞÜNÜYOR…',
+    'KARTLAR İNCELENİYOR…',
+    'SAYI BELİRLENİYOR…'
+  ];
+  let li=0;
+  oracleText.textContent=thinkingLines[0];
+  const lineTimer=setInterval(()=>{
+    li=(li+1)%thinkingLines.length;
+    oracleText.textContent=thinkingLines[li];
+  },900);
+
+  setTimeout(()=>{
+    clearInterval(lineTimer);
+    oracleText.textContent='';
+    document.getElementById('resultNumber').textContent = total;
+    document.getElementById('resultSub').innerHTML =
+      total>=1 && total<=63
+        ? "CEVABIM YANLIŞSA<br>KARTLARI İŞARETLERKEN<br>HATA OLMUŞTUR."
+        : "HİÇ BİR KART SEÇİLMEDİĞİ İÇİN<br>SAYIYI TAHMİN EDEMİYORUM.";
+    resultBlock.classList.add('show');
+    closeBtn.classList.add('show');
+  }, 2700);
+}
+
+/* Sonuç modalindeki "Yeniden Oyna" butonu: pencereyi kapatır ve oyunu sıfırlar. */
+function playAgain(){
+  document.getElementById('oracleOverlay').classList.remove('show');
+  resetGame();
+}
+
+function setMsg(t){ document.getElementById('msg').textContent=t; }
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
+
+resetGame();
+</script>
+
+</body>
+</html>
