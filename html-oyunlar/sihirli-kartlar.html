@@ -39,12 +39,24 @@ html.mm button.a{padding:4px 9px;font-size:10px}
   padding:8px 6px 10px;
   cursor:pointer;
   border:2px solid;
-  transition:transform .12s,box-shadow .12s;
+  transition:transform .18s ease,box-shadow .18s ease,filter .18s ease,opacity .18s ease;
   user-select:none;
   -webkit-user-select:none;
 }
 .mcard:hover{transform:translateY(-2px)}
-.mcard.picked{box-shadow:0 0 0 3px rgba(255,255,255,0.25) inset, 0 4px 14px rgba(0,0,0,0.5);transform:translateY(-3px)}
+/* Tıklanan kart önce kısa bir an beyaz "glow" ile büyür, sonra ya normale
+   döner ya da soluk/bulanık "işaretli" hâline geçer. */
+.mcard.glow{
+  transform:scale(1.06) translateY(-3px);
+  box-shadow:0 0 0 3px rgba(255,255,255,0.85) inset, 0 0 24px 8px rgba(255,255,255,0.55);
+  filter:none;
+  opacity:1;
+}
+.mcard.picked:not(.glow){
+  transform:scale(0.93);
+  filter:blur(0.7px) saturate(0.65) brightness(0.85);
+  opacity:.78;
+}
 
 .mcard-head{
   text-align:center;font-size:11px;font-weight:700;
@@ -62,12 +74,14 @@ html.mm button.a{padding:4px 9px;font-size:10px}
   border-radius:2px;
   aspect-ratio:1.05/1;
 }
-/* Masaüstünde (kartlar aynı anda gösterildiğinde) Georgia fontunun rakamları
-   eşit boyut/hizada göstermemesi sorunu için sadece bu ızgaradaki sayılarda
-   farklı, rakamları tutarlı çizen bir font kullanılır. Mobil kartlar bu
-   kuralın dışındadır, oradaki görünüm değişmez. */
-.cards-area .mcard-cell{
-  font-family:'Trebuchet MS',Verdana,Arial,sans-serif;
+/* Georgia fontunun rakamları eşit boyut/hizada göstermemesi sorunu için
+   tüm sayı gösterimlerinde (kart hücreleri ve sonuç sayısı) ortak, rakamları
+   her zaman aynı yükseklik ve genişlikte çizen bir font ailesi kullanılır.
+   Bu kural masaüstü ve mobil kartların tamamını, ayrıca sonuç ekranındaki
+   büyük sayıyı kapsar. */
+.mcard-cell,
+.result-number{
+  font-family:'Segoe UI',Tahoma,Verdana,Arial,sans-serif;
   font-variant-numeric:lining-nums tabular-nums;
 }
 
@@ -178,7 +192,7 @@ html.mm button.a{padding:4px 9px;font-size:10px}
 .oracle-close-btn.show{display:inline-block}
 .oracle-close-btn:hover{background:rgba(120,55,170,0.8)}
 
-.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.msg{font-size:11px;color:rgba(247,242,232,0.78);text-align:center;min-height:14px}
 
 button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
 button.a:hover{background:rgba(200,150,12,0.2)}
@@ -395,6 +409,14 @@ function renderDesktopCards(){
     el.addEventListener('click',()=>{
       card.picked=!card.picked;
       renderDesktopCards();
+      // Yeniden çizilen kartı bulup kısa bir beyaz "glow" ile büyütüp,
+      // ardından (işaretliyse soluk/bulanık, değilse normal) son haline
+      // yumuşak geçişle bırak.
+      const refreshed=document.querySelectorAll('#cardsArea .mcard')[idx];
+      if(refreshed){
+        refreshed.classList.add('glow');
+        setTimeout(()=>{ refreshed.classList.remove('glow'); }, 180);
+      }
     });
     area.appendChild(el);
   });
