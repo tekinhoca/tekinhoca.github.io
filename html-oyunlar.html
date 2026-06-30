@@ -40,18 +40,8 @@ main { max-width: 960px; }
 [data-theme="dark"] .game-thumb-label { color: var(--on-dark); }
 
 /* ── DİKKAT TESTLERİ — geniş tanıtım kartı ── */
-.attention-card {
-  margin-bottom: 32px;
-  padding: 0;
-  line-height: 0;
-}
-.attention-card picture,
-.attention-card img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 0 0 4px 4px;
-}
+/* (attention-card stili artık kullanılmıyor; tüm "Eğlenceli Oyunlar" kartları
+   diğer kategorilerle aynı svg tabanlı .game-thumb yapısını kullanır.) */
 
 .cat-header {
   display: flex;
@@ -179,23 +169,139 @@ main { max-width: 960px; }
 <main>
 
   <div class="info-note">
-    <p>Bu sayfamda 21 tane mantık ve zekâ oyunu bulunuyor.</p>
-<p>Son olarak eklediğim DİKKAT TESTİ adlı yeni oyunuma ilk görseli tıklayarak ulaşabilirsiniz.</p>
+    <p>Sayfadaki tüm içerik, yapay zeka araçları kullanılarak benim tarafımdan hazırlandı.</p>
     <p>Oyunlar herhangi bir eklenti gerektirmezler; tarayıcı üzerinden tüm cihazlarda sorunsuz çalışırlar.</p>
     <p>İki oyunculu oyunları ekranı sırayla kullanarak oynayabilirsiniz.</p>
-    <p>Sayfadaki tüm içerik, yapay zeka araçları kullanılarak benim tarafımdan hazırlandı.</p>
     <p>İzinsiz kopyalanması, kullanılması yasaktır.</p>
     <p>Ekleme/geliştirme önerileriniz için HAKKIMDA sayfasından bana ulaşabilirsiniz.</p>
   </div>
 
-  <!-- ── DİKKAT TESTLERİ ── -->
-  <div class="game-thumb attention-card" data-game="dikkat-testi" data-title="Dikkat Testleri">
-    <picture>
-      <source media="(max-width:600px)" srcset="img/dikkat-logo2.webp">
-      <img src="img/dikkat-logo1.webp" alt="Dikkat Testleri">
-    </picture>
+  <!-- ── EĞLENCELİ OYUNLAR ── -->
+  <div class="cat-header">
+    <div class="cat-label">Eğlencelik Oyunlar</div>
+    <div class="cat-line"></div>
   </div>
+  <div class="games-grid">
 
+    <!-- DİKKAT TESTLERİ -->
+    <div class="game-thumb" data-game="dikkat-testi" data-title="Dikkat Seti">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#0e0e0a"/>
+          <defs>
+            <radialGradient id="brainGlow" cx="50%" cy="42%" r="55%">
+              <stop offset="0%" stop-color="#FFD97A" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#FFD97A" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="200" cy="128" r="100" fill="url(#brainGlow)"/>
+          <!-- Beyin taslağı (basitleştirilmiş) -->
+          <g fill="none" stroke="#c8960c" stroke-width="2.5" opacity=".85">
+            <path d="M150,90 C140,65 165,48 188,55 C198,42 222,42 232,55 C258,48 278,70 268,95 C282,108 282,135 266,148 C272,168 256,188 232,186 C224,200 200,205 188,192 C168,200 146,188 144,170 C124,164 118,140 132,122 C122,108 132,94 150,90 Z"/>
+            <path d="M188,55 C186,80 192,100 178,118 C190,128 186,148 174,158" stroke-width="1.8" opacity=".7"/>
+            <path d="M222,58 C228,80 220,102 234,116 C222,130 230,148 220,162" stroke-width="1.8" opacity=".7"/>
+          </g>
+          <!-- Kıvılcımlar -->
+          <g fill="#FFD97A">
+            <circle cx="118" cy="80" r="3"/>
+            <circle cx="284" cy="78" r="2.5"/>
+            <circle cx="296" cy="120" r="2"/>
+            <circle cx="106" cy="135" r="2"/>
+            <circle cx="200" cy="48" r="2.5"/>
+          </g>
+          <!-- İkon şeridi: sayı / renk / zaman -->
+          <g font-family="Georgia,serif" font-size="14" font-weight="700">
+            <circle cx="138" cy="222" r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/>
+            <text x="138" y="227" text-anchor="middle" fill="#e8d5a0">7</text>
+            <circle cx="200" cy="222" r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/>
+            <path d="M192,222 a8,8 0 1,1 16,0" fill="#6a9fc0" opacity=".75"/>
+            <path d="M192,222 a8,8 0 1,0 16,0" fill="#e67e22" opacity=".75"/>
+            <circle cx="262" cy="222" r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/>
+            <circle cx="262" cy="222" r="7" fill="none" stroke="#e8d5a0" stroke-width="1.4"/>
+            <line x1="262" y1="222" x2="262" y2="217" stroke="#e8d5a0" stroke-width="1.4"/>
+            <line x1="262" y1="222" x2="266" y2="224" stroke="#e8d5a0" stroke-width="1.4"/>
+          </g>
+          <text x="200" y="278" text-anchor="middle" font-size="15" fill="#c8960c" font-family="Georgia,serif" font-weight="700" opacity=".92">Dikkat Seti</text>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Dikkat Seti</div>
+    </div>
+
+    <!-- SİHİRLİ KARTLAR -->
+    <div class="game-thumb" data-game="sihirli-kartlar" data-title="Sihirli Kartlar">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#0e0a14"/>
+          <!-- Arka kart -->
+          <g transform="translate(200,150) rotate(-16)">
+            <rect x="-58" y="-78" width="116" height="156" rx="8" fill="#04201f" stroke="#1abc9c" stroke-width="2"/>
+            <text x="-40" y="-50" font-size="16" fill="#5ee8d2" font-family="Georgia,serif" font-weight="700">9</text>
+          </g>
+          <!-- Orta kart -->
+          <g transform="translate(200,150)">
+            <rect x="-58" y="-78" width="116" height="156" rx="8" fill="#241405" stroke="#c8960c" stroke-width="2.5"/>
+            <text x="-40" y="-50" font-size="16" fill="#FFD97A" font-family="Georgia,serif" font-weight="700">5</text>
+            <g transform="translate(0,2)" fill="rgba(200,150,12,0.18)">
+              <rect x="-38" y="-26" width="20" height="16" rx="2"/><rect x="-14" y="-26" width="20" height="16" rx="2"/><rect x="10" y="-26" width="20" height="16" rx="2"/>
+              <rect x="-38" y="-6"  width="20" height="16" rx="2"/><rect x="-14" y="-6"  width="20" height="16" rx="2"/><rect x="10" y="-6"  width="20" height="16" rx="2"/>
+              <rect x="-38" y="14"  width="20" height="16" rx="2"/><rect x="-14" y="14"  width="20" height="16" rx="2"/><rect x="10" y="14"  width="20" height="16" rx="2"/>
+              <rect x="-38" y="34"  width="20" height="16" rx="2"/><rect x="-14" y="34"  width="20" height="16" rx="2"/><rect x="10" y="34"  width="20" height="16" rx="2"/>
+            </g>
+          </g>
+          <!-- Ön kart -->
+          <g transform="translate(200,150) rotate(16)">
+            <rect x="-58" y="-78" width="116" height="156" rx="8" fill="#240a1c" stroke="#e91e8c" stroke-width="2"/>
+            <text x="-40" y="-50" font-size="16" fill="#ff8fc8" font-family="Georgia,serif" font-weight="700">36</text>
+          </g>
+          <!-- Sihirli kıvılcımlar -->
+          <g fill="#FFD97A">
+            <circle cx="92" cy="92" r="2.5"/><circle cx="312" cy="88" r="2"/><circle cx="318" cy="200" r="2.5"/>
+          </g>
+          <text x="200" y="278" text-anchor="middle" font-size="15" fill="#c8960c" font-family="Georgia,serif" font-weight="700" opacity=".92">Sihirli Kartlar</text>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Sihirli Kartlar</div>
+    </div>
+
+    <!-- SİHİRLİ KÜRE -->
+    <div class="game-thumb" data-game="sihirli-kure" data-title="Sihirli Küre">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#0e0a14"/>
+          <defs>
+            <radialGradient id="orbGrad" cx="38%" cy="32%" r="60%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity=".85"/>
+              <stop offset="45%" stop-color="#a064e6" stop-opacity=".7"/>
+              <stop offset="100%" stop-color="#1a0a30" stop-opacity=".95"/>
+            </radialGradient>
+            <radialGradient id="orbHalo" cx="50%" cy="48%" r="60%">
+              <stop offset="0%" stop-color="#a064e6" stop-opacity=".5"/>
+              <stop offset="100%" stop-color="#a064e6" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="200" cy="118" r="92" fill="url(#orbHalo)"/>
+          <circle cx="200" cy="118" r="62" fill="url(#orbGrad)"/>
+          <text x="200" y="128" text-anchor="middle" font-size="34" fill="#ffe68f">✦</text>
+          <!-- Küre tabanı -->
+          <path d="M150,176 Q200,196 250,176 L262,196 Q200,214 138,196 Z" fill="#2a1850" stroke="#c8960c" stroke-width="1.3" opacity=".85"/>
+          <!-- Sembol tablosu -->
+          <g font-family="Georgia,serif" font-size="13" fill="#f0d38a">
+            <rect x="84"  y="226" width="44" height="34" rx="4" fill="rgba(255,255,255,0.06)"/>
+            <rect x="134" y="226" width="44" height="34" rx="4" fill="rgba(255,255,255,0.06)"/>
+            <rect x="184" y="226" width="44" height="34" rx="4" fill="rgba(255,255,255,0.06)"/>
+            <rect x="234" y="226" width="44" height="34" rx="4" fill="rgba(255,255,255,0.06)"/>
+            <text x="106" y="248" text-anchor="middle">36</text>
+            <text x="156" y="248" text-anchor="middle">✧</text>
+            <text x="206" y="248" text-anchor="middle">45</text>
+            <text x="256" y="248" text-anchor="middle">✪</text>
+          </g>
+          <text x="200" y="285" text-anchor="middle" font-size="15" fill="#c8960c" font-family="Georgia,serif" font-weight="700" opacity=".92">Sihirli Küre</text>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Sihirli Küre</div>
+    </div>
+
+  </div>
 
   <!-- ── TAHTA VE STRATEJİ ── -->
   <div class="cat-header">
@@ -1097,6 +1203,8 @@ main { max-width: 960px; }
     'solo-test':     'html-oyunlar/solo-test.html',
     '15-puzzle':     'html-oyunlar/15-puzzle.html',
     'dikkat-testi':  'html-oyunlar/dikkat-testi.html',
+    'sihirli-kartlar':'html-oyunlar/sihirli-kartlar.html',
+    'sihirli-kure':  'html-oyunlar/sihirli-kure.html',
   };
 
   document.querySelectorAll('.game-thumb:not(.coming-soon)').forEach(function(card){
