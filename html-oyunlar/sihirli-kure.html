@@ -7,69 +7,202 @@
 <title>Sihirli Küre</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:#0e0a14;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto}
-.wrap{width:100%;max-width:860px;display:flex;flex-direction:column;gap:12px;margin:auto}
-.game-title{font-size:24px;font-weight:700;color:#c8960c;letter-spacing:.07em;text-align:center;margin-bottom:8px}
-.msg{font-size:13px;color:rgba(247,242,232,0.85);text-align:center;min-height:18px}
+html,body{min-height:100%;background:#0e0a14;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:860px;display:flex;flex-direction:column;gap:9px;margin:auto}
 
-.info-modal{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
-.info-box{background:#1a1428;border:2px solid #c8960c;border-radius:12px;padding:28px 24px;max-width:460px;width:100%;color:#f5e8c7;box-shadow:0 0 30px rgba(200,150,12,0.4)}
-.info-box h3{color:#FFD97A;margin-bottom:16px}
-.info-box p{margin-bottom:12px;line-height:1.6}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.top-actions{display:flex;gap:5px;flex-wrap:wrap}
 
-.table-area{display:grid;grid-template-columns:repeat(auto-fit, minmax(56px, 1fr));gap:7px;justify-content:center;background:rgba(20,15,35,0.75);padding:16px;border-radius:12px;border:1px solid rgba(200,150,12,0.4)}
-@media (min-width: 768px) {
-  .table-area { grid-template-columns: repeat(10, 1fr); }
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+
+/* ── SAYI / SEMBOL TABLOSU ── */
+.table-area{
+  display:grid;grid-template-columns:repeat(auto-fit, minmax(54px, 1fr));
+  gap:7px;justify-content:center;
+  background:rgba(20,15,35,0.55);padding:14px;border-radius:8px;
+  border:1px solid rgba(200,150,12,0.25);
 }
-@media (max-width: 767px) {
-  .table-area { grid-template-columns: repeat(5, 1fr); }
+@media (min-width: 768px) { .table-area { grid-template-columns: repeat(10, 1fr); } }
+@media (max-width: 767px) { .table-area { grid-template-columns: repeat(5, 1fr); } }
+.num-item{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);
+  padding:clamp(4px,1.4vw,7px) 3px;border-radius:5px;
+  transition:background .15s;
+  font-size:clamp(10px,2.6vw,13px);font-weight:700;color:rgba(247,242,232,0.8);
+  min-height:clamp(50px,12vw,68px);aspect-ratio:1/1.1;
 }
-.num-item{display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,0.06);padding:7px 3px;border-radius:6px;cursor:default;transition:all .2s;font-size:13px;font-weight:700;color:#f0d38a;box-shadow:0 2px 8px rgba(0,0,0,0.3);min-height:68px; aspect-ratio: 1 / 1.1;}
-.num-item:hover{transform:scale(1.05);background:rgba(255,255,255,0.12)}
-.symbol{font-size:24px;margin-top:3px;line-height:1;color:#ffe68f}
+.num-item:hover{background:rgba(255,255,255,0.1)}
+.symbol{font-size:clamp(17px,4.4vw,24px);margin-top:3px;line-height:1;color:#ffe68f}
 
-.oracle-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);display:none;align-items:center;justify-content:center;z-index:1100;padding:16px}
-.oracle-overlay.show { display: flex !important; }
-.oracle-box{background:#120d22;border:1px solid rgba(170,120,230,0.6);border-radius:14px;padding:32px 26px;max-width:360px;width:100%;text-align:center}
-.orb{width:130px;height:130px;border-radius:50%;margin:0 auto 24px;background:radial-gradient(circle at 38% 32%,rgba(255,255,255,0.65),rgba(160,100,230,0.65) 48%,rgba(45,15,75,0.95) 82%);box-shadow:0 0 45px 15px rgba(160,100,230,0.55),0 0 90px 30px rgba(90,45,150,0.45);animation:orbPulse 1.25s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-size:58px}
-@keyframes orbPulse{0%,100%{transform:scale(1)} 50%{transform:scale(1.09)}}
-.result-symbol{font-size:72px;margin:18px 0;color:#ffe68f}
-button.a{background:rgba(200,150,12,0.12);border:1.5px solid rgba(200,150,12,0.55);border-radius:6px;padding:10px 26px;font-size:14px;font-weight:700;cursor:pointer;color:#FFD97A;transition:background .2s;margin-top:12px}
-button.a:hover{background:rgba(200,150,12,0.35)}
+.confirm-wrap{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+.confirm-btn{
+  background:rgba(90,40,130,0.6);border:1.5px solid rgba(200,150,12,0.6);
+  border-radius:5px;padding:9px 24px;font-size:12px;font-weight:700;
+  cursor:pointer;color:#FFD97A;font-family:Georgia,serif;transition:background .2s;
+}
+.confirm-btn:hover{background:rgba(120,55,170,0.8)}
+
+/* ── SONUÇ MODALI (küre + cevap) ── */
+.oracle-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1100;padding:16px;
+}
+.oracle-overlay.hidden{display:none}
+.oracle-box{
+  background:#0c0816;border:1px solid rgba(170,120,230,0.5);border-radius:10px;
+  padding:26px 24px 22px;max-width:340px;width:100%;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  animation:modalIn .3s ease;
+}
+.orb{
+  width:96px;height:96px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,0.55),rgba(150,90,220,0.55) 40%,rgba(40,10,70,0.85) 75%);
+  box-shadow:0 0 30px 8px rgba(150,90,220,0.45),0 0 60px 18px rgba(80,40,140,0.25);
+  animation:orbPulse 1.1s ease-in-out infinite;
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:38px;line-height:1;color:#ffe68f;
+}
+@keyframes orbPulse{
+  0%,100%{transform:scale(1);box-shadow:0 0 30px 8px rgba(150,90,220,0.45),0 0 60px 18px rgba(80,40,140,0.25)}
+  50%{transform:scale(1.07);box-shadow:0 0 40px 14px rgba(180,120,240,0.6),0 0 80px 26px rgba(100,50,160,0.35)}
+}
+.oracle-text{font-size:12px;color:rgba(220,190,255,0.75);letter-spacing:.06em;text-align:center;min-height:16px}
+.result-block{display:none;flex-direction:column;align-items:center;gap:4px}
+.result-block.show{display:flex}
+.result-block h2{font-size:13px;color:rgba(220,190,255,0.75);letter-spacing:.05em;font-weight:700}
+.result-number{font-size:46px;font-weight:700;color:#FFD97A;text-shadow:0 0 20px rgba(255,217,122,0.5);line-height:1}
+.result-sub{font-size:11px;color:rgba(247,242,232,0.45);text-align:center;margin-top:2px}
+.oracle-close-btn{
+  margin-top:4px;display:none;
+  background:rgba(90,40,130,0.6);border:1px solid rgba(200,150,12,0.6);
+  border-radius:4px;padding:6px 18px;font-size:11px;font-weight:600;
+  color:#c8960c;cursor:pointer;font-family:Georgia,serif;transition:background .2s;
+}
+.oracle-close-btn.show{display:inline-block}
+.oracle-close-btn:hover{background:rgba(120,55,170,0.8)}
+
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+/* ── Açılış Modalı ── */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;padding:16px;
+}
+.modal-overlay.hidden{display:none;}
+.modal-box{
+  background:#0b0712;
+  border:1px solid rgba(200,150,12,0.5);
+  border-radius:8px;
+  padding:22px 20px 18px;
+  max-width:380px;width:100%;
+  display:flex;flex-direction:column;gap:12px;
+  animation:modalIn .3s ease;
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94);}
+  to{opacity:1;transform:scale(1);}
+}
+.modal-title{
+  font-size:22px;font-weight:700;
+  color:#c8960c;text-align:center;
+  letter-spacing:.06em;
+}
+.modal-rules{
+  font-size:11.5px;
+  color:rgba(247,242,232,0.72);
+  line-height:1.75;
+  border-top:1px solid rgba(200,150,12,0.2);
+  border-bottom:1px solid rgba(200,150,12,0.2);
+  padding:10px 4px;
+  list-style:none;
+}
+.modal-rules li{margin-bottom:3px;padding-left:4px;}
+.modal-rules li::before{content:"✦ ";color:#c8960c;}
+.modal-btns{display:flex;gap:10px;justify-content:center;}
+.modal-close{
+  background:rgba(18,16,14,0.7);
+  border:1px solid rgba(200,150,12,0.35);
+  border-radius:3px;padding:6px 18px;
+  font-size:12px;cursor:pointer;
+  color:rgba(247,242,232,0.6);
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-close:hover{background:rgba(40,20,55,0.9);}
+.modal-start{
+  background:rgba(90,40,130,0.6);
+  border:1px solid rgba(200,150,12,0.6);
+  border-radius:3px;padding:6px 22px;
+  font-size:12px;cursor:pointer;
+  color:#c8960c;font-weight:600;
+  font-family:Georgia,serif;transition:background .2s;
+}
+.modal-start:hover{background:rgba(120,55,170,0.8);}
+.modal-logo{display:flex;justify-content:center;padding-top:4px;}
 </style>
 </head>
 <body>
+
+<!-- ── Açılış Modalı ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">SİHİRLİ KÜRE</div>
+    <ul class="modal-rules">
+      <li>Aklınızdan iki basamaklı bir sayı tutun. <b style="color:#c8960c">Örnek: 45</b></li>
+      <li>Sayının rakamlarını toplayın: <b style="color:#c8960c">4 + 5 = 9</b></li>
+      <li>Tuttuğunuz sayıdan bu toplamı çıkarın: <b style="color:#c8960c">45 − 9 = 36</b></li>
+      <li>Çıkan sonucu aşağıdaki tabloda bulup yanındaki sembolü aklınızda tutun.</li>
+      <li>Hazır olduğunuzda <b style="color:#c8960c">"Küreye Sor"</b> butonuna basın; sihirli küre sembolünüzü bulacak.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+           onmouseover="this.style.opacity='0.65'"
+           onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
-  <div class="game-title">SİHİRLİ KÜRE</div>
-  <div class="msg" id="mainMsg"></div>
-  <div class="table-area" id="numberTable" style="display:none"></div>
-  <div style="text-align:center" id="proceedContainer" style="display:none">
-    <button class="a" onclick="startOracle()">Sembolümü Aklımda Tuttum → Küreye Sor</button>
-  </div>
-</div>
-
-<div class="info-modal" id="infoModal">
-  <div class="info-box">
-    <h3>Aklınızdan iki basamaklı bir sayı tutun.</h3>
-    <p><strong>Örnek:</strong> 45</p>
-    <p>Bu sayının rakamlarını toplayın: <strong>4 + 5 = 9</strong></p>
-    <p>Tuttuğunuz sayıdan bu toplamı çıkarın: <strong>45 - 9 = 36</strong></p>
-    <p><strong>Elde ettiğiniz sonucu aşağıdaki tabloda bulun ve yanındaki sembolü aklınızda tutun.</strong></p>
-    <div style="text-align:center;margin-top:24px">
-      <button class="a" onclick="closeInfoModal()">Sayı Hazır, Sembolleri Göster</button>
+  <div class="top-bar">
+    <div class="game-title">Sihirli Küre</div>
+    <div class="top-actions">
+      <button class="a" onclick="resetGame()">&#8635; Yeniden Başla</button>
+      <button class="a" onclick="openModal()">&#9432; Kurallar</button>
     </div>
   </div>
+
+  <div class="msg" id="mainMsg">Sembolünüzü aklınızda tutun ve sihirli küreye sorun.</div>
+
+  <div class="table-area" id="numberTable"></div>
+
+  <div class="confirm-wrap">
+    <button class="confirm-btn" onclick="startOracle()">&#10003; Sembolümü Aklımda Tuttum — Küreye Sor</button>
+  </div>
 </div>
 
-<div class="oracle-overlay" id="oracleOverlay">
+<!-- ── SONUÇ MODALI (küre + cevap) ── -->
+<div class="oracle-overlay hidden" id="oracleOverlay">
   <div class="oracle-box">
-    <div class="orb" id="orb">🌌</div>
-    <div id="oracleText" style="color:#d4b8ff;font-size:15px;margin-bottom:16px">Sihirli Küre odaklanıyor...</div>
-    <div id="resultArea" style="display:none">
-      <div style="color:#c8960c;font-size:16px;margin-bottom:8px">Aklınızdaki sembol:</div>
-      <div class="result-symbol" id="resultSymbol"></div>
+    <div class="orb" id="orb"></div>
+    <div class="oracle-text" id="oracleText">Sihirli Küre odaklanıyor…</div>
+    <div class="result-block" id="resultBlock">
+      <h2>TUTTUĞUNUZ SEMBOL</h2>
+      <div class="result-number" id="resultSymbol">✦</div>
+      <div class="result-sub" id="resultSub"></div>
     </div>
-    <button class="a" onclick="playAgain()">Tekrar Oyna</button>
+    <button class="oracle-close-btn" id="oracleCloseBtn" onclick="playAgain()">&#8635; TEKRAR OYNA</button>
   </div>
 </div>
 
@@ -77,6 +210,7 @@ button.a:hover{background:rgba(200,150,12,0.35)}
 const symbolsPool = ['✦','✧','✪','✫','✬','✭','✮','✯','❈','❉','❊','❋','✵','✶','✷','✸','☾','☽','☀','☼','⚝','⚜','☯','☘','♠','♣','♥','♦','♛','♜','♞','⚑','★','✴','🌙'];
 let magicSymbol = '';
 let numberSymbols = {};
+let cycleTimer = null;
 
 function generateSymbols() {
   const multiplesOf9 = [0,9,18,27,36,45,54,63,72,81,90,99];
@@ -100,40 +234,53 @@ function renderTable() {
   }
 }
 
-function closeInfoModal() {
-  document.getElementById('infoModal').style.display = 'none';
-  document.getElementById('numberTable').style.display = 'grid';
-  document.getElementById('proceedContainer').style.display = 'block';
-  document.getElementById('mainMsg').textContent = 'Sembolünüzü aklınızda tutun ve sihirli küreye sorun.';
-}
-
 function startOracle() {
+  clearInterval(cycleTimer);
   const overlay = document.getElementById('oracleOverlay');
-  overlay.classList.add('show');
-  document.getElementById('resultArea').style.display = 'none';
-  document.getElementById('orb').textContent = '🌌';
-  document.getElementById('oracleText').textContent = 'Sihirli Küre odaklanıyor...';
+  const orb = document.getElementById('orb');
+  const closeBtn = document.getElementById('oracleCloseBtn');
+
+  overlay.classList.remove('hidden');
+  document.getElementById('resultBlock').classList.remove('show');
+  closeBtn.classList.remove('show');
+  document.getElementById('oracleText').textContent = 'Sihirli Küre odaklanıyor…';
+
+  // Düşünme animasyonu: küre içinde sembol setindeki semboller hızla değişir
+  orb.textContent = symbolsPool[Math.floor(Math.random() * symbolsPool.length)];
+  cycleTimer = setInterval(() => {
+    orb.textContent = symbolsPool[Math.floor(Math.random() * symbolsPool.length)];
+  }, 90);
+
   setTimeout(() => {
-    document.getElementById('orb').textContent = magicSymbol;
+    clearInterval(cycleTimer);
+    orb.textContent = magicSymbol;
     document.getElementById('oracleText').textContent = 'Bulduk!';
-    document.getElementById('resultArea').style.display = 'block';
     document.getElementById('resultSymbol').textContent = magicSymbol;
+    document.getElementById('resultBlock').classList.add('show');
+    closeBtn.classList.add('show');
   }, 2600);
 }
 
 function playAgain() {
-  document.getElementById('oracleOverlay').classList.remove('show');
+  clearInterval(cycleTimer);
+  document.getElementById('oracleOverlay').classList.add('hidden');
+  initGame();
+}
+
+function resetGame(){
+  clearInterval(cycleTimer);
+  document.getElementById('oracleOverlay').classList.add('hidden');
   initGame();
 }
 
 function initGame() {
   generateSymbols();
   renderTable();
-  document.getElementById('infoModal').style.display = 'flex';
-  document.getElementById('numberTable').style.display = 'none';
-  document.getElementById('proceedContainer').style.display = 'none';
-  document.getElementById('mainMsg').textContent = '';
+  document.getElementById('mainMsg').textContent = 'Sembolünüzü aklınızda tutun ve sihirli küreye sorun.';
 }
+
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
 
 initGame();
 </script>
