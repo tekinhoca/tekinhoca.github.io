@@ -7,6 +7,7 @@ const MENU_ITEMS = [
   { label: "Matematik Tarihi",     href: "matematik-tarihi.html" },
   { label: "Estetik Matematik",    href: "estetik-matematik.html" },
   { label: "Matematik Hikayeleri", href: "matematik-hikayeleri.html" },
+  { label: "Hesaplama Araçları",   href: "hesap-araclar.html" },
   { label: "Mantık-Zekâ Oyunları", href: "html-oyunlar.html" },
   { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html" },
   { label: "Kulüp Dosyaları",      href: "kulup-dosyalari.html" },
