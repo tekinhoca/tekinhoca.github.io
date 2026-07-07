@@ -246,6 +246,18 @@ if(!ok) continue;
   function shuffle(arr) {
     return arr.sort(() => Math.random() - 0.5);
   }
+
+  const SUP_MAP = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
+
+  function splitSuperscript(text) {
+    let i = text.length;
+    while (i > 0 && SUP_MAP[text[i - 1]] !== undefined) i--;
+    if (i === text.length) return null;
+    return {
+      base: text.slice(0, i),
+      sup: text.slice(i).split('').map(ch => SUP_MAP[ch]).join('')
+    };
+  }
 function getNeighbours(r,c,size){
 
     const list=[];
@@ -387,12 +399,38 @@ function getNeighbours(r,c,size){
             ctx.shadowBlur = 0;
 
             ctx.fillStyle = '#f7f2e8';
-            let fontSize = Math.floor(cellSize * 0.22);
-            if(cell.text.length > 4) fontSize = Math.floor(cellSize * 0.17);
-            ctx.font = '600 ' + fontSize + 'px "Trebuchet MS", "Segoe UI", Arial, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(cell.text, px, py);
+            const supParts = splitSuperscript(cell.text);
+
+            if (supParts) {
+              const baseFontSize = Math.floor(cellSize * 0.24);
+              const supFontSize = Math.floor(baseFontSize * 0.62);
+
+              ctx.font = '600 ' + baseFontSize + 'px "Trebuchet MS", "Segoe UI", Arial, sans-serif';
+              const baseWidth = ctx.measureText(supParts.base).width;
+
+              ctx.font = '600 ' + supFontSize + 'px "Trebuchet MS", "Segoe UI", Arial, sans-serif';
+              const supWidth = ctx.measureText(supParts.sup).width;
+
+              const startX = px - (baseWidth + supWidth) / 2;
+              const baseBaselineY = py + baseFontSize * 0.35;
+              const supBaselineY = baseBaselineY - baseFontSize * 0.42;
+
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'alphabetic';
+
+              ctx.font = '600 ' + baseFontSize + 'px "Trebuchet MS", "Segoe UI", Arial, sans-serif';
+              ctx.fillText(supParts.base, startX, baseBaselineY);
+
+              ctx.font = '600 ' + supFontSize + 'px "Trebuchet MS", "Segoe UI", Arial, sans-serif';
+              ctx.fillText(supParts.sup, startX + baseWidth, supBaselineY);
+            } else {
+              let fontSize = Math.floor(cellSize * 0.24);
+              if(cell.text.length > 4) fontSize = Math.floor(cellSize * 0.19);
+              ctx.font = '600 ' + fontSize + 'px "Trebuchet MS", "Segoe UI", Arial, sans-serif';
+              ctx.textAlign = 'center';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(cell.text, px, py);
+            }
           }
         }
       }
