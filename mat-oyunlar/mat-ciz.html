@@ -53,18 +53,21 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   <div class="modal-box">
     <div class="modal-title">MATEMATİKSEL BAĞ KURMA</div>
     <ul class="modal-rules">
-      <li>Seçtiğiniz moda göre birbiriyle ilişkili matematiksel ifadeleri eşleştirin.</li>
+      <li>Oyun, aynı renkleri birbirine bağlamanız gereken klasik bulmacayla başlar.</li>
+<li>Bu klasik bulmacalarda oyunu öğrendikten sonra, açılır menüden diğer modlardan birini seçebilirsiniz.</li>
+<li>Seçtiğiniz moda göre birbiriyle ilişkili matematiksel ifadeleri eşleştirin.</li>
       <li>İfadenin üzerinden fareniz veya parmağınızla sürükleyerek doğru cevaba hat çekin.</li>
       <li>Çizgiler dikey veya yatay ilerler; <b>çapraz geçiş yapmak yasaktır</b>.</li>
-      <li>Bölümü tamamlamak için haritadaki <b>tüm boş hücreleri</b> çizgilerle doldulmalısınız.</li>
-      <li>Matematik modlarında çizgiler, tam eşleşme sağlanana kadar nötr kalır; ezbere dayalı hileyi engeller!</li>
+      <li>Bölümün tamamlanması için ızgarada hiç boş hücre kalmamalı.</li>
     </ul>
     <div class="modal-btns">
       <button class="modal-close" onclick="closeModal()">Kapat</button>
       <button class="modal-start" onclick="closeModal()">Başla</button>
     </div>
     <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo" style="height:27px;opacity:0.38;filter:brightness(1.3)">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+     style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+     onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.38'">
     </div>
   </div>
 </div>
@@ -76,7 +79,7 @@ button.a:hover{background:rgba(200,150,12,0.2)}
       <label>Mod:</label>
       <select id="gameModeSel" onchange="RB.changeMode()">
         <option value="classic" selected>Klasik (Renkler)</option>
-        <option value="karekök">Karekök (Tam Kare)</option>
+        <option value="karekök">Karekök</option>
         <option value="üslü">Üslü Sayılar</option>
         <option value="çarpma">Çarpım Tablosu</option>
       </select>
@@ -88,7 +91,7 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   </div>
   <div class="board-outer"><canvas id="canvas"></canvas></div>
   <div class="msg" id="msg">İfadeleri doğru yanıtlarıyla birleştirin ve tüm alanı doldurun.</div>
-  <div class="result-banner" id="banner"><h2 id="bannerTitle">Tebrikler!</h2><p id="bannerBody">Tüm matematiksel bağlar doğru kuruldu ve alan dolduruldu!</p></div>
+  <div class="result-banner" id="banner"><h2 id="bannerTitle">Tebrikler!</h2></div>
   <div class="br-btns">
     <button class="a" onclick="RB.resetGame()">&#8635; Sıfırla</button>
     <button class="a" onclick="RB.newGame()">&#9654; Yeni Oyun</button>
@@ -603,7 +606,9 @@ RB.init();
 </script>
 
 <div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
-  <img src="../img/THlogo.webp" alt="Tekin Hoca Logo" style="height:32px;opacity:0.35;filter:brightness(1.3)">
+  <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+     style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
+     onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
 </div>
 </body>
 </html>
