@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Matematiksel Bağ Kurma</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#0e0e0a;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+.wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:7px;margin:auto}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
+.diff-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
+.diff-sel select{background:#14120a;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:3px 6px;cursor:pointer}
+.infobar{display:flex;gap:6px}
+.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
+.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
+.ibox .v{font-size:14px;font-weight:700;color:#c8960c}
+.board-outer{display:flex;justify-content:center}
+canvas{cursor:pointer;touch-action:none;border-radius:6px;background:#14120a;border:2px solid rgba(200,150,12,0.4)}
+.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
+.result-banner{display:none;border-radius:5px;padding:8px 14px;text-align:center}
+.result-banner.show{display:block}
+.result-banner.win{background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35)}
+.result-banner h2{font-size:13px;margin-bottom:2px;color:#50c878}
+.result-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
+.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
+button.a:hover{background:rgba(200,150,12,0.2)}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.modal-overlay.hidden{display:none}
+.modal-box{background:#0a0a06;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-title{font-size:18px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em}
+.modal-rules{font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);padding:10px 4px;list-style:none}
+.modal-rules li{margin-bottom:4px;padding-left:4px}
+.modal-rules li::before{content:"✨ ";font-size:10px}
+.modal-btns{display:flex;gap:10px;justify-content:center}
+.modal-close,.modal-start{border-radius:3px;padding:6px 20px;font-size:12px;cursor:pointer;font-family:Georgia,serif;transition:background .2s}
+.modal-close{background:rgba(12,10,8,0.7);border:1px solid rgba(200,150,12,0.35);color:rgba(247,242,232,0.6)}
+.modal-close:hover{background:rgba(50,30,10,0.9)}
+.modal-start{background:rgba(100,60,10,0.75);border:1px solid rgba(200,150,12,0.6);color:#c8960c;font-weight:600}
+.modal-start:hover{background:rgba(150,90,15,0.9)}
+.modal-logo{display:flex;justify-content:center;padding-top:4px}
+</style>
+</head>
+<body>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">MATEMATİKSEL BAĞ KURMA</div>
+    <ul class="modal-rules">
+      <li>Seçtiğiniz moda göre birbiriyle ilişkili matematiksel ifadeleri eşleştirin.</li>
+      <li>İfadenin üzerinden fareniz veya parmağınızla sürükleyerek doğru cevaba hat çekin.</li>
+      <li>Çizgiler dikey veya yatay ilerler; <b>çapraz geçiş yapmak yasaktır</b>.</li>
+      <li>Bölümü tamamlamak için haritadaki <b>tüm boş hücreleri</b> çizgilerle doldulmalısınız.</li>
+      <li>Matematik modlarında çizgiler, tam eşleşme sağlanana kadar nötr kalır; ezbere dayalı hileyi engeller!</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo" style="height:27px;opacity:0.38;filter:brightness(1.3)">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="top-bar">
+    <div class="game-title">Matematiksel Bağ</div>
+    <div class="diff-sel">
+      <label>Mod:</label>
+      <select id="gameModeSel" onchange="RB.changeMode()">
+        <option value="classic" selected>Klasik (Renkler)</option>
+        <option value="karekök">Karekök (Tam Kare)</option>
+        <option value="üslü">Üslü Sayılar</option>
+        <option value="çarpma">Çarpım Tablosu</option>
+      </select>
+    </div>
+  </div>
+  <div class="infobar">
+    <div class="ibox"><div class="l">Eşleşme</div><div class="v" id="matchDisp">0/0</div></div>
+    <div class="ibox"><div class="l">Hamle</div><div class="v" id="moveDisp">0</div></div>
+  </div>
+  <div class="board-outer"><canvas id="canvas"></canvas></div>
+  <div class="msg" id="msg">İfadeleri doğru yanıtlarıyla birleştirin ve tüm alanı doldurun.</div>
+  <div class="result-banner" id="banner"><h2 id="bannerTitle">Tebrikler!</h2><p id="bannerBody">Tüm matematiksel bağlar doğru kuruldu ve alan dolduruldu!</p></div>
+  <div class="br-btns">
+    <button class="a" onclick="RB.resetGame()">&#8635; Sıfırla</button>
+    <button class="a" onclick="RB.newGame()">&#9654; Yeni Oyun</button>
+    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
+  </div>
+</div>
+
+<script>
+const RB = (function(){
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  
+  const COLORS = {
+    1: '#ff3333', 2: '#33ff33', 3: '#3333ff', 4: '#ffff33', 5: '#ff33ff', 6: '#33ffff'
+  };
+
+  const NEUTRAL_BOX_COLOR = '#c8960c';
+
+  const POOLS = {
+    "karekök": [
+      {q: "√4", a: "2"}, {q: "√9", a: "3"}, {q: "√16", a: "4"}, {q: "√25", a: "5"}, 
+      {q: "√36", a: "6"}, {q: "√49", a: "7"}, {q: "√64", a: "8"}, {q: "√81", a: "9"},
+      {q: "√100", a: "10"}, {q: "√121", a: "11"}, {q: "√144", a: "12"}, {q: "√169", a: "13"}
+    ],
+    "üslü": [
+      {q: "(-2)³", a: "-8"}, {q: "-3²", a: "-9"}, {q: "(-3)²", a: "9"}, {q: "(-5)³", a: "-125"},
+      {q: "(-2)⁴", a: "16"}, {q: "-2⁴", a: "-16"}, {q: "5³", a: "125"}, {q: "(-4)³", a: "-64"},
+      {q: "7²", a: "49"}, {q: "(-1)⁵", a: "-1"}, {q: "(-10)⁴", a: "10000"}, {q: "-6²", a: "-36"}
+    ],
+    "çarpma": [
+      {q: "6×7", a: "42"}, {q: "8×9", a: "72"}, {q: "7×8", a: "56"}, {q: "9×6", a: "54"},
+      {q: "4×8", a: "32"}, {q: "7×7", a: "49"}, {q: "6×8", a: "48"}, {q: "9×9", a: "81"},
+      {q: "3×9", a: "27"}, {q: "8×8", a: "64"}, {q: "7×9", a: "63"}, {q: "5×9", a: "45"}
+    ]
+  };
+
+  let mode, size, cells, activeDots, currentPath, paths, completedPairs, totalPairs, moves, over;
+  let canvasSize, cellSize, isDrawing;
+let solutionGrid = null;
+let endpointTemplate = null;
+function generatePerfectMap(size){
+
+    const pairCount=size===4?4:5;
+
+    for(let retry=0;retry<500;retry++){
+
+        let grid=Array.from(
+            {length:size},
+            ()=>Array(size).fill(0)
+        );
+
+        let endpoints=[];
+
+        let ok=true;
+
+        for(let id=1;id<=pairCount;id++){
+
+            let empty=[];
+
+            for(let r=0;r<size;r++)
+                for(let c=0;c<size;c++)
+                    if(grid[r][c]==0)
+                        empty.push({r,c});
+
+            if(empty.length<2){
+                ok=false;
+                break;
+            }
+
+            let start=empty[Math.floor(Math.random()*empty.length)];
+
+            grid[start.r][start.c]=id;
+
+            let current=start;
+
+            let steps=4+Math.floor(Math.random()*5);
+
+            for(let s=0;s<steps;s++){
+
+                let moved=false;
+
+                for(let n of getNeighbours(current.r,current.c,size)){
+
+                    if(grid[n.r][n.c]==0){
+
+                        grid[n.r][n.c]=id;
+
+                        current=n;
+
+                        moved=true;
+
+                        break;
+
+                    }
+
+                }
+
+                if(!moved) break;
+
+            }
+// Başlangıç ve bitiş aynı hücre olamaz.
+if (current.r === start.r && current.c === start.c) {
+    ok = false;
+    break;
+}
+            endpoints.push({
+                r:start.r,
+                c:start.c,
+                p:id,
+                q:true
+            });
+
+            endpoints.push({
+                r:current.r,
+                c:current.c,
+                p:id,
+                q:false
+            });
+
+        }
+
+        let filled=true;
+
+        for(let r=0;r<size;r++)
+            for(let c=0;c<size;c++)
+                if(grid[r][c]==0)
+                    filled=false;
+
+        if(!filled) continue;
+if(!ok) continue;
+        solutionGrid=grid;
+
+        endpointTemplate=endpoints;
+
+        return endpoints;
+
+    }
+
+    return null;
+
+}  function init() {
+    mode = document.getElementById('gameModeSel').value;
+    size = (mode === 'çarpma') ? 4 : 5;
+
+    let perfectTemplate = generatePerfectMap(size);
+    buildLevelData(perfectTemplate);
+    resetGame();
+    resize();
+    render();
+  }
+
+  function shuffle(arr) {
+    return arr.sort(() => Math.random() - 0.5);
+  }
+function getNeighbours(r,c,size){
+
+    const list=[];
+
+    if(r>0) list.push({r:r-1,c});
+    if(r<size-1) list.push({r:r+1,c});
+    if(c>0) list.push({r,c:c-1});
+    if(c<size-1) list.push({r,c:c+1});
+
+    return shuffle(list);
+
+}
+  function buildLevelData(template) {
+    totalPairs = Math.max(...template.map(t => t.p));
+
+    if (mode === 'classic') {
+      activeDots = template.map(t => ({
+        r: t.r, c: t.c, color: t.p, text: ""
+      }));
+    } else {
+      let poolCopy = shuffle([...POOLS[mode]]).slice(0, totalPairs);
+      activeDots = [];
+      
+      template.forEach(t => {
+        const pairObj = poolCopy[t.p - 1];
+        activeDots.push({
+          r: t.r,
+          c: t.c,
+          color: t.p,
+          text: t.q ? pairObj.q : pairObj.a
+        });
+      });
+    }
+  }
+
+  function resetGame() {
+    cells = Array.from({length: size}, () => Array(size).fill(null));
+    paths = {};
+    completedPairs = new Set();
+    
+    for(let i = 1; i <= totalPairs; i++) paths[i] = [];
+    
+    activeDots.forEach(d => {
+      cells[d.r][d.c] = { type: 'dot', color: d.color, text: d.text };
+    });
+
+    currentPath = null;
+    isDrawing = false;
+    moves = 0;
+    over = false;
+    document.getElementById('banner').className = 'result-banner';
+    setMsg('İfadeleri doğru yanıtlarıyla birleştirin ve tüm alanı doldurun.');
+    updateInfo();
+    render();
+  }
+
+  function newGame() {
+    init();
+  }
+
+  function resize() {
+    const maxW = Math.min(window.innerWidth - 32, 400);
+    cellSize = Math.floor(maxW / size);
+    canvasSize = cellSize * size;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
+    canvas.style.width = canvasSize + 'px';
+    canvas.style.height = canvasSize + 'px';
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, canvasSize, canvasSize);
+    
+    ctx.strokeStyle = 'rgba(200,150,12,0.12)';
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= size; i++) {
+      ctx.beginPath(); ctx.moveTo(i * cellSize, 0); ctx.lineTo(i * cellSize, canvasSize); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, i * cellSize); ctx.lineTo(canvasSize, i * cellSize); ctx.stroke();
+    }
+
+    Object.keys(paths).forEach(colorIdx => {
+      const path = paths[colorIdx];
+      const cIdx = parseInt(colorIdx);
+      if (path.length > 0) {
+        const isCompleted = completedPairs.has(cIdx);
+        const drawColor = (mode === 'classic' || isCompleted) ? COLORS[colorIdx] : NEUTRAL_BOX_COLOR;
+
+        ctx.strokeStyle = drawColor;
+        ctx.lineWidth = cellSize * 0.24;
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        
+        if (mode === 'classic' || isCompleted) {
+          ctx.shadowBlur = 12; ctx.shadowColor = drawColor;
+        } else {
+          ctx.shadowBlur = 0;
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(path[0].c * cellSize + cellSize / 2, path[0].r * cellSize + cellSize / 2);
+        for (let i = 1; i < path.length; i++) {
+          ctx.lineTo(path[i].c * cellSize + cellSize / 2, path[i].r * cellSize + cellSize / 2);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+    });
+
+    for (let r = 0; r < size; r++) {
+      for (let c = 0; c < size; c++) {
+        const cell = cells[r][c];
+        if (cell && cell.type === 'dot') {
+          const px = c * cellSize + cellSize / 2;
+          const py = r * cellSize + cellSize / 2;
+
+          if (mode === 'classic') {
+            const rad = cellSize * 0.25;
+            ctx.shadowBlur = 16; ctx.shadowColor = COLORS[cell.color];
+            ctx.beginPath(); ctx.arc(px, py, rad, 0, Math.PI * 2);
+            ctx.fillStyle = COLORS[cell.color]; ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = '#0e0e0a'; ctx.lineWidth = 2; ctx.stroke();
+          } else {
+            const boxW = cellSize * 0.84;
+            const boxH = cellSize * 0.55;
+            
+            const isCompleted = completedPairs.has(cell.color);
+            const borderCol = isCompleted ? COLORS[cell.color] : NEUTRAL_BOX_COLOR;
+
+            ctx.shadowBlur = isCompleted ? 10 : 0; 
+            ctx.shadowColor = isCompleted ? COLORS[cell.color] : 'transparent';
+            
+            ctx.fillStyle = '#1c1a12';
+            ctx.strokeStyle = borderCol;
+            ctx.lineWidth = 2;
+            
+            ctx.beginPath();
+            ctx.roundRect(px - boxW/2, py - boxH/2, boxW, boxH, 4);
+            ctx.fill(); ctx.stroke();
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#f7f2e8';
+            let fontSize = Math.floor(cellSize * 0.22);
+            if(cell.text.length > 4) fontSize = Math.floor(cellSize * 0.17);
+            ctx.font = '600 ' + fontSize + 'px "Trebuchet MS", "Segoe UI", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(cell.text, px, py);
+          }
+        }
+      }
+    }
+  }
+
+  function getCellCoords(e) {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const x = clientX - rect.left; const y = clientY - rect.top;
+    const c = Math.floor(x / cellSize); const r = Math.floor(y / cellSize);
+    if (r >= 0 && r < size && c >= 0 && c < size) return {r, c};
+    return null;
+  }
+
+  function startDraw(e) {
+    if (over) return;
+    const coords = getCellCoords(e);
+    if (!coords) return;
+
+    const cell = cells[coords.r][coords.c];
+    
+    if (cell && cell.type === 'dot') {
+      isDrawing = true;
+      currentPath = cell.color;
+      completedPairs.delete(currentPath);
+      clearPath(currentPath);
+      paths[currentPath].push({r: coords.r, c: coords.c});
+      moves++; updateInfo(); render();
+    } else {
+      Object.keys(paths).forEach(colorIdx => {
+        const idx = paths[colorIdx].findIndex(p => p.r === coords.r && p.c === coords.c);
+        if (idx !== -1) {
+          isDrawing = true;
+          currentPath = parseInt(colorIdx);
+          completedPairs.delete(currentPath);
+          paths[currentPath] = paths[currentPath].slice(0, idx + 1);
+          moves++; updateInfo(); render();
+        }
+      });
+    }
+  }
+
+  function moveDraw(e) {
+    if (!isDrawing || over) return;
+    const coords = getCellCoords(e);
+    if (!coords) return;
+
+    const path = paths[currentPath];
+    if (path.length === 0) return;
+
+    const last = path[path.length - 1];
+    if (last.r === coords.r && last.c === coords.c) return;
+
+    if (path.length > 1) {
+      const prev = path[path.length - 2];
+      if (prev.r === coords.r && prev.c === coords.c) {
+        path.pop(); updateInfo(); render(); return;
+      }
+    }
+
+    const dr = Math.abs(coords.r - last.r);
+    const dc = Math.abs(coords.c - last.c);
+    
+    if ((dr === 1 && dc === 0) || (dr === 0 && dc === 1)) {
+      const targetCell = cells[coords.r][coords.c];
+      
+      if (targetCell && targetCell.type === 'dot') {
+        if (targetCell.color === currentPath && path.length > 0) {
+          path.push({r: coords.r, c: coords.c});
+          completedPairs.add(currentPath);
+          isDrawing = false; checkGameEnd(); render();
+        }
+        return;
+      }
+
+      removeCellFromAllPaths(coords.r, coords.c);
+      path.push({r: coords.r, c: coords.c});
+      updateInfo(); render();
+    }
+  }
+
+  function endDraw() { isDrawing = false; checkGameEnd(); render(); }
+  function clearPath(color) { paths[color] = []; render(); }
+
+  function removeCellFromAllPaths(r, c) {
+    Object.keys(paths).forEach(color => {
+      if (parseInt(color) !== currentPath) {
+        const oldLen = paths[color].length;
+        paths[color] = paths[color].filter(p => !(p.r === r && p.c === c));
+        if (paths[color].length !== oldLen) {
+          completedPairs.delete(parseInt(color));
+        }
+      }
+    });
+  }
+
+  function updateInfo() {
+    let validMatches = 0;
+    Object.keys(paths).forEach(color => {
+      const path = paths[color];
+      if (path.length > 1) {
+        const start = path[0]; const end = path[path.length - 1];
+if(isPairConnected(parseInt(color))){
+          validMatches++;
+        }
+      }
+    });
+    document.getElementById('matchDisp').textContent = validMatches + '/' + totalPairs;
+    document.getElementById('moveDisp').textContent = moves;
+  }
+function comparePathWithSolution(color){
+
+    const path = paths[color];
+
+    if(path.length<2) return false;
+
+    let visited = new Set();
+
+    path.forEach(p=>{
+        visited.add(p.r+"_"+p.c);
+    });
+
+    for(let r=0;r<size;r++){
+
+        for(let c=0;c<size;c++){
+
+            if(solutionGrid[r][c]===color){
+
+                if(!visited.has(r+"_"+c))
+                    return false;
+
+            }
+
+        }
+
+    }
+
+    return true;
+
+}
+function isPairConnected(color){
+
+    const path = paths[color];
+
+    if(path.length < 2) return false;
+
+    const first = path[0];
+    const last  = path[path.length-1];
+
+    const a = cells[first.r][first.c];
+    const b = cells[last.r][last.c];
+
+    if(!a || !b) return false;
+
+    if(a.type!=="dot" || b.type!=="dot")
+        return false;
+
+    if(a.color!==color || b.color!==color)
+        return false;
+
+    return !(first.r===last.r && first.c===last.c);
+
+}
+  function checkGameEnd() {
+    updateInfo();
+    let validMatches = 0; let filledCells = 0;
+    let occupied = Array.from({length: size}, () => Array(size).fill(false));
+    activeDots.forEach(d => occupied[d.r][d.c] = true);
+
+    Object.keys(paths).forEach(color => {
+      const path = paths[color];
+      if (path.length > 1) {
+        const start = path[0]; const end = path[path.length - 1];
+if(isPairConnected(parseInt(color))){
+          validMatches++;
+        }
+        path.forEach(pt => occupied[pt.r][pt.c] = true);
+      }
+    });
+
+    for(let r=0; r<size; r++) { for(let c=0; c<size; c++) { if(occupied[r][c]) filledCells++; } }
+
+    if (validMatches === totalPairs && filledCells === (size * size)) {
+      over = true;
+      document.getElementById('banner').className = 'result-banner show win';
+      setMsg('Harika! Tüm bağlar başarıyla kuruldu.');
+    }
+  }
+
+  function setMsg(t) { document.getElementById('msg').textContent = t; }
+
+  canvas.addEventListener('mousedown', startDraw);
+  window.addEventListener('mousemove', moveDraw);
+  window.addEventListener('mouseup', endDraw);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); startDraw(e); }, {passive: false});
+  window.addEventListener('touchmove', e => { moveDraw(e); }, {passive: false});
+  window.addEventListener('touchend', endDraw);
+  window.addEventListener('resize', () => { resize(); render(); });
+
+  return {
+    init, resetGame, newGame, changeMode: function() { init(); }
+  };
+})();
+
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
+function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
+
+RB.init();
+</script>
+
+<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
+  <img src="../img/THlogo.webp" alt="Tekin Hoca Logo" style="height:32px;opacity:0.35;filter:brightness(1.3)">
+</div>
+</body>
+</html>
