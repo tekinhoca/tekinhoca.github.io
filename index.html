@@ -35,40 +35,6 @@
 <style>
 main { max-width:760px; }
 
-
-
-
-
-
-
-
-.page-links{display:flex;flex-direction:column;gap:8px;margin-bottom:36px;}
-.page-link{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(90deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.18);border-radius:3px;text-decoration:none;color:var(--ink);font-size:0.88rem;transition:background 0.2s,border-color 0.2s,transform 0.2s;box-shadow:1px 2px 6px var(--shadow);animation:fadeUp 0.5s ease both;}
-.page-link:hover{background:linear-gradient(90deg,var(--aged),var(--cream));border-color:rgba(155,53,16,0.35);transform:translateX(4px);}
-.page-link-icon{font-size:1.1rem;flex-shrink:0;}
-.page-link-text{flex:1;}
-.page-link-text strong{display:block;font-family:'Playfair Display',serif;font-weight:700;color:var(--rust);font-size:0.9rem;margin-bottom:1px;}
-.page-link-text span{font-size:0.75rem;color:var(--muted);}
-.page-link-arrow{color:var(--gold);font-size:0.8rem;opacity:0.7;}
-.sidebar{display:flex;flex-direction:column;gap:24px;}
-.sidebar-card{background:linear-gradient(135deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.2);border-radius:4px;overflow:hidden;box-shadow:2px 3px 10px var(--shadow);}
-.sidebar-card-head{background:var(--surface-dark);padding:10px 16px;font-family:'Playfair Display',serif;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);}
-.sidebar-card-
-.notice-box{font-size:0.8rem;line-height:1.75;color:var(--muted);}
-.notice-box strong{color:var(--rust);}
-.ext-links{list-style:none;}
-.ext-links li{border-bottom:1px solid rgba(122,92,30,0.15);}
-.ext-links li:last-child{border-bottom:none;}
-.ext-links a{display:block;padding:9px 0;font-size:0.8rem;color:var(--rust);text-decoration:none;transition:color 0.2s,padding-left 0.2s;}
-.ext-links a:hover{color:var(--sepia);padding-left:6px;}
-.ext-links a::before{content:'→ ';opacity:0.5;}
-.teacher-sig{text-align:center;padding:18px 16px;}
-.teacher-sig .name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:3px;}
-.teacher-sig .title{font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--sepia);}
-.yt-btn{display:flex;align-items:center;gap:8px;background:#ff0000;color:#fff;padding:10px 16px;border-radius:3px;text-decoration:none;font-size:0.82rem;font-weight:600;margin-top:12px;transition:background 0.2s;justify-content:center;}
-.yt-btn:hover{background:#cc0000;}
-.page-link:nth-child(1){animation-delay:0.05s;}.page-link:nth-child(2){animation-delay:0.10s;}.page-link:nth-child(3){animation-delay:0.15s;}.page-link:nth-child(4){animation-delay:0.20s;}
-
 /* ── ÖNE ÇIKAN SAYFA KARTLARI ── */
 .feature-grid {
   display: grid;
@@ -109,6 +75,13 @@ main { max-width:760px; }
 [data-theme="dark"] .feature-title { color: var(--gold); }
 .feature-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
 .feature-arrow { color: var(--gold); font-size: 1rem; opacity: 0.7; flex-shrink: 0; }
+
+/* Kelime bazlı açıklamalar: mobilde tek satır/nokta ile, PC'de (>780px) alt alta, noktasız */
+.feature-desc .fd-word:not(:first-child)::before { content: ' · '; }
+@media (min-width: 781px) {
+  .feature-desc .fd-word { display: block; }
+  .feature-desc .fd-word:not(:first-child)::before { content: none; }
+}
 .feature-card:nth-child(1) { animation-delay: 0.05s; }
 .feature-card:nth-child(2) { animation-delay: 0.10s; }
 .feature-card:nth-child(3) { animation-delay: 0.15s; }
@@ -152,7 +125,7 @@ main { max-width:760px; }
         </svg></div>
         <div class="feature-text">
           <div class="feature-title">Mantık ve Zekâ Oyunları</div>
-          <div class="feature-desc">Düşün · Keşfet · Çöz</div>
+          <div class="feature-desc"><span class="fd-word">Düşün</span><span class="fd-word">Keşfet</span><span class="fd-word">Çöz</span></div>
         </div>
         <div class="feature-arrow">→</div>
       </a>
@@ -167,7 +140,7 @@ main { max-width:760px; }
         </svg></div>
         <div class="feature-text">
           <div class="feature-title">Ortaokul Matematik</div>
-          <div class="feature-desc">Eğlen · Keşfet · Uygula · Öğren</div>
+          <div class="feature-desc"><span class="fd-word">Eğlen</span><span class="fd-word">Keşfet</span><span class="fd-word">Uygula</span><span class="fd-word">Öğren</span></div>
         </div>
         <div class="feature-arrow">→</div>
       </a>
