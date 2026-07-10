@@ -21,9 +21,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .board-outer{display:flex;justify-content:center}
 canvas{cursor:pointer;touch-action:none;border-radius:6px;background:#14120a;border:2px solid rgba(200,150,12,0.4)}
 .msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
-.result-banner{display:none;border-radius:5px;padding:8px 14px;text-align:center}
-.result-banner.show{display:block}
-.result-banner.win{background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35)}
+.result-banner{visibility:hidden;border-radius:5px;padding:8px 14px;text-align:center;border:1px solid transparent}
+.result-banner.show{visibility:visible}
+.result-banner.win{background:rgba(80,200,120,0.1);border-color:rgba(80,200,120,0.35)}
 .result-banner h2{font-size:13px;margin-bottom:2px;color:#50c878}
 .result-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
 .br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
@@ -309,7 +309,9 @@ function getNeighbours(r,c,size){
     moves = 0;
     over = false;
     document.getElementById('banner').className = 'result-banner';
-    setMsg('İfadeleri doğru yanıtlarıyla birleştirin ve tüm alanı doldurun.');
+    setMsg(mode === 'classic'
+      ? 'Aynı renkli yuvarlakları birleştirin ve tüm hücreleri doldurun.'
+      : 'İfadeleri doğru yanıtlarıyla birleştirin ve tüm alanı doldurun.');
     updateInfo();
     render();
   }
@@ -618,7 +620,7 @@ if(isPairConnected(parseInt(color))){
     if (validMatches === totalPairs && filledCells === (size * size)) {
       over = true;
       document.getElementById('banner').className = 'result-banner show win';
-      setMsg('Harika! Tüm bağlar başarıyla kuruldu.');
+      setMsg('');
     }
   }
 
