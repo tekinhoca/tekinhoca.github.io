@@ -106,11 +106,27 @@ button.icon-btn:active{transform:scale(.92)}
   font-family:'Space Mono',monospace;font-weight:700;color:#241033;
   text-shadow:0 1px 0 rgba(255,255,255,.35);
   padding:0 4px;line-height:1;white-space:nowrap;
+  transform:translateY(-12%);
 }
 .exp-sup{
   font-size:0.8em;
   vertical-align:super;
   margin-left:1px;
+}
+.float-fx{
+  position:absolute;transform:translate(-50%,0);
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:19px;
+  pointer-events:none;z-index:22;white-space:nowrap;
+  animation:floatUp .9s ease-out forwards;
+}
+.float-correct{ color:#4ade80; text-shadow:0 0 10px rgba(74,222,128,.85),0 0 3px rgba(74,222,128,.9); }
+.float-wrong{ color:#ff6b6b; text-shadow:0 0 10px rgba(255,107,107,.85),0 0 3px rgba(255,107,107,.9); }
+.float-miss{ color:#c9a8ff; font-size:12.5px; font-weight:700; text-shadow:none; opacity:.85; font-family:'Nunito',sans-serif; }
+@keyframes floatUp{
+  0%{ transform:translate(-50%,0) scale(.75); opacity:0; }
+  18%{ opacity:1; transform:translate(-50%,-6px) scale(1.15); }
+  35%{ transform:translate(-50%,-10px) scale(1); }
+  100%{ transform:translate(-50%,-46px) scale(1); opacity:0; }
 }
 .mound{
   position:absolute;left:50%;bottom:-14%;transform:translateX(-50%);width:112%;height:34%;
@@ -157,6 +173,23 @@ button.ghost{
 .modal-rules li{margin-bottom:4px}
 .modal-rules li::before{content:"⭐ ";}
 .modal-btns{display:flex;justify-content:center;gap:10px}
+.mode-btns{display:flex;flex-direction:column;gap:10px}
+.mode-btn{
+  display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+  width:100%;text-align:left;
+  background:linear-gradient(180deg,#2a1550,#1c0f3d);
+  border:2px solid rgba(255,217,61,.35);border-radius:14px;
+  padding:12px 16px;cursor:pointer;
+  transition:transform .15s ease, border-color .2s, background .2s;
+}
+.mode-btn:hover{
+  border-color:#ffd93d;
+  background:linear-gradient(180deg,#3d1e6e,#2a1550);
+  transform:translateY(-2px);
+}
+.mode-btn:active{ transform:translateY(0); }
+.mode-btn-title{ font-family:'Baloo 2',cursive;font-weight:700;font-size:15.5px;color:#ffd93d; }
+.mode-btn-sub{ font-family:'Nunito',sans-serif;font-size:11px;color:#c9a8ff; }
 .modal-logo{display:flex;justify-content:center;padding-top:2px}
 
 .demo-badge{text-align:center;font-size:10.5px;color:#c9a8ff;letter-spacing:.05em}
@@ -178,7 +211,7 @@ button.ghost{
   <div class="modal-box">
     <div class="modal-title">MATEMATİK AVI</div>
     <ul class="modal-rules">
-      <li>Karşına sırayla 8 farklı görev gelecek; hangisinin ne zaman geleceğini bilmiyorsun.</li>
+      <li>Seçtiğin moda göre (1, 4 ya da 8 görev) karşına sırayla görevler gelecek; hangisinin ne zaman geleceğini bilmiyorsun.</li>
       <li>Her görevden önce açıklaması ekranda belirir, ardından geri sayımla oyun başlar.</li>
       <li>Deliklerden çıkan yumurtalardan görev tanımına uyanlara dokun / tıkla.</li>
       <li>Doğru yumurta 10 puan kazandırır, yanlış yumurta 5 puan düşürür.</li>
@@ -195,6 +228,26 @@ button.ghost{
   </div>
 </div>
 
+<div class="modal-overlay hidden" id="modeModal">
+  <div class="modal-box">
+    <div class="modal-title">BİR MOD SEÇ</div>
+    <div class="mode-btns">
+      <button class="mode-btn" data-count="1">
+        <span class="mode-btn-title">Rastgele 1 Görev</span>
+        <span class="mode-btn-sub">Hızlı bir tur — yaklaşık 1 dakika</span>
+      </button>
+      <button class="mode-btn" data-count="4">
+        <span class="mode-btn-title">Rastgele 4 Görev</span>
+        <span class="mode-btn-sub">Karışık bir set — yaklaşık 3-4 dakika</span>
+      </button>
+      <button class="mode-btn" data-count="0">
+        <span class="mode-btn-title">Tüm Görevleri Tamamla</span>
+        <span class="mode-btn-sub">8 görevin tamamı — yaklaşık 8 dakika</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <div class="stage">
   <div class="progress-bar" id="progressBar" style="width:100%"></div>
 
@@ -206,7 +259,7 @@ button.ghost{
 
   <div class="question-board">
     <span class="q-label" id="qLabel">HAZIR MISIN?</span>
-    <span class="q-text" id="qText">Başlamak için “Başlat”a bas</span>
+    <span class="q-text" id="qText">Bir mod seçerek başla</span>
   </div>
 
   <div class="stats-bar">
@@ -227,7 +280,7 @@ button.ghost{
   </div>
 
   <div class="controls">
-    <button class="a" id="mainBtn">▶ Başlat</button>
+    <button class="a" id="mainBtn" style="display:none">▶ Başlat</button>
     <button class="ghost" id="skipTaskBtn" style="display:none">Görevi Bitir</button>
     <button class="ghost" id="finishBtn" style="display:none">Oyunu Bitir</button>
     <button class="ghost" id="rulesBtn2">Kurallar</button>
@@ -244,7 +297,7 @@ button.ghost{
   <div class="modal-box">
     <div class="modal-title">KURALLAR</div>
     <ul class="modal-rules">
-      <li>Karşına sırayla 8 farklı görev gelecek; hangisinin ne zaman geleceğini bilmiyorsun.</li>
+      <li>Seçtiğin moda göre (1, 4 ya da 8 görev) karşına sırayla görevler gelecek; hangisinin ne zaman geleceğini bilmiyorsun.</li>
       <li>Her görevden önce ekranda açıklaması belirir, ardından geri sayımla oyun başlar.</li>
       <li>Deliklerden çıkan yumurtalardan görev tanımına uyanlara dokun / tıkla.</li>
       <li>Doğru yumurta 10 puan kazandırır, yanlış yumurta 5 puan düşürür.</li>
@@ -537,8 +590,10 @@ button.ghost{
     }
   }
 
-  function generateAllTasks(){
-    tasks = shuffle(GENERATORS).map(fn => fn());
+  function generateAllTasks(count){
+    let gens = shuffle(GENERATORS);
+    if(count && count < gens.length){ gens = gens.slice(0, count); }
+    tasks = gens.map(fn => fn());
   }
 
   /* ---------------- Yumurta motoru ---------------- */
@@ -627,16 +682,32 @@ button.ghost{
     }
     rec.egg.style.background = 'radial-gradient(circle at 35% 28%, #fff, ' + randChoice(EGG_COLORS) + ')';
     rec.el.classList.add('up');
-    rec.retreatHandle = setTimeout(()=>{ retreatEgg(rec); }, 2200 + Math.random()*3200);
+    rec.retreatHandle = setTimeout(()=>{ retreatEgg(rec, true); }, 2200 + Math.random()*3200);
   }
 
-  function retreatEgg(rec){
+  function showFloatingText(holeEl, text, kind){
+    const wrapEl = boardEl.parentElement;
+    const wrapRect = wrapEl.getBoundingClientRect();
+    const holeRect = holeEl.getBoundingClientRect();
+    const el = document.createElement('div');
+    el.className = 'float-fx float-'+kind;
+    el.textContent = text;
+    el.style.left = (holeRect.left - wrapRect.left + holeRect.width/2) + 'px';
+    el.style.top = (holeRect.top - wrapRect.top + holeRect.height*0.22) + 'px';
+    wrapEl.appendChild(el);
+    setTimeout(()=>{ el.remove(); }, 950);
+  }
+
+  function retreatEgg(rec, missed){
+    if(missed && rec.active && rec.isCorrect){
+      showFloatingText(rec.el, 'Kaçtı!', 'miss');
+    }
     rec.el.classList.remove('up');
     rec.active = false;
     if(rec.retreatHandle){ clearTimeout(rec.retreatHandle); rec.retreatHandle=null; }
   }
 
-  function retreatAllEggs(){ holes.forEach(retreatEgg); }
+  function retreatAllEggs(){ holes.forEach(h=>retreatEgg(h,false)); }
 
   function handleHit(rec){
     if(phase!=='playing' || !rec.active) return;
@@ -646,11 +717,14 @@ button.ghost{
       score += 10;
       correctSound();
       burstConfetti(rec.el);
-      retreatEgg(rec);
+      showFloatingText(rec.el, '+10', 'correct');
+      retreatEgg(rec, false);
     } else {
-      if(score>5) score -= 5;
+      const penalized = score>5;
+      if(penalized) score -= 5;
       wrongSound();
       shakeBoard();
+      showFloatingText(rec.el, penalized ? '-5' : '−', 'wrong');
       rec.el.classList.add('hit');
       setTimeout(()=>{ rec.el.classList.remove('hit','up'); rec.active=false; }, 200);
     }
@@ -660,9 +734,9 @@ button.ghost{
   function shakeBoard(){ boardEl.classList.remove('shake'); void boardEl.offsetWidth; boardEl.classList.add('shake'); }
 
   /* ---------------- Görev akışı ---------------- */
-  function startGame(){
+  function startGame(count){
     ensureAudio();
-    generateAllTasks();
+    generateAllTasks(count);
     taskIndex = 0; score = 0;
     overlay.classList.remove('show');
     finishBtn.style.display = 'none';
@@ -670,6 +744,21 @@ button.ghost{
     mainBtn.style.display = 'none';
     updateStats();
     beginTaskIntro();
+  }
+
+  function showModeSelect(){
+    phase = 'idle';
+    clearInterval(taskTimer); clearInterval(spawnTimer); clearInterval(countdownTimer);
+    retreatAllEggs();
+    overlay.classList.remove('show');
+    timeStat.classList.remove('low');
+    mainBtn.style.display = 'none';
+    finishBtn.style.display = 'none';
+    skipTaskBtn.style.display = 'none';
+    score = 0; taskIndex = 0; tasks = [];
+    setQuestion('HAZIR MISIN?', 'Bir mod seçerek başla', false);
+    updateStats();
+    document.getElementById('modeModal').classList.remove('hidden');
   }
 
   function beginTaskIntro(){
@@ -813,11 +902,18 @@ button.ghost{
   window.addEventListener('resize', resizeFx);
 
   /* ---------------- Kontroller ---------------- */
-  mainBtn.onclick = startGame;
-  document.getElementById('playAgainBtn').addEventListener('click', startGame);
+  document.querySelectorAll('.mode-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const count = parseInt(btn.dataset.count, 10);
+      document.getElementById('modeModal').classList.add('hidden');
+      startGame(count);
+    });
+  });
+  document.getElementById('playAgainBtn').addEventListener('click', showModeSelect);
   document.getElementById('modalStartBtn').addEventListener('click', ()=>{
     document.getElementById('startModal').classList.add('hidden');
     ensureAudio();
+    document.getElementById('modeModal').classList.remove('hidden');
   });
   finishBtn.addEventListener('click', quitEarly);
   skipTaskBtn.addEventListener('click', skipCurrentTask);
