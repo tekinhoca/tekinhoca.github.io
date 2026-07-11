@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Matematik Avı</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow-y:auto;scrollbar-width:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+body{
+  font-family:'Nunito',sans-serif;
+  background:
+    radial-gradient(ellipse at 50% -10%, #4a2170 0%, transparent 60%),
+    linear-gradient(180deg,#1c0f3d 0%,#3a1768 45%,#6a2a8c 100%);
+  min-height:100%;
+  display:flex;align-items:flex-start;justify-content:center;
+  padding:10px 8px 24px;
+}
+.stage{width:100%;max-width:520px;display:flex;flex-direction:column;gap:10px;position:relative}
+
+.progress-bar{
+  height:16px;border-radius:20px;
+  background: linear-gradient(90deg, #ffd93d, #ffaa00);
+  opacity:.9;
+  position:relative;
+  overflow:hidden;
+  transition: width 0.3s linear;
+}
+.progress-bar::before{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg, rgba(255,255,255,.9) 0 6px, transparent 6px 20px);
+  animation:twinkle 1.1s steps(2) infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+
+header{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:2px 4px}
+.title{
+  font-family:'Baloo 2',cursive;font-weight:800;font-size:22px;color:#ffd93d;
+  text-shadow:0 2px 0 #7a3d00, 0 0 18px rgba(255,217,61,.5);
+  letter-spacing:.02em;
+}
+.head-controls{display:flex;align-items:center;gap:8px}
+button.icon-btn{
+  background:#2a1550;border:2px solid #ffd93d;border-radius:8px;color:#ffd93d;
+  font-size:16px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .15s, background .2s;
+}
+button.icon-btn:hover{background:#3d1e6e;transform:scale(1.08)}
+button.icon-btn:active{transform:scale(.92)}
+
+.question-board{
+  background:linear-gradient(180deg,#2a1550,#1c0f3d);
+  border:3px solid #ffd93d;border-radius:14px;
+  padding:14px 10px;text-align:center;
+  box-shadow:0 0 0 4px rgba(255,217,61,.12), inset 0 0 24px rgba(255,217,61,.08);
+  transition:transform .15s;
+}
+.q-label{
+  display:block;font-family:'Nunito',sans-serif;font-weight:800;font-size:10px;letter-spacing:.2em;
+  color:#c9a8ff;margin-bottom:4px;
+}
+.q-text{
+  font-family:'Baloo 2',cursive;font-weight:700;font-size:26px;color:#fff2c8;
+  text-shadow:0 2px 0 rgba(0,0,0,.3);
+  display:block;min-height:34px;
+}
+.q-text.pulse{animation:qpulse .55s ease-out}
+@keyframes qpulse{0%{transform:scale(1.5);opacity:0}60%{opacity:1}100%{transform:scale(1)}}
+
+.stats-bar{display:flex;gap:8px}
+.stat{
+  flex:1;background:rgba(255,255,255,.06);border:2px solid rgba(255,217,61,.35);border-radius:10px;
+  padding:6px 4px;text-align:center;
+}
+.stat .l{font-size:9px;font-weight:800;letter-spacing:.15em;color:#c9a8ff}
+.stat .v{font-family:'Space Mono',monospace;font-weight:700;font-size:20px;color:#ffd93d}
+.stat.time.low .v{color:#ff5c5c;animation:pulseWarn .5s infinite}
+@keyframes pulseWarn{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+
+.board-wrap{position:relative}
+.board{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  background:linear-gradient(180deg,#3d2b1a,#2a1c10);
+  border:4px solid #6b4423;border-radius:18px;padding:14px 10px 26px;
+  box-shadow:inset 0 6px 18px rgba(0,0,0,.45);
+}
+.hole{
+  position:relative;aspect-ratio:1/0.95;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 40%, #1a1108 0%, #3c2a17 65%, #584023 100%);
+  box-shadow:inset 0 6px 10px rgba(0,0,0,.6), 0 3px 0 rgba(255,255,255,.05);
+  overflow:hidden;cursor:pointer;
+}
+.egg{
+  position:absolute;left:50%;bottom:-10%;width:60%;height:82%;border-radius:50% 50% 46% 46%;
+  transform:translate(-50%,90%);
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:inset 0 -10px 16px rgba(0,0,0,.28), inset 0 8px 12px rgba(255,255,255,.3), 0 4px 6px rgba(0,0,0,.35);
+  pointer-events:none;z-index:2;
+}
+.hole.up .egg{transform:translate(-50%,4%);pointer-events:auto}
+.hole.hit .egg{transition:transform .16s ease-in;transform:translate(-50%,80%) scaleY(.65)}
+.egg-num{
+  font-family:'Space Mono',monospace;font-weight:700;color:#241033;
+  text-shadow:0 1px 0 rgba(255,255,255,.35);
+  padding:0 4px;line-height:1;white-space:nowrap;
+}
+.exp-sup{
+  font-size:0.8em;
+  vertical-align:super;
+  margin-left:1px;
+}
+.mound{
+  position:absolute;left:50%;bottom:-14%;transform:translateX(-50%);width:112%;height:34%;
+  border-radius:50%;background:radial-gradient(ellipse at 50% 30%,#7a5230,#4a3018);
+  box-shadow:0 6px 8px rgba(0,0,0,.35);z-index:3;pointer-events:none;
+}
+.fx-layer{position:absolute;inset:0;pointer-events:none;z-index:20}
+
+.controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+button.a{
+  background:linear-gradient(180deg,#ffd93d,#e0a800);border:2px solid #7a5200;border-radius:8px;
+  color:#3a1e00;font-family:'Baloo 2',cursive;font-weight:700;font-size:13px;padding:9px 18px;cursor:pointer;
+  box-shadow:0 3px 0 #7a5200;transition:transform .1s;
+}
+button.a:active{transform:translateY(2px);box-shadow:0 1px 0 #7a5200}
+button.a[disabled]{opacity:.35;pointer-events:none}
+button.ghost{
+  background:rgba(255,255,255,.06);border:2px solid rgba(255,217,61,.4);color:#ffd93d;
+  font-family:'Nunito',sans-serif;font-weight:700;font-size:12px;padding:9px 14px;border-radius:8px;cursor:pointer;
+}
+
+.board.shake{animation:shake .35s}
+@keyframes shake{
+  10%,90%{transform:translateX(-3px)}
+  20%,80%{transform:translateX(5px)}
+  30%,50%,70%{transform:translateX(-7px)}
+  40%,60%{transform:translateX(7px)}
+}
+
+.overlay{
+  position:absolute;inset:0;background:rgba(15,7,35,.94);border-radius:18px;
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;z-index:30;padding:14px;
+}
+.overlay.show{display:flex}
+.overlay h2{font-family:'Baloo 2',cursive;color:#ffd93d;font-size:22px}
+.overlay p{color:#e6d9ff;font-size:13px}
+.overlay .final-score{font-family:'Space Mono',monospace;font-size:32px;color:#ffd93d}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.modal-overlay.hidden{display:none}
+.modal-box{background:#1c0f3d;border:2px solid #ffd93d;border-radius:12px;padding:20px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px}
+.modal-title{font-family:'Baloo 2',cursive;color:#ffd93d;font-size:18px;text-align:center}
+.modal-rules{font-size:12.5px;color:#e6d9ff;line-height:1.7;list-style:none;border-top:1px solid rgba(255,217,61,.25);border-bottom:1px solid rgba(255,217,61,.25);padding:10px 4px}
+.modal-rules li{margin-bottom:4px}
+.modal-rules li::before{content:"⭐ ";}
+.modal-btns{display:flex;justify-content:center;gap:10px}
+.modal-logo{display:flex;justify-content:center;padding-top:2px}
+
+.demo-badge{text-align:center;font-size:10.5px;color:#c9a8ff;letter-spacing:.05em}
+.bottom-logo{text-align:center;padding-top:4px;pointer-events:none}
+
+@media(max-width:400px){
+  body{padding:6px 4px 18px}
+  .board{padding:8px 5px 18px;gap:6px}
+  .title{font-size:18px}
+  .q-text{font-size:20px}
+  .stat .v{font-size:16px}
+  .controls button{padding:7px 10px;font-size:11.5px}
+}
+</style>
+</head>
+<body>
+
+<div class="modal-overlay" id="startModal">
+  <div class="modal-box">
+    <div class="modal-title">MATEMATİK AVI</div>
+    <ul class="modal-rules">
+      <li>Karşına sırayla 8 farklı görev gelecek; hangisinin ne zaman geleceğini bilmiyorsun.</li>
+      <li>Her görevden önce açıklaması ekranda belirir, ardından geri sayımla oyun başlar.</li>
+      <li>Deliklerden çıkan yumurtalardan görev tanımına uyanlara dokun / tıkla.</li>
+      <li>Doğru yumurta 10 puan kazandırır, yanlış yumurta 5 puan düşürür.</li>
+      <li>Süre bitince sıradaki göreve geçilir.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="a" id="modalStartBtn">▶ Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+     style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+     onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="progress-bar" id="progressBar" style="width:100%"></div>
+
+  <header>
+    <div class="title">MATEMATİK AVI</div>
+    <div class="head-controls">
+    </div>
+  </header>
+
+  <div class="question-board">
+    <span class="q-label" id="qLabel">HAZIR MISIN?</span>
+    <span class="q-text" id="qText">Başlamak için “Başlat”a bas</span>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="l">SKOR</div><div class="v" id="scoreDisp">0</div></div>
+    <div class="stat time" id="timeStat"><div class="l">SÜRE</div><div class="v" id="timeDisp">–</div></div>
+    <div class="stat"><div class="l">GÖREV</div><div class="v" id="taskDisp">0/3</div></div>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+    <canvas class="fx-layer" id="fx"></canvas>
+    <div class="overlay" id="overlay">
+      <h2 id="overlayTitle">Tüm Görevler Tamamlandı!</h2>
+      <div class="final-score" id="finalScore">0</div>
+      <p>toplam puan</p>
+      <button class="a" id="playAgainBtn">▶ Tekrar Oyna</button>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="a" id="mainBtn">▶ Başlat</button>
+    <button class="ghost" id="skipTaskBtn" style="display:none">Görevi Bitir</button>
+    <button class="ghost" id="finishBtn" style="display:none">Oyunu Bitir</button>
+    <button class="ghost" id="rulesBtn2">Kurallar</button>
+  </div>
+
+  <div class="bottom-logo">
+    <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+     style="height:26px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
+     onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="rulesModal">
+  <div class="modal-box">
+    <div class="modal-title">KURALLAR</div>
+    <ul class="modal-rules">
+      <li>Karşına sırayla 8 farklı görev gelecek; hangisinin ne zaman geleceğini bilmiyorsun.</li>
+      <li>Her görevden önce ekranda açıklaması belirir, ardından geri sayımla oyun başlar.</li>
+      <li>Deliklerden çıkan yumurtalardan görev tanımına uyanlara dokun / tıkla.</li>
+      <li>Doğru yumurta 10 puan kazandırır, yanlış yumurta 5 puan düşürür.</li>
+      <li>Süre bitince sıradaki göreve geçilir.</li>
+    </ul>
+    <div class="modal-btns">
+      <button class="a" id="closeRulesBtn">Anladım</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+     style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+     onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.38'">
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+
+  /* ---------------- Ses motoru (TANI AMAÇLI TAMAMEN DEVRE DIŞI) ---------------- */
+  const SOUND_ENABLED = false;
+  let actx=null, muted=true;
+  function ensureAudio(){ if(!SOUND_ENABLED) return; if(!actx){ actx = new (window.AudioContext||window.webkitAudioContext)(); } }
+  function tone(freq,dur,type,vol,delay){
+    if(!SOUND_ENABLED || muted || !actx) return;
+    const t0=actx.currentTime+(delay||0);
+    const osc=actx.createOscillator(); const gain=actx.createGain();
+    osc.type=type||'sine';
+    osc.frequency.setValueAtTime(freq,t0);
+    gain.gain.setValueAtTime(0,t0);
+    gain.gain.linearRampToValueAtTime(vol||0.2,t0+0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+    osc.connect(gain).connect(actx.destination);
+    osc.start(t0); osc.stop(t0+dur+0.02);
+  }
+  function correctSound(){ tone(560,.1,'triangle',.22,0); tone(840,.16,'triangle',.2,.08); }
+  function wrongSound(){ tone(160,.22,'sawtooth',.18,0); }
+  function tickSound(){ tone(880,.05,'square',.08,0); }
+  function countdownSound(n){ tone(n===0?880:520,.14,'triangle',.2,0); }
+  function taskDoneSound(){ tone(660,.12,'triangle',.18,0); tone(880,.18,'triangle',.2,.12); }
+  function allDoneSound(){ tone(660,.14,'triangle',.2,0); tone(784,.14,'triangle',.2,.14); tone(988,.28,'triangle',.24,.28); }
+
+  /* ---------------- Yardımcılar ---------------- */
+  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function randChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function shuffle(arr){ return arr.slice().sort(()=>Math.random()-0.5); }
+  const SUP = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+  const SUP_TO_DIGIT = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
+  function sup(n){ return String(n).split('').map(c=>SUP[c]||c).join(''); }
+  function divisorsOf(n){ const r=[]; for(let i=2;i<=Math.sqrt(n);i++){ if(n%i===0){ r.push(i); if(i!==n/i) r.push(n/i);} } return r; }
+
+  /* ---------------- Görev üretici fonksiyonlar ---------------- */
+  // Her üretici {title, correct:[...], wrong:[...]} döndürür.
+
+  const KAT_SUFFIX = { 2:"nin",3:"ün",4:"ün",5:"in",6:"nın",7:"nin",8:"in",9:"un",10:"un",
+    11:"in",12:"nin",13:"ün",14:"ün",15:"in",16:"nın",17:"nin",18:"in",19:"un",20:"nin" };
+
+  function genKatlariniBul(){
+    const n = randInt(6,15);
+    const title = n + "'" + KAT_SUFFIX[n] + " Katlarını Bul";
+    const correctSet = new Set();
+    for(let k=2;k<=11;k++) correctSet.add(n*k);
+    const correct = Array.from(correctSet);
+    const wrongSet = new Set();
+    correct.forEach(m=>{
+      [1,-1,2,-2].forEach(o=>{
+        const v = m+o;
+        if(v>0 && !correctSet.has(v)) wrongSet.add(v);
+      });
+    });
+    return { title, correct: shuffle(correct).slice(0,10).map(String), wrong: shuffle(Array.from(wrongSet)).slice(0,10).map(String) };
+  }
+
+  function buildExprForValue(target,count){
+    const results = new Set(); let attempts=0;
+    while(results.size<count && attempts<500){
+      attempts++;
+      const op = randChoice(['+','-','x','÷']);
+      let expr=null;
+      if(op==='+'){ const a=randInt(1,target-1); const b=target-a; if(b>=1) expr=a+" + "+b; }
+      else if(op==='-'){ const b=randInt(1,20); const a=target+b; expr=a+" − "+b; }
+      else if(op==='x'){ const divs=divisorsOf(target); if(divs.length){ const a=randChoice(divs); const b=target/a; expr=a+" × "+b; } }
+      else { const m=randInt(2,6); const a=target*m; expr=a+" ÷ "+m; }
+      if(expr && !results.has(expr)) results.add(expr);
+    }
+    return Array.from(results).slice(0,count);
+  }
+
+  function buildExprNear(target,count){
+    const results = new Set(); let attempts=0;
+    const deltas = [1,-1,2,-2,3,-3,4,-4];
+    while(results.size<count && attempts<600){
+      attempts++;
+      const val = target + randChoice(deltas);
+      if(val<=0) continue;
+      const op = randChoice(['+','-','x','÷']);
+      let expr=null;
+      if(op==='+'){ const a=randInt(1,val-1); const b=val-a; if(b>=1) expr=a+" + "+b; }
+      else if(op==='-'){ const b=randInt(1,20); const a=val+b; expr=a+" − "+b; }
+      else if(op==='x'){ const divs=divisorsOf(val); if(divs.length){ const a=randChoice(divs); const b=val/a; expr=a+" × "+b; } }
+      else { const m=randInt(2,6); const a=val*m; expr=a+" ÷ "+m; }
+      if(expr && !results.has(expr)) results.add(expr);
+    }
+    return Array.from(results).slice(0,count);
+  }
+
+  const DATIVE_WORD_INFO = {
+    "bir":{v:false,h:"e"}, "iki":{v:true,h:"e"}, "üç":{v:false,h:"e"}, "dört":{v:false,h:"e"}, "beş":{v:false,h:"e"},
+    "altı":{v:true,h:"a"}, "yedi":{v:true,h:"e"}, "sekiz":{v:false,h:"e"}, "dokuz":{v:false,h:"a"},
+    "on":{v:false,h:"a"}, "yirmi":{v:true,h:"e"}, "otuz":{v:false,h:"a"}, "kırk":{v:false,h:"a"},
+    "elli":{v:true,h:"e"}, "altmış":{v:false,h:"a"}
+  };
+  const ONES_WORDS = {1:"bir",2:"iki",3:"üç",4:"dört",5:"beş",6:"altı",7:"yedi",8:"sekiz",9:"dokuz"};
+  const TENS_WORDS = {1:"on",2:"yirmi",3:"otuz",4:"kırk",5:"elli",6:"altmış"};
+  function dativeSuffix(num){
+    const tens = Math.floor(num/10), ones = num%10;
+    const word = ones===0 ? TENS_WORDS[tens] : ONES_WORDS[ones];
+    const info = DATIVE_WORD_INFO[word];
+    return (info.v ? "y" : "") + info.h;
+  }
+
+  const GENITIVE_WORD_INFO = {
+    "bir":{v:false,h:"i"}, "iki":{v:true,h:"i"}, "üç":{v:false,h:"ü"}, "dört":{v:false,h:"ü"}, "beş":{v:false,h:"i"},
+    "altı":{v:true,h:"ı"}, "yedi":{v:true,h:"i"}, "sekiz":{v:false,h:"i"}, "dokuz":{v:false,h:"u"},
+    "on":{v:false,h:"u"}, "yirmi":{v:true,h:"i"}, "otuz":{v:false,h:"u"}, "kırk":{v:false,h:"ı"},
+    "elli":{v:true,h:"i"}, "altmış":{v:false,h:"ı"}
+  };
+  function genitiveSuffix(num){
+    const tens = Math.floor(num/10), ones = num%10;
+    const word = ones===0 ? TENS_WORDS[tens] : ONES_WORDS[ones];
+    const info = GENITIVE_WORD_INFO[word];
+    return (info.v ? "n" : "") + info.h + "n";
+  }
+
+  function genEsitOlanlariBul(){
+    const T = randInt(15,60);
+    const title = T + "'" + dativeSuffix(T) + " Eşit Olanları Bul";
+    return { title, correct: buildExprForValue(T,10), wrong: buildExprNear(T,10) };
+  }
+
+  function genEsitOlmayanlariBul(){
+    const T = randInt(15,60);
+    const title = T + "'" + dativeSuffix(T) + " Eşit Olmayanları Bul";
+    return { title, correct: buildExprNear(T,10), wrong: buildExprForValue(T,10) };
+  }
+
+  function isPrime(n){ if(n<2) return false; for(let i=2;i*i<=n;i++){ if(n%i===0) return false; } return true; }
+
+  function genAsalSayilariBul(){
+    const title = "Asal Sayıları Bul";
+    const lo=2, hi=60;
+    const primes=[], composites=[];
+    for(let i=lo;i<=hi;i++){ if(isPrime(i)) primes.push(i); else composites.push(i); }
+    const nearComposites = new Set();
+    primes.forEach(p=>{
+      [p-1,p+1].forEach(v=>{ if(v>=lo && v<=hi && !isPrime(v)) nearComposites.add(v); });
+    });
+    let wrongPool = Array.from(nearComposites);
+    if(wrongPool.length<10){ composites.forEach(c=>{ if(!nearComposites.has(c)) wrongPool.push(c); }); }
+    return { title, correct: shuffle(primes).slice(0,10).map(String), wrong: shuffle(wrongPool).slice(0,10).map(String) };
+  }
+
+  function genTamKareBul(){
+    const title = "Tam Kare Olan Sayıları Bul";
+    const squares = [];
+    for(let k=2;k<=15;k++) squares.push(k*k);
+    const wrongSet = new Set();
+    squares.forEach(s=>{
+      [1,-1,2,-2].forEach(o=>{ const v=s+o; if(v>0 && !squares.includes(v)) wrongSet.add(v); });
+    });
+    return { title, correct: shuffle(squares).slice(0,10).map(String), wrong: shuffle(Array.from(wrongSet)).slice(0,10).map(String) };
+  }
+
+  function genNegatifOlanlariBul(){
+    const title = "Negatif Olan İfadeleri Bul";
+    const correct=[], wrong=[];
+    [2,3,4,5,6].forEach(a=>{
+      const oddExp = randChoice([3,5]);
+      const evenExp = randChoice([2,4]);
+      correct.push("(-"+a+")"+sup(oddExp));      // parantez içi negatif taban, tek kuvvet
+      correct.push("-"+a+sup(evenExp));           // parantezsiz, çift kuvvet ama dışta eksi
+      correct.push("-"+a+sup(oddExp));             // parantezsiz, tek kuvvet, dışta eksi
+      wrong.push("(-"+a+")"+sup(evenExp));        // parantez içi negatif taban, çift kuvvet -> pozitif tuzağı
+      wrong.push(a+sup(evenExp));                  // düz doğal sayı, çift kuvvet
+      wrong.push(a+sup(oddExp));                   // düz doğal sayı, tek kuvvet
+    });
+    return { title, correct: shuffle(correct).slice(0,10), wrong: shuffle(wrong).slice(0,10) };
+  }
+
+  function genCarpanlariniBul(){
+    let n;
+    do {
+      n = randInt(12, 60);
+    } while (divisorsOf(n).length < 4); // divisorsOf, 1 ve n'i saymaz; +2 ile toplam en az 6 bölen garanti edilir
+    const title = n + "'" + genitiveSuffix(n) + " Çarpanlarını Bul";
+    const divs = [1, ...divisorsOf(n), n];
+    const correct = shuffle(divs).slice(0,8);
+    const wrongSet = new Set();
+    for(let i=1; i<=n+12; i++){
+      if(!divs.includes(i)) wrongSet.add(i);
+    }
+    const wrong = shuffle(Array.from(wrongSet)).slice(0,12);
+    return { title, correct: correct.map(String), wrong: wrong.map(String) };
+  }
+
+  function genBolunebilirlikBul(){
+    const rules = [2,3,4,5,6,9,10,15];
+    const divisor = randChoice(rules);
+    const title = divisor + "'" + dativeSuffix(divisor) + " Bölünebilen Sayıları Bul";
+    const correct = [], wrong = [];
+    for(let i=10; i<=80; i++){
+      if(i % divisor === 0) correct.push(i);
+      else wrong.push(i);
+    }
+    return { 
+      title, 
+      correct: shuffle(correct).slice(0,10).map(String), 
+      wrong: shuffle(wrong).slice(0,10).map(String) 
+    };
+  }
+
+  const GENERATORS = [genKatlariniBul, genEsitOlanlariBul, genNegatifOlanlariBul, genEsitOlmayanlariBul, genAsalSayilariBul, genTamKareBul, genCarpanlariniBul, genBolunebilirlikBul];
+
+  /* ---------------- Oyun durumu ---------------- */
+  const HOLE_COUNT = 6;
+  const TASK_DURATION = 24; // saniye
+  const MAX_EGGS = 3;
+  const EGG_COLORS = ['#ff6b6b','#4ecdc4','#ffd93d','#a78bfa','#38bdf8','#fb923c','#f472b6','#84cc16'];
+
+  let tasks = [];
+  let taskIndex = 0;
+  let score = 0;
+  let timeLeft = 0;
+  let phase = 'idle'; // idle | intro | countdown | playing | transition | final
+  let holes = [];
+  let spawnTimer = null, countdownTimer = null, taskTimer = null;
+
+  const boardEl = document.getElementById('board');
+  const qLabelEl = document.getElementById('qLabel');
+  const qTextEl = document.getElementById('qText');
+  const scoreDisp = document.getElementById('scoreDisp');
+  const timeDisp = document.getElementById('timeDisp');
+  const timeStat = document.getElementById('timeStat');
+  const taskDisp = document.getElementById('taskDisp');
+  const overlay = document.getElementById('overlay');
+  const overlayTitle = document.getElementById('overlayTitle');
+  const finalScore = document.getElementById('finalScore');
+  const mainBtn = document.getElementById('mainBtn');
+  const finishBtn = document.getElementById('finishBtn');
+  const skipTaskBtn = document.getElementById('skipTaskBtn');
+  const progressBar = document.getElementById('progressBar');
+
+  function buildHoles(){
+    boardEl.innerHTML = '';
+    holes = [];
+    for(let i=0;i<HOLE_COUNT;i++){
+      const hole = document.createElement('div');
+      hole.className = 'hole';
+      hole.innerHTML = '<div class="mound"></div><div class="egg"><span class="egg-num"></span></div>';
+      boardEl.appendChild(hole);
+      const egg = hole.querySelector('.egg');
+      const num = hole.querySelector('.egg-num');
+      const rec = {el:hole, egg, num, active:false, isCorrect:false, retreatHandle:null};
+      hole.addEventListener('click', ()=>handleHit(rec));
+      hole.addEventListener('touchstart', (e)=>{ e.preventDefault(); handleHit(rec); }, {passive:false});
+      holes.push(rec);
+    }
+  }
+
+  function setQuestion(label, text, pulse){
+    qLabelEl.textContent = label;
+    qTextEl.textContent = text;
+    if(pulse){ qTextEl.classList.remove('pulse'); void qTextEl.offsetWidth; qTextEl.classList.add('pulse'); }
+  }
+
+  function updateStats(){
+    scoreDisp.textContent = score;
+    timeDisp.textContent = phase==='playing' ? timeLeft : '–';
+    taskDisp.textContent = Math.min(taskIndex+ (phase==='idle'?0:1), tasks.length) + '/' + tasks.length;
+  }
+
+  function updateProgress(){
+    if(phase !== 'playing' || !progressBar) return;
+    const percent = Math.max(0, (timeLeft / TASK_DURATION) * 100);
+    progressBar.style.width = percent + '%';
+    if(timeLeft <= 8){
+      progressBar.style.background = 'linear-gradient(90deg, #ff5c5c, #ffaa00)';
+    } else {
+      progressBar.style.background = 'linear-gradient(90deg, #ffd93d, #ffaa00)';
+    }
+  }
+
+  function generateAllTasks(){
+    tasks = shuffle(GENERATORS).map(fn => fn());
+  }
+
+  /* ---------------- Yumurta motoru ---------------- */
+  function freeHoles(){ return holes.filter(h=>!h.active); }
+  function activeCount(){ return holes.filter(h=>h.active).length; }
+
+  const SUP_CHARS = new Set(Object.values(SUP));
+  function visualWeight(text){
+    let w = 0;
+    for(const ch of text){
+      if(ch==='('||ch===')') w += 0.4;
+      else if(ch==='-'||ch==='−'||ch==='+'||ch==='×'||ch==='÷') w += 0.6;
+      else if(ch===' ') w += 0.3;
+      else if(SUP_CHARS.has(ch)) w += 0.55;
+      else w += 1; // rakam
+    }
+    return w;
+  }
+
+  let holeScale = 1;
+  function updateHoleScale(){
+    if(!holes.length) return;
+    const rect = holes[0].el.getBoundingClientRect();
+    const REF = 150; // masaüstü tasarım referans genişliği (px)
+    if(rect.width>0) holeScale = Math.max(0.6, Math.min(1, rect.width / REF));
+  }
+
+  function fontSizeFor(text){
+    const w = visualWeight(text);
+    let base;
+    if(w<=3) base=24;
+    else if(w<=6) base=19;
+    else if(w<=9) base=15;
+    else base=12;
+    return Math.max(9, Math.round(base*holeScale*10)/10);
+  }
+
+  let correctBag = [], wrongBag = [], typeBag = [];
+  function resetBags(){ correctBag = []; wrongBag = []; typeBag = []; }
+  function drawType(){
+    if(typeBag.length===0){
+      // her 7 yumurtanın 4'ü doğru, 3'ü yanlış olacak şekilde gruplu torba
+      const base = [true,true,true,true,false,false,false];
+      typeBag = shuffle(base);
+    }
+    return typeBag.pop();
+  }
+  function drawFromBag(isCorrect){
+    const task = tasks[taskIndex];
+    let bag = isCorrect ? correctBag : wrongBag;
+    if(bag.length===0){
+      const pool = isCorrect ? task.correct : task.wrong;
+      bag = shuffle(pool);
+      if(isCorrect) correctBag = bag; else wrongBag = bag;
+    }
+    return (isCorrect ? correctBag : wrongBag).pop();
+  }
+
+  function spawnEgg(){
+    if(phase!=='playing') return;
+    const n = activeCount();
+    if(n>=MAX_EGGS) return;
+    if(n>=2 && Math.random()>0.75) return;  // sadece 3. yumurtada hafif bir seyreklik kalsın
+    // 1. ve 2. yumurta artık hiç geciktirilmeden, boş delik olur olmaz gelir
+    const free = freeHoles();
+    if(!free.length) return;
+    const rec = randChoice(free);
+    const useCorrect = drawType();
+    const val = drawFromBag(useCorrect);
+    rec.active = true;
+    rec.isCorrect = useCorrect;
+    rec.num.style.fontSize = fontSizeFor(String(val)) + 'px';
+    const valStr = String(val);
+    const supMatch = valStr.match(/([⁰¹²³⁴⁵⁶⁷⁸⁹]+)$/);
+    rec.num.innerHTML = '';
+    if(supMatch){
+      const base = valStr.slice(0, valStr.length - supMatch[0].length);
+      const digits = supMatch[0].split('').map(ch=>SUP_TO_DIGIT[ch]).join('');
+      rec.num.appendChild(document.createTextNode(base));
+      const supSpan = document.createElement('span');
+      supSpan.className = 'exp-sup';
+      supSpan.textContent = digits;
+      rec.num.appendChild(supSpan);
+    } else {
+      rec.num.textContent = valStr;
+    }
+    rec.egg.style.background = 'radial-gradient(circle at 35% 28%, #fff, ' + randChoice(EGG_COLORS) + ')';
+    rec.el.classList.add('up');
+    rec.retreatHandle = setTimeout(()=>{ retreatEgg(rec); }, 2200 + Math.random()*3200);
+  }
+
+  function retreatEgg(rec){
+    rec.el.classList.remove('up');
+    rec.active = false;
+    if(rec.retreatHandle){ clearTimeout(rec.retreatHandle); rec.retreatHandle=null; }
+  }
+
+  function retreatAllEggs(){ holes.forEach(retreatEgg); }
+
+  function handleHit(rec){
+    if(phase!=='playing' || !rec.active) return;
+    ensureAudio();
+    if(rec.retreatHandle){ clearTimeout(rec.retreatHandle); rec.retreatHandle=null; }
+    if(rec.isCorrect){
+      score += 10;
+      correctSound();
+      burstConfetti(rec.el);
+      retreatEgg(rec);
+    } else {
+      if(score>5) score -= 5;
+      wrongSound();
+      shakeBoard();
+      rec.el.classList.add('hit');
+      setTimeout(()=>{ rec.el.classList.remove('hit','up'); rec.active=false; }, 200);
+    }
+    updateStats();
+  }
+
+  function shakeBoard(){ boardEl.classList.remove('shake'); void boardEl.offsetWidth; boardEl.classList.add('shake'); }
+
+  /* ---------------- Görev akışı ---------------- */
+  function startGame(){
+    ensureAudio();
+    generateAllTasks();
+    taskIndex = 0; score = 0;
+    overlay.classList.remove('show');
+    finishBtn.style.display = 'none';
+    skipTaskBtn.style.display = 'none';
+    mainBtn.style.display = 'none';
+    updateStats();
+    beginTaskIntro();
+  }
+
+  function beginTaskIntro(){
+    phase = 'intro';
+    timeStat.classList.remove('low');
+    updateStats();
+    const task = tasks[taskIndex];
+    setQuestion('GÖREV '+(taskIndex+1)+'/'+tasks.length, task.title, true);
+    setTimeout(runCountdown, 1300);
+  }
+
+  function runCountdown(){
+    phase = 'countdown';
+    let n = 3;
+    setQuestion('BAŞLIYOR', String(n), true);
+    countdownSound(n);
+    countdownTimer = setInterval(()=>{
+      n--;
+      if(n>0){ setQuestion('BAŞLIYOR', String(n), true); countdownSound(n); }
+      else{
+        clearInterval(countdownTimer);
+        setQuestion('BAŞLIYOR', 'BAŞLA!', true); countdownSound(0);
+        setTimeout(playTask, 500);
+      }
+    }, 700);
+  }
+
+  function playTask(){
+    phase = 'playing';
+    const task = tasks[taskIndex];
+    setQuestion('GÖREV '+(taskIndex+1)+'/'+tasks.length, task.title, false);
+    timeLeft = TASK_DURATION;
+    finishBtn.style.display = 'inline-block';
+    skipTaskBtn.style.display = 'inline-block';
+    resetBags();
+    updateStats();
+    if(progressBar) {
+      progressBar.style.width = '100%';
+      progressBar.style.background = 'linear-gradient(90deg, #ffd93d, #ffaa00)';
+    }
+
+    clearInterval(taskTimer);
+    taskTimer = setInterval(()=>{
+      timeLeft--;
+      if(timeLeft<=5 && timeLeft>0){ timeStat.classList.add('low'); tickSound(); }
+      updateStats();
+      updateProgress();
+      if(timeLeft<=0){ endTask(); }
+    }, 1000);
+
+    clearInterval(spawnTimer);
+    spawnTimer = setInterval(spawnEgg, 420);
+    spawnEgg();
+  }
+
+  function endTask(){
+    clearInterval(taskTimer); clearInterval(spawnTimer);
+    timeStat.classList.remove('low');
+    if(progressBar) progressBar.style.width = '0%';
+    retreatAllEggs();
+    taskDoneSound();
+    if(taskIndex < tasks.length-1){
+      phase = 'transition';
+      finishBtn.style.display = 'none';
+      skipTaskBtn.style.display = 'none';
+      mainBtn.style.display = 'inline-block';
+      mainBtn.textContent = 'Sıradaki Görev ▶';
+      mainBtn.onclick = advanceTask;
+      setQuestion('GÖREV TAMAMLANDI', 'Toplam Skor: '+score, true);
+      updateStats();
+    } else {
+      finishGame();
+    }
+  }
+
+  function advanceTask(){
+    taskIndex++;
+    mainBtn.onclick = null;
+    mainBtn.style.display = 'none';
+    beginTaskIntro();
+  }
+
+  function finishGame(){
+    phase = 'final';
+    clearInterval(taskTimer); clearInterval(spawnTimer); clearInterval(countdownTimer);
+    if(progressBar) progressBar.style.width = '0%';
+    retreatAllEggs();
+    finishBtn.style.display = 'none';
+    skipTaskBtn.style.display = 'none';
+    mainBtn.style.display = 'none';
+    allDoneSound();
+    overlayTitle.textContent = 'Tüm Görevler Tamamlandı!';
+    finalScore.textContent = score;
+    overlay.classList.add('show');
+    setQuestion('BİTTİ', 'Yeni bir tur için hazır ol', false);
+    updateStats();
+  }
+
+  function quitEarly(){
+    if(phase!=='playing' && phase!=='transition') return;
+    finishGame();
+  }
+
+  function skipCurrentTask(){
+    if(phase!=='playing') return;
+    endTask();
+  }
+
+  /* ---------------- Konfeti ---------------- */
+  const fx = document.getElementById('fx');
+  const fctx = fx.getContext('2d');
+  let particles = []; let fxRunning=false;
+  function resizeFx(){
+    const wrapRect = fx.parentElement.getBoundingClientRect();
+    fx.width = wrapRect.width; fx.height = wrapRect.height;
+  }
+  function burstConfetti(holeEl){
+    resizeFx();
+    const holeRect = holeEl.getBoundingClientRect();
+    const wrapRect = fx.parentElement.getBoundingClientRect();
+    const cx = holeRect.left - wrapRect.left + holeRect.width/2;
+    const cy = holeRect.top - wrapRect.top + holeRect.height*0.3;
+    for(let i=0;i<18;i++){
+      particles.push({ x:cx,y:cy, vx:(Math.random()-0.5)*7, vy:-3-Math.random()*4, g:0.18, life:1,
+        size:3+Math.random()*3, color:randChoice(EGG_COLORS) });
+    }
+    if(!fxRunning) runFx();
+  }
+  function runFx(){
+    fxRunning = true;
+    fctx.clearRect(0,0,fx.width,fx.height);
+    particles.forEach(p=>{
+      p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.life-=0.018;
+      fctx.globalAlpha=Math.max(p.life,0); fctx.fillStyle=p.color; fctx.fillRect(p.x,p.y,p.size,p.size);
+    });
+    fctx.globalAlpha=1;
+    particles = particles.filter(p=>p.life>0);
+    if(particles.length>0) requestAnimationFrame(runFx);
+    else{ fxRunning=false; fctx.clearRect(0,0,fx.width,fx.height); }
+  }
+  window.addEventListener('resize', resizeFx);
+
+  /* ---------------- Kontroller ---------------- */
+  mainBtn.onclick = startGame;
+  document.getElementById('playAgainBtn').addEventListener('click', startGame);
+  document.getElementById('modalStartBtn').addEventListener('click', ()=>{
+    document.getElementById('startModal').classList.add('hidden');
+    ensureAudio();
+  });
+  finishBtn.addEventListener('click', quitEarly);
+  skipTaskBtn.addEventListener('click', skipCurrentTask);
+  function openRules(){ document.getElementById('rulesModal').classList.remove('hidden'); }
+  function closeRules(){ document.getElementById('rulesModal').classList.add('hidden'); }
+  document.getElementById('rulesBtn2').addEventListener('click', openRules);
+  document.getElementById('closeRulesBtn').addEventListener('click', closeRules);
+
+  buildHoles();
+  resizeFx();
+  updateStats();
+  requestAnimationFrame(updateHoleScale);
+  let resizeDebounce = null;
+  window.addEventListener('resize', ()=>{
+    clearTimeout(resizeDebounce);
+    resizeDebounce = setTimeout(updateHoleScale, 150);
+  });
+})();
+</script>
+</body>
+</html>
