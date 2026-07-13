@@ -21,8 +21,8 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .subtitle{font-size:11px;color:rgba(247,242,232,0.35);text-align:center;letter-spacing:.05em}
 
 /* ── MOD SEÇİMİ ── */
-.mode-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.mode-btn{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.35);border-radius:6px;padding:18px 28px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;font-size:13px;transition:all .2s;text-align:center;flex:1;min-width:140px}
+.mode-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mode-btn{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.35);border-radius:6px;padding:18px 10px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;font-size:13px;transition:all .2s;text-align:center;min-width:0}
 .mode-btn:hover{background:rgba(200,150,12,0.2);color:#e8d5a0;border-color:rgba(200,150,12,0.6)}
 .mode-btn .mode-icon{font-size:26px;display:block;margin-bottom:6px}
 .mode-btn .mode-label{font-weight:700;display:block;margin-bottom:3px}
@@ -142,11 +142,23 @@ button.primary:hover{background:rgba(200,150,12,0.35)}
     <div class="game-title">Sayı Hedefi</div>
     <div class="subtitle">Verilen sayılarla hedefe ulaş</div>
     <div class="mode-btns">
+      <div class="mode-btn" onclick="G.selectMode(1,true)">
+        <span class="mode-icon">🎯</span>
+        <span class="mode-label">Tek Kişi</span>
+        <span class="mode-desc">Tek oyun</span>
+        <span class="mode-desc">hızlı deneme</span>
+      </div>
       <div class="mode-btn" onclick="G.selectMode(1)">
         <span class="mode-icon">🧠</span>
         <span class="mode-label">Tek Kişi</span>
         <span class="mode-desc">10 soruluk</span>
         <span class="mode-desc">meydan okuma</span>
+      </div>
+      <div class="mode-btn" onclick="G.selectMode(2,true)">
+        <span class="mode-icon">🔁</span>
+        <span class="mode-label">İki Kişi</span>
+        <span class="mode-desc">Tek oyun</span>
+        <span class="mode-desc">sırayla tek tur</span>
       </div>
       <div class="mode-btn" onclick="G.selectMode(2)">
         <span class="mode-icon">⚔️</span>
@@ -229,7 +241,7 @@ button.primary:hover{background:rgba(200,150,12,0.35)}
 const G = (function(){
   const TOTAL_TIME = 90;
 
-  let mode, players, scores, roundScores;
+  let mode, singleMode, players, scores, roundScores;
   let currentQ, currentP; // soru no, oyuncu no (0 veya 1)
   let target, cards; // cards: [{val, id, used, isResult}]
   let sel1, selOp; // seçili 1. sayı ve işlem
@@ -243,8 +255,9 @@ const G = (function(){
     document.getElementById(id).classList.add('active');
   }
 
-  function selectMode(m){
+  function selectMode(m, single){
     mode = m;
+    singleMode = !!single;
     const f = document.getElementById('nameForm');
     f.innerHTML = '';
     const count = m===1?1:2;
@@ -304,17 +317,31 @@ const G = (function(){
 
   // Tüm ulaşılabilir (sonuç → minimum_işlem_sayısı) haritasını çıkar
   // Sonra 3 basamaklı, min_işlem >= 3 olan bir hedef seç
+  //
+  // PERFORMANS NOTU: Orijinal sürüm her (i,j) çiftini HEM (i,j) HEM (j,i)
+  // olarak iki kez tarıyordu; ancak "ops" listesi zaten a-b/b-a ve a÷b/b÷a
+  // ihtimallerinin ikisini de içerdiğinden bu ikinci tarama tamamen
+  // gereksizdi ve arama ağacını katlanarak büyütüyordu (telefonlarda
+  // sorular arasında donma hissi buradan kaynaklanıyordu). Aşağıdaki
+  // sürüm yalnızca i<j çiftlerini tarar ve aynı sayı kümesinin tekrar
+  // taranmasını "visited" haritasıyla engeller. Sonuç kümesi (minOpsMap)
+  // matematiksel olarak birebir aynıdır; sadece hesaplama çok daha hızlıdır.
   function minSolutionLength(nums){
     // Her ulaşılabilir sayının minimum kaç işlemde bulunduğunu tut
     const minOpsMap = new Map(); // result -> minOps
+    const visited = new Map();  // sıralı sayı kümesi anahtarı -> daha önce hangi derinlikte tarandığı
 
     function dfs(available, opsCount){
+      const key = available.slice().sort((a,b)=>a-b).join(',');
+      const seenAt = visited.get(key);
+      if(seenAt !== undefined && seenAt <= opsCount) return;
+      visited.set(key, opsCount);
+
       for(let i=0;i<available.length;i++){
-        for(let j=0;j<available.length;j++){
-          if(i===j) continue;
+        for(let j=i+1;j<available.length;j++){
           const a=available[i], b=available[j];
           const rest=available.filter((_,k)=>k!==i&&k!==j);
-          const ops=[a+b, a-b, b-a, a*b];
+          const ops=[a+b, Math.abs(a-b), a*b];
           if(b!==0&&a%b===0) ops.push(a/b);
           if(a!==0&&b%a===0) ops.push(b/a);
           ops.forEach(r=>{
@@ -344,34 +371,55 @@ const G = (function(){
     return pool[Math.floor(Math.random()*pool.length)];
   }
 
+  // ── TOPLAM SORU SAYISI ──
+  function getMaxQ(){
+    // Tek oyun modunda (singleMode) her zaman 1 bulmaca oynanır
+    if(singleMode) return 1;
+    return mode===1?10:8;
+  }
+
   // ── SORU AKIŞI ──
   function nextQuestion(){
-    // 1 kişi: 10 soru
-    // 2 kişi: 6 tur × 2 oyuncu = 12 yarı-tur
+    // 1 kişi: 10 soru (Tek Oyun modunda: 1 soru)
+    // 2 kişi: 8 tur × 2 oyuncu (Tek Oyun modunda: 1 tur × 2 oyuncu)
     // Her turda aynı bulmaca iki oyuncuya da gidiyor
-    // currentQ: bulmaca no (0..5 iki kişi, 0..9 tek kişi)
+    // currentQ: bulmaca no
     // currentP: hangi oyuncu oynuyor (0 veya 1)
 
-    const maxQ = mode===1?10:8;
+    const maxQ = getMaxQ();
 
     if(mode===1){
       if(currentQ>=maxQ){ showEnd(); return; }
-      const puzzle = generatePuzzle();
-      startRound(puzzle, 0, currentQ+1, maxQ);
+      // Bulmaca üretimi (özellikle 6 sayılı zor kombinasyonlarda) biraz
+      // sürebildiği için önce kısa bir "hazırlanıyor" mesajı gösterip
+      // ağır hesaplamayı bir sonraki an'a erteliyoruz. Böylece ekran
+      // donmuş gibi görünmüyor, kullanıcı bir geri bildirim görüyor.
+      setMsg('Yeni bulmaca hazırlanıyor…');
+      setTimeout(()=>{
+        const puzzle = generatePuzzle();
+        startRound(puzzle, 0, currentQ+1, maxQ);
+      }, 20);
     } else {
       if(currentQ>=maxQ){ showEnd(); return; }
+      const proceedToHandoff = ()=>{
+        // Hangi oyuncu başlıyor? Tur 0→P0, Tur1→P1, Tur2→P0...
+        const startP = currentQ%2===0?0:1;
+        const activeP = currentP===0?startP:1-startP;
+        // Geçiş ekranı göster
+        showHandoff(players[activeP], ()=>{
+          startRound(G._currentPuzzle, activeP, currentQ+1, maxQ);
+        });
+      };
       // Tur başında bulmaca üret (her tur için aynı bulmaca iki oyuncuya)
       if(currentP===0){
-        // Yeni bulmaca üret
-        G._currentPuzzle = generatePuzzle();
+        setMsg('Yeni bulmaca hazırlanıyor…');
+        setTimeout(()=>{
+          G._currentPuzzle = generatePuzzle();
+          proceedToHandoff();
+        }, 20);
+      } else {
+        proceedToHandoff();
       }
-      // Hangi oyuncu başlıyor? Tur 0→P0, Tur1→P1, Tur2→P0...
-      const startP = currentQ%2===0?0:1;
-      const activeP = currentP===0?startP:1-startP;
-      // Geçiş ekranı göster
-      showHandoff(players[activeP], ()=>{
-        startRound(G._currentPuzzle, activeP, currentQ+1, maxQ);
-      });
     }
   }
 
@@ -590,10 +638,11 @@ const G = (function(){
     if(mode===1){
       const div=document.createElement('div');
       div.className='final-row winner';
+      const detail = singleMode ? '1 soruluk hızlı deneme tamamlandı' : '10 soruluk yarışma tamamlandı';
       div.innerHTML=`
         <div>
           <div class="final-name">${players[0]}</div>
-          <div class="final-detail">10 soruluk yarışma tamamlandı</div>
+          <div class="final-detail">${detail}</div>
         </div>
         <div class="final-score">${scores[0]} puan</div>`;
       fs.appendChild(div);
