@@ -266,14 +266,18 @@ const PZ = (function(){
   function setMsg(t){document.getElementById('msg').textContent=t;}
   function toggleInfo(){}
 
-  return {newGame,toggleInfo};
+return {
+    newGame,
+    toggleInfo,
+    render
+};
 })();
 
 function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
 function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
 
 PZ.newGame();
-window.addEventListener('resize',()=>PZ.newGame());
+window.addEventListener('resize',()=>PZ.render());
 </script>
 
 </body>
