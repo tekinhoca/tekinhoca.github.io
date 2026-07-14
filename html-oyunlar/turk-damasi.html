@@ -530,14 +530,23 @@ const TD = (function(){
 
   function toggleInfo(){} // artık kullanılmıyor
 
-  return{newGame,undo,toggleInfo};
+return {
+    newGame,
+    undo,
+    toggleInfo,
+    resize,
+    render
+};
 })();
 
 function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
 function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
 
 TD.newGame();
-window.addEventListener('resize',()=>TD.newGame());
+window.addEventListener('resize', () => {
+    TD.resize();
+    TD.render();
+});
 </script>
 
 </body>
