@@ -9,13 +9,13 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:#12100e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:6px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-.wrap{width:100%;max-width:520px;display:flex;flex-direction:column;gap:5px;margin:auto}
+.wrap{width:100%;max-width:440px;display:flex;flex-direction:column;gap:5px;margin:auto;flex-shrink:0}
 .top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .game-title{font-size:16px;font-weight:700;color:#c8960c;letter-spacing:.06em}
 .mode-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
 .mode-sel select{background:#1e1a14;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
 .infobar{display:flex;gap:7px;flex-wrap:wrap}
-.ibox{background:rgba(255,255,255,0.05);border-radius:5px;padding:4px 8px;flex:1;min-width:60px;text-align:center}
+.ibox{background:rgba(255,255,255,0.05);border-radius:5px;padding:4px 8px;flex:1;width:33.33%;min-width:60px;text-align:center}
 .ibox .l{font-size:10px;color:rgba(247,242,232,0.32);margin-bottom:2px}
 .ibox .v{font-size:14px;font-weight:700;color:#FFD97A}
 .ibox .v.p1c{color:#e8d5a0}.ibox .v.p2c{color:#6a9fc0}
@@ -30,15 +30,33 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .sp{width:13px;height:13px;border-radius:50%;flex-shrink:0}
 .sp.p1{background:radial-gradient(circle at 35% 35%,#f5e8c0,#c8a060)}
 .sp.p2{background:radial-gradient(circle at 35% 35%,#aac4ef,#4a6aaf)}
-.phase-bar{text-align:center;font-size:11px;color:rgba(247,242,232,0.38);background:rgba(255,255,255,0.04);border-radius:4px;padding:3px 8px}
+.phase-bar{
+    text-align:center;
+    font-size:11px;
+    color:rgba(247,242,232,0.38);
+    background:rgba(255,255,255,0.04);
+    border-radius:4px;
+    padding:3px 8px;
+    min-height: 38px; /* Metin tek satıra düşse bile iki satırlık yer kaplamasını zorlar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .phase-bar b{color:#c8960c}
 .board-wrap{display:flex;align-items:center;justify-content:center}
-.bsw{width:100%;max-width:320px;margin:0 auto}
+.bsw{width:100%;max-width:440px;margin:0 auto;flex-shrink:0}
 .bsw svg{
     width:100%;
     height:auto;
     display:block;
     touch-action:none;
+}
+/* PC ve Geniş Ekranlar İçin SVG Boyutunu Kilitleme */
+@media (min-width: 480px) {
+    .bsw svg {
+        width: 440px !important;
+        height: 440px !important;
+    }
 }
 .msg{font-size:12px;color:rgba(247,242,232,0.48);text-align:center;min-height:16px}
 .wb{display:none;background:rgba(111,207,151,0.1);border:1px solid rgba(111,207,151,0.3);border-radius:5px;padding:9px 14px;text-align:center}
@@ -525,9 +543,9 @@ function upUI(){
   const phn=ph===1?'Yerleştirme':fl?'Uçuş':'Hareket';
   document.getElementById('phD').textContent=phn;
   const tx={
-    'Yerleştirme':'<b>Faz 1 — Yerleştirme:</b> Sırayla boş noktalara taş koyun. Değirmen kurarsanız rakibin taşını alırsınız.',
-    'Hareket':'<b>Faz 2 — Hareket:</b> Taşlarınızı komşu boş noktalara kaydırın. Değirmen kurunca rakibin taşını alırsınız.',
-    'Uçuş':'<b>Faz 3 — Uçuş:</b> 3 taşa düşen oyuncu taşını herhangi bir boş noktaya atlayabilir.'
+    'Yerleştirme':'Sırayla boş noktalara taş koyun.<br>Değirmen kurarsanız rakibin taşını alırsınız.',
+    'Hareket':'Taşlarınızı komşu boş noktalara kaydırın.<br>Değirmen kurunca rakibin taşını alırsınız.',
+    'Uçuş':'<b>3 taşa düşen oyuncu<br>taşını herhangi bir boş noktaya yerleştirebilir.'
   };
   document.getElementById('phB').innerHTML=tx[phn];
 }
