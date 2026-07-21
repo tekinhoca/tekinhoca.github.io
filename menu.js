@@ -30,7 +30,15 @@ const MENU_ITEMS = [
 
   MENU_ITEMS.forEach(function (item) {
     const a = document.createElement("a");
-    a.href = item.href;
+
+    // "Ana Sayfa" linki için: offline (file://) modda yerel index.html'e,
+    // online (https://) modda ise canonical adrese yönlendir.
+    if (item.href === "https://tekinhoca.github.io/" && window.location.protocol === "file:") {
+      a.href = "index.html";
+    } else {
+      a.href = item.href;
+    }
+
     a.textContent = item.label;
     if (item.href === current) a.className = "active";
     inner.appendChild(a);
