@@ -163,7 +163,14 @@ button.ghost{
 .overlay.show{display:flex}
 .overlay h2{font-family:'Baloo 2',cursive;color:#ffd93d;font-size:22px}
 .overlay p{color:#e6d9ff;font-size:13px}
+.overlay .score-box{
+  display:inline-block;margin:8px auto 4px;padding:8px 26px 12px;
+  border:2px solid #8b5cf6;border-radius:12px;background:rgba(139,92,246,.08);
+}
+.overlay .score-label{color:#e6d9ff;font-size:13px;margin-bottom:2px}
 .overlay .final-score{font-family:'Space Mono',monospace;font-size:32px;color:#ffd93d}
+.overlay .perf-title{font-family:'Baloo 2',cursive;font-weight:700;font-size:12px;letter-spacing:.08em;color:#e6d9ff;margin-top:14px}
+.overlay .accuracy-line{font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;color:#c9a8ff;margin:0}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .modal-overlay.hidden{display:none}
@@ -274,8 +281,13 @@ button.ghost{
     <canvas class="fx-layer" id="fx"></canvas>
     <div class="overlay" id="overlay">
       <h2 id="overlayTitle">Tüm Görevler Tamamlandı!</h2>
-      <div class="final-score" id="finalScore">0</div>
-      <p>toplam puan</p>
+      <div class="score-box">
+        <p class="score-label">toplam puan</p>
+        <div class="final-score" id="finalScore">0</div>
+      </div>
+      <p class="perf-title">PERFORMANS ÖZETİ</p>
+      <p class="accuracy-line" id="captureLine">yakalama yüzdesi: %0</p>
+      <p class="accuracy-line" id="accuracyLine">doğru yüzdesi: %0</p>
       <button class="a" id="playAgainBtn">▶ Tekrar Oyna</button>
     </div>
   </div>
@@ -345,7 +357,14 @@ button.ghost{
   /* ---------------- Yardımcılar ---------------- */
   function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
   function randChoice(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-  function shuffle(arr){ return arr.slice().sort(()=>Math.random()-0.5); }
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
   const SUP = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
   const SUP_TO_DIGIT = {'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9'};
   function sup(n){ return String(n).split('').map(c=>SUP[c]||c).join(''); }
@@ -532,6 +551,9 @@ button.ghost{
   let tasks = [];
   let taskIndex = 0;
   let score = 0;
+  let correctCount = 0;
+  let wrongCount = 0;
+  let totalCorrectSpawned = 0;
   let timeLeft = 0;
   let phase = 'idle'; // idle | intro | countdown | playing | transition | final
   let holes = [];
@@ -547,6 +569,8 @@ button.ghost{
   const overlay = document.getElementById('overlay');
   const overlayTitle = document.getElementById('overlayTitle');
   const finalScore = document.getElementById('finalScore');
+  const accuracyLine = document.getElementById('accuracyLine');
+  const captureLine = document.getElementById('captureLine');
   const mainBtn = document.getElementById('mainBtn');
   const finishBtn = document.getElementById('finishBtn');
   const skipTaskBtn = document.getElementById('skipTaskBtn');
@@ -667,6 +691,7 @@ button.ghost{
     const val = drawFromBag(useCorrect);
     rec.active = true;
     rec.isCorrect = useCorrect;
+    if(useCorrect) totalCorrectSpawned++;
     rec.num.style.fontSize = fontSizeFor(String(val)) + 'px';
     const valStr = String(val);
     const supMatch = valStr.match(/([⁰¹²³⁴⁵⁶⁷⁸⁹]+)$/);
@@ -717,6 +742,7 @@ button.ghost{
     if(rec.retreatHandle){ clearTimeout(rec.retreatHandle); rec.retreatHandle=null; }
     if(rec.isCorrect){
       score += 10;
+      correctCount++;
       correctSound();
       burstConfetti(rec.el);
       showFloatingText(rec.el, '+10', 'correct');
@@ -724,6 +750,7 @@ button.ghost{
     } else {
       const penalized = score>5;
       if(penalized) score -= 5;
+      wrongCount++;
       wrongSound();
       shakeBoard();
       showFloatingText(rec.el, penalized ? '-5' : '−', 'wrong');
@@ -739,7 +766,7 @@ button.ghost{
   function startGame(count){
     ensureAudio();
     generateAllTasks(count);
-    taskIndex = 0; score = 0;
+    taskIndex = 0; score = 0; correctCount = 0; wrongCount = 0; totalCorrectSpawned = 0;
     overlay.classList.remove('show');
     finishBtn.style.display = 'none';
     skipTaskBtn.style.display = 'none';
@@ -757,7 +784,7 @@ button.ghost{
     mainBtn.style.display = 'none';
     finishBtn.style.display = 'none';
     skipTaskBtn.style.display = 'none';
-    score = 0; taskIndex = 0; tasks = [];
+    score = 0; taskIndex = 0; tasks = []; correctCount = 0; wrongCount = 0; totalCorrectSpawned = 0;
     setQuestion('HAZIR MISIN?', 'Bir mod seçerek başla', false);
     updateStats();
     document.getElementById('modeModal').classList.remove('hidden');
@@ -852,8 +879,13 @@ button.ghost{
     skipTaskBtn.style.display = 'none';
     mainBtn.style.display = 'none';
     allDoneSound();
-    overlayTitle.textContent = 'Tüm Görevler Tamamlandı!';
+    overlayTitle.textContent = tasks.length === 1 ? 'Görev Tamamlandı!' : 'Tüm Görevler Tamamlandı!';
     finalScore.textContent = score;
+    const totalAnswered = correctCount + wrongCount;
+    const accuracy = totalAnswered > 0 ? Math.round((correctCount/totalAnswered)*100) : 0;
+    accuracyLine.textContent = totalAnswered > 0 ? ('doğru yüzdesi: %'+accuracy) : 'doğru yüzdesi: –';
+    const capture = totalCorrectSpawned > 0 ? Math.round((correctCount/totalCorrectSpawned)*100) : 0;
+    captureLine.textContent = totalCorrectSpawned > 0 ? ('yakalama yüzdesi: %'+capture) : 'yakalama yüzdesi: –';
     overlay.classList.add('show');
     setQuestion('BİTTİ', 'Yeni bir tur için hazır ol', false);
     updateStats();
