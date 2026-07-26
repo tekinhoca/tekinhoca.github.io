@@ -34,6 +34,12 @@ button.a:disabled{opacity:.32;cursor:not-allowed;pointer-events:none}
 @keyframes winIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
 @keyframes winPulse{0%,100%{box-shadow:0 0 18px rgba(80,200,120,0.55),0 0 38px rgba(80,200,120,0.3)}50%{box-shadow:0 0 28px rgba(80,200,120,0.9),0 0 52px rgba(80,200,120,0.5)}}
 
+.warn-box{border-color:#ff2d2d;animation:winIn .35s ease, warnPulse 1.1s ease-in-out infinite}
+.warn-title{color:#ffcc00;font-weight:800;text-shadow:0 0 10px rgba(255,45,45,0.9),0 0 18px rgba(255,204,0,0.5)}
+.warn-btn{margin-top:14px;border-color:rgba(255,45,45,0.5);color:#f7f2e8}
+.warn-btn:hover{background:rgba(255,45,45,0.18)}
+@keyframes warnPulse{0%,100%{box-shadow:0 0 18px rgba(255,45,45,0.6),0 0 38px rgba(255,45,45,0.3)}50%{box-shadow:0 0 30px rgba(255,45,45,0.95),0 0 55px rgba(255,45,45,0.55)}}
+
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .modal-overlay.hidden{display:none}
 .modal-box{background:#0a0a06;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease}
@@ -59,11 +65,11 @@ button.a:disabled{opacity:.32;cursor:not-allowed;pointer-events:none}
     <ul class="modal-rules">
       <li>Oyun, aynı renkleri birbirine bağlamanız gereken klasik bulmacayla başlar.</li>
       <li>En kısa yolları kullanmak çoğunlukla işe yaramaz.</li>
-      <li>Bölümün tamamlanması için tüm hücreleri kullanmalısınız.</li>
+      <li>Bölümün tamamlanması için ızgarada hiç boş hücre kalmamalı.</li>
 <li>Bu klasik bulmacalarda oyunu öğrendikten sonra, açılır menüden diğer modlardan birini seçebilirsiniz.</li>
 <li>Seçtiğiniz moda göre birbiriyle ilişkili matematiksel ifadeleri eşleştirin.</li>
       <li>İfadenin üzerinden fareniz veya parmağınızla sürükleyerek doğru cevaba hat çekin.</li>
-      <li>Çizgiler dikey veya yatay ilerler; <b>çapraz geçiş yapılamaz</b>.</li>
+      <li>Çizgiler dikey veya yatay ilerler; <b>çapraz geçiş yapmak yasaktır</b>.</li>
     </ul>
     <div class="modal-btns">
       <button class="modal-close" onclick="closeModal()">Kapat</button>
@@ -81,6 +87,14 @@ button.a:disabled{opacity:.32;cursor:not-allowed;pointer-events:none}
   <div class="win-modal-box">
     <div class="win-modal-title">Tebrikler!</div>
     <div class="win-modal-sub">Bölümü başarıyla tamamladınız.</div>
+  </div>
+</div>
+
+<div class="win-modal-overlay warn" id="warnModalOverlay">
+  <div class="win-modal-box warn-box">
+    <div class="win-modal-title warn-title">Henüz Bitmedi!</div>
+    <div class="win-modal-sub">Eşleşmeler bitti ama ızgarada boş hücreler kaldı.</div>
+    <button class="a warn-btn" onclick="RB.hideWarnModal()">Devam Et</button>
   </div>
 </div>
 
@@ -139,7 +153,7 @@ const RB = (function(){
     ]
   };
 
-  let mode, size, cells, activeDots, currentPath, paths, completedPairs, totalPairs, moves, over;
+  let mode, size, cells, activeDots, currentPath, paths, completedPairs, totalPairs, moves, over, warnedIncomplete;
   let canvasSize, cellSize, isDrawing;
 let solutionGrid = null;
 let endpointTemplate = null;
@@ -319,11 +333,14 @@ function getNeighbours(r,c,size){
     isDrawing = false;
     moves = 0;
     over = false;
+    warnedIncomplete = false;
 
     const ngBtn = document.getElementById('newGameBtn');
     if (ngBtn) ngBtn.disabled = true;
     const winOverlay = document.getElementById('winModalOverlay');
     if (winOverlay) winOverlay.classList.remove('show');
+    const warnOverlay = document.getElementById('warnModalOverlay');
+    if (warnOverlay) warnOverlay.classList.remove('show');
 
     setMsg(mode === 'classic'
       ? 'Aynı renkli yuvarlakları birleştirin ve tüm hücreleri doldurun.'
@@ -640,7 +657,21 @@ if(isPairConnected(parseInt(color))){
       if (ngBtn) ngBtn.disabled = false;
       setMsg('');
       showWinModal();
+    } else if (validMatches === totalPairs && filledCells !== (size * size) && !warnedIncomplete) {
+      warnedIncomplete = true;
+      showWarnModal();
     }
+  }
+
+  function showWarnModal() {
+    const overlay = document.getElementById('warnModalOverlay');
+    if (!overlay) return;
+    overlay.classList.add('show');
+  }
+
+  function hideWarnModal() {
+    const overlay = document.getElementById('warnModalOverlay');
+    if (overlay) overlay.classList.remove('show');
   }
 
   function showWinModal() {
@@ -664,7 +695,7 @@ if(isPairConnected(parseInt(color))){
   window.addEventListener('resize', () => { resize(); render(); });
 
   return {
-    init, resetGame, newGame, changeMode: function() { init(); }
+    init, resetGame, newGame, changeMode: function() { init(); }, hideWarnModal
   };
 })();
 
