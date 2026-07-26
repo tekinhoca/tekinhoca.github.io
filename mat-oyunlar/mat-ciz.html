@@ -21,14 +21,18 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .board-outer{display:flex;justify-content:center}
 canvas{cursor:pointer;touch-action:none;border-radius:6px;background:#14120a;border:2px solid rgba(200,150,12,0.4)}
 .msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
-.result-banner{visibility:hidden;border-radius:5px;padding:8px 14px;text-align:center;border:1px solid transparent}
-.result-banner.show{visibility:visible}
-.result-banner.win{background:rgba(80,200,120,0.1);border-color:rgba(80,200,120,0.35)}
-.result-banner h2{font-size:13px;margin-bottom:2px;color:#50c878}
-.result-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
 .br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
 button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
 button.a:hover{background:rgba(200,150,12,0.2)}
+button.a:disabled{opacity:.32;cursor:not-allowed;pointer-events:none}
+
+.win-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:2000;opacity:0;pointer-events:none;transition:opacity .25s ease}
+.win-modal-overlay.show{opacity:1;pointer-events:auto}
+.win-modal-box{background:#0a0a06;border:2px solid #50c878;border-radius:10px;padding:26px 42px;text-align:center;animation:winIn .35s ease, winPulse 1.6s ease-in-out infinite}
+.win-modal-title{font-size:24px;font-weight:700;color:#50c878;letter-spacing:.08em;text-shadow:0 0 10px rgba(80,200,120,0.85)}
+.win-modal-sub{font-size:11.5px;color:rgba(247,242,232,0.5);margin-top:7px}
+@keyframes winIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+@keyframes winPulse{0%,100%{box-shadow:0 0 18px rgba(80,200,120,0.55),0 0 38px rgba(80,200,120,0.3)}50%{box-shadow:0 0 28px rgba(80,200,120,0.9),0 0 52px rgba(80,200,120,0.5)}}
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .modal-overlay.hidden{display:none}
@@ -72,6 +76,13 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   </div>
 </div>
 
+<div class="win-modal-overlay" id="winModalOverlay">
+  <div class="win-modal-box">
+    <div class="win-modal-title">Tebrikler!</div>
+    <div class="win-modal-sub">Bölümü başarıyla tamamladınız.</div>
+  </div>
+</div>
+
 <div class="wrap">
   <div class="top-bar">
     <div class="game-title">Matematiksel Bağ</div>
@@ -91,10 +102,9 @@ button.a:hover{background:rgba(200,150,12,0.2)}
   </div>
   <div class="board-outer"><canvas id="canvas"></canvas></div>
   <div class="msg" id="msg">İfadeleri doğru yanıtlarıyla birleştirin ve tüm alanı doldurun.</div>
-  <div class="result-banner" id="banner"><h2 id="bannerTitle">Tebrikler!</h2></div>
   <div class="br-btns">
     <button class="a" onclick="RB.resetGame()">&#8635; Sıfırla</button>
-    <button class="a" onclick="RB.newGame()">&#9654; Yeni Oyun</button>
+    <button class="a" id="newGameBtn" onclick="RB.newGame()" disabled title="Bölümü tamamlamadan yeni oyun başlatılamaz">&#9654; Yeni Oyun</button>
     <button class="a" onclick="openModal()">&#9432; Kurallar</button>
   </div>
 </div>
@@ -308,7 +318,12 @@ function getNeighbours(r,c,size){
     isDrawing = false;
     moves = 0;
     over = false;
-    document.getElementById('banner').className = 'result-banner';
+
+    const ngBtn = document.getElementById('newGameBtn');
+    if (ngBtn) ngBtn.disabled = true;
+    const winOverlay = document.getElementById('winModalOverlay');
+    if (winOverlay) winOverlay.classList.remove('show');
+
     setMsg(mode === 'classic'
       ? 'Aynı renkli yuvarlakları birleştirin ve tüm hücreleri doldurun.'
       : 'İfadeleri doğru yanıtlarıyla birleştirin ve tüm alanı doldurun.');
@@ -599,6 +614,7 @@ function isPairConnected(color){
 
 }
   function checkGameEnd() {
+    if (over) return;
     updateInfo();
     let validMatches = 0; let filledCells = 0;
     let occupied = Array.from({length: size}, () => Array(size).fill(false));
@@ -619,9 +635,21 @@ if(isPairConnected(parseInt(color))){
 
     if (validMatches === totalPairs && filledCells === (size * size)) {
       over = true;
-      document.getElementById('banner').className = 'result-banner show win';
+      const ngBtn = document.getElementById('newGameBtn');
+      if (ngBtn) ngBtn.disabled = false;
       setMsg('');
+      showWinModal();
     }
+  }
+
+  function showWinModal() {
+    const overlay = document.getElementById('winModalOverlay');
+    if (!overlay) return;
+    overlay.classList.add('show');
+    clearTimeout(showWinModal._timer);
+    showWinModal._timer = setTimeout(() => {
+      overlay.classList.remove('show');
+    }, 3000);
   }
 
   function setMsg(t) { document.getElementById('msg').textContent = t; }
