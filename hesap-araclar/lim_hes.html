@@ -13,6 +13,7 @@ window.MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.3/math.min.js"></script>
 <style>
 :root {
   --bg:       #f4f1eb;
@@ -341,7 +342,7 @@ footer p {
         <div class="formula-math">
           \(\dfrac{0}{0}\) veya \(\dfrac{\infty}{\infty}\) durumunda:<br>
 <p style="line-height: 3.5;">
-          \(\lim \dfrac{f}{g} = \lim \dfrac{f'}{g'}\)
+          \(\lim_{x \to a} \dfrac{f(x)}{g(x)} = \lim_{x \to a} \dfrac{f'(x)}{g'(x)}\)
         </div>
       </div>
     </div>
@@ -352,7 +353,7 @@ footer p {
         <div class="formula-math" style="line-height:2.2">
           \(\lim_{x \to 0} \dfrac{\sin x}{x} = 1\)
 <p style="line-height: 4.5;">
-          \(\lim_{x \to 0} \dfrac{1-\cos x}{x} = 0\)
+          \(\lim_{x \to 0} \dfrac{1-\cos x}{x^2} = \dfrac{1}{2}\)
 <p style="line-height: 1.5;">
           \(\lim_{n \to \infty}\!\left(1+\dfrac{1}{n}\right)^{\!n} = e\)
 <p style="line-height: 3.5;">
@@ -388,8 +389,8 @@ footer p {
       <div id="yOzelRow" style="display:none; margin-bottom:12px;">
         <div class="input-row">
           <label>f(x) = </label>
-          <input class="inp wide" id="yOzel" type="text" placeholder="Örn: (x*x - 1) / (x - 1)">
-          <span style="font-size:0.78rem;color:var(--text-dim)">JS ifadesi: Math.sin(x), Math.exp(x), Math.log(x)</span>
+          <input class="inp wide" id="yOzel" type="text" placeholder="Örn: (x^2 - 1) / (x - 1)">
+          <span style="font-size:0.78rem;color:var(--text-dim)">Matematik ifadesi: sin(x), cos(x), exp(x), log(x), sqrt(x), x^2</span>
         </div>
       </div>
       <div class="warn-box" id="yWarn"></div>
@@ -457,8 +458,17 @@ footer p {
    YARDIMCI
 ══════════════════════════════════ */
 function fmt(v, d=6){
+  if(Number.isNaN(v)) return "tanımsız";
   if(!isFinite(v)) return v>0?"∞":"-∞";
   return parseFloat(v.toFixed(d)).toString();
+}
+/* Bağıl hata da dikkate alan yakınlık kontrolü:
+   küçük mertebeli sayılarda mutlak tolerans, büyük mertebeli sayılarda bağıl tolerans kullanılır. */
+function yakinMi(a, b, tolAbs=1e-6, tolRel=1e-4){
+  if(!isFinite(a) || !isFinite(b) || Number.isNaN(a) || Number.isNaN(b)) return false;
+  const fark = Math.abs(a-b);
+  const olcek = Math.max(Math.abs(a), Math.abs(b), 1);
+  return fark <= tolAbs || (fark/olcek) <= tolRel;
 }
 function showWarn(id,msg){ const e=document.getElementById(id); e.textContent=msg; e.style.display="block"; }
 function hideWarn(id){ document.getElementById(id).style.display="none"; }
@@ -480,7 +490,7 @@ const BELİRSİZLİK = {
   ex_x:     { tur:"0/0", acik:"x=0'da (e⁰−1)=0, payda 0 olur.", yol:"L'Hôpital uygulanır: (eˣ−1)' = eˣ, (x)' = 1 → lim eˣ = e⁰ = 1", sonuc:"1" },
   ln1px_x:  { tur:"0/0", acik:"x=0'da ln(1+0)=0, payda 0 olur.", yol:"L'Hôpital uygulanır: (ln(1+x))' = 1/(1+x), (x)' = 1 → lim 1/(1+x) = 1", sonuc:"1" },
   x2_inf:   { tur:"∞/∞", acik:"x→∞'da hem pay hem payda ∞ olur.", yol:"Pay ve payda x² ile bölünür: 1/(1+1/x²) → x→∞'da 1/x²→0 → lim = 1", sonuc:"1" },
-  xsinx:    { tur:"0·∞", acik:"x→0⁺'da x→0, sin(1/x) sınırsız salınır.", yol:"|sin(1/x)| ≤ 1 olduğundan |x·sin(1/x)| ≤ |x| → 0. Sıkıştırma teoremi ile limit = 0.", sonuc:"0" }
+  xsinx:    { tur:"0·∞", acik:"x→0⁺'da x→0, sin(1/x) ise [−1,1] aralığında sınırlı kalarak sonsuz kez salınır ve tek başına bir limite yaklaşmaz.", yol:"|sin(1/x)| ≤ 1 olduğundan |x·sin(1/x)| ≤ |x| → 0. Sıkıştırma teoremi ile limit = 0.", sonuc:"0" }
 };
 
 /* ══════════════════════════════════
@@ -504,7 +514,12 @@ function yaklaşımTablosu(){
   if(sec==="ozel"){
     const expr = document.getElementById("yOzel").value.trim();
     if(!expr){ showWarn("yWarn","⚠️ Fonksiyon ifadesi girin."); return; }
-    try { fn = new Function("x", `return ${expr};`); fn(aVal+0.1); }
+    if(typeof math === "undefined"){ showWarn("yWarn","⚠️ Hesaplama kütüphanesi yüklenemedi."); return; }
+    try {
+      const derlenmis = math.compile(expr);
+      fn = x => derlenmis.evaluate({x});
+      fn(aVal+0.1);
+    }
     catch(e){ showWarn("yWarn","⚠️ Geçersiz fonksiyon ifadesi."); return; }
   } else {
     if(!FONKLAR[sec]){ showWarn("yWarn","⚠️ Fonksiyon bulunamadı."); return; }
@@ -516,33 +531,39 @@ function yaklaşımTablosu(){
   const adimlar = [1e-1, 1e-2, 1e-3, 1e-4, 1e-5, 1e-6];
   const tablo = document.getElementById("yTablo");
   const result = document.getElementById("yResult");
+  const n = adimlar.length;
 
-  // Sol satırlar: a-0.1 → a-0.000001 (giderek yaklaşıyor)
+  // Sol satırlar: a-0.1 → a-0.000001 (giderek yaklaşıyor). Hücre rengi a'ya yaklaştıkça koyulaşır.
   let solSatirlar = "";
-  let solSon;
-  adimlar.forEach(d=>{
+  adimlar.forEach((d,i)=>{
     const xs = aVal - d;
     const ys = fn(xs);
-    solSon = ys;
-    solSatirlar += `<tr class="sol"><td>SOLDAN</td><td>${fmt(xs,7)}</td><td>${isFinite(ys)?fmt(ys):"tanımsız"}</td></tr>`;
+    const alpha = ((i+1)/n*0.55).toFixed(2);
+    solSatirlar += `<tr class="sol" style="background:rgba(45,106,79,${alpha})"><td>SOLDAN</td><td>${fmt(xs,7)}</td><td>${fmt(ys)}</td></tr>`;
   });
 
-  // Sağ satırlar: a+0.000001 → a+0.1 (giderek uzaklaşıyor — a'dan başlayıp büyüyor)
+  // Sağ satırlar: a+0.1 → a+0.000001 (giderek yaklaşıyor, tabloda büyükten küçüğe gösterim)
   let sagSatirlar = "";
-  let sagSon;
-  [...adimlar].reverse().forEach(d=>{
+  [...adimlar].reverse().forEach((d,revI)=>{
     const xs = aVal + d;
     const ys = fn(xs);
-    if(d === adimlar[adimlar.length-1]) sagSon = fn(aVal + adimlar[adimlar.length-1]); // en küçük adım = en yakın
-    sagSatirlar += `<tr class="sag"><td>SAĞDAN</td><td>${fmt(xs,7)}</td><td>${isFinite(ys)?fmt(ys):"tanımsız"}</td></tr>`;
+    const i = n-1-revI; // yakınlık indeksi (adimlar ile aynı sırada)
+    const alpha = ((i+1)/n*0.55).toFixed(2);
+    sagSatirlar += `<tr class="sag" style="background:rgba(69,123,157,${alpha})"><td>SAĞDAN</td><td>${fmt(xs,7)}</td><td>${fmt(ys)}</td></tr>`;
   });
 
-  // sagSon = a'ya en yakın sağ değer = en küçük adım
-  sagSon = fn(aVal + adimlar[adimlar.length-1]);
+  // a'ya en yakın (1e-6) ve bir önceki (1e-5) adım değerleri — sadece son satıra değil, yakınsama eğilimine bakılır
+  const solSon  = fn(aVal - adimlar[n-1]);
+  const solOnce = fn(aVal - adimlar[n-2]);
+  const sagSon  = fn(aVal + adimlar[n-1]);
+  const sagOnce = fn(aVal + adimlar[n-2]);
 
-  const solStr = isFinite(solSon)?fmt(solSon):"∞";
-  const sagStr = isFinite(sagSon)?fmt(sagSon):"∞";
-  const esit = isFinite(solSon)&&isFinite(sagSon)&&Math.abs(solSon-sagSon)<1e-4;
+  const solKararli = yakinMi(solSon, solOnce);
+  const sagKararli = yakinMi(sagSon, sagOnce);
+  const ikiYonluEsit = yakinMi(solSon, sagSon);
+
+  const solStr = fmt(solSon);
+  const sagStr = fmt(sagSon);
 
   let html = `<table class="yakl-table"><thead><tr>
     <th>Yön</th><th>x</th><th>f(x)</th>
@@ -550,17 +571,33 @@ function yaklaşımTablosu(){
   html += solSatirlar;
   html += sagSatirlar;
   html += `<tr class="limit-row"><td colspan="2">Limit tahmini</td>
-    <td>${esit ? fmt((solSon+sagSon)/2) : "Sol: "+solStr+" / Sağ: "+sagStr}</td></tr>`;
+    <td>${ikiYonluEsit ? fmt((solSon+sagSon)/2) : "Sol: "+solStr+" / Sağ: "+sagStr}</td></tr>`;
   html += `</tbody></table>`;
   tablo.innerHTML = html;
 
-  result.className = "result-box";
-  if(esit){
-    const L = (solSon+sagSon)/2;
-    result.innerHTML = `Sol limit ≈ Sağ limit ≈ <strong>${fmt(L)}</strong> → İki yönlü limit <strong>mevcut</strong>.`;
-  } else {
-    result.innerHTML = `Sol limit (${solStr}) ≠ Sağ limit (${sagStr}) → İki yönlü limit <strong>mevcut değil</strong>.`;
+  // f(a)'nın tanımlı olup olmadığını ayrıca kontrol et (limit ile fonksiyon değerinin farklı kavramlar olduğunu göstermek için)
+  let faNotu = "";
+  try {
+    const fa = fn(aVal);
+    if(Number.isNaN(fa) || !isFinite(fa)){
+      faNotu = `<br><span style="font-size:0.82rem;color:var(--text-dim)">Not: f(${fmt(aVal,4)}) tanımsız; ancak limit farklı bir değere yaklaşabilir — limit ile fonksiyon değeri aynı şey değildir.</span>`;
+    }
+  } catch(e){
+    faNotu = `<br><span style="font-size:0.82rem;color:var(--text-dim)">Not: f(${fmt(aVal,4)}) hesaplanamıyor; ancak limit farklı bir değere yaklaşabilir.</span>`;
   }
+
+  const kararsizlikNotu = (!solKararli || !sagKararli)
+    ? `<br><span style="font-size:0.82rem;color:var(--accent2)">Uyarı: son iki adımdaki (1e-5 → 1e-6) değerler arasında belirgin fark var; yakınsama kararsız görünüyor, sonucu temkinli yorumlayın.</span>`
+    : "";
+
+  result.className = "result-box";
+  result.innerHTML =
+    `Sol limit ≈ <strong>${solStr}</strong><br>` +
+    `Sağ limit ≈ <strong>${sagStr}</strong><br>` +
+    (ikiYonluEsit
+      ? `İki yönlü limit ≈ <strong>${fmt((solSon+sagSon)/2)}</strong> → <strong>mevcut</strong>.`
+      : `İki yönlü limit → <strong>mevcut değil</strong> (sol ve sağ limit birbirine eşit değil).`)
+    + kararsizlikNotu + faNotu;
 }
 
 /* ══════════════════════════════════
@@ -701,10 +738,10 @@ const GALERİ = [
     solDan: true  // x=0'a hem soldan hem sağdan yaklaşılabilir
   },
   {
-    title: "\\(\\lim_{x \\to 0} \\dfrac{1-\\cos x}{x} = 0\\)",
-    fn: x => (1-Math.cos(x))/x,
+    title: "\\(\\lim_{x \\to 0} \\dfrac{1-\\cos x}{x^2} = \\dfrac{1}{2}\\)",
+    fn: x => (1-Math.cos(x))/(x*x),
     xlar: [0.5, 0.1, 0.01, 0.001],
-    sonuc: "0",
+    sonuc: "1/2",
     solDan: true
   },
   {
