@@ -326,9 +326,9 @@ footer p {
       <div class="sec-title">Hesaplayıcı</div>
       <div class="input-row">
         <label>Taban (a):</label>
-        <input class="inp" id="hTaban" type="number" value="2" min="1" step="1" placeholder="2">
+        <input class="inp" id="hTaban" type="number" value="2" step="any" placeholder="2">
         <label>Sayı (b):</label>
-        <input class="inp" id="hSayi" type="number" value="8" min="1" step="1" placeholder="8">
+        <input class="inp" id="hSayi" type="number" value="8" step="any" placeholder="8">
         <button class="tbl-btn primary" onclick="hesapla()">HESAPLA</button>
       </div>
       <div class="warn-box" id="hWarn"></div>
@@ -344,13 +344,13 @@ footer p {
       </p>
       <div class="input-row">
         <label>Taban (a):</label>
-        <input class="inp" id="kTaban" type="number" value="2" min="1" step="1">
+        <input class="inp" id="kTaban" type="number" value="2" step="any">
         <label>m:</label>
-        <input class="inp" id="kM" type="number" value="4" min="1" step="1">
+        <input class="inp" id="kM" type="number" value="4" step="any">
         <label>n:</label>
-        <input class="inp" id="kN" type="number" value="2" min="1" step="1">
+        <input class="inp" id="kN" type="number" value="2" step="any">
         <label>k (üs):</label>
-        <input class="inp" id="kK" type="number" value="3" step="1">
+        <input class="inp" id="kK" type="number" value="3" step="any">
         <button class="tbl-btn primary" onclick="kuralGoster()">GÖSTER</button>
       </div>
       <div class="warn-box" id="kWarn"></div>
@@ -365,9 +365,9 @@ footer p {
       </p>
       <div class="input-row">
         <label>Taban (a):</label>
-        <input class="inp" id="dTaban" type="number" value="3" min="1" step="1">
+        <input class="inp" id="dTaban" type="number" value="3" step="any">
         <label>Sayı (b):</label>
-        <input class="inp" id="dSayi" type="number" value="81" min="1" step="1">
+        <input class="inp" id="dSayi" type="number" value="81" step="any">
         <button class="tbl-btn primary" onclick="tabanDonusumu()">DÖNÜŞTÜR</button>
       </div>
       <div class="warn-box" id="dWarn"></div>
@@ -385,14 +385,14 @@ footer p {
         <div style="display:flex; flex-direction:column; align-items:center; gap:6px; min-width:200px;">
           <span style="font-size:0.78rem; color:var(--text-dim); text-align:center; line-height:1.6;">Birinci eğride taban:<br><strong style="color:#2d6a4f; font-size:1.05rem;">a</strong></span>
           <div style="display:flex; align-items:center; gap:8px; width:100%;">
-            <input type="range" id="gSlider" min="1.05" max="10" step="0.05" value="2" oninput="grafikGuncelle()" style="accent-color:#2d6a4f; flex:1;">
+            <input type="range" id="gSlider" min="0.1" max="10" step="0.05" value="2" oninput="grafikGuncelle()" style="accent-color:#2d6a4f; flex:1;">
             <span class="slider-val" id="gVal" style="color:#2d6a4f;">2</span>
           </div>
         </div>
         <div style="display:flex; flex-direction:column; align-items:center; gap:6px; min-width:200px;">
           <span style="font-size:0.78rem; color:var(--text-dim); text-align:center; line-height:1.6;">İkinci eğride taban:<br><strong style="color:#c0392b; font-size:1.05rem;">b</strong></span>
           <div style="display:flex; align-items:center; gap:8px; width:100%;">
-            <input type="range" id="gSlider2" min="1.05" max="10" step="0.05" value="10" oninput="grafikGuncelle()" style="accent-color:#c0392b; flex:1;">
+            <input type="range" id="gSlider2" min="0.1" max="10" step="0.05" value="10" oninput="grafikGuncelle()" style="accent-color:#c0392b; flex:1;">
             <span class="slider-val" id="gVal2" style="color:#c0392b;">10</span>
           </div>
         </div>
@@ -402,6 +402,9 @@ footer p {
         <span style="color:#2d6a4f;">&#9644;</span> log<sub>a</sub> x &nbsp;·&nbsp;
         <span style="color:#c0392b;">&#9644;</span> log<sub>b</sub> x &nbsp;·&nbsp;
         Kesişim noktası: (1, 0)
+      </p>
+      <p style="font-size:0.76rem;color:var(--text-dim);margin-top:4px;">
+        Taban daima 0'dan büyük ve 1'den farklı olmalıdır. 0 &lt; taban &lt; 1 seçildiğinde eğri azalandır (bkz. 0.1–0.95 aralığı); taban tam 1 değerine denk gelirse otomatik olarak en yakın geçerli değere kaydırılır.
       </p>
     </div>
 
@@ -419,6 +422,10 @@ function fmt(v, d=4){
   return parseFloat(v.toFixed(d)).toString().replace(".",",");
 }
 function log(base, x){ return Math.log(x)/Math.log(base); }
+// Kayan noktalı hassasiyet için "===1" yerine çok dar toleranslı bir eşitlik kontrolü.
+// Not: parseFloat ile doğrudan okunan girdilerde a===1 zaten pratikte hatasızdır;
+// bu, ileride a'nın bir hesaplamadan gelebileceği durumlara karşı bir güvenlik payıdır.
+function birEsitMi(a){ return Math.abs(a-1) < 1e-12; }
 function showWarn(id, msg){ const el=document.getElementById(id); el.textContent=msg; el.style.display="block"; }
 function hideWarn(id){ document.getElementById(id).style.display="none"; }
 
@@ -432,9 +439,9 @@ function hesapla(){
   const res = document.getElementById("hResult");
   const steps = document.getElementById("hSteps");
 
-  if(isNaN(a)||isNaN(b)){ showWarn("hWarn","⚠️ Lütfen geçerli sayılar girin."); return; }
-  if(a<=0||a===1){ showWarn("hWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
-  if(b<=0){ showWarn("hWarn","⚠️ Sayı b > 0 olmalıdır."); return; }
+  if(isNaN(a)||isNaN(b)){ res.className="result-box empty"; res.innerHTML="Taban ve sayı girip Hesapla'ya basın."; steps.style.display="none"; steps.innerHTML=""; showWarn("hWarn","⚠️ Lütfen geçerli sayılar girin."); return; }
+  if(a<=0||birEsitMi(a)){ res.className="result-box empty"; res.innerHTML="Taban ve sayı girip Hesapla'ya basın."; steps.style.display="none"; steps.innerHTML=""; showWarn("hWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
+  if(b<=0){ res.className="result-box empty"; res.innerHTML="Taban ve sayı girip Hesapla'ya basın."; steps.style.display="none"; steps.innerHTML=""; showWarn("hWarn","⚠️ Sayı b > 0 olmalıdır."); return; }
 
   const aFmt = fmt(a,6).replace(/,?0+$/,"");
   const bFmt = fmt(b,6).replace(/,?0+$/,"");
@@ -444,18 +451,21 @@ function hesapla(){
   res.innerHTML = `<span style="color:var(--text-dim);font-size:0.85rem;">SORU:</span> \\(\\log_{${aFmt}} ${bFmt} = ?\\)`;
 
   const sonuc = log(a, b);
-  const tamSayi = Math.abs(sonuc - Math.round(sonuc)) < 1e-9;
   const c = Math.round(sonuc);
+  // Tam sayı tespiti: log oranını yuvarlamaya güvenmek yerine, a^c=b özdeşliğini doğrudan test ediyoruz.
+  // Bu, Math.log'un ECMAScript'te "doğru yuvarlanmış" olması garanti edilmediği durumlara karşı daha sağlamdır.
+  const tamSayi = Math.abs(Math.pow(a,c) - b) < 1e-10 * Math.max(1, Math.abs(b));
 
   steps.style.display = "block";
   steps.innerHTML = "";
 
   let adimlar;
   if(tamSayi){
-    // Tam sayı: 2 adım — a^c = b olduğuna göre + sonuç
+    // Tam sayı: a^c=b adımı + ikinci bir yöntemle (ln) doğrulama
     adimlar = [
       `\\(${aFmt}^{${c}} = ${bFmt}\\) olduğuna göre,`,
-      `\\(\\Rightarrow \\log_{${aFmt}} ${bFmt} = ${c}\\)`
+      `\\(\\Rightarrow \\log_{${aFmt}} ${bFmt} = ${c}\\)`,
+      `<span style="color:var(--text-dim);font-size:0.82rem;">Doğrulama (taban dönüşümü): \\(\\log_{${aFmt}} ${bFmt} = \\dfrac{\\ln ${bFmt}}{\\ln ${aFmt}} = \\dfrac{${fmt(Math.log(b))}}{${fmt(Math.log(a))}} = ${fmt(sonuc)}\\)</span>`
     ];
   } else {
     // Kesir: taban dönüşümü (2,3,4 — eski sıralama)
@@ -487,9 +497,9 @@ function kuralGoster(){
   const k = parseFloat(document.getElementById("kK").value);
   const grid = document.getElementById("kGrid");
 
-  if([a,m,n,k].some(isNaN)){ showWarn("kWarn","⚠️ Tüm alanları doldurun."); return; }
-  if(a<=0||a===1){ showWarn("kWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
-  if(m<=0||n<=0){ showWarn("kWarn","⚠️ m ve n pozitif olmalıdır."); return; }
+  if([a,m,n,k].some(isNaN)){ grid.style.display="none"; grid.innerHTML=""; showWarn("kWarn","⚠️ Tüm alanları doldurun."); return; }
+  if(a<=0||birEsitMi(a)){ grid.style.display="none"; grid.innerHTML=""; showWarn("kWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
+  if(m<=0||n<=0){ grid.style.display="none"; grid.innerHTML=""; showWarn("kWarn","⚠️ m ve n pozitif olmalıdır."); return; }
 
   const A=fmt(a,0), M=fmt(m,0), N=fmt(n,0), K=fmt(k,0);
   const lm  = log(a,m), ln_ = log(a,n);
@@ -559,23 +569,31 @@ function tabanDonusumu(){
   const res = document.getElementById("dResult");
   const steps = document.getElementById("dSteps");
 
-  if(isNaN(a)||isNaN(b)){ showWarn("dWarn","⚠️ Lütfen geçerli sayılar girin."); return; }
-  if(a<=0||a===1){ showWarn("dWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
-  if(b<=0){ showWarn("dWarn","⚠️ Sayı b > 0 olmalıdır."); return; }
+  if(isNaN(a)||isNaN(b)){ res.style.display="none"; res.innerHTML=""; steps.style.display="none"; steps.innerHTML=""; showWarn("dWarn","⚠️ Lütfen geçerli sayılar girin."); return; }
+  if(a<=0||birEsitMi(a)){ res.style.display="none"; res.innerHTML=""; steps.style.display="none"; steps.innerHTML=""; showWarn("dWarn","⚠️ Taban a > 0 ve a ≠ 1 olmalıdır."); return; }
+  if(b<=0){ res.style.display="none"; res.innerHTML=""; steps.style.display="none"; steps.innerHTML=""; showWarn("dWarn","⚠️ Sayı b > 0 olmalıdır."); return; }
 
   const doğal = Math.log(b)/Math.log(a);
   const onluk = Math.log10(b)/Math.log10(a);
   const doğalFmt = fmt(doğal);
   const onlukFmt = fmt(onluk);
 
-  // Sonuç tam sayı mı?
-  const tamSayi = Math.abs(doğal - Math.round(doğal)) < 1e-9;
+  // Tam sayı tespiti: log oranını yuvarlamak yerine a^c=b özdeşliğini doğrudan test ediyoruz.
   const c = Math.round(doğal);
+  const tamSayi = Math.abs(Math.pow(a,c) - b) < 1e-10 * Math.max(1, Math.abs(b));
+
+  // Aranan değer kartı — hem tam sayı hem kesirli sonuçta gösterilir, soru cümlesini netleştirir
+  const aranganKart = `
+    <div class="conv-card" style="grid-column:1/-1; background:var(--surface); border:1px solid var(--border);">
+      <div class="conv-label">Aranan Değer</div>
+      <div class="conv-formula" style="font-size:0.95rem;">
+        \\(\\log_{${fmt(a,0)}} ${fmt(b,0)} = c\\)
+      </div>
+    </div>`;
 
   // Özgün çözüm kartı — sadece tam sayı sonuçlarda
   let ozgunKart = "";
   if(tamSayi){
-    // b = a^c mi doğrula (güzel gösterim için)
     ozgunKart = `
     <div class="conv-card" style="grid-column:1/-1; background:var(--surface); border:2px solid var(--accent);">
       <div class="conv-label" style="color:var(--accent);">Özgün Çözüm</div>
@@ -591,7 +609,7 @@ function tabanDonusumu(){
   res.style.display = "grid";
   res.style.gridTemplateColumns = tamSayi ? "1fr" : "1fr 1fr";
   res.style.gap = "10px";
-  res.innerHTML = ozgunKart + `
+  res.innerHTML = (tamSayi ? ozgunKart : aranganKart) + `
     <div class="conv-card">
       <div class="conv-label">log<sub>10</sub> Kullanarak</div>
       <div class="conv-formula">
@@ -616,12 +634,62 @@ function tabanDonusumu(){
 /* ══════════════════════════════════
    4. GRAFİK
 ══════════════════════════════════ */
+function tabanGecerliYap(deger, sliderId){
+  // Taban tam 1'e denk gelirse (log tanımsız), en yakın geçerli değere kaydır.
+  if(Math.abs(deger-1) < 0.001){
+    deger = deger >= 1 ? 1.05 : 0.95;
+    document.getElementById(sliderId).value = deger;
+  }
+  return deger;
+}
+
 function grafikGuncelle(){
-  const a1 = parseFloat(document.getElementById("gSlider").value);
-  const a2 = parseFloat(document.getElementById("gSlider2").value);
+  let a1 = parseFloat(document.getElementById("gSlider").value);
+  let a2 = parseFloat(document.getElementById("gSlider2").value);
+  a1 = tabanGecerliYap(a1, "gSlider");
+  a2 = tabanGecerliYap(a2, "gSlider2");
   document.getElementById("gVal").textContent  = fmt(a1,2);
   document.getElementById("gVal2").textContent = fmt(a2,2);
   cizGrafik(a1, a2);
+}
+
+function yAralikHesapla(a1, a2, xMin, xMax){
+  let yMin = Infinity, yMax = -Infinity;
+  const N = 300;
+  const xBaslangic = Math.max(0.02, xMin);
+  [a1, a2].forEach(a=>{
+    for(let i=0;i<=N;i++){
+      const x = xBaslangic + (i/N)*(xMax-xBaslangic);
+      if(x<=0.001) continue;
+      const y = Math.log(x)/Math.log(a);
+      if(isFinite(y)){ if(y<yMin) yMin=y; if(y>yMax) yMax=y; }
+    }
+  });
+  if(!isFinite(yMin) || !isFinite(yMax) || yMin===yMax){ return {yMin:-3.5, yMax:3.5}; }
+  // Kenar payı ekle
+  const pad = Math.max((yMax-yMin)*0.15, 0.5);
+  yMin -= pad; yMax += pad;
+  // Taban 1'e çok yakınken eğri dikleşip ölçeği aşırı büyütebilir; makul bir üst sınır koyuyoruz.
+  const maxSpan = 60;
+  if(yMax-yMin > maxSpan){
+    const orta = (yMax+yMin)/2;
+    yMin = orta - maxSpan/2; yMax = orta + maxSpan/2;
+  }
+  return {yMin, yMax};
+}
+
+// Ham bir adım değerini 1, 2 veya 5'in katına (ve bunların 10 kuvvetlerine) yuvarlar.
+// Böylece eksen etiketleri 1,7143 gibi "çirkin" sayılar yerine 0.5 - 1 - 2 - 5 - 10 gibi okunaklı değerler alır.
+function niceStep(rawStep){
+  if(!isFinite(rawStep) || rawStep<=0) return 1;
+  const mertebe = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const normalize = rawStep / mertebe;
+  let nice;
+  if(normalize < 1.5) nice = 1;
+  else if(normalize < 3.5) nice = 2;
+  else if(normalize < 7.5) nice = 5;
+  else nice = 10;
+  return nice * mertebe;
 }
 
 function cizGrafik(a1, a2){
@@ -630,8 +698,9 @@ function cizGrafik(a1, a2){
   const ctx = canvas.getContext("2d");
   ctx.clearRect(0,0,W,H);
 
-  // Koordinat sistemi: x 0.05'ten başlıyor (log tanım alanı), y ekseni x=0'da
-  const xMin=-0.5, xMax=12, yMin=-3.5, yMax=3.5;
+  // Koordinat sistemi: x sabit, y seçilen tabanlara göre dinamik
+  const xMin=-0.5, xMax=12;
+  const {yMin, yMax} = yAralikHesapla(a1, a2, xMin, xMax);
   const toX = x => (x-xMin)/(xMax-xMin)*W;
   const toY = y => H - (y-yMin)/(yMax-yMin)*H;
 
@@ -639,32 +708,35 @@ function cizGrafik(a1, a2){
   ctx.fillStyle = "#fdfcf9";
   ctx.fillRect(0,0,W,H);
 
-  // Izgara
+  // Izgara — x sabit adım, y güzel sayılara yuvarlanmış dinamik adım
+  const yStep = niceStep((yMax-yMin)/7);
   ctx.strokeStyle = "#e8e3d8"; ctx.lineWidth = 1;
   for(let gx=1; gx<=11; gx++){
     ctx.beginPath(); ctx.moveTo(toX(gx),0); ctx.lineTo(toX(gx),H); ctx.stroke();
   }
-  for(let gy=-3; gy<=3; gy++){
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
     ctx.beginPath(); ctx.moveTo(0,toY(gy)); ctx.lineTo(W,toY(gy)); ctx.stroke();
   }
 
-  // x ekseni (y=0)
+  // x ekseni (y=0) — yalnızca 0 görünür aralıktaysa çiz
   ctx.strokeStyle = "#b0a898"; ctx.lineWidth = 1.8; ctx.setLineDash([]);
-  ctx.beginPath(); ctx.moveTo(0,toY(0)); ctx.lineTo(W,toY(0)); ctx.stroke();
+  if(yMin<0 && yMax>0){
+    ctx.beginPath(); ctx.moveTo(0,toY(0)); ctx.lineTo(W,toY(0)); ctx.stroke();
+  }
 
   // y ekseni (x=0)
   ctx.beginPath(); ctx.moveTo(toX(0),0); ctx.lineTo(toX(0),H); ctx.stroke();
 
   // Eksen etiketleri — x
   ctx.fillStyle = "#8a7f72"; ctx.font = "11px DM Sans, sans-serif"; ctx.textAlign="center";
+  const xEtiketY = (yMin<0 && yMax>0) ? toY(0)+14 : H-6;
   for(let gx=1; gx<=11; gx+=1){
-    if(gx===0) continue;
-    ctx.fillText(gx, toX(gx), toY(0)+14);
+    ctx.fillText(gx, toX(gx), xEtiketY);
   }
   // Eksen etiketleri — y (y ekseninin soluna)
   ctx.textAlign="right";
-  for(let gy=-3; gy<=3; gy++){
-    if(gy!==0) ctx.fillText(gy, toX(0)-5, toY(gy)+4);
+  for(let gy=Math.ceil(yMin/yStep)*yStep; gy<=yMax; gy+=yStep){
+    if(Math.abs(gy)>1e-9) ctx.fillText(fmt(gy,1), toX(0)-5, toY(gy)+4);
   }
 
   // Eğri çizme
@@ -685,21 +757,27 @@ function cizGrafik(a1, a2){
   cizEgri(a1, "#2d6a4f");
   cizEgri(a2, "#c0392b");
 
-  // (1,0) noktası
-  ctx.fillStyle="#e76f51";
-  ctx.beginPath(); ctx.arc(toX(1),toY(0),5,0,Math.PI*2); ctx.fill();
-  ctx.strokeStyle="#fff"; ctx.lineWidth=1.5; ctx.stroke();
+  // (1,0) noktası — yalnızca 0 görünür aralıktaysa göster
+  if(yMin<0 && yMax>0){
+    ctx.fillStyle="#e76f51";
+    ctx.beginPath(); ctx.arc(toX(1),toY(0),5,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle="#fff"; ctx.lineWidth=1.5; ctx.stroke();
+  }
 
-  // Etiketler
+  // Etiketler — iki eğri birbirine yakınsa (a1≈a2) çakışmayı önlemek için ofseti artır
   ctx.font="bold 12px DM Sans, sans-serif"; ctx.setLineDash([]);
   const y1At8 = Math.log(8)/Math.log(a1);
   const y2At8 = Math.log(8)/Math.log(a2);
+  const yFarki = Math.abs(y1At8 - y2At8);
+  const yaklasik = yFarki < (yMax-yMin)*0.06; // ekrandaki dikey farkın küçük olduğu durum
+  const ofset1 = yaklasik ? -16 : -8;
+  const ofset2 = yaklasik ? 22 : 16;
   ctx.fillStyle="#2d6a4f"; ctx.textAlign="left";
   if(y1At8>=yMin && y1At8<=yMax)
-    ctx.fillText(`log_a(x)  a=${fmt(a1,2)}`, toX(7.5), toY(y1At8)-8);
+    ctx.fillText(`log_a(x)  a=${fmt(a1,2)}`, toX(7.5), toY(y1At8)+ofset1);
   ctx.fillStyle="#c0392b";
   if(y2At8>=yMin && y2At8<=yMax)
-    ctx.fillText(`log_b(x)  b=${fmt(a2,2)}`, toX(7.5), toY(y2At8)+16);
+    ctx.fillText(`log_b(x)  b=${fmt(a2,2)}`, toX(7.5), toY(y2At8)+ofset2);
 }
 
 /* ── BAŞLAT ── */
