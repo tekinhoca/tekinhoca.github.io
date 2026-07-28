@@ -331,11 +331,11 @@ Bileşke fonkiyonun türevi:<br>
       <div class="sec-title">İntegral Tanımı</div>
       <div class="formula-block">
         <div class="formula-math">
-          \(f'(x) = F(x)\) olmak üzere<br>
+          \(F'(x) = f(x)\) olmak üzere<br>
 Belirsiz İntegral:<br>
-          \(\int F(x)\,dx = f(x) + c\)<br>
+          \(\int f(x)\,dx = F(x) + c\)<br>
 Belirli İntegral:<br>
-          \(\int_a^b F(x)\,dx = f(b) - f(a)\)<br>
+          \(\int_a^b f(x)\,dx = F(b) - F(a)\)<br>
         </div>
       </div>
       <div class="formula-block">
@@ -407,6 +407,7 @@ Belirli İntegral:<br>
           <label>x₀ =</label>
           <input class="inp" id="tX0" type="number" value="1" step="0.1" style="width:80px" oninput="tegetCiz()">
         </div>
+        <div class="warn-box" id="tWarn"></div>
         <div class="result-box" id="tResult" style="min-height:36px;"></div>
         <canvas class="grafik" id="tCanvas" width="580" height="300"></canvas>
 
@@ -416,7 +417,7 @@ Belirli İntegral:<br>
 
         <div class="sec-title">Riemann Toplamı Göstericisi</div>
         <p style="font-size:0.83rem;color:var(--text-dim);margin-bottom:14px;">
-          Açılır listedeki fonksiyonları kullanmak için <strong>HAZIR SEÇİM</strong><br>Elle fonksiyon girmek için (math.js formatında) <strong>DİNAMİK GİRİŞ</strong><br>Dikdörtgen sayısı arttıkça gerçek alana yaklaştığınızı gözlemleyin.<br><strong>NOT:</strong> Açılır listedeki fonksiyonların belirli integralleri sonraki bölümde adım adım hesaplanır.
+          Açılır listedeki fonksiyonları kullanmak için <strong>HAZIR SEÇİM</strong><br>Elle fonksiyon girmek için (math.js formatında) <strong>DİNAMİK GİRİŞ</strong><br>Dikdörtgen sayısı arttıkça gerçek alana yaklaştığınızı gözlemleyin.<br><strong>NOT:</strong> Açılır listedeki fonksiyonların belirli integralleri sonraki bölümde adım adım hesaplanır.<br><span style="color:var(--text-dim);">Bu gösterici her alt aralıkta <strong>soldan (sol uç noktalı)</strong> dikdörtgenler kullanır; artan/azalan fonksiyonlarda bu yöntem gerçek alanı sistematik olarak eksik/fazla tahmin edebilir.</span>
         </p>
         
         <div style="display:flex;gap:10px;margin-bottom:14px;">
@@ -569,7 +570,11 @@ Belirli İntegral:<br>
 /* ══════════════════════════════════
    YARDIMCI FONKSİYONLAR
 ══════════════════════════════════ */
-function fmt(v,d=4){ return isFinite(v)?parseFloat(v.toFixed(d)).toString().replace(".",","):v>0?"∞":"-∞"; }
+function fmt(v,d=4){
+  if(Number.isNaN(v)) return "tanımsız";
+  if(!isFinite(v)) return v>0?"∞":"-∞";
+  return parseFloat(v.toFixed(d)).toString().replace(".",",");
+}
 function showWarn(id,msg){ const e=document.getElementById(id); e.textContent=msg; e.style.display="block"; }
 function hideWarn(id){ document.getElementById(id).style.display="none"; }
 
@@ -614,7 +619,7 @@ const KURALLAR = {
   poly3: { ad:"Üs + Toplam Kuralı", kuralTex:"(x^n)' = nx^{n-1}, \\quad (f+g)' = f'+g'", fonk:"3x^4 - 5x^2 + 2", turev:"12x^3 - 10x", adimlar:[ "Her terimin ayrı ayrı türevi alınır ve toplanır. (toplam kuralı)", "\\((3x^4)' = 4 \\cdot 3x^{4-1} = 12x^3\\) &nbsp;(üs kuralı)", "\\((5x^2)' = 2 \\cdot 5x^{2-1} = 10x\\) &nbsp;(üs kuralı)", "\\((2)' = 0\\) &nbsp;(sabit terim kuralı)", "Sonuç: \\(f'(x) = 12x^3 - 10x\\)" ] },
   poly2: { ad:"Üs + Toplam Kuralı", kuralTex:"(x^n)' = nx^{n-1}, \\quad (f+g)' = f'+g'", fonk:"x^3 + 4x", turev:"3x^2 + 4", adimlar:[ "Her terimin ayrı ayrı türevi alınır ve toplanır. (toplam kuralı)", "\\((x^3)' = 3x^2\\) &nbsp;(üs kuralı)", "\\((4x)' = 4\\)", "Sonuç: \\(f'(x) = 3x^2 + 4\\)" ] },
   sincos: { ad:"Çarpım Kuralı", kuralTex:"(f \\cdot g)' = f'g + fg'", fonk:"\\sin x \\cdot \\cos x", turev:"\\cos^2 x - \\sin^2 x = \\cos 2x", adimlar:[ "f = sin x → f′ = cos x", "g = cos x → g′ = −sin x", "\\((f \\cdot g)' = \\cos x \\cdot \\cos x + \\sin x \\cdot (-\\sin x)\\)", "\\(= \\cos^2 x - \\sin^2 x = \\cos 2x\\)" ] },
-  frac: { ad:"Bölüm Kuralı", kuralTex:"\\left(\\dfrac{f}{g}\right)' = \\dfrac{f'g - fg'}{g^2}", fonk:"\\dfrac{x^2}{x+1}", turev:"\\dfrac{x^2+2x}{(x+1)^2}", adimlar:[ "f = x² → f′ = 2x", "g = x+1 → g′ = 1", "\\(\\left(\\dfrac{f}{g}\right)' = \\dfrac{2x(x+1) - x^2 \\cdot 1}{(x+1)^2}\\)", "\\(= \\dfrac{2x^2+2x-x^2}{(x+1)^2} = \\dfrac{x^2+2x}{(x+1)^2}\\)" ] },
+  frac: { ad:"Bölüm Kuralı", kuralTex:"\\left(\\dfrac{f}{g}\\right)' = \\dfrac{f'g - fg'}{g^2}", fonk:"\\dfrac{x^2}{x+1}", turev:"\\dfrac{x^2+2x}{(x+1)^2}", adimlar:[ "f = x² → f′ = 2x", "g = x+1 → g′ = 1", "\\(\\left(\\dfrac{f}{g}\\right)' = \\dfrac{2x(x+1) - x^2 \\cdot 1}{(x+1)^2}\\)", "\\(= \\dfrac{2x^2+2x-x^2}{(x+1)^2} = \\dfrac{x^2+2x}{(x+1)^2}\\)" ] },
   zincir_sin: { ad:"Zincir Kuralı", kuralTex:"(f(g))' = f'(g) \\cdot g'", fonk:"\\sin(3x^2)", turev:"6x\\cos(3x^2)", adimlar:[ "Dış fonksiyon: sin(u), iç fonksiyon: u = 3x²", "sin′(u) = cos(u)", "u′ = (3x²)′ = 6x", "\\((\\sin(3x^2))' = \\cos(3x^2) \\cdot 6x = 6x\\cos(3x^2)\\)" ] },
   zincir_exp: { ad:"Zincir Kuralı", kuralTex:"(f(g))' = f'(g) \\cdot g'", fonk:"e^{x^2}", turev:"2x \\cdot e^{x^2}", adimlar:[ "Dış fonksiyon: eᵘ, iç fonksiyon: u = x²", "(eᵘ)′ = eᵘ", "u′ = 2x", "\\((e^{x^2})' = e^{x^2} \\cdot 2x\\)" ] },
   ln_x: { ad:"Zincir Kuralı", kuralTex:"(f(g))' = f'(g) \\cdot g'", fonk:"\\ln(x^2+1)", turev:"\\dfrac{2x}{x^2+1}", adimlar:[ "Dış fonksiyon: ln(u), iç fonksiyon: u = x²+1", "(ln u)′ = 1/u", "u′ = 2x", "\\((\\ln(x^2+1))' = \\dfrac{1}{x^2+1} \\cdot 2x = \\dfrac{2x}{x^2+1}\\)" ] },
@@ -644,14 +649,18 @@ function kuralGoster(){
    2. TEĞET DOĞRUSU
 ══════════════════════════════════ */
 function tegetCiz(){
+  hideWarn("tWarn");
   const sec = document.getElementById("tFonk").value;
   const x0 = parseFloat(document.getElementById("tX0").value);
   const fonk = FN[sec]; if(!fonk) return;
-  if(isNaN(x0)) return;
+  const res = document.getElementById("tResult");
+
+  if(isNaN(x0)){ res.className="result-box empty"; res.innerHTML="Fonksiyon ve x₀ seçin."; showWarn("tWarn","⚠️ Geçerli bir x₀ girin."); return; }
+  if(sec==="lnx" && x0<=0){ res.className="result-box empty"; res.innerHTML="Fonksiyon ve x₀ seçin."; showWarn("tWarn","⚠️ ln(x) için x₀ > 0 olmalıdır."); return; }
 
   const y0 = fonk.fn(x0);
   const m  = fonk.d(x0);
-  if(!isFinite(y0)||!isFinite(m)) return;
+  if(!isFinite(y0)||!isFinite(m)){ res.className="result-box empty"; res.innerHTML="Fonksiyon ve x₀ seçin."; showWarn("tWarn","⚠️ Bu fonksiyon için x₀ noktasında türev/tanım hesaplanamıyor."); return; }
 
   const b = y0 - m*x0;
   const x0Str = fmt(x0);
@@ -661,7 +670,6 @@ function tegetCiz(){
   const bKisim = b >= 0 ? `+ ${fmt(b)}` : `- ${bAbs}`;
   const x0Tex  = x0 >= 0 ? x0Str : `(${x0Str})`;
 
-  const res = document.getElementById("tResult");
   res.className = "result-box";
   res.innerHTML = `
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:14px;font-size:0.9rem;">
@@ -753,6 +761,7 @@ function riemannCiz() {
   let sec = null;
   if (mod === "hazir") {
     sec = document.getElementById("rFonk").value;
+    if(sec==="sqrt" && a<0){ showWarn("rWarn","⚠️ √x için a ≥ 0 olmalıdır."); return; }
     fnCalc = FN[sec].fn;
   } else {
     const expr = document.getElementById("rElleF").value.trim();
@@ -913,17 +922,17 @@ function integralHesapla(){
   steps.style.display="block";
   steps.innerHTML=`
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 16px;margin-bottom:14px;font-size:0.9rem;">
-      Belirli İntegral Formülü: &nbsp;\\(\\displaystyle\\int_a^b f'(x)\\,dx = f(b) - f(a)\\)
+      Belirli İntegral Formülü: &nbsp;\\(\\displaystyle\\int_a^b f(x)\\,dx = F(b) - F(a)\\)
     </div>
     <div style="font-size:0.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;">Çözüm Aşamaları</div>
     <div style="font-size:0.9rem;">
       <div style="margin-bottom:14px;">Belirsiz İntegral: &nbsp;\\(\\int ${fonk.tex}\\,dx = ${fonk.Ftex} + c\\)</div>
-      <div style="margin-bottom:14px;">\\(f(x) = ${FxTex} + c\\)</div>
-      <div style="margin-bottom:14px;">\\(f(${fmt(b)}) = ${gosterFx(b)}\\)</div>
-      <div style="margin-bottom:14px;">\\(f(${fmt(a)}) = ${gosterFx(a)}\\)</div>
+      <div style="margin-bottom:14px;">\\(F(x) = ${FxTex} + c\\)</div>
+      <div style="margin-bottom:14px;">\\(F(${fmt(b)}) = ${gosterFx(b)}\\)</div>
+      <div style="margin-bottom:14px;">\\(F(${fmt(a)}) = ${gosterFx(a)}\\)</div>
     </div>
     <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:0.9rem;">
-      \\(\\Rightarrow \\displaystyle\\int_{${fmt(a)}}^{${fmt(b)}} ${fonk.tex}\\,dx = ${sonucKesir().replace(/F\(/g,'f(')}\\)
+      \\(\\Rightarrow \\displaystyle\\int_{${fmt(a)}}^{${fmt(b)}} ${fonk.tex}\\,dx = ${sonucKesir()}\\)
     </div>`;
 
   if(window.MathJax) MathJax.typesetPromise([steps]).catch(()=>{});
@@ -1013,7 +1022,8 @@ function alanHacimHesapla() {
       for (let j = 0; j < 30; j++) {
         const mid = (lo + hi) / 2;
         const vm = fn1(mid) - fn2(mid);
-        if (Math.abs(vm) < 1e-10) break;
+        const olcek = Math.max(1, Math.abs(fn1(mid)), Math.abs(fn2(mid)));
+        if (Math.abs(vm) < 1e-10 * olcek) break;
         if ((fn1(lo) - fn2(lo)) * vm < 0) hi = mid; else lo = mid;
       }
       const xi = (lo + hi) / 2;
@@ -1052,10 +1062,13 @@ function alanHacimHesapla() {
   document.getElementById("aCozumWrap").style.display = "block";
   const stepsPanel = document.getElementById("aSteps");
   const kesStrTex = kesisimler.map(k => fmt(k, 3)).join(",\\; ");
-  
+  const cokluKesisimNotu = kesisimler.length > 2
+    ? `<br><span style="font-size:0.82rem;color:var(--text-dim)">Not: aralıkta ${kesisimler.length} kesişim noktası bulundu; en dıştaki iki nokta (a ve b) sınır olarak alınır. Aradaki kesişimler bir sorun oluşturmaz, çünkü |f(x)-g(x)| mutlak değeri her alt bölgede eğrilerin hangisinin üstte olduğuna bakılmaksızın doğru işaretsiz alanı üretir.</span>`
+    : "";
+
   let adimHtml = `
-    <div class="step-line"><span class="hl">1. İki Fonksiyonun Kesiştiği Noktaların Bulunması:</span><br>İki fonksiyon arasında bir bölge oluşması için fonksiyonların en az iki noktada kesişmeleri gerekir.<br>Verilen aralıkta \\(f(x) = g(x)\\) denkleminin kökleri: \\(x \\in \\{ ${kesStrTex} \\}\\) olarak bulunur.<br>Belirli integralin sınırlarını \\(a = ${fmt(a,3)}\\) ve \\(b = ${fmt(b,3)}\\) alalım.</div>
-    <div class="step-line"><span class="hl">2. Alan Hesabı İçin Belirli İntegral:</span><br>Arada kalan bölgenin alanı, eğrilerin farkının mutlak değerinin belirli integralidir:</div>
+    <div class="step-line"><span class="hl">1. İki Fonksiyonun Kesiştiği Noktaların Bulunması:</span><br>İki fonksiyon arasında bir bölge oluşması için fonksiyonların en az iki noktada kesişmeleri gerekir.<br>Verilen aralıkta \\(f(x) = g(x)\\) denkleminin kökleri: \\(x \\in \\{ ${kesStrTex} \\}\\) olarak bulunur.<br>Belirli integralin sınırlarını \\(a = ${fmt(a,3)}\\) ve \\(b = ${fmt(b,3)}\\) alalım.${cokluKesisimNotu}</div>
+    <div class="step-line"><span class="hl">2. Alan Hesabı İçin Belirli İntegral:</span><br>Arada kalan bölgenin (işaretsiz) alanı, eğrilerin farkının mutlak değerinin belirli integralidir. Mutlak değer kullanılması, eğrilerden hangisinin araya göre üstte/altta olduğuna bakılmaksızın alanın her zaman pozitif çıkmasını sağlar:</div>
     <div style="margin: 6px 0 12px 20px;">\\(A = \\int_{${fmt(a,3)}}^{${fmt(b,3)}} |f(x) - g(x)|\\,dx = \\int_{${fmt(a,3)}}^{${fmt(b,3)}} |(${tex1}) - (${tex2})|\\,dx\\)</div>
     <div class="step-line">Sayısal integral hesabı sonucunda alan: <span class="hl">\\(A \\approx ${fmt(alan,4)}\\text{ br}^2\\)</span> olarak hesaplanır.</div>
   `;
@@ -1138,7 +1151,7 @@ function alanHacimHesapla() {
     ctx.stroke();
   }
   cizEgri(fn1, "#2d6a4f");
-  cizEgrid = cizEgri(fn2, "#457b9d");
+  cizEgri(fn2, "#457b9d");
 
   kesisimler.forEach(xi => {
     ctx.beginPath(); ctx.arc(toX(xi), toY(fn1(xi)), 5, 0, Math.PI * 2);
