@@ -448,11 +448,13 @@ function calcIkd() {
   const yKes = c; // x=0
 
   // Kökler
-  let kokler = [], kokStr = '';
+  let kokler = [], kokStr = '', x1Raw, x2Raw;
   if (delta > 0) {
-    const x1 = (-b - Math.sqrt(delta)) / (2 * a);
-    const x2 = (-b + Math.sqrt(delta)) / (2 * a);
-    kokler = [Math.min(x1, x2), Math.max(x1, x2)];
+    // x1Raw = (-b+√Δ)/(2a) ve x2Raw = (-b-√Δ)/(2a) — adım adım gösterimdeki formüllerle birebir eşleşir.
+    // kokler ise yalnızca nokta/grafik/Vieta gösterimlerinde kullanılmak üzere küçükten büyüğe sıralanır.
+    x1Raw = (-b + Math.sqrt(delta)) / (2 * a);
+    x2Raw = (-b - Math.sqrt(delta)) / (2 * a);
+    kokler = [Math.min(x1Raw, x2Raw), Math.max(x1Raw, x2Raw)];
     kokStr = `x₁ = ${fmtR(kokler[0])} , x₂ = ${fmtR(kokler[1])}`;
   } else if (Math.abs(delta) < 1e-9) {
     kokler = [xT];
@@ -480,8 +482,8 @@ function calcIkd() {
     steps += `<div class="step-section">KÖKLERİN BULUNMASI</div>
       <div class="step">\\(x = \\dfrac{-b \\pm \\sqrt{\\Delta}}{2a}\\)</div>`;
     if (delta > 1e-9) {
-      steps += `<div class="step">\\(\\Rightarrow\\; x_1 = \\dfrac{${fmtR(-b)} + \\sqrt{${deltaStr}}}{2 \\cdot ${aStr}} = ${fmtR(kokler[0])}\\)</div>`;
-      steps += `<div class="step">\\(\\Rightarrow\\; x_2 = \\dfrac{${fmtR(-b)} - \\sqrt{${deltaStr}}}{2 \\cdot ${aStr}} = ${fmtR(kokler[1])}\\)</div>`;
+      steps += `<div class="step">\\(\\Rightarrow\\; x_1 = \\dfrac{${fmtR(-b)} + \\sqrt{${deltaStr}}}{2 \\cdot ${aStr}} = ${fmtR(x1Raw)}\\)</div>`;
+      steps += `<div class="step">\\(\\Rightarrow\\; x_2 = \\dfrac{${fmtR(-b)} - \\sqrt{${deltaStr}}}{2 \\cdot ${aStr}} = ${fmtR(x2Raw)}\\)</div>`;
       steps += `<div class="step-section">KÖKLER TOPLAMI ve KÖKLER ÇARPIMI BAĞINTILARI İLE<br>BULDUĞUMUZ KÖKLERİN KARŞILAŞTIRILMASI — SAĞLAMA</div>`;
       steps += `<div class="step">✓ Köklerin toplamı &emsp; \\(\\left\\{\\begin{array}{l} x_1+x_2 = -\\dfrac{b}{a} = -\\dfrac{${bStr}}{${aStr}} = ${fmtR(-b/a)} \\\\[6pt] x_1+x_2 = ${fmtR(kokler[0])}+${fmtR(kokler[1])} = ${fmtR(kokler[0]+kokler[1])} \\end{array}\\right.\\)</div>`;
       steps += `<div class="step">✓ Köklerin çarpımı &emsp; \\(\\left\\{\\begin{array}{l} x_1 \\cdot x_2 = \\dfrac{c}{a} = \\dfrac{${cStr2}}{${aStr}} = ${fmtFrac(c,a)} \\\\[6pt] x_1 \\cdot x_2 = ${fmtR(kokler[0])} \\cdot ${fmtR(kokler[1])} = ${fmtR(kokler[0]*kokler[1])} \\end{array}\\right.\\)</div>`;
@@ -544,9 +546,18 @@ function drawIkdGrafik(canvas, a, b, c, xT, yT, kokler) {
   const pts = [xT, 0, ...kokler];
   const xMin = Math.min(-8, Math.min(...pts) - margin);
   const xMax = Math.max(8, Math.max(...pts) + margin);
-  const ys = pts.map(x => a * x * x + b * x + c);
-  const yMin = Math.min(-8, Math.min(...ys) - margin);
-  const yMax = Math.max(8, Math.max(...ys) + margin);
+  // y-aralığını yalnızca özel noktalardan (kök/tepe) değil, x-aralığı boyunca eğriyi
+  // örnekleyerek hesaplıyoruz; aksi halde büyük |a| değerlerinde eğri ekran dışına taşabilir.
+  const N_ORNEK = 100;
+  let yEgriMin = Infinity, yEgriMax = -Infinity;
+  for (let i = 0; i <= N_ORNEK; i++) {
+    const sx = xMin + (i / N_ORNEK) * (xMax - xMin);
+    const sy = a * sx * sx + b * sx + c;
+    if (sy < yEgriMin) yEgriMin = sy;
+    if (sy > yEgriMax) yEgriMax = sy;
+  }
+  const yMin = Math.min(-8, yEgriMin - margin);
+  const yMax = Math.max(8, yEgriMax + margin);
   const PAD = { top: 30, right: 20, bottom: 30, left: 44 };
   const ax = buildAxes(ctx, W, H, xMin, xMax, yMin, yMax, PAD);
 
