@@ -320,6 +320,10 @@ const fmtK  = v => {
 function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a;}
 function lcm(a,b){return a&&b?Math.abs(a*b)/gcd(a,b):0;}
 
+// Kayan noktalı katsayılarda "ikisi de pratikte sıfır mı" kontrolü için tolerans.
+const EPS = 1e-9;
+function ikisiDeSifirMi(a,b){ return Math.abs(a)<EPS && Math.abs(b)<EPS; }
+
 function denklemSatir(a,b,c){
   let parts=[];
   const addT=(coef,varN,isFirst)=>{
@@ -416,12 +420,12 @@ function hasSecondDenk(){
 function calcDenk(){
   hideErr('denk-error');
   const a1=getN('d-a1'),b1=getN('d-b1'),c1=getN('d-c1');
-  if(a1===0&&b1===0){ showErr('denk-error','Birinci denklemde a ve b aynı anda sıfır olamaz.'); return; }
+  if(ikisiDeSifirMi(a1,b1)){ showErr('denk-error','Birinci denklemde a ve b aynı anda sıfır olamaz.'); return; }
 
   if(hasSecondDenk()){
     // SİSTEM MODU
     const a2=getN('d-a2'),b2=getN('d-b2'),c2=getN('d-c2');
-    if(a2===0&&b2===0){ showErr('denk-error','İkinci denklemde a ve b aynı anda sıfır olamaz.'); return; }
+    if(ikisiDeSifirMi(a2,b2)){ showErr('denk-error','İkinci denklemde a ve b aynı anda sıfır olamaz.'); return; }
     calcSistemCore(a1,b1,c1,a2,b2,c2);
   } else {
     // TEK DENKLEM MODU
@@ -683,8 +687,11 @@ function drawTekGrafik(canvas,a,b,c,s,xKesim,yKesim){
   if(!s.dikey){
     const margin=3;
     xMin=Math.min(-6,(xKesim||0)-margin);xMax=Math.max(6,(xKesim||0)+margin);
-    const allY=[s.n,s.m*(xKesim||0)+s.n];
-    yMin=Math.min(-6,Math.min(...allY)-margin);yMax=Math.max(6,Math.max(...allY)+margin);
+    // y-aralığını yalnızca y-kesimi ve x-kesimindeki y-değerinden değil,
+    // x-aralığının tamamı boyunca doğruyu örnekleyerek hesaplıyoruz.
+    // Aksi halde büyük eğimli doğrularda (örn. y=100x+2) çizgi neredeyse tamamen ekran dışında kalabilir.
+    const uc1=s.m*xMin+s.n, uc2=s.m*xMax+s.n;
+    yMin=Math.min(-6,Math.min(uc1,uc2)-margin);yMax=Math.max(6,Math.max(uc1,uc2)+margin);
   } else {xMin=s.xVal-6;xMax=s.xVal+6;}
   const PAD={top:30,right:20,bottom:30,left:40};
   const cW=W-PAD.left-PAD.right,cH=H-PAD.top-PAD.bottom;
@@ -738,9 +745,23 @@ function drawSistemGrafik(canvas,a1,b1,c1,s1,a2,b2,c2,s2,kx,ky){
   const ctx=canvas.getContext('2d');
   const W=canvas.width,H=canvas.height;
   ctx.fillStyle='#fdfcf9';ctx.fillRect(0,0,W,H);
-  let cx0=kx||0,cy0=ky||0;
-  const range=8;
-  let xMin=cx0-range,xMax=cx0+range,yMin=cy0-range,yMax=cy0+range;
+  // Görünüm penceresini sabit ±8 yerine, kesişim noktası + iki doğrunun eksen kesim
+  // noktalarını (ve orijini) kapsayacak şekilde dinamik hesaplıyoruz. Böylece kesişim
+  // orijinden uzak olsa bile eksen kesimleri ekrandan çıkmaz.
+  function eksenlerBul(s){
+    if(!s) return {x:null,y:null};
+    if(s.dikey) return {x:s.xVal, y:null};
+    return {x:(s.m!==0 ? -s.n/s.m : null), y:s.n};
+  }
+  const ek1=eksenlerBul(s1), ek2=eksenlerBul(s2);
+  const allX=[0,kx,ek1.x,ek2.x].filter(v=>v!==null&&v!==undefined&&isFinite(v));
+  const allY=[0,ky,ek1.y,ek2.y].filter(v=>v!==null&&v!==undefined&&isFinite(v));
+  const margin=3;
+  let xMin=Math.min(...allX)-margin, xMax=Math.max(...allX)+margin;
+  let yMin=Math.min(...allY)-margin, yMax=Math.max(...allY)+margin;
+  const MIN_SPAN=8;
+  if(xMax-xMin<MIN_SPAN){const mid=(xMax+xMin)/2; xMin=mid-MIN_SPAN/2; xMax=mid+MIN_SPAN/2;}
+  if(yMax-yMin<MIN_SPAN){const mid=(yMax+yMin)/2; yMin=mid-MIN_SPAN/2; yMax=mid+MIN_SPAN/2;}
   const PAD={top:30,right:20,bottom:30,left:40};
   const cW=W-PAD.left-PAD.right,cH=H-PAD.top-PAD.bottom;
   const scale=Math.min(cW/(xMax-xMin),cH/(yMax-yMin));
@@ -798,8 +819,11 @@ function esitPreview(){
 
 function testEsit(a,b,c,op,px,py){
   const val=a*px+b*py+c;
-  if(op==='gt')return val>0;if(op==='gte')return val>=0;
-  if(op==='lt')return val<0;if(op==='lte')return val<=0;
+  // Katsayı/koordinat büyüklüğüne göre ölçeklenen tolerans: sınır üzerindeki bir nokta,
+  // kayan nokta yuvarlama hatası nedeniyle yanlışlıkla "dışarıda" görünmesin.
+  const tol = EPS * Math.max(1, Math.abs(a*px), Math.abs(b*py), Math.abs(c));
+  if(op==='gt')return val>tol;if(op==='gte')return val>=-tol;
+  if(op==='lt')return val<-tol;if(op==='lte')return val<=tol;
   return false;
 }
 
@@ -813,11 +837,11 @@ function calcEsit(){
   hideErr('esit-error');
   const a1=getN('e-a1'),b1=getN('e-b1'),c1=getN('e-c1');
   const op1=document.getElementById('e-op1').value;
-  if(a1===0&&b1===0){showErr('esit-error','a ve b aynı anda sıfır olamaz.');return;}
+  if(ikisiDeSifirMi(a1,b1)){showErr('esit-error','a ve b aynı anda sıfır olamaz.');return;}
   const hasSecond=hasSecondEsit();
   const a2=getN('e-a2'),b2=getN('e-b2'),c2=getN('e-c2');
   const op2=document.getElementById('e-op2').value;
-  if(hasSecond&&a2===0&&b2===0){showErr('esit-error','İkinci eşitsizlikte a ve b aynı anda sıfır olamaz.');return;}
+  if(hasSecond&&ikisiDeSifirMi(a2,b2)){showErr('esit-error','İkinci eşitsizlikte a ve b aynı anda sıfır olamaz.');return;}
   const s1=toSlope(a1,b1,c1);
   const s2=hasSecond?toSlope(a2,b2,c2):null;
 
