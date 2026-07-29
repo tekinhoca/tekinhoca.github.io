@@ -51,7 +51,8 @@ header {
   padding-bottom: 18px;
   border-bottom: 2px solid var(--border);
 }
-header img { height: 44px; width: auto; }
+header img { height: 44px; width: auto; max-width: 100%; display: block; margin: 0 auto 0 0; border-radius: 10px; }
+header .titles { text-align: right; }
 header .titles h1 {
   font-family: 'Lora', serif;
   font-size: clamp(1.1rem, 2.5vw, 1.75rem);
@@ -113,6 +114,8 @@ header .titles p { font-size: 0.85rem; color: var(--text-dim); margin-top: 3px; 
   line-height: 1.8;
 }
 .def-table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+.def-table.mt-8 { margin-top: 8px; }
+.formula-math.sm-text { font-size: 0.78rem; }
 .def-table td {
   font-size: 0.75rem; padding: 5px 4px;
   border-bottom: 1px solid var(--border);
@@ -396,6 +399,15 @@ input[type="range"] {
   font-family: 'Lora', serif; font-size: 1.2rem; font-weight: 700;
   color: var(--accent3); margin-top: 10px; min-height: 28px;
 }
+/* ── Eskiden inline style ile tanımlanan bileşenler ── */
+#stepCounter { font-size: 0.72rem; color: var(--text-dim); margin-left: 4px; }
+.table-scroll { overflow-x: auto; }
+.dt-combo-wrap { margin-bottom: 10px; }
+#dtModeAC, #dtResult, #trigResults, #ozdResults { display: none; }
+.hint-note { font-size: 0.75rem; color: var(--text-dim); margin-bottom: 10px; line-height: 1.5; }
+.hint-note.hint-note--sm { font-size: 0.68rem; margin-bottom: 0; margin-top: 6px; }
+.ozdeslik-list.mt-10 { margin-top: 10px; }
+
 /* ── FOOTER ── */
 footer {
   max-width: 1200px;
@@ -416,9 +428,8 @@ footer p {
 
 <!-- HEADER -->
 <header>
-<img src="../img/THlogo1.webp" alt="TekinHoca Logo" 
-     style="max-width:100%;display:block;margin:0 auto 0 0;border-radius:10px;">
-<div class="titles" style="text-align:right;">
+<img src="../img/THlogo1.webp" alt="TekinHoca Logo">
+<div class="titles">
     <h1>Trigonometri Hesap Aracı</h1>
     <p>Özel açılar Pratik Tablo · Hesaplayıcı · Birim çember · Dik üçgen · Ters trigonometri</p>
   </div>
@@ -446,41 +457,35 @@ footer p {
 
     <div class="panel">
       <div class="sec-title">Özel Dik Üçgenler</div>
-      <table class="def-table">
       <div class="formula-block">
         <h4>30° - 60° - 90° üçgeni:</h4>
-        <div class="formula-math">- 30°nin karşısındaki<br>dik kenarın uzunluğu,<br>hipotenüsün yarısına<br>eşittir.</div>
-      </table>
-      <table class="def-table">
+        <div class="formula-math">- 30°'nin karşısındaki<br>dik kenarın uzunluğu,<br>hipotenüsün yarısına<br>eşittir.</div>
+      </div>
       <div class="formula-block">
-        <div class="formula-math">- 60°nin karşısındaki<br>dik kenarın uzunluğu<br>hipotenüsün yarısının<br>√3 katına eşittir.</div>
-      </table>
-      <table class="def-table">
+        <div class="formula-math">- 60°'nin karşısındaki<br>dik kenarın uzunluğu<br>hipotenüsün yarısının<br>√3 katına eşittir.</div>
+      </div>
       <div class="formula-block">
         <div class="formula-math">⚠️ Kenar uzunlukları arasında<br>1 : √3 : 2<br>orantısı vardır.</div>
-      </table>
-      </table>
-      <table class="def-table">
+      </div>
       <div class="formula-block">
         <h4>45° - 45° - 90° üçgeni:</h4>
         <div class="formula-math">- Hipotenüsün uzunluğu,<br>dik kenarın uzunluğunun<br>√2 katına eşittir.</div>
-      </table>
-      <table class="def-table">
+      </div>
       <div class="formula-block">
         <div class="formula-math">⚠️ Kenar uzunlukları arasında<br>1 : 1 : √2<br>orantısı vardır.</div>
-      </table>
+      </div>
 
     </div>
 
 
     <div class="panel">
       <div class="sec-title">Radyan — Derece</div>
-      <div class="formula-math" style="font-size:0.78rem;">
+      <div class="formula-math sm-text">
         180° = π rad ≈ 3,1416 rad<br>
         1° = π/180 rad ≈ 0,0175 rad<br>
         1 rad = 180°/π ≈ 57,3°
       </div>
-      <table class="def-table" style="margin-top:8px;">
+      <table class="def-table mt-8">
         <tr><td>30°</td><td>π/6</td></tr>
         <tr><td>45°</td><td>π/4</td></tr>
         <tr><td>60°</td><td>π/3</td></tr>
@@ -502,17 +507,16 @@ footer p {
         <button class="tbl-btn primary" id="startBtn">BAŞLAT</button>
         <button class="tbl-btn ghost" id="nextBtn" disabled>İLERLE ▶</button>
         <button class="tbl-btn ghost" id="resetBtn">TEMİZLE</button>
-        <span style="font-size:0.72rem;color:var(--text-dim);margin-left:4px;" id="stepCounter"></span>
+        <span id="stepCounter"></span>
       </div>
       <div class="step-desc-box" id="stepDesc"><strong>Başlat butonuna basarak adım adım tabloyu doldurun.</strong></div>
       <div id="flightLayer" class="flight-layer" aria-hidden="true"></div>
     </div>
 
-      <div style="overflow-x:auto;">
+      <div class="table-scroll">
         <table id="trigTable" aria-label="Trigonometrik oranlar tablosu">
           <colgroup>
-            <col style="width:120px">
-            <col><col><col><col><col>
+            <col><col><col><col><col><col>
           </colgroup>
           <tr>
             <th></th>
@@ -580,7 +584,7 @@ footer p {
           <input type="range" id="angleSlider" min="0" max="360" value="0" step="1" oninput="onSlider(this.value)">
         </div>
         <div class="error-box" id="trigError"></div>
-        <div class="trig-results-grid" id="trigResults" style="display:none;">
+        <div class="trig-results-grid" id="trigResults">
           <div class="rb-card sin-card"><div class="rb-label">sin α</div><div class="rb-val" id="rSin">—</div></div>
           <div class="rb-card cos-card"><div class="rb-label">cos α</div><div class="rb-val" id="rCos">—</div></div>
           <div class="rb-card tan-card"><div class="rb-label">tan α</div><div class="rb-val" id="rTan">—</div></div>
@@ -608,7 +612,7 @@ footer p {
     <!-- 3. Dik Üçgen Çözücü -->
     <div class="panel">
       <div class="sec-title">Dik Üçgen Çözücü</div>
-      <div style="margin-bottom:10px;">
+      <div class="dt-combo-wrap">
         <div class="dt-combo-label">Bilinen değerler:</div>
         <div class="dt-combo-grid">
           <button class="dt-combo-btn active" onclick="selectDTCombo(this,'aa')" data-combo="aa">İki Kenar</button>
@@ -627,7 +631,7 @@ footer p {
           <div class="input-group"><label id="dtLabelB">Hipotenüs (c)</label><input type="number" id="dtB" placeholder="c" oninput="solveDT()"></div>
         </div>
       </div>
-      <div id="dtModeAC" style="display:none;">
+      <div id="dtModeAC">
         <div class="dt-sub-label">Kenar türü ve açı:</div>
         <div class="dt-combo-grid">
           <button class="dt-sub-btn2 active" onclick="selectDTSub2(this,'ah_ang')" data-sub2="ah_ang">Karşı + α</button>
@@ -640,7 +644,7 @@ footer p {
         </div>
       </div>
       <div class="error-box" id="dtError"></div>
-      <div id="dtResult" style="display:none;">
+      <div id="dtResult">
         <div class="dt-visual-wrap">
           <canvas id="dtCanvas" width="200" height="165"></canvas>
           <div class="dt-result-list" id="dtResultList"></div>
@@ -666,7 +670,7 @@ footer p {
         </div>
         <div class="error-box" id="invError"></div>
         <div class="inv-result" id="invResult">—</div>
-        <p style="font-size:0.68rem;color:var(--text-dim);margin-top:6px;line-height:1.5;">
+        <p class="hint-note hint-note--sm">
           Bu soruların sonsuz sayıda çözümü vardır.<br>
           Buraya sadece belli değer aralığındaki cevap yazılmıştır.<br>
           arcsin: [−90°, 90°] &nbsp;·&nbsp; arccos: [0°, 180°] &nbsp;·&nbsp; arctan: (−90°, 90°)
@@ -676,10 +680,10 @@ footer p {
       <!-- Özdeşlik Doğrulama -->
       <div class="panel">
         <div class="sec-title">Özdeşlik Doğrulama</div>
-        <p style="font-size:0.75rem;color:var(--text-dim);margin-bottom:10px;line-height:1.5;">
+        <p class="hint-note">
           Bir trigonometrik oranı girin; özdeşliklerden yararlanarak diğerleri hesaplansın.
         </p>
-        <div class="inv-type-grid" style="margin-bottom:10px;">
+        <div class="inv-type-grid">
           <button class="inv-type-btn active" onclick="selectOzd(this,'sin')" data-ozd="sin">sin α</button>
           <button class="inv-type-btn" onclick="selectOzd(this,'cos')" data-ozd="cos">cos α</button>
           <button class="inv-type-btn" onclick="selectOzd(this,'tan')" data-ozd="tan">tan α</button>
@@ -689,7 +693,7 @@ footer p {
           <input type="number" id="ozdInput" placeholder="değer girin" step="any" oninput="calcOzd()">
         </div>
         <div class="error-box" id="ozdError"></div>
-        <div class="ozdeslik-list" id="ozdResults" style="margin-top:10px;display:none;">
+        <div class="ozdeslik-list mt-10" id="ozdResults">
           <div class="ozd-row"><strong>sin²α + cos²α = 1</strong><div class="ozd-val" id="ozdV1">—</div></div>
           <div class="ozd-row"><strong>tan α = sin α / cos α</strong><div class="ozd-val" id="ozdV2">—</div></div>
           <div class="ozd-row"><strong>cot α = cos α / sin α</strong><div class="ozd-val" id="ozdV3">—</div></div>
@@ -735,9 +739,7 @@ async function reserveRowHeight(){
   await retypeset(m);
   const h=Math.ceil(m.getBoundingClientRect().height+16);
   document.documentElement.style.setProperty("--reserved-row-h",h+"px");
-const scaleV=1+0.30*Math.sin(Math.PI*t);
-ghost.style.transform=`translate(${cx-ghost.offsetWidth/2-sl}px,${cy-ghost.offsetHeight/2-st-par}px) scale(${scaleV})`;
-ghost.style.filter=`drop-shadow(0 0 ${Math.round(8*Math.sin(Math.PI*t))}px rgba(180,120,0,${(0.85*Math.sin(Math.PI*t)).toFixed(2)}))`;  m.remove();
+  m.remove();
 }
 
 function lerp(a,b,t){ return a+(b-a)*t; }
@@ -945,6 +947,7 @@ async function runSteps(){
       enableControls("running");
       stepDesc.innerHTML=stepDescs[i]||"";
       stepCounter.textContent = i < 8 ? `Adım ${i+1}/8` : "";
+      startBtn.textContent = i < 8 ? `ÇALIŞIYOR (${i+1}/8)` : "ÇALIŞIYOR";
       await steps[i]();
       if(ctrl.cancelled)break;
       if(i<steps.length-1){ enableControls("waiting"); await waitForNext(); }
@@ -966,9 +969,13 @@ startBtn.disabled=true; startBtn.textContent="ÇALIŞIYOR";
   runSteps().catch(e=>{ console.warn(e); ctrl.running=false; enableControls("stopped"); });
 });
 
-resetBtn.addEventListener("click",()=>{
+resetBtn.addEventListener("click",async()=>{
   ctrl.cancelled=true; ctrl.running=false;
   if(ctrl.nextResolve){const r=ctrl.nextResolve;ctrl.nextResolve=null;r();}
+  stepDesc.innerHTML="<strong>Tablo temizleniyor...</strong>";
+  document.querySelectorAll("#trigTable td").forEach(td=>td.classList.add("fade-cell-out"));
+  await sleep(300);
+  document.querySelectorAll("#trigTable td").forEach(td=>td.classList.remove("fade-cell-out"));
   clearAll(); enableControls("idle");
   startBtn.textContent="BAŞLAT";
   stepDesc.innerHTML="<strong>Başlat butonuna basarak adım adım tabloyu doldurun.</strong>";
