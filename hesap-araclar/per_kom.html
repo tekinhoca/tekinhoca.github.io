@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Permütasyon ve Kombinasyon</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  chtml: { scale: 0.87 },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js" id="MathJax-script" async></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
@@ -197,6 +205,11 @@ input[type=range] {
   display:none; background:rgba(231,111,81,0.1); border:1px solid rgba(231,111,81,0.4);
   border-radius:8px; padding:10px 13px; font-size:0.82rem; color:#c0392b; margin-top:10px; line-height:1.5;
 }
+.dup-warn {
+  background: rgba(233,196,106,0.18); border: 1px solid var(--hl-c);
+  border-radius: 8px; padding: 8px 12px; font-size: 0.76rem; color: #7a5c00;
+  margin-top: 6px; line-height: 1.5;
+}
 
 /* ── RIGHT COLUMN ── */
 .right-col { display:flex; flex-direction:column; gap:16px; }
@@ -253,6 +266,16 @@ input[type=range] {
 }
 canvas#treeCanvas { display:block; width:100%; border-radius:8px; }
 .tree-scroll { overflow-x:auto; }
+.tree-note {
+  margin-top: 10px;
+  font-size: 0.76rem;
+  color: var(--text-dim);
+  background: var(--surface2);
+  border-radius: 7px;
+  padding: 8px 12px;
+  line-height: 1.6;
+}
+.tree-note strong { color: var(--comb-c); }
 
 /* ── COMPARISON ── */
 .compare-row {
@@ -367,13 +390,14 @@ footer p {
 
       <label class="field-label">Seçilecek Eleman Sayısı (r)</label>
       <div class="slider-row">
-        <input type="range" id="sliderR" min="1" max="4" value="2" oninput="syncR()">
+        <input type="range" id="sliderR" min="0" max="4" value="2" oninput="syncR()">
         <div class="slider-val" id="valR">2</div>
       </div>
 
       <label class="field-label">Elemanlar</label>
       <div class="elem-wrap" id="elemWrap"></div>
       <div class="hint">💡 Elemanlar otomatik oluşturulur. Harfleri kendi verilerinizle değiştirebilirsiniz.</div>
+      <div class="dup-warn" id="dupWarn" style="display:none;"></div>
 
       <label class="field-label">Özel Eleman İsimleri (isteğe bağlı)</label>
       <input type="text" id="customElems" placeholder="Örn: Ali, Veli, Ayşe, Fatma"
@@ -401,15 +425,15 @@ footer p {
       <div class="sec-title">Formüller</div>
       <div style="font-size:0.82rem;line-height:1.9;color:var(--text-dim);">
         <p><span style="color:var(--perm-c);font-weight:700;">Permütasyon:</span></p>
-        <p style="font-family:monospace;background:var(--surface2);padding:6px 10px;border-radius:6px;margin:4px 0 10px;">
-          P(n,r) = n! / (n−r)!
+        <p style="background:var(--surface2);padding:8px 10px;border-radius:6px;margin:4px 0 10px;text-align:center;">
+          \(\displaystyle P(n,r) = \dfrac{n!}{(n-r)!}\)
         </p>
         <p><span style="color:var(--comb-c);font-weight:700;">Kombinasyon:</span></p>
-        <p style="font-family:monospace;background:var(--surface2);padding:6px 10px;border-radius:6px;margin:4px 0 10px;">
-          C(n,r) = n! / (r! × (n−r)!)
+        <p style="background:var(--surface2);padding:8px 10px;border-radius:6px;margin:4px 0 10px;text-align:center;">
+          \(\displaystyle C(n,r) = \dfrac{n!}{r! \,(n-r)!}\)
         </p>
         <p>📎 Her kombinasyon, <strong>r!</strong> tane permütasyona karşılık gelir.</p>
-        <p style="margin-top:6px;">∴ P(n,r) = C(n,r) × r!</p>
+        <p style="margin-top:6px;">\( \displaystyle P(n,r) = C(n,r) \times r! \)</p>
       </div>
     </div>
   </div>
@@ -476,6 +500,26 @@ function updateElements() {
     }
   }
   renderElemChips();
+  checkDuplicateElements();
+}
+
+function checkDuplicateElements() {
+  const warnEl = document.getElementById('dupWarn');
+  const seen = new Map();
+  const dups = new Set();
+  elements.forEach(el => {
+    const key = el.toLocaleLowerCase('tr');
+    if (seen.has(key)) dups.add(el);
+    seen.set(key, true);
+  });
+  if (dups.size > 0) {
+    warnEl.style.display = 'block';
+    warnEl.textContent = '⚠️ Aynı eleman ismi birden fazla kez girildi ('
+      + Array.from(dups).join(', ')
+      + '). Program bunları farklı elemanlar (konum/indeks bazlı) olarak sayar; bu yüzden görsel olarak aynı görünen sonuçlar aslında farklı sayılabilir.';
+  } else {
+    warnEl.style.display = 'none';
+  }
 }
 
 function updateCustomElems() { updateElements(); }
@@ -527,6 +571,40 @@ function comb(n,r) { return factorial(n) / (factorial(r) * factorial(n-r)); }
 function factStr(n) {
   if (n === 0 || n === 1) return '1';
   return Array.from({length:n},(_,i)=>n-i).join(' × ');
+}
+function factStrTex(n) {
+  if (n === 0 || n === 1) return '1';
+  return Array.from({length:n},(_,i)=>n-i).join(' \\times ');
+}
+function survivingTermsTex(n, r) {
+  // n × (n-1) × ... × (n-r+1) — the r terms that remain after (n-r)! cancels
+  if (r === 0) return '1';
+  return Array.from({length:r},(_,i)=>n-i).join(' \\times ');
+}
+
+// ════════════════════════════════════════════════════════
+//  REAL-LIFE EXAMPLE (dynamic closing note)
+// ════════════════════════════════════════════════════════
+const PERM_EXAMPLES = [
+  (n,r,res) => `${n} kişilik bir yarışta ilk ${r} sırayı (örn. altın-gümüş-bronz) belirlemenin <strong>${res.toLocaleString('tr')}</strong> farklı yolu vardır.`,
+  (n,r,res) => `${n} farklı rakam/harften ${r} basamaklı, tekrarsız bir şifre oluşturmanın <strong>${res.toLocaleString('tr')}</strong> farklı yolu vardır.`,
+  (n,r,res) => `${n} kişi arasından ${r} kişiyi farklı görevlere (örn. başkan, sekreter) atamanın <strong>${res.toLocaleString('tr')}</strong> farklı yolu vardır.`,
+];
+const COMB_EXAMPLES = [
+  (n,r,res) => `${n} kişilik bir gruptan, görev ayrımı yapmadan ${r} kişilik bir komite/takım seçmenin <strong>${res.toLocaleString('tr')}</strong> farklı yolu vardır.`,
+  (n,r,res) => `${n} çeşit kitap arasından bir okuma listesi için ${r} tanesinin seçildiği bir kitap kulübünde <strong>${res.toLocaleString('tr')}</strong> farklı seçim olasılığı vardır.`,
+  (n,r,res) => `${n} çeşit malzemeden ${r} tanesinin seçildiği bir pizzada <strong>${res.toLocaleString('tr')}</strong> farklı malzeme kombinasyonu mümkündür.`,
+];
+
+function buildRealLifeExample(isPerm, n, r, result) {
+  const list = isPerm ? PERM_EXAMPLES : COMB_EXAMPLES;
+  const idx  = (n + r) % list.length; // aynı n,r için her zaman aynı örnek — tutarlı ve kararlı
+  const text = list[idx](n, r, result);
+  return `
+    <div class="panel">
+      <div class="sec-title">Gerçek Hayat Örneği</div>
+      <div class="insight-box">${text}</div>
+    </div>`;
 }
 
 // ════════════════════════════════════════════════════════
@@ -586,17 +664,18 @@ function renderResults(P, C, result, arrs, MAX_SHOW) {
   if (isPerm) {
     stepsHTML = `
       <div class="formula-steps">
-        P(${n},${r}) = ${n}! / (${n}−${r})! = ${n}! / ${n-r}!<br>
-        = [${factStr(n)}] / [${factStr(n-r)||'1'}]<br>
-        = <strong style="color:var(--perm-c)">${P.toLocaleString('tr')}</strong>
+        \\[ P(${n},${r}) = \\dfrac{${n}!}{(${n}-${r})!} = \\dfrac{${n}!}{${n-r}!} \\]
+        \\[ = \\dfrac{${factStrTex(n)}}{${factStrTex(n-r)||'1'}} \\]
+        ${r > 0 && r < n ? `\\[ = ${survivingTermsTex(n,r)} \\]` : ''}
+        <div style="text-align:center;">= <strong style="color:var(--perm-c)">${P.toLocaleString('tr')}</strong></div>
       </div>`;
   } else {
     stepsHTML = `
       <div class="formula-steps">
-        C(${n},${r}) = ${n}! / (${r}! × ${n-r}!) <br>
-        = [${factStr(n)}] / ([${factStr(r)}] × [${factStr(n-r)||'1'}])<br>
-        = ${Math.round(factorial(n)/factorial(n-r)).toLocaleString('tr')} / ${factorial(r).toLocaleString('tr')}<br>
-        = <strong style="color:var(--comb-c)">${C.toLocaleString('tr')}</strong>
+        \\[ C(${n},${r}) = \\dfrac{${n}!}{${r}!\\,(${n-r})!} = \\dfrac{${n}!}{${r}!${n-r}!} \\]
+        \\[ = \\dfrac{${factStrTex(n)}}{[${factStrTex(r)}] \\times [${factStrTex(n-r)||'1'}]} \\]
+        ${r > 0 && r < n ? `\\[ = \\dfrac{${survivingTermsTex(n,r)}}{${factorial(r)}} = \\dfrac{${P}}{${factorial(r)}} = ${C} \\]` : ''}
+        <div style="text-align:center;">= <strong style="color:var(--comb-c)">${C.toLocaleString('tr')}</strong></div>
       </div>`;
   }
 
@@ -604,23 +683,29 @@ function renderResults(P, C, result, arrs, MAX_SHOW) {
   const pillCls  = isPerm ? 'perm-pill' : 'comb-pill';
   const shown    = arrs.slice(0, MAX_SHOW);
   const moreCount= arrs.length - shown.length;
-  const pillsHTML= shown.map(arr =>
-    `<span class="arr-pill ${pillCls}">${arr.join(isPerm ? '→' : ', ')}</span>`
-  ).join('');
+  const pillsHTML= shown.map(arr => {
+    if (arr.length === 0) return `<span class="arr-pill ${pillCls}">${isPerm ? '(boş diziliş)' : '{ } (boş küme)'}</span>`;
+    return `<span class="arr-pill ${pillCls}">${isPerm ? arr.join('→') : '{' + arr.join(', ') + '}'}</span>`;
+  }).join('');
   const moreHTML = moreCount > 0
     ? `<div class="arr-more">… ve ${moreCount.toLocaleString('tr')} diziliş daha (toplam: ${arrs.length.toLocaleString('tr')})</div>`
     : '';
 
   // Tree diagram: only show if n<=6 AND r<=4 AND result<=64
   const showTree = (n <= 6 && r <= 4 && result <= 64);
+  const combNote = (!isPerm && elements.length >= 2)
+    ? `<div class="tree-note">ℹ️ Sıra önemli olmadığı için, örneğin <strong>{${elements[0]}, ${elements[1]}}</strong> ile <strong>{${elements[1]}, ${elements[0]}}</strong> aynı seçimi ifade eder; bu yüzden ağaçta yalnızca biri (artan sıradaki dal) gösterilir, tekrar eden dallar çizilmez.</div>`
+    : '';
   const treeHTML = showTree
     ? `<div class="panel">
         <div class="sec-title">Ağaç Diyagramı</div>
         <div class="tree-scroll"><canvas id="treeCanvas"></canvas></div>
+        ${combNote}
        </div>`
     : `<div class="panel">
         <div class="sec-title">Ağaç Diyagramı</div>
         <div class="tree-warn">⚠️ Toplam ${result.toLocaleString('tr')} dal içerdiğinden ağaç diyagramı çizmek görsel olarak mümkün değil. Aşağıdaki tabloda, ${result.toLocaleString('tr')} olası sonuçtan bazılarını görebilirsiniz. </div>
+        ${combNote}
        </div>`;
 
   // Insight
@@ -644,8 +729,16 @@ function renderResults(P, C, result, arrs, MAX_SHOW) {
         Bu örnekte her kombinasyon grubu kendi içinde <strong>${r}!</strong> farklı şekilde sıralanabileceği için P değeri C'nin <strong>${factorial(r).toLocaleString('tr')}</strong> katına eşittir.<br><br>
         <strong>P = C × r!</strong> &nbsp;⇒ P =&nbsp; ${C.toLocaleString('tr')} × ${r}! = ${C.toLocaleString('tr')} × ${factorial(r)} = <strong>${P.toLocaleString('tr')}</strong>
         ${r===1 ? '<br><br>ℹ️ r=1 olduğunda P=C — tek elemanlı seçimlerde sıra fark yaratmaz.' : ''}
+        ${r===0 ? '<br><br>ℹ️ r=0 olduğunda hiç eleman seçilmez/sıralanmaz — bu yüzden P(n,0)=C(n,0)=1: "hiçbir şey yapmamanın" da tek bir yolu vardır (boş diziliş/boş küme).' : ''}
       </div>
     </div>`;
+
+  // Real-life example (dynamic, based on mode + n/r)
+  const realLifeHTML = buildRealLifeExample(isPerm, n, r, result);
+
+  const topFormulaTex = isPerm
+    ? `\\(\\displaystyle P(n,r) = \\dfrac{n!}{(n-r)!}\\)`
+    : `\\(\\displaystyle C(n,r) = \\dfrac{n!}{r!\\,(n-r)!}\\)`;
 
   document.getElementById('rightCol').innerHTML = `
     <div class="result-banner ${cls}">
@@ -656,7 +749,7 @@ function renderResults(P, C, result, arrs, MAX_SHOW) {
         </div>
       </div>
       <div class="formula-box">
-        <strong>${label} = ${isPerm ? n+'! / ('+n+'−'+r+')!' : n+'! / ('+r+'! × '+(n-r)+'!)'}</strong>
+        <strong>${topFormulaTex}</strong>
         ${stepsHTML}
       </div>
     </div>
@@ -671,7 +764,13 @@ function renderResults(P, C, result, arrs, MAX_SHOW) {
       ${moreHTML}
     </div>
 
-    ${insightHTML}`;
+    ${insightHTML}
+
+    ${realLifeHTML}`;
+
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    MathJax.typesetPromise([document.getElementById('rightCol')]).catch(err => console.error('MathJax hatası:', err));
+  }
 
   if (showTree) {
     requestAnimationFrame(() => drawTree(arrs, r));
@@ -709,97 +808,23 @@ function drawTree(arrs, r) {
   const NODE_R  = 14;
   const PAD_X   = 30;
 
-  // Count leaves
-  function countLeaves(node) {
-    if (node.children.length === 0) return 1;
-    return node.children.reduce((s,c) => s + countLeaves(c.node), 0);
-  }
   const leaves = arrs.length;
+  const PATH_SEP = isPerm ? '→' : ', ';
 
   const W = Math.max(600, leaves * 38 + PAD_X*2);
-  const H = (r + 1) * LEVEL_H + 60;
+  const H = (r + 1) * LEVEL_H + 84; // extra room for full-path label under each leaf
 
   canvas.width  = W;
   canvas.height = H;
   const ctx = canvas.getContext('2d');
   ctx.fillStyle = '#fdfcf9'; ctx.fillRect(0,0,W,H);
 
-  // Assign x positions to leaves
-  let leafX = [];
-  function assignLeafX(node, depth) {
-    if (node.children.length === 0) {
-      leafX.push(PAD_X + leafX.length * (W-PAD_X*2) / Math.max(leaves-1,1));
-      return;
-    }
-    node.children.forEach(c => assignLeafX(c.node, depth+1));
-  }
-  assignLeafX(tree, 0);
-
-  // Draw nodes
-  let leafIdx = 0;
-  function drawNode(node, depth, x, parentX, parentY, labelEl, colorIdx) {
-    const y = 40 + depth * LEVEL_H;
-    const nodeColor = COLORS[colorIdx % COLORS.length];
-
-    // Edge from parent
-    if (parentX !== null) {
-      ctx.strokeStyle = '#d8d0c0'; ctx.lineWidth = 1.5;
-      ctx.beginPath(); ctx.moveTo(parentX, parentY); ctx.lineTo(x, y); ctx.stroke();
-
-      // Edge label (element name)
-      const mx = (parentX+x)/2, my = (parentY+y)/2;
-      ctx.fillStyle = nodeColor;
-      ctx.font = 'bold 11px DM Sans,sans-serif';
-      ctx.textAlign = 'center';
-      const lbl = labelEl || '';
-      ctx.fillText(lbl, mx+6, my);
-    }
-
-    // Node circle
-    if (depth < r) {
-      ctx.fillStyle = depth === 0 ? '#eee9df' : nodeColor + '22';
-      ctx.strokeStyle = depth === 0 ? '#c8c0b0' : nodeColor;
-      ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.arc(x, y, NODE_R, 0, Math.PI*2);
-      ctx.fill(); ctx.stroke();
-      if (depth === 0) {
-        ctx.fillStyle = '#6b6456'; ctx.font = 'bold 11px DM Sans,sans-serif'; ctx.textAlign='center';
-        ctx.fillText('Başla', x, y+4);
-      }
-    } else {
-      // Leaf: show full path
-      ctx.fillStyle = nodeColor;
-      ctx.beginPath(); ctx.arc(x, y, NODE_R-2, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = '#fff'; ctx.font = 'bold 9px DM Sans,sans-serif'; ctx.textAlign='center';
-      ctx.fillText(labelEl||'', x, y+3);
-      leafIdx++;
-    }
-
-    // Recurse
-    if (node.children.length > 0) {
-      // Compute x positions for children
-      function getSubLeafCount(n2) {
-        if (n2.children.length===0) return 1;
-        return n2.children.reduce((s,c)=>s+getSubLeafCount(c.node),0);
-      }
-      let childLeafStart = leafIdx;
-      // We need sub-leaf ranges — re-compute
-      node.children.forEach((child, ci) => {
-        const subLeaves = getSubLeafCount(child.node) || 1;
-        const cx = PAD_X + (childLeafStart + subLeaves/2 - 0.5) * (W-PAD_X*2) / Math.max(leaves-1,1);
-        childLeafStart += subLeaves;
-        drawNode(child.node, depth+1, cx, x, y, child.label, child.idx);
-      });
-    }
-  }
-
-  // Reset leafIdx and recompute with proper x
   function getSubLeafCount(node) {
     if (node.children.length===0) return 1;
     return node.children.reduce((s,c)=>s+getSubLeafCount(c.node),0);
   }
 
-  function drawLevel(node, depth, xStart, xEnd, parentX, parentY, labelEl, colorIdx) {
+  function drawLevel(node, depth, xStart, xEnd, parentX, parentY, labelEl, colorIdx, path) {
     const y = 40 + depth * LEVEL_H;
     const x = (xStart + xEnd) / 2;
     const nodeColor = COLORS[colorIdx % COLORS.length];
@@ -819,10 +844,11 @@ function drawTree(arrs, r) {
       ctx.fillStyle='#6b6456'; ctx.font='bold 10px DM Sans,sans-serif'; ctx.textAlign='center';
       ctx.fillText('Başla', x, y+4);
     } else if (depth === r) {
+      // Leaf: small colored dot, full accumulated path printed below it
       ctx.fillStyle = nodeColor;
-      ctx.beginPath(); ctx.arc(x,y,NODE_R-2,0,Math.PI*2); ctx.fill();
-      ctx.fillStyle='#fff'; ctx.font='bold 10px DM Sans,sans-serif'; ctx.textAlign='center';
-      ctx.fillText(labelEl||'', x, y+4);
+      ctx.beginPath(); ctx.arc(x,y,NODE_R-4,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle = nodeColor; ctx.font = 'bold 10px DM Sans,sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(path||'', x, y + NODE_R + 14);
     } else {
       ctx.fillStyle = nodeColor+'22'; ctx.strokeStyle=nodeColor; ctx.lineWidth=2;
       ctx.beginPath(); ctx.arc(x,y,NODE_R,0,Math.PI*2); ctx.fill(); ctx.stroke();
@@ -837,13 +863,14 @@ function drawTree(arrs, r) {
         const sub = getSubLeafCount(child.node);
         const cx1 = cur;
         const cx2 = cur + (xEnd-xStart)*sub/total;
-        drawLevel(child.node, depth+1, cx1, cx2, x, y, child.label, child.idx);
+        const childPath = path ? path + PATH_SEP + child.label : String(child.label);
+        drawLevel(child.node, depth+1, cx1, cx2, x, y, child.label, child.idx, childPath);
         cur = cx2;
       });
     }
   }
 
-  drawLevel(tree, 0, PAD_X, W-PAD_X, null, null, null, 0);
+  drawLevel(tree, 0, PAD_X, W-PAD_X, null, null, null, 0, '');
 }
 
 // ════════════════════════════════════════════════════════
