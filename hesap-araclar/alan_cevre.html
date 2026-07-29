@@ -316,13 +316,13 @@ footer p {
           </div>
         </div>
         <div id="form-quad-yamuk" style="display:none;">
-          <div class="hint">💡 İki paralel kenar (a, c), iki yan kenar (b, d) ve yüksekliği girin.</div>
+          <div class="hint">💡 İki paralel kenar (a, c), iki yan kenar (b, d) ve yüksekliği girin.<br>💡 Girilen değerlerin gerçek bir yamuk oluşturup oluşturmadığı kontrol edilir.</div>
           <div class="input-grid">
             <div class="input-group"><label>a — alt taban</label><input type="number" id="yam-a" placeholder="örn: 10" min="1" step="1"></div>
             <div class="input-group"><label>c — üst taban</label><input type="number" id="yam-c" placeholder="örn: 6" min="1" step="1"></div>
             <div class="input-group"><label>b — sol yan kenar</label><input type="number" id="yam-b" placeholder="örn: 5" min="1" step="1"></div>
-            <div class="input-group"><label>d — sağ yan kenar</label><input type="number" id="yam-d" placeholder="örn: 5" min="1" step="1"></div>
-            <div class="input-group"><label>h — yükseklik</label><input type="number" id="yam-h" placeholder="örn: 4" min="1" step="1"></div>
+            <div class="input-group"><label>d — sağ yan kenar</label><input type="number" id="yam-d" placeholder="örn: 3" min="1" step="1"></div>
+            <div class="input-group"><label>h — yükseklik</label><input type="number" id="yam-h" placeholder="örn: 3" min="1" step="1"></div>
             <div class="input-group"><label>Birim</label><select class="unit-sel" id="yam-unit"><option value="cm">cm</option><option value="m">m</option><option value="mm">mm</option></select></div>
           </div>
         </div>
@@ -714,12 +714,14 @@ function calcTriGenel() {
   if (Math.abs(a-b)<eps && Math.abs(b-c)<eps) turKenar = 'Eşkenar Üçgen';
   else if (Math.abs(a-b)<eps || Math.abs(b-c)<eps || Math.abs(a-c)<eps) turKenar = 'İkizkenar Üçgen';
 
-  // Dik üçgen tespiti (göreli tolerans)
+  // Açı türü tespiti (en uzun kenarın karşısındaki açı belirleyicidir)
   const sides  = [a,b,c].sort((x,y)=>x-y);
   const lhs    = Math.round((sides[0]**2 + sides[1]**2)*1e9)/1e9;
   const rhs    = Math.round(sides[2]**2 * 1e9)/1e9;
   const isDik  = Math.abs(lhs-rhs) < 1e-6*rhs;
-  const turAci = isDik ? ' · Dik Üçgen' : '';
+  const isGenis = !isDik && rhs > lhs;
+  const isDar   = !isDik && rhs < lhs;
+  const turAci = isDik ? ' · Dik Üçgen' : isGenis ? ' · Geniş Açılı Üçgen' : ' · Dar Açılı Üçgen';
 
   const isEsk = turKenar === 'Eşkenar Üçgen';
 
@@ -747,7 +749,13 @@ function calcTriGenel() {
   const steps = `
     <div class="step" style="color:var(--accent3);">📐 Tür: <strong>${turKenar}${turAci}</strong></div>
     <div class="step"><strong>Çevre:</strong> ${fmtN(a)} + ${fmtN(b)} + ${fmtN(c)} = <strong>${fmtN(cevre)} ${unit}</strong></div>
-    ${isDik ? `<div class="step" style="color:var(--accent2);">Pisagor: ${fmtN(sides[0])}² + ${fmtN(sides[1])}² = ${fmtN(Math.round(sides[0]**2))} + ${fmtN(Math.round(sides[1]**2))} = ${fmtN(Math.round(sides[2]**2))} = ${fmtN(sides[2])}² ✓</div>` : ''}
+    <div class="step" style="color:var(--accent2);">
+      ${isDik
+        ? `Pisagor: ${fmtN(sides[0])}² + ${fmtN(sides[1])}² = ${fmtN(Math.round(sides[0]**2))} + ${fmtN(Math.round(sides[1]**2))} = ${fmtN(Math.round(sides[2]**2))} = ${fmtN(sides[2])}² ✓ (Dik Üçgen)`
+        : isGenis
+          ? `${fmtN(sides[2])}² (=${fmtN(rhs)}) &gt; ${fmtN(sides[0])}² + ${fmtN(sides[1])}² (=${fmtN(lhs)}) olduğundan en uzun kenarın karşısındaki açı geniştir (Geniş Açılı Üçgen).`
+          : `${fmtN(sides[2])}² (=${fmtN(rhs)}) &lt; ${fmtN(sides[0])}² + ${fmtN(sides[1])}² (=${fmtN(lhs)}) olduğundan üçgenin bütün açıları dardır (Dar Açılı Üçgen).`}
+    </div>
     ${eskStep1}
     <div class="step"><strong>${isEsk ? 'Yarı çevre:' : 'Alan — Yarı çevre:'}</strong> \\( s = \\dfrac{${fmtN(a)}+${fmtN(b)}+${fmtN(c)}}{2} \\) = <strong>${fmtN(s)}</strong></div>
     <div class="step"><strong>Heron formülü:</strong> \\( A = \\sqrt{s(s-a)(s-b)(s-c)} \\)</div>
@@ -852,6 +860,34 @@ function calcYamuk() {
         d = getVal('yam-d'), h = getVal('yam-h');
   const unit = document.getElementById('yam-unit').value;
   if (!a||!b||!c||!d||!h||[a,b,c,d,h].some(v=>v<=0)) throw new Error('Tüm değerler için pozitif sayı girin.');
+
+  // Geometrik tutarlılık kontrolü
+  // 1) Her yan kenar, yüksekliğe indirilen dikmeyle birlikte bir dik üçgenin
+  //    hipotenüsü gibi davranır; bu yüzden yan kenar yükseklikten kısa olamaz.
+  if (b < h) throw new Error(
+    'Girilen değerlerle bir yamuk oluşturulamıyor.\n' +
+    `Yan kenar b = ${fmtN(b)} ${unit}, yükseklikten (h = ${fmtN(h)} ${unit}) küçük olamaz.`
+  );
+  if (d < h) throw new Error(
+    'Girilen değerlerle bir yamuk oluşturulamıyor.\n' +
+    `Yan kenar d = ${fmtN(d)} ${unit}, yükseklikten (h = ${fmtN(h)} ${unit}) küçük olamaz.`
+  );
+
+  // 2) Yan kenarların yükseklik düşüldükten sonraki taban izdüşümleri (X, Y),
+  //    tabanlar arasındaki farkı (|a-c|) karşılamalıdır: |a-c| = X+Y ya da |X-Y|.
+  const X = Math.sqrt(b*b - h*h);
+  const Y = Math.sqrt(d*d - h*h);
+  const diff = Math.abs(a - c);
+  const sum  = X + Y;
+  const dif  = Math.abs(X - Y);
+  const eps  = Math.max(1e-6, 0.01*sum);
+  const geoValid = Math.abs(diff - sum) < eps || Math.abs(diff - dif) < eps;
+  if (!geoValid) throw new Error(
+    'Girilen değerlerle geometrik olarak bir yamuk oluşturulamıyor.\n' +
+    'Yan kenarların (b, d) yüksekliğe göre taban izdüşümleri, iki tabanın (a, c) farkını karşılamıyor.\n' +
+    'a, b, c, d, h değerlerinin gerçek bir yamuğa ait olduğundan emin olun.'
+  );
+
   const alan = (a+c)*h/2, cevre = a+b+c+d;
   const steps = `
     <div class="step"><strong>Çevre:</strong> Ç = a + b + c + d = ${fmtN(a)} + ${fmtN(b)} + ${fmtN(c)} + ${fmtN(d)} = <strong>${fmtN(cevre)} ${unit}</strong></div>
