@@ -639,87 +639,223 @@ function setSource(cat, unit, valRaw) {
   convert(cat);
 }
 
-// ─── UZUNLUK ────────────────────────────────────────────────────────────────
-// Taban: metre (m)
-const uzunlukToM = {
-  km:1000, hm:100, dam:10, m:1, dm:0.1, cm:0.01, mm:0.001, um:1e-6,
-  mi:1609.344, nmi:1852, yd:0.9144, ft:0.3048, in:0.0254,
-  merhale:45480, fersah:5685, osmMil:1895,
-  kulac:1.895, mimarArsın:0.75774, carsıArsın:0.6858, endaze:0.6525, parmak:0.031572
+// ─── BİRİM KONFİGÜRASYONU (TEK KAYNAK) ─────────────────────────────────────
+// Her kategori için birim adı, sembolü ve taban birime çevirme katsayısı
+// TEK YERDE tanımlanır. Önceki sürümde bu değerler hem "...ToX" tablolarında
+// hem de convert() içindeki gruplarda ayrı ayrı yazılıyordu; bu, iki yer
+// senkron kalmazsa hatalı sonuç riski taşıyordu. Artık katsayı sadece burada var.
+const UNIT_CONFIG = {
+  uzunluk: { groups: [
+    { title:'Metrik', note:null, units:[
+      {key:'km',name:'Kilometre',sym:'km',factor:1000},
+      {key:'hm',name:'Hektometre',sym:'hm',factor:100},
+      {key:'dam',name:'Dekametre',sym:'dam',factor:10},
+      {key:'m',name:'Metre',sym:'m',factor:1},
+      {key:'dm',name:'Desimetre',sym:'dm',factor:0.1},
+      {key:'cm',name:'Santimetre',sym:'cm',factor:0.01},
+      {key:'mm',name:'Milimetre',sym:'mm',factor:0.001},
+      {key:'um',name:'Mikrometre',sym:'μm',factor:1e-6},
+    ]},
+    { title:'Emperyal', note:null, units:[
+      {key:'mi',name:'Kara mili',sym:'mi',factor:1609.344},
+      {key:'nmi',name:'Deniz mili',sym:'nmi',factor:1852},
+      {key:'yd',name:'Yard',sym:'yd',factor:0.9144},
+      {key:'ft',name:'Foot',sym:'ft',factor:0.3048},
+      {key:'in',name:'İnç',sym:'in',factor:0.0254},
+    ]},
+    { title:'Osmanlı', note:'Değerler yaklaşıktır. Çarşı arşını: 68,58 cm; mimar arşını: 75,77 cm; endaze: 65,25 cm. Kaynak: Wikip. & Kotaman 2024.', units:[
+      {key:'merhale',name:'Merhale',sym:'',factor:45480},
+      {key:'fersah',name:'Fersah',sym:'',factor:5685},
+      {key:'osmMil',name:'Osmanlı Mili',sym:'',factor:1895},
+      {key:'kulac',name:'Kulaç',sym:'',factor:1.895},
+      {key:'mimarArsın',name:'Mimar Arşını',sym:'',factor:0.75774},
+      {key:'carsıArsın',name:'Çarşı Arşını',sym:'',factor:0.6858},
+      {key:'endaze',name:'Endaze',sym:'',factor:0.6525},
+      {key:'parmak',name:'Parmak',sym:'',factor:0.031572},
+    ]},
+  ]},
+
+  alan: { groups: [
+    { title:'Metrik', note:null, units:[
+      {key:'km2',name:'Kilometrekare',sym:'km²',factor:1e6},
+      {key:'hm2',name:'Hektometrekare',sym:'hm²',factor:1e4},
+      {key:'dam2',name:'Dekametrekare',sym:'dam²',factor:100},
+      {key:'m2',name:'Metrekare',sym:'m²',factor:1},
+      {key:'dm2',name:'Desimetrekare',sym:'dm²',factor:0.01},
+      {key:'cm2',name:'Santimetrekare',sym:'cm²',factor:1e-4},
+      {key:'mm2',name:'Milimetrekare',sym:'mm²',factor:1e-6},
+    ]},
+    { title:'Arazi Ölçüleri', note:null, units:[
+      {key:'hektar2',name:'Hektar',sym:'ha',factor:10000},
+      {key:'dekar',name:'Dekar / Dönüm',sym:'daa',factor:1000},
+      {key:'ar',name:'Ar',sym:'a',factor:100},
+      {key:'acre',name:'Acre',sym:'ac',factor:4046.8564},
+    ]},
+    { title:'Emperyal', note:null, units:[
+      {key:'mi2',name:'Mil kare',sym:'mi²',factor:2589988.11},
+      {key:'yd2',name:'Yard kare',sym:'yd²',factor:0.836127},
+      {key:'ft2',name:'Foot kare',sym:'ft²',factor:0.092903},
+      {key:'in2',name:'İnç kare',sym:'in²',factor:6.4516e-4},
+    ]},
+    { title:'Osmanlı', note:'Evlek ≈ 250 m², Dönüm (Osmanlı) ≈ 919,3 m² (1000 arşın²), Cerîb ≈ 1838,6 m².', units:[
+      {key:'evlek',name:'Evlek',sym:'',factor:250},
+      {key:'donum_osm',name:'Dönüm (Osmanlı)',sym:'',factor:919.3},
+      {key:'cerib',name:'Cerîb',sym:'',factor:1838.6},
+    ]},
+  ]},
+
+  hacim: { groups: [
+    { title:'Metrik Hacim', note:null, units:[
+      {key:'m3',name:'Metreküp',sym:'m³',factor:1000},
+      {key:'dm3',name:'Desimetreküp',sym:'dm³',factor:1},
+      {key:'cm3',name:'Santimetreküp',sym:'cm³',factor:0.001},
+      {key:'mm3',name:'Milimetreküp',sym:'mm³',factor:1e-6},
+    ]},
+    { title:'Sıvı Ölçüleri', note:null, units:[
+      {key:'lt',name:'Litre',sym:'L',factor:1},
+      {key:'dl',name:'Desilitre',sym:'dL',factor:0.1},
+      {key:'cl',name:'Santilitre',sym:'cL',factor:0.01},
+      {key:'ml',name:'Mililitre',sym:'mL',factor:0.001},
+    ]},
+    { title:'Emperyal', note:null, units:[
+      {key:'gal_us',name:'Galon (US)',sym:'gal',factor:3.785411784},
+      {key:'gal_uk',name:'Galon (UK)',sym:'gal',factor:4.54609},
+      {key:'qt',name:'Quart (US)',sym:'qt',factor:0.946353},
+      {key:'pint',name:'Pint (US)',sym:'pt',factor:0.473176},
+      {key:'fl_oz',name:'Fluid ounce (US)',sym:'fl oz',factor:0.0295735},
+      {key:'ft3',name:'Foot küp',sym:'ft³',factor:28.316847},
+      {key:'in3',name:'İnç küp',sym:'in³',factor:0.016387},
+    ]},
+    { title:'Osmanlı', note:'Kile ≈ 25,656 L (İstanbul kilesi). Okka: sıvı ölçüsü olarak ≈ 1,283 L.', units:[
+      {key:'kile',name:'Kile',sym:'',factor:25.656},
+      {key:'mud',name:'Müd (4 kile)',sym:'',factor:25.656*4},
+      {key:'okka_sıvı',name:'Okka (sıvı)',sym:'',factor:1.282945},
+    ]},
+  ]},
+
+  kutle: { groups: [
+    { title:'Metrik', note:null, units:[
+      {key:'ton',name:'Ton',sym:'t',factor:1e6},
+      {key:'kg',name:'Kilogram',sym:'kg',factor:1000},
+      {key:'gr',name:'Gram',sym:'g',factor:1},
+      {key:'mg',name:'Miligram',sym:'mg',factor:0.001},
+    ]},
+    { title:'Emperyal', note:null, units:[
+      {key:'lb',name:'Pound',sym:'lb',factor:453.592},
+      {key:'oz',name:'Ons',sym:'oz',factor:28.3495},
+      {key:'stone',name:'Stone',sym:'st',factor:6350.29},
+      {key:'ton_us',name:'Ton (US)',sym:'',factor:907185},
+      {key:'ton_uk',name:'Ton (UK / uzun)',sym:'',factor:1016047},
+    ]},
+    { title:'Osmanlı', note:'1 okka = 400 dirhem = 1282,945 g. 1 batman = 6 okka. 1 kantar = 44 okka. 1 çeki = 4 kantar. Kaynak: Mehmet İzzet, İlm-i Hisab (1912).', units:[
+      {key:'ceki',name:'Çeki',sym:'',factor:225798.32},
+      {key:'kantar',name:'Kantar',sym:'',factor:56449.58},
+      {key:'batman',name:'Batman',sym:'',factor:7697.67},
+      {key:'okka',name:'Okka / Kıyye',sym:'',factor:1282.945},
+      {key:'dirhem',name:'Dirhem',sym:'',factor:3.2073625},
+      {key:'miskal',name:'Miskal',sym:'',factor:4.5819464},
+      {key:'kirat',name:'Kırat',sym:'',factor:0.20046},
+    ]},
+  ]},
+
+  hiz: { groups: [
+    { title:'Hız Birimleri', note:null, units:[
+      {key:'ms',name:'Metre / saniye',sym:'m/s',factor:1},
+      {key:'kmh',name:'Kilometre / saat',sym:'km/s',factor:1/3.6},
+      {key:'mph',name:'Mil / saat',sym:'mph',factor:0.44704},
+      {key:'knot',name:'Knot (deniz mili/saat)',sym:'kn',factor:1852/3600},
+      {key:'mach',name:'Mach (deniz seviyesi)',sym:'Ma',factor:340.29},
+      {key:'fts',name:'Foot / saniye',sym:'ft/s',factor:0.3048},
+    ]},
+  ]},
+
+  zaman: { groups: [
+    { title:'Zaman Birimleri', note:'Hesaplamalarda "1 yıl = 365 gün" kabul edilmiştir.', units:[
+      {key:'yil',name:'Yıl',sym:'yıl',factor:31536000},
+      {key:'hafta',name:'Hafta',sym:'hafta',factor:604800},
+      {key:'gun',name:'Gün',sym:'gün',factor:86400},
+      {key:'saat',name:'Saat',sym:'saat',factor:3600},
+      {key:'dakika',name:'Dakika',sym:'dak',factor:60},
+      {key:'saniye',name:'Saniye',sym:'s',factor:1},
+      {key:'ms',name:'Milisaniye',sym:'ms',factor:0.001},
+    ]},
+  ]},
+
+  guc: { groups: [
+    { title:'Güç Birimleri', note:null, units:[
+      {key:'W',name:'Watt',sym:'W',factor:1},
+      {key:'kW',name:'Kilowatt',sym:'kW',factor:1000},
+      {key:'MW',name:'Megawatt',sym:'MW',factor:1e6},
+      {key:'hp_met',name:'Beygir gücü (metrik)',sym:'PS',factor:735.49875},
+      {key:'hp_imp',name:'Beygir gücü (İngiliz)',sym:'hp',factor:745.69987},
+      {key:'kcal_s',name:'Kilokalori/saniye',sym:'kcal/s',factor:4186.8},
+      {key:'BTU_h',name:'BTU/saat',sym:'BTU/h',factor:0.29307107},
+    ]},
+  ]},
+
+  enerji: { groups: [
+    { title:'Enerji Birimleri', note:null, units:[
+      {key:'J',name:'Joule',sym:'J',factor:1},
+      {key:'kJ',name:'Kilojoule',sym:'kJ',factor:1000},
+      {key:'MJ',name:'Megajoule',sym:'MJ',factor:1e6},
+      {key:'cal',name:'Kalori',sym:'cal',factor:4.184},
+      {key:'kcal',name:'Kilokalori',sym:'kcal',factor:4184},
+      {key:'Wh',name:'Watt·saat',sym:'Wh',factor:3600},
+      {key:'kWh',name:'Kilowatt·saat',sym:'kWh',factor:3600000},
+      {key:'eV',name:'Elektron volt',sym:'eV',factor:1.602176634e-19},
+      {key:'BTU',name:'BTU',sym:'BTU',factor:1055.05585},
+    ]},
+  ]},
+
+  kuvvet: { groups: [
+    { title:'Kuvvet Birimleri', note:null, units:[
+      {key:'N',name:'Newton',sym:'N',factor:1},
+      {key:'kN',name:'Kilonewton',sym:'kN',factor:1000},
+      {key:'MN',name:'Meganewton',sym:'MN',factor:1e6},
+      {key:'dyn',name:'Dyn',sym:'dyn',factor:1e-5},
+      {key:'kgf',name:'Kilogram-kuvvet',sym:'kgf',factor:9.80665},
+      {key:'lbf',name:'Pound-kuvvet',sym:'lbf',factor:4.44822},
+      {key:'ozf',name:'Ons-kuvvet',sym:'ozf',factor:0.278014},
+    ]},
+  ]},
+
+  veri: { groups: [
+    { title:'SI (Ondalık)', note:null, units:[
+      {key:'bit',name:'Bit',sym:'bit',factor:1},
+      {key:'B',name:'Byte',sym:'B',factor:8},
+      {key:'KB',name:'Kilobyte',sym:'KB',factor:8000},
+      {key:'MB',name:'Megabyte',sym:'MB',factor:8e6},
+      {key:'GB',name:'Gigabyte',sym:'GB',factor:8e9},
+      {key:'TB',name:'Terabyte',sym:'TB',factor:8e12},
+      {key:'PB',name:'Petabyte',sym:'PB',factor:8e15},
+    ]},
+    { title:'IEC (İkili)', note:'1 KiB = 1024 B, 1 MiB = 1024 KiB, vb.', units:[
+      {key:'Kib',name:'Kibibyte',sym:'KiB',factor:8192},
+      {key:'Mib',name:'Mebibyte',sym:'MiB',factor:8388608},
+      {key:'Gib',name:'Gibibyte',sym:'GiB',factor:8589934592},
+    ]},
+  ]},
 };
 
-// ─── ALAN ───────────────────────────────────────────────────────────────────
-// Taban: m²
-const alanToM2 = {
-  km2:1e6, hm2:1e4, dam2:100, m2:1, dm2:1e-2, cm2:1e-4, mm2:1e-6,
-  hektar2:10000, dekar:1000, ar:100, donum:1000, acre:4046.8564,
-  mi2:2589988.11, yd2:0.836127, ft2:0.092903, in2:6.4516e-4,
-  evlek:250, donum_osm:919.3, cerib:1838.6
-};
+// Her kategori için "birim anahtarı -> katsayı" eşlemesini config'ten türetiyoruz.
+// Böylece katsayı tabloları elle ayrıca yazılmaz; UNIT_CONFIG tek kaynaktır.
+function buildFactorMap(cat) {
+  const map = {};
+  for (const g of UNIT_CONFIG[cat].groups) {
+    for (const u of g.units) map[u.key] = u.factor;
+  }
+  return map;
+}
+for (const cat in UNIT_CONFIG) {
+  UNIT_CONFIG[cat].factorMap = buildFactorMap(cat);
+}
 
-// ─── HACİM ──────────────────────────────────────────────────────────────────
-// Taban: litre (L)
-const hacimToL = {
-  m3:1000, dm3:1, cm3:0.001, mm3:1e-6,
-  lt:1, dl:0.1, cl:0.01, ml:0.001,
-  gal_us:3.785411784, gal_uk:4.54609, qt:0.946353, pint:0.473176, fl_oz:0.0295735,
-  ft3:28.316847, in3:0.016387,
-  kile:25.656, mud:25.656*4, okka_sıvı:1.282945
-};
-
-// ─── KÜTLE ──────────────────────────────────────────────────────────────────
-// Taban: gram (g)
-const kutleToG = {
-  ton:1e6, kg:1000, gr:1, mg:0.001,
-  lb:453.592, oz:28.3495, stone:6350.29, ton_us:907185, ton_uk:1016047,
-  ceki:225798.32, kantar:56449.58, batman:7697.67,
-  okka:1282.945, dirhem:3.2073625, miskal:4.5819464, kirat:0.20046
-};
-
-// ─── HIZ ────────────────────────────────────────────────────────────────────
-// Taban: m/s
-const hizToMs = {
-  ms:1, kmh:1/3.6, mph:0.44704, knot:1852/3600, mach:340.29, fts:0.3048
-};
-
-// ─── ZAMAN ──────────────────────────────────────────────────────────────────
-// Taban: saniye
-const zamanToS = {
-  yil:31536000, hafta:604800, gun:86400, saat:3600, dakika:60, saniye:1, ms:0.001
-};
-
-// ─── GÜÇ ────────────────────────────────────────────────────────────────────
-// Taban: Watt
-const gucToW = {
-  W:1, kW:1000, MW:1e6,
-  hp_met:735.49875, hp_imp:745.69987,
-  kcal_s:4186.8, BTU_h:0.29307107
-};
-
-// ─── ENERJİ ─────────────────────────────────────────────────────────────────
-// Taban: Joule
-const enerjiToJ = {
-  J:1, kJ:1000, MJ:1e6,
-  cal:4.184, kcal:4184,
-  Wh:3600, kWh:3600000,
-  eV:1.602176634e-19, BTU:1055.05585
-};
-
-// ─── KUVVET ─────────────────────────────────────────────────────────────────
-// Taban: Newton
-const kuvvetToN = {
-  N:1, kN:1000, MN:1e6,
-  dyn:1e-5, kgf:9.80665, lbf:4.44822, ozf:0.278014
-};
-
-// ─── VERİ ───────────────────────────────────────────────────────────────────
-// Taban: bit
-const veriToBit = {
-  bit:1, B:8, KB:8000, MB:8e6, GB:8e9, TB:8e12, PB:8e15,
-  Kib:8192, Mib:8388608, Gib:8589934592
-};
-
-// ─── ANA DÖNÜŞÜM FONKSİYONU ─────────────────────────────────────────────────
+// ─── ANA DÖNÜŞÜM FONKSİYONU (config tabanlı, tek fonksiyon) ────────────────
+// Önceki sürümde burada kategori sayısı kadar (11 adet) if/else if dalı ve
+// yüzlerce satır kod vardı; her dal aynı işi (baseVal hesapla, satırları
+// elle yaz) tekrar ediyordu. Artık tüm kategoriler UNIT_CONFIG üzerinden
+// aynı jenerik mantıkla işleniyor; yeni kategori eklemek sadece UNIT_CONFIG'e
+// veri eklemek anlamına geliyor, bu fonksiyonu büyütmüyor.
 function convert(cat) {
   const val  = parseFloat(document.getElementById(cat+'-val').value);
   const unit = document.getElementById(cat+'-unit').value;
@@ -727,222 +863,21 @@ function convert(cat) {
 
   if (cat === 'sicaklik') { convertSicaklik(val, unit); return; }
 
-  let baseVal, table, groups;
+  const config  = UNIT_CONFIG[cat];
+  const baseVal = val * config.factorMap[unit];
 
-  if (cat==='uzunluk') {
-    baseVal = val * uzunlukToM[unit];
-    groups = [
-      { title:'Metrik', note:null, rows:[
-        {key:'km',name:'Kilometre',sym:'km',valRaw:baseVal/1000,val:fmt(baseVal/1000)},
-        {key:'hm',name:'Hektometre',sym:'hm',valRaw:baseVal/100,val:fmt(baseVal/100)},
-        {key:'dam',name:'Dekametre',sym:'dam',valRaw:baseVal/10,val:fmt(baseVal/10)},
-        {key:'m',name:'Metre',sym:'m',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'dm',name:'Desimetre',sym:'dm',valRaw:baseVal/0.1,val:fmt(baseVal/0.1)},
-        {key:'cm',name:'Santimetre',sym:'cm',valRaw:baseVal/0.01,val:fmt(baseVal/0.01)},
-        {key:'mm',name:'Milimetre',sym:'mm',valRaw:baseVal/0.001,val:fmt(baseVal/0.001)},
-        {key:'um',name:'Mikrometre',sym:'μm',valRaw:baseVal/1e-6,val:fmt(baseVal/1e-6)},
-      ]},
-      { title:'Emperyal', note:null, rows:[
-        {key:'mi',name:'Kara mili',sym:'mi',valRaw:baseVal/1609.344,val:fmt(baseVal/1609.344)},
-        {key:'nmi',name:'Deniz mili',sym:'nmi',valRaw:baseVal/1852,val:fmt(baseVal/1852)},
-        {key:'yd',name:'Yard',sym:'yd',valRaw:baseVal/0.9144,val:fmt(baseVal/0.9144)},
-        {key:'ft',name:'Foot',sym:'ft',valRaw:baseVal/0.3048,val:fmt(baseVal/0.3048)},
-        {key:'in',name:'İnç',sym:'in',valRaw:baseVal/0.0254,val:fmt(baseVal/0.0254)},
-      ]},
-      { title:'Osmanlı', note:'Değerler yaklaşıktır. Çarşı arşını: 68,58 cm; mimar arşını: 75,77 cm; endaze: 65,25 cm. Kaynak: Wikip. & Kotaman 2024.', rows:[
-        {key:'merhale',name:'Merhale',sym:'',valRaw:baseVal/45480,val:fmt(baseVal/45480)},
-        {key:'fersah',name:'Fersah',sym:'',valRaw:baseVal/5685,val:fmt(baseVal/5685)},
-        {key:'osmMil',name:'Osmanlı Mili',sym:'',valRaw:baseVal/1895,val:fmt(baseVal/1895)},
-        {key:'kulac',name:'Kulaç',sym:'',valRaw:baseVal/1.895,val:fmt(baseVal/1.895)},
-        {key:'mimarArsın',name:'Mimar Arşını',sym:'',valRaw:baseVal/0.75774,val:fmt(baseVal/0.75774)},
-        {key:'carsıArsın',name:'Çarşı Arşını',sym:'',valRaw:baseVal/0.6858,val:fmt(baseVal/0.6858)},
-        {key:'endaze',name:'Endaze',sym:'',valRaw:baseVal/0.6525,val:fmt(baseVal/0.6525)},
-        {key:'parmak',name:'Parmak',sym:'',valRaw:baseVal/0.031572,val:fmt(baseVal/0.031572)},
-      ]},
-    ];
-  }
-  else if (cat==='alan') {
-    baseVal = val * alanToM2[unit];
-    groups = [
-      { title:'Metrik', note:null, rows:[
-        {key:'km2',name:'Kilometrekare',sym:'km²',valRaw:baseVal/1e6,val:fmt(baseVal/1e6)},
-        {key:'hm2',name:'Hektometrekare',sym:'hm²',valRaw:baseVal/1e4,val:fmt(baseVal/1e4)},
-        {key:'dam2',name:'Dekametrekare',sym:'dam²',valRaw:baseVal/100,val:fmt(baseVal/100)},
-        {key:'m2',name:'Metrekare',sym:'m²',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'dm2',name:'Desimetrekare',sym:'dm²',valRaw:baseVal/0.01,val:fmt(baseVal/0.01)},
-        {key:'cm2',name:'Santimetrekare',sym:'cm²',valRaw:baseVal/1e-4,val:fmt(baseVal/1e-4)},
-        {key:'mm2',name:'Milimetrekare',sym:'mm²',valRaw:baseVal/1e-6,val:fmt(baseVal/1e-6)},
-      ]},
-      { title:'Arazi Ölçüleri', note:null, rows:[
-        {key:'hektar2',name:'Hektar',sym:'ha',valRaw:baseVal/10000,val:fmt(baseVal/10000)},
-        {key:'dekar',name:'Dekar / Dönüm',sym:'daa',valRaw:baseVal/1000,val:fmt(baseVal/1000)},
-        {key:'ar',name:'Ar',sym:'a',valRaw:baseVal/100,val:fmt(baseVal/100)},
-        {key:'acre',name:'Acre',sym:'ac',valRaw:baseVal/4046.8564,val:fmt(baseVal/4046.8564)},
-      ]},
-      { title:'Emperyal', note:null, rows:[
-        {key:'mi2',name:'Mil kare',sym:'mi²',valRaw:baseVal/2589988.11,val:fmt(baseVal/2589988.11)},
-        {key:'yd2',name:'Yard kare',sym:'yd²',valRaw:baseVal/0.836127,val:fmt(baseVal/0.836127)},
-        {key:'ft2',name:'Foot kare',sym:'ft²',valRaw:baseVal/0.092903,val:fmt(baseVal/0.092903)},
-        {key:'in2',name:'İnç kare',sym:'in²',valRaw:baseVal/6.4516e-4,val:fmt(baseVal/6.4516e-4)},
-      ]},
-      { title:'Osmanlı', note:'Evlek ≈ 250 m², Dönüm (Osmanlı) ≈ 919,3 m² (1000 arşın²), Cerîb ≈ 1838,6 m².', rows:[
-        {key:'evlek',name:'Evlek',sym:'',valRaw:baseVal/250,val:fmt(baseVal/250)},
-        {key:'donum_osm',name:'Dönüm (Osmanlı)',sym:'',valRaw:baseVal/919.3,val:fmt(baseVal/919.3)},
-        {key:'cerib',name:'Cerîb',sym:'',valRaw:baseVal/1838.6,val:fmt(baseVal/1838.6)},
-      ]},
-    ];
-  }
-  else if (cat==='hacim') {
-    baseVal = val * hacimToL[unit]; // litre cinsinden
-    groups = [
-      { title:'Metrik Hacim', note:null, rows:[
-        {key:'m3',name:'Metreküp',sym:'m³',valRaw:baseVal/1000,val:fmt(baseVal/1000)},
-        {key:'dm3',name:'Desimetreküp',sym:'dm³',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'cm3',name:'Santimetreküp',sym:'cm³',valRaw:baseVal*1000,val:fmt(baseVal*1000)},
-        {key:'mm3',name:'Milimetreküp',sym:'mm³',valRaw:baseVal*1e6,val:fmt(baseVal*1e6)},
-      ]},
-      { title:'Sıvı Ölçüleri', note:null, rows:[
-        {key:'lt',name:'Litre',sym:'L',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'dl',name:'Desilitre',sym:'dL',valRaw:baseVal/0.1,val:fmt(baseVal/0.1)},
-        {key:'cl',name:'Santilitre',sym:'cL',valRaw:baseVal/0.01,val:fmt(baseVal/0.01)},
-        {key:'ml',name:'Mililitre',sym:'mL',valRaw:baseVal/0.001,val:fmt(baseVal/0.001)},
-      ]},
-      { title:'Emperyal', note:null, rows:[
-        {key:'gal_us',name:'Galon (US)',sym:'gal',valRaw:baseVal/3.785411784,val:fmt(baseVal/3.785411784)},
-        {key:'gal_uk',name:'Galon (UK)',sym:'gal',valRaw:baseVal/4.54609,val:fmt(baseVal/4.54609)},
-        {key:'qt',name:'Quart (US)',sym:'qt',valRaw:baseVal/0.946353,val:fmt(baseVal/0.946353)},
-        {key:'pint',name:'Pint (US)',sym:'pt',valRaw:baseVal/0.473176,val:fmt(baseVal/0.473176)},
-        {key:'fl_oz',name:'Fluid ounce (US)',sym:'fl oz',valRaw:baseVal/0.0295735,val:fmt(baseVal/0.0295735)},
-        {key:'ft3',name:'Foot küp',sym:'ft³',valRaw:baseVal/28.316847,val:fmt(baseVal/28.316847)},
-        {key:'in3',name:'İnç küp',sym:'in³',valRaw:baseVal/0.016387,val:fmt(baseVal/0.016387)},
-      ]},
-      { title:'Osmanlı', note:'Kile ≈ 25,656 L (İstanbul kilesi). Okka: sıvı ölçüsü olarak ≈ 1,283 L.', rows:[
-        {key:'kile',name:'Kile',sym:'',valRaw:baseVal/25.656,val:fmt(baseVal/25.656)},
-        {key:'mud',name:'Müd (4 kile)',sym:'',valRaw:baseVal/(25.656*4),val:fmt(baseVal/(25.656*4))},
-        {key:'okka_sıvı',name:'Okka (sıvı)',sym:'',valRaw:baseVal/1.282945,val:fmt(baseVal/1.282945)},
-      ]},
-    ];
-  }
-  else if (cat==='kutle') {
-    baseVal = val * kutleToG[unit]; // gram cinsinden
-    groups = [
-      { title:'Metrik', note:null, rows:[
-        {key:'ton',name:'Ton',sym:'t',valRaw:baseVal/1e6,val:fmt(baseVal/1e6)},
-        {key:'kg',name:'Kilogram',sym:'kg',valRaw:baseVal/1000,val:fmt(baseVal/1000)},
-        {key:'gr',name:'Gram',sym:'g',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'mg',name:'Miligram',sym:'mg',valRaw:baseVal/0.001,val:fmt(baseVal/0.001)},
-      ]},
-      { title:'Emperyal', note:null, rows:[
-        {key:'lb',name:'Pound',sym:'lb',valRaw:baseVal/453.592,val:fmt(baseVal/453.592)},
-        {key:'oz',name:'Ons',sym:'oz',valRaw:baseVal/28.3495,val:fmt(baseVal/28.3495)},
-        {key:'stone',name:'Stone',sym:'st',valRaw:baseVal/6350.29,val:fmt(baseVal/6350.29)},
-        {key:'ton_us',name:'Ton (US)',sym:'',valRaw:baseVal/907185,val:fmt(baseVal/907185)},
-        {key:'ton_uk',name:'Ton (UK / uzun)',sym:'',valRaw:baseVal/1016047,val:fmt(baseVal/1016047)},
-      ]},
-      { title:'Osmanlı', note:'1 okka = 400 dirhem = 1282,945 g. 1 batman = 6 okka. 1 kantar = 44 okka. 1 çeki = 4 kantar. Kaynak: Mehmet İzzet, İlm-i Hisab (1912).', rows:[
-        {key:'ceki',name:'Çeki',sym:'',valRaw:baseVal/225798.32,val:fmt(baseVal/225798.32)},
-        {key:'kantar',name:'Kantar',sym:'',valRaw:baseVal/56449.58,val:fmt(baseVal/56449.58)},
-        {key:'batman',name:'Batman',sym:'',valRaw:baseVal/7697.67,val:fmt(baseVal/7697.67)},
-        {key:'okka',name:'Okka / Kıyye',sym:'',valRaw:baseVal/1282.945,val:fmt(baseVal/1282.945)},
-        {key:'dirhem',name:'Dirhem',sym:'',valRaw:baseVal/3.2073625,val:fmt(baseVal/3.2073625)},
-        {key:'miskal',name:'Miskal',sym:'',valRaw:baseVal/4.5819464,val:fmt(baseVal/4.5819464)},
-        {key:'kirat',name:'Kırat',sym:'',valRaw:baseVal/0.20046,val:fmt(baseVal/0.20046)},
-      ]},
-    ];
-  }
-  else if (cat==='hiz') {
-    baseVal = val * hizToMs[unit]; // m/s
-    groups = [
-      { title:'Hız Birimleri', note:null, rows:[
-        {key:'ms',name:'Metre / saniye',sym:'m/s',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'kmh',name:'Kilometre / saat',sym:'km/s',valRaw:baseVal*3.6,val:fmt(baseVal*3.6)},
-        {key:'mph',name:'Mil / saat',sym:'mph',valRaw:baseVal/0.44704,val:fmt(baseVal/0.44704)},
-        {key:'knot',name:'Knot (deniz mili/saat)',sym:'kn',valRaw:baseVal/(1852/3600),val:fmt(baseVal/(1852/3600))},
-        {key:'mach',name:'Mach (deniz seviyesi)',sym:'Ma',valRaw:baseVal/340.29,val:fmt(baseVal/340.29)},
-        {key:'fts',name:'Foot / saniye',sym:'ft/s',valRaw:baseVal/0.3048,val:fmt(baseVal/0.3048)},
-      ]},
-    ];
-  }
-  else if (cat==='zaman') {
-    baseVal = val * zamanToS[unit]; // saniye
-    groups = [
-      { title:'Zaman Birimleri', note:'Hesaplamalarda "1 yıl = 365 gün" kabul edilmiştir.', rows:[
-        {key:'yil',name:'Yıl',sym:'yıl',valRaw:baseVal/31536000,val:fmt(baseVal/31536000)},
-        {key:'hafta',name:'Hafta',sym:'hafta',valRaw:baseVal/604800,val:fmt(baseVal/604800)},
-        {key:'gun',name:'Gün',sym:'gün',valRaw:baseVal/86400,val:fmt(baseVal/86400)},
-        {key:'saat',name:'Saat',sym:'saat',valRaw:baseVal/3600,val:fmt(baseVal/3600)},
-        {key:'dakika',name:'Dakika',sym:'dak',valRaw:baseVal/60,val:fmt(baseVal/60)},
-        {key:'saniye',name:'Saniye',sym:'s',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'ms',name:'Milisaniye',sym:'ms',valRaw:baseVal/0.001,val:fmt(baseVal/0.001)},
-      ]},
-    ];
-  }
-  else if (cat==='guc') {
-    baseVal = val * gucToW[unit]; // Watt
-    groups = [
-      { title:'Güç Birimleri', note:null, rows:[
-        {key:'W',name:'Watt',sym:'W',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'kW',name:'Kilowatt',sym:'kW',valRaw:baseVal/1000,val:fmt(baseVal/1000)},
-        {key:'MW',name:'Megawatt',sym:'MW',valRaw:baseVal/1e6,val:fmt(baseVal/1e6)},
-        {key:'hp_met',name:'Beygir gücü (metrik)',sym:'PS',valRaw:baseVal/735.49875,val:fmt(baseVal/735.49875)},
-        {key:'hp_imp',name:'Beygir gücü (İngiliz)',sym:'hp',valRaw:baseVal/745.69987,val:fmt(baseVal/745.69987)},
-        {key:'kcal_s',name:'Kilokalori/saniye',sym:'kcal/s',valRaw:baseVal/4186.8,val:fmt(baseVal/4186.8)},
-        {key:'BTU_h',name:'BTU/saat',sym:'BTU/h',valRaw:baseVal/0.29307107,val:fmt(baseVal/0.29307107)},
-      ]},
-    ];
-  }
-  else if (cat==='enerji') {
-    baseVal = val * enerjiToJ[unit]; // Joule
-    groups = [
-      { title:'Enerji Birimleri', note:null, rows:[
-        {key:'J',name:'Joule',sym:'J',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'kJ',name:'Kilojoule',sym:'kJ',valRaw:baseVal/1000,val:fmt(baseVal/1000)},
-        {key:'MJ',name:'Megajoule',sym:'MJ',valRaw:baseVal/1e6,val:fmt(baseVal/1e6)},
-        {key:'cal',name:'Kalori',sym:'cal',valRaw:baseVal/4.184,val:fmt(baseVal/4.184)},
-        {key:'kcal',name:'Kilokalori',sym:'kcal',valRaw:baseVal/4184,val:fmt(baseVal/4184)},
-        {key:'Wh',name:'Watt·saat',sym:'Wh',valRaw:baseVal/3600,val:fmt(baseVal/3600)},
-        {key:'kWh',name:'Kilowatt·saat',sym:'kWh',valRaw:baseVal/3600000,val:fmt(baseVal/3600000)},
-        {key:'eV',name:'Elektron volt',sym:'eV',valRaw:baseVal/1.602176634e-19,val:fmt(baseVal/1.602176634e-19)},
-        {key:'BTU',name:'BTU',sym:'BTU',valRaw:baseVal/1055.05585,val:fmt(baseVal/1055.05585)},
-      ]},
-    ];
-  }
-  else if (cat==='kuvvet') {
-    baseVal = val * kuvvetToN[unit]; // Newton
-    groups = [
-      { title:'Kuvvet Birimleri', note:null, rows:[
-        {key:'N',name:'Newton',sym:'N',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'kN',name:'Kilonewton',sym:'kN',valRaw:baseVal/1000,val:fmt(baseVal/1000)},
-        {key:'MN',name:'Meganewton',sym:'MN',valRaw:baseVal/1e6,val:fmt(baseVal/1e6)},
-        {key:'dyn',name:'Dyn',sym:'dyn',valRaw:baseVal/1e-5,val:fmt(baseVal/1e-5)},
-        {key:'kgf',name:'Kilogram-kuvvet',sym:'kgf',valRaw:baseVal/9.80665,val:fmt(baseVal/9.80665)},
-        {key:'lbf',name:'Pound-kuvvet',sym:'lbf',valRaw:baseVal/4.44822,val:fmt(baseVal/4.44822)},
-        {key:'ozf',name:'Ons-kuvvet',sym:'ozf',valRaw:baseVal/0.278014,val:fmt(baseVal/0.278014)},
-      ]},
-    ];
-  }
-  else if (cat==='veri') {
-    baseVal = val * veriToBit[unit]; // bit
-    groups = [
-      { title:'SI (Ondalık)', note:null, rows:[
-        {key:'bit',name:'Bit',sym:'bit',valRaw:baseVal,val:fmt(baseVal)},
-        {key:'B',name:'Byte',sym:'B',valRaw:baseVal/8,val:fmt(baseVal/8)},
-        {key:'KB',name:'Kilobyte',sym:'KB',valRaw:baseVal/8000,val:fmt(baseVal/8000)},
-        {key:'MB',name:'Megabyte',sym:'MB',valRaw:baseVal/8e6,val:fmt(baseVal/8e6)},
-        {key:'GB',name:'Gigabyte',sym:'GB',valRaw:baseVal/8e9,val:fmt(baseVal/8e9)},
-        {key:'TB',name:'Terabyte',sym:'TB',valRaw:baseVal/8e12,val:fmt(baseVal/8e12)},
-        {key:'PB',name:'Petabyte',sym:'PB',valRaw:baseVal/8e15,val:fmt(baseVal/8e15)},
-      ]},
-      { title:'IEC (İkili)', note:'1 KiB = 1024 B, 1 MiB = 1024 KiB, vb.', rows:[
-        {key:'Kib',name:'Kibibyte',sym:'KiB',valRaw:baseVal/8192,val:fmt(baseVal/8192)},
-        {key:'Mib',name:'Mebibyte',sym:'MiB',valRaw:baseVal/8388608,val:fmt(baseVal/8388608)},
-        {key:'Gib',name:'Gibibyte',sym:'GiB',valRaw:baseVal/8589934592,val:fmt(baseVal/8589934592)},
-      ]},
-    ];
-  }
+  const groups = config.groups.map(g => ({
+    title: g.title,
+    note:  g.note,
+    rows: g.units.map(u => {
+      const raw = baseVal / u.factor;
+      return { key:u.key, name:u.name, sym:u.sym, valRaw:raw, val:fmt(raw) };
+    }),
+  }));
 
   renderGroups(cat+'-results', groups, unit);
 }
+
 
 // ─── SICAKLIK (formül tabanlı) ───────────────────────────────────────────────
 function convertSicaklik(val, unit) {
