@@ -28,8 +28,13 @@
 <meta property="og:description" content="Hesaplama Araçları, Mantık ve Zekâ oyunları, Matematik Etkinlikleri. Matematik öğretmeni Tekin Canıtez (Tekin CANITEZ) tarafından hazırlanmıştır.">
 <meta property="og:image" content="https://tekinhoca.github.io/og-image.png">
 <meta property="og:url" content="https://tekinhoca.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#9B3510">
+<meta name="robots" content="index, follow">
   
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600;8..60,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <script>(function(){var t=localStorage.getItem('th-theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
@@ -44,7 +49,67 @@ main { max-width:760px; }
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
+  margin-bottom: 10px;
 }
+.main-pad { padding-top: 28px; }
+.fade-in-a { animation: fadeUp 0.4s ease both; margin-bottom: 28px; margin-top: 0; }
+.fade-in-b { animation: fadeUp 0.45s ease both; margin-bottom: 36px; }
+.links-col { max-width: 760px; margin: 0 auto; padding: 0 20px 48px; }
+.footer-about { margin-top: 8px; }
+.footer-link { color: rgba(200,150,12,0.7); text-decoration: none; font-size: 0.76rem; letter-spacing: 0.08em; }
+
+/* ── ORTAK BİLGİ KUTUSU (koyu/açık moda uyumlu) ── */
+.soft-box {
+  background: linear-gradient(135deg, var(--cream), var(--aged));
+  border: 1px solid rgba(122,92,30,0.22);
+  border-radius: 5px;
+  box-shadow: 2px 3px 10px var(--shadow);
+}
+
+/* ── SİTE TANITIM KUTUSU ── */
+.intro-box {
+  text-align: center;
+  margin-bottom: 28px;
+  animation: fadeUp 0.35s ease both;
+  padding: 20px 24px;
+}
+.intro-box p {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.intro-box strong { color: var(--rust); }
+[data-theme="dark"] .intro-box strong { color: var(--gold); }
+
+/* ── ÇOK YAKINDA BİLGİ KUTUSU ── */
+.weekly-info-box {
+  text-align: center;
+  padding: 18px 22px 16px;
+  margin-bottom: 14px;
+}
+
+/* ── FAYDALI BAĞLANTILAR ── */
+.useful-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap: 12px; }
+.useful-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: linear-gradient(90deg, var(--cream), var(--aged));
+  border: 1px solid rgba(122,92,30,0.18);
+  border-left: 3px solid var(--rust);
+  border-radius: 0 4px 4px 0;
+  text-decoration: none;
+  color: var(--rust);
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 1px 2px 6px var(--shadow);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.useful-link:hover { transform: translateX(4px); }
+.useful-link svg { width: 20px; height: 20px; flex-shrink: 0; }
 @media (max-width: 780px) { .feature-grid { grid-template-columns: 1fr; } }
 .feature-card {
   display: flex;
@@ -89,6 +154,103 @@ main { max-width:760px; }
 .feature-card:nth-child(1) { animation-delay: 0.05s; }
 .feature-card:nth-child(2) { animation-delay: 0.10s; }
 .feature-card:nth-child(3) { animation-delay: 0.15s; }
+
+/* ── HAFTALIK GÖRSEL KARTI ── */
+.weekly-image-kicker {
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+[data-theme="dark"] .weekly-image-kicker { color: var(--gold); }
+
+.weekly-image-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--rust);
+  text-align: center;
+  margin-bottom: 8px;
+  letter-spacing: 0.005em;
+}
+[data-theme="dark"] .weekly-image-title { color: var(--gold); }
+
+.weekly-image-subtitle {
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.weekly-image-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(122,92,30,0.25);
+  box-shadow: 2px 3px 10px var(--shadow);
+  cursor: zoom-in;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.weekly-image-frame:hover {
+  transform: translateY(-3px);
+  box-shadow: 3px 6px 16px var(--shadow);
+}
+.weekly-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── LIGHTBOX ── */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,8,5,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.lightbox-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.lightbox-overlay img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(18,16,14,0.75);
+  border: 1px solid rgba(200,150,12,0.5);
+  color: var(--on-dark);
+  font-size: 1.3rem;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+.lightbox-close:hover { background: rgba(155,53,16,0.75); }
 </style>
 </head>
 <body>
@@ -100,15 +262,18 @@ main { max-width:760px; }
   </div>
 </header>
 <nav id="site-nav"><button id="burger" aria-label="Menüyü aç/kapat">MENÜ</button></nav>
-<main style="padding-top:28px;">
+<main class="main-pad">
   <div class="content-col">
-    <div class="quote-box" style="animation:fadeUp 0.4s ease both;margin-bottom:28px;margin-top:0;">
+    <div class="quote-box fade-in-a">
       <p class="quote-text">"Hayatta en hakiki mürşit ilimdir."</p>
       <p class="quote-attr">Mustafa Kemal ATATÜRK</p>
     </div>
 
+    <div class="intro-box soft-box">
+      <p>Matematik öğretmeni <strong>Tekin Canıtez</strong> tarafından hazırlanan bu sitede<br>interaktif hesaplama araçları, zekâ oyunları ve ortaokul matematik etkinlikleri sunulmaktadır.</p>
+    </div>
 
-    <div class="feature-grid" style="margin-bottom:36px;">
+    <div class="feature-grid">
       <a href="hesap-araclar.html" class="feature-card">
         <div class="feature-icon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;">
           <rect x="22" y="10" width="56" height="80" rx="6" fill="none" stroke="var(--gold)" stroke-width="4"/>
@@ -119,7 +284,7 @@ main { max-width:760px; }
         </svg></div>
         <div class="feature-text">
           <div class="feature-title">Hesaplama Araçları</div>
-          <div class="feature-desc">16 interaktif matematik hesaplama aracı</div>
+          <div class="feature-desc"><span class="fd-word">Hesapla</span><span class="fd-word">Ölç</span><span class="fd-word">Dönüştür</span><span class="fd-word">Çöz</span></div>
         </div>
         <div class="feature-arrow">→</div>
       </a>
@@ -128,7 +293,7 @@ main { max-width:760px; }
           <path d="M30,20 h20 v10 a10,10 0 0 1 0,20 v10 h20 v20 a10,10 0 0 1 -20,0 v10 h-20 v-20 a10,10 0 0 1 0,-20 z" fill="none" stroke="var(--gold)" stroke-width="4" stroke-linejoin="round"/>
         </svg></div>
         <div class="feature-text">
-          <div class="feature-title">Mantık ve Zekâ Oyunları</div>
+          <div class="feature-title">Mantık<br>ve Zekâ<br>Oyunları</div>
           <div class="feature-desc"><span class="fd-word">Düşün</span><span class="fd-word">Keşfet</span><span class="fd-word">Çöz</span></div>
         </div>
         <div class="feature-arrow">→</div>
@@ -153,21 +318,39 @@ main { max-width:760px; }
   
 </main>
 
-<div style="max-width:760px;margin:0 auto;padding:0 20px 48px;">
+<div class="links-col">
   <div class="sec-title"><h2>Faydalı Bağlantılar</h2><div class="sec-line"></div></div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
-<a href="https://www.tzv.org.tr" target="_blank" rel="noopener" style="display:block;padding:12px 16px;background:linear-gradient(90deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.18);border-left:3px solid var(--rust);border-radius:0 4px 4px 0;text-decoration:none;color:var(--rust);font-size:0.85rem;font-weight:600;transition:transform 0.2s,box-shadow 0.2s;box-shadow:1px 2px 6px var(--shadow);" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='translateX(0)'">Türkiye Zekâ Vakfı</a>
-    <a href="https://www.tazof.org.tr/" target="_blank" rel="noopener" style="display:block;padding:12px 16px;background:linear-gradient(90deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.18);border-left:3px solid var(--rust);border-radius:0 4px 4px 0;text-decoration:none;color:var(--rust);font-size:0.85rem;font-weight:600;transition:transform 0.2s,box-shadow 0.2s;box-shadow:1px 2px 6px var(--shadow);" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='translateX(0)'">TAZOF</a>
-    <a href="https://bilimgenc.tubitak.gov.tr/" target="_blank" rel="noopener" style="display:block;padding:12px 16px;background:linear-gradient(90deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.18);border-left:3px solid var(--rust);border-radius:0 4px 4px 0;text-decoration:none;color:var(--rust);font-size:0.85rem;font-weight:600;transition:transform 0.2s,box-shadow 0.2s;box-shadow:1px 2px 6px var(--shadow);" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='translateX(0)'">TÜBİTAK Bilim Genç</a>
-    <a href="https://mebi.eba.gov.tr/" target="_blank" rel="noopener" style="display:block;padding:12px 16px;background:linear-gradient(90deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.18);border-left:3px solid var(--rust);border-radius:0 4px 4px 0;text-decoration:none;color:var(--rust);font-size:0.85rem;font-weight:600;transition:transform 0.2s,box-shadow 0.2s;box-shadow:1px 2px 6px var(--shadow);" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='translateX(0)'">MEBİ</a>
-    <a href="https://www.atam.gov.tr" target="_blank" rel="noopener" style="display:block;padding:12px 16px;background:linear-gradient(90deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.18);border-left:3px solid var(--rust);border-radius:0 4px 4px 0;text-decoration:none;color:var(--rust);font-size:0.85rem;font-weight:600;transition:transform 0.2s,box-shadow 0.2s;box-shadow:1px 2px 6px var(--shadow);" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='translateX(0)'">Atatürk Araştırma Merkezi</a>
-    <a href="https://www.anitkabir.org" target="_blank" rel="noopener" style="display:block;padding:12px 16px;background:linear-gradient(90deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.18);border-left:3px solid var(--rust);border-radius:0 4px 4px 0;text-decoration:none;color:var(--rust);font-size:0.85rem;font-weight:600;transition:transform 0.2s,box-shadow 0.2s;box-shadow:1px 2px 6px var(--shadow);" onmouseover="this.style.transform='translateX(4px)'" onmouseout="this.style.transform='translateX(0)'">Anıtkabir</a>
+  <div class="useful-links">
+    <a href="https://www.tzv.org.tr" target="_blank" rel="noopener" class="useful-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.6.55 1 1.3 1 2.1V16h6v-.4c0-.8.4-1.55 1-2.1A6 6 0 0 0 12 3Z"/></svg>
+      Türkiye Zekâ Vakfı
+    </a>
+    <a href="https://www.tazof.org.tr/" target="_blank" rel="noopener" class="useful-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M8.5 12.5 6 21l6-3 6 3-2.5-8.5"/></svg>
+      TAZOF
+    </a>
+    <a href="https://bilimgenc.tubitak.gov.tr/" target="_blank" rel="noopener" class="useful-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 3v6l-5.5 9.5A1.5 1.5 0 0 0 5.8 21h12.4a1.5 1.5 0 0 0 1.3-2.25L14 9V3"/><path d="M7.5 15h9"/></svg>
+      TÜBİTAK Bilim Genç
+    </a>
+    <a href="https://mebi.eba.gov.tr/" target="_blank" rel="noopener" class="useful-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-2-1.3-4.5-2-7-2v13c2.5 0 5 .7 7 2 2-1.3 4.5-2 7-2V4c-2.5 0-5 .7-7 2Z"/><path d="M12 6v13"/></svg>
+      MEBİ
+    </a>
+    <a href="https://www.atam.gov.tr" target="_blank" rel="noopener" class="useful-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/><path d="M4 21h16"/></svg>
+      Atatürk Araştırma Merkezi
+    </a>
+    <a href="https://www.anitkabir.org" target="_blank" rel="noopener" class="useful-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16"/><path d="M6 21V9M10 21V9M14 21V9M18 21V9"/><path d="M3 9 12 4l9 5"/></svg>
+      Anıtkabir
+    </a>
   </div>
 </div>
 <footer>
   <img src="img/THlogo.webp" alt="Tekin Hoca Logo" class="footer-logo">
   <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
-  <p style="margin-top:8px;"><a href="hakkimda.html" style="color:rgba(200,150,12,0.7);text-decoration:none;font-size:0.76rem;letter-spacing:0.08em;">HAKKIMDA</a></p>
+  <p class="footer-about"><a href="hakkimda.html" class="footer-link">HAKKIMDA</a></p>
 </footer>
 <button id="back-to-top" title="Başa dön">↑</button>
 <script src="menu.js"></script>
@@ -175,6 +358,41 @@ main { max-width:760px; }
   const btn=document.getElementById('back-to-top');
   window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
   btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  // Haftalık görsel — lightbox
+  (function(){
+    const trigger = document.getElementById('weeklyImageTrigger');
+    if(!trigger) return;
+    const sourceImg = trigger.querySelector('img');
+
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'lightbox-close';
+    closeBtn.setAttribute('aria-label','Kapat');
+    closeBtn.textContent = '×';
+
+    const bigImg = document.createElement('img');
+    bigImg.src = sourceImg.src;
+    bigImg.alt = sourceImg.alt;
+
+    overlay.appendChild(closeBtn);
+    overlay.appendChild(bigImg);
+    document.body.appendChild(overlay);
+
+    function openLightbox(){ overlay.classList.add('show'); }
+    function closeLightbox(){ overlay.classList.remove('show'); }
+
+    trigger.addEventListener('click', openLightbox);
+    trigger.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(); }
+    });
+    overlay.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  })();
 </script>
 </body>
 </html>
