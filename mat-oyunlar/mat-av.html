@@ -7,14 +7,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow-y:auto;scrollbar-width:none}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 body{
   font-family:'Nunito',sans-serif;
   background:
     radial-gradient(ellipse at 50% -10%, #4a2170 0%, transparent 60%),
     linear-gradient(180deg,#1c0f3d 0%,#3a1768 45%,#6a2a8c 100%);
-  min-height:100%;
+  height:100%;
+  height:100dvh;
   display:flex;align-items:flex-start;justify-content:center;
   padding:10px 8px 24px;
 }
@@ -79,8 +79,9 @@ button.icon-btn:active{transform:scale(.92)}
 .stat.time.low .v{color:#ff5c5c;animation:pulseWarn .5s infinite}
 @keyframes pulseWarn{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
 
-.board-wrap{position:relative}
+.board-wrap{position:relative;display:flex;justify-content:center;flex-shrink:0}
 .board{
+  width:100%;
   display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
   background:linear-gradient(180deg,#3d2b1a,#2a1c10);
   border:4px solid #6b4423;border-radius:18px;padding:14px 10px 26px;
@@ -157,10 +158,12 @@ button.ghost{
 }
 
 .overlay{
-  position:absolute;inset:0;background:rgba(15,7,35,.94);border-radius:18px;
-  display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;z-index:30;padding:14px;
+  position:fixed;inset:0;background:rgba(15,7,35,.94);
+  display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;z-index:900;padding:14px;
+  overflow-y:auto;
 }
 .overlay.show{display:flex}
+.overlay-inner{width:100%;max-width:360px;display:flex;flex-direction:column;align-items:center;gap:8px}
 .overlay h2{font-family:'Baloo 2',cursive;color:#ffd93d;font-size:22px}
 .overlay p{color:#e6d9ff;font-size:13px}
 .overlay .score-box{
@@ -280,15 +283,17 @@ button.ghost{
     <div class="board" id="board"></div>
     <canvas class="fx-layer" id="fx"></canvas>
     <div class="overlay" id="overlay">
-      <h2 id="overlayTitle">Tüm Görevler Tamamlandı!</h2>
-      <div class="score-box">
-        <p class="score-label">toplam puan</p>
-        <div class="final-score" id="finalScore">0</div>
+      <div class="overlay-inner">
+        <h2 id="overlayTitle">Tüm Görevler Tamamlandı!</h2>
+        <div class="score-box">
+          <p class="score-label">toplam puan</p>
+          <div class="final-score" id="finalScore">0</div>
+        </div>
+        <p class="perf-title">PERFORMANS ÖZETİ</p>
+        <p class="accuracy-line" id="captureLine">yakalama yüzdesi: %0</p>
+        <p class="accuracy-line" id="accuracyLine">doğru yüzdesi: %0</p>
+        <button class="a" id="playAgainBtn">▶ Tekrar Oyna</button>
       </div>
-      <p class="perf-title">PERFORMANS ÖZETİ</p>
-      <p class="accuracy-line" id="captureLine">yakalama yüzdesi: %0</p>
-      <p class="accuracy-line" id="accuracyLine">doğru yüzdesi: %0</p>
-      <button class="a" id="playAgainBtn">▶ Tekrar Oyna</button>
     </div>
   </div>
 
@@ -597,6 +602,7 @@ button.ghost{
     qLabelEl.textContent = label;
     qTextEl.textContent = text;
     if(pulse){ qTextEl.classList.remove('pulse'); void qTextEl.offsetWidth; qTextEl.classList.add('pulse'); }
+    fitStageHeight();
   }
 
   function updateStats(){
@@ -637,6 +643,25 @@ button.ghost{
       else w += 1; // rakam
     }
     return w;
+  }
+
+  function fitStageHeight(){
+    const stage = document.querySelector('.stage');
+    const boardEl2 = document.getElementById('board');
+    if(!stage || !boardEl2) return;
+    boardEl2.style.maxWidth = 'none';
+    const bodyStyle = getComputedStyle(document.body);
+    const vPad = parseFloat(bodyStyle.paddingTop) + parseFloat(bodyStyle.paddingBottom);
+    const viewportH = document.documentElement.clientHeight || window.innerHeight;
+    const stageRect = stage.getBoundingClientRect();
+    const boardRect = boardEl2.getBoundingClientRect();
+    const othersHeight = stageRect.height - boardRect.height;
+    const available = viewportH - vPad - othersHeight - 4;
+    if(available > 80 && boardRect.height > available && boardRect.width > 0){
+      const ratio = boardRect.height / boardRect.width;
+      const newWidth = Math.max(180, Math.floor(available / ratio));
+      boardEl2.style.maxWidth = newWidth + 'px';
+    }
   }
 
   let holeScale = 1;
@@ -959,11 +984,15 @@ button.ghost{
   buildHoles();
   resizeFx();
   updateStats();
+  fitStageHeight();
   requestAnimationFrame(updateHoleScale);
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(()=>{ fitStageHeight(); updateHoleScale(); });
+  }
   let resizeDebounce = null;
   window.addEventListener('resize', ()=>{
     clearTimeout(resizeDebounce);
-    resizeDebounce = setTimeout(updateHoleScale, 150);
+    resizeDebounce = setTimeout(()=>{ fitStageHeight(); updateHoleScale(); resizeFx(); }, 150);
   });
 })();
 </script>
