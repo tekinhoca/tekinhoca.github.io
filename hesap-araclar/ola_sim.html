@@ -666,6 +666,7 @@ let speed        = 'medium';
 
 let counts = {};
 let total  = 0;
+let barYMax = null;   // Sütun grafiği için sabit y-ekseni tavanı (senaryo başlamadan önce hesaplanır, deney boyunca değişmez)
 let running = false;
 let simTimer = null;
 let convHistory = [];   // {n, ratio} pairs for first outcome
@@ -858,6 +859,7 @@ function resetSim() {
   outcomes.forEach(o => counts[o] = 0);
   total = 0;
   convHistory = [];
+  barYMax = computeBarYMax();
   document.getElementById('totalCount').textContent = '0';
   setStatus('', 'Hazır');
   updateVisualReset();
@@ -865,6 +867,22 @@ function resetSim() {
   drawBarChart();
   drawConvChart();
   document.getElementById('llnCallout').innerHTML = 'Simülasyon başladıktan sonra, deney sonucu ile teorik olasılık sonucunun birbirine yaklaşma durumunu görebilirsiniz.';
+}
+
+// Sütun grafiğinin y-ekseni tavanını, senaryo başlamadan önce, sadece teorik
+// olasılığa göre bir kere hesaplar. Bu değer deney boyunca sabit kalır; bu
+// sayede kırmızı (teorik) sütunun tepe pikseli hiçbir zaman kaymaz.
+function computeBarYMax() {
+  let theoryMax;
+  if (scenario === 'die2') {
+    theoryMax = 6/36*100; // en yüksek teorik olasılık (toplam=7)
+  } else {
+    const n = outcomes.length || 1;
+    theoryMax = 100/n;
+  }
+  // Teorik sütun, grafiğin yaklaşık yarısını kaplasın; kalan yarı, deneysel
+  // sütunun erken aşamalardaki sapmaları için pay bıraksın.
+  return Math.min(100, theoryMax * 2);
 }
 
 function recordConv() {
@@ -1039,12 +1057,9 @@ function drawBarChartDie2(ctx, W, H) {
   const cW  = W - PAD.left - PAD.right;
   const cH  = H - PAD.top  - PAD.bottom;
 
-  // y max: highest of observed or theoretical %
-  const maxTheory = 6/36*100; // 7 sum = 16.67%
-  const maxObs    = total > 0
-    ? Math.max(...sums.map(s=>(obsCounts[s]||0)/total*100))
-    : 0;
-  const yMax = Math.min(100, Math.max(maxTheory, maxObs) * 1.35);
+  // y ekseni tavanı: senaryo başlamadan önce hesaplanmış sabit değer
+  // (deney boyunca değişmez; bkz. computeBarYMax())
+  const yMax = barYMax || computeBarYMax();
 
   // grid
   ctx.strokeStyle = '#d8d0c0';
@@ -1065,16 +1080,32 @@ function drawBarChartDie2(ctx, W, H) {
   sums.forEach((s, i) => {
     const theoryPct = ways[i]/36*100;
     const obsPct    = total > 0 ? (obsCounts[s]||0)/total*100 : 0;
+    const overflow  = obsPct > yMax;
+    const obsClip   = Math.min(obsPct, yMax);
     const x         = PAD.left + i*groupW + groupW/2;
 
-    // observed bar
-    const obsH = (obsPct/yMax)*cH;
+    // observed bar (sabit tavanı aşarsa kırpılır)
+    const obsH = (obsClip/yMax)*cH;
     const obsX = x - bW - gap/2;
     const obsY = PAD.top + cH - obsH;
     const g1   = ctx.createLinearGradient(0,obsY,0,PAD.top+cH);
     g1.addColorStop(0,'#2d6a4f'); g1.addColorStop(1,'#9b8fff44');
     ctx.fillStyle = g1;
     ctx.beginPath(); roundRect(ctx, obsX, obsY, bW, obsH, 3); ctx.fill();
+
+    // taşma göstergesi
+    if (overflow) {
+      ctx.fillStyle = '#2d6a4f';
+      ctx.beginPath();
+      ctx.moveTo(obsX+bW/2-4, PAD.top+6);
+      ctx.lineTo(obsX+bW/2+4, PAD.top+6);
+      ctx.lineTo(obsX+bW/2,   PAD.top-1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.font = 'bold 8px Nunito, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(obsPct.toFixed(1)+'%', obsX+bW/2, PAD.top+17);
+    }
 
     // theory bar
     const thH = (theoryPct/yMax)*cH;
@@ -1132,8 +1163,7 @@ function drawBarChart() {
   ctx.fillRect(0,0,W,H);
 
   const theory = 100/n;
-  const maxObs  = Math.max(...outcomes.map(o=>(counts[o]||0)/(total||1)*100), theory, 1);
-  const yMax    = Math.min(100, maxObs * 1.3);
+  const yMax   = barYMax || computeBarYMax();
 
   // grid
   ctx.strokeStyle = '#d8d0c0';
@@ -1154,11 +1184,13 @@ function drawBarChart() {
   const gap     = Math.max(1, groupW * 0.05);
 
   outcomes.forEach((o,i) => {
-    const obs = total>0 ? (counts[o]||0)/total*100 : 0;
-    const x   = PAD.left + i*groupW + groupW/2;
+    const obs      = total>0 ? (counts[o]||0)/total*100 : 0;
+    const overflow = obs > yMax;
+    const obsClip  = Math.min(obs, yMax);
+    const x        = PAD.left + i*groupW + groupW/2;
 
-    // observed bar
-    const obsH  = (obs/yMax)*cH;
+    // observed bar (sabit tavanı aşarsa kırpılır)
+    const obsH  = (obsClip/yMax)*cH;
     const obsX  = x - barW2 - gap/2;
     const obsY  = PAD.top + cH - obsH;
     const grad  = ctx.createLinearGradient(0, obsY, 0, PAD.top+cH);
@@ -1167,6 +1199,21 @@ function drawBarChart() {
     ctx.beginPath();
     roundRect(ctx, obsX, obsY, barW2, obsH, 3);
     ctx.fill();
+
+    // taşma göstergesi: sütun grafiğin üst sınırını aştığında
+    // tepeye küçük bir ok ve gerçek değeri yazı olarak ekle
+    if (overflow) {
+      ctx.fillStyle = '#2d6a4f';
+      ctx.beginPath();
+      ctx.moveTo(obsX+barW2/2-5, PAD.top+7);
+      ctx.lineTo(obsX+barW2/2+5, PAD.top+7);
+      ctx.lineTo(obsX+barW2/2,   PAD.top-1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.font = 'bold 9px Nunito, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(obs.toFixed(1)+'%', obsX+barW2/2, PAD.top+19);
+    }
 
     // theory bar
     const thH  = (theory/yMax)*cH;
