@@ -25,12 +25,14 @@
   --shadow:  0 4px 24px rgba(0,0,0,0.08);
 }
 * { box-sizing:border-box; margin:0; padding:0; }
+html { overflow-x: hidden; }
 body {
   background: var(--bg);
   color: var(--text);
   font-family: 'DM Sans', sans-serif;
   min-height: 100vh;
   padding: 20px;
+  overflow-x: hidden;
   background-image:
     radial-gradient(circle at 10% 20%, rgba(45,106,79,0.06) 0%, transparent 50%),
     radial-gradient(circle at 90% 80%, rgba(155,93,229,0.05) 0%, transparent 50%);
@@ -40,10 +42,11 @@ body {
 header {
   max-width: 1200px;
   margin: 0 auto 24px;
-  display: flex; align-items: center; gap: 18px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 18px;
   padding-bottom: 18px; border-bottom: 2px solid var(--border);
 }
-header img { height: 44px; width: auto; }
+header img { height: 44px; width: auto; flex-shrink: 0; }
+header .titles { min-width: 0; flex: 1 1 220px; }
 header .titles h1 {
   font-family: 'Lora', serif;
   font-size: clamp(1.2rem, 2.8vw, 1.85rem);
@@ -63,6 +66,13 @@ header .titles p { font-size:0.85rem; color:var(--text-dim); margin-top:3px; }
   gap: 20px; align-items: start;
 }
 @media (max-width:860px) { .app { grid-template-columns:1fr; } }
+.app > div {
+  min-width: 0; /* grid öğelerinin içerik genişliğine kilitlenip sayfayı taşırmasını engeller */
+}
+@media (max-width:480px) {
+  body { padding: 12px; }
+  header .titles { text-align: left !important; }
+}
 
 /* ── PANEL ── */
 .panel {
@@ -101,6 +111,7 @@ input[type=range] {
   display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; margin-top: 10px;
 }
 .quick-btn {
+  min-width: 0;
   background: var(--surface2); border: 1px solid var(--border); border-radius: 7px;
   padding: 6px 2px; cursor: pointer; font-family: 'DM Sans', sans-serif;
   font-size: 0.75rem; font-weight: 700; color: var(--text-dim);
@@ -161,7 +172,7 @@ input[type=range] {
 .canvas-formula-row {
   display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start;
 }
-.canvas-formula-row > .panel { display:flex; flex-direction:column; }
+.canvas-formula-row > .panel { display:flex; flex-direction:column; min-width: 0; }
 .canvas-formula-row > .panel canvas { flex:1; }
 @media (max-width:700px) { .canvas-formula-row { grid-template-columns:1fr; } }
 
