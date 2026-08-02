@@ -277,6 +277,7 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
     <div class="cat-card" onclick="openPage('hiz')"><div class="cat-icon">🚀</div><div class="cat-name">Hız</div></div>
     <div class="cat-card" onclick="openPage('zaman')"><div class="cat-icon">⏱️</div><div class="cat-name">Zaman</div></div>
     <div class="cat-card" onclick="openPage('guc')"><div class="cat-icon">⚡</div><div class="cat-name">Güç</div></div>
+<div class="cat-card" onclick="openPage('basinc')"><div class="cat-icon">🧭</div><div class="cat-name">Basınç</div></div>
     <div class="cat-card" onclick="openPage('enerji')"><div class="cat-icon">🔋</div><div class="cat-name">Enerji</div></div>
     <div class="cat-card" onclick="openPage('kuvvet')"><div class="cat-icon">💪</div><div class="cat-name">Kuvvet</div></div>
     <div class="cat-card" onclick="openPage('veri')"><div class="cat-icon">💾</div><div class="cat-name">Veri</div></div>
@@ -503,7 +504,29 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
   </div>
   <div id="guc-results"></div>
 </div>
-
+<div class="converter-page" id="page-basinc">
+  <p class="page-title">🧭 Basınç</p>
+  <div class="input-card">
+    <div class="ig"><label>Değer</label><input type="number" id="basinc-val" value="1" oninput="convert('basinc')"></div>
+    <div class="ig"><label>Birim</label>
+      <select id="basinc-unit" onchange="convert('basinc')">
+        <optgroup label="Standart & Metrik">
+          <option value="bar" selected>Bar (bar)</option>
+          <option value="mbar">Milibar / Hektopascal (mbar / hPa)</option>
+          <option value="Pa">Pascal (Pa)</option>
+          <option value="kPa">Kilopascal (kPa)</option>
+          <option value="MPa">Megapascal (MPa)</option>
+        </optgroup>
+        <optgroup label="Emperyal & Diğer">
+          <option value="psi">PSI (lb/in²)</option>
+          <option value="atm">Atmosfer (atm)</option>
+          <option value="mmHg">Milimetre Cıva / Torr (mmHg)</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+  <div id="basinc-results"></div>
+</div>
 <div class="converter-page" id="page-enerji">
   <p class="page-title">🔋 Enerji</p>
   <div class="input-card">
@@ -804,6 +827,19 @@ const UNIT_CONFIG = {
       {key:'hp_imp',name:'Beygir gücü (İngiliz)',sym:'hp',factor:745.69987},
       {key:'kcal_s',name:'Kilokalori/saniye',sym:'kcal/s',factor:4186.8},
       {key:'BTU_h',name:'BTU/saat',sym:'BTU/h',factor:0.29307107},
+    ]},
+  ]},
+
+basinc: { groups: [
+    { title:'Basınç Birimleri', note:'1 bar = 100.000 Pa. Lastik basınçlarında yaygın olarak PSI ve bar kullanılır.', units:[
+      {key:'bar',name:'Bar',sym:'bar',factor:100000},
+      {key:'mbar',name:'Milibar / hPa',sym:'mbar',factor:100},
+      {key:'Pa',name:'Pascal',sym:'Pa',factor:1},
+      {key:'kPa',name:'Kilopascal',sym:'kPa',factor:1000},
+      {key:'MPa',name:'Megapascal',sym:'MPa',factor:1e6},
+      {key:'psi',name:'PSI (Pound/in²)',sym:'psi',factor:6894.75729},
+      {key:'atm',name:'Standart Atmosfer',sym:'atm',factor:101325},
+      {key:'mmHg',name:'Milimetre Cıva (Torr)',sym:'mmHg',factor:133.322368},
     ]},
   ]},
 
