@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Nesne Tahmin Oyunu</title>
+    <style>
+        :root{
+            --bg-deep:#0e0e0a;--accent-gold:#c8960c;--accent-violet:#FFD97A;
+            --accent-pink:#e8d5a0;--text-dim:rgba(247,242,232,0.45);--text-bright:rgba(247,242,232,0.92);
+            --danger:#eb5757;--success:#50c878;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: Georgia, serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            touch-action: none;
+            background-color: var(--bg-deep);
+            color: var(--text-bright);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .game-container {
+            background: #14120a;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(200,150,12,0.35);
+            box-shadow: 0 0 40px rgba(200,150,12,0.08);
+            width: 92%;
+            max-width: 440px;
+            max-height: 98vh;
+            text-align: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .character-box {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 5px auto;
+            flex-shrink: 0;
+        }
+
+        .character-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease, opacity 0.2s ease;
+        }
+
+        h1 { color: var(--accent-gold); margin: 2px 0; font-size: 1.4rem; letter-spacing: .05em; }
+        .description { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 10px; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 16px;
+        }
+
+        .modal-content {
+            background: #0a0a06;
+            padding: 22px 20px 18px;
+            border-radius: 8px;
+            border: 1px solid rgba(200,150,12,0.5);
+            width: 88%;
+            max-width: 400px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .modal-content h2 { color: var(--accent-gold); margin-top: 4px; font-size: 1.3rem; letter-spacing: .04em; }
+        .modal-content p { color: var(--text-bright); opacity: .85; line-height: 1.5; margin: 6px 0; font-size: 0.9rem; }
+        .modal-logo { display: flex; justify-content: center; padding-top: 4px; }
+
+        .btn {
+            appearance: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            border: 1px solid rgba(200,150,12,0.6);
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            margin: 4px 0;
+            width: 100%;
+            font-family: Georgia, serif;
+            letter-spacing: .03em;
+        }
+
+        .btn-primary { background: rgba(200,150,12,0.18); color: var(--accent-gold); }
+        .btn-primary:hover { background: rgba(200,150,12,0.32); }
+
+        .btn-success { background: rgba(80,200,120,0.16); color: var(--success); border-color: rgba(80,200,120,0.5); }
+        .btn-success:hover { background: rgba(80,200,120,0.3); }
+
+        .btn-warning { background: rgba(200,150,12,0.08); color: var(--text-bright); border-color: rgba(200,150,12,0.3); }
+        .btn-warning:hover { background: rgba(200,150,12,0.2); }
+
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .item-card {
+            background: rgba(255,255,255,0.03);
+            border: 1.5px solid rgba(255,255,255,0.12);
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--text-bright);
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .item-card:hover {
+            border-color: var(--accent-gold);
+            background: rgba(200,150,12,0.1);
+        }
+
+        .question-box {
+            background: rgba(255,255,255,0.04);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            color: var(--text-bright);
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin: 10px 0;
+            letter-spacing: 0.5px;
+            line-height: 1.3;
+        }
+
+        .answer-box {
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .ans-evet { background: rgba(80,200,120,.12); color: var(--success); border: 1.5px solid rgba(80,200,120,.4); }
+        .ans-hayir { background: rgba(235,87,87,.12); color: var(--danger); border: 1.5px solid rgba(235,87,87,.4); }
+        .ans-belki { background: rgba(200,150,12,.12); color: var(--accent-gold); border: 1.5px solid rgba(200,150,12,.4); }
+
+        .hidden { display: none !important; }
+        .step-title { color: var(--text-dim); font-size: 0.9rem; font-weight: 600; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="welcomeModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="character-box">
+                <img src="../img/mecetru.webp" alt="Matece" class="character-img">
+            </div>
+            <h2>Merhaba! Ben Matece</h2>
+            <p>Aklımdan bir nesne tuttum! Sorular sorarak gizli nesneyi bulabilir misiniz?</p>
+            <p><strong>Kural:</strong> En fazla <strong>20 soru</strong> hakkınız var. Hazır hissettiğiniz an tahmin yapabilirsiniz.</p>
+            <button id="startBtn" class="btn btn-success">Oyunu Başlat</button>
+            <div class="modal-logo">
+                <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+                     style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
+                     onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.38'">
+            </div>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <div>
+            <div class="character-box">
+                <img id="mateceImg" src="../img/mecetru.webp" alt="Matece" class="character-img">
+            </div>
+
+            <h1>Nesne Tahmin Oyunu</h1>
+            <p class="description">İpuçlarını toplayın ve gizli nesneyi bulun.</p>
+            <button id="btnHistory" class="btn" style="width:auto;padding:5px 14px;font-size:0.72rem;margin:0 auto 8px;display:block;background:rgba(255,255,255,0.04);color:var(--text-dim);border-color:rgba(255,255,255,0.15);">📋 Soru Geçmişi</button>
+            <hr style="border: 0; border-top: 1px solid rgba(200,150,12,0.2); margin-bottom: 10px;">
+        </div>
+
+        <div id="historyModal" class="modal-overlay hidden">
+            <div class="modal-content" style="max-height:80vh;">
+                <h2>Soru Geçmişi</h2>
+                <div id="historyList" style="text-align:left;overflow-y:auto;max-height:50vh;padding-right:4px;"></div>
+                <button id="btnCloseHistory" class="btn btn-primary">Oyuna Devam Et</button>
+            </div>
+        </div>
+
+        <div id="screenQuestionSelect" class="hidden">
+            <div class="step-title">
+                Soru <span id="currentQNum">1</span> / 20 
+                <br>
+                <strong>Hangi soruyu sormak istersiniz?</strong>
+                <br>
+                <span id="kalanAdaySayaci" style="color:var(--accent-gold);font-size:0.78rem;"></span>
+            </div>
+            <div id="questionCards" class="card-list"></div>
+        </div>
+
+        <div id="screenAnswer" class="hidden">
+            <div class="step-title">Soru <span id="answeredQNum">1</span> / 20</div>
+            
+            <div id="askedQuestionText" class="question-box"></div>
+            <div id="answerDisplay" class="answer-box"></div>
+
+            <div id="actionButtons" style="margin-top: 10px;">
+                <button id="btnMoreQuestion" class="btn btn-primary">BİR SORU DAHA İSTİYORUM</button>
+                <button id="btnGoGuess" class="btn btn-warning">TAHMİN EDECEĞİM</button>
+            </div>
+        </div>
+
+        <div id="screenGuess" class="hidden">
+            <div class="step-title"><strong>Sizce aklımdaki nesne hangisi?</strong></div>
+            <p style="color: rgba(247,242,232,0.45); font-size: 0.8rem; margin: 2px 0 8px 0;">En çok şüphelendiğiniz nesneye tıklayın:</p>
+            <div id="guessCards" class="card-list"></div>
+        </div>
+
+        <div id="screenResult" class="hidden">
+            <div id="resultBox" class="answer-box"></div>
+            <button id="btnRestart" class="btn btn-primary">Yeniden Başla</button>
+        </div>
+
+    </div>
+
+    <script>
+        const MATECE_IMG = {
+            MUTLU: "../img/mecetru.webp",
+            DUSUNUYOR: "../img/meceunk.webp",
+            AHA: "../img/meceaha.webp",
+            SASKIN: "../img/mecefal.webp"
+        };
+
+        // 50 ADET GENİŞLETİLMİŞ SORU HAVUZU
+                const sorular = [
+            { id: "q1", metin: "Mutfakta bulunur mu?" },
+            { id: "q2", metin: "Elektrik veya pille mi çalışır?" },
+            { id: "q3", metin: "Plastik malzeme içerir mi?" },
+            { id: "q4", metin: "Bir ayakkabı kutusuna sığar mı?" },
+            { id: "q5", metin: "Oturmak veya dinlenmek için mi kullanılır?" },
+            { id: "q6", metin: "Elde rahatça taşınabilir bir şey midir?" },
+            { id: "q7", metin: "Dış mekanda / sokakta sabit bulunur mu?" },
+            { id: "q8", metin: "Metal malzeme içerir mi?" },
+            { id: "q9", metin: "Yenilebilir veya içilebilir bir şey midir?" },
+            { id: "q10", metin: "Su barındıran veya suyla çalışan bir şey midir?" },
+            { id: "q11", metin: "Teknoloji / dijital bir cihaz mıdır?" },
+            { id: "q12", metin: "Kumaş veya tekstil parçası içerir mi?" },
+            { id: "q13", metin: "Ulaşım / taşıt amacı taşır mı?" },
+            { id: "q14", metin: "Cam malzeme içerir mi?" },
+            { id: "q15", metin: "Aydınlatma / ışık verme işlevi var mıdır?" },
+            { id: "q16", metin: "Ahşap (tahta) malzeme içerir mi?" },
+            { id: "q17", metin: "Kesici veya delici bir alet midir?" },
+            { id: "q18", metin: "Okul veya ofiste kırtasiye amacıyla kullanılır mı?" },
+            { id: "q19", metin: "Giyim / giyilebilir bir eşya mıdır?" },
+            { id: "q20", metin: "Temizlik amacıyla mı kullanılır?" },
+            { id: "q21", metin: "Müzik veya ses üretmek için mi kullanılır?" },
+            { id: "q22", metin: "Kağıt veya karton içerir mi?" },
+            { id: "q23", metin: "Sıcak yemek pişirmeye yarar mı?" },
+            { id: "q24", metin: "Tekerleği var mıdır?" },
+            { id: "q25", metin: "Zamanı göstermeye yarar mı?" },
+            { id: "q26", metin: "Isıtma veya soğutma özelliği var mıdır?" },
+            { id: "q27", metin: "Ağırlığı 1 kilogramdan fazla mıdır?" },
+            { id: "q28", metin: "İçine bir şey koymaya veya saklamaya yarar mı?" },
+            { id: "q29", metin: "Kırılabilir hassas bir yapısı var mıdır?" },
+            { id: "q30", metin: "Aynası veya yansıtıcı yüzeyi var mıdır?" },
+            { id: "q31", metin: "Açılıp kapanan bir kapağı veya kapısı var mıdır?" },
+            { id: "q32", metin: "Kullanırken insan gücü veya fiziksel efor gerekir mi?" },
+            { id: "q33", metin: "Evin salonunda veya oturma odasında bulunur mu?" },
+            { id: "q34", metin: "Kullanım sırasında ses veya gürültü çıkarır mı?" },
+            { id: "q35", metin: "Sıvı ile temas etmesi arızalanmasına neden olur mu?" },
+            { id: "q36", metin: "Üzerinde tuşlar veya düğmeler bulunur mu?" },
+            { id: "q37", metin: "Görüşü netleştirmek veya süs amacıyla gözle ilgili midir?" },
+            { id: "q38", metin: "Kişisel bakım veya hijyen amacıyla mı kullanılır?" },
+            { id: "q39", metin: "Çocukların oyun oynaması için bir nesne midir?" },
+            { id: "q40", metin: "Katlanabilir veya formu değiştirilebilir mi?" },
+            { id: "q41", metin: "Fişe takılarak veya duvara monte edilerek mi kullanılır?" },
+            { id: "q42", metin: "Doğal malzemelerden mi yapılmıştır?" },
+            { id: "q43", metin: "Yüksek ses çıkararak uyarabilir mi?" },
+            { id: "q44", metin: "Birden fazla insan aynı anda kullanabilir mi?" },
+            { id: "q45", metin: "Işığı kırar veya yansıtır mı?" },
+            { id: "q46", metin: "Kesildiğinde veya kırıldığında çöp olur mu?" },
+            { id: "q47", metin: "Alev veya yüksek ısı üretir mi?" },
+            { id: "q48", metin: "Spor veya fiziksel aktivite yaparken kullanılır mı?" },
+            { id: "q49", metin: "Canlı bir varlık mıdır?" },
+            { id: "q50", metin: "Bitki midir?" },
+            { id: "q51", metin: "Hayvan mıdır?" },
+            { id: "q52", metin: "İnsan yapımı (yapay) bir nesne midir?" },
+            { id: "q53", metin: "Doğal ortamda kendiliğinden bulunabilir mi?" },
+            { id: "q54", metin: "Evcil / insanla birlikte yaşayan bir tür müdür?" },
+            { id: "q55", metin: "Uçabilme yeteneği var mıdır?" },
+            { id: "q56", metin: "Suda yaşayabilir veya suda hareket edebilir mi?" },
+            { id: "q57", metin: "Bağımsız olarak (kendi gücüyle) hareket edebilir mi?" },
+            { id: "q58", metin: "Bir aracın veya makinenin parçası mıdır?" },
+            { id: "q59", metin: "Boyu bir insan boyundan büyük müdür?" },
+            { id: "q60", metin: "Tek elle kolayca kavranabilecek kadar küçük müdür?" },
+            { id: "q61", metin: "Yenilebilir bir gıda kaynağı mıdır?" },
+            { id: "q62", metin: "Tehlikeli olabilir mi (zehirli, keskin, yüksek voltajlı vb.)?" },
+            { id: "q63", metin: "Bir spor dalında kullanılır mı?" },
+            { id: "q64", metin: "Açık havada bulunması daha olağan mıdır?" },
+            { id: "q65", metin: "İç mekânda bulunması daha olağan mıdır?" },
+            { id: "q66", metin: "Belirli bir meslek/iş kolunda özel olarak kullanılır mı?" },
+            { id: "q67", metin: "Bir canlının beslenmesiyle doğrudan ilgili midir?" },
+            { id: "q68", metin: "Şeffaf veya yarı şeffaf bir yapısı var mıdır?" },
+            { id: "q69", metin: "Bir yüzeye veya duvara asılı biçimde durabilir mi?" },
+            { id: "q70", metin: "Yalnızca belirli bir mevsimde daha yaygın görülür mü?" },
+            { id: "q71", metin: "Bir sanat veya el işi malzemesi midir?" },
+            { id: "q72", metin: "Bir bilim/laboratuvar aracı mıdır?" },
+            { id: "q73", metin: "Bir oyuncak veya eğlence amaçlı üretilmiş midir?" },
+            { id: "q74", metin: "Kendi kendine üreyebilir/çoğalabilir mi?" },
+            { id: "q75", metin: "Bu tür/canlı genellikle sürü veya topluluk hâlinde yaşar mı?" },
+            { id: "q76", metin: "Bu nesne genellikle tek başına değil bir set/takım hâlinde kullanılır mı?" },
+            { id: "q77", metin: "Kapalı bir alanda (kutu, çit, kafes vb.) tutulması gerekir mi?" },
+            { id: "q78", metin: "Zamanla bozulan/çürüyen bir yapısı var mıdır?" },
+            { id: "q79", metin: "İnsan bedenine doğrudan temas ederek kullanılır mı?" },
+            { id: "q80", metin: "Bir yapı veya binanın parçası mıdır?" },
+            { id: "q81", metin: "Bir taşıtın üzerinde/içinde taşınabilir mi?" },
+            { id: "q82", metin: "İnsanlar tarafından biriktirilen bir koleksiyon nesnesi olabilir mi?" },
+            { id: "q83", metin: "Zamanla şekil/boyut değiştirebilir mi (büyüme, erime, aşınma vb.)?" },
+            { id: "q84", metin: "Bir coğrafi yapıyla ilişkilendirilir mi (dağ, nehir, orman vb.)?" },
+            { id: "q85", metin: "Toprakla doğrudan teması gerektirir mi (kök salma, gömülme vb.)?" },
+            { id: "q86", metin: "Bir görev için eğitilebilir veya programlanabilir midir?" },
+            { id: "q87", metin: "Acil durum/tehlike anında kullanılan bir nesne midir?" },
+            { id: "q88", metin: "İki elle taşınması daha uygun mudur?" },
+            { id: "q89", metin: "Üzerinde hareketli parçalar var mıdır?" },
+            { id: "q90", metin: "Dönen bir parçası var mıdır?" },
+            { id: "q91", metin: "İçinden hava geçmesi gerekir mi?" },
+            { id: "q92", metin: "İçi boş bir yapıya sahip midir?" },
+            { id: "q93", metin: "Bir şey ölçmek amacıyla kullanılır mı?" },
+            { id: "q94", metin: "Bir şey kesmeden şekil vermeye yarar mı?" },
+            { id: "q95", metin: "Üzerinde yazı yazılabilir mi?" },
+            { id: "q96", metin: "Yazıları silmeye yarar mı?" },
+            { id: "q97", metin: "Sayıları göstermeye yarar mı?" },
+            { id: "q98", metin: "Masa üzerinde kullanılmaya uygun mudur?" },
+            { id: "q99", metin: "Tavana monte edilebilir mi?" },
+            { id: "q100", metin: "Bir çekmecenin içine rahatça sığar mı?" },
+            { id: "q101", metin: "Esnek bir yapıya sahip midir?" },
+            { id: "q102", metin: "Sert bir yapıya sahip midir?" },
+            { id: "q103", metin: "Yuvarlanabilir mi?" },
+            { id: "q104", metin: "Zıplayabilir mi?" },
+            { id: "q105", metin: "Kullanımı sırasında döndürülmesi gerekir mi?" },
+            { id: "q106", metin: "Kullanımı sırasında bastırılması gerekir mi?" },
+            { id: "q107", metin: "Üzerinde ekran bulunabilir mi?" },
+            { id: "q108", metin: "Üzerinde gösterge ışığı bulunabilir mi?" },
+            { id: "q109", metin: "İçinde yay mekanizması bulunabilir mi?" },
+            { id: "q110", metin: "Lastik parça içerir mi?" },
+            { id: "q111", metin: "Seramik malzeme içerir mi?" },
+            { id: "q112", metin: "Deri malzeme içerir mi?" },
+            { id: "q113", metin: "Paslanabilir mi?" },
+            { id: "q114", metin: "Güneş ışığında kullanılmak üzere tasarlanmış mıdır?" },
+            { id: "q115", metin: "Karanlıkta kullanılabilir mi?" },
+            { id: "q116", metin: "Üzerinde harf bulunabilir mi?" },
+            { id: "q117", metin: "Tek kullanımlık olarak üretilebilir mi?" },
+            { id: "q118", metin: "Yeniden doldurularak kullanılabilir mi?" },
+            { id: "q119", metin: "Kullanıldıkça aşınır mı?" },
+            { id: "q120", metin: "Bakım veya temizlik gerektirir mi?" },
+            { id: "q121", metin: "Kilitlenebilir bir mekanizması var mıdır?" },
+            { id: "q122", metin: "Birden fazla parçanın birleşmesiyle oluşur mu?" },
+            { id: "q123", metin: "Genellikle dik konumda kullanılır mı?" },
+            { id: "q124", metin: "Kullanım amacı insan tarafından sonradan değiştirilebilir mi?" },
+            { id: "q125", metin: "Ağırlığı 10 kilogramdan fazla mıdır?" },
+            { id: "q126", metin: "Ağırlığı 100 gramdan az mıdır?" },
+            { id: "q127", metin: "Zeminde serbestçe duran (hiçbir yere sabitlenmemiş) bir nesne midir?" },
+            { id: "q128", metin: "Taşınmadan önce sökülmesi/demonte edilmesi gerekir mi?" },
+            { id: "q129", metin: "Soğuk/serin bir ortamda saklanması gerekir mi?" },
+            { id: "q130", metin: "Diğer örneklerle üst üste veya iç içe istiflenebilir mi?" },
+            { id: "q131", metin: "Belirli aralıklarla değiştirilmesi gereken bir parçası (pil, filtre, bıçak vb.) var mıdır?" },
+            { id: "q132", metin: "Bir cepte taşınabilecek kadar küçük müdür?" },
+            { id: "q133", metin: "Taşınması için tekerlek veya özel bir düzenek gerekir mi?" }
+        ];
+
+        const nesneler = [
+            {
+                isim: "Buzdolabı",
+                ozellikler: {
+                    q1: true, q2: true, q3: true, q4: false, q5: false, q6: false, q7: false, q8: true, q9: false, q10: true,
+                    q11: true, q12: false, q13: false, q14: false, q15: true, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: true, q27: true, q28: true, q29: false, q30: false,
+                    q31: true, q32: false, q33: false, q34: true, q35: true, q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: true, q42: false, q43: true, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: true, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: "belki", q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: true, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: "belki", q132: false, q133: true
+                }
+            },
+            {
+                isim: "Tahta Kaşık",
+                ozellikler: {
+                    q1: true, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: true, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: true, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: true, q95: false, q96: false, q97: false, q98: true, q99: false, q100: true,
+                    q101: "belki", q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: true, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Sandalye",
+                ozellikler: {
+                    q1: "belki", q2: false, q3: "belki", q4: false, q5: true, q6: false, q7: "belki", q8: "belki", q9: false, q10: false,
+                    q11: false, q12: "belki", q13: false, q14: false, q15: false, q16: "belki", q17: false, q18: "belki", q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: true, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: "belki",
+                    q41: false, q42: "belki", q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: true, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Akıllı Telefon",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: true, q5: false, q6: true, q7: true, q8: true, q9: false, q10: false,
+                    q11: true, q12: false, q13: false, q14: true, q15: true, q16: false, q17: false, q18: true, q19: false, q20: false,
+                    q21: true, q22: false, q23: false, q24: false, q25: true, q26: "belki", q27: false, q28: true, q29: true, q30: true,
+                    q31: false, q32: true, q33: true, q34: true, q35: true, q36: true, q37: false, q38: false, q39: true, q40: "belki",
+                    q41: true, q42: false, q43: true, q44: false, q45: true, q46: false, q47: false, q48: "belki", q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: false, q83: false, q84: false, q85: true, q86: false, q87: true, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: "belki", q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: true,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: true, q116: true, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: true, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Park Bankı",
+                ozellikler: {
+                    q1: false, q2: false, q3: "belki", q4: false, q5: true, q6: false, q7: true, q8: "belki", q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: "belki", q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: false, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: true, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Su Şişesi",
+                ozellikler: {
+                    q1: true, q2: false, q3: true, q4: true, q5: false, q6: true, q7: true, q8: "belki", q9: false, q10: true,
+                    q11: false, q12: false, q13: false, q14: "belki", q15: false, q16: false, q17: false, q18: true, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: "belki", q27: false, q28: true, q29: "belki", q30: false,
+                    q31: true, q32: true, q33: true, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: "belki", q46: true, q47: false, q48: true, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: "belki", q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: true, q99: false, q100: true,
+                    q101: "belki", q102: false, q103: true, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: true, q116: true, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: true, q124: false, q125: false, q126: "belki", q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Dizüstü Bilgisayar",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: "belki", q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: true, q12: false, q13: false, q14: true, q15: true, q16: false, q17: false, q18: true, q19: false, q20: false,
+                    q21: true, q22: false, q23: false, q24: false, q25: true, q26: "belki", q27: true, q28: true, q29: true, q30: false,
+                    q31: true, q32: true, q33: true, q34: true, q35: true, q36: true, q37: false, q38: false, q39: true, q40: true,
+                    q41: true, q42: false, q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: true, q69: false, q70: false,
+                    q71: false, q72: true, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: false, q83: false, q84: false, q85: true, q86: false, q87: true, q88: true, q89: true, q90: true,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: true, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: true, q116: true, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: true, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Mutfak Bıçağı",
+                ozellikler: {
+                    q1: true, q2: false, q3: "belki", q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: "belki", q17: true, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: true, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: true, q63: false, q64: false, q65: true, q66: false, q67: true, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: true, q95: false, q96: false, q97: false, q98: true, q99: false, q100: true,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: true, q113: false, q114: false, q115: false, q116: false, q117: true, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: true, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Otomobil",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: false, q5: true, q6: false, q7: true, q8: true, q9: false, q10: false,
+                    q11: true, q12: true, q13: true, q14: true, q15: true, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: true, q22: false, q23: false, q24: true, q25: true, q26: true, q27: true, q28: true, q29: false, q30: true,
+                    q31: true, q32: true, q33: false, q34: true, q35: "belki", q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: true, q44: true, q45: true, q46: false, q47: true, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: true, q58: false, q59: true, q60: false,
+                    q61: false, q62: true, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: true, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: true, q83: true, q84: false, q85: false, q86: true, q87: true, q88: false, q89: true, q90: true,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: true, q104: false, q105: true, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: true, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Kitap",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: true, q19: false, q20: false,
+                    q21: false, q22: true, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: true, q32: true, q33: true, q34: false, q35: true, q36: false, q37: false, q38: false, q39: "belki", q40: true,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: true, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: true, q67: false, q68: false, q69: false, q70: false,
+                    q71: true, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: true, q96: false, q97: true, q98: true, q99: false, q100: true,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Duvar Saati",
+                ozellikler: {
+                    q1: "belki", q2: true, q3: true, q4: true, q5: false, q6: true, q7: false, q8: "belki", q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: true, q15: false, q16: "belki", q17: false, q18: "belki", q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: true, q26: false, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: true, q34: true, q35: true, q36: "belki", q37: false, q38: false, q39: false, q40: false,
+                    q41: true, q42: false, q43: true, q44: true, q45: "belki", q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: "belki", q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: "belki", q69: true, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: true, q90: true,
+                    q91: false, q92: false, q93: true, q94: false, q95: false, q96: false, q97: true, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: "belki", q106: false, q107: "belki", q108: true, q109: true, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: true, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: true, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: true, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Gitar",
+                ozellikler: {
+                    q1: false, q2: "belki", q3: "belki", q4: false, q5: false, q6: true, q7: false, q8: "belki", q9: false, q10: false,
+                    q11: "belki", q12: false, q13: false, q14: false, q15: false, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: true, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: true, q30: false,
+                    q31: false, q32: true, q33: true, q34: true, q35: true, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: true, q67: false, q68: false, q69: false, q70: false,
+                    q71: true, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: true, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: true, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: true, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Şemsiye",
+                ozellikler: {
+                    q1: false, q2: false, q3: true, q4: true, q5: false, q6: true, q7: true, q8: true, q9: false, q10: true,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: "belki", q17: false, q18: false, q19: "belki", q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: true, q32: true, q33: false, q34: false, q35: false, q36: true, q37: false, q38: false, q39: false, q40: true,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: "belki",
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: false, q83: true, q84: false, q85: false, q86: false, q87: true, q88: true, q89: true, q90: true,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: true, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Süpürge",
+                ozellikler: {
+                    q1: true, q2: "belki", q3: true, q4: false, q5: false, q6: true, q7: false, q8: "belki", q9: false, q10: false,
+                    q11: "belki", q12: false, q13: false, q14: false, q15: false, q16: "belki", q17: false, q18: false, q19: false, q20: true,
+                    q21: false, q22: false, q23: false, q24: "belki", q25: false, q26: false, q27: true, q28: "belki", q29: false, q30: false,
+                    q31: false, q32: true, q33: true, q34: true, q35: "belki", q36: "belki", q37: false, q38: true, q39: false, q40: false,
+                    q41: "belki", q42: "belki", q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: true, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: true, q88: true, q89: true, q90: true,
+                    q91: true, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: true, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: "belki", q132: false, q133: false
+                }
+            },
+            {
+                isim: "Çamaşır Makinesi",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: false, q5: false, q6: false, q7: false, q8: true, q9: false, q10: true,
+                    q11: true, q12: false, q13: false, q14: true, q15: true, q16: false, q17: false, q18: false, q19: false, q20: true,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: true, q27: true, q28: true, q29: false, q30: false,
+                    q31: true, q32: false, q33: false, q34: true, q35: true, q36: true, q37: false, q38: true, q39: false, q40: false,
+                    q41: true, q42: false, q43: true, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: true, q87: false, q88: false, q89: true, q90: true,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: true, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: "belki", q132: false, q133: true
+                }
+            },
+            {
+                isim: "Güneş Gözlüğü",
+                ozellikler: {
+                    q1: false, q2: false, q3: true, q4: true, q5: false, q6: true, q7: true, q8: "belki", q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: true, q15: false, q16: false, q17: false, q18: false, q19: true, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: true, q30: "belki",
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: true, q38: false, q39: false, q40: true,
+                    q41: false, q42: false, q43: false, q44: false, q45: true, q46: false, q47: false, q48: true, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: true, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: true,
+                    q101: "belki", q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: true, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Mikrodalga Fırın",
+                ozellikler: {
+                    q1: true, q2: true, q3: true, q4: "belki", q5: false, q6: false, q7: false, q8: true, q9: false, q10: false,
+                    q11: true, q12: false, q13: false, q14: true, q15: true, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: true, q24: false, q25: true, q26: true, q27: true, q28: true, q29: false, q30: false,
+                    q31: true, q32: false, q33: false, q34: true, q35: true, q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: true, q42: false, q43: true, q44: true, q45: false, q46: false, q47: true, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: true, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: true, q86: false, q87: false, q88: false, q89: true, q90: true,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: true, q98: true, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: true, q106: true, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Bisiklet",
+                ozellikler: {
+                    q1: false, q2: "belki", q3: true, q4: false, q5: true, q6: false, q7: true, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: true, q14: false, q15: "belki", q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: true, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: "belki", q35: false, q36: false, q37: false, q38: false, q39: true, q40: "belki",
+                    q41: false, q42: false, q43: "belki", q44: false, q45: false, q46: false, q47: false, q48: true, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: true, q58: false, q59: true, q60: false,
+                    q61: false, q62: false, q63: true, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: true, q90: true,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: true, q104: false, q105: true, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: true, q113: true, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: "belki", q132: false, q133: false
+                }
+            },
+            {
+                isim: "Çay Bardağı",
+                ozellikler: {
+                    q1: true, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: true,
+                    q11: false, q12: false, q13: false, q14: true, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: "belki", q27: false, q28: true, q29: true, q30: false,
+                    q31: false, q32: true, q33: "belki", q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: true, q46: true, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: "belki", q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: true, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: true, q99: false, q100: true,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: true, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Ayna",
+                ozellikler: {
+                    q1: "belki", q2: false, q3: "belki", q4: "belki", q5: false, q6: true, q7: false, q8: "belki", q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: true, q15: false, q16: "belki", q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: "belki", q28: false, q29: true, q30: true,
+                    q31: false, q32: false, q33: true, q34: false, q35: false, q36: false, q37: true, q38: true, q39: false, q40: false,
+                    q41: "belki", q42: false, q43: false, q44: true, q45: true, q46: true, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: "belki", q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: true, q69: true, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: true,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Aslan",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: false, q56: false, q57: true, q58: false, q59: true, q60: false,
+                    q61: false, q62: true, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: true, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Kelebek",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: false, q44: false, q45: "belki", q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: true, q56: false, q57: true, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: true, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Yunus",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: "belki",
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: false, q56: true, q57: true, q58: false, q59: true, q60: false,
+                    q61: false, q62: false, q63: false, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: true, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: true, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Meşe Ağacı",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: true, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: true,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: true, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: true, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: true, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Gül",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: true, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: true, q47: false, q48: false, q49: true, q50: true,
+                    q51: false, q52: false, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: true, q63: false, q64: "belki", q65: "belki", q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Kaktüs",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: true, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: true,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: true, q63: false, q64: true, q65: "belki", q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Akıllı Saat",
+                ozellikler: {
+                    q1: false, q2: true, q3: false, q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: true, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: true, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: false, q83: false, q84: false, q85: true, q86: false, q87: true, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: true, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: true,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: true, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: true, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Drone (İHA)",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: false, q5: false, q6: false, q7: false, q8: true, q9: false, q10: false,
+                    q11: true, q12: false, q13: true, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: true, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: true, q35: false, q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: true, q56: false, q57: true, q58: false, q59: false, q60: false,
+                    q61: false, q62: true, q63: false, q64: true, q65: false, q66: true, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: true, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: true, q86: true, q87: true, q88: false, q89: true, q90: true,
+                    q91: true, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: true, q125: false, q126: false, q127: false, q128: true, q129: false, q130: false,
+                    q131: "belki", q132: false, q133: false
+                }
+            },
+            {
+                isim: "Kartal",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: true, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: true, q56: false, q57: true, q58: false, q59: false, q60: false,
+                    q61: false, q62: true, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: true, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Karınca",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: false, q56: false, q57: true, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: true, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Penguen",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: "belki",
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: false, q56: true, q57: true, q58: false, q59: true, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: true, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: true, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: true, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Ayçiçeği",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: true, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: true,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: "belki", q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Çim",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: false, q7: true, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: true, q49: true, q50: true,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: true, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: true, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Muz",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: true, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: true, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: true, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Termometre",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: "belki",
+                    q11: false, q12: false, q13: false, q14: true, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: true, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: true, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: true, q69: false, q70: false,
+                    q71: false, q72: true, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: true, q93: true, q94: false, q95: false, q96: false, q97: true, q98: false, q99: false, q100: true,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: true, q113: false, q114: false, q115: false, q116: true, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Mikroskop",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: false, q5: false, q6: false, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: true, q15: true, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: true, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: true, q73: false, q74: false, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: true, q90: true,
+                    q91: false, q92: false, q93: true, q94: false, q95: false, q96: false, q97: false, q98: true, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Futbol Topu",
+                ozellikler: {
+                    q1: false, q2: false, q3: true, q4: false, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: true, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: true, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: false, q103: true, q104: true, q105: false, q106: true, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: true,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Paten",
+                ozellikler: {
+                    q1: false, q2: false, q3: true, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: true, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: true, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: true, q45: false, q46: false, q47: false, q48: true, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: true, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: true, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: true, q90: true,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: true, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: true,
+                    q131: "belki", q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Çadır",
+                ozellikler: {
+                    q1: false, q2: false, q3: true, q4: false, q5: false, q6: true, q7: true, q8: false, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: true, q88: true, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: false, q128: true, q129: false, q130: true,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Yelkenli Tekne",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: true, q6: false, q7: false, q8: true, q9: true, q10: true,
+                    q11: false, q12: true, q13: true, q14: false, q15: false, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: true, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: true, q57: false, q58: true, q59: true, q60: false,
+                    q61: false, q62: true, q63: true, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: true, q85: false, q86: false, q87: false, q88: false, q89: true, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Uçak",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: true, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: true, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: true, q36: false, q37: true, q38: false, q39: false, q40: false,
+                    q41: true, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: true, q56: false, q57: false, q58: false, q59: true, q60: false,
+                    q61: false, q62: true, q63: false, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: true, q87: false, q88: false, q89: true, q90: true,
+                    q91: true, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: true, q107: true, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: true, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Trompet",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: true, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: true,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: true, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: true, q90: false,
+                    q91: true, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: true, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Bal",
+                ozellikler: {
+                    q1: true, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: true, q10: true,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: true, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: true, q62: false, q63: false, q64: false, q65: false, q66: false, q67: false, q68: true, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: true, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Peynir",
+                ozellikler: {
+                    q1: true, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: true, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: true, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: true, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: true, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: true, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: true, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: true, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: true, q130: true,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Şapka",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: true, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: "belki", q65: "belki", q66: true, q67: false, q68: false, q69: false, q70: false,
+                    q71: true, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: true, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: true, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Çekiç",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: true, q17: true, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: true, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: true, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: true, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: true, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            },
+            {
+                isim: "Fil",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: false, q56: "belki", q57: true, q58: false, q59: true, q60: false,
+                    q61: false, q62: true, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: true, q76: false, q77: true, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: true, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: true, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Yılan",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: "belki", q5: false, q6: "belki", q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: "belki", q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: false, q56: "belki", q57: true, q58: false, q59: false, q60: false,
+                    q61: false, q62: true, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: true, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: "belki", q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Baykuş",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: true, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: false, q55: true, q56: false, q57: true, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Papatya",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: true, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: "belki", q34: false, q35: false, q36: false, q37: true, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: true,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: true, q65: "belki", q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Çilek",
+                ozellikler: {
+                    q1: true, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: true, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: true,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: true, q62: false, q63: false, q64: true, q65: "belki", q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: true, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Mantar",
+                ozellikler: {
+                    q1: "belki", q2: false, q3: false, q4: true, q5: false, q6: true, q7: true, q8: false, q9: true, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: true, q62: "belki", q63: false, q64: true, q65: "belki", q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: true, q128: false, q129: true, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Tornavida",
+                ozellikler: {
+                    q1: false, q2: false, q3: "belki", q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: true, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: true,
+                    q91: false, q92: false, q93: false, q94: true, q95: false, q96: false, q97: false, q98: true, q99: false, q100: true,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Testere",
+                ozellikler: {
+                    q1: false, q2: "belki", q3: false, q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: true, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: true, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: true, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Cetvel",
+                ozellikler: {
+                    q1: false, q2: false, q3: true, q4: true, q5: false, q6: true, q7: false, q8: "belki", q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: "belki", q17: false, q18: true, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: true, q94: false, q95: true, q96: false, q97: true, q98: true, q99: false, q100: true,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: true, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: true, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Pusula",
+                ozellikler: {
+                    q1: false, q2: false, q3: "belki", q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: true, q90: true,
+                    q91: false, q92: true, q93: true, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: true,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: true, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: true, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Kürek",
+                ozellikler: {
+                    q1: false, q2: false, q3: "belki", q4: false, q5: false, q6: true, q7: false, q8: false, q9: false, q10: true,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: true, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: true, q57: false, q58: true, q59: true, q60: false,
+                    q61: false, q62: false, q63: true, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Raket",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: "belki", q13: false, q14: false, q15: false, q16: "belki", q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: false, q44: false, q45: false, q46: false, q47: false, q48: true, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: true, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: true, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Bere",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: true, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: true, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: true, q42: "belki", q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: true,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Bot",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: "belki", q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: true, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: "belki", q43: false, q44: false, q45: false, q46: false, q47: false, q48: true, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: "belki", q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Sırt Çantası",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: false, q18: "belki", q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: true, q29: false, q30: false,
+                    q31: true, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: "belki", q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: true, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Anahtar",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: true, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: true,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: true, q113: false, q114: false, q115: false, q116: true, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Mum",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: true, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: true, q34: false, q35: true, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: true, q42: true, q43: false, q44: false, q45: false, q46: true, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: true, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: "belki", q70: false,
+                    q71: true, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: true, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: true,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: true, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: true, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: true,
+                    q131: true, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Balon",
+                ozellikler: {
+                    q1: false, q2: false, q3: true, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: true, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: true, q39: true, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: true, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: true, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: true, q63: false, q64: "belki", q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: true, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: true, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: false, q103: true, q104: true, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: true, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            },
+            {
+                isim: "Kedi",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: true, q34: true, q35: false, q36: false, q37: false, q38: false, q39: true, q40: false,
+                    q41: false, q42: "belki", q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: true, q55: false, q56: false, q57: true, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: true, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: true, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Köpek",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: true, q34: true, q35: false, q36: false, q37: false, q38: false, q39: true, q40: false,
+                    q41: false, q42: "belki", q43: true, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: true, q55: false, q56: false, q57: true, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: true, q64: true, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: true, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: true, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: true, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Balık",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: true, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: true, q40: false,
+                    q41: false, q42: "belki", q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: false,
+                    q51: true, q52: false, q53: true, q54: "belki", q55: false, q56: true, q57: true, q58: false, q59: false, q60: "belki",
+                    q61: false, q62: false, q63: false, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: true, q75: true, q76: false, q77: true, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Palmiye Ağacı",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: false, q5: false, q6: false, q7: true, q8: false, q9: false, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: true,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: true, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: false, q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: true, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: true, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Nane",
+                ozellikler: {
+                    q1: "belki", q2: false, q3: false, q4: true, q5: false, q6: true, q7: true, q8: false, q9: true, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: "belki", q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: true, q50: true,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: true, q62: false, q63: false, q64: true, q65: "belki", q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: true, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: true, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Elma",
+                ozellikler: {
+                    q1: true, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: true, q10: false,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: false, q53: true, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: true, q62: false, q63: false, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: true, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: true, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Televizyon",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: false, q5: false, q6: false, q7: false, q8: false, q9: false, q10: false,
+                    q11: true, q12: false, q13: false, q14: true, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: true, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: true, q30: "belki",
+                    q31: false, q32: false, q33: true, q34: true, q35: true, q36: true, q37: false, q38: false, q39: false, q40: true,
+                    q41: false, q42: false, q43: true, q44: false, q45: true, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: true, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Kulaklık",
+                ozellikler: {
+                    q1: false, q2: true, q3: true, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: true, q12: "belki", q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: true, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: true, q36: false, q37: false, q38: true, q39: false, q40: true,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: true,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: true, q108: true, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: true, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Piyano",
+                ozellikler: {
+                    q1: false, q2: "belki", q3: false, q4: false, q5: true, q6: false, q7: true, q8: false, q9: false, q10: false,
+                    q11: true, q12: false, q13: false, q14: false, q15: false, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: true, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: true, q34: true, q35: true, q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: "belki", q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: true, q60: false,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: true, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: true, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: true, q126: false, q127: true, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Kemer",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: true, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: true, q40: false,
+                    q41: "belki", q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Eldiven",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: true, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: true, q32: false, q33: false, q34: false, q35: false, q36: false, q37: true, q38: false, q39: true, q40: false,
+                    q41: "belki", q42: false, q43: false, q44: false, q45: false, q46: false, q47: true, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: true, q67: false, q68: false, q69: false, q70: true,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: true, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Kayak",
+                ozellikler: {
+                    q1: false, q2: false, q3: "belki", q4: false, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: true, q12: false, q13: false, q14: false, q15: true, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: "belki", q42: false, q43: false, q44: false, q45: false, q46: false, q47: true, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: true, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Yüzük",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: true, q20: false,
+                    q21: false, q22: false, q23: true, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: "belki",
+                    q31: true, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: "belki", q42: false, q43: false, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: true, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: true, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Kolye",
+                ozellikler: {
+                    q1: false, q2: false, q3: false, q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: true, q20: false,
+                    q21: true, q22: false, q23: true, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: "belki",
+                    q31: true, q32: false, q33: false, q34: true, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: "belki", q42: false, q43: false, q44: true, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: true, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: false,
+                    q121: false, q122: false, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Tencere",
+                ozellikler: {
+                    q1: true, q2: false, q3: false, q4: false, q5: false, q6: true, q7: false, q8: true, q9: false, q10: true,
+                    q11: false, q12: false, q13: false, q14: false, q15: false, q16: false, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: true, q24: false, q25: false, q26: true, q27: true, q28: true, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: true, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: false,
+                    q61: false, q62: false, q63: false, q64: true, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: true, q76: false, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: false, q90: false,
+                    q91: false, q92: true, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: true, q124: false, q125: false, q126: false, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: false, q133: false
+                }
+            }
+,
+            {
+                isim: "Fırça",
+                ozellikler: {
+                    q1: false, q2: false, q3: true, q4: true, q5: false, q6: true, q7: false, q8: false, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: "belki", q17: false, q18: false, q19: false, q20: true,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: true, q32: true, q33: false, q34: false, q35: false, q36: false, q37: true, q38: true, q39: false, q40: false,
+                    q41: "belki", q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: false, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: true, q72: false, q73: false, q74: false, q75: false, q76: false, q77: false, q78: false, q79: true, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: false, q89: false, q90: false,
+                    q91: false, q92: false, q93: false, q94: false, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: true, q102: false, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: true,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Makas",
+                ozellikler: {
+                    q1: false, q2: false, q3: "belki", q4: true, q5: false, q6: true, q7: false, q8: true, q9: false, q10: false,
+                    q11: false, q12: true, q13: false, q14: false, q15: false, q16: false, q17: true, q18: true, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: false, q28: false, q29: false, q30: false,
+                    q31: false, q32: true, q33: false, q34: false, q35: false, q36: false, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: false, q43: false, q44: false, q45: false, q46: false, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: false, q56: false, q57: false, q58: false, q59: false, q60: true,
+                    q61: false, q62: true, q63: true, q64: false, q65: true, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: false, q73: false, q74: false, q75: false, q76: true, q77: false, q78: false, q79: false, q80: false,
+                    q81: false, q82: false, q83: false, q84: false, q85: false, q86: false, q87: false, q88: true, q89: true, q90: false,
+                    q91: false, q92: false, q93: false, q94: true, q95: false, q96: false, q97: false, q98: false, q99: false, q100: false,
+                    q101: false, q102: true, q103: false, q104: false, q105: false, q106: false, q107: false, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: true, q123: false, q124: false, q125: false, q126: true, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: true, q133: false
+                }
+            }
+,
+            {
+                isim: "Roket",
+                ozellikler: {
+                    q1: false, q2: true, q3: false, q4: false, q5: false, q6: false, q7: true, q8: false, q9: false, q10: false,
+                    q11: true, q12: false, q13: true, q14: false, q15: false, q16: true, q17: false, q18: false, q19: false, q20: false,
+                    q21: false, q22: false, q23: false, q24: false, q25: false, q26: false, q27: true, q28: true, q29: false, q30: false,
+                    q31: false, q32: false, q33: false, q34: true, q35: true, q36: true, q37: false, q38: false, q39: false, q40: false,
+                    q41: false, q42: true, q43: false, q44: false, q45: true, q46: true, q47: false, q48: false, q49: false, q50: false,
+                    q51: false, q52: true, q53: false, q54: false, q55: true, q56: false, q57: true, q58: true, q59: true, q60: false,
+                    q61: false, q62: true, q63: false, q64: false, q65: false, q66: false, q67: false, q68: false, q69: false, q70: false,
+                    q71: false, q72: true, q73: false, q74: false, q75: false, q76: false, q77: false, q78: true, q79: false, q80: false,
+                    q81: false, q82: true, q83: false, q84: false, q85: false, q86: true, q87: true, q88: false, q89: true, q90: true,
+                    q91: true, q92: true, q93: false, q94: false, q95: false, q96: false, q97: true, q98: false, q99: false, q100: false,
+                    q101: false, q102: false, q103: false, q104: false, q105: true, q106: true, q107: true, q108: false, q109: false, q110: false,
+                    q111: false, q112: false, q113: false, q114: false, q115: false, q116: false, q117: false, q118: false, q119: false, q120: true,
+                    q121: false, q122: false, q123: true, q124: false, q125: true, q126: false, q127: false, q128: false, q129: false, q130: false,
+                    q131: false, q132: false, q133: false
+                }
+            }
+        ];
+
+        let secilenNesne = null;
+        let mevcutSoruSayisi = 1;
+        let sorulanSorularVeCevaplar = [];
+
+        const mateceImg = document.getElementById("mateceImg");
+        const welcomeModal = document.getElementById("welcomeModal");
+        const startBtn = document.getElementById("startBtn");
+        
+        const screenQuestionSelect = document.getElementById("screenQuestionSelect");
+        const screenAnswer = document.getElementById("screenAnswer");
+        const screenGuess = document.getElementById("screenGuess");
+        const screenResult = document.getElementById("screenResult");
+
+        const currentQNum = document.getElementById("currentQNum");
+        const answeredQNum = document.getElementById("answeredQNum");
+        const questionCards = document.getElementById("questionCards");
+        const askedQuestionText = document.getElementById("askedQuestionText");
+        const answerDisplay = document.getElementById("answerDisplay");
+
+        const btnMoreQuestion = document.getElementById("btnMoreQuestion");
+        const btnGoGuess = document.getElementById("btnGoGuess");
+        const guessCards = document.getElementById("guessCards");
+        const resultBox = document.getElementById("resultBox");
+        const btnRestart = document.getElementById("btnRestart");
+
+        const btnHistory = document.getElementById("btnHistory");
+        const historyModal = document.getElementById("historyModal");
+        const historyList = document.getElementById("historyList");
+        const btnCloseHistory = document.getElementById("btnCloseHistory");
+
+        function gecmisiRenderEt() {
+            historyList.innerHTML = "";
+            if (sorulanSorularVeCevaplar.length === 0) {
+                historyList.innerHTML = '<p style="color:var(--text-dim);font-size:0.85rem;">Henüz bir soru sormadınız.</p>';
+                return;
+            }
+            sorulanSorularVeCevaplar.forEach((item, index) => {
+                const soru = sorular.find(s => s.id === item.qId);
+                const cevapSinif = item.cevap === true ? "ans-evet" : (item.cevap === false ? "ans-hayir" : "ans-belki");
+                const cevapMetni = item.cevap === true ? "EVET" : (item.cevap === false ? "HAYIR" : "BELKİ");
+                const satir = document.createElement("div");
+                satir.style.cssText = "margin-bottom:8px;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);";
+                satir.innerHTML = `<div style="font-size:0.8rem;color:var(--text-bright);margin-bottom:4px;">${index + 1}. ${soru ? soru.metin : "?"}</div>
+                    <span class="${cevapSinif}" style="display:inline-block;padding:2px 10px;border-radius:6px;font-size:0.75rem;font-weight:bold;">${cevapMetni}</span>`;
+                historyList.appendChild(satir);
+            });
+        }
+
+        btnHistory.addEventListener("click", () => {
+            gecmisiRenderEt();
+            historyModal.classList.remove("hidden");
+        });
+        btnCloseHistory.addEventListener("click", () => {
+            historyModal.classList.add("hidden");
+        });
+
+        function mateceGörseliGuncelle(gorselYolu) {
+            mateceImg.style.opacity = 0;
+            setTimeout(() => {
+                mateceImg.src = gorselYolu;
+                mateceImg.style.opacity = 1;
+            }, 150);
+        }
+
+        function oyunuBaslat() {
+            const randomIndex = Math.floor(Math.random() * nesneler.length);
+            secilenNesne = nesneler[randomIndex];
+
+            mevcutSoruSayisi = 1;
+            sorulanSorularVeCevaplar = [];
+            historyList.innerHTML = "";
+            historyModal.classList.add("hidden");
+
+            welcomeModal.classList.add("hidden");
+            tumEkranlariKapat();
+            soruSecimEkraniniHazirla();
+        }
+
+        function tumEkranlariKapat() {
+            screenQuestionSelect.classList.add("hidden");
+            screenAnswer.classList.add("hidden");
+            screenGuess.classList.add("hidden");
+            screenResult.classList.add("hidden");
+        }
+
+        // Genel/kaba ayrim yapan "Temel" sorular - ilk turlarda bu havuzdan secim yapilir
+        const TEMEL_SORU_IDS = new Set([
+            "q1", "q2", "q6", "q9", "q11", "q13", "q19", "q27", "q42", "q48",
+            "q49", "q50", "q51", "q52", "q53", "q55", "q56", "q57", "q59", "q60",
+            "q62", "q64", "q65", "q125", "q126"
+        ]);
+
+        // En genel "kimlik" sorulari - oyunun ilk turunda mutlaka bunlardan sunulur
+        const KIMLIK_SORU_IDS = new Set(["q49", "q50", "q51", "q52"]);
+
+        function tutarliMi(nesneCevap, verilenCevap) {
+            return nesneCevap === verilenCevap || nesneCevap === "belki" || verilenCevap === "belki";
+        }
+
+        function kalanAdaylariHesapla() {
+            return nesneler.filter(n =>
+                sorulanSorularVeCevaplar.every(item => tutarliMi(n.ozellikler[item.qId], item.cevap))
+            );
+        }
+
+        function soruBilgiPuani(soru, adaylar) {
+            let e = 0, h = 0, b = 0;
+            adaylar.forEach(n => {
+                const v = n.ozellikler[soru.id];
+                if (v === true) e++; else if (v === false) h++; else b++;
+            });
+            const maxGrup = Math.max(e, h, b);
+            return adaylar.length - maxGrup; // buyudukce daha dengeli bolunuyor demektir
+        }
+
+        function soruSecimEkraniniHazirla() {
+            tumEkranlariKapat();
+            screenQuestionSelect.classList.remove("hidden");
+            currentQNum.textContent = mevcutSoruSayisi;
+            mateceGörseliGuncelle(MATECE_IMG.MUTLU);
+
+            const sorulanIds = sorulanSorularVeCevaplar.map(s => s.qId);
+            let kalanSorular = sorular.filter(q => !sorulanIds.includes(q.id));
+
+            const adaylar = kalanAdaylariHesapla();
+            document.getElementById("kalanAdaySayaci").textContent =
+                sorulanSorularVeCevaplar.length > 0 ? `Kalan olası nesne: ${adaylar.length}` : "";
+
+            // ilk turda kesinlikle "canli mi / hayvan mi / bitki mi / insan yapimi mi" sorulur
+            if (mevcutSoruSayisi === 1) {
+                const kimlikHavuz = kalanSorular.filter(q => KIMLIK_SORU_IDS.has(q.id));
+                if (kimlikHavuz.length > 0) kalanSorular = kimlikHavuz;
+            } else if (mevcutSoruSayisi <= 5) {
+                const temelHavuz = kalanSorular.filter(q => TEMEL_SORU_IDS.has(q.id));
+                if (temelHavuz.length >= 3) kalanSorular = temelHavuz;
+            }
+
+            // her soru, kalan adaylari ne kadar dengeli boldugune gore puanlanir
+            const skorlu = kalanSorular
+                .map(q => ({ soru: q, puan: soruBilgiPuani(q, adaylar) }))
+                .sort((a, b) => b.puan - a.puan);
+
+            // tekrar oynanabilirlik icin en iyi 8 aday arasindan rastgele 3 tanesi sunulur
+            const enIyiHavuz = skorlu.slice(0, Math.min(8, skorlu.length)).map(s => s.soru);
+
+            let secilen3Soru = [];
+            while (secilen3Soru.length < 3 && enIyiHavuz.length > secilen3Soru.length) {
+                const aday = rastgeleElemanSec(enIyiHavuz);
+                if (!secilen3Soru.includes(aday)) secilen3Soru.push(aday);
+            }
+            while (secilen3Soru.length < 3 && kalanSorular.length > secilen3Soru.length) {
+                const aday = rastgeleElemanSec(kalanSorular);
+                if (!secilen3Soru.includes(aday)) secilen3Soru.push(aday);
+            }
+
+            questionCards.innerHTML = "";
+            secilen3Soru.forEach(q => {
+                const card = document.createElement("div");
+                card.className = "item-card";
+                card.textContent = q.metin;
+                card.addEventListener("click", () => soruSecildi(q));
+                questionCards.appendChild(card);
+            });
+        }
+
+        function rastgeleElemanSec(dizi) {
+            return dizi[Math.floor(Math.random() * dizi.length)];
+        }
+
+        function soruSecildi(soru) {
+            const cevap = secilenNesne.ozellikler[soru.id];
+            sorulanSorularVeCevaplar.push({ qId: soru.id, cevap: cevap });
+
+            tumEkranlariKapat();
+            screenAnswer.classList.remove("hidden");
+            mateceGörseliGuncelle(MATECE_IMG.DUSUNUYOR);
+
+            answeredQNum.textContent = mevcutSoruSayisi;
+            askedQuestionText.textContent = soru.metin;
+
+            if (cevap === true) {
+                answerDisplay.textContent = "Cevap: EVET";
+                answerDisplay.className = "answer-box ans-evet";
+            } else if (cevap === false) {
+                answerDisplay.textContent = "Cevap: HAYIR";
+                answerDisplay.className = "answer-box ans-hayir";
+            } else {
+                answerDisplay.textContent = "Cevap: BAZEN / DURUMA GÖRE";
+                answerDisplay.className = "answer-box ans-belki";
+            }
+
+            if (mevcutSoruSayisi >= 20) {
+                btnMoreQuestion.classList.add("hidden");
+            } else {
+                btnMoreQuestion.classList.remove("hidden");
+            }
+        }
+
+        function tahminEkraniniHazirla() {
+            tumEkranlariKapat();
+            screenGuess.classList.remove("hidden");
+            mateceGörseliGuncelle(MATECE_IMG.AHA);
+
+            const digerNesneler = nesneler.filter(n => n.isim !== secilenNesne.isim);
+
+            const skorluNesneler = digerNesneler.map(nesne => {
+                let benzerlikSkoru = 0;
+                sorulanSorularVeCevaplar.forEach(item => {
+                    const nesneCevap = nesne.ozellikler[item.qId];
+                    if (nesneCevap === item.cevap) {
+                        benzerlikSkoru += 2;
+                    } else if (nesneCevap === "belki" || item.cevap === "belki") {
+                        benzerlikSkoru += 1;
+                    }
+                });
+                return { nesne: nesne, skor: benzerlikSkoru };
+            });
+
+            skorluNesneler.sort((a, b) => b.skor - a.skor);
+
+            const celdiriciler = skorluNesneler.slice(0, 4).map(item => item.nesne);
+
+            const secenekler = [secilenNesne, ...celdiriciler];
+            secenekler.sort(() => Math.random() - 0.5);
+
+            guessCards.innerHTML = "";
+            secenekler.forEach(nesne => {
+                const card = document.createElement("div");
+                card.className = "item-card";
+                card.textContent = nesne.isim;
+                card.addEventListener("click", () => tahminYapildi(nesne.isim));
+                guessCards.appendChild(card);
+            });
+        }
+
+        function tahminYapildi(tahminEdilenIsim) {
+            tumEkranlariKapat();
+            screenResult.classList.remove("hidden");
+
+            if (tahminEdilenIsim === secilenNesne.isim) {
+                mateceGörseliGuncelle(MATECE_IMG.MUTLU);
+                resultBox.textContent = `HARİKA! ${mevcutSoruSayisi}. SORUDA DOĞRU TAHMİN ETTİNİZ: ${secilenNesne.isim.toUpperCase()}`;
+                resultBox.className = "answer-box ans-evet";
+            } else {
+                mateceGörseliGuncelle(MATECE_IMG.SASKIN);
+                resultBox.textContent = `MAALESEF YANLIŞ! AKLIMDAKİ NESNE: ${secilenNesne.isim.toUpperCase()}`;
+                resultBox.className = "answer-box ans-hayir";
+            }
+        }
+
+        startBtn.addEventListener("click", oyunuBaslat);
+        btnMoreQuestion.addEventListener("click", () => {
+            mevcutSoruSayisi++;
+            soruSecimEkraniniHazirla();
+        });
+        btnGoGuess.addEventListener("click", tahminEkraniniHazirla);
+        btnRestart.addEventListener("click", oyunuBaslat);
+    </script>
+
+    <div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
+        <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
+             style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
+             onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
+    </div>
+</body>
+</html>
