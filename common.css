@@ -14,6 +14,9 @@
   /* Sabit değerler — her iki modda da değişmez */
   --surface-dark:  #12100e;   /* header, footer, nav arka planı */
   --on-dark:       #f7f2e8;   /* koyu yüzey üzerindeki metin */
+  /* Sticky nav yüksekliği — menu.js tarafından gerçek değerle güncellenir.
+     Buradaki 90px, JS henüz çalışmadan önceki geçici bir tahmindir. */
+  --nav-height:    90px;
 }
 
 /* ── GECE MODU ── */
@@ -122,6 +125,12 @@ h1 span { color: var(--gold); font-style: italic; }
 #site-nav a:hover { background: rgba(200,150,12,0.2); color: var(--gold); }
 #site-nav a:hover::after { left: 12%; right: 12%; }
 #site-nav a.active { background: rgba(200,150,12,0.28); color: var(--gold); }
+
+/* ── SAYFA İÇİ BAĞLANTI HEDEFLERİ ── */
+/* Herhangi bir sayfada #id ile atlanan bir öğe, sticky navın altında
+   kalmasın diye menu.js tarafından hesaplanan --nav-height kadar pay bırakır.
+   Sayfaya özgü ek scroll-margin-top tanımları da bu değişkeni kullanmalı. */
+:target { scroll-margin-top: var(--nav-height); }
 
 /* Hamburger (mobil) */
 #burger {

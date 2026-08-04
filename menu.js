@@ -51,23 +51,44 @@ const MENU_ITEMS = [
     document.getElementById("burger").classList.remove("open");
   }
 
+  // ── NAV YÜKSEKLİĞİ — sayfa içi #id bağlantılarının menü altında
+  // kalmaması için gerçek yüksekliği ölç ve CSS değişkenine yaz.
+  // Menü satır sayısı ekran genişliğine göre değiştiğinden (sarma),
+  // sabit bir piksel değeri yerine her zaman güncel değeri kullanırız.
+  function updateNavHeight() {
+    document.documentElement.style.setProperty("--nav-height", nav.offsetHeight + "px");
+  }
+  updateNavHeight();
+  window.addEventListener("load", updateNavHeight);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(updateNavHeight);
+  }
+  let navResizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(navResizeTimer);
+    navResizeTimer = setTimeout(updateNavHeight, 150);
+  });
+
   let burger = document.getElementById("burger");
   if (burger) {
     burger.textContent = "MENÜ";
     burger.addEventListener("click", function () {
       inner.classList.toggle("open");
       burger.classList.toggle("open");
+      updateNavHeight();
     });
     document.addEventListener("click", function (e) {
       if (!nav.contains(e.target)) {
         inner.classList.remove("open");
         burger.classList.remove("open");
+        updateNavHeight();
       }
     });
     inner.querySelectorAll("a").forEach(function (a) {
       a.addEventListener("click", function () {
         inner.classList.remove("open");
         burger.classList.remove("open");
+        updateNavHeight();
       });
     });
   }
