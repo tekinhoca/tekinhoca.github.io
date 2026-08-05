@@ -124,6 +124,98 @@ main { max-width:920px; }
 .formula-card p{font-size:0.78rem;color:rgba(247,242,232,0.5);line-height:1.55;}
 
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);}}
+/* Sayı Test Aracı Stilleri */
+.tool-input-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.tool-input-group input {
+  padding: 8px 14px;
+  border: 1px solid rgba(122,92,30,0.3);
+  border-radius: 4px;
+  background: var(--cream);
+  color: var(--sepia);
+  font-family: inherit;
+  font-size: 0.9rem;
+  outline: none;
+  width: 160px;
+}
+
+.tool-input-group button {
+  padding: 8px 18px;
+  background: var(--rust);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+}
+
+.tool-input-group button:hover {
+  background: var(--gold);
+}
+
+.result-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-weight: 600;
+  margin-right: 6px;
+  font-size: 0.8rem;
+}
+.result-tag.success { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+.result-tag.fail { background: rgba(220, 53, 69, 0.15); color: #dc3545; }
+
+/* Rekorlar ve İlginç Gerçekler Kartı - diğer number-card'larla aynı tema değişkenlerini kullanır */
+.record-facts-card {
+  grid-column: 1 / -1;
+  border-left: 3px solid var(--gold);
+}
+
+.record-facts-card .card-header h3 {
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--rust);
+  border-bottom: 1px solid rgba(122,92,30,0.2);
+  padding-bottom: 0.5rem;
+  text-align: center;
+}
+
+.record-facts-card .facts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.record-facts-card .facts-list li {
+  background: rgba(122,92,30,0.06);
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 3px solid var(--gold);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--muted);
+  text-align: center;
+}
+
+.record-facts-card .facts-list li strong {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: var(--rust);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
 </style>
 </head>
 <body>
@@ -260,6 +352,39 @@ main { max-width:920px; }
         </div>
         </div>
       </div>
+<!-- Matematiksel Rekorlar ve İlginç Gerçekler Kartı -->
+<div class="visual-item record-facts-card">
+  <div class="card-header">
+    <h3>Sayılar Aleminin "En"leri ve İlginç Gerçekler</h3>
+  </div>
+  <ul class="facts-list">
+    <li><strong>En küçük mükemmel sayı:</strong> 6'dır.</li>
+    <li><strong>İki basamaklı tek mükemmel sayı:</strong> 28'dir.</li>
+    <li><strong>Bulunan toplam miktar:</strong> Günümüze kadar toplam 52 tane mükemmel sayı belirlenmiştir.</li>
+    <li><strong>Bilinen son ve en büyük mükemmel sayı:</strong> 82.048.640 basamaklıdır.</li>
+    <li><strong>En küçük 3 basamaklı dost sayı çifti:</strong> (1184, 1210) çiftidir.</li>
+    <li><strong>Narsistik sayıların sınırı:</strong> Onluk tabanda toplamda sadece 88 adet narsistik sayı bulunmaktadır.</li>
+    <li><strong>Bilinen en büyük narsistik sayı:</strong> 39 basamaklıdır.</li>
+    <li><strong>Harshad serisi rekoru:</strong> Onluk tabanda en fazla 20 tane ardışık Harshad sayısı olabilir.</li>
+  </ul>
+</div>
+
+<!-- İNTERAKTİF SAYI TEST ARACI -->
+<div class="number-card interactive-tool">
+  <div class="number-card-content">
+    <h3>🔍 Sayı Analiz Laboratuvarı</h3>
+    <p>Bir sayı girerek özel sayı türlerine uyup uymadığını ve adımlarını anlık olarak inceleyin.</p>
+    
+    <div class="tool-input-group">
+      <input type="number" id="math-number-input" min="1" placeholder="Örn: 7, 153, 220" aria-label="Test edilecek sayı">
+      <button id="math-analyze-btn">Analiz Et</button>
+    </div>
+
+    <div id="math-analysis-result" class="number-example" style="display: none; margin-top: 15px; font-style: normal;">
+      <!-- Sonuçlar JS ile buraya yüklenecek -->
+    </div>
+  </div>
+</div>
       </div>
       </div>
 
@@ -373,7 +498,7 @@ main { max-width:920px; }
 
       <!-- Sierpinski Üçgeni -->
       <div class="visual-item">
-        <svg viewBox="0 0 200 185" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 200 185" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sierpinski Üçgeni Fraktal Görseli">
           <rect width="200" height="185" fill="#12100e" rx="4"/>
           <polygon points="100,12 10,172 190,172" fill="#c8960c" fill-opacity="0.75"/>
           <polygon points="55.0,92.0 100.0,172.0 145.0,92.0" fill="#12100e"/>
@@ -425,7 +550,7 @@ main { max-width:920px; }
 
       <!-- Koch Kar Tanesi -->
       <div class="visual-item">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fraktal Geometri Görseli">
           <rect width="200" height="200" fill="#12100e" rx="4"/>
           <polygon points="100.0,27.0 97.8,30.9 93.3,30.9 95.5,34.8 93.3,38.7 88.8,38.7 86.5,34.8 84.3,38.7 79.8,38.7 82.0,42.6 79.8,46.4 84.3,46.4 86.5,50.3 84.3,54.2 79.8,54.2 82.0,58.1 79.8,62.0 75.3,62.0 73.1,58.1 70.8,62.0 66.3,62.0 64.1,58.1 66.3,54.2 61.8,54.2 59.6,50.3 57.3,54.2 52.8,54.2 55.1,58.1 52.8,62.0 48.4,62.0 46.1,58.1 43.9,62.0 39.4,62.0 41.6,65.9 39.4,69.8 43.9,69.8 46.1,73.7 43.9,77.6 39.4,77.6 41.6,81.4 39.4,85.3 43.9,85.3 46.1,89.2 48.4,85.3 52.8,85.3 55.1,89.2 52.8,93.1 57.3,93.1 59.6,97.0 57.3,100.9 52.8,100.9 55.1,104.8 52.8,108.7 48.4,108.7 46.1,104.8 43.9,108.7 39.4,108.7 41.6,112.6 39.4,116.4 43.9,116.4 46.1,120.3 43.9,124.2 39.4,124.2 41.6,128.1 39.4,132.0 43.9,132.0 46.1,135.9 48.4,132.0 52.8,132.0 55.1,135.9 52.8,139.8 57.3,139.8 59.6,143.7 61.8,139.8 66.3,139.8 64.1,135.9 66.3,132.0 70.8,132.0 73.1,135.9 75.3,132.0 79.8,132.0 82.0,135.9 79.8,139.8 84.3,139.8 86.5,143.7 84.3,147.6 79.8,147.6 82.0,151.4 79.8,155.3 84.3,155.3 86.5,159.2 88.8,155.3 93.3,155.3 95.5,159.2 93.3,163.1 97.8,163.1 100.0,167.0 102.2,163.1 106.7,163.1 104.5,159.2 106.7,155.3 111.2,155.3 113.5,159.2 115.7,155.3 120.2,155.3 118.0,151.4 120.2,147.6 115.7,147.6 113.5,143.7 115.7,139.8 120.2,139.8 118.0,135.9 120.2,132.0 124.7,132.0 126.9,135.9 129.2,132.0 133.7,132.0 135.9,135.9 133.7,139.8 138.2,139.8 140.4,143.7 142.7,139.8 147.2,139.8 144.9,135.9 147.2,132.0 151.6,132.0 153.9,135.9 156.1,132.0 160.6,132.0 158.4,128.1 160.6,124.2 156.1,124.2 153.9,120.3 156.1,116.4 160.6,116.4 158.4,112.6 160.6,108.7 156.1,108.7 153.9,104.8 151.6,108.7 147.2,108.7 144.9,104.8 147.2,100.9 142.7,100.9 140.4,97.0 142.7,93.1 147.2,93.1 144.9,89.2 147.2,85.3 151.6,85.3 153.9,89.2 156.1,85.3 160.6,85.3 158.4,81.4 160.6,77.6 156.1,77.6 153.9,73.7 156.1,69.8 160.6,69.8 158.4,65.9 160.6,62.0 156.1,62.0 153.9,58.1 151.6,62.0 147.2,62.0 144.9,58.1 147.2,54.2 142.7,54.2 140.4,50.3 138.2,54.2 133.7,54.2 135.9,58.1 133.7,62.0 129.2,62.0 126.9,58.1 124.7,62.0 120.2,62.0 118.0,58.1 120.2,54.2 115.7,54.2 113.5,50.3 115.7,46.4 120.2,46.4 118.0,42.6 120.2,38.7 115.7,38.7 113.5,34.8 111.2,38.7 106.7,38.7 104.5,34.8 106.7,30.9 102.2,30.9" fill="#c8960c" fill-opacity="0.2" stroke="#c8960c" stroke-width="0.9" stroke-linejoin="round"/>
         </svg>
@@ -437,7 +562,7 @@ main { max-width:920px; }
 
       <!-- Pisagor Teoreminin Geometrik Kanıtı -->
       <div class="visual-item">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pisagor Teoreminin Geometrik Kanıtı Görseli">
           <rect width="200" height="200" fill="#12100e" rx="4"/>
           <!-- Dik üçgen: A(75,125) B(125,125) C(125,75) -->
           <polygon points="75,125 125,125 125,75" fill="none" stroke="#c8960c" stroke-width="1.5"/>
@@ -459,7 +584,7 @@ main { max-width:920px; }
 
       <!-- Sinüs Dalgası ve Çember İlişkisi -->
       <div class="visual-item">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sinüs Dalgası ve Çember İlişkisi Görseli">
           <rect width="200" height="200" fill="#12100e" rx="4"/>
           <circle cx="55" cy="100" r="45" fill="none" stroke="#c8960c" stroke-width="1" stroke-opacity="0.5"/>
           <line x1="10" y1="100" x2="100" y2="100" stroke="#c8960c" stroke-width="0.8" stroke-opacity="0.4"/>
@@ -478,7 +603,7 @@ main { max-width:920px; }
 
       <!-- Düzgün Çokgenler -->
       <div class="visual-item">
-        <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Düzgün Çokgenler Görseli">
           <rect width="200" height="160" fill="#12100e" rx="4"/>
           <polygon points="30.0,25.0 47.3,55.0 12.7,55.0" fill="none" stroke="#c8960c" stroke-width="1.2"/>
           <text x="30" y="73" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">3gen</text>
@@ -513,5 +638,215 @@ main { max-width:920px; }
   window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
   btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
 </script>
+<script>
+document.getElementById('math-analyze-btn').addEventListener('click', analyzeNumber);
+document.getElementById('math-number-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    analyzeNumber();
+  }
+});
+
+const PERFECT_CHECK_LIMIT = 10000000; // Performans nedeniyle mükemmel sayı taraması bu değerle sınırlıdır.
+
+function analyzeNumber() {
+  const input = document.getElementById('math-number-input');
+  const resultDiv = document.getElementById('math-analysis-result');
+  const val = parseInt(input.value, 10);
+
+  if (isNaN(val) || val <= 0) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = '<p style="color:var(--rust);">Lütfen pozitif bir tam sayı giriniz.</p>';
+    return;
+  }
+
+  if (!Number.isSafeInteger(val)) {
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = '<p style="color:var(--rust);">Girilen sayı, JavaScript\'in güvenli tam sayı sınırını (2<sup>53</sup>-1 ≈ 9 katrilyon) aştığı için hassas bir analiz yapılamaz. Lütfen daha küçük bir sayı deneyiniz.</p>';
+    return;
+  }
+
+  let html = `<p><strong>Sayı: ${val}</strong></p><hr style="border:0; border-top:1px stroke rgba(122,92,30,0.2); margin:12px 0;">`;
+
+  // 1. MUTLU / MUTSUZ SAYI ANALİZİ
+  const happyResult = isHappyDetailed(val);
+  html += `<div style="margin-bottom: 16px;">`;
+  html += `<p><span class="result-tag ${happyResult.isHappy ? 'success' : 'fail'}">${happyResult.isHappy ? 'Mutlu Sayı' : 'Mutsuz Sayı'}</span> <strong>${val} sayısı bir ${happyResult.isHappy ? 'mutlu' : 'mutsuz'} sayıdır.</strong></p>`;
+  
+  happyResult.stepsDetail.forEach(step => {
+    html += `<p style="margin-left: 10px; margin-bottom: 2px;">${step}</p>`;
+  });
+  
+  if (!happyResult.isHappy) {
+    html += `<p style="margin-left: 10px; margin-top: 4px; color: var(--rust);"><em>Döngüye girildiği için asla 1'e ulaşılamaz.</em></p>`;
+  }
+  html += `</div>`;
+
+  // 2. NARSİSTİK (ARMSTRONG) SAYI ANALİZİ
+  const narsResult = isArmstrongDetailed(val);
+  html += `<div style="margin-bottom: 16px;">`;
+  html += `<p><span class="result-tag ${narsResult.isArmstrong ? 'success' : 'fail'}">${narsResult.isArmstrong ? 'Narsistik Sayı' : 'Narsistik Değil'}</span> <strong>${val} ${narsResult.isArmstrong ? 'bir narsistik sayıdır.' : 'narsistik bir sayı değildir.'}</strong></p>`;
+  html += `<p style="margin-left: 10px; margin-top: 2px;">${narsResult.formula} = <strong>${narsResult.sum}</strong> ${narsResult.isArmstrong ? '(kendisine eşittir)' : '(kendisine eşit değildir)'}</p>`;
+  html += `</div>`;
+
+  // 3. HARSHAD (NİVEN) SAYISI ANALİZİ
+  const harshadResult = isHarshadDetailed(val);
+  html += `<div style="margin-bottom: 16px;">`;
+  html += `<p><span class="result-tag ${harshadResult.isHarshad ? 'success' : 'fail'}">${harshadResult.isHarshad ? 'Harshad Sayısı' : 'Harshad Değil'}</span> <strong>${val}, bir Harshad sayısı${harshadResult.isHarshad ? 'dır' : ' değildir'}.</strong></p>`;
+  html += `<p style="margin-left: 10px; margin-top: 2px;">${harshadResult.detailText}</p>`;
+  html += `</div>`;
+
+  // 4. MÜKEMMEL SAYI ANALİZİ
+  html += `<div>`;
+  if (val > PERFECT_CHECK_LIMIT) {
+    html += `<p><span class="result-tag fail">Kontrol Edilemedi</span> <strong>Mükemmel sayı taraması, performans nedeniyle ${PERFECT_CHECK_LIMIT.toLocaleString('tr-TR')}'den büyük sayılar için yapılmamaktadır.</strong></p>`;
+  } else {
+    const perfectResult = isPerfectDetailed(val);
+    const nEks = getEks(val);
+    html += `<p><span class="result-tag ${perfectResult.isPerfect ? 'success' : 'fail'}">${perfectResult.isPerfect ? 'Mükemmel Sayı' : 'Mükemmel Değil'}</span> <strong>${val} ${perfectResult.isPerfect ? 'bir mükemmel sayıdır.' : 'mükemmel bir sayı değildir.'}</strong></p>`;
+    if (perfectResult.divisors.length > 0) {
+      html += `<p style="margin-left: 10px; margin-top: 2px;">${val}'${nEks.inEk} kendisi hariç bölenleri: ${perfectResult.divisors.join(', ')}.</p>`;
+      html += `<p style="margin-left: 10px; margin-top: 2px;">${perfectResult.divisors.join(' + ')} = <strong>${perfectResult.sum}</strong> ${perfectResult.isPerfect ? '(kendisine eşittir)' : '(kendisine eşit değildir)'}</p>`;
+    } else {
+      html += `<p style="margin-left: 10px; margin-top: 2px;">${val} sayısının kendisi hariç pozitif böleni yoktur.</p>`;
+    }
+  }
+  html += `</div>`;
+
+  resultDiv.innerHTML = html;
+  resultDiv.style.display = 'block';
+}
+
+function isHappyDetailed(n) {
+  let seen = new Set();
+  let stepsDetail = [];
+  let curr = n;
+
+  while (curr !== 1 && !seen.has(curr)) {
+    seen.add(curr);
+    const digits = String(curr).split('');
+    const expr = digits.map(d => `${d}<sup>2</sup>`).join(' + ');
+    const vals = digits.map(d => Math.pow(parseInt(d), 2));
+    const sum = vals.reduce((a, b) => a + b, 0);
+
+    if (digits.length === 1) {
+      stepsDetail.push(`${curr}<sup>2</sup> = ${sum}`);
+    } else {
+      stepsDetail.push(`${expr} = ${vals.join(' + ')} = ${sum}`);
+    }
+
+    curr = sum;
+  }
+
+  return { isHappy: curr === 1, stepsDetail: stepsDetail };
+}
+
+function isArmstrongDetailed(n) {
+  const digits = String(n).split('');
+  const p = digits.length;
+  const expr = digits.map(d => `${d}<sup>${p}</sup>`).join(' + ');
+  const vals = digits.map(d => Math.pow(parseInt(d), p));
+  const sum = vals.reduce((a, b) => a + b, 0);
+
+  return { isArmstrong: sum === n, formula: `${expr} = ${vals.join(' + ')}`, sum: sum };
+}
+
+/* TÜRKÇE DİLBİLGİSİ EKLERİNİ DOĞRU ÜRETEN MANTIK */
+
+function numberToTurkishWords(num) {
+  if (num === 0) return "sıfır";
+  const ones = ["", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"];
+  const tens = ["", "on", "yirmi", "otuz", "kırk", "elli", "atmış", "yetmiş", "seksen", "doksan"];
+  
+  if (num < 10) return ones[num];
+  if (num < 100) {
+    const t = Math.floor(num / 10);
+    const o = num % 10;
+    return tens[t] + (o ? " " + ones[o] : "");
+  }
+  if (num < 1000) {
+    const h = Math.floor(num / 100);
+    const r = num % 100;
+    const hStr = h === 1 ? "yüz" : ones[h] + " yüz";
+    return hStr + (r ? " " + numberToTurkishWords(r) : "");
+  }
+  if (num < 1000000) {
+    const th = Math.floor(num / 1000);
+    const r = num % 1000;
+    const thStr = th === 1 ? "bin" : numberToTurkishWords(th) + " bin";
+    return thStr + (r ? " " + numberToTurkishWords(r) : "");
+  }
+  return String(num);
+}
+
+function getEks(num) {
+  const words = numberToTurkishWords(num).split(" ");
+  const lastWord = words[words.length - 1]; // Okunuştaki son kelime
+  
+  const lastChar = lastWord.slice(-1);
+  const vowels = lastWord.match(/[aıeiöuü]/g) || [];
+  const lastVowel = vowels.length ? vowels[vowels.length - 1] : "i";
+  const isVowelEnding = ["a","e","ı","i","o","ö","u","ü"].includes(lastChar);
+  const isHardConsonant = ["ç","f","h","k","p","s","ş","t"].includes(lastChar);
+
+  let inEk = "", aEk = "", dirEk = "";
+
+  // 1. İlgi Eki (-in, -ın, -un, -ün / -nin, -nın, -nun, -nün)
+  if (isVowelEnding) {
+    if (["e","i"].includes(lastVowel)) inEk = "nin";
+    else if (["a","ı"].includes(lastVowel)) inEk = "nın";
+    else if (["o","u"].includes(lastVowel)) inEk = "nun";
+    else if (["ö","ü"].includes(lastVowel)) inEk = "nün";
+  } else {
+    if (["e","i"].includes(lastVowel)) inEk = "in";
+    else if (["a","ı"].includes(lastVowel)) inEk = "ın";
+    else if (["o","u"].includes(lastVowel)) inEk = "un";
+    else if (["ö","ü"].includes(lastVowel)) inEk = "ün";
+  }
+
+  // 2. Yönelme Eki (-e, -a / -ye, -ya)
+  if (isVowelEnding) {
+    if (["e","i","ö","ü"].includes(lastVowel)) aEk = "ye";
+    else aEk = "ya";
+  } else {
+    if (["e","i","ö","ü"].includes(lastVowel)) aEk = "e";
+    else aEk = "a";
+  }
+
+  // 3. Bildirme Eki (-dir, -dır, -dur, -dür / -tir, -tır, -tur, -tür)
+  const dOrT = isHardConsonant ? "t" : "d";
+  if (["e","i"].includes(lastVowel)) dirEk = dOrT + "ir";
+  else if (["a","ı"].includes(lastVowel)) dirEk = dOrT + "ır";
+  else if (["o","u"].includes(lastVowel)) dirEk = dOrT + "ur";
+  else if (["ö","ü"].includes(lastVowel)) dirEk = dOrT + "ür";
+
+  return { inEk, aEk, dirEk };
+}
+
+function isPerfectDetailed(n) {
+  let divisors = [];
+  for (let i = 1; i < n; i++) {
+    if (n % i === 0) divisors.push(i);
+  }
+  const sum = divisors.reduce((a, b) => a + b, 0);
+  return { isPerfect: sum === n, divisors: divisors, sum: sum };
+}
+
+function isHarshadDetailed(n) {
+  const digits = String(n).split('');
+  const sum = digits.reduce((acc, d) => acc + parseInt(d, 10), 0);
+  const isHarshad = (n % sum === 0);
+
+  const nEks = getEks(n);
+  const sumEks = getEks(sum);
+
+  const detailText = isHarshad 
+    ? `${n}'${nEks.inEk} rakamlarının toplamı ${sum}'${sumEks.dirEk}. ${n}, ${sum}'${sumEks.aEk} kalansız bölünebilir.`
+    : `${n}'${nEks.inEk} rakamlarının toplamı ${sum}'${sumEks.dirEk}. Ancak ${n}, ${sum}'${sumEks.aEk} kalansız bölünemez.`;
+
+  return { isHarshad: isHarshad, detailText: detailText };
+}
+</script>
+</div>
 </body>
 </html>
