@@ -473,6 +473,13 @@ function fmtN(x) {
   return parseFloat(x.toFixed(6)).toString();
 }
 
+// Negatif üslü ifadeleri kesir olarak, pozitif/sıfır üslü ifadeleri normal biçimde döndürür
+function fmtPow(a, exp) {
+  if (exp >= 0) return fmtN(Math.pow(a, exp));
+  const denom = Math.pow(a, -exp);
+  return `\\dfrac{1}{${fmtN(denom)}}`;
+}
+
 // Üs yazımı için üst indis karakterleri (görsel)
 const supMap = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
 function toSup(n) { return String(n).split('').map(c => supMap[c]||c).join(''); }
@@ -635,10 +642,9 @@ function usHesapla() {
     // ── Negatif üs ──
     const posN = -n;
     const payda = Math.pow(a, posN);
-    const sonuc = Math.pow(a, n);
     steps += `<div class="step"><strong>Negatif Üs Kuralı:</strong> \\(a^{-n} = \\dfrac{1}{a^n}\\)</div>`;
     steps += `<div class="step">\\(${a}^{${n}} = \\dfrac{1}{${a}^{${posN}}} = \\dfrac{1}{${fmtN(payda)}}\\)</div>`;
-    steps += `<div class="step"><strong>Sonuç:</strong> \\(${fmtN(sonuc)}\\)</div>`;
+    steps += `<div class="step"><strong>Sonuç:</strong> \\(${fmtPow(a, n)}\\)</div>`;
   } else {
     // ── Pozitif üs ──
     const sonuc = Math.pow(a, n);
@@ -665,16 +671,15 @@ function kuralGoster() {
   const n = parseInt(document.getElementById('kural-n').value);
   if (!isFinite(a) || !isFinite(m) || !isFinite(n)) { el.style.display='none'; return; }
 
-  const c1 = Math.pow(a, m), c2 = Math.pow(a, n);
   const steps = `
 <div class="step"><strong>Çarpma Kuralı:</strong> \\(a^m \\cdot a^n = a^{m+n}\\)</div>
-<div class="step">\\(${a}^{${m}} \\cdot ${a}^{${n}} = ${a}^{${m}+${n}} = ${a}^{${m+n}} = ${fmtN(Math.pow(a,m+n))}\\)</div>
-<div class="step">Doğrulama: \\(${fmtN(c1)} \\cdot ${fmtN(c2)} = ${fmtN(c1*c2)}\\) ✓</div>
+<div class="step">\\(${a}^{${m}} \\cdot ${a}^{${n}} = ${a}^{${m}+${n}} = ${a}^{${m+n}} = ${fmtPow(a,m+n)}\\)</div>
+<div class="step">Doğrulama: \\(${fmtPow(a,m)} \\cdot ${fmtPow(a,n)} = ${fmtPow(a,m+n)}\\) ✓</div>
 <div class="step" style="margin-top:8px"><strong>Bölme Kuralı:</strong> \\(a^m \\div a^n = a^{m-n}\\)</div>
-<div class="step">\\(${a}^{${m}} \\div ${a}^{${n}} = ${a}^{${m}-${n}} = ${a}^{${m-n}} = ${fmtN(Math.pow(a,m-n))}\\)</div>
-<div class="step">Doğrulama: \\(${fmtN(c1)} \\div ${fmtN(c2)} = ${fmtN(c1/c2)}\\) ✓</div>
+<div class="step">\\(${a}^{${m}} \\div ${a}^{${n}} = ${a}^{${m}-${n}} = ${a}^{${m-n}} = ${fmtPow(a,m-n)}\\)</div>
+<div class="step">Doğrulama: \\(${fmtPow(a,m)} \\div ${fmtPow(a,n)} = ${fmtPow(a,m-n)}\\) ✓</div>
 <div class="step" style="margin-top:8px"><strong>Üs Alma Kuralı:</strong> \\((a^m)^n = a^{m \\cdot n}\\)</div>
-<div class="step">\\((${a}^{${m}})^{${n}} = ${a}^{${m} \\cdot ${n}} = ${a}^{${m*n}} = ${fmtN(Math.pow(a,m*n))}\\)</div>`;
+<div class="step">\\((${a}^{${m}})^{${n}} = ${a}^{${m} \\cdot ${n}} = ${a}^{${m*n}} = ${fmtPow(a,m*n)}\\)</div>`;
 
   el.innerHTML = steps;
   el.style.display = 'block';
