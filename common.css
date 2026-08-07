@@ -135,6 +135,7 @@ h1 span { color: var(--gold); font-style: italic; }
 /* Hamburger (mobil) */
 #burger {
   display: none;
+  align-items: center; gap: 8px;
   background: none; border: none; cursor: pointer;
   padding: 13px 16px; color: var(--on-dark);
   font-family: 'Source Serif 4', serif;
@@ -142,8 +143,21 @@ h1 span { color: var(--gold); font-style: italic; }
   letter-spacing: 0.13em; text-transform: uppercase;
   line-height: 1;
 }
+#burger svg { width: 18px; height: 18px; flex-shrink: 0; }
 @media (max-width: 640px) {
-  #burger { display: block; margin-left: auto; }
+  #burger {
+    display: flex;
+    margin: 8px 16px 8px auto;
+    padding: 9px 14px;
+    background: rgba(200,150,12,0.15);
+    border: 1px solid rgba(200,150,12,0.45);
+    border-radius: 6px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  #burger:hover, #burger.open {
+    background: rgba(200,150,12,0.3);
+    border-color: rgba(200,150,12,0.7);
+  }
   .nav-inner {
     display: none; flex-direction: column;
     width: 100%; background: var(--rust);
