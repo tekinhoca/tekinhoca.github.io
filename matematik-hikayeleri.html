@@ -152,6 +152,76 @@ main { max-width:920px; }
   margin-bottom: 0;
 }
 
+/* Hikaye banner görseli — tıkla-büyüt */
+.hikaye-banner-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1536 / 250;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--gold);
+  box-shadow: 2px 3px 10px var(--shadow);
+  cursor: zoom-in;
+  margin-top: 1.6rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.hikaye-banner-frame:hover {
+  transform: translateY(-3px);
+  box-shadow: 3px 6px 16px var(--shadow);
+}
+.hikaye-banner-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+@media (max-width: 640px) {
+  .hikaye-banner-frame { aspect-ratio: 3.8 / 1; }
+}
+
+/* ── LIGHTBOX (hikaye görselleri) ── */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,8,5,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.lightbox-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.lightbox-overlay img {
+  max-width: 92vw;
+  max-height: 92vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+.lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(18,16,14,0.75);
+  border: 1px solid rgba(200,150,12,0.5);
+  color: var(--on-dark);
+  font-size: 1.3rem;
+  line-height: 40px;
+  text-align: center;
+  cursor: pointer;
+}
+.lightbox-close:hover { background: rgba(155,53,16,0.75); }
+
 /* Zeka Molası */
 .zeka-molasi {
   background: var(--aged);
@@ -369,7 +439,7 @@ main { max-width:920px; }
     <p class="intro-attr">— Augustus De Morgan</p>
   </div>
 
-<div class="icindekiler">
+<div class="icindekiler" id="icindekiler">
     <div class="icindekiler-baslik">İçindekiler</div>
     <ul class="icindekiler-liste">
       <li><a href="#hikaye-1"><span class="numara">1.</span> Ramanujan'ın Taksi Sayısı</a></li>
@@ -418,6 +488,10 @@ main { max-width:920px; }
       <p>İngiliz matematikçi G.H. Hardy, hasta yatağındaki Hintli dâhi Srinivasa Ramanujan'ı ziyarete giderken bindiği taksinin plaka numarasını fark eder: 1729. Odaya girdiğinde bunu sohbet konusu yapar: "Bindiğim taksinin numarası oldukça sıradandı, 1729. Umarım kötüye işaret değildir" der.</p>
       <p>Ramanujan hiç düşünmeden karşılık verir: <strong>"Hayır Hardy, çok ilginç bir sayı! 1729, iki küpün toplamı olarak iki farklı şekilde yazılabilen en küçük sayıdır: <span class="math">1<sup>3</sup>+12<sup>3</sup> = 9<sup>3</sup>+10<sup>3</sup></span>."</strong> Bu anlık gözlem, Ramanujan'ın sayılarla kurduğu olağanüstü sezgisel ilişkinin en ünlü örneği hâline geldi; bugün bu tür sayılara "taksi sayıları" (taxicab numbers) denir.</p>
 
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh01.webp">
+        <img src="mhres/mh01b.webp" alt="Ramanujan'ın Taksi Sayısı: 1729'un Gizli Zarafeti illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
         <div class="zeka-molasi-soru">1729, iki küpün toplamı olarak iki farklı şekilde yazılabilen en küçük sayı. Peki üç farklı şekilde yazılabilen bir "taksi sayısı" var mıdır?</div>
@@ -464,6 +538,10 @@ main { max-width:920px; }
       <p>Alman matematikçi David Hilbert, sonsuzluk kavramını anlatmak için hayali bir otel tasarlar: Sonsuz sayıda odası olan bir otel. Otel tamamen doludur — her odada bir misafir vardır. Tam bu sırada yeni bir misafir gelir ve oda ister. Sıradan bir otelde bu imkânsızdır; ama Hilbert'in otelinde resepsiyonist kolayca çözer: 1. odadaki misafirden 2. odaya, 2. odadakinden 3. odaya geçmesini ister — bu sonsuza kadar böyle sürer. Sonuçta 1. oda boşalır ve yeni misafir rahatça yerleşir.</p>
       <p>İşin asıl şaşırtıcı yanı, bu otele sonsuz sayıda yeni misafir birden gelse bile yer açılabilmesidir: Her misafirden, bulunduğu oda numarasının iki katına taşınmasını istemek yeterlidir (1→2, 2→4, 3→6...). Bu şekilde tüm tek numaralı odalar boşalır ve sonsuz sayıda yeni misafiri ağırlayabilir. Hilbert'in Oteli, "sonsuz" kavramının alışılmış sayma mantığından tamamen farklı işlediğini gösteren, matematik tarihinin en ünlü düşünce deneylerinden biridir.</p>
 
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh02.webp">
+        <img src="mhres/mh02b.webp" alt="Hilbert'in Sonsuz Oteli: Doluyken Yer Açabilen Bir Otel illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
         <div class="zeka-molasi-soru">Peki ya otele sonsuz sayıda otobüs gelseydi ve her otobüste de sonsuz sayıda yolcu olsaydı? Otel yine de hepsine yer açabilir miydi?</div>
@@ -509,6 +587,10 @@ main { max-width:920px; }
       <p>23 öğrencinin bulunduğu bir sınıfa girip şu iddiada bulunsanız kaç kişi size inanır?<br>"Bu sınıfta en az iki öğrencinin doğum gününün aynı gün olma olasılığı %50'yi geçer."<br>Çoğu insan bu olasılığın çok daha düşük, belki %10 civarında olması gerektiğini düşünecektir — çünkü bir yılda 365 gün vardır ve 23 kişi bu sayıya oranla çok az görünür.</p>
       <p>Ancak burada gözden kaçan nokta, soru "Sınıfta, seninle aynı gün doğan biri var mı?" değil, "Sınıftaki <em>herhangi iki kişinin</em> doğum tarihinde" bir çakışma olup olmadığıdır.<br>Şimdi işin püf noktası şudur: En az bir çakışma olma olasılığını hesaplamayla uğraşmak yerine, bunun tersini yani hiç çakışma olmama olasılığını hesaplamak daha kolaydır; <span class="math">365/365 × 364/365 × 363/365 × ... × 343/365</span> şeklinde art arda çarptığımızda, hiç çakışma olmama olasılığını yaklaşık 0,493 buluruz.<br>Buna göre, en az bir çakışma olma olasılığı yaklaşık 0,507 yani <strong>%50,7</strong>'dir.</p>
 
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh03.webp">
+        <img src="mhres/mh03b.webp" alt="Doğum Günü Paradoksu: Sezgimizin Yanıldığı An illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
         <div class="zeka-molasi-soru">Sınıf 23 değil de 70 kişilik olsaydı, en az iki kişinin doğum gününün aynı olma ihtimali yaklaşık kaç olurdu?</div>
@@ -548,6 +630,10 @@ main { max-width:920px; }
       </div>
       <p>Kuzey Amerika'da yaşayan bazı ağustos böceği türleri (Magicicada), ömürlerinin neredeyse tamamını toprak altında larva hâlinde geçirir ve yalnızca 13 veya 17 yılda bir, hep birlikte, milyonlarca birey hâlinde yüzeye çıkıp üremek için birkaç haftalığına ortaya çıkar. İlginç olan şu: hem 13 hem de 17 <strong>asal sayılardır</strong> — tesadüf olabilir mi?</p>
       <p>Biyologların en çok kabul gören açıklamasına göre, asal döngü yırtıcılara karşı bir koruma stratejisidir. Eğer ağustos böceği 12 yılda bir çıksaydı, 2, 3, 4 veya 6 yıllık döngüsü olan bir yırtıcı neredeyse her çıkışta onunla karşılaşırdı. Ama döngü 17 gibi asal olduğunda, örneğin 4 yıllık bir döngüye sahip bir yırtıcıyla ortak çıkış yılı ancak <span class="math">4×17=68</span> yılda bir gerçekleşir. Asal sayı döngüsü, yırtıcıların ağustos böceğinin çıkış yılını "senkronize edebilmesini" matematiksel olarak neredeyse imkânsız hâle getirir.</p>
+
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh04.webp">
+        <img src="mhres/mh04b.webp" alt="17 Yıllık Ağustos Böcekleri: Doğanın Asal Sayı Stratejisi illüstrasyonu" loading="lazy">
+      </div>
 
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
@@ -593,6 +679,10 @@ main { max-width:920px; }
       <p>Satrancın icadına dair anlatılan şu efsane, sayıların ne kadar hızlı devleşebileceğini gösterir.<br>Hint Kralı, ilk kez gördüğü satranç adlı oyunu çok beğenince mucitten bir dilekte bulunmasını ister. Mucit mütevazı görünerek şöyle der: "Sizden sadece biraz buğday isterim. Satranç tahtasının ilk karesine 1 tane, ikinciye 2, üçüncüye 4, dördüncüye 8 tane… Yani her kareye bir öncekinin iki katı kadar buğday koyun yeter."</p>
       <p>Kral, bu isteği küçümser ve gerekli emirleri verir adamlarına. Ancak vezirler hesaplamayı bitirdiğinde gerçek ortaya çıkar; 64. kareye gelindiğinde buğday miktarı yaklaşık <strong>18,5 kentilyon (18.446.744.073.709.551.615)</strong> taneye ulaşmıştır. Bu miktar, günümüzde dünyadaki yıllık toplam buğday üretiminin yaklaşık 1.000 katına denk gelmektedir.<br>Matematik bize der ki: Basit bir katlama (üs alma) işlemi, çok geçmeden hayal gücümüzü aşar.</p>
 
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh05.webp">
+        <img src="mhres/mh05b.webp" alt="Satranç Tahtası ve Buğday Tanesi: Üstel Artışın Görünmez Gücü illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
         <div class="zeka-molasi-soru">Satranç tahtasının sadece ilk 20 karesindeki buğdayları saniyede 1 tane sayacak olsaydınız, sayma işlemini bitirmeniz yaklaşık ne kadar sürerdi?</div>
@@ -635,6 +725,10 @@ main { max-width:920px; }
       </div>
       <p>1700'lü yıllarda Prusya Krallığı'nın Königsberg şehrinde yaşayan halk, bir pazar gezintisi bilmecesine takılmıştı: "Şehirdeki yedi köprünün her birinden tam olarak bir kez geçerek tüm şehri dolaşmak mümkün müdür?" Kimse bunu başaramıyordu; ama nedenini de kimse açıklayamıyordu.</p>
       <p>Ünlü matematikçi Leonhard Euler, 1735 yılında bu soruyu çözmek için haritadaki kara parçalarını "noktalara", köprüleri ise "çizgilere" indirgedi. Bir noktaya giren her çizginin bir de çıkışı olması gerektiğini fark etti. Eğer bir noktaya tek sayıda köprü bağlanmışsa, o nokta ya başlangıç ya da bitiş noktası olmalıydı. Şehirde 4 kara parçası vardı ve hepsine de tek sayıda köprü bağlanmıştı; oysa bir rota için en fazla iki başlangıç/bitiş noktası olabilirdi. Euler bu imkânsızlığı kanıtlayarak, bugün modern ağ yapılarını ve GPS teknolojilerini mümkün kılan <strong>Graf Teorisi</strong>'ni başlatmış oldu.</p>
+
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh06.webp">
+        <img src="mhres/mh06b.webp" alt="Königsberg'in Yedi Köprüsü: Bir Gezintiyle Doğan Yeni Bilim illüstrasyonu" loading="lazy">
+      </div>
 
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
@@ -682,6 +776,10 @@ main { max-width:920px; }
       <p>Adını Amerikalı bir televizyon sunucusundan alan bu problem, en zeki matematikçileri bile karşı karşıya getirmiştir.<br>Önünüzde üç kapı var. Birinin arkasında son model bir araba, diğer ikisinde ise birer keçi duruyor. Bir kapı seçiyorsunuz (diyelim ki 1. kapı). Kapıların arkasında ne olduğunu bilen sunucu, kalan iki kapıdan, arkasında keçi olan birini (diyelim ki 3. kapı) açıyor ve size soruyor: "Seçiminizi değiştirip 2. kapıya geçmek ister misiniz?"</p>
       <p>Sezgi bize "Fark etmez, iki kapı kaldı, şans %50" dese de matematik <strong>"Değiştir!"</strong> der. Çünkü en başta yanlış kapıyı seçme ihtimaliniz %66'ydı (2/3). Seçiminizi değiştirdiğinizde, aslında başlangıçtaki o %66'lık "yanlış yapma ihtimalini" kazanma şansına çevirmiş olursunuz. Bu paradoks, olasılığın her zaman göründüğü kadar basit olmadığını kanıtlar.</p>
 
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh07.webp">
+        <img src="mhres/mh07b.webp" alt="Monty Hall Problemi: Zihnimizin Olasılıkla İmtihanı illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
         <div class="zeka-molasi-soru">Eğer sunucu hangi kapıda araba olduğunu bilmeseydi ve rastgele bir kapı açıp şans eseri arkasından keçi çıksaydı, seçiminizi değiştirmek hâlâ avantajlı olur muydu?</div>
@@ -723,6 +821,10 @@ main { max-width:920px; }
       </div>
       <p>Siraküza Kralı Hieron, yaptırdığı yeni tacın saf altın olmadığından, içine gümüş karıştırıldığından şüphelenir ve Arşimet'ten taca zarar vermeden bu gerçeği bulmasını ister. Arşimet, bu sorunu düşünürken hamama gider. Küvete girdiğinde suyun yükseldiğini ve vücudunun hafiflediğini fark eder. Aradığı cevabı bulmuştur: Suya batan her cisim, kendi hacmi kadar suyu yerinden oynatır.</p>
       <p>Saf altın ve gümüşün yoğunlukları farklı olduğu için, eğer tacın içinde gümüş varsa aynı ağırlıktaki saf altından daha fazla su taşıracaktır. Heyecandan <strong>"Buldum!" (Eureka!)</strong> diye bağırarak sokağa fırlayan Arşimet, sadece kralın tacının sahte olduğunu kanıtlamakla kalmamış; akışkanlar mekaniğinin ve modern fizikteki hacim hesaplamalarının temelini atmıştır.</p>
+
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh08.webp">
+        <img src="mhres/mh08b.webp" alt="Arşimet'in &quot;Eureka&quot; Çığlığı: Bir Hamamda Çözülen Gizem illüstrasyonu" loading="lazy">
+      </div>
 
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
@@ -768,6 +870,10 @@ main { max-width:920px; }
       </div>
       <p>Modern matematiğin prensi kabul edilen Carl Friedrich Gauss, henüz ilkokul çağındayken tüm sınıfı hayrete düşüren bir çözüm üretmiştir. Öğretmeni, öğrencilerini oyalamak amacıyla onlardan 1'den 100'e kadar olan tüm sayıları toplamalarını ister. Diğer öğrenciler uzun işlemlerle uğraşırken, küçük Gauss birkaç saniye içinde cevabı bulur: <strong>5050</strong>.</p>
       <p>Gauss'un yöntemi, karmaşık bir soruyu basitleştirmenin en güzel örneğidir. Sayıları bir baştan bir sondan olmak üzere eşleştirebildiğini fark etmiştir: 1+100=101, 2+99=101, 3+98=101… Bu şekilde, toplamları 101 olan tam 50 tane sayı çifti olduğunu görür. 50×101 işlemini zihninden yaparak da sonuca ulaşır. Bugün öğrencilerin kullandığı <strong><span class="math">n(n+1)/2</span></strong> formülü, küçük bir çocuğun sınıftaki o pratik gözlemine dayanmaktadır.</p>
+
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh09.webp">
+        <img src="mhres/mh09b.webp" alt="Küçük Gauss ve Toplam Formülü: Dehanın İlk Parıltısı illüstrasyonu" loading="lazy">
+      </div>
 
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
@@ -816,6 +922,10 @@ main { max-width:920px; }
       <p>Büyük matematikçi Pisagor tarafından yaklaşık 2500 yıl önce icat edilen bir kupa (bardak), aslında bir "etik ve denge" dersidir. Görünüşte sıradan bir kadehe benzeyen bu kupanın içinde gizli bir sifon düzeneği bulunur. Kupada, sıvının doldurulabileceği bir sınır çizgisi vardır.</p>
       <p>Eğer kişi kadehini bu sınırın altında doldurursa, içeceğini rahatlıkla içebilir. Ancak kişi açgözlülük yapıp çizgiyi aşarsa sifon etkisi başlar ve kupanın içindeki tüm içecek alt delikten dışarı boşalır. Pisagor, matematiksel bir tasarım aracılığıyla şu mesajı verir: <strong>"Eğer azla yetinmeyi bilmezseniz, elinizde olanın tamamını da kaybedersiniz."</strong></p>
 
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh10.webp">
+        <img src="mhres/mh10b.webp" alt="Pisagor'un Adalet Kupası: Açgözlülüğün Matematiksel Sınırı illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
         <div class="zeka-molasi-soru">Pisagor'un kupasını tamamen suyun içine daldırıp sonra ters çevirerek çıkarsanız ne olur? Sifon etkisi kupa boşalana kadar devam eder mi?</div>
@@ -847,6 +957,10 @@ main { max-width:920px; }
       </div>
       <p>Fransız matematikçi Pierre de Fermat, 1637 yılında bir kitabın kenar boşluğuna şu tarihi notu düşer:<br>"<span class="math">a<sup>n</sup> + b<sup>n</sup> = c<sup>n</sup></span> denkleminde n 2'den büyük bir tam sayı olduğunda denklemi sağlayan pozitif tam sayı çözümü yoktur."<br>Ardından şunu da ekler:<br><strong>"Bu önerme için gerçekten harika bir kanıt buldum, ancak sayfa kenarı bunu yazmak için çok dar."</strong></p>
       <p>Bu küçük not, matematik tarihinin en büyük avını başlattı. Yüzyıllar boyunca Euler ve Gauss dâhil en büyük zekâlar kanıtı aradı fakat bulamadı. Nihayet 1994 yılında İngiliz matematikçi Andrew Wiles, modern matematiğin en karmaşık araçlarını kullanarak 358 yıldır çözülemeyen bu teoremi kanıtlamayı başardı.</p>
+
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh11.webp">
+        <img src="mhres/mh11b.webp" alt="Fermat'ın Son Teoremi: 358 Yıllık Deha Bilmecesi illüstrasyonu" loading="lazy">
+      </div>
 
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
@@ -882,6 +996,10 @@ main { max-width:920px; }
       <p>Bu basit kaydırma işlemi, günümüz modern kriptolojisinin ve siber güvenliğinin temel harcı kabul edilen modüler aritmetiğin ilk uygulamalarındandır. Günümüzde internet üzerindeki şifrelemeler çok daha büyük sayıların modüler işlemlerine ve asal sayı çarpanlarına dayanmaktadır.</p>
 
       <!-- ETKİLEŞİMLİ ZEKA MOLASI -->
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh12.webp">
+        <img src="mhres/mh12b.webp" alt="Sezar Şifrelemesi ve Kriptoloji: Gizli Mesajların Matematiği illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⚡ İnteraktif Deneyim: Sezar Şifreleyici</div>
         <p style="font-size: 0.9rem; margin-bottom: 0.8rem;">Kendi mesajınızı yazarak Sezar algoritmasının harfleri nasıl dönüştürdüğünü canlı olarak test edin:</p>
@@ -931,6 +1049,10 @@ main { max-width:920px; }
       <p>Benoit Mandelbrot, 1970'lerde doğadaki şekillerin (bulutlar, dağlar, kıyı şeritleri, kar taneleri) klasik Öklid geometrisindeki daire veya üçgen gibi pürüzsüz yapılarla açıklanamayacağını fark etti. Yaptığı araştırmalar sonucunda "fraktal" kavramını geliştirdi: Yakınlaştıkça kendi kendini sürekli tekrar eden, sonsuz detaya sahip geometrik şekiller.</p>
       <p>Mandelbrot kümesi, <span class="math">z<sub>n+1</sub> = z<sub>n</sub><sup>2</sup> + c</span> gibi son derece basit bir yinelemeli karmaşık sayı kuralına dayanır. Ancak bilgisayar ekranında görselleştirildiğinde, içinde sonsuz sayıda yeni evrenler barındıran büyüleyici ve sınırları olmayan bir yapı ortaya çıkar.</p>
 
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh13.webp">
+        <img src="mhres/mh13b.webp" alt="Mandelbrot ve Fraktallar: Sonsuz Karmaşıklığın Geometrisi illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
         <div class="zeka-molasi-soru">Bir kıyı şeridinin (örneğin Türkiye kıyılarının) uzunluğunu daha küçük bir cetvelle ölçtükçe toplam uzunluk artar mı yoksa azalır mı?</div>
@@ -964,6 +1086,10 @@ main { max-width:920px; }
       <p>Günümüzden yaklaşık 2.200 yıl önce İskenderiye Kütüphanesi müdürü Eratosthenes, yaz dönümünde Syene (Asvan) şehrinde güneş ışınlarının öğle vakti bir kuyunun dibine dik açıyla düştüğünü (gölge oluşturmadığını) öğrendi. Aynı gün ve saatte İskenderiye'deki bir çubuğun gölgesini ölçtü ve ışınların yaklaşık 7,2 derecelik bir açıyla geldiğini tespit etti.</p>
       <p>Bu açının tam bir çemberin (360°) 50'de biri olduğunu hesaplayan Eratosthenes, İskenderiye ile Syene arasındaki mesafeyi 50 ile çarparak Dünyanın çevresini hesapladı. Hiçbir modern teknoloji olmadan, yalnızca geometri sezgisi ve bir çubuğun gölgesiyle gerçeğe %98'in üzerinde bir doğrulukla ulaşmıştır.</p>
 
+      <div class="hikaye-banner-frame" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="mhres/mh14.webp">
+        <img src="mhres/mh14b.webp" alt="Eratosthenes ve Dünyanın Çevresi: Bir Çubuk ve Bir Gölge İle Ölçüm illüstrasyonu" loading="lazy">
+      </div>
+
       <div class="zeka-molasi">
         <div class="zeka-molasi-baslik">⏸ Zeka Molası</div>
         <div class="zeka-molasi-soru">Eratosthenes'in yaptığı hesaplamanın geçerli olabilmesi için Dünya'ya gelen güneş ışınları hakkında hangi temel varsayımı yapması gerekiyordu?</div>
@@ -975,6 +1101,7 @@ main { max-width:920px; }
 
       <div class="hikaye-gezinme">
         <a href="#hikaye-13" class="onceki">&larr; Önceki: Mandelbrot ve Fraktallar</a>
+        <a href="#icindekiler" class="sonraki">Hikaye Listesine Dön &uarr;</a>
       </div>
     </article>
 
@@ -999,6 +1126,44 @@ main { max-width:920px; }
   btn.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  // Hikaye banner görselleri — ortak lightbox
+  (function () {
+    const triggers = document.querySelectorAll('.hikaye-banner-frame');
+    if (!triggers.length) return;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Kapat');
+    closeBtn.textContent = '×';
+
+    const bigImg = document.createElement('img');
+
+    overlay.appendChild(closeBtn);
+    overlay.appendChild(bigImg);
+    document.body.appendChild(overlay);
+
+    function openLightbox(trigger) {
+      bigImg.src = trigger.getAttribute('data-full');
+      bigImg.alt = trigger.querySelector('img').alt;
+      overlay.classList.add('show');
+    }
+    function closeLightbox() { overlay.classList.remove('show'); }
+
+    triggers.forEach(function (trigger) {
+      trigger.addEventListener('click', function () { openLightbox(trigger); });
+      trigger.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(trigger); }
+      });
+    });
+    overlay.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  })();
 
   function cevapAc(buton) {
     const kutu = buton.nextElementSibling;
