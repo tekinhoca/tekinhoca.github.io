@@ -204,7 +204,10 @@ main { max-width:920px; }
   object-fit: contain;
   border-radius: 4px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
+.lightbox-overlay img.loaded { opacity: 1; }
 .lightbox-close {
   position: absolute;
   top: 20px;
@@ -1141,17 +1144,27 @@ main { max-width:920px; }
     closeBtn.textContent = '×';
 
     const bigImg = document.createElement('img');
+    bigImg.decoding = 'async';
 
     overlay.appendChild(closeBtn);
     overlay.appendChild(bigImg);
     document.body.appendChild(overlay);
 
     function openLightbox(trigger) {
-      bigImg.src = trigger.getAttribute('data-full');
+      bigImg.classList.remove('loaded');
       bigImg.alt = trigger.querySelector('img').alt;
+      bigImg.onload = function () { bigImg.classList.add('loaded'); };
+      bigImg.src = trigger.getAttribute('data-full');
       overlay.classList.add('show');
     }
-    function closeLightbox() { overlay.classList.remove('show'); }
+    function closeLightbox() {
+      overlay.classList.remove('show');
+      // Geçiş bitince görseli bellekten serbest bırak
+      setTimeout(function () {
+        bigImg.src = '';
+        bigImg.classList.remove('loaded');
+      }, 250);
+    }
 
     triggers.forEach(function (trigger) {
       trigger.addEventListener('click', function () { openLightbox(trigger); });
