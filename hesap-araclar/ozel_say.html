@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Özel / İlginç Sayı Kümeleri — TekinHoca</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f1eb; --surface:#fdfcf9; --surface2:#eee9df; --border:#d8d0c0;
+  --accent:#2d6a4f; --accent2:#e76f51; --accent3:#457b9d; --accent4:#e9c46a;
+  --bolme-c:var(--accent); --asal-c:var(--accent3); --dizi-c:var(--accent2); --sekil-c:#c9971f; --eslesme-c:#9b5de5;
+  --text:#1a1a1a; --text-dim:#6b6456; --radius:12px; --shadow:0 4px 24px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding:20px;
+  background-image:radial-gradient(circle at 10% 20%,rgba(45,106,79,0.06) 0%,transparent 50%),
+  radial-gradient(circle at 90% 80%,rgba(69,123,157,0.06) 0%,transparent 50%);}
+header{max-width:1200px;margin:0 auto 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding-bottom:18px;border-bottom:2px solid var(--border);}
+header img{height:44px;width:auto;}
+header .titles{text-align:right;}
+header .titles h1{font-family:'Lora',serif;font-size:clamp(1.1rem,2.5vw,1.75rem);font-weight:700;color:var(--accent);}
+header .titles p{font-size:0.85rem;color:var(--text-dim);margin-top:3px;}
+.breadcrumb{max-width:1200px;margin:0 auto 20px;font-size:0.8rem;color:var(--text-dim);}
+.breadcrumb a{color:var(--accent);text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
+.breadcrumb .current{color:var(--text);}
+.app{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start;}
+@media(max-width:860px){.app{grid-template-columns:1fr;}}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+.panel+.panel{margin-top:16px;}
+.sec-title{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+
+/* ── SOL PANEL: KÜME TANIMLARI (AKORDEON) ── */
+.legend-group{margin-bottom:8px;border-radius:9px;overflow:hidden;border:1px solid var(--border);}
+.legend-head{width:100%;text-align:left;background:var(--surface2);border:none;cursor:pointer;
+  padding:10px 12px;font-family:'Lora',serif;font-weight:700;font-size:0.82rem;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;transition:background 0.15s;}
+.legend-head:hover{background:var(--border);}
+.legend-head .chevron{transition:transform 0.2s;font-size:0.7rem;color:var(--text-dim);}
+.legend-head.open .chevron{transform:rotate(90deg);}
+.legend-body{display:none;padding:10px 12px;background:var(--surface);}
+.legend-body.open{display:block;}
+.legend-item{font-size:0.78rem;line-height:1.6;color:var(--text-dim);margin-bottom:8px;}
+.legend-item strong{color:var(--text);}
+.legend-note{margin-top:14px;padding:10px 12px;background:var(--surface2);
+  border-left:3px solid var(--accent4);border-radius:0 8px 8px 0;
+  font-size:0.76rem;color:var(--text-dim);line-height:1.6;font-style:italic;}
+
+/* ── SAĞ SÜTUN: ANA SEKMELER ── */
+.main-tabs{display:flex;gap:0;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;border:2px solid var(--border);border-bottom:none;}
+.main-tab{flex:1;padding:14px 10px;cursor:pointer;font-family:'Lora',serif;font-weight:700;
+  font-size:0.92rem;text-align:center;background:var(--surface2);color:var(--text-dim);
+  border:none;transition:all 0.18s;line-height:1.3;}
+.main-tab:not(:last-child){border-right:2px solid var(--border);}
+.main-tab:hover{background:var(--surface);color:var(--text);}
+.main-tab.active{background:var(--surface);color:var(--accent);border-bottom:3px solid var(--accent);}
+.tab-content{display:none;border:2px solid var(--border);border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);background:var(--surface);padding:20px;box-shadow:var(--shadow);}
+.tab-content.active{display:block;}
+
+/* ── GİRİŞ ALANLARI ── */
+label.field-label{display:block;font-size:0.78rem;font-weight:600;color:var(--text-dim);
+  margin-bottom:5px;margin-top:12px;text-transform:uppercase;letter-spacing:0.8px;}
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
+.input-group{display:flex;flex-direction:column;}
+.input-group label{font-size:0.75rem;color:var(--text-dim);font-weight:600;margin-bottom:4px;}
+.input-group input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.95rem;padding:9px 12px;
+  outline:none;transition:border-color 0.18s,box-shadow 0.18s;width:100%;}
+.input-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,106,79,0.12);}
+.hint{font-size:0.73rem;color:var(--text-dim);margin-top:6px;line-height:1.55;}
+.btn-calc{margin-top:16px;background:var(--accent);border:none;border-radius:10px;
+  color:#fff;font-family:'Lora',serif;font-weight:700;font-size:0.95rem;padding:12px 22px;
+  cursor:pointer;transition:background 0.18s,transform 0.1s;}
+.btn-calc:hover{background:#1f4e38;}
+.btn-reset-sm{margin-top:8px;margin-left:8px;background:transparent;border:1px solid var(--border);
+  border-radius:10px;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-weight:600;
+  font-size:0.85rem;padding:11px 18px;cursor:pointer;transition:background 0.15s;}
+.btn-reset-sm:hover{background:var(--surface2);color:var(--text);}
+.btn-cancel{background:var(--accent2);border:none;border-radius:10px;color:#fff;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;padding:9px 16px;cursor:pointer;}
+.btn-row{display:flex;align-items:center;flex-wrap:wrap;}
+.error-box{display:none;background:rgba(231,111,81,0.1);border:1px solid rgba(231,111,81,0.4);
+  border-radius:8px;padding:10px 13px;font-size:0.82rem;color:#c0392b;margin-top:10px;line-height:1.5;}
+
+/* ── SONUÇ ROZETLERİ ── */
+.result-tag{display:inline-block;padding:2px 9px;border-radius:4px;font-weight:700;
+  margin-right:6px;font-size:0.76rem;letter-spacing:0.3px;}
+.result-tag.success{background:rgba(40,167,69,0.15);color:#28a745;}
+.result-tag.fail{background:rgba(220,53,69,0.15);color:#dc3545;}
+.result-tag.na{background:rgba(107,100,86,0.15);color:var(--text-dim);}
+
+/* ── SONUÇ AKORDEONU (kategoriye göre renkli) ── */
+.acc-group{margin-bottom:10px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.acc-head{width:100%;text-align:left;border:none;cursor:pointer;padding:12px 14px;
+  font-family:'Lora',serif;font-weight:700;font-size:0.88rem;color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;transition:filter 0.15s;}
+.acc-head:hover{filter:brightness(1.08);}
+.acc-head .chevron{transition:transform 0.2s;font-size:0.7rem;}
+.acc-head.open .chevron{transform:rotate(90deg);}
+.acc-body{display:none;padding:14px 16px;background:var(--surface);border-top:1px solid var(--border);}
+.acc-body.open{display:block;}
+.item-block{padding:10px 0;border-bottom:1px dashed var(--border);}
+.item-block:last-child{border-bottom:none;}
+.item-block .item-title{font-weight:700;font-size:0.85rem;margin-bottom:4px;}
+.item-block p{font-size:0.83rem;color:var(--text-dim);line-height:1.6;margin-top:2px;}
+.item-block .kucuk-not{font-size:0.75rem;color:var(--text-dim);font-style:italic;margin-top:3px;}
+
+/* Modül 2'de sayım satırları */
+.count-row{display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:8px 0;border-bottom:1px dashed var(--border);font-size:0.86rem;}
+.count-row:last-child{border-bottom:none;}
+.count-row .cr-name{display:flex;align-items:center;gap:8px;}
+.count-row .cr-radio{accent-color:var(--accent);}
+.count-row .cr-val{font-family:'Lora',serif;font-weight:700;color:var(--text);}
+.count-row .cr-pct{font-size:0.72rem;color:var(--text-dim);}
+
+/* İLERLEME ÇUBUĞU */
+.progress-wrap{display:none;margin-top:16px;}
+.progress-wrap.active{display:block;}
+.progress-label{font-size:0.8rem;color:var(--text-dim);margin-bottom:6px;display:flex;justify-content:space-between;}
+.progress-outer{width:100%;height:14px;background:var(--surface2);border:1px solid var(--border);
+  border-radius:7px;overflow:hidden;}
+.progress-inner{height:100%;width:0%;background:linear-gradient(90deg,var(--accent3),var(--accent));
+  transition:width 0.15s linear;}
+.progress-status{font-size:0.78rem;color:var(--text-dim);margin-top:6px;}
+
+/* EK İSTATİSTİK PANELİ — kaydırma sırasında üstte sabit kalır */
+#aralik-stats{position:sticky;top:12px;z-index:5;}
+#aralik-stats:empty{position:static;}
+
+/* İSTATİSTİK KARTLARI */
+.stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+@media(max-width:600px){.stat-strip{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;}
+.st-label{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-dim);margin-bottom:4px;}
+.st-val{font-family:'Lora',serif;font-size:1.15rem;font-weight:700;line-height:1.2;color:var(--accent);}
+.mini-table{width:100%;border-collapse:collapse;font-size:0.82rem;margin-top:10px;}
+.mini-table th{background:var(--surface2);color:var(--text-dim);font-size:0.68rem;letter-spacing:1px;
+  text-transform:uppercase;padding:7px 10px;text-align:center;border-bottom:2px solid var(--border);}
+.mini-table td{padding:6px 10px;text-align:center;font-family:monospace;font-size:0.85rem;border-bottom:1px solid var(--border);}
+.ilk-n-box{margin-top:10px;background:var(--surface2);border-left:3px solid var(--accent);
+  border-radius:0 6px 6px 0;padding:9px 12px;font-size:0.82rem;color:var(--text-dim);word-break:break-word;}
+
+/* PANEL İÇİ TABLO AKORDEONU (basamak dağılımı) */
+.table-acc-head{cursor:pointer;font-size:0.82rem;color:var(--accent);font-weight:600;
+  display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px;
+  padding:9px 12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border);
+  transition:background 0.15s;}
+.table-acc-head:hover{background:var(--border);}
+.table-acc-head .chevron{transition:transform 0.2s;font-size:0.7rem;flex-shrink:0;}
+.table-acc-head.open .chevron{transform:rotate(90deg);}
+.table-acc-body{display:none;}
+.table-acc-body.open{display:block;}
+
+footer{max-width:1200px;margin:40px auto 0;padding-top:16px;border-top:2px solid var(--border);text-align:center;}
+footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-serif;padding-bottom:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="../img/THlogo1.webp" alt="Tekin Hoca Logo" style="max-width:100%;display:block;border-radius:10px;">
+  <div class="titles">
+    <h1>Özel / İlginç Sayı Kümeleri</h1>
+    <p>Tekli Sayı Analizi · Aralık Taraması</p>
+  </div>
+</header>
+
+<p class="breadcrumb">
+  <a href="../index.html">Ana Sayfa</a>
+  <span aria-hidden="true"> › </span>
+  <a href="../hesap-araclar.html">Hesaplama Araçları</a>
+  <span aria-hidden="true"> ›› </span>
+  <span class="current" aria-current="page">Özel / İlginç Sayı Kümeleri</span>
+</p>
+
+<div class="app">
+
+  <!-- ══════════ SOL PANEL: KÜME TANIMLARI ══════════ -->
+  <div class="left-col">
+    <div class="panel">
+      <div class="sec-title">Küme Tanımları</div>
+      <div id="legend-accordion"></div>
+      <div class="legend-note">NOT: Mutlu/Mutsuz Sayılar, Narsistik Sayılar, Mükemmel Sayılar ve Dost Sayılar ile ilgili işlem örneklerini incelemek isterseniz sitedeki "Estetik Matematik" sayfasını da ziyaret edebilirsiniz.</div>
+    </div>
+  </div>
+
+  <!-- ══════════ SAĞ SÜTUN ══════════ -->
+  <div class="right-col">
+
+    <div class="main-tabs">
+      <button class="main-tab active" data-tab="tekli">Tekli Sayı Analizi</button>
+      <button class="main-tab" data-tab="aralik">Aralık Taraması</button>
+    </div>
+
+    <!-- ── MODÜL 1: TEKLİ SAYI ANALİZİ ── -->
+    <div class="tab-content active" id="tab-tekli">
+      <label class="field-label">Analiz Edilecek Sayı</label>
+      <div class="input-grid" style="grid-template-columns:1fr;">
+        <div class="input-group">
+          <input type="text" id="tekli-input" value="" inputmode="numeric" placeholder="Pozitif bir tam sayı giriniz">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-calc" id="tekli-btn">İncele</button>
+        <button class="btn-reset-sm" id="tekli-reset-btn">Sıfırla</button>
+      </div>
+      <div class="hint">Pozitif bir tam sayı giriniz. 10.000.000'dan büyük sayılarda Asal, Mersenne Asal, Mükemmel, İkiz Asal ve Dost Sayı kontrolleri performans nedeniyle yapılamaz; diğer kümeler her büyüklükte kontrol edilir.</div>
+      <div class="error-box" id="tekli-error"></div>
+      <div id="tekli-result" style="margin-top:18px;"></div>
+    </div>
+
+    <!-- ── MODÜL 2: ARALIK TARAMASI ── -->
+    <div class="tab-content" id="tab-aralik">
+      <div class="input-grid">
+        <div class="input-group">
+          <label>Başlangıç</label>
+          <input type="text" id="aralik-start" value="1" inputmode="numeric">
+        </div>
+        <div class="input-group">
+          <label>Bitiş</label>
+          <input type="text" id="aralik-end" value="1.000.000" inputmode="numeric">
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-calc" id="aralik-btn">Taramayı Başlat</button>
+        <button class="btn-reset-sm" id="aralik-reset-btn">Sıfırla</button>
+        <button class="btn-cancel" id="aralik-cancel-btn" style="display:none;margin-left:8px;">İptal Et</button>
+      </div>
+      <div class="hint">Performans nedeniyle üst sınır 20.000.000 ile sınırlıdır. Kesişim hesaplanmaz; her küme aralık içinde ayrı ayrı sayılır.</div>
+      <div class="error-box" id="aralik-error"></div>
+
+      <div class="progress-wrap" id="aralik-progress">
+        <div class="progress-label"><span id="progress-text-left">Hazırlanıyor...</span><span id="progress-text-right">%0</span></div>
+        <div class="progress-outer"><div class="progress-inner" id="progress-inner"></div></div>
+        <div class="progress-status" id="progress-status"></div>
+      </div>
+
+      <div id="aralik-stats" style="margin-top:18px;"></div>
+      <div id="aralik-result" style="margin-top:18px;"></div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   YARDIMCI FONKSİYONLAR
+   ════════════════════════════════════════════════════════════ */
+function trNum(n){ return n.toLocaleString('tr-TR'); }
+function digits(n){ return String(n).split(''); }
+
+function attachThousandsFormatter(input){
+  input.addEventListener('input', function(){
+    const raw = this.value.replace(/\D/g,'');
+    if(raw===''){ this.value=''; return; }
+    this.value = Number(raw).toLocaleString('tr-TR');
+  });
+}
+function parseFormatted(input){
+  return Number(input.value.replace(/\./g,'').replace(/\s/g,''));
+}
+
+/* ════════════════════════════════════════════════════════════
+   TEMEL SAYI TESTLERİ (her iki modülde de kullanılır)
+   ════════════════════════════════════════════════════════════ */
+const kareler=[0,1,4,9,16,25,36,49,64,81];
+/* Not: taban 10'da mutsuz sayıların tamamı tek ve aynı döngüye (4→16→37→58→89→145→42→20→4) girer.
+   Bu nedenle "görülen değerler" kümesi tutmaya gerek yoktur; n=1 (mutlu) veya n=4 (mutsuz döngüsü)
+   görülene kadar iterasyon yeterlidir. Bu, büyük aralık taramalarında kayda değer bir hız kazancı sağlar. */
+function mutluMu(sayi){
+  let n=sayi;
+  while(n!==1 && n!==4){
+    let toplam=0, t=n;
+    while(t>0){ toplam+=kareler[t%10]; t=Math.floor(t/10); }
+    n=toplam;
+  }
+  return n===1;
+}
+
+function narsistikMi(n){
+  const d=digits(n), p=d.length;
+  const sum=d.reduce((a,c)=>a+Math.pow(Number(c),p),0);
+  return sum===n;
+}
+function harshadMi(n){
+  const d=digits(n);
+  const s=d.reduce((a,c)=>a+Number(c),0);
+  return n%s===0;
+}
+function palindromMu(n){
+  const s=String(n); return s===s.split('').reverse().join('');
+}
+function kaprekarMi(n){
+  if(n<1) return false;
+  if(n===1) return true;
+  const s=String(n*n);
+  for(let p=1;p<s.length;p++){
+    const l=Number(s.slice(0,p)), r=Number(s.slice(p));
+    if(r>0 && l+r===n) return true;
+  }
+  return false;
+}
+const kuvvetCache=[0,1,4,27,256,3125,46656,823543,16777216,387420489];
+function munchhausenMi(n){
+  const d=digits(n);
+  const sum=d.reduce((a,c)=>a+kuvvetCache[Number(c)],0);
+  return sum===n;
+}
+function bolenToplami(n){
+  if(n<1) return {divisors:[],sum:0};
+  const divs=[];
+  for(let i=1;i*i<=n;i++){
+    if(n%i===0){ divs.push(i); const j=n/i; if(j!==i) divs.push(j); }
+  }
+  divs.sort((a,b)=>a-b);
+  if(divs.length && divs[divs.length-1]===n) divs.pop();
+  return {divisors:divs, sum:divs.reduce((a,b)=>a+b,0)};
+}
+function asalMi(n){
+  if(n<2) return false;
+  if(n%2===0) return n===2;
+  for(let i=3;i*i<=n;i+=2){ if(n%i===0) return false; }
+  return true;
+}
+function mersenneUsBul(n){
+  const p=Math.log2(n+1);
+  return Math.abs(p-Math.round(p))<1e-9 ? Math.round(p) : null;
+}
+function ucgenselMi(n){ const x=(-1+Math.sqrt(1+8*n))/2; return x>0 && Math.abs(x-Math.round(x))<1e-9; }
+function kareSayiMi(n){ const x=Math.sqrt(n); return Math.abs(x-Math.round(x))<1e-9; }
+function besgenselMi(n){ const x=(1+Math.sqrt(1+24*n))/6; return x>0 && Math.abs(x-Math.round(x))<1e-9; }
+function altigenselMi(n){ const x=(1+Math.sqrt(1+8*n))/4; return x>0 && Math.abs(x-Math.round(x))<1e-9; }
+
+function fibonacciUyesiMi(n, limit){
+  let a=1,b=1;
+  while(a<=(limit||n)){ if(a===n) return true; const t=a+b; a=b; b=t; }
+  return false;
+}
+function tribonacciUyesiMi(n, limit){
+  let a=0,b=0,c=1;
+  while(a<=(limit||n)){ if(a===n) return true; const t=a+b+c; a=b;b=c;c=t; }
+  return false;
+}
+function lucasUyesiMi(n, limit){
+  let a=2,b=1;
+  while(a<=(limit||n)){ if(a===n) return true; const t=a+b; a=b; b=t; }
+  return false;
+}
+
+const KATEGORI_RENK = { bolme:'var(--bolme-c)', asal:'var(--asal-c)', dizi:'var(--dizi-c)', sekil:'var(--sekil-c)', eslesme:'var(--eslesme-c)' };
+const KATEGORI_BASLIK = { bolme:'Bölme / Basamak Temelli', asal:'Asal Temelli', dizi:'Dizi Temelli', sekil:'Şekilsel Sayılar', eslesme:'Eşleşme Kontrolü' };
+
+/* ════════════════════════════════════════════════════════════
+   KÜME TANIMLARI (sol panel + kısa bilgi metinleri)
+   ════════════════════════════════════════════════════════════ */
+const KUME_TANIMLARI = {
+  bolme:[
+    ['Mutlu Sayı','Rakamlarının kareleri art arda toplanınca sonunda 1\'e ulaşılan sayılardır.'],
+    ['Narsistik (Armstrong) Sayı','n basamaklı bir sayının her rakamının n. kuvvetinin toplamı, sayının kendisine eşittir.'],
+    ['Harshad (Niven) Sayı','Rakamları toplamına kalansız bölünebilen sayılardır.'],
+    ['Mükemmel Sayı','Kendisi hariç tüm pozitif bölenlerinin toplamı kendisine eşit olan sayılardır.'],
+    ['Palindrom Sayı','Soldan ve sağdan okunuşu aynı olan sayılardır.'],
+    ['Kaprekar Sayı','Karesi iki parçaya bölündüğünde parçaların toplamı kendisini veren sayılardır.'],
+    ['Münchhausen Sayı','Her rakamının kendi kuvvetine yükseltilmiş hâlinin toplamı kendisine eşit olan sayılardır.']
+  ],
+  asal:[
+    ['Asal Sayı','1\'den ve kendisinden başka pozitif böleni olmayan, 1\'den büyük sayılardır.'],
+    ['Mersenne Asal','2<sup>p</sup> − 1 biçiminde yazılabilen asal sayılardır.']
+  ],
+  dizi:[
+    ['Fibonacci Sayısı','Her terimin kendisinden önceki iki terimin toplamına eşit olduğu (1,1,2,3,5,8,…) dizinin elemanlarıdır.'],
+    ['Tribonacci Sayısı','Her terimin kendisinden önceki üç terimin toplamına eşit olduğu dizinin elemanlarıdır.'],
+    ['Lucas Sayısı','Fibonacci dizisiyle aynı kurala sahip, ancak 2 ve 1 ile başlayan dizinin elemanlarıdır.']
+  ],
+  sekil:[
+    ['Üçgensel Sayı','k(k+1)/2 biçiminde yazılabilen, art arda gelen doğal sayıların toplamı olan sayılardır.'],
+    ['Kare Sayı','Bir doğal sayının karesi olan sayılardır.'],
+    ['Beşgensel Sayı','k(3k−1)/2 biçiminde yazılabilen sayılardır.'],
+    ['Altıgensel Sayı','k(2k−1) biçiminde yazılabilen sayılardır.']
+  ],
+  eslesme:[
+    ['İkiz Asal','Kendisinden 2 küçük veya 2 büyük olan sayı da asal olan asal sayılardır.'],
+    ['Dost Sayı','Kendisi hariç bölenler toplamı birbirine eşit olan iki farklı sayıdan biridir.']
+  ]
+};
+
+function legendAkordeonuOlustur(){
+  const el = document.getElementById('legend-accordion');
+  let html='';
+  Object.keys(KUME_TANIMLARI).forEach((key,i)=>{
+    html += `<div class="legend-group">
+      <button class="legend-head" data-idx="${i}" style="border-left:4px solid ${KATEGORI_RENK[key]};">
+        <span>${KATEGORI_BASLIK[key]}</span><span class="chevron">▶</span>
+      </button>
+      <div class="legend-body" id="legend-body-${i}">
+        ${KUME_TANIMLARI[key].map(([ad,tanim])=>`<div class="legend-item"><strong>${ad}:</strong> ${tanim}</div>`).join('')}
+      </div>
+    </div>`;
+  });
+  el.innerHTML = html;
+  el.querySelectorAll('.legend-head').forEach(btn=>{
+    btn.addEventListener('click', function(){
+      const acikMiydi = this.classList.contains('open');
+      el.querySelectorAll('.legend-head.open').forEach(h=>{
+        h.classList.remove('open');
+        document.getElementById('legend-body-'+h.dataset.idx).classList.remove('open');
+      });
+      if(!acikMiydi){
+        this.classList.add('open');
+        document.getElementById('legend-body-'+this.dataset.idx).classList.add('open');
+      }
+    });
+  });
+}
+legendAkordeonuOlustur();
+
+/* ════════════════════════════════════════════════════════════
+   SEKME GEÇİŞİ
+   ════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.main-tab').forEach(tab=>{
+  tab.addEventListener('click', function(){
+    document.querySelectorAll('.main-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('tab-'+this.dataset.tab).classList.add('active');
+  });
+});
+
+/* ════════════════════════════════════════════════════════════
+   ORTAK: SONUÇ AKORDEONU ÇİZİMİ
+   ════════════════════════════════════════════════════════════ */
+let accIdCounter=0;
+/**
+ * opts.defaultOpen  : grup ilk oluşturulduğunda açık gelsin mi
+ * opts.singleOpen   : true ise bu container içinde aynı anda yalnızca bir grup açık kalır
+ *                     (bir grup açılınca diğerleri otomatik kapanır)
+ */
+function accGroupAc(containerEl, key, bodyHtml, opts){
+  opts = opts || {};
+  const id = 'acc-'+(accIdCounter++);
+  const wrap=document.createElement('div');
+  wrap.className='acc-group';
+  const acikMi = !!opts.defaultOpen;
+  wrap.innerHTML = `
+    <button class="acc-head${acikMi?' open':''}" style="background:${KATEGORI_RENK[key]};" data-target="${id}">
+      <span>${KATEGORI_BASLIK[key]}</span><span class="chevron">▶</span>
+    </button>
+    <div class="acc-body${acikMi?' open':''}" id="${id}">${bodyHtml}</div>`;
+  containerEl.appendChild(wrap);
+  const headBtn = wrap.querySelector('.acc-head');
+  headBtn.addEventListener('click', function(){
+    const body = document.getElementById(this.dataset.target);
+    const yeniDurum = !this.classList.contains('open');
+    if(opts.singleOpen){
+      containerEl.querySelectorAll('.acc-head.open').forEach(h=>{
+        if(h!==this){
+          h.classList.remove('open');
+          document.getElementById(h.dataset.target).classList.remove('open');
+        }
+      });
+    }
+    this.classList.toggle('open', yeniDurum);
+    body.classList.toggle('open', yeniDurum);
+    // İstatistik panelindeki basamak dağılımı tablosu açıksa, herhangi bir kategori
+    // başlığına tıklandığında bu da otomatik kapansın (panel altında gizli kalmasın).
+    const tabloHead = document.getElementById('tablo-acc-head');
+    const tabloBody = document.getElementById('tablo-acc-body');
+    if(tabloHead && tabloBody){
+      tabloHead.classList.remove('open');
+      tabloBody.classList.remove('open');
+    }
+  });
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODÜL 1 — TEKLİ SAYI ANALİZİ
+   ════════════════════════════════════════════════════════════ */
+const MODUL1_AGIR_LIMIT = 10000000;
+
+const TEKLI_PLACEHOLDER = 'Pozitif bir tam sayı giriniz';
+const tekliInputEl = document.getElementById('tekli-input');
+attachThousandsFormatter(tekliInputEl);
+tekliInputEl.addEventListener('focus', function(){ this.placeholder=''; });
+tekliInputEl.addEventListener('blur', function(){ if(!this.value) this.placeholder=TEKLI_PLACEHOLDER; });
+
+function tekliHata(msg){
+  const box=document.getElementById('tekli-error');
+  box.style.display='block'; box.textContent=msg;
+}
+function tekliHataGizle(){
+  document.getElementById('tekli-error').style.display='none';
+}
+
+document.getElementById('tekli-btn').addEventListener('click', analizTekli);
+document.getElementById('tekli-input').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); analizTekli(); } });
+document.getElementById('tekli-reset-btn').addEventListener('click', ()=>{
+  tekliInputEl.value='';
+  tekliInputEl.placeholder=TEKLI_PLACEHOLDER;
+  document.getElementById('tekli-result').innerHTML='';
+  tekliHataGizle();
+});
+
+function analizTekli(){
+  tekliHataGizle();
+  const n = parseFormatted(document.getElementById('tekli-input'));
+  if(!Number.isFinite(n) || n<=0 || n!==Math.floor(n)){
+    tekliHata('Lütfen pozitif bir tam sayı giriniz.');
+    return;
+  }
+  if(!Number.isSafeInteger(n)){
+    tekliHata('Girilen sayı, JavaScript\'in güvenli tam sayı sınırını (2^53−1) aştığı için hassas analiz yapılamaz.');
+    return;
+  }
+  const agirUygun = n<=MODUL1_AGIR_LIMIT;
+
+  const kategoriler = {bolme:[], asal:[], dizi:[], sekil:[], eslesme:[]};
+
+  // ── BÖLME / BASAMAK TEMELLİ ──
+  const mutlu = mutluMu(n);
+  kategoriler.bolme.push({ad:'Mutlu / Mutsuz Sayı', ok:mutlu,
+    detay: mutlu ? `${trNum(n)} bir mutlu sayıdır; rakamların kareleri toplanarak yapılan tekrarlı işlem sonunda 1'e ulaşılır.`
+                 : `${trNum(n)} bir mutsuz sayıdır; işlem sonsuz bir döngüye girer ve asla 1'e ulaşılmaz.`});
+
+  const nars = narsistikMi(n);
+  kategoriler.bolme.push({ad:'Narsistik (Armstrong) Sayı', ok:nars,
+    detay: nars ? `Basamaklarının ${digits(n).length}. kuvvetlerinin toplamı ${trNum(n)}'e eşittir.`
+                : `Basamaklarının ${digits(n).length}. kuvvetlerinin toplamı ${trNum(n)}'e eşit değildir.`});
+
+  const s=digits(n).reduce((a,c)=>a+Number(c),0);
+  const harshad = harshadMi(n);
+  kategoriler.bolme.push({ad:'Harshad (Niven) Sayı', ok:harshad,
+    detay:`Rakamları toplamı ${s}. ${trNum(n)}, ${s}'e ${harshad?'kalansız bölünür':'kalansız bölünmez'}.`});
+
+  const pal = palindromMu(n);
+  kategoriler.bolme.push({ad:'Palindrom Sayı', ok:pal,
+    detay: pal ? `${trNum(n)} soldan ve sağdan okunuşu aynı olan bir sayıdır.` : `${trNum(n)} soldan ve sağdan okunuşu aynı olmayan bir sayıdır.`});
+
+  const kap = kaprekarMi(n);
+  kategoriler.bolme.push({ad:'Kaprekar Sayı', ok:kap,
+    detay: kap ? `${trNum(n)}² = ${trNum(n*n)}; bu sayı, toplamı ${trNum(n)}'i veren iki parçaya bölünebilir.`
+               : `${trNum(n)}² = ${trNum(n*n)}; bu sayının hiçbir bölünüşü ${trNum(n)}'i vermiyor.`});
+
+  const mun = munchhausenMi(n);
+  kategoriler.bolme.push({ad:'Münchhausen Sayı', ok:mun,
+    detay: mun ? `Her rakamının kendi kuvvetine yükseltilmiş hâlinin toplamı ${trNum(n)}'e eşittir.`
+               : `Her rakamının kendi kuvvetine yükseltilmiş hâlinin toplamı ${trNum(n)}'e eşit değildir.`});
+
+  // Mükemmel (ağır)
+  if(agirUygun){
+    const bt = bolenToplami(n);
+    const mukemmel = bt.sum===n && n>1;
+    kategoriler.bolme.push({ad:'Mükemmel Sayı', ok:mukemmel,
+      detay: bt.divisors.length? `Kendisi hariç bölenleri: ${bt.divisors.join(', ')}. Toplamları ${trNum(bt.sum)}, ${mukemmel?'kendisine eşittir.':'kendisine eşit değildir.'}`
+                                : `${trNum(n)} sayısının kendisi hariç pozitif böleni yoktur.`});
+  } else {
+    kategoriler.bolme.push({ad:'Mükemmel Sayı', ok:null, detay:`Performans sınırı (${trNum(MODUL1_AGIR_LIMIT)}) aşıldığı için kontrol edilemedi.`});
+  }
+
+  // ── ASAL TEMELLİ ──
+  if(agirUygun){
+    const asal = asalMi(n);
+    kategoriler.asal.push({ad:'Asal Sayı', ok:asal,
+      detay: asal ? `${trNum(n)}, 1 ve kendisinden başka pozitif böleni olmayan bir sayıdır.` : `${trNum(n)} sayısının 1 ve kendisi dışında en az bir böleni vardır.`});
+
+    const p = mersenneUsBul(n);
+    let mersenne=false;
+    if(p!==null && asal){ mersenne=true; }
+    kategoriler.asal.push({ad:'Mersenne Asal', ok: p!==null ? mersenne : false,
+      detay: p===null ? `${trNum(n)}, 2<sup>p</sup> − 1 biçiminde yazılamaz.`
+           : mersenne ? `${trNum(n)} = 2<sup>${p}</sup> − 1 biçimindedir ve asaldır.`
+                       : `${trNum(n)} = 2<sup>${p}</sup> − 1 biçimindedir, ancak asal değildir.`});
+  } else {
+    kategoriler.asal.push({ad:'Asal Sayı', ok:null, detay:`Performans sınırı (${trNum(MODUL1_AGIR_LIMIT)}) aşıldığı için kontrol edilemedi.`});
+    kategoriler.asal.push({ad:'Mersenne Asal', ok:null, detay:`Performans sınırı (${trNum(MODUL1_AGIR_LIMIT)}) aşıldığı için kontrol edilemedi.`});
+  }
+
+  // ── DİZİ TEMELLİ ──
+  const fib = fibonacciUyesiMi(n, n);
+  kategoriler.dizi.push({ad:'Fibonacci Sayısı', ok:fib, detay: fib?`${trNum(n)}, Fibonacci dizisinin bir elemanıdır.`:`${trNum(n)}, Fibonacci dizisinde yer almaz.`});
+  const trib = tribonacciUyesiMi(n, n);
+  kategoriler.dizi.push({ad:'Tribonacci Sayısı', ok:trib, detay: trib?`${trNum(n)}, Tribonacci dizisinin bir elemanıdır.`:`${trNum(n)}, Tribonacci dizisinde yer almaz.`});
+  const luc = lucasUyesiMi(n, n);
+  kategoriler.dizi.push({ad:'Lucas Sayısı', ok:luc, detay: luc?`${trNum(n)}, Lucas dizisinin bir elemanıdır.`:`${trNum(n)}, Lucas dizisinde yer almaz.`});
+
+  // ── ŞEKİLSEL SAYILAR ──
+  const uc=ucgenselMi(n), kr=kareSayiMi(n), bs=besgenselMi(n), al=altigenselMi(n);
+  kategoriler.sekil.push({ad:'Üçgensel Sayı', ok:uc, detay: uc?`${trNum(n)}, k(k+1)/2 biçiminde yazılabilir.`:`${trNum(n)}, üçgensel sayı biçiminde yazılamaz.`});
+  kategoriler.sekil.push({ad:'Kare Sayı', ok:kr, detay: kr?`${trNum(n)} = ${Math.round(Math.sqrt(n))}².`:`${trNum(n)}, tam kare değildir.`});
+  kategoriler.sekil.push({ad:'Beşgensel Sayı', ok:bs, detay: bs?`${trNum(n)}, k(3k−1)/2 biçiminde yazılabilir.`:`${trNum(n)}, beşgensel sayı biçiminde yazılamaz.`});
+  kategoriler.sekil.push({ad:'Altıgensel Sayı', ok:al, detay: al?`${trNum(n)}, k(2k−1) biçiminde yazılabilir.`:`${trNum(n)}, altıgensel sayı biçiminde yazılamaz.`});
+
+  // ── EŞLEŞME KONTROLÜ ──
+  if(agirUygun){
+    const asalMy = asalMi(n);
+    if(!asalMy){
+      kategoriler.eslesme.push({ad:'İkiz Asal Eşi', ok:null, detay:`Bu özellik yalnızca asal sayılar için tanımlıdır; ${trNum(n)} bir asal sayı değildir.`});
+    } else {
+      let eş=null;
+      if(n-2>1 && asalMi(n-2)) eş=n-2;
+      else if(asalMi(n+2)) eş=n+2;
+      kategoriler.eslesme.push({ad:'İkiz Asal Eşi', ok: eş!==null,
+        detay: eş!==null ? `${trNum(n)} ve ${trNum(eş)} birlikte bir ikiz asal çifti oluşturur.` : `${trNum(n)} asaldır, ancak 2 birim yakınında başka bir asal yoktur.`});
+    }
+
+    const bt = bolenToplami(n);
+    if(bt.sum===0){
+      kategoriler.eslesme.push({ad:'Dost Sayı Eşi', ok:false, detay:`${trNum(n)} sayısının kendisi dışında pozitif böleni olmadığından ("1"in kendisi hariç böleni yoktur) dost sayı eşi aranamaz.`});
+    } else if(bt.sum===n){
+      kategoriler.eslesme.push({ad:'Dost Sayı Eşi', ok:null, detay:`${trNum(n)} bir mükemmel sayı olduğundan dost sayı kavramı burada geçerli değildir.`});
+    } else if(asalMy){
+      kategoriler.eslesme.push({ad:'Dost Sayı Eşi', ok:false,
+        detay:`${trNum(n)} bir asal sayı olduğu için kendisi dışında bölenlerinin toplamı 1'dir. Diğer taraftan 1'in kendisi dışında böleni yoktur (bölenler toplamı 0'dır). Bir eşitlik söz konusu değil; bu nedenle asal sayıların dost sayı eşi yoktur.`});
+    } else {
+      const bt2 = bolenToplami(bt.sum);
+      const dost = bt2.sum===n;
+      kategoriler.eslesme.push({ad:'Dost Sayı Eşi', ok:dost,
+        detay: dost ? `${trNum(n)}'in kendisi dışındaki bölenlerinin toplamı ${trNum(bt.sum)}; ${trNum(bt.sum)}'in kendisi dışındaki bölenlerinin toplamı da ${trNum(n)}'dir. Bu ikisi bir dost sayı çiftidir.`
+                     : `${trNum(n)}'in kendisi dışındaki bölenlerinin toplamı ${trNum(bt.sum)}; ancak ${trNum(bt.sum)}'in kendisi dışındaki bölenlerinin toplamı ${trNum(bt2.sum)}, ${trNum(n)}'e eşit değil. Dost sayı eşi bulunamadı.`});
+    }
+  } else {
+    kategoriler.eslesme.push({ad:'İkiz Asal Eşi', ok:null, detay:`Performans sınırı (${trNum(MODUL1_AGIR_LIMIT)}) aşıldığı için kontrol edilemedi.`});
+    kategoriler.eslesme.push({ad:'Dost Sayı Eşi', ok:null, detay:`Performans sınırı (${trNum(MODUL1_AGIR_LIMIT)}) aşıldığı için kontrol edilemedi.`});
+  }
+
+  // ── ÇİZİM ──
+  const container = document.getElementById('tekli-result');
+  container.innerHTML='';
+  Object.keys(kategoriler).forEach(key=>{
+    const body = kategoriler[key].map(it=>{
+      const rozetSinif = it.ok===null?'na':(it.ok?'success':'fail');
+      const rozetMetin = it.ok===null?'Uygulanamaz':(it.ok?'Evet':'Hayır');
+      return `<div class="item-block">
+        <div class="item-title"><span class="result-tag ${rozetSinif}">${rozetMetin}</span>${it.ad}</div>
+        <p>${it.detay}</p>
+      </div>`;
+    }).join('');
+    accGroupAc(container, key, body, {defaultOpen:true, singleOpen:false});
+  });
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODÜL 2 — ARALIK TARAMASI
+   ════════════════════════════════════════════════════════════ */
+const ARALIK_UST_SINIR = 20000000;
+const CHUNK_SIZE = 200000;
+const MUKEMMEL_SAYILAR = [6,28,496,8128,33550336];
+
+attachThousandsFormatter(document.getElementById('aralik-start'));
+attachThousandsFormatter(document.getElementById('aralik-end'));
+
+let aralikDurum = null; // aktif tarama durumu (iptal / devam)
+
+function aralikHata(msg){
+  const box=document.getElementById('aralik-error');
+  box.style.display='block'; box.textContent=msg;
+}
+function aralikHataGizle(){
+  document.getElementById('aralik-error').style.display='none';
+}
+
+document.getElementById('aralik-btn').addEventListener('click', baslatAralikTaramasi);
+document.getElementById('aralik-reset-btn').addEventListener('click', ()=>{
+  document.getElementById('aralik-start').value='1';
+  document.getElementById('aralik-end').value='1.000.000';
+  document.getElementById('aralik-result').innerHTML='';
+  document.getElementById('aralik-stats').innerHTML='';
+  document.getElementById('aralik-progress').classList.remove('active');
+  aralikHataGizle();
+  if(aralikDurum) aralikDurum.iptal=true;
+});
+document.getElementById('aralik-cancel-btn').addEventListener('click', ()=>{
+  if(aralikDurum) aralikDurum.iptal=true;
+});
+
+/* Bir küme radyo düğmesiyle seçilir seçilmez, ekstra bir düğmeye tıklamaya gerek kalmadan
+   istatistikler otomatik güncellensin (delegasyonla; akordeon her taramada yeniden çizildiği için) */
+document.getElementById('aralik-result').addEventListener('change', function(e){
+  if(e.target && e.target.name==='kumeSecimi'){
+    ekIstatistikGoster();
+  }
+});
+
+const KUME_LISTESI = [
+  {key:'mutlu', kat:'bolme', ad:'Mutlu Sayı'},
+  {key:'narsistik', kat:'bolme', ad:'Narsistik (Armstrong) Sayı'},
+  {key:'harshad', kat:'bolme', ad:'Harshad (Niven) Sayı'},
+  {key:'mukemmel', kat:'bolme', ad:'Mükemmel Sayı'},
+  {key:'palindrom', kat:'bolme', ad:'Palindrom Sayı'},
+  {key:'kaprekar', kat:'bolme', ad:'Kaprekar Sayı'},
+  {key:'munchhausen', kat:'bolme', ad:'Münchhausen Sayı'},
+  {key:'asal', kat:'asal', ad:'Asal Sayı'},
+  {key:'mersenne', kat:'asal', ad:'Mersenne Asal'},
+  {key:'fibonacci', kat:'dizi', ad:'Fibonacci Sayısı'},
+  {key:'tribonacci', kat:'dizi', ad:'Tribonacci Sayısı'},
+  {key:'lucas', kat:'dizi', ad:'Lucas Sayısı'},
+  {key:'ucgensel', kat:'sekil', ad:'Üçgensel Sayı'},
+  {key:'kare', kat:'sekil', ad:'Kare Sayı'},
+  {key:'besgensel', kat:'sekil', ad:'Beşgensel Sayı'},
+  {key:'altigensel', kat:'sekil', ad:'Altıgensel Sayı'}
+];
+
+function eratosthenesElegi(limit){
+  const sieve=new Uint8Array(limit+1);
+  sieve.fill(1);
+  if(limit>=0) sieve[0]=0;
+  if(limit>=1) sieve[1]=0;
+  for(let i=2;i*i<=limit;i++){
+    if(sieve[i]){
+      for(let j=i*i;j<=limit;j+=i) sieve[j]=0;
+    }
+  }
+  return sieve;
+}
+function mersenneAdaylariBul(limit, sieve){
+  const s=new Set();
+  let p=2;
+  while(Math.pow(2,p)-1<=limit){
+    const cand=Math.pow(2,p)-1;
+    if(sieve[cand]) s.add(cand);
+    p++;
+  }
+  return s;
+}
+function fibonacciDizisiUret(limit){
+  const s=new Set(); let a=1,b=1;
+  while(a<=limit){ s.add(a); const t=a+b; a=b; b=t; }
+  return s;
+}
+function tribonacciDizisiUret(limit){
+  const s=new Set(); let a=0,b=0,c=1;
+  while(a<=limit){ s.add(a); const t=a+b+c; a=b;b=c;c=t; }
+  return s;
+}
+function lucasDizisiUret(limit){
+  const s=new Set(); let a=2,b=1;
+  while(a<=limit){ s.add(a); const t=a+b; a=b; b=t; }
+  return s;
+}
+function sekilselDizileriUret(limit){
+  const ucgen=new Set(), kare=new Set(), besgen=new Set(), altigen=new Set();
+  let k=1; while(k*(k+1)/2<=limit){ ucgen.add(k*(k+1)/2); k++; }
+  k=1; while(k*k<=limit){ kare.add(k*k); k++; }
+  k=1; while(k*(3*k-1)/2<=limit){ besgen.add(k*(3*k-1)/2); k++; }
+  k=1; while(k*(2*k-1)<=limit){ altigen.add(k*(2*k-1)); k++; }
+  return {ucgen,kare,besgen,altigen};
+}
+
+function baslatAralikTaramasi(){
+  aralikHataGizle();
+  document.getElementById('aralik-result').innerHTML='';
+  document.getElementById('aralik-stats').innerHTML='';
+
+  const start = parseFormatted(document.getElementById('aralik-start'));
+  const end = parseFormatted(document.getElementById('aralik-end'));
+
+  if(!Number.isFinite(start) || !Number.isFinite(end) || start<1 || start!==Math.floor(start) || end!==Math.floor(end)){
+    aralikHata('Lütfen geçerli, pozitif tam sayılar giriniz.');
+    return;
+  }
+  if(start>end){
+    aralikHata('Başlangıç değeri, bitiş değerinden büyük olamaz.');
+    return;
+  }
+  if(end>ARALIK_UST_SINIR){
+    aralikHata(`Performans nedeniyle üst sınır ${trNum(ARALIK_UST_SINIR)} ile sınırlıdır. Lütfen daha küçük bir bitiş değeri giriniz.`);
+    return;
+  }
+
+  aralikDurum = {iptal:false, start, end};
+  document.getElementById('aralik-progress').classList.add('active');
+  document.getElementById('aralik-cancel-btn').style.display='inline-block';
+  document.getElementById('progress-text-left').textContent='Diziler ve asal eleği hazırlanıyor...';
+  document.getElementById('progress-text-right').textContent='%0';
+  document.getElementById('progress-inner').style.width='0%';
+  document.getElementById('progress-status').textContent='';
+  document.getElementById('aralik-btn').disabled=true;
+
+  const zamanBaslangic = performance.now();
+
+  setTimeout(()=>{ hazirlikYapVeBasla(start, end, zamanBaslangic); }, 30);
+}
+
+function hazirlikYapVeBasla(start, end, zamanBaslangic){
+  if(aralikDurum.iptal){ taramaTamamlaIptal(); return; }
+
+  const sieve = eratosthenesElegi(end);
+  const mersenneSet = mersenneAdaylariBul(end, sieve);
+  const fibSet = fibonacciDizisiUret(end);
+  const tribSet = tribonacciDizisiUret(end);
+  const lucasSet = lucasDizisiUret(end);
+  const sek = sekilselDizileriUret(end);
+  const mukemmelSet = new Set(MUKEMMEL_SAYILAR.filter(x=>x<=end));
+
+  // Narsistik (Armstrong) testi için d^len tablosu (len=1..9, d=0..9) — Math.pow'u döngü içinden çıkarır
+  const narsPow = [null];
+  for(let len=1; len<=9; len++){
+    const row=new Array(10);
+    for(let d=0; d<10; d++) row[d]=Math.pow(d,len);
+    narsPow.push(row);
+  }
+
+  const sonuclar = {};
+  KUME_LISTESI.forEach(k=>{ sonuclar[k.key]=[]; });
+
+  aralikDurum.sieve=sieve; aralikDurum.mersenneSet=mersenneSet;
+  aralikDurum.fibSet=fibSet; aralikDurum.tribSet=tribSet; aralikDurum.lucasSet=lucasSet;
+  aralikDurum.sek=sek; aralikDurum.mukemmelSet=mukemmelSet;
+  aralikDurum.sonuclar=sonuclar; aralikDurum.narsPow=narsPow;
+  aralikDurum.currentN=start;
+  aralikDurum.zamanBaslangic=zamanBaslangic;
+
+  document.getElementById('progress-text-left').textContent='Taranıyor...';
+  parcaIsle();
+}
+
+function parcaIsle(){
+  if(aralikDurum.iptal){ taramaTamamlaIptal(); return; }
+
+  const {end, sonuclar, sieve, mersenneSet, fibSet, tribSet, lucasSet, sek, mukemmelSet} = aralikDurum;
+  const chunkEnd = Math.min(aralikDurum.currentN+CHUNK_SIZE-1, end);
+
+  // Rakam tabanlı kümeler için n^d değerlerini önceden hesapla (len=1..8, basamak=0..9)
+  const narsPow = aralikDurum.narsPow;
+
+  for(let n=aralikDurum.currentN; n<=chunkEnd; n++){
+    // ── Tek geçişte rakamları çıkar: mutlu, narsistik, harshad, münchhausen, palindrom ortak kullanır ──
+    const s = ''+n;
+    const len = s.length;
+    const pow = narsPow[len];
+    let digitToplam=0, narsToplam=0, munchToplam=0;
+    for(let i=0;i<len;i++){
+      const d = s.charCodeAt(i)-48;
+      digitToplam += d;
+      narsToplam += pow[d];
+      munchToplam += kuvvetCache[d];
+    }
+    if(digitToplam>0 && n%digitToplam===0) sonuclar.harshad.push(n);
+    if(narsToplam===n) sonuclar.narsistik.push(n);
+    if(munchToplam===n) sonuclar.munchhausen.push(n);
+    if(len>1){
+      let palindrom=true;
+      for(let i=0,j=len-1;i<j;i++,j--){ if(s.charCodeAt(i)!==s.charCodeAt(j)){ palindrom=false; break; } }
+      if(palindrom) sonuclar.palindrom.push(n);
+    } else {
+      sonuclar.palindrom.push(n); // tek basamaklı sayılar her zaman palindromdur
+    }
+
+    if(mutluMu(n)) sonuclar.mutlu.push(n);
+    if(mukemmelSet.has(n)) sonuclar.mukemmel.push(n);
+    if(kaprekarMi(n)) sonuclar.kaprekar.push(n);
+    if(sieve[n]) sonuclar.asal.push(n);
+    if(mersenneSet.has(n)) sonuclar.mersenne.push(n);
+    if(fibSet.has(n)) sonuclar.fibonacci.push(n);
+    if(tribSet.has(n)) sonuclar.tribonacci.push(n);
+    if(lucasSet.has(n)) sonuclar.lucas.push(n);
+    if(sek.ucgen.has(n)) sonuclar.ucgensel.push(n);
+    if(sek.kare.has(n)) sonuclar.kare.push(n);
+    if(sek.besgen.has(n)) sonuclar.besgensel.push(n);
+    if(sek.altigen.has(n)) sonuclar.altigensel.push(n);
+  }
+
+  aralikDurum.currentN = chunkEnd+1;
+  const toplam = aralikDurum.end-aralikDurum.start+1;
+  const yapilan = aralikDurum.currentN-aralikDurum.start;
+  const yuzde = Math.min(100, Math.round((yapilan/toplam)*100));
+  document.getElementById('progress-inner').style.width=yuzde+'%';
+  document.getElementById('progress-text-right').textContent='%'+yuzde;
+  document.getElementById('progress-status').textContent = trNum(Math.min(yapilan,toplam))+' / '+trNum(toplam)+' sayı tarandı';
+
+  if(aralikDurum.currentN<=aralikDurum.end){
+    setTimeout(parcaIsle, 0);
+  } else {
+    taramaTamamla();
+  }
+}
+
+function taramaTamamlaIptal(){
+  document.getElementById('aralik-btn').disabled=false;
+  document.getElementById('aralik-cancel-btn').style.display='none';
+  document.getElementById('progress-text-left').textContent='İptal edildi.';
+  document.getElementById('aralik-result').innerHTML='<p style="color:var(--text-dim);font-size:0.85rem;">Tarama kullanıcı tarafından iptal edildi.</p>';
+}
+
+let sonEkranSonuclari = null;
+let sonEkranAralik = null;
+
+function taramaTamamla(){
+  const gecenSure = ((performance.now()-aralikDurum.zamanBaslangic)/1000).toFixed(2);
+  document.getElementById('aralik-btn').disabled=false;
+  document.getElementById('aralik-cancel-btn').style.display='none';
+  document.getElementById('progress-text-left').textContent='Tamamlandı';
+  document.getElementById('progress-status').textContent = `Analiz tamamlandı. Süre: ${gecenSure} saniye`;
+
+  sonEkranSonuclari = aralikDurum.sonuclar;
+  sonEkranAralik = {start:aralikDurum.start, end:aralikDurum.end};
+  const toplamSayi = aralikDurum.end-aralikDurum.start+1;
+
+  const container = document.getElementById('aralik-result');
+  container.innerHTML='';
+
+  const gruplar = {bolme:[], asal:[], dizi:[], sekil:[]};
+  KUME_LISTESI.forEach(k=>{ gruplar[k.kat].push(k); });
+
+  Object.keys(gruplar).forEach((kat,i)=>{
+    const body = gruplar[kat].map(k=>{
+      const adet = sonEkranSonuclari[k.key].length;
+      const yuzde = toplamSayi>0 ? ((adet/toplamSayi)*100).toFixed(3) : '0';
+      return `<div class="count-row">
+        <span class="cr-name"><input type="radio" name="kumeSecimi" class="cr-radio" value="${k.key}">${k.ad}</span>
+        <span><span class="cr-val">${trNum(adet)}</span> <span class="cr-pct">(%${yuzde})</span></span>
+      </div>`;
+    }).join('');
+    accGroupAc(container, kat, body, {defaultOpen:false, singleOpen:true});
+  });
+
+  document.getElementById('aralik-stats').innerHTML =
+    '<p style="font-size:0.82rem;color:var(--text-dim);">Bir küme seçtiğinizde istatistikler burada, ekranın tepesinde sabit biçimde görünecek.</p>';
+}
+
+function ekIstatistikGoster(){
+  const secili = document.querySelector('input[name="kumeSecimi"]:checked');
+  const statsBox = document.getElementById('aralik-stats');
+  if(!secili){
+    statsBox.innerHTML = '<p style="color:#c0392b;font-size:0.85rem;">Lütfen önce bir küme seçiniz.</p>';
+    return;
+  }
+  const key = secili.value;
+  const kumeTanim = KUME_LISTESI.find(k=>k.key===key);
+  const liste = sonEkranSonuclari[key];
+
+  if(liste.length===0){
+    statsBox.innerHTML = `<div class="panel"><div class="sec-title">${kumeTanim.ad} — İstatistikler</div><p style="font-size:0.85rem;color:var(--text-dim);">Bu aralıkta bu kümeye ait hiç eleman bulunamadı.</p></div>`;
+    return;
+  }
+
+  const enKucuk = liste[0];
+  const enBuyuk = liste[liste.length-1];
+  const baslangic = sonEkranAralik.start;
+
+  let ilkN = liste.slice(0,20);
+  let ilkNBaslik = `İlk ${ilkN.length} eleman`;
+
+  // Lucas dizisinin gerçek terim sırası 2,1,3,4,7,... şeklindedir (ilk iki terim küçükten
+  // büyüğe değil, tanım sırasına göre verilir). Aralık taraması değerleri küçükten büyüğe
+  // listelediği için, bu iki özel durumda (başlangıç 1 veya 2) gösterimi gerçek terim
+  // sırasına göre düzenliyoruz; başlangıç 3 veya daha büyükse mevcut sıralama zaten
+  // dizinin gerçek sırasıyla örtüştüğünden dokunmuyoruz.
+  if(key==='lucas' && baslangic===1 && liste.length>=20){
+    ilkN = liste.slice(0,20);
+    const tmp=ilkN[0]; ilkN[0]=ilkN[1]; ilkN[1]=tmp;
+    ilkNBaslik = `İlk ${ilkN.length} terim (dizinin gerçek sırasına göre)`;
+  } else if(key==='lucas' && baslangic===2 && liste.length>=19){
+    ilkN = [liste[0], 1, ...liste.slice(1,19)];
+    ilkNBaslik = `İlk ${ilkN.length} terim (dizinin gerçek sırasına göre)`;
+  }
+
+  // Tribonacci dizisinin tanımı 0,0,1,1 ile başlar; bu araç farklı sayı değerlerini
+  // listelediğinden tekrarlanan 0 ve 1 normalde tek seferde görünür. Başlangıç 1 ise
+  // ve yeterli veri varsa, dizinin gerçek başlangıcını (tekrarlarla birlikte) gösteriyoruz.
+  if(key==='tribonacci' && baslangic===1 && liste.length>=20){
+    const ozel=[0,0,1,1];
+    let x=0,y=1,z=1;
+    for(let i=0;i<18;i++){ const t=x+y+z; ozel.push(t); x=y; y=z; z=t; }
+    ilkN = ozel;
+    ilkNBaslik = `İlk ${ilkN.length} terim (dizinin gerçek sırasına göre, tekrarlar dahil)`;
+  }
+
+  let tabloNotu = '';
+  if(key==='tribonacci' && baslangic===1){
+    tabloNotu = `<div class="hint" style="margin-top:10px;">Not: Bu dizinin birinci ve ikinci terimleri 0'dır. Tarama işleminde alt sınır 1 seçildiği için bu iki sayı tablodaki toplamlara dahil edilmemiştir. Bu dizinin üçüncü ve dördüncü terimleri 1'dir. Tekrarlanan 1 sayılarından bir tanesi de tablodaki toplamlara dahil edilmemiştir.</div>`;
+  } else if(key==='lucas' && baslangic===2){
+    tabloNotu = `<div class="hint" style="margin-top:10px;">Not: Bu dizinin ilk terimi 2, ikinci terimi 1'dir. Tarama işleminde alt sınır 2 seçildiği için, ikinci terim olan 1 sayısı tablodaki toplamlara dahil edilmemiştir.</div>`;
+  }
+
+  const dagilim={};
+  liste.forEach(n=>{ const d=String(n).length; dagilim[d]=(dagilim[d]||0)+1; });
+  const basamaklar = Object.keys(dagilim).map(Number).sort((a,b)=>a-b);
+  let kumulatif=0;
+  const dagilimSatirlari = basamaklar.map(d=>{
+    kumulatif+=dagilim[d];
+    return `<tr><td>${d}</td><td>${trNum(dagilim[d])}</td><td>${trNum(kumulatif)}</td></tr>`;
+  }).join('');
+
+  statsBox.innerHTML = `
+    <div class="panel">
+      <div class="sec-title">${kumeTanim.ad} — İstatistikler (${trNum(sonEkranAralik.start)} – ${trNum(sonEkranAralik.end)})</div>
+      <div class="stat-strip">
+        <div class="stat-card"><div class="st-label">Toplam Adet</div><div class="st-val">${trNum(liste.length)}</div></div>
+        <div class="stat-card"><div class="st-label">En Küçük</div><div class="st-val">${trNum(enKucuk)}</div></div>
+        <div class="stat-card"><div class="st-label">En Büyük</div><div class="st-val">${trNum(enBuyuk)}</div></div>
+      </div>
+      <div class="ilk-n-box"><strong>${ilkNBaslik}:</strong> ${ilkN.map(trNum).join(', ')}</div>
+      <div class="table-acc-head" id="tablo-acc-head">
+        <span>Basamak sayılarına göre ${kumeTanim.ad.toLowerCase()} sayılarının dağılımını görmek için tıklayınız</span>
+        <span class="chevron">▶</span>
+      </div>
+      <div class="table-acc-body" id="tablo-acc-body">
+        ${tabloNotu}
+        <table class="mini-table">
+          <thead><tr><th>Basamak Sayısı</th><th>Bu Basamakta Adet</th><th>Kümülatif Toplam</th></tr></thead>
+          <tbody>${dagilimSatirlari}</tbody>
+        </table>
+      </div>
+    </div>`;
+
+  document.getElementById('tablo-acc-head').addEventListener('click', function(){
+    this.classList.toggle('open');
+    document.getElementById('tablo-acc-body').classList.toggle('open');
+  });
+}
+</script>
+</body>
+</html>
