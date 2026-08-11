@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>EBOB - EKOK ve Asal Çarpanlara Ayırma — TekinHoca</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4f1eb; --surface:#fdfcf9; --surface2:#eee9df; --border:#d8d0c0;
+  --accent:#2d6a4f; --accent2:#e76f51; --accent3:#457b9d; --accent4:#c9971f;
+  --text:#1a1a1a; --text-dim:#6b6456; --radius:12px; --shadow:0 4px 24px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding:20px;
+  background-image:radial-gradient(circle at 10% 20%,rgba(45,106,79,0.06) 0%,transparent 50%),
+  radial-gradient(circle at 90% 80%,rgba(69,123,157,0.06) 0%,transparent 50%);}
+header{max-width:1100px;margin:0 auto 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding-bottom:18px;border-bottom:2px solid var(--border);}
+header img{height:44px;width:auto;}
+header .titles{text-align:right;}
+header .titles h1{font-family:'Lora',serif;font-size:clamp(1.05rem,2.4vw,1.6rem);font-weight:700;color:var(--accent);}
+header .titles p{font-size:0.85rem;color:var(--text-dim);margin-top:3px;}
+.breadcrumb{max-width:1100px;margin:0 auto 20px;font-size:0.8rem;color:var(--text-dim);}
+.breadcrumb a{color:var(--accent);text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
+.breadcrumb .current{color:var(--text);}
+.wrap{max-width:1100px;margin:0 auto;}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+.panel+.panel{margin-top:16px;}
+.sec-title{font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+
+.main-tabs{display:flex;gap:0;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden;border:2px solid var(--border);border-bottom:none;}
+.main-tab{flex:1;padding:14px 10px;cursor:pointer;font-family:'Lora',serif;font-weight:700;
+  font-size:0.9rem;text-align:center;background:var(--surface2);color:var(--text-dim);
+  border:none;transition:all 0.18s;line-height:1.3;}
+.main-tab:not(:last-child){border-right:2px solid var(--border);}
+.main-tab:hover{background:var(--surface);color:var(--text);}
+.main-tab.active{background:var(--surface);color:var(--accent);border-bottom:3px solid var(--accent);}
+.tab-content{display:none;border:2px solid var(--border);border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);background:var(--surface);padding:20px;box-shadow:var(--shadow);}
+.tab-content.active{display:block;}
+
+.input-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px;}
+.input-group{display:flex;flex-direction:column;}
+.input-group label{font-size:0.75rem;color:var(--text-dim);font-weight:600;margin-bottom:4px;}
+.input-group input{background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.95rem;padding:9px 12px;
+  outline:none;transition:border-color 0.18s,box-shadow 0.18s;width:100%;}
+.input-group input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,106,79,0.12);}
+.hint{font-size:0.73rem;color:var(--text-dim);margin-top:6px;line-height:1.55;}
+.btn-calc{margin-top:16px;background:var(--accent);border:none;border-radius:10px;
+  color:#fff;font-family:'Lora',serif;font-weight:700;font-size:0.95rem;padding:12px 22px;
+  cursor:pointer;transition:background 0.18s;}
+.btn-calc:hover{background:#1f4e38;}
+.btn-reset-sm{margin-top:8px;margin-left:8px;background:transparent;border:1px solid var(--border);
+  border-radius:10px;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-weight:600;
+  font-size:0.85rem;padding:11px 18px;cursor:pointer;transition:background 0.15s;}
+.btn-reset-sm:hover{background:var(--surface2);color:var(--text);}
+.btn-row{display:flex;align-items:center;flex-wrap:wrap;}
+.error-box{display:none;background:rgba(231,111,81,0.1);border:1px solid rgba(231,111,81,0.4);
+  border-radius:8px;padding:10px 13px;font-size:0.82rem;color:#c0392b;margin-top:10px;line-height:1.5;}
+
+.steps-box{background:var(--surface2);border:1px solid var(--border);border-radius:9px;
+  padding:12px 15px;margin-top:14px;}
+.steps-box .step-line{font-family:'DM Sans',monospace;font-size:0.88rem;color:var(--text);
+  padding:5px 0;border-bottom:1px dashed var(--border);}
+.steps-box .step-line:last-child{border-bottom:none;}
+.steps-box .step-line .ok{color:var(--accent);font-weight:700;}
+
+.stat-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+@media(max-width:600px){.stat-strip{grid-template-columns:1fr;}}
+.stat-card{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;}
+.st-label{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--text-dim);margin-bottom:4px;}
+.st-val{font-family:'Lora',serif;font-size:1.15rem;font-weight:700;line-height:1.2;color:var(--accent);}
+.st-sub{font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:500;line-height:1.35;color:var(--text-dim);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.st-sub sup{font-size:0.72em;line-height:0;}
+
+.uslu-box{margin-top:14px;background:var(--surface2);border-left:3px solid var(--accent);
+  border-radius:0 8px 8px 0;padding:12px 15px;font-family:'Lora',serif;font-size:1.05rem;color:var(--text);}
+
+.tree-wrap{margin-top:16px;overflow-x:auto;}
+.carpan-composite circle{fill:rgba(69,123,157,0.12);stroke:var(--accent3);stroke-width:1.5;}
+.carpan-composite text{fill:var(--accent3);font-family:'Lora',serif;font-weight:700;}
+.carpan-asal circle{fill:rgba(201,151,31,0.16);stroke:var(--accent4);stroke-width:1.5;}
+.carpan-asal text{fill:#8a6a12;font-family:'Lora',serif;font-weight:700;}
+.tree-line{stroke:var(--border);stroke-width:1.5;}
+.tree-caption{font-size:0.76rem;fill:var(--text-dim);font-family:'DM Sans',sans-serif;}
+
+.mini-table{width:100%;border-collapse:collapse;font-size:0.85rem;margin-top:12px;}
+.mini-table th{background:var(--surface2);color:var(--text-dim);font-size:0.66rem;letter-spacing:1px;
+  text-transform:uppercase;padding:8px 10px;text-align:center;border-bottom:2px solid var(--border);}
+.mini-table td{padding:7px 10px;text-align:center;font-family:monospace;font-size:0.88rem;border-bottom:1px solid var(--border);}
+.mini-table td.vurgu{background:rgba(45,106,79,0.08);font-weight:700;color:var(--accent);}
+
+.method-title{font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:2px;
+  text-transform:uppercase;color:var(--text-dim);margin-top:22px;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.result-tag{display:inline-block;padding:2px 9px;border-radius:4px;font-weight:700;
+  margin-right:6px;font-size:0.76rem;letter-spacing:0.3px;}
+.result-tag.success{background:rgba(40,167,69,0.15);color:#28a745;}
+
+footer{max-width:1100px;margin:40px auto 0;padding-top:16px;border-top:2px solid var(--border);text-align:center;}
+footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-serif;padding-bottom:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="../img/THlogo1.webp" alt="Tekin Hoca Logo" style="max-width:100%;display:block;border-radius:10px;">
+  <div class="titles">
+    <h1>EBOB - EKOK ve Asal Çarpanlara Ayırma</h1>
+    <p>Çarpan Ağacı · Öklid Algoritması</p>
+  </div>
+</header>
+
+<p class="breadcrumb">
+  <a href="../index.html">Ana Sayfa</a>
+  <span aria-hidden="true"> › </span>
+  <a href="../hesap-araclar.html">Hesaplama Araçları</a>
+  <span aria-hidden="true"> ›› </span>
+  <span class="current" aria-current="page">EBOB - EKOK ve Asal Çarpanlara Ayırma</span>
+</p>
+
+<div class="wrap">
+  <div class="main-tabs">
+    <button class="main-tab active" data-tab="carpanlara">Asal Çarpanlara Ayırma</button>
+    <button class="main-tab" data-tab="ebobekok">EBOB - EKOK Hesaplayıcı</button>
+    <button class="main-tab" data-tab="tersbul">EBOB-EKOK'tan Sayıları Bul</button>
+  </div>
+
+  <!-- ══════════ MODÜL 1: ASAL ÇARPANLARA AYIRMA ══════════ -->
+  <div class="tab-content active" id="tab-carpanlara">
+    <label class="field-label" style="font-size:0.78rem;font-weight:600;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.8px;">Çarpanlarına Ayrılacak Sayı</label>
+    <div class="input-grid" style="grid-template-columns:1fr;">
+      <div class="input-group">
+        <input type="text" id="cf-input" value="" inputmode="numeric" placeholder="Pozitif bir tam sayı giriniz">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-calc" id="cf-btn">Ayır</button>
+      <button class="btn-reset-sm" id="cf-reset-btn">Sıfırla</button>
+    </div>
+    <div class="hint">2 ile 1.000.000.000.000 (1 trilyon) arasında bir tam sayı giriniz. Çok sayıda asal çarpanı olan sayılarda ağaç görseli yerine adım listesi gösterilir.</div>
+    <div class="error-box" id="cf-error"></div>
+    <div id="cf-result" style="margin-top:18px;"></div>
+  </div>
+
+  <!-- ══════════ MODÜL 2: EBOB - EKOK HESAPLAYICI ══════════ -->
+  <div class="tab-content" id="tab-ebobekok">
+    <div class="input-grid">
+      <div class="input-group">
+        <label>Birinci Sayı</label>
+        <input type="text" id="ee-a" value="" inputmode="numeric" placeholder="Örn. 48">
+      </div>
+      <div class="input-group">
+        <label>İkinci Sayı</label>
+        <input type="text" id="ee-b" value="" inputmode="numeric" placeholder="Örn. 18">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-calc" id="ee-btn">Hesapla</button>
+      <button class="btn-reset-sm" id="ee-reset-btn">Sıfırla</button>
+    </div>
+    <div class="hint">İki pozitif tam sayı giriniz (1 ile 1.000.000 arasında). Sonuç üç ayrı yöntemle adım adım gösterilir.</div>
+    <div class="error-box" id="ee-error"></div>
+    <div id="ee-result" style="margin-top:18px;"></div>
+  </div>
+
+  <!-- ══════════ MODÜL 3: EBOB-EKOK'TAN SAYILARI BULMA ══════════ -->
+  <div class="tab-content" id="tab-tersbul">
+    <div class="input-grid">
+      <div class="input-group">
+        <label>EBOB</label>
+        <input type="text" id="tb-d" value="" inputmode="numeric" placeholder="Örn. 6">
+      </div>
+      <div class="input-group">
+        <label>EKOK</label>
+        <input type="text" id="tb-l" value="" inputmode="numeric" placeholder="Örn. 72">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-calc" id="tb-btn">Sayıları Bul</button>
+      <button class="btn-reset-sm" id="tb-reset-btn">Sıfırla</button>
+    </div>
+    <div class="hint">EKOK EBOB'a tam bölünmüyorsa uygun bir sayı çifti bulunamaz.<br>Her iki değer için üst sınır 1.000.000'dur.</div>
+    <div class="error-box" id="tb-error"></div>
+    <div id="tb-result" style="margin-top:18px;"></div>
+  </div>
+</div>
+
+<footer>
+  <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   ORTAK MATEMATİK FONKSİYONLARI
+   ════════════════════════════════════════════════════════════ */
+function trNum(n){ return n.toLocaleString('tr-TR'); }
+function attachThousandsFormatter(input){
+  input.addEventListener('input', function(){
+    const raw = this.value.replace(/\D/g,'');
+    if(raw===''){ this.value=''; return; }
+    this.value = Number(raw).toLocaleString('tr-TR');
+  });
+}
+function parseFormatted(input){
+  return Number(input.value.replace(/\./g,'').replace(/\s/g,''));
+}
+
+function asalMi(n){
+  if(n<2) return false;
+  if(n%2===0) return n===2;
+  for(let i=3;i*i<=n;i+=2){ if(n%i===0) return false; }
+  return true;
+}
+function enKucukAsalCarpan(n){
+  if(n%2===0) return 2;
+  for(let i=3;i*i<=n;i+=2){ if(n%i===0) return i; }
+  return n;
+}
+function carpanAgaciAdimlariUret(n){
+  const adimlar=[];
+  let mevcut=n;
+  while(!asalMi(mevcut) && mevcut>1){
+    const p=enKucukAsalCarpan(mevcut);
+    const sonraki=mevcut/p;
+    adimlar.push({ust:mevcut, sol:p, sag:sonraki});
+    mevcut=sonraki;
+  }
+  return adimlar;
+}
+function usluGosterimHaritasi(n){
+  const map={};
+  let m=n;
+  while(!asalMi(m) && m>1){
+    const p=enKucukAsalCarpan(m);
+    map[p]=(map[p]||0)+1;
+    m=m/p;
+  }
+  if(m>1) map[m]=(map[m]||0)+1;
+  return map;
+}
+function usluGosterimMetni(map){
+  const asallar = Object.keys(map).map(Number).sort((a,b)=>a-b);
+  return asallar.map(p=> map[p]===1 ? `${p}` : `${p}<sup>${map[p]}</sup>`).join(' × ');
+}
+function bolenSayisi(map){
+  return Object.values(map).reduce((a,e)=>a*(e+1),1);
+}
+function bolenlerToplami(map){
+  let toplam=1;
+  for(const p in map){
+    const e=map[p], pp=Number(p);
+    let terim=0, guc=1;
+    for(let i=0;i<=e;i++){ terim+=guc; guc*=pp; }
+    toplam*=terim;
+  }
+  return toplam;
+}
+
+function pozitifBolenlerUret(map){
+  let bolenler=[1];
+  for(const p of Object.keys(map).map(Number).sort((a,b)=>a-b)){
+    const e=map[p];
+    const mevcut=[...bolenler];
+    let guc=1;
+    for(let i=1;i<=e;i++){
+      guc*=p;
+      for(const d of mevcut) bolenler.push(d*guc);
+    }
+  }
+  return bolenler.sort((a,b)=>a-b);
+}
+function usluGosterimMetniTam(map){
+  return Object.keys(map).map(Number).sort((a,b)=>a-b)
+    .map(p=>`${p}<sup>${map[p]}</sup>`).join(' × ');
+}
+function usluGosterimMetniKisa(map, maxDistinct=3){
+  const asallar=Object.keys(map).map(Number).sort((a,b)=>a-b);
+  if(asallar.length<=maxDistinct) return asallar.map(p=>`${p}<sup>${map[p]}</sup>`).join(' × ');
+  return `${asallar.slice(0,2).map(p=>`${p}<sup>${map[p]}</sup>`).join(' × ')} × … × ${asallar[asallar.length-1]}<sup>${map[asallar[asallar.length-1]]}</sup>`;
+}
+function ebobEkokHesapla(a,b){
+  const adimlar=[]; let x=Math.max(a,b), y=Math.min(a,b);
+  while(y!==0){
+    const q=Math.floor(x/y), r=x%y;
+    adimlar.push({x,y,q,r});
+    x=y; y=r;
+  }
+  const g=x;
+  return {ebob:g, ekok:(a/g)*b, adimlar};
+}
+
+/* Merdiven (ortak bölme) yöntemi: okullarda öğretilen klasik tablo yöntemi */
+function merdivenAdimlariUret(a,b){
+  const adimlar=[];
+  let x=a, y=b;
+  while(x>1 || y>1){
+    let p;
+    if(x>1 && y>1) p = Math.min(enKucukAsalCarpan(x), enKucukAsalCarpan(y));
+    else if(x>1) p = enKucukAsalCarpan(x);
+    else p = enKucukAsalCarpan(y);
+    const xB = x>1 && x%p===0;
+    const yB = y>1 && y%p===0;
+    adimlar.push({xOnce:x, yOnce:y, p, ortak:xB&&yB});
+    x = xB ? x/p : x;
+    y = yB ? y/p : y;
+  }
+  return adimlar;
+}
+
+/* ── TÜRKÇE EK MOTORU (sayıların okunuşuna göre doğru hâl eki seçimi) ── */
+const TR_BIRLER=['','bir','iki','üç','dört','beş','altı','yedi','sekiz','dokuz'];
+const TR_ONLAR=['','on','yirmi','otuz','kırk','elli','altmış','yetmiş','seksen','doksan'];
+function turkceSonKelime(n){
+  n = Math.abs(Math.round(n));
+  if(n===0) return 'sıfır';
+  if(n%10!==0) return TR_BIRLER[n%10];
+  if(n%100!==0) return TR_ONLAR[Math.floor(n/10)%10];
+  if(n%1000!==0) return 'yüz';
+  if(n%1000000!==0) return 'bin';
+  if(n%1000000000!==0) return 'milyon';
+  return 'milyar';
+}
+const TR_EK_TABLOSU={
+  'sıfır':{acc:'ı',dat:'a',buf:false}, 'bir':{acc:'i',dat:'e',buf:false},
+  'iki':{acc:'i',dat:'e',buf:true},    'üç':{acc:'ü',dat:'e',buf:false},
+  'dört':{acc:'ü',dat:'e',buf:false},  'beş':{acc:'i',dat:'e',buf:false},
+  'altı':{acc:'ı',dat:'a',buf:true},   'yedi':{acc:'i',dat:'e',buf:true},
+  'sekiz':{acc:'i',dat:'e',buf:false}, 'dokuz':{acc:'u',dat:'a',buf:false},
+  'on':{acc:'u',dat:'a',buf:false},    'yirmi':{acc:'i',dat:'e',buf:true},
+  'otuz':{acc:'u',dat:'a',buf:false},  'kırk':{acc:'ı',dat:'a',buf:false},
+  'elli':{acc:'i',dat:'e',buf:true},   'altmış':{acc:'ı',dat:'a',buf:false},
+  'yetmiş':{acc:'i',dat:'e',buf:false},'seksen':{acc:'i',dat:'e',buf:false},
+  'doksan':{acc:'ı',dat:'a',buf:false},'yüz':{acc:'ü',dat:'e',buf:false},
+  'bin':{acc:'i',dat:'e',buf:false},   'milyon':{acc:'u',dat:'a',buf:false},
+  'milyar':{acc:'ı',dat:'a',buf:false}
+};
+/* tur: 'acc' (-i hâli) ya da 'dat' (-e hâli) */
+function turkceEk(n, tur){
+  const bilgi = TR_EK_TABLOSU[turkceSonKelime(n)];
+  return (bilgi.buf?'y':'') + bilgi[tur];
+}
+function trEk(n, tur){ return `${trNum(n)}'${turkceEk(n,tur)}`; }
+
+/* Çarpan ağacını SVG olarak üretir (basamak sayısı çok fazla değilse) */
+function carpanAgaciSVGUret(n){
+  const steps = carpanAgaciAdimlariUret(n);
+  const svgStyle = 'display:block;width:100%;max-width:520px;height:auto;margin:0 auto;';
+  if(steps.length===0){
+    return `<svg viewBox="0 0 300 110" role="img" style="${svgStyle}"><g class="carpan-asal">
+      <circle cx="150" cy="55" r="24"/><text x="150" y="55" text-anchor="middle" dominant-baseline="central" font-size="14">${trNum(n)}</text>
+    </g></svg><p class="hint" style="text-align:center;">${trNum(n)} zaten asaldır, çarpanlarına ayrılamaz.</p>`;
+  }
+  const finalLeaf = steps[steps.length-1].sag;
+  let cx=270, cy=45;
+  const dy=70, r=20;
+  let maxX=cx+r+10, minX=cx-r-10, maxY=cy+r+10;
+  const nodesHtml=[];
+  const linesHtml=[];
+  nodesHtml.push(`<g class="carpan-composite"><circle cx="${cx}" cy="${cy}" r="${r}"/><text x="${cx}" y="${cy}" text-anchor="middle" dominant-baseline="central" font-size="12">${trNum(steps[0].ust)}</text></g>`);
+  let curX=cx, curY=cy;
+  for(let i=0;i<steps.length;i++){
+    const dx = (i===0)?90:60;
+    const leafX=curX-dx, leafY=curY+dy;
+    const nextX=curX+dx, nextY=curY+dy;
+    linesHtml.push(`<line class="tree-line" x1="${curX}" y1="${curY+r}" x2="${leafX}" y2="${leafY-r}"/>`);
+    linesHtml.push(`<line class="tree-line" x1="${curX}" y1="${curY+r}" x2="${nextX}" y2="${nextY-r}"/>`);
+    nodesHtml.push(`<g class="carpan-asal"><circle cx="${leafX}" cy="${leafY}" r="${r}"/><text x="${leafX}" y="${leafY}" text-anchor="middle" dominant-baseline="central" font-size="12">${trNum(steps[i].sol)}</text></g>`);
+    const nextVal = (i===steps.length-1) ? finalLeaf : steps[i+1].ust;
+    const nextClass = (i===steps.length-1) ? 'carpan-asal' : 'carpan-composite';
+    nodesHtml.push(`<g class="${nextClass}"><circle cx="${nextX}" cy="${nextY}" r="${r}"/><text x="${nextX}" y="${nextY}" text-anchor="middle" dominant-baseline="central" font-size="12">${trNum(nextVal)}</text></g>`);
+    minX=Math.min(minX, leafX-r-10); maxX=Math.max(maxX, nextX+r+10, leafX+r+10);
+    maxY=Math.max(maxY, nextY+r+10);
+    curX=nextX; curY=nextY;
+  }
+  const vbW = maxX-minX;
+  const vbH = maxY;
+  const shiftX = -minX;
+  return `<svg viewBox="0 0 ${vbW} ${vbH}" role="img" style="${svgStyle}"><g transform="translate(${shiftX},0)">
+    ${linesHtml.join('')}
+    ${nodesHtml.join('')}
+    </g>
+  </svg>
+  <p class="hint" style="text-align:center;">Mavi yuvarlaklar bölünmeye devam eden sayılar, altın renkli yuvarlaklar asal çarpanlardır.</p>`;
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODÜL 1 — ASAL ÇARPANLARA AYIRMA
+   ════════════════════════════════════════════════════════════ */
+const CF_LIMIT = 1000000000000;
+const CF_AGAC_ADIM_LIMIT = 12;
+
+const CF_PLACEHOLDER='Pozitif bir tam sayı giriniz';
+const cfInputEl = document.getElementById('cf-input');
+attachThousandsFormatter(cfInputEl);
+cfInputEl.addEventListener('focus', function(){ this.placeholder=''; });
+cfInputEl.addEventListener('blur', function(){ if(!this.value) this.placeholder=CF_PLACEHOLDER; });
+cfInputEl.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); analizCarpanlara(); } });
+
+document.getElementById('cf-btn').addEventListener('click', analizCarpanlara);
+document.getElementById('cf-reset-btn').addEventListener('click', ()=>{
+  cfInputEl.value=''; cfInputEl.placeholder=CF_PLACEHOLDER;
+  document.getElementById('cf-result').innerHTML='';
+  document.getElementById('cf-error').style.display='none';
+});
+
+function analizCarpanlara(){
+  const errBox=document.getElementById('cf-error');
+  errBox.style.display='none';
+  const n = parseFormatted(cfInputEl);
+  if(!Number.isFinite(n) || n<1 || n!==Math.floor(n)){
+    errBox.style.display='block'; errBox.textContent='Lütfen pozitif bir tam sayı giriniz.';
+    return;
+  }
+  if(n>CF_LIMIT){
+    errBox.style.display='block'; errBox.textContent=`Performans nedeniyle üst sınır ${trNum(CF_LIMIT)} ile sınırlıdır.`;
+    return;
+  }
+
+  const container = document.getElementById('cf-result');
+
+  if(n===1){
+    container.innerHTML = `<div class="panel"><p style="font-size:0.9rem;color:var(--text-dim);">1 sayısının asal çarpanı yoktur; asal çarpanlara ayırma tanımı 1'den büyük tam sayılar için geçerlidir.</p></div>`;
+    return;
+  }
+
+  const steps = carpanAgaciAdimlariUret(n);
+  const map = usluGosterimHaritasi(n);
+
+  let stepsHtml='';
+  if(steps.length===0){
+    stepsHtml = `<div class="step-line">${trNum(n)} zaten asaldır, bölme işlemi yapılmaz.</div>`;
+  } else {
+    steps.forEach(s=>{
+      stepsHtml += `<div class="step-line">${trNum(s.ust)} ÷ ${trNum(s.sol)} = <span class="ok">${trNum(s.sag)}</span></div>`;
+    });
+    const finalLeaf = steps[steps.length-1].sag;
+    stepsHtml += `<div class="step-line">${trNum(finalLeaf)} asaldır, işlem tamamlanır.</div>`;
+  }
+
+  let agacHtml='';
+  if(steps.length<=CF_AGAC_ADIM_LIMIT){
+    agacHtml = `<div class="tree-wrap">${carpanAgaciSVGUret(n)}</div>`;
+  } else {
+    agacHtml = `<p style="font-size:0.82rem;color:var(--text-dim);margin-top:14px;">Bu sayının çok fazla asal çarpanı olduğu için ağaç görseli oluşturulmadı; adımlar yukarıda listelenmiştir.</p>`;
+  }
+
+  container.innerHTML = `
+    <div class="panel">
+      <div class="sec-title">Asal Çarpanlara Ayırma Yöntemleri</div>
+      <div class="method-title">1. Yöntem: Bölme Algoritması</div>
+      <div class="steps-box">${stepsHtml}</div>
+      <div class="uslu-box">${trNum(n)} = ${usluGosterimMetni(map)}</div>
+      <div class="method-title">2. Yöntem: Çarpan Ağacı</div>
+      ${agacHtml}
+      <div class="stat-strip">
+        <div class="stat-card"><div class="st-label">Farklı Asal Çarpanların Sayısı</div><div class="st-val">${Object.keys(map).length}</div><div class="st-sub">${Object.keys(map).map(Number).sort((a,b)=>a-b).map(p=>trNum(p)).join(' ve ')}</div></div>
+        <div class="stat-card"><div class="st-label">Pozitif Bölenlerin Sayısı</div><div class="st-val">${trNum(bolenSayisi(map))}</div><div class="st-sub">${(()=>{const b=pozitifBolenlerUret(map); return b.length<=5 ? b.map(x=>trNum(x)).join(', ') : `${b.slice(0,3).map(x=>trNum(x)).join(', ')}, …, ${b.slice(-2).map(x=>trNum(x)).join(', ')}`;})()}</div></div>
+        <div class="stat-card"><div class="st-label">Pozitif Bölenlerin Toplamı</div><div class="st-val">${trNum(bolenlerToplami(map))}</div></div>
+      </div>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODÜL 2 — EBOB / EKOK HESAPLAYICI
+   ════════════════════════════════════════════════════════════ */
+const EE_LIMIT = 1000000;
+
+const eeAInput = document.getElementById('ee-a');
+const eeBInput = document.getElementById('ee-b');
+attachThousandsFormatter(eeAInput);
+attachThousandsFormatter(eeBInput);
+[eeAInput, eeBInput].forEach(inp=>{
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); hesaplaEbobEkok(); } });
+});
+
+document.getElementById('ee-btn').addEventListener('click', hesaplaEbobEkok);
+document.getElementById('ee-reset-btn').addEventListener('click', ()=>{
+  eeAInput.value=''; eeBInput.value='';
+  document.getElementById('ee-result').innerHTML='';
+  document.getElementById('ee-error').style.display='none';
+});
+
+function hesaplaEbobEkok(){
+  const errBox=document.getElementById('ee-error');
+  errBox.style.display='none';
+  const a = parseFormatted(eeAInput);
+  const b = parseFormatted(eeBInput);
+  if(!Number.isFinite(a) || !Number.isFinite(b) || a<1 || b<1 || a!==Math.floor(a) || b!==Math.floor(b)){
+    errBox.style.display='block'; errBox.textContent='Lütfen her iki kutuya da pozitif birer tam sayı giriniz.';
+    return;
+  }
+  if(a>EE_LIMIT || b>EE_LIMIT){
+    errBox.style.display='block'; errBox.textContent=`Performans nedeniyle her iki sayı da ${trNum(EE_LIMIT)} ile sınırlıdır.`;
+    return;
+  }
+
+  const mapA = usluGosterimHaritasi(a);
+  const mapB = usluGosterimHaritasi(b);
+  const tumAsallar = [...new Set([...Object.keys(mapA), ...Object.keys(mapB)].map(Number))].sort((x,y)=>x-y);
+
+  let tabloSatirlari='';
+  let ebobCarpim=1, ekokCarpim=1;
+  tumAsallar.forEach(p=>{
+    const ea = mapA[p]||0, eb = mapB[p]||0;
+    const minE = Math.min(ea,eb), maxE = Math.max(ea,eb);
+    ebobCarpim *= Math.pow(p,minE);
+    ekokCarpim *= Math.pow(p,maxE);
+    const ortakMi = ea>0 && eb>0;
+    tabloSatirlari += `<tr>
+      <td>${p}</td>
+      <td>${ea>0?ea:'—'}</td>
+      <td>${eb>0?eb:'—'}</td>
+      <td class="${ortakMi?'vurgu':''}">${minE>0?minE:'—'}</td>
+      <td>${maxE}</td>
+    </tr>`;
+  });
+
+  const { ebob, ekok, adimlar } = ebobEkokHesapla(a,b);
+
+  let euclidHtml='';
+  adimlar.forEach(s=>{
+    euclidHtml += `<div class="step-line">${trNum(s.x)} = ${trNum(s.y)} × ${trNum(s.q)} + ${trNum(s.r)}</div>`;
+  });
+  euclidHtml += `<div class="step-line">Kalan 0 olduğunda son bölen olan <span class="ok">${trNum(ebob)}</span>, EBOB'dur.</div>`;
+  const euclidGiris = `Bu yöntemde ${trEk(Math.max(a,b),'acc')} ${trEk(Math.min(a,b),'dat')} böleriz, kalan sıfır olana kadar bu işlemi tekrarlarız.`;
+
+  // Merdiven (ortak bölme) yöntemi
+  const merdivenAdim = merdivenAdimlariUret(a,b);
+  let merdivenSatirlari='';
+  let mEbob=1, mEkok=1;
+  merdivenAdim.forEach(s=>{
+    mEkok *= s.p;
+    if(s.ortak) mEbob *= s.p;
+    merdivenSatirlari += `<tr>
+      <td>${trNum(s.xOnce)}</td><td>${trNum(s.yOnce)}</td><td>${trNum(s.p)}</td>
+      <td class="${s.ortak?'vurgu':''}">${s.ortak?'✓':'—'}</td>
+    </tr>`;
+  });
+
+  const carpim1 = a*b, carpim2 = ebob*ekok;
+
+  const merdivenEbobIslemi = merdivenAdim.filter(s=>s.ortak).map(s=>trNum(s.p)).join(' × ') || '1';
+  const merdivenMap = {};
+  merdivenAdim.forEach(s=>{ merdivenMap[s.p]=(merdivenMap[s.p]||0)+1; });
+  const merdivenEkokIslemi = usluGosterimMetniKisa(merdivenMap) || '1';
+  const asalCarpanEbobIslemi = usluGosterimMetniTam(
+    Object.fromEntries(tumAsallar.filter(p=>(mapA[p]||0)>0 && (mapB[p]||0)>0)
+      .map(p=>[p,Math.min(mapA[p]||0,mapB[p]||0)]))
+  ) || '1';
+  const asalCarpanEkokIslemi = usluGosterimMetniKisa(
+    Object.fromEntries(tumAsallar.map(p=>[p,Math.max(mapA[p]||0,mapB[p]||0)]))
+  ) || '1';
+
+  document.getElementById('ee-result').innerHTML = `
+    <div class="panel">
+      <div class="sec-title">Yöntem 1 — Merdiven (Ortak Bölme) Yöntemi</div>
+      <table class="mini-table">
+        <thead><tr><th>${trNum(a)}</th><th>${trNum(b)}</th><th>Bölen</th><th>Ortak mı?</th></tr></thead>
+        <tbody>${merdivenSatirlari}</tbody>
+      </table>
+      <div class="hint">Her iki sayıyı da aynı anda bölebilen ortak asal çarpanlara ✓ işareti koyuyoruz.</div>
+      <div class="stat-strip">
+        <div class="stat-card"><div class="st-label">EBOB (✓ olan bölenler)</div><div class="st-val">${trNum(mEbob)}</div><div class="st-sub">${merdivenEbobIslemi}</div></div>
+        <div class="stat-card"><div class="st-label">EKOK (tüm bölenler)</div><div class="st-val">${trNum(mEkok)}</div><div class="st-sub">${merdivenEkokIslemi}</div></div>
+      </div>
+
+      <div class="method-title">Yöntem 2 — Asal Çarpanlara Ayırma</div>
+      <div class="uslu-box">${trNum(a)} = ${usluGosterimMetni(mapA)}</div>
+      <div class="uslu-box" style="margin-top:8px;">${trNum(b)} = ${usluGosterimMetni(mapB)}</div>
+      <table class="mini-table">
+        <thead><tr><th>Asal Çarpan</th><th>${trNum(a)}'de Üs</th><th>${trNum(b)}'de Üs</th><th>Ortak (min)</th><th>En Büyük (maks)</th></tr></thead>
+        <tbody>${tabloSatirlari}</tbody>
+      </table>
+      <div class="hint">Ortak asal çarpanların en küçük kuvvetlileri çarpılarak EBOB elde edilir.<br>Tüm asal çarpanların en büyük kuvvetlileri çarpılarak EKOK elde edilir.</div>
+      <div class="stat-strip">
+        <div class="stat-card"><div class="st-label">EBOB</div><div class="st-val">${trNum(ebobCarpim)}</div><div class="st-sub">${asalCarpanEbobIslemi}</div></div>
+        <div class="stat-card"><div class="st-label">EKOK</div><div class="st-val">${trNum(ekokCarpim)}</div><div class="st-sub">${asalCarpanEkokIslemi}</div></div>
+      </div>
+
+      <div class="method-title">Yöntem 3 — Öklid Algoritması (yalnızca EBOB için)</div>
+      <div class="hint" style="margin-top:0;margin-bottom:8px;">${euclidGiris}</div>
+      <div class="steps-box">${euclidHtml}</div>
+
+      <div class="method-title">Sağlama — A × B = EBOB × EKOK</div>
+      <div class="steps-box">
+        <div class="step-line">${trNum(a)} × ${trNum(b)} = <span class="ok">${trNum(carpim1)}</span></div>
+        <div class="step-line">${trNum(ebob)} × ${trNum(ekok)} = <span class="ok">${trNum(carpim2)}</span></div>
+        <div class="step-line"><span class="result-tag success">${carpim1===carpim2?'Eşit':'Hata'}</span> İki çarpım da birbirine eşit olduğundan sağlama doğrulanmıştır.</div>
+      </div>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════
+   MODÜL 3 — EBOB-EKOK'TAN SAYILARI BULMA
+   ════════════════════════════════════════════════════════════ */
+const TB_LIMIT = 1000000;
+const TB_COK_COZUM_ESIGI = 5;
+
+function ebcHesap(x,y){
+  while(y!==0){ const t=y; y=x%y; x=t; }
+  return x;
+}
+
+const tbDInput = document.getElementById('tb-d');
+const tbLInput = document.getElementById('tb-l');
+attachThousandsFormatter(tbDInput);
+attachThousandsFormatter(tbLInput);
+[tbDInput, tbLInput].forEach(inp=>{
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); ebobEkoktanBul(); } });
+});
+document.getElementById('tb-btn').addEventListener('click', ebobEkoktanBul);
+document.getElementById('tb-reset-btn').addEventListener('click', ()=>{
+  tbDInput.value=''; tbLInput.value='';
+  document.getElementById('tb-result').innerHTML='';
+  document.getElementById('tb-error').style.display='none';
+});
+
+function ebobEkoktanBul(){
+  const errBox=document.getElementById('tb-error');
+  errBox.style.display='none';
+  const d = parseFormatted(tbDInput);
+  const L = parseFormatted(tbLInput);
+  if(!Number.isFinite(d) || !Number.isFinite(L) || d<1 || L<1 || d!==Math.floor(d) || L!==Math.floor(L)){
+    errBox.style.display='block'; errBox.textContent='Lütfen her iki kutuya da pozitif birer tam sayı giriniz.';
+    return;
+  }
+  if(d>TB_LIMIT || L>TB_LIMIT){
+    errBox.style.display='block'; errBox.textContent=`Performans nedeniyle her iki değer de ${trNum(TB_LIMIT)} ile sınırlıdır.`;
+    return;
+  }
+  if(L % d !== 0){
+    errBox.style.display='block'; errBox.textContent=`Girilen EBOB (${trNum(d)}), EKOK'u (${trNum(L)}) tam bölmüyor. EBOB her zaman EKOK'un bir böleni olmak zorunda olduğundan, bu değerlere sahip bir sayı çifti mevcut değildir.`;
+    return;
+  }
+
+  const k = L/d;
+  const ciftler=[];
+  for(let m=1; m*m<=k; m++){
+    if(k%m===0){
+      const n=k/m;
+      if(ebcHesap(m,n)===1){
+        ciftler.push({m,n,a:d*m,b:d*n});
+      }
+    }
+  }
+
+  let adimHtml = `
+    <div class="step-line">Bu iki sayının EBOB'u ${trNum(d)} olduğu için sayılara A = ${trNum(d)} × M ve B = ${trNum(d)} × N diyelim (M ve N aralarında asal).</div>
+    <div class="step-line">EKOK formülünü uygulayalım: EKOK = ${trNum(d)} × M × N = ${trNum(L)}</div>
+    <div class="step-line">Her iki tarafı ${trEk(d,'dat')} bölelim: M × N = ${trNum(L)} ÷ ${trNum(d)} = ${trNum(k)}</div>
+    <div class="step-line">Çarpımı ${trNum(k)} olan, aralarında asal M, N çiftlerini bulalım:</div>`;
+
+  let sonucHtml='';
+  if(ciftler.length===0){
+    sonucHtml = `<p style="font-size:0.85rem;color:var(--text-dim);margin-top:10px;">Bu koşulları sağlayan bir sayı çifti bulunamadı (bu normalde k=${trNum(k)}≥1 olduğundan yaşanmaz; girdileri kontrol ediniz).</p>`;
+  } else {
+    sonucHtml = `<table class="mini-table">
+      <thead><tr><th>m</th><th>n</th><th>a = ${trNum(d)}×m</th><th>b = ${trNum(d)}×n</th></tr></thead>
+      <tbody>${ciftler.map(c=>`<tr>
+        <td>${trNum(c.m)}</td><td>${trNum(c.n)}</td>
+        <td class="vurgu">${trNum(c.a)}</td><td class="vurgu">${trNum(c.b)}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+  }
+
+  let cokCozumNotu='';
+  if(ciftler.length>TB_COK_COZUM_ESIGI){
+    cokCozumNotu = `<div class="hint" style="margin-top:10px;">Bu EBOB-EKOK çiftini sağlayan toplam ${trNum(ciftler.length)} farklı sayı çifti bulunmaktadır. Çok sayıda çözüm çıkmasının nedeni, ${trNum(k)} sayısının birden fazla farklı asal çarpana sahip olmasıdır — her bir asal çarpan, m ve n'den yalnızca birine ait olabileceğinden, farklı asalların m-n arasında dağılım biçimleri arttıkça çözüm sayısı da katlanarak artar.</div>`;
+  } else if(ciftler.length>1){
+    cokCozumNotu = `<div class="hint" style="margin-top:10px;">Bu EBOB-EKOK çiftini sağlayan birden fazla (${trNum(ciftler.length)}) sayı çifti bulundu; bu gibi durumlarda birden fazla doğru çift var demektir.</div>`;
+  }
+
+  document.getElementById('tb-result').innerHTML = `
+    <div class="panel">
+      <div class="sec-title">Çözüm Adımları</div>
+      <div class="steps-box">${adimHtml}</div>
+      ${sonucHtml}
+      ${cokCozumNotu}
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════
+   SEKME GEÇİŞİ
+   ════════════════════════════════════════════════════════════ */
+document.querySelectorAll('.main-tab').forEach(tab=>{
+  tab.addEventListener('click', function(){
+    document.querySelectorAll('.main-tab').forEach(t=>t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('tab-'+this.dataset.tab).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
