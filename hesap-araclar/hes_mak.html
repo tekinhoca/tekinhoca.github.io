@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hesap Makinesi</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+:root {
+  --bg:#f4f1eb; --surface:#fdfcf9; --surface2:#eee9df; --border:#d8d0c0;
+  --accent:#2d6a4f; --accent2:#e76f51; --accent3:#457b9d; --accent4:#e9c46a;
+  --text:#1a1a1a; --text-dim:#6b6456; --radius:12px; --shadow:0 4px 24px rgba(0,0,0,0.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;padding:20px;
+  background-image:radial-gradient(circle at 10% 20%,rgba(45,106,79,0.06) 0%,transparent 50%),
+  radial-gradient(circle at 90% 80%,rgba(69,123,157,0.06) 0%,transparent 50%);}
+
+header{max-width:1200px;margin:0 auto 24px;display:flex;align-items:center;gap:18px;
+  padding-bottom:18px;border-bottom:2px solid var(--border);}
+header img{height:44px;width:auto;}
+header .titles h1{font-family:'Lora',serif;font-size:clamp(1.2rem,2.8vw,1.85rem);font-weight:700;color:var(--accent);}
+header .titles p{font-size:0.85rem;color:var(--text-dim);margin-top:3px;}
+.breadcrumb{max-width:1200px;margin:0 auto 20px;font-size:0.8rem;color:var(--text-dim);}
+.breadcrumb a{color:var(--accent);text-decoration:none;}
+.breadcrumb a:hover{text-decoration:underline;}
+.breadcrumb .current{color:var(--text);}
+
+/* ── SEKME BAR ── */
+.sekme-bar{max-width:1200px;margin:0 auto 20px;display:flex;gap:10px;border-bottom:2px solid var(--border);}
+.sekme{background:transparent;border:none;padding:10px 22px;font-family:'Lora',serif;font-weight:700;
+  font-size:0.95rem;color:var(--text-dim);cursor:pointer;border-bottom:3px solid transparent;
+  margin-bottom:-2px;transition:all 0.15s;}
+.sekme:hover{color:var(--accent);}
+.sekme.aktif{color:var(--accent);border-bottom-color:var(--accent);}
+.sekme-panel{display:none;}
+.sekme-panel.aktif{display:block;}
+
+/* ── AKILLI MODÜL ── */
+.app{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start;}
+.app.panel-kapali{grid-template-columns:1fr;}
+.app.panel-kapali .ornek-panel{display:none;}
+.app.panel-acik{grid-template-columns:320px 1fr;}
+.panel-ac-kapat{display:inline-flex;align-items:center;justify-content:center;margin-left:auto;background:transparent;border:1px solid var(--border);border-radius:8px;padding:5px 10px;color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:700;cursor:pointer;}
+.panel-ac-kapat:hover{border-color:var(--accent);color:var(--accent);}
+.panel-ac{display:inline-flex;align-items:center;justify-content:center;margin-top:10px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:8px 14px;color:var(--accent);font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;cursor:pointer;}
+.panel-ac:hover{border-color:var(--accent);background:rgba(45,106,79,0.06);}
+.panel-perde{display:none;position:fixed;inset:0;z-index:1000;}
+.ornek-panel-baslik{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.ornek-panel-baslik .sec-title{margin-bottom:0;flex:1;}
+@media(max-width:860px){
+  .app{display:block;position:relative;}
+  .app.panel-kapali{display:block;}
+  .app .ornek-panel{display:block;position:fixed;z-index:1001;left:0;top:0;bottom:0;width:min(320px,86vw);overflow-y:auto;border-radius:0 12px 12px 0;transform:translateX(-105%);transition:transform .2s ease;box-shadow:8px 0 28px rgba(0,0,0,.18);}
+  .app.panel-acik .ornek-panel{transform:translateX(0);}
+  .app.panel-acik .panel-perde{display:block;background:rgba(0,0,0,.28);}
+}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);}
+.panel+.panel{margin-top:16px;}
+.sec-title{font-family:'Lora',serif;font-size:0.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text-dim);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+
+.ornek-grup{margin-bottom:16px;}
+.ornek-grup:last-child{margin-bottom:0;}
+.ornek-baslik{font-size:0.7rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px;}
+.ornek-btn{display:block;width:100%;text-align:left;background:var(--surface2);border:1px solid var(--border);
+  border-radius:8px;padding:8px 11px;margin-bottom:6px;cursor:pointer;font-family:'DM Sans',sans-serif;
+  font-size:0.8rem;color:var(--text-dim);transition:all 0.15s;}
+.ornek-btn:hover{border-color:var(--accent);color:var(--text);background:rgba(45,106,79,0.06);}
+.ornek-btn:last-child{margin-bottom:0;}
+
+.right-col{display:flex;flex-direction:column;gap:16px;}
+.ahm-baslik{font-family:'Lora',serif;font-size:1.15rem;font-weight:700;margin-bottom:4px;}
+.ahm-alt{font-size:0.83rem;color:var(--text-dim);margin-bottom:16px;}
+
+.ahm-input-row{display:flex;gap:10px;}
+.ahm-input-row input[type="text"]{flex:1;min-width:0;font-family:'Lora',serif;font-size:1.02rem;
+  padding:14px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);
+  color:var(--text);outline:none;transition:border-color 0.18s,box-shadow 0.18s;}
+.ahm-input-row input[type="text"]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(45,106,79,0.12);}
+.ahm-input-row button{flex-shrink:0;background:var(--accent);border:none;border-radius:10px;color:#fff;
+  font-family:'Lora',serif;font-weight:700;font-size:1rem;padding:0 26px;cursor:pointer;
+  transition:background 0.18s,transform 0.1s;}
+.ahm-input-row button:hover{background:#1f4e38;transform:translateY(-1px);}
+.ahm-input-row .ahm-sifirla{background:transparent;color:var(--accent2);border:1px solid var(--border);padding:0 18px;}
+.ahm-input-row .ahm-sifirla:hover{background:rgba(231,111,81,0.07);border-color:var(--accent2);color:var(--accent2);}
+.oneri-cip{appearance:none;background:var(--surface2);border:1px solid var(--border);border-radius:999px;
+  padding:6px 14px;font-size:0.8rem;color:var(--text-dim);font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.oneri-cip:hover{border-color:var(--accent);color:var(--accent);background:rgba(45,106,79,0.06);}
+@media(max-width:560px){.ahm-input-row{flex-direction:column;} .ahm-input-row button{padding:13px;}}
+
+.sonuc-alani{margin-top:18px;}
+.result-banner{border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow);
+  border:1px solid var(--border);border-top:5px solid var(--accent);background:var(--surface);}
+.rb-label{font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;
+  color:var(--text-dim);margin-bottom:6px;}
+.rb-val{font-family:'Lora',serif;font-size:2rem;font-weight:700;line-height:1.25;color:var(--accent);
+  word-break:break-word;}
+.rb-link{display:inline-block;margin-top:12px;font-size:0.8rem;color:var(--accent3);text-decoration:none;
+  border-bottom:1px solid rgba(69,123,157,0.4);}
+.rb-link:hover{border-color:var(--accent3);}
+
+.oneri-banner{border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+  border:1px solid rgba(233,196,106,0.5);border-top:5px solid var(--accent4);background:var(--surface);}
+.oneri-mesaj{font-size:0.88rem;color:var(--text);margin-bottom:10px;}
+.oneri-liste{display:flex;flex-wrap:wrap;gap:8px;}
+.oneri-cip{background:var(--surface2);border:1px solid var(--border);border-radius:999px;
+  padding:6px 14px;font-size:0.8rem;color:var(--text-dim);font-weight:600;}
+
+.hata-banner{border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+  border:1px solid rgba(231,111,81,0.4);border-top:5px solid var(--accent2);background:var(--surface);}
+.hata-mesaj{font-size:0.88rem;color:#c0392b;}
+
+.bos-durum{text-align:center;padding:30px 20px;color:var(--text-dim);}
+.bos-durum .big-icon{font-size:2.2rem;margin-bottom:8px;}
+.bos-durum p{font-size:0.86rem;line-height:1.6;}
+
+/* ── KLASİK MODÜL ── */
+.klasik-wrap{max-width:420px;margin:0 auto;}
+.klasik-baslik{font-family:'Lora',serif;font-size:1.05rem;font-weight:700;color:var(--accent);margin-bottom:12px;text-align:center;}
+
+.ekran{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;}
+.ekran input{width:100%;background:transparent;border:none;outline:none;font-family:'Lora',serif;
+  font-size:1.3rem;color:var(--text);text-align:right;}
+.klasik-sonuc-satiri{min-height:28px;text-align:right;font-family:'Lora',serif;font-size:1rem;color:var(--text-dim);
+  margin-top:4px;word-break:break-word;}
+.klasik-sonuc-satiri.basarili{color:var(--accent);font-weight:700;font-size:1.15rem;}
+.klasik-sonuc-satiri.hata{color:#c0392b;font-size:0.85rem;font-weight:600;}
+
+.izgara{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.tus{border:1px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text);
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:1.02rem;padding:14px 0;cursor:pointer;
+  transition:all 0.12s;user-select:none;}
+.tus:hover{border-color:var(--accent);background:rgba(45,106,79,0.08);}
+.tus:active{transform:scale(0.96);}
+.tus.islec{color:var(--accent3);font-weight:700;}
+.tus.esittir{background:var(--accent);color:#fff;border-color:var(--accent);grid-column:span 4;font-weight:700;}
+.tus.esittir:hover{background:#1f4e38;}
+.tus.temizle{color:var(--accent2);font-weight:700;}
+.tus.geri{color:var(--accent2);}
+
+.bilimsel-toggle{width:100%;background:transparent;border:1px dashed var(--border);border-radius:9px;
+  padding:9px;margin:12px 0;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600;
+  font-size:0.82rem;color:var(--text-dim);transition:all 0.15s;}
+.bilimsel-toggle:hover{border-color:var(--accent);color:var(--accent);}
+.bilimsel-panel{display:none;margin-bottom:12px;}
+.bilimsel-panel.acik{display:block;}
+.bilimsel-grup{margin-bottom:10px;}
+.bilimsel-grup:last-child{margin-bottom:0;}
+.bilimsel-etiket{font-size:0.66rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:6px;}
+.bilimsel-satir{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.tus.bilimsel{border:1px solid var(--border);border-radius:9px;background:var(--surface);color:var(--text-dim);
+  font-family:'DM Sans',sans-serif;font-weight:600;font-size:0.88rem;padding:11px 0;cursor:pointer;
+  transition:all 0.12s;}
+.tus.bilimsel:hover{border-color:var(--accent);color:var(--text);background:rgba(45,106,79,0.06);}
+.tus.bilimsel:active{transform:scale(0.96);}
+.klasik-not{font-size:0.72rem;color:var(--text-dim);margin-top:12px;line-height:1.5;text-align:center;}
+
+footer{max-width:1200px;margin:40px auto 0;padding-top:16px;border-top:2px solid var(--border);text-align:center;}
+footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-serif;padding-bottom:20px;}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="../img/THlogo1.webp" alt="TekinHoca Logo" style="max-width:100%;display:block;border-radius:10px;">
+  <div class="titles" style="text-align:right;flex:1;">
+    <h1>Hesap Makinesi</h1>
+    <p>Ne hesaplamak istersen günlük dilde yaz, ya da klasik tuşlarla hesapla</p>
+  </div>
+</header>
+<p class="breadcrumb">
+  <a href="../index.html">Ana Sayfa</a>
+  <span aria-hidden="true"> › </span>
+  <a href="../hesap-araclar.html">Hesaplama Araçları</a>
+  <span aria-hidden="true"> ›› </span>
+  <span class="current" aria-current="page">Hesap Makinesi</span>
+</p>
+
+<div class="sekme-bar">
+  <button class="sekme aktif" data-hedef="panel-akilli">Akıllı Hesap Makinesi</button>
+  <button class="sekme" data-hedef="panel-klasik">Klasik Hesap Makinesi</button>
+</div>
+
+<!-- ══════════ AKILLI MODÜL ══════════ -->
+<div class="sekme-panel aktif" id="panel-akilli">
+  <div class="app panel-kapali" id="akilliApp">
+    <div class="ornek-panel panel">
+      <div class="ornek-panel-baslik">
+        <div class="sec-title">Örnek Sorgular</div>
+        <button type="button" class="panel-ac-kapat" id="panelKapat">KAPAT</button>
+      </div>
+
+      <div class="ornek-grup">
+        <div class="ornek-baslik">Yüzde</div>
+        <button class="ornek-btn" data-sorgu="120'nin yüzde 25'i">120'nin yüzde 25'i</button>
+        <button class="ornek-btn" data-sorgu="yüzde 25'i 30">yüzde 25'i 30</button>
+        <button class="ornek-btn" data-sorgu="120'nin yüzde kaçı 30">120'nin yüzde kaçı 30</button>
+      </div>
+      <div class="ornek-grup">
+        <div class="ornek-baslik">Kesir</div>
+        <button class="ornek-btn" data-sorgu="300'ün beşte ikisi">300'ün beşte ikisi</button>
+        <button class="ornek-btn" data-sorgu="beşte ikisi 120">beşte ikisi 120</button>
+        <button class="ornek-btn" data-sorgu="300'ün kaçta kaçı 120">300'ün kaçta kaçı 120</button>
+      </div>
+      <div class="ornek-grup">
+        <div class="ornek-baslik">Kat</div>
+        <button class="ornek-btn" data-sorgu="25'in 3 katı">25'in 3 katı</button>
+        <button class="ornek-btn" data-sorgu="3 katı 75">3 katı 75</button>
+      </div>
+      <div class="ornek-grup">
+        <div class="ornek-baslik">Değişim</div>
+        <button class="ornek-btn" data-sorgu="120'nin 15 fazlası">120'nin 15 fazlası</button>
+        <button class="ornek-btn" data-sorgu="15 fazlası 135">15 fazlası 135</button>
+      </div>
+      <div class="ornek-grup">
+        <div class="ornek-baslik">Oran</div>
+        <button class="ornek-btn" data-sorgu="80'in 120'ye oranı">80'in 120'ye oranı</button>
+        <button class="ornek-btn" data-sorgu="4'e oranı 3">4'e oranı 3</button>
+      </div>
+      <div class="ornek-grup">
+        <div class="ornek-baslik">Zincirli İşlemler</div>
+        <button class="ornek-btn" data-sorgu="125'in 3 katının 20 eksiği">125'in 3 katının 20 eksiği</button>
+        <button class="ornek-btn" data-sorgu="3 katının 20 eksiği 355">3 katının 20 eksiği 355</button>
+      </div>
+      <div class="ornek-grup">
+        <div class="ornek-baslik">Üs / Karekök</div>
+        <button class="ornek-btn" data-sorgu="144'ün karekökü">144'ün karekökü</button>
+        <button class="ornek-btn" data-sorgu="karekökü 12">karekökü 12</button>
+      </div>
+      <div class="ornek-grup">
+        <div class="ornek-baslik">EBOB / EKOK</div>
+        <button class="ornek-btn" data-sorgu="84 ile 126'nın EBOB'u">84 ile 126'nın EBOB'u</button>
+        <button class="ornek-btn" data-sorgu="84 ile 126'nın EKOK'u">84 ile 126'nın EKOK'u</button>
+      </div>
+      <div class="ornek-grup">
+        <div class="ornek-baslik">Sayılar</div>
+        <button class="ornek-btn" data-sorgu="360'ın asal çarpanları">360'ın asal çarpanları</button>
+        <button class="ornek-btn" data-sorgu="7 faktöriyel">7 faktöriyel</button>
+      </div>
+    </div>
+    <div class="panel-perde" id="panelPerde"></div>
+
+    <div class="right-col">
+      <div class="panel">
+        <div class="ahm-baslik">Ne hesaplamak istiyorsun?</div>
+        <div class="ahm-alt">İsterseniz işlemi günlük dilde yazabilirsiniz.</div>
+        <form id="ahmForm" autocomplete="off">
+          <div class="ahm-input-row">
+            <input type="text" id="ahmGirdi" placeholder="Örn: 120'nin yüzde 25'i">
+            <button type="submit">Hesapla</button>
+            <button type="button" id="ahmSifirla" class="ahm-sifirla">Sıfırla</button>
+          </div>
+        </form>
+        <div class="sonuc-alani" id="sonucAlani">
+          <div class="bos-durum">
+            <div class="big-icon">🧮</div>
+            <p>Örnek soru kalıplarını denemek için sol paneli açabilirsiniz.</p>
+            <button type="button" class="panel-ac" id="panelAc">PANELİ AÇ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ KLASİK MODÜL ══════════ -->
+<div class="sekme-panel" id="panel-klasik">
+  <div class="klasik-wrap">
+    <div class="panel">
+      <div class="ekran">
+        <input type="text" id="ifadeKutusu" placeholder="0" inputmode="none">
+        <div class="klasik-sonuc-satiri" id="klasikSonucSatiri"></div>
+      </div>
+
+      <button class="bilimsel-toggle" id="bilimselToggle">Bilimsel Fonksiyonlar ▾</button>
+
+      <div class="bilimsel-panel" id="bilimselPanel">
+        <div class="bilimsel-grup">
+          <div class="bilimsel-etiket">Üslü / Köklü / Sayılar</div>
+          <div class="bilimsel-satir">
+            <button class="tus bilimsel" data-ekle="^2">x²</button>
+            <button class="tus bilimsel" data-ekle="^">x^y</button>
+            <button class="tus bilimsel" data-fonksiyon="√">√</button>
+            <button class="tus bilimsel" data-ekle="!">n!</button>
+          </div>
+        </div>
+        <div class="bilimsel-grup">
+          <div class="bilimsel-etiket">Trigonometri (derece)</div>
+          <div class="bilimsel-satir">
+            <button class="tus bilimsel" data-fonksiyon="sin">sin</button>
+            <button class="tus bilimsel" data-fonksiyon="cos">cos</button>
+            <button class="tus bilimsel" data-fonksiyon="tan">tan</button>
+            <button class="tus bilimsel" data-ekle="π">π</button>
+          </div>
+        </div>
+        <div class="bilimsel-grup">
+          <div class="bilimsel-etiket">Logaritma</div>
+          <div class="bilimsel-satir">
+            <button class="tus bilimsel" data-fonksiyon="log">log</button>
+            <button class="tus bilimsel" data-fonksiyon="ln">ln</button>
+            <button class="tus bilimsel" data-ekle="e">e</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="izgara">
+        <button class="tus temizle" id="btnTemizle">C</button>
+        <button class="tus geri" id="btnGeri">⌫</button>
+        <button class="tus islec" data-ekle="(">(</button>
+        <button class="tus islec" data-ekle=")">)</button>
+
+        <button class="tus" data-ekle="7">7</button>
+        <button class="tus" data-ekle="8">8</button>
+        <button class="tus" data-ekle="9">9</button>
+        <button class="tus islec" data-ekle="÷">÷</button>
+
+        <button class="tus" data-ekle="4">4</button>
+        <button class="tus" data-ekle="5">5</button>
+        <button class="tus" data-ekle="6">6</button>
+        <button class="tus islec" data-ekle="×">×</button>
+
+        <button class="tus" data-ekle="1">1</button>
+        <button class="tus" data-ekle="2">2</button>
+        <button class="tus" data-ekle="3">3</button>
+        <button class="tus islec" data-ekle="-">−</button>
+
+        <button class="tus" data-ekle="%">%</button>
+        <button class="tus" data-ekle="0">0</button>
+        <button class="tus" data-ekle=",">,</button>
+        <button class="tus islec" data-ekle="+">+</button>
+
+        <button class="tus esittir" id="btnEsittir">=</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© Tekin CANITEZ — Matematik Öğretmeni</p>
+</footer>
+
+<script src="js/hesap-motoru.js"></script>
+<script src="js/tr-normallestir.js"></script>
+<script src="js/ifade-motoru.js"></script>
+<script src="js/hesap-parser.js"></script>
+<script>
+  /* ── SEKME GEÇİŞİ ── */
+  document.querySelectorAll('.sekme').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.sekme').forEach(function (b) { b.classList.remove('aktif'); });
+      document.querySelectorAll('.sekme-panel').forEach(function (p) { p.classList.remove('aktif'); });
+      btn.classList.add('aktif');
+      document.getElementById(btn.getAttribute('data-hedef')).classList.add('aktif');
+    });
+  });
+
+  /* ── AKILLI MODÜL MANTIĞI ── */
+  const ahmForm = document.getElementById('ahmForm');
+  const ahmGirdi = document.getElementById('ahmGirdi');
+  const sonucAlani = document.getElementById('sonucAlani');
+
+  const CAPRAZ_BAGLANTILAR = {
+    'ebob': { href: 'ebob_ekok.html', metin: 'Adım adım öğrenmek için EBOB-EKOK aracına bakın →' },
+    'ekok': { href: 'ebob_ekok.html', metin: 'Adım adım öğrenmek için EBOB-EKOK aracına bakın →' }
+  };
+
+  function sonucGoster(sonuc) {
+    if (sonuc.basarili) {
+      const baglanti = CAPRAZ_BAGLANTILAR[sonuc.kalipId];
+      sonucAlani.innerHTML =
+        '<div class="result-banner"><div class="rb-label">Sonuç</div><div class="rb-val"></div>' +
+        (baglanti ? '<a class="rb-link" href="' + baglanti.href + '"></a>' : '') + '</div>';
+      sonucAlani.querySelector('.rb-val').textContent = sonuc.sonuc;
+      if (baglanti) sonucAlani.querySelector('.rb-link').textContent = baglanti.metin;
+    } else if (sonuc.tur === 'yakin_eslesme') {
+      sonucAlani.innerHTML = '<div class="oneri-banner"><div class="oneri-mesaj"></div><div class="oneri-liste"></div></div>';
+      sonucAlani.querySelector('.oneri-mesaj').textContent = sonuc.mesaj;
+      const liste = sonucAlani.querySelector('.oneri-liste');
+      const ONERI_ORNEKLERI = {
+        'Yüzde hesaplama': "120'nin yüzde 25'i",
+        'EBOB hesaplama': "84 ile 126'nın EBOB'u",
+        'EKOK hesaplama': "84 ile 126'nın EKOK'u",
+        'Kök alma': "144'ün karekökü",
+        'Üs alma': "7'nin karesi",
+        'Faktöriyel hesaplama': '7 faktöriyel',
+        'Asal çarpanlara ayırma / Asal sayı testi': "360'ın asal çarpanları",
+        'Bölenleri bulma': "360'ın bölenleri",
+        'Oran hesaplama': "80'in 120'ye oranı",
+        'Dört işlem': '125 + 375'
+      };
+      sonuc.oneriler.forEach(function (oneri) {
+        const cip = document.createElement('button');
+        cip.type = 'button';
+        cip.className = 'oneri-cip';
+        cip.textContent = oneri;
+        cip.addEventListener('click', function () {
+          const sorgu = ONERI_ORNEKLERI[oneri];
+          if (!sorgu) return;
+          ahmGirdi.value = sorgu;
+          ahmHesaplaVeGoster(sorgu);
+          ahmGirdi.focus();
+        });
+        liste.appendChild(cip);
+      });
+    } else {
+      sonucAlani.innerHTML = '<div class="hata-banner"><div class="hata-mesaj"></div></div>';
+      sonucAlani.querySelector('.hata-mesaj').textContent = sonuc.mesaj;
+    }
+  }
+
+  function ahmHesaplaVeGoster(girdi) { sonucGoster(HesapParser.hesapla(girdi)); }
+
+  ahmForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const girdi = ahmGirdi.value.trim();
+    if (girdi === '') return;
+    ahmHesaplaVeGoster(girdi);
+  });
+
+  document.getElementById('ahmSifirla').addEventListener('click', function () {
+    ahmGirdi.value = '';
+    sonucAlani.innerHTML = '<div class="bos-durum"><div class="big-icon">🧮</div><p>Örnek soru kalıplarını denemek için sol paneli açabilirsiniz.</p><button type="button" class="panel-ac" id="panelAc">PANELİ AÇ</button></div>';
+    ahmGirdi.focus();
+  });
+
+  function panelDurumunuAyarla(acik) {
+    const app = document.getElementById('akilliApp');
+    if (!app) return;
+    app.classList.toggle('panel-kapali', !acik);
+    app.classList.toggle('panel-acik', acik);
+  }
+
+  function panelAc() {
+    panelDurumunuAyarla(true);
+    const btn = document.getElementById('panelAc');
+    if (btn) btn.textContent = 'PANELİ KAPAT';
+  }
+  function panelKapat() {
+    panelDurumunuAyarla(false);
+    const btn = document.getElementById('panelAc');
+    if (btn) btn.textContent = 'PANELİ AÇ';
+  }
+
+  // Akıllı mod her açıldığında panel varsayılan olarak kapalıdır.
+  panelDurumunuAyarla(false);
+  const ilkPanelBtn = document.getElementById('panelAc');
+  if (ilkPanelBtn) ilkPanelBtn.textContent = 'PANELİ AÇ';
+
+  document.getElementById('panelKapat').addEventListener('click', panelKapat);
+  document.getElementById('panelPerde').addEventListener('click', panelKapat);
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'panelAc') {
+      const app = document.getElementById('akilliApp');
+      if (app.classList.contains('panel-acik')) panelKapat(); else panelAc();
+    }
+  });
+
+  document.querySelectorAll('.ornek-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const sorgu = btn.getAttribute('data-sorgu');
+      ahmGirdi.value = sorgu;
+      ahmHesaplaVeGoster(sorgu);
+      panelKapat();
+      ahmGirdi.focus();
+    });
+  });
+
+  /* ── KLASİK MODÜL MANTIĞI ── */
+  const ifadeKutusu = document.getElementById('ifadeKutusu');
+  const klasikSonucSatiri = document.getElementById('klasikSonucSatiri');
+  const bilimselToggle = document.getElementById('bilimselToggle');
+  const bilimselPanel = document.getElementById('bilimselPanel');
+
+  function imlecKonumundaEkle(metin) {
+    const start = ifadeKutusu.selectionStart != null ? ifadeKutusu.selectionStart : ifadeKutusu.value.length;
+    const end = ifadeKutusu.selectionEnd != null ? ifadeKutusu.selectionEnd : ifadeKutusu.value.length;
+    const mevcut = ifadeKutusu.value;
+    ifadeKutusu.value = mevcut.slice(0, start) + metin + mevcut.slice(end);
+    const yeniPos = start + metin.length;
+    ifadeKutusu.focus();
+    ifadeKutusu.setSelectionRange(yeniPos, yeniPos);
+  }
+
+  function fonksiyonEkle(onEk) {
+    const start = ifadeKutusu.selectionStart != null ? ifadeKutusu.selectionStart : ifadeKutusu.value.length;
+    const end = ifadeKutusu.selectionEnd != null ? ifadeKutusu.selectionEnd : ifadeKutusu.value.length;
+    const mevcut = ifadeKutusu.value;
+    const eklenecek = onEk + '()';
+    ifadeKutusu.value = mevcut.slice(0, start) + eklenecek + mevcut.slice(end);
+    const yeniPos = start + onEk.length + 1;
+    ifadeKutusu.focus();
+    ifadeKutusu.setSelectionRange(yeniPos, yeniPos);
+  }
+
+  document.querySelectorAll('#panel-klasik .tus[data-ekle]').forEach(function (btn) {
+    btn.addEventListener('click', function () { imlecKonumundaEkle(btn.getAttribute('data-ekle')); });
+  });
+  document.querySelectorAll('#panel-klasik .tus[data-fonksiyon]').forEach(function (btn) {
+    btn.addEventListener('click', function () { fonksiyonEkle(btn.getAttribute('data-fonksiyon')); });
+  });
+
+  document.getElementById('btnTemizle').addEventListener('click', function () {
+    ifadeKutusu.value = '';
+    klasikSonucSatiri.textContent = '';
+    klasikSonucSatiri.className = 'klasik-sonuc-satiri';
+    ifadeKutusu.focus();
+  });
+
+  document.getElementById('btnGeri').addEventListener('click', function () {
+    const start = ifadeKutusu.selectionStart != null ? ifadeKutusu.selectionStart : ifadeKutusu.value.length;
+    const end = ifadeKutusu.selectionEnd != null ? ifadeKutusu.selectionEnd : ifadeKutusu.value.length;
+    const mevcut = ifadeKutusu.value;
+    if (start === end && start > 0) {
+      ifadeKutusu.value = mevcut.slice(0, start - 1) + mevcut.slice(end);
+      ifadeKutusu.setSelectionRange(start - 1, start - 1);
+    } else if (start !== end) {
+      ifadeKutusu.value = mevcut.slice(0, start) + mevcut.slice(end);
+      ifadeKutusu.setSelectionRange(start, start);
+    }
+    ifadeKutusu.focus();
+  });
+
+  function klasikHesaplaVeGoster() {
+    const ifade = ifadeKutusu.value.trim();
+    if (ifade === '') return;
+    try {
+      const sonuc = IfadeMotoru.hesapla(ifade);
+      const yuvarlak = Math.round(sonuc * 10000) / 10000;
+      klasikSonucSatiri.textContent = '= ' + String(yuvarlak).replace('.', ',');
+      klasikSonucSatiri.className = 'klasik-sonuc-satiri basarili';
+    } catch (e) {
+      klasikSonucSatiri.textContent = e.message;
+      klasikSonucSatiri.className = 'klasik-sonuc-satiri hata';
+    }
+  }
+
+  document.getElementById('btnEsittir').addEventListener('click', klasikHesaplaVeGoster);
+  ifadeKutusu.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); klasikHesaplaVeGoster(); }
+  });
+
+  bilimselToggle.addEventListener('click', function () {
+    const acik = bilimselPanel.classList.toggle('acik');
+    bilimselToggle.textContent = acik ? 'Bilimsel Fonksiyonlar ▴' : 'Bilimsel Fonksiyonlar ▾';
+  });
+</script>
+</body>
+</html>
