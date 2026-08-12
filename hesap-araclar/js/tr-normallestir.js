@@ -70,6 +70,71 @@
     throw new Error('"' + dizgi + '" geçerli bir sayı biçiminde değil.');
   }
 
+  /* ---------- YAZIYLA YAZILAN SAYILARIN YAYGIN EKLİ BİÇİMLERİ ---------- */
+  // Özellikle yüzde ifadelerinde: "yüzde onu" -> "yüzde 10".
+  // Bu dönüşüm yalnızca sayı sözcüğünün doğrudan sayı eki almış yaygın
+  // biçimlerini kapsar; serbest metni genel olarak sayıya çevirmiyoruz.
+  // Yazıyla sayıların yaygın ekli biçimlerini sayıya çeviriyoruz.
+  // Bu dönüşüm BÜTÜN metne uygulanmaz. Özellikle kesirlerde "beşte üçü"
+  // ifadesindeki "beş" ve "üç" sözcüklerinin sayı yer tutucusuna dönüşmesi
+  // istenmez; kesir parser'ı bunları kendisi çözer. Dönüşüm yalnızca
+  // "yüzde ..." yapısındaki yüzde değerine uygulanır.
+  const BIRLER = {
+    bir:1, iki:2, üç:3, uc:3, dört:4, dort:4, beş:5, bes:5,
+    altı:6, alti:6, yedi:7, sekiz:8, dokuz:9
+  };
+  const ONLAR = {
+    yirmi:20, otuz:30, kırk:40, kirk:40, elli:50, altmış:60, altmis:60,
+    yetmiş:70, yetmis:70, seksen:80, doksan:90
+  };
+  const TEK_SAYILAR = Object.assign({on:10}, BIRLER, ONLAR);
+
+  function yaziSayiGovdesiCoz(metin) {
+    const k = String(metin).toLocaleLowerCase('tr-TR').replace(/\s+/g, '');
+    if (Object.prototype.hasOwnProperty.call(TEK_SAYILAR, k)) return TEK_SAYILAR[k];
+    if (/^on(?:bir|iki|üç|uc|dört|dort|beş|bes|altı|alti|yedi|sekiz|dokuz)$/.test(k)) {
+      return 10 + BIRLER[k.slice(2)];
+    }
+    const onlar = Object.keys(ONLAR).sort((a,b)=>b.length-a.length);
+    for (const onluk of onlar) {
+      if (k.startsWith(onluk) && k.length > onluk.length) {
+        const bir = k.slice(onluk.length);
+        if (Object.prototype.hasOwnProperty.call(BIRLER, bir)) return ONLAR[onluk] + BIRLER[bir];
+      }
+    }
+    return null;
+  }
+
+  function yaziSayiEkleriniNormallestir(metin) {
+    let s = metin;
+
+    // Yalnızca "yüzde ..." sonrasındaki sayı sözcüğünü dönüştür.
+    // Böylece "beşte üçü" gibi kesirler bozulmaz.
+    const birler = Object.keys(BIRLER).sort((a,b)=>b.length-a.length);
+    const onlar = Object.keys(ONLAR).sort((a,b)=>b.length-a.length);
+    const sayiGovdeleri = ['on', ...birler, ...onlar];
+    onlar.forEach(function (onluk) {
+      birler.forEach(function (birlik) {
+        sayiGovdeleri.push(onluk + ' ' + birlik);
+        sayiGovdeleri.push(onluk + birlik);
+      });
+    });
+    birler.forEach(function (birlik) {
+      sayiGovdeleri.push('on ' + birlik);
+      sayiGovdeleri.push('on' + birlik);
+    });
+    const benzersiz = [...new Set(sayiGovdeleri)].sort((a,b)=>b.length-a.length);
+    const govdeAlternatifi = benzersiz.map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/ /g, '\\s+')).join('|');
+    const ek = '(?:si|sı|su|sü|i|ı|u|ü|nin|nın|nun|nün|in|ın|un|ün)?';
+    const yuzdeDeseni = new RegExp('(y[uü]zde\\s+)(' + govdeAlternatifi + ')' + ek + '(?=$|[^a-zçğıöşü])', 'gi');
+
+    s = s.replace(yuzdeDeseni, function(_, bas, sayiGovdesi) {
+      const deger = yaziSayiGovdesiCoz(sayiGovdesi);
+      return bas + (deger == null ? sayiGovdesi : deger);
+    });
+    return s;
+  }
+
   /* ---------- SAYI + EK YAKALAMA ---------- */
 
   // Tek bir eşleşmede: [ % işareti ] [ sayı ] [ kesme ] [ bitişik ek (ör. nin, i, ün, ye) ]
@@ -94,7 +159,7 @@
     const sayilar = [];
     let index = 0;
 
-    let calisilanMetin = metin.toLowerCase();
+    let calisilanMetin = yaziSayiEkleriniNormallestir(metin.toLowerCase());
 
     const normalizedText = calisilanMetin.replace(
       SAYI_DESENI,

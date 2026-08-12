@@ -59,7 +59,7 @@
 
   /* ---------- SONUÇ BİÇİMLENDİRME ---------- */
 
-  const TURKCE_SAYILAR = { bir:1, iki:2, uc:3, üç:3, dort:4, dört:4, bes:5, beş:5, alti:6, altı:6, yedi:7, sekiz:8, dokuz:9, on:10 };
+  const TURKCE_SAYILAR = { bir:1, iki:2, uc:3, üç:3, dort:4, dört:4, dördü:4, bes:5, beş:5, alti:6, altı:6, yedi:7, sekiz:8, dokuz:9, on:10 };
   function turkceSayiSozu(sozcuk) {
     return TURKCE_SAYILAR[String(sozcuk).toLocaleLowerCase('tr-TR')] ?? null;
   }
@@ -148,7 +148,7 @@
       id: 'kesir-sozcu',
       tur: 'kesir',
       esle: function (metin) {
-        const m = metin.match(/^\{SAYI(\d+)\}\s+([a-zçğıöşü]+)te\s+(bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)(?:si|sı)$/i);
+        const m = metin.match(/^\{SAYI(\d+)\}\s+([a-zçğıöşü]+)te\s+(bir|iki|üç|dört|dördü|beş|altı|yedi|sekiz|dokuz|on)(?:si|sı|su|sü|i|ı|u|ü)?$/i);
         if (!m) return null;
         const payda = turkceSayiSozu(m[2]);
         const pay = turkceSayiSozu(m[3]);
@@ -168,7 +168,7 @@
       id: 'kesir-sozcu-ters',
       tur: 'kesir',
       esle: function (metin) {
-        const m = metin.match(/^([a-zçğıöşü]+)te\s+(bir|iki|üç|dört|beş|altı|yedi|sekiz|dokuz|on)(?:si|sı)\s+\{SAYI(\d+)\}$/i);
+        const m = metin.match(/^([a-zçğıöşü]+)te\s+(bir|iki|üç|dört|dördü|beş|altı|yedi|sekiz|dokuz|on)(?:si|sı|su|sü|i|ı|u|ü)?\s+\{SAYI(\d+)\}$/i);
         if (!m) return null;
         const payda = turkceSayiSozu(m[1]);
         const pay = turkceSayiSozu(m[2]);
