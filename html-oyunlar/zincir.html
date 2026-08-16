@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Zincir</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#0a160a;font-family:'Nunito',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden}
+.wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:8px;padding:8px;height:100%;overflow:hidden}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
+.modal-overlay.hidden{display:none}
+.modal-box{background:#0e1e0e;border:1px solid rgba(200,150,12,0.5);border-radius:10px;padding:20px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:10px;animation:modalIn .3s ease}
+@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.character-box{width:96px;height:96px;margin:0 auto 2px;flex-shrink:0}
+.character-img{width:100%;height:100%;object-fit:contain}
+.modal-title{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#f0c040;text-align:center;letter-spacing:.03em;text-shadow:0 0 14px rgba(240,192,64,.35)}
+.modal-sub{font-size:12px;font-weight:600;color:rgba(247,242,232,0.55);text-align:center}
+.modal-rules{font-size:13px;font-weight:600;color:rgba(247,242,232,0.82);line-height:1.85}
+.modal-rules b{color:#f0c040}
+.modal-btns{display:flex;gap:8px;justify-content:center}
+button.modal-start{background:rgba(200,150,12,0.2);border:1px solid rgba(200,150,12,0.6);border-radius:6px;padding:9px 26px;font-size:13px;font-weight:700;cursor:pointer;color:#f0d9a0;font-family:'Nunito',sans-serif;transition:background .2s}
+button.modal-start:hover{background:rgba(200,150,12,0.35)}
+button.modal-close{background:transparent;border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;color:rgba(247,242,232,0.5);font-family:'Nunito',sans-serif}
+button.modal-close:hover{background:rgba(255,255,255,0.06)}
+.modal-logo{text-align:center;margin-top:2px}
+.modal-logo img{height:28px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s}
+.modal-logo img:hover{opacity:.7}
+
+/* ── BİLGİ ÇUBUĞU ── */
+.infobar{display:flex;gap:6px;flex-shrink:0}
+.ibox{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:7px 10px;flex:1;text-align:center;transition:background .2s,border-color .2s}
+.ibox .l{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:rgba(247,242,232,0.5);text-transform:uppercase;letter-spacing:.14em;margin-bottom:2px}
+.ibox .v{font-family:'Space Mono',monospace;font-size:27px;font-weight:700;color:#f0c040;line-height:1}
+.ibox.time-low{background:rgba(200,60,40,0.15);border-color:rgba(200,60,40,0.5)}
+.ibox.time-low .v{color:#ff5c5c;animation:pulseWarn .55s ease-in-out infinite;transform-origin:center}
+@keyframes pulseWarn{
+  0%,100%{transform:scale(1);text-shadow:0 0 0 rgba(255,92,92,0)}
+  50%{transform:scale(1.10);text-shadow:0 0 10px rgba(255,92,92,.65)}
+}
+
+/* ── TAHTA ── */
+.board-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;position:relative}
+.board{display:grid;gap:3px;background:#10151f;border-radius:8px;padding:6px;border:2px solid rgba(200,150,12,0.25);position:relative;transition:filter .3s}
+.board.blurred{filter:blur(6px)}
+.cell{background:#1b2230;border-radius:5px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:visible;transition:background .12s;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.cell:hover{background:#232c3f}
+.cell.selected{background:rgba(200,150,12,0.28);outline:2px solid #c8960c;outline-offset:-2px}
+.cell.hint-cell{animation:hintPulse .6s ease-in-out 2}
+@keyframes hintPulse{
+  0%,100%{background:#1b2230;filter:none}
+  25%{background:rgba(240,192,64,0.22);filter:brightness(1.12)}
+  50%{background:rgba(240,192,64,0.34);filter:brightness(1.22)}
+  75%{background:rgba(240,192,64,0.22);filter:brightness(1.12)}
+}
+.cell.hint-cell .tile{animation:hintTile .6s ease-in-out 2}
+@keyframes hintTile{
+  0%,100%{transform:scale(1)}
+  25%{transform:scale(1.06) translateY(-2px)}
+  50%{transform:scale(1.10) translateY(0)}
+  75%{transform:scale(1.06) translateY(2px)}
+}
+.cell .tile{line-height:1;position:relative;will-change:transform}
+.tile.settling{animation:tileSettle .16s ease-out forwards}
+@keyframes tileSettle{
+  0%{transform:scale(1.035,.965)}
+  45%{transform:scale(.985,1.015)}
+  100%{transform:scale(1)}
+}
+.cell.matched .tile{animation:tilePop .32s ease forwards}
+.cell.matched::after{content:'';position:absolute;inset:22%;border:2px solid rgba(240,192,64,.9);border-radius:50%;pointer-events:none;animation:matchBurst .32s ease-out forwards}
+@keyframes matchBurst{
+  0%{transform:scale(.35);opacity:0;box-shadow:0 0 0 rgba(240,192,64,0)}
+  25%{opacity:1;box-shadow:0 0 10px rgba(240,192,64,.8)}
+  100%{transform:scale(2.15);opacity:0;box-shadow:0 0 18px rgba(240,192,64,0)}
+}
+@keyframes tilePop{
+  0%{transform:scale(1);opacity:1;filter:brightness(1) drop-shadow(0 0 0 rgba(240,192,64,0))}
+  40%{transform:scale(1.35);opacity:1;filter:brightness(1.7) drop-shadow(0 0 7px rgba(240,192,64,0.85))}
+  100%{transform:scale(0);opacity:0;filter:brightness(1) drop-shadow(0 0 0 rgba(240,192,64,0))}
+}
+.cell.disabled{cursor:default}
+
+/* ── YÜKSELEN METİN KATMANI (render() tarafından silinmez) ── */
+.fx-layer{position:absolute;inset:0;pointer-events:none;z-index:45;overflow:visible}
+.float-fx{position:absolute;transform:translate(-50%,0);font-family:'Baloo 2',cursive;font-weight:800;font-size:15px;pointer-events:none;white-space:nowrap;animation:floatUp 1.1s ease-out forwards}
+.float-fx.time{color:#4ade80;text-shadow:0 0 8px rgba(74,222,128,.85),0 0 3px rgba(74,222,128,.9)}
+.float-fx.chain{color:#f0c040;font-size:21px;letter-spacing:.03em;animation-duration:1.5s;text-shadow:0 0 12px rgba(240,192,64,.9),0 0 4px rgba(240,192,64,.95)}
+.float-fx.center{left:50%;top:38%}
+@keyframes floatUp{
+  0%{transform:translate(-50%,0) scale(.7);opacity:0}
+  16%{opacity:1;transform:translate(-50%,-6px) scale(1.15)}
+  32%{transform:translate(-50%,-10px) scale(1)}
+  100%{transform:translate(-50%,-52px) scale(1);opacity:0}
+}
+
+/* ── HAMLE KALMADI ── */
+.deadlock-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);opacity:0;pointer-events:none;transition:opacity .2s;z-index:60;border-radius:8px}
+.deadlock-overlay.show{opacity:1;pointer-events:auto}
+.deadlock-box{background:rgba(10,22,10,.95);border:2px solid #f0c040;border-radius:10px;padding:16px 22px;text-align:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:14px;color:#f0c040;line-height:1.7;letter-spacing:.03em;box-shadow:0 0 30px rgba(240,192,64,.25)}
+
+/* ── ALT ── */
+.msg{font-size:12px;font-weight:600;color:rgba(247,242,232,0.65);text-align:center;min-height:15px;flex-shrink:0}
+.win-banner{display:none;background:rgba(200,150,12,0.1);border:1px solid rgba(200,150,12,0.35);border-radius:8px;padding:9px 14px;text-align:center;flex-shrink:0}
+.win-banner.show{display:block}
+.win-banner h2{font-family:'Baloo 2',cursive;font-size:15px;color:#f0c040;margin-bottom:2px}
+.win-banner p{font-size:13px;font-weight:600;color:rgba(247,242,232,0.75)}
+.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;flex-shrink:0}
+button.a{background:rgba(10,22,10,0.8);border:1px solid rgba(200,150,12,0.35);border-radius:5px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;color:rgba(247,242,232,0.8);font-family:'Nunito',sans-serif;transition:background .2s}
+button.a:hover{background:rgba(155,53,16,0.45)}
+</style>
+</head>
+<body>
+
+<!-- ── MODAL ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="character-box">
+      <img src="../img/mecetru.webp" alt="Matece" class="character-img">
+    </div>
+    <div class="modal-title">ZİNCİR<br>OYUNU</div>
+    <div class="modal-rules" id="rulesText">
+      <b>3'lü</b> eşleşme puan kazandırır.<br>
+      <b>4'lü</b> eşleşme puan + <b>5 saniye</b> ekler.<br>
+      <b>5'li</b> eşleşme puan + <b>10 saniye</b> ekler.<br>
+      Bir hamle art arda birden fazla eşleşme tetiklerse <b>ZİNCİR!</b> oluşur ve <b>4 saniye</b> daha kazandırır.<br><br>
+      Süre dolduğunda oyun biter. <b id="ctrlHint">Kontrol yöntemi yükleniyor…</b>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-start" onclick="closeModal()">▶ Başla</button>
+    </div>
+    <div class="modal-logo">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo">
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="infobar">
+    <div class="ibox" id="timeBox"><div class="l">Süre</div><div class="v" id="timeDisp">60</div></div>
+    <div class="ibox"><div class="l">Skor</div><div class="v" id="scoreDisp">0</div></div>
+  </div>
+
+  <div class="board-wrap" id="boardWrap">
+    <div class="board" id="board"></div>
+    <div class="fx-layer" id="fxLayer"></div>
+    <div class="deadlock-overlay" id="deadlockOverlay">
+      <div class="deadlock-box">HAMLE KALMADI<br>TAŞLAR TEKRAR YERLEŞTİRİLİYOR</div>
+    </div>
+  </div>
+
+  <div class="msg" id="msg"></div>
+  <div class="win-banner" id="winBanner">
+    <h2 id="winTitle"></h2>
+    <p id="winBody"></p>
+  </div>
+
+  <div class="br">
+    <button class="a" onclick="resetGame()">&#8635; Tekrar Oyna</button>
+    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
+  </div>
+</div>
+
+<script>
+const TYPES=['⭐','🔷','🟥','🟢','🟣','🟠'];
+const isMobileMode = window.innerWidth <= 600;
+const SIZE = isMobileMode ? 6 : 8;
+const DRAG_THRESHOLD=14;
+
+let board, score, timeLeft, timerId, gameOver, isResolving, selected, dragStart, chainCount;
+let hintTimerId=null, hintRepeatTimerId=null, hintLevel=1, hintCell=null;
+
+const boardEl=document.getElementById('board');
+const boardWrapEl=document.getElementById('boardWrap');
+const fxLayer=document.getElementById('fxLayer');
+const deadlockOverlay=document.getElementById('deadlockOverlay');
+
+/* ── MODAL ── */
+function closeModal(){
+  document.getElementById('modalOverlay').classList.add('hidden');
+  if(!gameOver && !isResolving){
+    startTimer();
+    resumeHints();
+  }
+}
+function openModal(){
+  clearInterval(timerId);
+  pauseHints();
+  document.getElementById('modalOverlay').classList.remove('hidden');
+}
+document.getElementById('ctrlHint').textContent = isMobileMode
+  ? 'Değiştirmek için iki kutuya sırayla dokunun.'
+  : 'Değiştirmek için bir kutuyu tutup komşusuna sürükleyin.';
+
+/* ── YARDIMCI FONKSİYONLAR ── */
+function randType(){ return Math.floor(Math.random()*TYPES.length); }
+function swapCells(b,r1,c1,r2,c2){ const t=b[r1][c1]; b[r1][c1]=b[r2][c2]; b[r2][c2]=t; }
+function isAdjacent(a,b){ return Math.abs(a.r-b.r)+Math.abs(a.c-b.c)===1; }
+
+function getMatches(b){
+  const mask=Array.from({length:SIZE},()=>Array(SIZE).fill(false));
+  const runs=[];
+  for(let r=0;r<SIZE;r++){
+    let c=0;
+    while(c<SIZE){
+      let c2=c;
+      while(c2<SIZE && b[r][c2]===b[r][c]) c2++;
+      const len=c2-c;
+      if(len>=3){
+        const cells=[];
+        for(let k=c;k<c2;k++){ mask[r][k]=true; cells.push([r,k]); }
+        runs.push({length:len,cells});
+      }
+      c=c2;
+    }
+  }
+  for(let c=0;c<SIZE;c++){
+    let r=0;
+    while(r<SIZE){
+      let r2=r;
+      while(r2<SIZE && b[r2][c]===b[r][c]) r2++;
+      const len=r2-r;
+      if(len>=3){
+        const cells=[];
+        for(let k=r;k<r2;k++){ mask[k][c]=true; cells.push([k,c]); }
+        runs.push({length:len,cells});
+      }
+      r=r2;
+    }
+  }
+  return {mask,runs};
+}
+
+function hasValidMove(b){
+  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
+    if(c+1<SIZE){
+      swapCells(b,r,c,r,c+1);
+      const has=getMatches(b).runs.length>0;
+      swapCells(b,r,c,r,c+1);
+      if(has) return true;
+    }
+    if(r+1<SIZE){
+      swapCells(b,r,c,r+1,c);
+      const has=getMatches(b).runs.length>0;
+      swapCells(b,r,c,r+1,c);
+      if(has) return true;
+    }
+  }
+  return false;
+}
+
+function createBoard(){
+  let b;
+  do{
+    b=[];
+    for(let r=0;r<SIZE;r++){
+      b[r]=[];
+      for(let c=0;c<SIZE;c++){
+        let t,tries=0;
+        do{ t=randType(); tries++; }
+        while(tries<50 && (
+          (c>=2 && b[r][c-1]===t && b[r][c-2]===t) ||
+          (r>=2 && b[r-1][c]===t && b[r-2][c]===t)
+        ));
+        b[r][c]=t;
+      }
+    }
+  } while(!hasValidMove(b));
+  return b;
+}
+
+/* Çöküş + yeniden doldurma: her hücrenin kaç sıra "düştüğünü" de
+   fallMask olarak döndürür, böylece render() bunu animasyonla gösterebilir. */
+function collapseAndRefill(){
+  const fallMask=Array.from({length:SIZE},()=>Array(SIZE).fill(0));
+  for(let c=0;c<SIZE;c++){
+    const survivors=[];
+    for(let r=SIZE-1;r>=0;r--){ if(board[r][c]!==-1) survivors.push({val:board[r][c],oldRow:r}); }
+    for(let i=0;i<SIZE;i++){
+      const newRow=SIZE-1-i;
+      if(i<survivors.length){
+        const {val,oldRow}=survivors[i];
+        board[newRow][c]=val;
+        const dist=newRow-oldRow;
+        if(dist>0) fallMask[newRow][c]=dist;
+      } else {
+        board[newRow][c]=randType();
+        fallMask[newRow][c]=newRow+1;
+      }
+    }
+  }
+  return fallMask;
+}
+
+function fullFallMask(){
+  const m=Array.from({length:SIZE},()=>Array(SIZE).fill(0));
+  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++) m[r][c]=r+1;
+  return m;
+}
+
+function applyBonus(len){
+  if(len>=5){ score+=100; timeLeft+=10; }
+  else if(len===4){ score+=60; timeLeft+=5; }
+  else { score+=30; }
+}
+
+/* ── YÜKSELEN METİNLER (fxLayer'a eklenir, render() bunları silmez) ── */
+function spawnFloatText(text,r,c,cls){
+  const cellEl=boardEl.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+  if(!cellEl) return;
+  const wrapRect=boardWrapEl.getBoundingClientRect();
+  const cellRect=cellEl.getBoundingClientRect();
+  const el=document.createElement('div');
+  el.className='float-fx '+cls;
+  el.textContent=text;
+  el.style.left=(cellRect.left-wrapRect.left+cellRect.width/2)+'px';
+  el.style.top=(cellRect.top-wrapRect.top)+'px';
+  fxLayer.appendChild(el);
+  setTimeout(()=>el.remove(),1150);
+}
+
+function spawnCenterFloatText(text,cls){
+  const el=document.createElement('div');
+  el.className='float-fx center '+cls;
+  el.textContent=text;
+  fxLayer.appendChild(el);
+  setTimeout(()=>el.remove(),1550);
+}
+
+/* ── GÖRÜNTÜLEME ── */
+function fitBoard(){
+  const wH=window.innerHeight;
+  const wW=Math.min(window.innerWidth,480);
+  const reserved=215;
+  const avail=Math.min(wH-reserved, wW-16);
+  const cellPx=Math.max(24, Math.floor((avail-14-(SIZE-1)*3)/SIZE));
+  boardEl.style.gridTemplateColumns=`repeat(${SIZE},${cellPx}px)`;
+  boardEl.style.gridTemplateRows=`repeat(${SIZE},${cellPx}px)`;
+  document.documentElement.style.setProperty('--cell-px', cellPx+'px');
+  document.querySelectorAll('.cell').forEach(c=>{
+    c.style.width=cellPx+'px'; c.style.height=cellPx+'px';
+    c.style.fontSize=Math.floor(cellPx*0.6)+'px';
+  });
+}
+
+/* fallMask verilirse, taşlar yukarıdan düşerek yerine oturur. */
+function render(matchedMask, fallMask){
+  const cellPx=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell-px'))||36;
+  boardEl.innerHTML='';
+  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
+    const cell=document.createElement('div');
+    cell.className='cell'+(gameOver?' disabled':'');
+    cell.style.width=cellPx+'px'; cell.style.height=cellPx+'px';
+    cell.dataset.r=r; cell.dataset.c=c;
+    if(selected && selected.r===r && selected.c===c) cell.classList.add('selected');
+    if(hintCell && hintCell.r===r && hintCell.c===c) cell.classList.add('hint-cell');
+    if(matchedMask && matchedMask[r][c]) cell.classList.add('matched');
+    const tile=document.createElement('span');
+    tile.className='tile';
+    tile.style.fontSize=Math.floor(cellPx*0.6)+'px';
+    tile.textContent = board[r][c]===-1 ? '' : TYPES[board[r][c]];
+    if(fallMask && fallMask[r][c]>0){
+      tile.style.transition='none';
+      tile.style.transform=`translateY(${-fallMask[r][c]*(cellPx+3)}px)`;
+    }
+    cell.appendChild(tile);
+    attachCellEvents(cell,r,c);
+    boardEl.appendChild(cell);
+  }
+  if(fallMask){
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        boardEl.querySelectorAll('.tile').forEach(t=>{
+          t.style.transition='transform .32s cubic-bezier(.34,1.56,.64,1)';
+          t.style.transform='translateY(0)';
+        });
+        setTimeout(()=>{
+          boardEl.querySelectorAll('.tile').forEach(t=>t.classList.add('settling'));
+        },330);
+      });
+    });
+  }
+}
+
+function attachCellEvents(cell,r,c){
+  if(gameOver) return;
+  if(isMobileMode){
+    cell.addEventListener('click', ()=>handleTap(r,c));
+  } else {
+    cell.addEventListener('mousedown', e=>{
+      e.preventDefault();
+      if(isResolving) return;
+      dragStart={r,c,x:e.clientX,y:e.clientY};
+      cell.classList.add('selected');
+    });
+  }
+}
+
+/* Sürükleme: bırakma noktasının tam hangi hücrede olduğuna değil,
+   başlangıç hücresinden hangi yöne ne kadar hareket edildiğine bakılır. */
+document.addEventListener('mouseup', e=>{
+  if(isMobileMode || !dragStart || isResolving || gameOver) { dragStart=null; render(); return; }
+  const dx=e.clientX-dragStart.x, dy=e.clientY-dragStart.y;
+  const dist=Math.hypot(dx,dy);
+  if(dist>=DRAG_THRESHOLD){
+    let tr=dragStart.r, tc=dragStart.c;
+    if(Math.abs(dx)>Math.abs(dy)) tc += dx>0?1:-1;
+    else tr += dy>0?1:-1;
+    if(tr>=0&&tr<SIZE&&tc>=0&&tc<SIZE){
+      attemptSwap(dragStart.r,dragStart.c,tr,tc);
+    } else {
+      render();
+    }
+  } else {
+    render();
+  }
+  dragStart=null;
+});
+
+function handleTap(r,c){
+  if(isResolving||gameOver) return;
+  if(!selected){ selected={r,c}; render(); return; }
+  if(selected.r===r && selected.c===c){ selected=null; render(); return; }
+  if(isAdjacent(selected,{r,c})){
+    const s=selected; selected=null;
+    attemptSwap(s.r,s.c,r,c);
+  } else {
+    selected={r,c}; render();
+  }
+}
+
+
+/* ── İPUCU SİSTEMİ ── */
+function clearHintTimers(){
+  if(hintTimerId!==null){clearTimeout(hintTimerId);hintTimerId=null;}
+  if(hintRepeatTimerId!==null){clearTimeout(hintRepeatTimerId);hintRepeatTimerId=null;}
+}
+
+function pauseHints(){
+  clearHintTimers();
+  hintCell=null;
+}
+
+function resumeHints(){
+  clearHintTimers();
+  hintCell=null;
+  if(gameOver || isResolving || !document.getElementById('modalOverlay').classList.contains('hidden')) return;
+  hintTimerId=setTimeout(showHint,hintLevel*5000);
+}
+
+function getValidMoves(){
+  const moves=[];
+  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
+    if(c+1<SIZE){
+      swapCells(board,r,c,r,c+1);
+      const valid=getMatches(board).runs.length>0;
+      swapCells(board,r,c,r,c+1);
+      if(valid) moves.push([{r:r,c:c},{r:r,c:c+1}]);
+    }
+    if(r+1<SIZE){
+      swapCells(board,r,c,r+1,c);
+      const valid=getMatches(board).runs.length>0;
+      swapCells(board,r,c,r+1,c);
+      if(valid) moves.push([{r:r,c:c},{r:r+1,c:c}]);
+    }
+  }
+  return moves;
+}
+
+function chooseHintCell(){
+  const moves=getValidMoves();
+  if(!moves.length) return null;
+  const candidates=[];
+  moves.forEach(m=>m.forEach(p=>{
+    if(!hintCell || p.r!==hintCell.r || p.c!==hintCell.c) candidates.push(p);
+  }));
+  const pool=candidates.length?candidates:moves.flat();
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function showHint(){
+  hintTimerId=null;
+  if(gameOver || isResolving || !document.getElementById('modalOverlay').classList.contains('hidden')) return;
+  hintCell=chooseHintCell();
+  if(!hintCell) return;
+  render();
+  hintRepeatTimerId=setTimeout(repeatHint,5000);
+}
+
+function repeatHint(){
+  hintRepeatTimerId=null;
+  if(gameOver || isResolving || !document.getElementById('modalOverlay').classList.contains('hidden')) return;
+  if(!hintCell) return;
+  const cell=boardEl.querySelector(`.cell[data-r="${hintCell.r}"][data-c="${hintCell.c}"]`);
+  if(cell){
+    cell.classList.remove('hint-cell');
+    void cell.offsetWidth;
+    cell.classList.add('hint-cell');
+  }
+  hintRepeatTimerId=setTimeout(repeatHint,5000);
+}
+
+function registerPlayerMove(){
+  clearHintTimers();
+  hintCell=null;
+  if(!gameOver && !isResolving && document.getElementById('modalOverlay').classList.contains('hidden')){
+    hintTimerId=setTimeout(showHint,hintLevel*5000);
+  }
+}
+
+/* ── OYUN AKIŞI ── */
+function moveTileVisual(tileEl,dx,dy,duration,cb){
+  tileEl.style.transition=`transform ${duration}ms ease`;
+  tileEl.style.transform=`translate(${dx}px,${dy}px)`;
+  tileEl.style.zIndex=5;
+  setTimeout(cb,duration);
+}
+
+function attemptSwap(r1,c1,r2,c2){
+  if(gameOver||isResolving) return;
+  if(!isAdjacent({r:r1,c:c1},{r:r2,c:c2})){ render(); return; }
+  const cellA=boardEl.querySelector(`.cell[data-r="${r1}"][data-c="${c1}"]`);
+  const cellB=boardEl.querySelector(`.cell[data-r="${r2}"][data-c="${c2}"]`);
+  if(!cellA||!cellB){ render(); return; }
+  const tileA=cellA.querySelector('.tile'), tileB=cellB.querySelector('.tile');
+  const rectA=cellA.getBoundingClientRect(), rectB=cellB.getBoundingClientRect();
+  const dx=rectB.left-rectA.left, dy=rectB.top-rectA.top;
+
+  const usedHint = !!hintCell &&
+    ((hintCell.r===r1 && hintCell.c===c1) || (hintCell.r===r2 && hintCell.c===c2));
+  isResolving=true;
+  let doneCount=0;
+  const onBothDone=()=>{
+    doneCount++;
+    if(doneCount<2) return;
+    swapCells(board,r1,c1,r2,c2);
+    const {runs}=getMatches(board);
+    if(runs.length===0){
+      swapCells(board,r1,c1,r2,c2);
+      let backCount=0;
+      const onBackDone=()=>{
+        backCount++;
+        if(backCount<2) return;
+        isResolving=false;
+        setMsg('Geçersiz hamle — eşleşme oluşturmuyor.');
+        render();
+        resumeHints();
+      };
+      moveTileVisual(tileA,0,0,150,onBackDone);
+      moveTileVisual(tileB,0,0,150,onBackDone);
+    } else {
+      setMsg('');
+      chainCount=0;
+      clearHintTimers();
+      hintCell=null;
+      if(usedHint) hintLevel++;
+      render();
+      setTimeout(resolveBoard,120);
+    }
+  };
+  moveTileVisual(tileA,dx,dy,150,onBothDone);
+  moveTileVisual(tileB,-dx,-dy,150,onBothDone);
+}
+
+function resolveBoard(){
+  const {mask,runs}=getMatches(board);
+  if(runs.length===0){
+    isResolving=false;
+    if(chainCount>=2){
+      timeLeft+=4;
+      spawnCenterFloatText('ZİNCİR!','chain');
+    }
+    chainCount=0;
+    updateInfobar();
+    checkDeadlock();
+    if(!isResolving && !gameOver && document.getElementById('modalOverlay').classList.contains('hidden')) resumeHints();
+    return;
+  }
+  chainCount++;
+  runs.forEach(run=>{
+    applyBonus(run.length);
+    const anchor=run.cells[Math.floor(run.cells.length/2)];
+    if(run.length===4) spawnFloatText('+5sn',anchor[0],anchor[1],'time');
+    else if(run.length>=5) spawnFloatText('+10sn',anchor[0],anchor[1],'time');
+  });
+  updateInfobar();
+  render(mask);
+  setTimeout(()=>{
+    for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++) if(mask[r][c]) board[r][c]=-1;
+    const fallMask=collapseAndRefill();
+    render(null, fallMask);
+    setTimeout(resolveBoard, 380);
+  }, 320);
+}
+
+function checkDeadlock(){
+  if(gameOver) return;
+  if(!hasValidMove(board)){
+    isResolving=true;
+    pauseHints();
+    clearInterval(timerId);
+    boardEl.classList.add('blurred');
+    deadlockOverlay.classList.add('show');
+    setTimeout(()=>{
+      board=createBoard();
+      deadlockOverlay.classList.remove('show');
+      boardEl.classList.remove('blurred');
+      render(null, fullFallMask());
+      isResolving=false;
+      startTimer();
+      resumeHints();
+    }, 1000);
+  }
+}
+
+/* ── SÜRE / SKOR ── */
+function updateInfobar(){
+  document.getElementById('timeDisp').textContent=timeLeft;
+  document.getElementById('scoreDisp').textContent=score;
+  document.getElementById('timeBox').classList.toggle('time-low', timeLeft<=5);
+}
+
+function startTimer(){
+  clearInterval(timerId);
+  timerId=setInterval(()=>{
+    timeLeft--;
+    if(timeLeft<=0){
+      timeLeft=0;
+      updateInfobar();
+      endGame();
+      return;
+    }
+    updateInfobar();
+  },1000);
+}
+
+function endGame(){
+  clearInterval(timerId);
+  pauseHints();
+  gameOver=true;
+  document.getElementById('winTitle').textContent='Oyun Bitti!';
+  document.getElementById('winBody').textContent='Skorunuz: '+score;
+  document.getElementById('winBanner').classList.add('show');
+  setMsg('');
+  render();
+}
+
+function setMsg(t){ document.getElementById('msg').textContent=t; }
+
+function resetGame(startImmediately=true){
+  clearInterval(timerId);
+  gameOver=false; isResolving=false; selected=null; dragStart=null; chainCount=0;
+  clearHintTimers(); hintLevel=1; hintCell=null;
+  score=0; timeLeft=60;
+  board=createBoard();
+  document.getElementById('winBanner').classList.remove('show');
+  deadlockOverlay.classList.remove('show');
+  boardEl.classList.remove('blurred');
+  fitBoard();
+  render(null, fullFallMask());
+  updateInfobar();
+  setMsg(isMobileMode ? 'Değiştirmek için iki kutuya sırayla dokunun.' : 'Bir kutuyu tutup komşusuna sürükleyin.');
+  if(startImmediately){
+    startTimer();
+    resumeHints();
+  }
+}
+
+window.addEventListener('resize', ()=>{ fitBoard(); render(); });
+
+resetGame(false);
+</script>
+</body>
+</html>
