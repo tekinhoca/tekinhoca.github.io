@@ -142,9 +142,9 @@ button.a:hover{background:rgba(155,53,16,0.45)}
     <div class="modal-title">ZİNCİR<br>OYUNU</div>
     <div class="modal-rules" id="rulesText">
       <b>3'lü</b> eşleşme puan kazandırır.<br>
-      <b>4'lü</b> eşleşme puan + <b>5 saniye</b> ekler.<br>
-      <b>5'li</b> eşleşme puan + <b>10 saniye</b> ekler.<br>
-      Bir hamle art arda birden fazla eşleşme tetiklerse <b>ZİNCİR!</b> oluşur ve <b>4 saniye</b> daha kazandırır.<br><br>
+      <b>4'lü</b> eşleşme puan + <b>3 saniye</b> ekler.<br>
+      <b>5'li</b> eşleşme puan + <b>5 saniye</b> ekler.<br>
+      Bir hamle art arda birden fazla eşleşme tetiklerse <b>ZİNCİR!</b> oluşur; 2. eşleşmeden başlayarak her eşleşme için kademeli süre ödülü verilir (<b>2, 3, 4… saniye</b>).<br><br>
       Süre dolduğunda oyun biter. <b id="ctrlHint">Kontrol yöntemi yükleniyor…</b>
     </div>
     <div class="modal-btns">
@@ -359,8 +359,8 @@ function triggerChainEffect(){
 }
 
 function applyBonus(len){
-  if(len>=5){ score+=100; timeLeft+=10; }
-  else if(len===4){ score+=60; timeLeft+=5; }
+  if(len>=5){ score+=100; timeLeft+=5; }
+  else if(len===4){ score+=60; timeLeft+=3; }
   else { score+=30; }
 }
 
@@ -629,7 +629,7 @@ function resolveBoard(){
   if(runs.length===0){
     isResolving=false;
     if(chainCount>=2){
-      timeLeft+=4;
+      timeLeft+=chainCount;
       flashInfo('timeBox','reward-flash',400);
       triggerChainEffect();
     }
@@ -646,8 +646,8 @@ function resolveBoard(){
     applyBonus(run.length);
     if(run.length>=4) timeRewarded=true;
     const anchor=run.cells[Math.floor(run.cells.length/2)];
-    if(run.length===4) spawnFloatText('+5sn',anchor[0],anchor[1],'time');
-    else if(run.length>=5) spawnFloatText('+10sn',anchor[0],anchor[1],'time');
+    if(run.length===4) spawnFloatText('+3sn',anchor[0],anchor[1],'time');
+    else if(run.length>=5) spawnFloatText('+5sn',anchor[0],anchor[1],'time');
   });
   updateInfobar();
   flashInfo('scoreBox','score-bump',260);
