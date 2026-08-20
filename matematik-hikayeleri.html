@@ -1137,8 +1137,6 @@ main { max-width:920px; }
 
     const overlay = document.createElement('div');
     overlay.className = 'lightbox-overlay';
-    overlay.style.touchAction = 'none';
-    overlay.style.overscrollBehavior = 'none';
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'lightbox-close';
@@ -1152,17 +1150,21 @@ main { max-width:920px; }
     overlay.appendChild(bigImg);
     document.body.appendChild(overlay);
 
-    // Belgenin scroll konumunu değiştirmiyoruz. Bunun yerine lightbox açıkken
-    // tekerlek ve dokunma kaydırmalarını overlay üzerinde durduruyoruz.
-    // Böylece arka plandaki sayfa hiç hareket etmiyor; kapanınca da scroll
-    // konumunu yeniden ayarlamaya gerek kalmıyor. Bu yaklaşım lazy-loading'i
-    // de etkilemiyor.
-    function preventLightboxScroll(e) {
-      e.preventDefault();
+    let scrollLockY = 0;
+    function bodyScrollLock() {
+      scrollLockY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = '-' + scrollLockY + 'px';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
     }
-
-    overlay.addEventListener('wheel', preventLightboxScroll, { passive: false });
-    overlay.addEventListener('touchmove', preventLightboxScroll, { passive: false });
+    function bodyScrollUnlock() {
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      window.scrollTo(0, scrollLockY);
+    }
 
     function openLightbox(trigger) {
       bigImg.classList.remove('loaded');
@@ -1170,9 +1172,11 @@ main { max-width:920px; }
       bigImg.onload = function () { bigImg.classList.add('loaded'); };
       bigImg.src = trigger.getAttribute('data-full');
       overlay.classList.add('show');
+      bodyScrollLock();
     }
     function closeLightbox() {
       overlay.classList.remove('show');
+      bodyScrollUnlock();
       // Geçiş bitince görseli bellekten serbest bırak
       setTimeout(function () {
         bigImg.src = '';
