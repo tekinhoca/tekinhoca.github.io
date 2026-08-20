@@ -1150,20 +1150,39 @@ main { max-width:920px; }
     overlay.appendChild(bigImg);
     document.body.appendChild(overlay);
 
+    // body'yi position:fixed yapmak bazı tarayıcılarda lightbox kapanırken
+    // sayfanın önce 0 konumuna sıçrayıp sonra eski konuma dönmesine neden olur.
+    // Scroll konumunu değiştirmeden belgeyi overflow:hidden ile kilitliyoruz.
     let scrollLockY = 0;
+    let htmlOverflow = '';
+    let bodyOverflow = '';
+    let bodyTouchAction = '';
+
     function bodyScrollLock() {
       scrollLockY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = '-' + scrollLockY + 'px';
-      document.body.style.left = '0';
-      document.body.style.right = '0';
+      const html = document.documentElement;
+
+      htmlOverflow = html.style.overflow;
+      bodyOverflow = document.body.style.overflow;
+      bodyTouchAction = document.body.style.touchAction;
+
+      html.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
     }
+
     function bodyScrollUnlock() {
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      window.scrollTo(0, scrollLockY);
+      const html = document.documentElement;
+
+      html.style.overflow = htmlOverflow;
+      document.body.style.overflow = bodyOverflow;
+      document.body.style.touchAction = bodyTouchAction;
+
+      // Normal durumda scrollY zaten değişmemiştir. Başka bir kod konumu
+      // değiştirdiyse yalnızca o durumda eski konuma geri dön.
+      if (window.scrollY !== scrollLockY) {
+        window.scrollTo(0, scrollLockY);
+      }
     }
 
     function openLightbox(trigger) {
