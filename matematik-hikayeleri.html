@@ -1137,6 +1137,8 @@ main { max-width:920px; }
 
     const overlay = document.createElement('div');
     overlay.className = 'lightbox-overlay';
+    overlay.style.touchAction = 'none';
+    overlay.style.overscrollBehavior = 'none';
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'lightbox-close';
@@ -1150,40 +1152,17 @@ main { max-width:920px; }
     overlay.appendChild(bigImg);
     document.body.appendChild(overlay);
 
-    // body'yi position:fixed yapmak bazı tarayıcılarda lightbox kapanırken
-    // sayfanın önce 0 konumuna sıçrayıp sonra eski konuma dönmesine neden olur.
-    // Scroll konumunu değiştirmeden belgeyi overflow:hidden ile kilitliyoruz.
-    let scrollLockY = 0;
-    let htmlOverflow = '';
-    let bodyOverflow = '';
-    let bodyTouchAction = '';
-
-    function bodyScrollLock() {
-      scrollLockY = window.scrollY;
-      const html = document.documentElement;
-
-      htmlOverflow = html.style.overflow;
-      bodyOverflow = document.body.style.overflow;
-      bodyTouchAction = document.body.style.touchAction;
-
-      html.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
-      document.body.style.touchAction = 'none';
+    // Belgenin scroll konumunu değiştirmiyoruz. Bunun yerine lightbox açıkken
+    // tekerlek ve dokunma kaydırmalarını overlay üzerinde durduruyoruz.
+    // Böylece arka plandaki sayfa hiç hareket etmiyor; kapanınca da scroll
+    // konumunu yeniden ayarlamaya gerek kalmıyor. Bu yaklaşım lazy-loading'i
+    // de etkilemiyor.
+    function preventLightboxScroll(e) {
+      e.preventDefault();
     }
 
-    function bodyScrollUnlock() {
-      const html = document.documentElement;
-
-      html.style.overflow = htmlOverflow;
-      document.body.style.overflow = bodyOverflow;
-      document.body.style.touchAction = bodyTouchAction;
-
-      // Normal durumda scrollY zaten değişmemiştir. Başka bir kod konumu
-      // değiştirdiyse yalnızca o durumda eski konuma geri dön.
-      if (window.scrollY !== scrollLockY) {
-        window.scrollTo(0, scrollLockY);
-      }
-    }
+    overlay.addEventListener('wheel', preventLightboxScroll, { passive: false });
+    overlay.addEventListener('touchmove', preventLightboxScroll, { passive: false });
 
     function openLightbox(trigger) {
       bigImg.classList.remove('loaded');
@@ -1191,11 +1170,9 @@ main { max-width:920px; }
       bigImg.onload = function () { bigImg.classList.add('loaded'); };
       bigImg.src = trigger.getAttribute('data-full');
       overlay.classList.add('show');
-      bodyScrollLock();
     }
     function closeLightbox() {
       overlay.classList.remove('show');
-      bodyScrollUnlock();
       // Geçiş bitince görseli bellekten serbest bırak
       setTimeout(function () {
         bigImg.src = '';
