@@ -11,7 +11,7 @@
 <meta property="og:url" content="https://tekinhoca.github.io/ortaokul-matematik.html">
 <meta name="keywords" content="ortaokul matematik, interaktif etkinlik, 6. sınıf matematik, 8. sınıf matematik, Tekin CANITEZ, Tekin Canıtez, tekinhoca">
 <meta name="author" content="Tekin Canıtez">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
 <script type="application/ld+json">
 {
@@ -63,21 +63,11 @@
   color: var(--gold);
 }
   /* --- Bölüm Başlıkları --- */
-  .section-title { text-align: center; margin: 40px 0 18px; color: var(--rust); font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; }
+  .section-title { text-align: center; margin: 40px 0 18px; color: var(--rust); font-family: 'Lora', serif; font-size: 1.5rem; font-weight: 700; }
   main > .section-title:first-of-type { margin-top: 0; }
 
-  /* --- Quiz Kartları (2 kart, ortalanmış, küçük) --- */
-  .quiz-grid { display: flex; gap: 15px; justify-content: center; max-width: 360px; margin: 0 auto 50px; padding: 0 15px; }
-  .quiz-link { text-decoration: none; display: block; flex: 0 0 150px; }
-  .quiz-card { 
-    background: var(--aged); border: 1px solid rgba(122,92,30,0.2); padding: 12px 10px; border-radius: 8px; 
-    text-align: center; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; 
-  }
-  .quiz-card:hover { transform: translateY(-3px); border-color: var(--gold); background: var(--cream); box-shadow: 0 5px 15px var(--shadow); }
-  .quiz-card span { margin-top: 8px; font-weight: 600; color: var(--ink); font-family: 'Source Serif 4', serif; font-size: 0.8rem; letter-spacing: 0.5px; }
-
   /* --- Oyun Kartları --- */
-  .game-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 700px; margin: 0 auto 50px; padding: 0 15px; }
+  .game-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-width: 700px; margin: 0 auto 50px; padding: 0 15px; }
   .game-link { text-decoration: none; display: block; }
   .game-card {
     background: var(--aged); border: 1px solid rgba(122,92,30,0.2); padding: 10px 8px; border-radius: 8px;
@@ -98,7 +88,9 @@
     .accordion-header { background: transparent !important; }
     .accordion-header:hover { background: rgba(122,92,30,0.12) !important; }
   }
-  .accordion-header h3 { margin: 0; font-family: 'Playfair Display', serif; font-size: 1.25rem; color: var(--rust); }
+  .accordion-header h3 { margin: 0; font-family: 'Lora', serif; font-size: 1.25rem; color: var(--rust); }
+  /* Sadece üst seviye sınıf başlıkları (5/6/7/8. Sınıf) tamamen büyük harf olacak */
+  .grade-block > .accordion-item > .accordion-header h3 { text-transform: uppercase; }
   .accordion-content { display: none; border-top: 1px solid rgba(122,92,30,0.1); background: transparent; }
   
   /* --- Etkinlik Tablosu (Koyulaşma ve Çizgi Özellikleri Korundu) --- */
@@ -110,7 +102,7 @@
   .col-icon { width:80px; padding:16px 12px 16px 0; vertical-align:middle; text-align:center; }
   .col-icon svg { display:block; margin:0 auto; }
   .col-name { padding:16px 20px 16px 8px; vertical-align:middle; }
-  .act-name { font-family:'Playfair Display',serif; font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.3; }
+  .act-name { font-family:'Lora',serif; font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.3; }
   .col-btn { width:140px; padding:16px 0 16px 8px; vertical-align:middle; text-align:right; }
   .go-btn { 
     display:inline-block; font-family:'Source Serif 4',serif; font-size:0.72rem; font-weight:600; 
@@ -124,11 +116,45 @@
   .disabled-section { opacity: 0.5; pointer-events: none; filter: grayscale(1); }
 
   @media(max-width:600px){
-    .game-grid { grid-template-columns: repeat(3, 1fr); }
-    .quiz-grid { max-width: 280px; }
+    .game-grid { grid-template-columns: repeat(2, 1fr); }
     .col-btn { width:auto; }
     .go-btn { font-size:0.68rem; padding:7px 10px; }
     .act-name { font-size:0.95rem; }
+  }
+
+  /* --- Tema Etkinlik Kartları (ikonsuz, tıklanabilir) --- */
+  .theme-card-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 20px 25px; }
+  .theme-card-link { text-decoration: none; display: block; }
+  .theme-card {
+    background: var(--aged); border: 1px solid rgba(122,92,30,0.2); padding: 16px 14px; border-radius: 8px;
+    text-align: center; cursor: pointer; transition: all 0.3s ease;
+  }
+  .theme-card:hover { transform: translateY(-3px); border-color: var(--gold); background: var(--cream); box-shadow: 0 5px 15px var(--shadow); }
+  .theme-card span { font-weight: 600; color: var(--ink); font-family: 'Source Serif 4', serif; font-size: 0.92rem; letter-spacing: 0.3px; }
+
+  @media(max-width:600px){
+    .theme-card-grid { grid-template-columns: repeat(1, 1fr); padding: 16px; }
+  }
+
+  /* --- Tek satırlık ikonsuz tıklanabilir kart (Quiz vb.) --- */
+  .full-row-link { text-decoration: none; display: block; }
+  .full-row-card {
+    padding: 16px 25px; text-align: center; cursor: pointer; transition: background 0.2s;
+    border-top: 1px solid rgba(122,92,30,0.1); font-weight: 600; color: var(--ink);
+    font-family: 'Source Serif 4', serif; font-size: 0.95rem; letter-spacing: 0.3px;
+  }
+  .full-row-card:hover { background: rgba(122,92,30,0.08); }
+
+  /* --- Koyu Mod: Başlıklar ve Alt Başlıklar --- */
+  [data-theme="dark"] .section-title,
+  [data-theme="dark"] .accordion-header h3,
+  [data-theme="dark"] .act-name,
+  [data-theme="dark"] .theme-card span,
+  [data-theme="dark"] .full-row-card {
+    color: var(--gold);
+  }
+  [data-theme="dark"] .toggle-icon {
+    fill: var(--gold);
   }
 </style>
 </head>
@@ -235,75 +261,21 @@
     </a>
   </div>
 
-  <!-- MATEMATİK QUİZLERİ -->
-  <h2 class="section-title">Matematik Quizleri</h2>
-  
-  <div class="quiz-grid">
-    <a href="okul-quizler/quiz-orta.html" target="_blank" class="quiz-link">
-      <div class="quiz-card">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5"><path d="M4 19L12 4l8 15H4z"/><path d="M12 4v15" stroke-dasharray="2 2"/></svg>
-        <span>ORTAOKUL</span>
-      </div>
-    </a>
-    <a href="okul-quizler/quiz-lise.html" target="_blank" class="quiz-link">
-      <div class="quiz-card">
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.5"><path d="M3 12h18M12 3v18"/><path d="M5 18c4-6 10-6 14-12" stroke-width="2"/></svg>
-        <span>LİSE</span>
-      </div>
-    </a>
-  </div>
-
   <!-- MATEMATİK ETKİNLİKLERİ -->
   <h2 class="section-title">Matematik Etkinlikleri</h2>
 
   <div class="grade-block">
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>6. Sınıf Matematik Etkinlikleri</h3>
+    <div class="accordion-item disabled-section">
+      <div class="accordion-header">
+        <h3>5. Sınıf Matematik Etkinlikleri (Hazırlanıyor)</h3>
         <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
       </div>
-      <div class="accordion-content">
-        <table class="activity-table">
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <rect x="8" y="12" width="44" height="32" rx="5" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
-                <text x="30" y="32" text-anchor="middle" font-size="14" font-weight="700" fill="#185FA5" font-family="Georgia,serif">x+2</text>
-                <text x="56" y="34" text-anchor="middle" font-size="18" font-weight="700" fill="#185FA5" font-family="Georgia,serif">=</text>
-                <rect x="62" y="12" width="14" height="32" rx="4" fill="#185FA5" fill-opacity="0.15" stroke="#185FA5" stroke-width="1.5"/>
-                <text x="69" y="32" text-anchor="middle" font-size="13" font-weight="700" fill="#185FA5" font-family="Georgia,serif">5</text>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">6. Sınıf Cebirsel İfadeler</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/6cebir.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <circle cx="12" cy="52" r="7" fill="#534AB7"/><circle cx="30" cy="37" r="9" fill="#7F77DD"/><circle cx="51" cy="24" r="11" fill="#AFA9EC"/><circle cx="68" cy="13" r="8" fill="#CECBF6" stroke="#534AB7" stroke-width="1"/>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">6. Sınıf Örüntüler</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/6oruntu.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <defs>
-                  <marker id="ar1" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 1L5 3L0 5" fill="none" stroke="#0F6E56" stroke-width="1.2"/></marker>
-                  <marker id="ar2" viewBox="0 0 6 6" refX="1" refY="3" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0 1L5 3L0 5" fill="none" stroke="#0F6E56" stroke-width="1.2"/></marker>
-                </defs>
-                <rect x="6" y="28" width="68" height="22" rx="3" fill="#1D9E75" fill-opacity="0.15" stroke="#1D9E75" stroke-width="1.5"/>
-                <rect x="6" y="28" width="22" height="22" rx="3" fill="#1D9E75" fill-opacity="0.35"/>
-                <text x="17" y="43" text-anchor="middle" font-size="9" font-weight="700" fill="#085041" font-family="Georgia,serif">1 m</text>
-                <text x="40" y="23" text-anchor="middle" font-size="9" fill="#0F6E56" font-family="Georgia,serif">100 cm</text>
-                <line x1="6" y1="20" x2="74" y2="20" stroke="#0F6E56" stroke-width="1" marker-end="url(#ar1)" marker-start="url(#ar2)"/>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">6. Sınıf Uzunluk Ölçüleri ile Alan Ölçüleri Arasındaki İlişki</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/6uzunlukalan.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-        </table>
+    </div>
+
+    <div class="accordion-item disabled-section">
+      <div class="accordion-header">
+        <h3>6. Sınıf Matematik Etkinlikleri (Hazırlanıyor)</h3>
+        <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
       </div>
     </div>
 
@@ -314,145 +286,10 @@
       </div>
     </div>
 
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">
-        <h3>8. Sınıf Matematik Etkinlikleri</h3>
+    <div class="accordion-item disabled-section">
+      <div class="accordion-header">
+        <h3>8. Sınıf Matematik Etkinlikleri (Hazırlanıyor)</h3>
         <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-      </div>
-      <div class="accordion-content">
-        <table class="activity-table">
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <line x1="8" y1="62" x2="72" y2="62" stroke="#888780" stroke-width="1.5"/>
-                <line x1="8" y1="62" x2="8" y2="8" stroke="#888780" stroke-width="1.5"/>
-                <circle cx="8" cy="62" r="3" fill="#185FA5"/><circle cx="22" cy="50" r="3" fill="#185FA5"/><circle cx="36" cy="38" r="3" fill="#185FA5"/><circle cx="50" cy="26" r="3" fill="#185FA5"/><circle cx="64" cy="14" r="3" fill="#185FA5"/>
-                <line x1="8" y1="62" x2="64" y2="14" stroke="#185FA5" stroke-width="1.5"/>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">8. Sınıf Doğrusal İlişki</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8dogrusaliliski.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <line x1="8" y1="66" x2="74" y2="66" stroke="#888780" stroke-width="1.4"/><line x1="8" y1="66" x2="8" y2="8" stroke="#888780" stroke-width="1.4"/>
-                <line x1="12" y1="62" x2="66" y2="18" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
-                <line x1="12" y1="62" x2="66" y2="62" stroke="#185FA5" stroke-width="1.2" stroke-dasharray="3,3"/>
-                <line x1="66" y1="62" x2="66" y2="18" stroke="#D85A30" stroke-width="1.2" stroke-dasharray="3,3"/>
-                <text x="39" y="74" text-anchor="middle" font-size="8" font-weight="700" fill="#185FA5" font-family="Georgia,serif">Δx</text>
-                <text x="74" y="42" text-anchor="middle" font-size="8" font-weight="700" fill="#D85A30" font-family="Georgia,serif">Δy</text>
-                <text x="28" y="38" text-anchor="middle" font-size="9" font-weight="700" fill="#185FA5" font-family="Georgia,serif">m=</text>
-                <line x1="36" y1="34" x2="52" y2="34" stroke="#185FA5" stroke-width="1"/>
-                <text x="44" y="32" text-anchor="middle" font-size="7" fill="#D85A30" font-family="Georgia,serif">Δy</text>
-                <text x="44" y="41" text-anchor="middle" font-size="7" fill="#185FA5" font-family="Georgia,serif">Δx</text>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">8. Sınıf Eğim</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8egim.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <text x="22" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="#D85A30" font-family="Georgia,serif">x</text>
-                <text x="40" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#993C1D" font-family="Georgia,serif">&gt;</text>
-                <text x="58" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="#D85A30" font-family="Georgia,serif">3</text>
-                <line x1="10" y1="54" x2="70" y2="54" stroke="#D85A30" stroke-width="2"/>
-                <circle cx="35" cy="54" r="5" fill="none" stroke="#D85A30" stroke-width="2"/>
-                <line x1="35" y1="54" x2="70" y2="54" stroke="#D85A30" stroke-width="3" stroke-linecap="round"/>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">8. Sınıf Eşitsizlikler</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8esitsizlikler.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <polygon points="40,8 70,58 10,58" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.5"/>
-                <text x="40" y="50" text-anchor="middle" font-size="9" font-weight="700" fill="#854F0B" font-family="Georgia,serif">a &lt; b+c</text>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">8. Sınıf Üçgenlerde Kenarlar ve Açılar Arasındaki İlişkiler</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8kenaraci.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <polygon points="10,62 56,62 56,10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
-                <rect x="48" y="54" width="8" height="8" fill="none" stroke="#0F6E56" stroke-width="1.2"/>
-                <text x="30" y="72" text-anchor="middle" font-size="8" fill="#0F6E56" font-family="Georgia,serif">a</text>
-                <text x="62" y="40" text-anchor="middle" font-size="8" fill="#0F6E56" font-family="Georgia,serif">b</text>
-                <text x="32" y="42" text-anchor="middle" font-size="8" font-weight="700" fill="#085041" font-family="Georgia,serif">c²=a²+b²</text>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">8. Sınıf Pisagor Kuralı</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8pisagor.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <!-- Büyük üçgen -->
-                <polygon points="8,64 52,64 52,16" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.6"/>
-                <!-- Küçük benzer üçgen (sağ üstte) -->
-                <polygon points="58,64 74,64 74,46" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.4"/>
-                <!-- Eşitlik işaretleri — karşılıklı kenarlar -->
-                <line x1="28" y1="68" x2="32" y2="68" stroke="#185FA5" stroke-width="1.8"/>
-                <line x1="64" y1="68" x2="66" y2="68" stroke="#BA7517" stroke-width="1.8"/>
-                <!-- ~ benzerlik sembolü -->
-                <text x="40" y="38" text-anchor="middle" font-size="13" font-weight="800" fill="#185FA5" font-family="Georgia,serif">~</text>
-                <!-- Dik açı işareti büyük -->
-                <rect x="44" y="56" width="8" height="8" fill="none" stroke="#185FA5" stroke-width="1.2"/>
-                <!-- Dik açı işareti küçük -->
-                <rect x="66" y="56" width="5" height="5" fill="none" stroke="#BA7517" stroke-width="1"/>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">8. Sınıf Eşlik ve Benzerlik</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8eslikbenzerlik.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <!-- Orijinal şekil (L benzeri) -->
-                <polygon points="6,58 18,58 18,46 14,46 14,28 6,28" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
-                <!-- Öteleme oku -->
-                <line x1="20" y1="43" x2="36" y2="43" stroke="#BA7517" stroke-width="1.4" stroke-dasharray="3,2" marker-end="url(#arr)"/>
-                <defs>
-                  <marker id="arr" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto">
-                    <path d="M0 1L5 3L0 5" fill="none" stroke="#BA7517" stroke-width="1.2"/>
-                  </marker>
-                </defs>
-                <!-- Ötelenmiş görüntü -->
-                <polygon points="38,58 50,58 50,46 46,46 46,28 38,28" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5" stroke-dasharray="4,2"/>
-                <!-- Simetri doğrusu -->
-                <line x1="62" y1="18" x2="62" y2="68" stroke="#D85A30" stroke-width="1.6" stroke-dasharray="5,3"/>
-                <!-- Yansıma görüntüsü -->
-                <polygon points="74,58 62,58 62,46 66,46 66,28 74,28" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.4" stroke-dasharray="4,2"/>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">8. Sınıf Öteleme ve Yansıma</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8oteleme_yansima.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-          <tr>
-            <td class="col-icon">
-              <svg width="64" height="64" viewBox="0 0 80 80">
-                <!-- Silindir -->
-                <ellipse cx="20" cy="22" rx="12" ry="5" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.4"/>
-                <rect x="8" y="22" width="24" height="22" fill="#D4E6F8" stroke="none"/>
-                <ellipse cx="20" cy="44" rx="12" ry="5" fill="#C8DBF5" stroke="#185FA5" stroke-width="1.4"/>
-                <line x1="8" y1="22" x2="8" y2="44" stroke="#185FA5" stroke-width="1.4"/>
-                <line x1="32" y1="22" x2="32" y2="44" stroke="#185FA5" stroke-width="1.4"/>
-                <!-- Kare tabanlı piramit -->
-                <polygon points="58,62 74,62 74,48 58,48" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.4"/>
-                <line x1="58" y1="48" x2="58" y2="62" stroke="#BA7517" stroke-width="1.4"/>
-                <polygon points="58,48 74,48 66,30" fill="#F5DFB8" stroke="#BA7517" stroke-width="1.4"/>
-                <polygon points="74,48 74,62 66,30" fill="#EEDBB0" stroke="#BA7517" stroke-width="1.4"/>
-                <line x1="58" y1="62" x2="66" y2="30" stroke="#BA7517" stroke-width="1.2" stroke-dasharray="3,2"/>
-              </svg>
-            </td>
-            <td class="col-name"><div class="act-name">8. Sınıf Geometrik Cisimler</div></td>
-            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8geocis.html" target="_blank">Etkinliğe Git</a></td>
-          </tr>
-        </table>
       </div>
     </div>
   </div>
@@ -471,13 +308,18 @@
   function toggleAccordion(header) {
     const item = header.parentElement;
     const content = header.nextElementSibling;
-    const allContents = document.querySelectorAll('.accordion-content');
-    const allHeaders = document.querySelectorAll('.accordion-header');
+    if (!content) return;
 
-    allContents.forEach((c, i) => {
-      if (c !== content) {
-        c.style.display = 'none';
-        allHeaders[i].classList.remove('active');
+    // Yalnızca aynı üst kapsayıcı (aynı seviye) içindeki kardeş akordeonları kapat.
+    // Bu sayede iç içe akordeonlarda (ör. 5. Sınıf içindeki temalar) bir tema açıldığında
+    // üst seviyedeki (5. Sınıf) akordeon kapanmaz.
+    const container = item.parentElement;
+    Array.from(container.children).forEach((sibling) => {
+      if (sibling !== item && sibling.classList.contains('accordion-item')) {
+        const sibHeader = sibling.querySelector(':scope > .accordion-header');
+        const sibContent = sibling.querySelector(':scope > .accordion-content');
+        if (sibContent) sibContent.style.display = 'none';
+        if (sibHeader) sibHeader.classList.remove('active');
       }
     });
 
