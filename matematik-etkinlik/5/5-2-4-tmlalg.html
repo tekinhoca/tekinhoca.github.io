@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temel Aritmetik İşlemlerde Algoritmalar | 5. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{
+  --primary:#8f1025;--primary2:#b51d35;--primary-light:#f9e8ec;
+  --accent:#d94b62;--success:#059669;--success-light:#eafaf3;
+  --danger:#dc2626;--warning:#d97706;--warning-light:#fff7e6;
+  --text:#1b1d24;--muted:#687080;--border:#e4e6eb;--bg:#f7f8fa;
+  --dark:#111217;--darkred:#4d0714;--shadow:0 4px 18px rgba(25,18,20,.07)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{
+  background:radial-gradient(ellipse at center,#050505 0%,#050505 34%,#35050e 66%,#710f22 100%);
+  color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 8px 40px rgba(70,5,18,.35)
+}
+header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.16}
+header:before{width:230px;height:230px;background:#d94b62;left:-90px;top:-130px}
+header:after{width:260px;height:260px;background:#8f1025;right:-100px;bottom:-180px}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,210,220,.3);
+border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;
+text-transform:uppercase;margin-bottom:9px;color:#ffe4e9;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(255,190,205,.18);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(255,240,244,.78);margin-top:3px;max-width:650px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#5c0716);color:#fff;border:none;
+border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(120,10,35,.35);
+opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}
+.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;
+font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:var(--success-light);border-left:4px solid #10b981;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.note-box{background:#f3f4f6;border-left:4px solid #6b7280;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.context-list{margin:10px 0 4px 20px}.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#171a21;color:#ffd6de;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#ffd6de!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.info-tile{background:#fafafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f8f8fa;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}
+.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}
+.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);
+padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
+.answer-input{border:2px solid #edd6dc;border-radius:12px;padding:9px 12px;width:120px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}.submit-btn:disabled{opacity:.5;cursor:default}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}.action-row.hidden{display:none}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#fff0f3);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.progress-bar{background:#171a21;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(90deg,#e66b80,#8f1025);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.score-num{font-size:1.6rem;font-weight:900;color:#ffd6de}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.summary-item{background:#f8f8fa;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}.mini-task h4{color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+.tf-row{display:flex;gap:10px;margin:14px 0}.tf-btn{flex:1;background:#f8f8fa;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
+.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.tf-btn:disabled{cursor:default}
+.balance{display:grid;grid-template-columns:1fr 70px 1fr;gap:10px;align-items:end;margin:18px 0}
+.balance-side{min-height:110px;background:#fafafa;border:2px solid #d9dce3;border-radius:16px;padding:14px;text-align:center}
+.balance-center{height:90px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--primary)}
+.value{font-family:'Baloo 2';font-size:1.8rem;font-weight:900}.op-row{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.small-btn{background:#fff;border:1.5px solid #d9dce3;border-radius:10px;padding:7px 10px;font-weight:800;cursor:pointer}.small-btn:hover{border-color:var(--primary)}
+.rule-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}.rule-table th,.rule-table td{border:1px solid #dfe1e6;padding:9px;text-align:center}.rule-table th{background:var(--primary);color:#fff}
+.pattern-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:15px 0}.pattern-term{min-width:48px;padding:9px 12px;background:var(--primary-light);border:2px solid #e8bdc6;border-radius:12px;text-align:center;font-weight:900;color:var(--primary)}
+.arrow{font-weight:900;color:var(--muted)}
+.shape-stage{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin:16px 0}.shape-step{border:1.5px solid var(--border);border-radius:16px;padding:12px;text-align:center;background:#fff}
+.blocks{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;max-width:140px;margin:auto}.block{width:20px;height:20px;border-radius:4px;background:var(--primary)}
+.flow{display:flex;flex-direction:column;align-items:center;gap:7px;margin:16px auto;max-width:430px}.flow-node{padding:10px 18px;border:2px solid var(--primary);background:var(--primary-light);font-weight:900;text-align:center;min-width:180px}
+.flow-node.start,.flow-node.end{border-radius:50px;background:#fff}.flow-node.action{border-radius:7px}.flow-node.decision{transform:skew(-8deg);background:#fff7ed;border-color:#d97706}.flow-arrow{color:var(--primary);font-size:1.25rem}
+.code-box{background:#171a21;color:#f4f4f5;border-radius:14px;padding:16px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.87rem;white-space:pre-wrap;line-height:1.7;overflow:auto}
+.rank-box{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.rank-item{padding:12px 8px;border:2px solid var(--border);border-radius:12px;text-align:center;font-weight:900;background:#fafafa}
+footer{margin-top:28px;background:linear-gradient(135deg,#7d0e21,#3a050e);color:#fff;padding:22px 16px;text-align:center;font-size:.82rem}
+footer .foot-title{font-family:'Baloo 2';font-size:1.05rem;font-weight:800}
+@media(max-width:620px){.two-col,.three-col,.summary-grid{grid-template-columns:1fr}.choices{grid-template-columns:1fr}.balance{grid-template-columns:1fr}.balance-center{height:35px}.rank-box{grid-template-columns:1fr 1fr}.tab-bar{gap:5px}.tab-btn{padding:8px 10px}.card{padding:16px}}
+.flow{display:flex;flex-direction:column;align-items:center;gap:8px;margin:18px auto;max-width:560px;width:100%;box-sizing:border-box}.flow-symbol{position:relative;display:flex;align-items:center;justify-content:center;width:170px;max-width:70vw;box-sizing:border-box}.flow-symbol img{display:block;width:100%;height:auto}.flow-symbol span{position:absolute;z-index:2;text-align:center;font-weight:900;line-height:1.2;padding:0 12px;max-width:82%;box-sizing:border-box}.decision-symbol{width:180px}.flow-arrow{font-size:2rem;line-height:.8;font-weight:900;color:#111827;margin:1px 0}.branch-row{display:flex;justify-content:center;align-items:flex-start;gap:40px;width:100%;box-sizing:border-box}.branch-col{display:flex;flex-direction:column;align-items:center;min-width:0}.branch-label{font-weight:900;font-size:.82rem;margin:2px 0 1px}.branch-label.yes{color:#15803d}.branch-label.no{color:#b91c1c}.symbol-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}.symbol-card{border:1.5px solid var(--border);border-radius:16px;padding:14px 10px;text-align:center;background:#fff;min-width:0}.symbol-card h4{margin:9px 0 5px;color:var(--primary);font-size:.92rem}.symbol-card p{font-size:.8rem;line-height:1.45;margin:0;color:var(--muted)}.symbol-shape{height:82px;display:flex;align-items:center;justify-content:center;position:relative}.symbol-shape img{display:block;width:115px;height:auto;max-width:100%}.symbol-card:nth-child(4) .symbol-shape img{width:92px}.symbol-card:nth-child(6) .symbol-shape img{width:90px}@media(max-width:620px){.symbol-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.symbol-shape{height:76px}.symbol-shape img{width:100px}.symbol-card:nth-child(4) .symbol-shape img{width:82px}.symbol-card:nth-child(6) .symbol-shape img{width:82px}.flow-symbol{width:145px;max-width:62vw}.decision-symbol{width:155px}.flow-arrow{font-size:1.75rem}.branch-row{gap:12px}.branch-col .flow-symbol{width:132px;max-width:42vw}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">5. Sınıf Matematik · 2. Tema</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo" onerror="this.style.display='none'">
+    <h1>⚙️ Temel Aritmetik İşlemlerde Algoritmalar</h1>
+    <p>MAT.5.2.4. Temel aritmetik işlem içeren durumlardaki algoritmaları yorumlayabilme</p>
+  </div>
+</header>
+<div class="container">
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+<button class="tab-btn" data-tab="akis">🔷 Akış Şeması</button>
+<button class="tab-btn" data-tab="kesfet">🧭 Algoritmayı Keşfet</button>
+<button class="tab-btn" data-tab="dogal">🗣️ Doğal Dil</button>
+<button class="tab-btn" data-tab="sozde">⌨️ Sözde Kod</button>
+<button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+<button class="tab-btn" data-tab="calisma">📝 Çalışma</button>
+<button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+<button class="tab-btn" data-tab="ozet">📋 Özet</button>
+</nav>
+
+<section class="tab-panel active" id="konu">
+<div class="card"><div class="card-title"><div class="icon">⚙️</div>Algoritma nedir?</div>
+<div class="def-box"><b>Algoritma</b>, bir işi veya problemi çözmek için izlenen, sıralı ve anlaşılır adımlar bütünüdür.</div>
+<p class="body-text">Günlük hayatta yemek tarifi, bir yere gitmek için izlenen yol veya bir işlemi adım adım yapma biçimi algoritmik düşünmeye örnektir. Matematikte de dört işlem içeren durumları belirli adımlarla ifade edebiliriz.</p>
+<div class="tip-box">“Algoritma” sözcüğünün kökeni, matematikçi <b>Harezmi</b> adının Latinceleştirilmiş biçimiyle ilişkilendirilir. Bu bağlantı, algoritmik düşünmenin matematik ve bilgisayar bilimi arasındaki tarihsel bağını görmemize yardımcı olur.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🧩</div>Bir algoritmanın üç yüzü</div>
+<div class="three-col"><div class="info-tile"><h4>Doğal dil</h4><p>Adımlar günlük ve anlaşılır cümlelerle anlatılır.</p></div><div class="info-tile"><h4>Sözde kod</h4><p>“Başla, gir, hesapla, yazdır, bitir” gibi düzenli komutlarla ifade edilir.</p></div><div class="info-tile"><h4>Akış şeması</h4><p>Adımlar geometrik semboller ve oklarla gösterilir.</p></div></div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🔢</div>Matematiksel ilişkiyi gör</div>
+<p class="body-text">Örneğin 700 gramlık bir ürünün fiyatı 35 TL ise aynı birim fiyat korunarak 1 kilogramın fiyatı bulunabilir.<br>1 kg = 1000 g olduğundan:</p>
+<div class="math-display">\[35\div700=0{,}05\text{ TL/g}\qquad\Longrightarrow\qquad0{,}05×1000=50\text{ TL}\]</div>
+<div class="gen-box">Burada algoritmanın matematiksel yapısı, önce gram başına fiyatı bulmak, sonra 1000 gram için 1000 ile çarpmaktır.</div>
+<div class="def-box"><b>ÖNEMLİ:</b> Burada önce 35'i 700'e bölmek zor gelirse, önce 1000 ile çarpıp sonra 700'e bölmek de mantıklı bir yöntem olarak seçilebilir.</div>
+<div class="math-display">\[35×1000=35000\qquad\Longrightarrow\qquad35000\div700=50\text{ TL}\]</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🔁</div>Tekrarlı çıkarma ile bölme</div>
+<p class="body-text">Bölme işlemi, bazı durumlarda aynı miktarı tekrar tekrar çıkarma olarak modellenebilir.<br>Örneğin 20'nin içinde kaç tane 4 olduğunu bulmak için 20'den 4'ü ardışık olarak çıkarırız.</p>
+<div class="math-display">\[20-4=16\rightarrow16-4=12\rightarrow12-4=8\rightarrow8-4=4\rightarrow4-4=0\]</div>
+<div class="gen-box">4 sayısı toplam 5 kez çıkarıldığı için \(20\div4=5\). Bu süreçte “tekrarlanan olay” 4 çıkarılmasıdır.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="kesfet">
+<div class="card"><div class="card-title"><div class="icon">🧭</div>Algoritmayı adımlara ayır</div>
+<p class="body-text">Bir algoritmayı okurken üç soruyu sor: <b>Ne giriliyor?</b> <b>Hangi işlem yapılıyor?</b> <b>Sonuç nasıl veriliyor?</b></p>
+<div class="flow">
+<div class="flow-symbol"><img src="img/elips.png" alt="Başlangıç"><span>BAŞLA</span></div>
+<div class="flow-arrow" aria-hidden="true">↓</div>
+<div class="flow-symbol"><img src="img/prll.png" alt="Veri girişi"><span>700 g fiyatını gir</span></div>
+<div class="flow-arrow" aria-hidden="true">↓</div>
+<div class="flow-symbol"><img src="img/ddrtgn.png" alt="İşlem"><span>Gram başına fiyatı hesapla</span></div>
+<div class="flow-arrow" aria-hidden="true">↓</div>
+<div class="flow-symbol"><img src="img/ddrtgn.png" alt="İşlem"><span>1000 ile çarp</span></div>
+<div class="flow-arrow" aria-hidden="true">↓</div>
+<div class="flow-symbol"><img src="img/wavy.png" alt="Çıktı"><span>Sonucu yazdır</span></div>
+<div class="flow-arrow" aria-hidden="true">↓</div>
+<div class="flow-symbol"><img src="img/elips.png" alt="Bitiş"><span>BİTİR</span></div>
+</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🔍</div>Algoritmayı sorgula</div>
+<div class="q-card"><div class="q-text">“Başla → 24 sayısını gir → 6'ya böl → sonucu yazdır → Bitir” algoritması hangi işlemi temsil eder?</div><div class="choices"><button class="choice-btn" onclick="algCheck(this,false)">Toplama</button><button class="choice-btn" onclick="algCheck(this,true)">Bölme</button><button class="choice-btn" onclick="algCheck(this,false)">Çarpma</button><button class="choice-btn" onclick="algCheck(this,false)">Çıkarma</button></div><div class="feedback" id="algFb"></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="dogal">
+<div class="card"><div class="card-title"><div class="icon">🗣️</div>Doğal dil ile algoritma</div>
+<p class="body-text">Bir dikdörtgenin alanını bulma durumunu, bu sınıf düzeyinde değişken kavramına girmeden adım adım ifade edebiliriz.</p>
+<div class="code-box">BAŞLA
+Dikdörtgenin kısa kenarını gir.
+Dikdörtgenin uzun kenarını gir.
+Kısa kenar ile uzun kenarı çarp.
+Alanı yazdır.
+BİTİR</div>
+<div class="tip-box">Algoritmanın her adımı açık, sıralı ve uygulanabilir olmalıdır. “Sonucu bul” tek başına yeterli bir adım değildir; hangi işlemin yapılacağı anlaşılmalıdır.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🔁</div>Tekrarlı çıkarma algoritmasını oku</div>
+<div class="code-box">BAŞLA
+20'den 4 çıkar.
+Kalan sayı 0 değilse 4 çıkarmaya devam et.
+Kaç kez 4 çıkardığını say.
+Sonucu yazdır.
+BİTİR</div>
+<p class="body-text">Bu algoritmada tekrarlanan eylem <b>4 çıkarmaktır</b>. Kalan 0 olduğunda işlem tamamlanır.</p>
+</div>
+</section>
+
+<section class="tab-panel" id="sozde">
+<div class="card"><div class="card-title"><div class="icon">⌨️</div>Sözde kodun dili</div>
+<p class="body-text">Sözde kod, gerçek bir programlama dili değildir; algoritmanın adımlarını düzenli ve kolay okunur biçimde ifade eder.</p>
+<div class="code-box">BAŞLA
+GİR: 700 gramlık paketin fiyatı
+HESAPLA: gram başına fiyat = fiyat ÷ 700
+HESAPLA: 1000 gramlık fiyat = gram başına fiyat × 1000
+YAZDIR: 1000 gramlık fiyat
+BİTİR</div>
+<div class="gen-box">MEB yaklaşımında bu düzeyde “başla, bitir, yazdır, hesapla, gir” gibi ifadeler kullanılabilir; değişken türleri ve programlama ayrıntılarına girilmez.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🔎</div>Tabloya dönüştür</div>
+<table class="rule-table"><tr><th>Adım</th><th>Yapılan işlem</th><th>Matematiksel ifade</th></tr>
+<tr><td>1</td><td>Fiyatı al</td><td>35 TL / 700 g</td></tr><tr><td>2</td><td>Gram fiyatını bul</td><td>35÷700</td></tr><tr><td>3</td><td>1000 g için hesapla</td><td>(35÷700)×1000</td></tr><tr><td>4</td><td>Sonucu yazdır</td><td>50 TL</td></tr></table>
+</div>
+</section>
+
+<section class="tab-panel" id="akis">
+<div class="card">
+<div class="card-title"><div class="icon">🔷</div>Akış Şemalarında Kullanılan Semboller</div>
+<p class="body-text">Akış şeması, bir algoritmayı şekillerle anlatmanın görsel yoludur. Her şekil belirli bir görevi temsil eder; oklar ise adımların hangi sırayla ilerlediğini gösterir. Bu nedenle işlem türüne uygun sembolün seçilmesi önemlidir.</p>
+<div class="symbol-grid">
+<div class="symbol-card"><div class="symbol-shape"><img src="img/elips.png" alt="Elips akış şeması sembolü"></div><h4>Elips</h4><p><b>Başlangıç ve bitiş</b> için kullanılır.</p></div>
+<div class="symbol-card"><div class="symbol-shape"><img src="img/prll.png" alt="Paralelkenar akış şeması sembolü"></div><h4>Paralelkenar</h4><p><b>Veri girişi</b> için kullanılır. Klavyeden ya da başka bir kaynaktan bilgi alma adımlarını gösterir.</p></div>
+<div class="symbol-card"><div class="symbol-shape"><img src="img/ddrtgn.png" alt="Dikdörtgen akış şeması sembolü"></div><h4>Dikdörtgen</h4><p><b>İşlem / talimat</b> adımını gösterir. Toplama, çıkarma gibi işlemler burada yer alır.</p></div>
+<div class="symbol-card"><div class="symbol-shape"><img src="img/edrtgn.png" alt="Eşkenar dörtgen akış şeması sembolü"></div><h4>Eşkenar dörtgen</h4><p><b>Karar</b> adımında kullanılır.<br>Örneğin Evet / Hayır seçimleri.</p></div>
+<div class="symbol-card"><div class="symbol-shape"><img src="img/wavy.png" alt="Dalgalı dörtgen akış şeması sembolü"></div><h4>Dalgalı dörtgen</h4><p><b>Sonucu yazdırma</b> veya çıktı üretme adımını gösterir.</p></div>
+<div class="symbol-card"><div class="symbol-shape"><img src="img/oklar.png" alt="Akış şeması okları"></div><h4>Oklar</h4><p>Şekillerden ayrı olarak <b>akışın yönünü ve işlem sırasını</b> gösterir.</p></div>
+</div>
+<div class="note-box" style="margin-top:16px;padding:13px 15px"><b>Önemli:</b> Bir sembolün anlamı, algoritmadaki adımın türüne göre belirlenir. Örneğin "sayıyı 4 ile çarp" bir işlem olduğu için dikdörtgen; "fiyatı gir" bir veri girişi olduğu için paralelkenar kullanır.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🔁</div>20 ÷ 4 için akış</div>
+<p class="body-text">20 sayısının içinde kaç tane 4 olduğunu, 4'ü tekrar tekrar çıkararak buluruz. Kalan sıfır olana kadar bu işlem tekrarlanır; kalan sıfır olduğunda kaç kez çıkarıldığı yazdırılır. Burada <b>karar</b> verildiği için eşkenar dörtgen kullanılır.</p>
+<div class="flow flow-branch">
+<div class="flow-symbol"><img src="img/elips.png" alt="Başlangıç"><span>BAŞLA</span></div>
+<div class="flow-arrow" aria-hidden="true">↓</div>
+<div class="flow-symbol"><img src="img/ddrtgn.png" alt="İşlem"><span>20'den 4 çıkar</span></div>
+<div class="flow-arrow" aria-hidden="true">↓</div>
+<div class="flow-symbol decision-symbol"><img src="img/edrtgn.png" alt="Karar"><span>Kalan 0 mı?</span></div>
+<div class="branch-row">
+<div class="branch-col"><div class="branch-label no">HAYIR</div><div class="flow-arrow" aria-hidden="true">↓</div><div class="flow-symbol"><img src="img/ddrtgn.png" alt="İşlem"><span>4 çıkarmaya devam et</span></div></div>
+<div class="branch-col"><div class="branch-label yes">EVET</div><div class="flow-arrow" aria-hidden="true">↓</div><div class="flow-symbol"><img src="img/wavy.png" alt="Çıktı"><span>Kaç kez çıkarıldığını yazdır</span></div></div>
+</div>
+<div class="flow-symbol"><img src="img/elips.png" alt="Bitiş"><span>BİTİR</span></div>
+</div>
+<div class="math-display">\[20\div4=5\]</div>
+<div class="gen-box"><b>Karar sembolü neden kullanıldı?</b> "Kalan 0 mı?" sorusunun iki olası sonucu vardır: <b>EVET</b> veya <b>HAYIR</b>. Akışın iki farklı yola ayrılması, eşkenar dörtgenin karar sembolü olarak kullanılmasını gerektirir.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="ornekler">
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">24 sayısını 6'ya bölme algoritmasının temel adımlarını yazınız.</span></div><div class="ex-body"><button class="ex-toggle" data-target="s241">Çözümü Göster</button><div class="ex-steps" id="s241"><div class="ex-step"><div class="snum">1</div><div>Başla.</div></div><div class="ex-step"><div class="snum">2</div><div>24'ü 6'ya böl.</div></div><div class="ex-step"><div class="snum">3</div><div>Sonucu yazdır.</div></div><div class="ex-step"><div class="snum">4</div><div>Bitir.</div></div><div class="ex-result">✓ Sonuç 4.</div></div></div></div>
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">700 gramı 35 TL olan ürünün 1 kilogram fiyatını bulan algoritmayı açıklayınız.</span></div><div class="ex-body"><button class="ex-toggle" data-target="s242">Çözümü Göster</button><div class="ex-steps" id="s242"><div class="ex-step"><div class="snum">1</div><div>35 TL'yi 700 grama bölerek gram başına fiyatı bul.</div></div><div class="ex-step"><div class="snum">2</div><div>Gram başına fiyatı 1000 ile çarp.</div></div><div class="ex-step"><div class="snum">3</div><div>\((35÷700)×1000=50\).</div></div><div class="ex-result">✓ 1 kilogram fiyatı 50 TL.</div></div></div></div>
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">20÷4 işlemini tekrarlı çıkarma ile açıklayınız.</span></div><div class="ex-body"><button class="ex-toggle" data-target="s243">Çözümü Göster</button><div class="ex-steps" id="s243"><div class="ex-step"><div class="snum">1</div><div>20−4=16.</div></div><div class="ex-step"><div class="snum">2</div><div>16−4=12, 12−4=8.</div></div><div class="ex-step"><div class="snum">3</div><div>8−4=4, 4−4=0.</div></div><div class="ex-result">✓ 4 toplam 5 kez çıkarıldığı için \(20÷4=5\).</div></div></div></div>
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">Bir algoritmayı tabloya dönüştürmenin yararı nedir?</span></div><div class="ex-body"><button class="ex-toggle" data-target="s244">Çözümü Göster</button><div class="ex-steps" id="s244"><div class="ex-step"><div class="snum">1</div><div>Her adımı ayrı bir satırda görmeyi sağlar.</div></div><div class="ex-step"><div class="snum">2</div><div>Algoritmadaki matematiksel işlemleri açıkça ilişkilendirmeye yardımcı olur.</div></div><div class="ex-result">✓ Algoritmik yapı ile matematiksel işlem arasındaki bağlantı görünür hâle gelir.</div></div></div></div>
+</section>
+
+<section class="tab-panel" id="calisma"><div class="card"><div class="card-title"><div class="icon">📝</div>Algoritma çalışma alanı</div>
+<div class="mini-task"><h4>1. “Başla → 18'i 3'e böl → sonucu yazdır → Bitir” hangi işlemdir?</h4><input class="answer-input" style="width:170px" id="w241" placeholder="bölme"><button class="check-mini" onclick="miniText('w241','mw241','bölme')">Kontrol</button><div class="mini-feedback" id="mw241"></div></div>
+<div class="mini-task"><h4>2. 24÷6 işleminin sonucu kaçtır?</h4><input class="answer-input" id="w242"><button class="check-mini" onclick="miniText('w242','mw242','4')">Kontrol</button><div class="mini-feedback" id="mw242"></div></div>
+<div class="mini-task"><h4>3. Algoritmada “YAZDIR” komutu neyi belirtir?</h4><button class="check-mini" onclick="textMini('mw243','Hesaplanan veya elde edilen sonucu kullanıcıya göstermeyi ifade eder.')">Cevabı göster</button><div class="mini-feedback" id="mw243"></div></div>
+</div></section>
+
+<section class="tab-panel" id="oyun"><div class="progress-bar"><div class="progress-top"><span>ALGORİTMA OKUYUCUSU · 10 SORU</span><span id="qCount">1 / 10</span></div><div class="progress-track"><div class="progress-fill" id="qFill" style="width:10%"></div></div><div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">PUAN</div><div class="score-num" id="qScore">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="qCorrect">0</b></div></div></div>
+<div class="q-card"><div class="q-text" id="quizText"></div><div class="choices" id="quizChoices"></div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div></div></section>
+
+<section class="tab-panel" id="ozet"><div class="card"><div class="card-title"><div class="icon">📋</div>Hızlı Özet</div><div class="summary-grid">
+<div class="summary-item"><b>Algoritma</b><span>Bir işi veya problemi çözmek için izlenen sıralı ve anlaşılır adımlar.</span></div>
+<div class="summary-item"><b>Doğal dil</b><span>Adımların açık cümlelerle ifade edilmesi.</span></div>
+<div class="summary-item"><b>Sözde kod</b><span>Başla, gir, hesapla, yazdır, bitir gibi düzenli komutlarla algoritmanın gösterimi.</span></div>
+<div class="summary-item"><b>Akış şeması</b><span>Adımların geometrik semboller ve oklarla gösterimi.</span></div></div></div>
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div><div class="mini-task"><h4>Bir algoritmayı okurken hangi üç soruyu sormalısın?</h4><button class="check-mini" onclick="textMini('sum24','Ne giriliyor? Hangi işlem yapılıyor? Sonuç nasıl veriliyor?')">Cevabı göster</button><div class="mini-feedback" id="sum24"></div></div></div></section>
+
+<script>
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5});}
+function typeset(el){if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]);}}
+function algCheck(btn,ok){document.querySelectorAll('#kesfet .choices button').forEach(function(b){b.disabled=true});btn.classList.add(ok?'correct':'wrong');var f=document.getElementById('algFb');f.className='feedback show '+(ok?'ok':'no');f.textContent=ok?'✓ Doğru! Algoritmadaki temel işlem 24÷6 bölmesidir.':'✗ Algoritmada “6’ya böl” adımı var.'}
+function miniText(id,fb,ans){var v=document.getElementById(id).value.trim().toLowerCase(),e=document.getElementById(fb),ok=v===ans;e.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün.';e.style.color=ok?'#047857':'#b91c1c'}
+function textMini(id,t){document.getElementById(id).textContent=t;document.getElementById(id).style.color='#047857'}
+var quiz24=[
+{text:'Algoritmanın temel özelliği hangisidir?',choices:['Sıralı ve anlaşılır adımlar içermesi','Rastgele işlemler içermesi','Sadece şekillerden oluşması','Sonuç vermemesi'],answer:'Sıralı ve anlaşılır adımlar içermesi',exp:'Algoritma uygulanabilir ve düzenli adımlardan oluşur.'},
+{text:'“YAZDIR” komutu neyi belirtir?',choices:['Sonucu gösterme','Yeni sayı seçme','İşlemi silme','Başlangıç'],answer:'Sonucu gösterme',exp:'Elde edilen sonucu kullanıcıya sunar.'},
+{text:'20 ÷ 4 işlemi tekrarlı çıkarma ile yapılırsa kaç kez 4 çıkarılır?',choices:['4','5','6','20'],answer:'5',exp:'20 − 4 − 4 − 4 − 4 − 4 = 0'},
+{text:'700 gramının fiyatı 35 TL olan ürünün gram başına fiyatı nedir?',choices:['0,05 TL','0,5 TL','5 TL','50 TL'],answer:'0,05 TL',exp:'35 ÷ 700 = 0,05 TL/g'},
+{text:'Gram başına fiyat 0,12 TL ise 1 kg fiyatı hangisidir?',choices:['1,20 TL','12 TL','120 TL','1200 TL'],answer:'120 TL',exp:'0,12 × 1000 = 120'},
+{text:'Sözde kodda hangi ifadeler kullanılabilir?',choices:['BAŞLA ve BİTİR','Sadece renk adları','Yalnızca şekiller','Sadece soru cümleleri'],answer:'BAŞLA ve BİTİR',exp:'Sözde kod algoritmanın adımlarını düzenli komutlarla ifade eder.'},
+{text:'Akış şemasında oklar neyi gösterir?',choices:['Adımlar arasındaki akışı','Sayıların değerini','Sonucun büyüklüğünü','Renkleri'],answer:'Adımlar arasındaki akışı',exp:'Oklar bir adımdan diğerine geçişi gösterir.'},
+{text:'“Kalan 0 mı?” ifadesi algoritmada ne tür bir yapıyı gösterir?',choices:['Karar','Başlangıç','Yazdırma','Sadece toplama'],answer:'Karar',exp:'Koşula göre yol seçilmesini sağlar.'},
+{text:'Algoritmayı tabloya dönüştürmenin yararı nedir?',choices:['Adımları ve matematiksel ilişkileri görünür kılmak','İşlemi zorlaştırmak','Sonucu değiştirmek','Algoritmayı silmek'],answer:'Adımları ve matematiksel ilişkileri görünür kılmak',exp:'Tablo, algoritmik yapı ile matematiksel işlemler arasındaki bağlantıyı daha anlaşılır hale getirir.'},
+{text:'Bir algoritmayı yorumlarken hangi soru uygundur?',choices:['Hangi işlem hangi adımda yapılıyor?','Hangi renk daha güzel?','Kağıt kaç gram?','Sayıların yazı tipi ne?'],answer:'Hangi işlem hangi adımda yapılıyor?',exp:'Algoritmik yapının matematiksel ilişkisini anlamaya yöneliktir.'}
+];
+var qi=0,score24=0,correct24=0;
+function renderQuiz24(){var q=quiz24[qi],box=document.getElementById('quizChoices');box.innerHTML='';document.getElementById('quizText').innerHTML=q.text;
+shuffle(q.choices).forEach(function(c){var b=document.createElement('button');b.className='choice-btn';b.textContent=c;b.onclick=function(){box.querySelectorAll('button').forEach(function(x){x.disabled=true});var ok=c===q.answer;if(ok){score24+=10;correct24++}b.classList.add(ok?'correct':'wrong');box.querySelectorAll('button').forEach(function(x){if(x.textContent===q.answer)x.classList.add('correct')});var f=document.getElementById('quizFeedback');f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'✓ Doğru! ':'✗ Doğru cevap: '+q.answer+'. ')+q.exp;document.getElementById('qScore').textContent=score24;document.getElementById('qCorrect').textContent=correct24;document.getElementById('quizNext').classList.add('show')};box.appendChild(b)});
+document.getElementById('qCount').textContent=(qi+1)+' / 10';document.getElementById('qFill').style.width=((qi+1)*10)+'%';document.getElementById('quizFeedback').className='feedback';document.getElementById('quizNext').classList.remove('show')}
+document.getElementById('quizNext').onclick=function(){qi++;if(qi>=quiz24.length){qi=0;score24=0;correct24=0}renderQuiz24()};renderQuiz24();
+typeset(document.getElementById('konu'));typeset(document.getElementById('ornekler'));
+</script></div>
+<footer><div class="foot-title">Tekin Hoca — Matematik ve Zekâ Oyunları Kulübü</div><div>5. Sınıf Matematik · 2. Tema: İşlemlerle Cebirsel Düşünme</div></footer>
+<script>
+document.querySelectorAll('.tab-btn').forEach(function(btn){btn.addEventListener('click',function(){
+ document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+ document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+ btn.classList.add('active');document.getElementById(btn.dataset.tab).classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+});});
+document.querySelectorAll('.ex-toggle').forEach(function(btn){btn.addEventListener('click',function(){
+ var t=document.getElementById(this.dataset.target),s=t.classList.toggle('show');this.textContent=s?'Çözümü Gizle':'Çözümü Göster';if(s)typeset(t);
+});});
+var bd=document.getElementById('basaDon');window.addEventListener('scroll',function(){bd.classList.toggle('gorunsun',window.scrollY>300)});
+bd.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+</script></body></html>

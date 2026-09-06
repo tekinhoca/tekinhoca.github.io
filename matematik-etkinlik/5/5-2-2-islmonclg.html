@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İşlem Önceliği | 5. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{
+  --primary:#8f1025;--primary2:#b51d35;--primary-light:#f9e8ec;
+  --accent:#d94b62;--success:#059669;--success-light:#eafaf3;
+  --danger:#dc2626;--warning:#d97706;--warning-light:#fff7e6;
+  --text:#1b1d24;--muted:#687080;--border:#e4e6eb;--bg:#f7f8fa;
+  --dark:#111217;--darkred:#4d0714;--shadow:0 4px 18px rgba(25,18,20,.07)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{
+  background:radial-gradient(ellipse at center,#050505 0%,#050505 34%,#35050e 66%,#710f22 100%);
+  color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;
+  box-shadow:0 8px 40px rgba(70,5,18,.35)
+}
+header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.16}
+header:before{width:230px;height:230px;background:#d94b62;left:-90px;top:-130px}
+header:after{width:260px;height:260px;background:#8f1025;right:-100px;bottom:-180px}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,210,220,.3);
+border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;
+text-transform:uppercase;margin-bottom:9px;color:#ffe4e9;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(255,190,205,.18);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(255,240,244,.78);margin-top:3px;max-width:650px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#5c0716);color:#fff;border:none;
+border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(120,10,35,.35);
+opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}
+.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;
+font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:var(--success-light);border-left:4px solid #10b981;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.note-box{background:#f3f4f6;border-left:4px solid #6b7280;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.context-list{margin:10px 0 4px 20px}.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#171a21;color:#ffd6de;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#ffd6de!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.info-tile{background:#fafafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f8f8fa;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}
+.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}
+.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);
+padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
+.answer-input{border:2px solid #edd6dc;border-radius:12px;padding:9px 12px;width:120px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}.submit-btn:disabled{opacity:.5;cursor:default}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}.action-row.hidden{display:none}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#fff0f3);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.progress-bar{background:#171a21;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(90deg,#e66b80,#8f1025);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.score-num{font-size:1.6rem;font-weight:900;color:#ffd6de}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.summary-item{background:#f8f8fa;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}.mini-task h4{color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+.tf-row{display:flex;gap:10px;margin:14px 0}.tf-btn{flex:1;background:#f8f8fa;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
+.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.tf-btn:disabled{cursor:default}
+.balance{display:grid;grid-template-columns:1fr 70px 1fr;gap:10px;align-items:end;margin:18px 0}
+.balance-side{min-height:110px;background:#fafafa;border:2px solid #d9dce3;border-radius:16px;padding:14px;text-align:center}
+.balance-center{height:90px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--primary)}
+.value{font-family:'Baloo 2';font-size:1.8rem;font-weight:900}.op-row{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.small-btn{background:#fff;border:1.5px solid #d9dce3;border-radius:10px;padding:7px 10px;font-weight:800;cursor:pointer}.small-btn:hover{border-color:var(--primary)}
+.rule-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}.rule-table th,.rule-table td{border:1px solid #dfe1e6;padding:9px;text-align:center}.rule-table th{background:var(--primary);color:#fff}
+.pattern-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:15px 0}.pattern-term{min-width:48px;padding:9px 12px;background:var(--primary-light);border:2px solid #e8bdc6;border-radius:12px;text-align:center;font-weight:900;color:var(--primary)}
+.arrow{font-weight:900;color:var(--muted)}
+.shape-stage{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin:16px 0}.shape-step{border:1.5px solid var(--border);border-radius:16px;padding:12px;text-align:center;background:#fff}
+.blocks{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;max-width:140px;margin:auto}.block{width:20px;height:20px;border-radius:4px;background:var(--primary)}
+.flow{display:flex;flex-direction:column;align-items:center;gap:7px;margin:16px auto;max-width:430px}.flow-node{padding:10px 18px;border:2px solid var(--primary);background:var(--primary-light);font-weight:900;text-align:center;min-width:180px}
+.flow-node.start,.flow-node.end{border-radius:50px;background:#fff}.flow-node.action{border-radius:7px}.flow-node.decision{transform:skew(-8deg);background:#fff7ed;border-color:#d97706}.flow-arrow{color:var(--primary);font-size:1.25rem}
+.code-box{background:#171a21;color:#f4f4f5;border-radius:14px;padding:16px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.87rem;white-space:pre-wrap;line-height:1.7;overflow:auto}
+.rank-box{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.rank-item{padding:12px 8px;border:2px solid var(--border);border-radius:12px;text-align:center;font-weight:900;background:#fafafa}
+footer{margin-top:28px;background:linear-gradient(135deg,#7d0e21,#3a050e);color:#fff;padding:22px 16px;text-align:center;font-size:.82rem}
+footer .foot-title{font-family:'Baloo 2';font-size:1.05rem;font-weight:800}
+@media(max-width:620px){.two-col,.three-col,.summary-grid{grid-template-columns:1fr}.choices{grid-template-columns:1fr}.balance{grid-template-columns:1fr}.balance-center{height:35px}.rank-box{grid-template-columns:1fr 1fr}.tab-bar{gap:5px}.tab-btn{padding:8px 10px}.card{padding:16px}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">5. Sınıf Matematik · 2. Tema</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo" onerror="this.style.display='none'">
+    <h1>🧭 İşlem Önceliği</h1>
+    <p>MAT.5.2.2. Karşılaştığı günlük hayat ya da matematiksel durumlarda işlem önceliğini yorumlayabilme</p>
+  </div>
+</header>
+<div class="container">
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+<button class="tab-btn" data-tab="kesfet">🧭 İşlem Sırasını Keşfet</button>
+<button class="tab-btn" data-tab="hikaye">📚 Problemden Sayı Cümlesine</button>
+<button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+<button class="tab-btn" data-tab="calisma">📝 Çalışma</button>
+<button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+<button class="tab-btn" data-tab="ozet">📋 Özet</button>
+</nav>
+
+<section class="tab-panel active" id="konu">
+<div class="card"><div class="card-title"><div class="icon">🧭</div>İşlem önceliği nedir?</div>
+<div class="def-box">Bir sayı cümlesinde birden fazla işlem varsa, işlemleri gelişigüzel yapmak yerine belirli bir sırayı takip ederiz. Bu sıraya <b>işlem önceliği</b> denir.</div>
+<div class="rank-box"><div class="rank-item">1<br><span style="font-size:.78rem">Parantez</span></div><div class="rank-item">2<br><span style="font-size:.78rem">Üslü ifade</span></div><div class="rank-item">3<br><span style="font-size:.78rem">× veya ÷</span></div><div class="rank-item">4<br><span style="font-size:.78rem">+ veya −</span></div></div>
+<p class="body-text">Parantez yoksa üslü ifade; ardından çarpma veya bölme; son olarak toplama veya çıkarma işlemleri ele alınır. Aynı düzeydeki işlemler birden fazla ise <b>soldan sağa</b> ilerlenir.</p>
+<div class="math-display">\[18+6×4=18+24=42\]<br>\[(18+6)×4=24×4=96\]</div>
+<div class="tip-box">Aynı sayılar kullanılsa bile parantez işlemin anlamını değiştirebilir. Bu nedenle parantezi fark etmek ilk adımdır.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">²³</div>Kare ve küp</div>
+<p class="body-text">Bu sınıf düzeyinde bir doğal sayının <b>karesi</b> ve <b>küpü</b> ile ilgili işlemler de işlem önceliğinde ele alınır.</p>
+<div class="two-col"><div class="info-tile"><h4>Kare</h4><div class="math-display">\(5^2=5×5=25\)</div></div>
+<div class="info-tile"><h4>Küp</h4><div class="math-display">\(3^3=3×3×3=27\)</div></div></div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🛑</div>En sık yapılan hata</div>
+<p class="body-text">\(12+8×2\) ifadesinde önce \(12+8\) yapılmaz. Önce çarpma yapılır:</p>
+<div class="math-display">\[12+8×2=12+16=28\]</div>
+<div class="gen-box">Genelleme: İşlem önceliğini açıklarken yalnızca “ezberden sıra” söylemek yerine, hangi işlemin neden önce yapıldığını sayı cümlesi üzerinden gerekçelendirmek gerekir.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="kesfet">
+<div class="card"><div class="card-title"><div class="icon">🧩</div>İlk hangi işlemi yapmalısın?</div>
+<p class="body-text">Aşağıdaki ifadede ilk yapılması gereken işlemi seç.</p>
+<div class="q-card"><div class="q-text">\(24+6×3\)</div><div class="choices" id="firstChoices">
+<button class="choice-btn" onclick="firstCheck(this,false)">24+6</button><button class="choice-btn" onclick="firstCheck(this,true)">6×3</button>
+<button class="choice-btn" onclick="firstCheck(this,false)">24×3</button><button class="choice-btn" onclick="firstCheck(this,false)">24+3</button></div><div class="feedback" id="firstFb"></div></div>
+<div class="math-display">\[24+6×3\rightarrow24+18\rightarrow42\]</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🔢</div>Parantezin etkisini karşılaştır</div>
+<div class="two-col"><div class="info-tile"><h4>Parantezsiz</h4><div class="math-display">\(10+5×2=20\)</div><p>Önce çarpma.</p></div>
+<div class="info-tile"><h4>Parantezli</h4><div class="math-display">\((10+5)×2=30\)</div><p>Önce parantez.</p></div></div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🧠</div>Soldan sağa</div>
+<p class="body-text">Aynı öncelik düzeyindeki işlemlerde sırayı korumak gerekir.</p><div class="math-display">\[36\div6×2=6×2=12\]</div>
+<div class="note-box">Çarpma ve bölme aynı öncelik düzeyindedir; burada soldaki işlem önce yapılmıştır.</div></div>
+<div class="card"><div class="card-title"><div class="icon">²³</div>Kare ve küpü adım adım incele</div>
+<div class="three-col"><div class="info-tile"><h4>4²</h4><p>\(4×4=16\)</p></div><div class="info-tile"><h4>2³</h4><p>\(2×2×2=8\)</p></div><div class="info-tile"><h4>6²</h4><p>\(6×6=36\)</p></div></div>
+<div class="math-display">\[7+3^2×2=7+9×2=7+18=25\]</div>
+<div class="tip-box">Burada \(3^2\) önce değerlendirilir, ardından çarpma ve en son toplama yapılır.</div>
+</div>
+</section>
+
+
+
+<section class="tab-panel" id="hikaye">
+<div class="card"><div class="card-title"><div class="icon">📚</div>Matematiksel ifadeyi hikâyeye dönüştür</div>
+<p class="body-text">MEB'in önerdiği performans görevi yaklaşımında, verilen bir matematiksel ifadeye uygun bir hikâye kurulabilir. Aşağıdaki ifade için kısa bir günlük hayat durumu düşün.</p>
+<div class="math-display">\[3×(12+8)\]</div>
+<div class="def-box"><b>Örnek bağlam:</b> Bir okulda, her birinde on ikişer öğrenci bulunan 3 tane proje ekibi oluşturuluyor. Yakındaki bir okuldan da bu projeye öğrenciler geliyor. Böylece her ekibe sekizer kişi daha katılıyor. Toplam kişi sayısını gösteren matematiksel ifade, \(3×(12+8)\) şeklinde yazılabilir.</div>
+<p class="body-text">Burada önemli olan, hikâyenin matematiksel ifadeyi gerçekten karşılamasıdır. Parantez içindeki 12+8'in aynı üç grup içinde tekrarlandığı açıkça anlaşılmalıdır.</p>
+<div class="tip-box">Kendi hikâyeni kurarken “Hangi sayı neyi temsil ediyor?” sorusunu her sayı için cevapla.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="ornekler">
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">\(15+4×6\) işlemini yapınız.</span></div><div class="ex-body"><button class="ex-toggle" data-target="s221">Çözümü Göster</button><div class="ex-steps" id="s221"><div class="ex-step"><div class="snum">1</div><div>Çarpma toplama işleminden önce yapılır: \(4×6=24\).</div></div><div class="ex-step"><div class="snum">2</div><div>\(15+24=39\).</div></div><div class="ex-result">✓ Sonuç 39.</div></div></div></div>
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">\((15+4)×6\) işlemini yapınız.</span></div><div class="ex-body"><button class="ex-toggle" data-target="s222">Çözümü Göster</button><div class="ex-steps" id="s222"><div class="ex-step"><div class="snum">1</div><div>Önce parantez: \(15+4=19\).</div></div><div class="ex-step"><div class="snum">2</div><div>Sonra çarpma: \(19×6=114\).</div></div><div class="ex-result">✓ Sonuç 114.</div></div></div></div>
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">\(40-18\div3\) işlemini yapınız.</span></div><div class="ex-body"><button class="ex-toggle" data-target="s223">Çözümü Göster</button><div class="ex-steps" id="s223"><div class="ex-step"><div class="snum">1</div><div>Önce bölme: \(18\div3=6\).</div></div><div class="ex-step"><div class="snum">2</div><div>Sonra çıkarma: \(40-6=34\).</div></div><div class="ex-result">✓ Sonuç 34.</div></div></div></div>
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">\(2^3+5×4\) işlemini yapınız.</span></div><div class="ex-body"><button class="ex-toggle" data-target="s224">Çözümü Göster</button><div class="ex-steps" id="s224"><div class="ex-step"><div class="snum">1</div><div>Küp: \(2^3=8\).</div></div><div class="ex-step"><div class="snum">2</div><div>Çarpma: \(5×4=20\).</div></div><div class="ex-step"><div class="snum">3</div><div>Toplama: \(8+20=28\).</div></div><div class="ex-result">✓ Sonuç 28.</div></div></div></div>
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">“Bir öğrenci 4 gün boyunca her gün 6 sayfa okuyor ve sonra 5 sayfa daha okuyor.” sayı cümlesini yazınız.</span></div><div class="ex-body"><button class="ex-toggle" data-target="s225">Çözümü Göster</button><div class="ex-steps" id="s225"><div class="ex-step"><div class="snum">1</div><div>4 gün boyunca okunan sayfa: \(4×6\).</div></div><div class="ex-step"><div class="snum">2</div><div>Sonra 5 sayfa daha: \(4×6+5\).</div></div><div class="ex-result">✓ Sayı cümlesi \(4×6+5\), sonuç 29.</div></div></div></div>
+</section>
+
+<section class="tab-panel" id="calisma">
+<div class="card"><div class="card-title"><div class="icon">📝</div>İşlem önceliği çalışma alanı</div>
+<div class="mini-task"><h4>1. \(8+7×3\) işleminin sonucu kaçtır?</h4><input class="answer-input" id="w221"><button class="check-mini" onclick="mini('w221','mw221','29')">Kontrol</button><div class="mini-feedback" id="mw221"></div></div>
+<div class="mini-task"><h4>2. \((8+7)×3\) işleminin sonucu kaçtır?</h4><input class="answer-input" id="w222"><button class="check-mini" onclick="mini('w222','mw222','45')">Kontrol</button><div class="mini-feedback" id="mw222"></div></div>
+<div class="mini-task"><h4>3. \(24\div4+3^2\) işleminin sonucu kaçtır?</h4><input class="answer-input" id="w223"><button class="check-mini" onclick="mini('w223','mw223','15')">Kontrol</button><div class="mini-feedback" id="mw223"></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="oyun">
+<div class="progress-bar"><div class="progress-top"><span>İŞLEM ÖNCELİĞİ · 10 SORU</span><span id="qCount">1 / 10</span></div><div class="progress-track"><div class="progress-fill" id="qFill" style="width:10%"></div></div>
+<div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">PUAN</div><div class="score-num" id="qScore">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="qCorrect">0</b></div></div></div>
+<div class="q-card"><div class="q-text" id="quizText"></div><div class="choices" id="quizChoices"></div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div></div>
+</section>
+<section class="tab-panel" id="ozet"><div class="card"><div class="card-title"><div class="icon">📋</div>Hızlı Özet</div><div class="summary-grid">
+<div class="summary-item"><b>1. Parantez</b><span>Parantez içindeki işlem önce ele alınır.</span></div><div class="summary-item"><b>2. Üslü ifade</b><span>Bu düzeyde doğal sayıların karesi ve küpü.</span></div><div class="summary-item"><b>3. × ve ÷</b><span>Çarpma ve bölme, aynı düzeyde soldan sağa.</span></div><div class="summary-item"><b>4. + ve −</b><span>Toplama ve çıkarma, aynı düzeyde soldan sağa.</span></div></div></div>
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div><div class="mini-task"><h4>“İşlem önceliği”ni kendi cümlenle açıklayabilir misin?</h4><button class="check-mini" onclick="textMini('sum22a','Birden fazla işlemin bulunduğu ifadelerde işlemleri belirli bir öncelik sırasına göre yapmaktır.')">Örnek açıklamayı göster</button><div class="mini-feedback" id="sum22a"></div></div></div></section>
+
+<script>
+function firstCheck(btn,ok){var fb=document.getElementById('firstFb');document.querySelectorAll('#firstChoices button').forEach(function(b){b.disabled=true});btn.classList.add(ok?'correct':'wrong');fb.className='feedback show '+(ok?'ok':'no');fb.textContent=ok?'✓ Doğru! Çarpma toplama işleminden önce yapılır.':'✗ Önce çarpma yapılmalıdır.'}
+function mini(id,fb,ans){var v=document.getElementById(id).value.trim(),e=document.getElementById(fb),ok=v===ans;e.textContent=ok?'✓ Doğru!':'✗ Tekrar işlem önceliğini kontrol et.';e.style.color=ok?'#047857':'#b91c1c'}
+function textMini(id,t){document.getElementById(id).textContent=t;document.getElementById(id).style.color='#047857'}
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5});}
+function checkExpression22(){var v=document.getElementById('expr22').value.replace(/\s/g,'').replace(/×/g,'*').replace(/²/g,'**2').replace(/³/g,'**3');var fb=document.getElementById('expr22fb');if(!v){fb.textContent='Bir ifade yaz.';fb.style.color='#b91c1c';return}try{var n=Function('"use strict";return ('+v+')')();fb.textContent=Number(n)===29?'✓ Doğru! Sonuç 29.':'✗ Bu ifade 29 sonucunu vermiyor. Sonucunu tekrar kontrol et.';fb.style.color=Number(n)===29?'#047857':'#b91c1c'}catch(e){fb.textContent='✗ İfadeyi anlaşılır biçimde yaz.';fb.style.color='#b91c1c'}}
+var quiz22=[
+{text:'18+6×2 ifadesinde ilk hangi işlem yapılır?',choices:['6×2','18+6','18+2','Hiçbiri'],answer:'6×2',exp:'Çarpma toplama işleminden önce gelir.'},
+{text:'(18+6)×2 ifadesinde ilk hangi işlem yapılır?',choices:['18+6','6×2','18×2','Çıkarma'],answer:'18+6',exp:'Parantez içi önce yapılır.'},
+{text:'30−12÷3 işleminin sonucu kaçtır?',choices:['6','26','22','18'],answer:'26',exp:'12÷3=4, sonra 30−4=26.'},
+{text:'4²+3 işleminin sonucu kaçtır?',choices:['11','19','16','64'],answer:'19',exp:'4²=16, ardından 16+3=19.'},
+{text:'5+2×7 işleminin sonucu kaçtır?',choices:['19','49','17','21'],answer:'19',exp:'2×7=14, sonra 5+14=19.'},
+{text:'36÷6×2 işleminin sonucu kaçtır?',choices:['3','12','18','6'],answer:'12',exp:'Çarpma ve bölme aynı düzeydedir; soldan sağa: 36÷6=6, 6×2=12.'},
+{text:'20−(3+2)×2 işleminin sonucu kaçtır?',choices:['10','14','30','5'],answer:'10',exp:'Parantez 5, sonra 5×2=10, ardından 20−10=10.'},
+{text:'2³+4×3 işleminin sonucu kaçtır?',choices:['20','24','18','14'],answer:'20',exp:'2³=8 ve 4×3=12; 8+12=20.'},
+{text:'45÷(5+4) işleminin sonucu kaçtır?',choices:['5','9','45','8'],answer:'5',exp:'Önce 5+4=9, sonra 45÷9=5.'},
+{text:'Hangisi işlem önceliğine uygundur?',choices:['8+2×3=14','8+2×3=30','8+2×3=10×3','8+2×3=24'],answer:'8+2×3=14',exp:'Önce 2×3=6, sonra 8+6=14.'}
+]
+var qi=0,score22=0,correct22=0;
+function typeset(el){if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]);}}
+function renderQuiz22(){var q=quiz22[qi],box=document.getElementById('quizChoices');box.innerHTML='';document.getElementById('quizText').textContent=q.text;
+shuffle(q.choices).forEach(function(c){var b=document.createElement('button');b.className='choice-btn';b.textContent=c;b.onclick=function(){box.querySelectorAll('button').forEach(function(x){x.disabled=true});var ok=c===q.answer;if(ok){score22+=10;correct22++}b.classList.add(ok?'correct':'wrong');box.querySelectorAll('button').forEach(function(x){if(x.textContent===q.answer)x.classList.add('correct')});var f=document.getElementById('quizFeedback');f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'✓ Doğru! ':'✗ Doğru cevap: '+q.answer+'. ')+q.exp;document.getElementById('qScore').textContent=score22;document.getElementById('qCorrect').textContent=correct22;document.getElementById('quizNext').classList.add('show')};box.appendChild(b)});
+document.getElementById('qCount').textContent=(qi+1)+' / 10';document.getElementById('qFill').style.width=((qi+1)*10)+'%';document.getElementById('quizFeedback').className='feedback';document.getElementById('quizNext').classList.remove('show')}
+document.getElementById('quizNext').onclick=function(){qi++;if(qi>=quiz22.length){qi=0;score22=0;correct22=0}renderQuiz22()};renderQuiz22();
+typeset(document.getElementById('konu'));typeset(document.getElementById('ornekler'));
+</script></div>
+<footer><div class="foot-title">Tekin Hoca — Matematik ve Zekâ Oyunları Kulübü</div><div>5. Sınıf Matematik · 2. Tema: İşlemlerle Cebirsel Düşünme</div></footer>
+<script>
+document.querySelectorAll('.tab-btn').forEach(function(btn){btn.addEventListener('click',function(){
+ document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+ document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+ btn.classList.add('active');document.getElementById(btn.dataset.tab).classList.add('active');
+ window.scrollTo({top:0,behavior:'smooth'});
+});});
+document.querySelectorAll('.ex-toggle').forEach(function(btn){btn.addEventListener('click',function(){
+ var t=document.getElementById(this.dataset.target),s=t.classList.toggle('show');this.textContent=s?'Çözümü Gizle':'Çözümü Göster';if(s)typeset(t);
+});});
+var bd=document.getElementById('basaDon');window.addEventListener('scroll',function(){bd.classList.toggle('gorunsun',window.scrollY>300)});
+bd.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+</script></body></html>
