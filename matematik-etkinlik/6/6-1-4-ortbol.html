@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ortak Kat - Ortak Bölen Atölyesi | 6. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:560px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.context-list{margin:10px 0 4px 4px}
+.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:110px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+.il-wrap{overflow-x:auto;padding:6px 2px 2px}
+.il-track{height:3px;background:#dce2ff;border-radius:2px;margin:0 4px 10px;min-width:640px}
+.il-row{display:flex;gap:4px;min-width:640px;margin-bottom:8px}
+.il-tick{background:#eef0fd;border:2px solid var(--border);border-radius:9px;min-width:38px;padding:6px 3px;font-weight:800;font-size:.72rem;color:var(--muted);text-align:center;font-family:'Nunito'}
+.il-tick.a{border-color:#4361ee;color:#4361ee}
+.il-tick.b{border-color:#f72585;color:#f72585}
+.il-tick.common{background:var(--success);color:#fff;border-color:var(--success)}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+.pair-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.pair-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:9px 15px;font-weight:800;font-size:.92rem;cursor:pointer;color:var(--text)}
+.pair-btn:hover{border-color:var(--primary)}
+.pair-btn.done{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
+.pair-btn.commonhit{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.venn-wrap{display:flex;justify-content:center;margin:14px 0}
+.venn-table{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0}
+.venn-col{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:12px;text-align:center}
+.venn-col h5{font-family:'Baloo 2';font-size:.85rem;margin-bottom:8px;color:var(--primary)}
+.venn-col .nums{font-size:.85rem;line-height:1.8}
+.venn-col.common{background:rgba(6,214,160,.1);border-color:var(--success)}
+.venn-col.common h5{color:#059669}
+mjx-container{margin:0!important}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.2em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+.tf-row{display:flex;gap:10px;margin:14px 0}
+.tf-btn{flex:1;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
+.tf-btn:hover{border-color:var(--primary)}
+.tf-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.tf-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.tf-btn:disabled{cursor:default}
+@media(max-width:480px){.choices,.order-grid,.summary-grid,.venn-table{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">6. Sınıf Matematik · 1. Tema · MAT.6.1.4</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>🤝 Ortak Kat - Ortak Bölen Atölyesi</h1>
+    <p>Günlük hayat problemleri ya da matematiksel durumlar üzerinden ortak kat ve ortak bölenleri yorumlayabilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+    <button class="tab-btn" data-tab="varsayim">🌳 Fidan Dikme (Ortak Kat)</button>
+    <button class="tab-btn" data-tab="model">📦 Paket Hazırlama (Ortak Bölen)</button>
+    <button class="tab-btn" data-tab="genelleme">🔍 Genellemeyi Sına</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. KONU ANLATIMI ============ -->
+<section class="tab-panel active" id="konu">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔁</div>Ortak Kat Nedir?</div>
+    <div class="def-box">İki doğal sayının katları arasında ortak olarak bulunan sayılara bu iki sayının <b>ortak katı</b> denir.</div>
+    <div class="math-display">\[6\text{'nın katları: }6,12,18,\mathbf{24},30,36,...\qquad 8\text{'in katları: }8,16,\mathbf{24},32,40,...\]</div>
+    <p class="body-text">6 ile 8'in ortak katları: 24, 48, 72, ... Bu ortak katlar arasındaki <b>en küçüğüne</b> ise en küçük ortak kat denir (24).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">✂️</div>Ortak Bölen Nedir?</div>
+    <div class="def-box">İki doğal sayının çarpanları (bölenleri) arasında ortak olarak bulunan sayılara bu iki sayının <b>ortak böleni</b> denir.</div>
+    <div class="math-display">\[18\text{'in çarpanları: }1,2,3,6,9,18 \qquad 24\text{'ün çarpanları: }1,2,3,4,6,8,12,24\]</div>
+    <p class="body-text">18 ile 24'ün ortak bölenleri: 1, 2, 3, 6. Bu ortak bölenler arasındaki <b>en büyüğüne</b> ise en büyük ortak bölen denir (6).</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🎯</div>Aralarında Asal Olma</div>
+    <div class="def-box">İki doğal sayının 1'den başka bir ortak böleni yoksa bu iki sayıya <b>aralarında asal</b> sayılar denir.</div>
+    <div class="math-display">\[9\text{'un çarpanları: }1,3,9 \qquad 16\text{'nın çarpanları: }1,2,4,8,16 \to \text{ortak bölen sadece }1\]</div>
+    <div class="gen-box">✓ 9 ile 16 aralarında asaldır. Dikkat: Aralarında asal olmak, sayıların kendisinin asal olması gerektiği anlamına gelmez!</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📊</div>Temsillerle Gösterim</div>
+    <p class="body-text">Ortak kat ve ortak bölen ilişkileri; <b>sayı doğrusu</b> (katların işaretlenmesi), <b>tablo</b> (çarpanların karşılaştırılması) ya da <b>çizim/şema</b> (iki kümenin kesişimi) gibi farklı temsillerle gösterilebilir.</p>
+    <ul class="context-list">
+      <li>🌳 Farklı aralıklarla fidan dikimi → ortak kat problemi</li>
+      <li>📦 Malzemeleri eşit paketlere ayırma → ortak bölen problemi</li>
+      <li>🚌 Aynı anda kalkan iki servisin tekrar buluşma zamanı → ortak kat problemi</li>
+      <li>🐾 Hayvanlara eşit büyüklükte mama paketleri hazırlama → ortak bölen problemi</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. FİDAN DİKME (ORTAK KAT) ============ -->
+<section class="tab-panel" id="varsayim">
+  <div class="card">
+    <div class="card-title"><div class="icon">🌳</div>Fidan Dikme Problemi</div>
+    <p class="body-text">Bir tarım arazisinin bir kenarı boyunca bir çiftçi <b>8 metrede bir</b>, diğer bir çiftçi ise aynı noktadan başlayarak <b>12 metrede bir</b> fidan dikiyor. İki çiftçinin de aynı noktaya fidan dikeceği ilk mesafeyi bulmak için aşağıdaki modelleri incele.</p>
+    <div class="il-wrap">
+      <div class="il-track"></div>
+      <div class="il-row" id="lineA"></div>
+      <div class="il-row" id="lineB"></div>
+    </div>
+    <div class="il-result" id="fidanResult">8'in ve 12'nin katlarından ortak olanlar yeşille işaretlendi.</div>
+    <div class="gen-box">✓ 8 ile 12'nin ortak katları: 24, 48, 72, 96, ... İki çiftçi ilk kez <b>24. metrede</b> aynı noktaya fidan diker.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">💭</div>Varsayımını Sına</div>
+    <p class="body-text" style="margin-bottom:6px">Bu problemden yola çıkarak aşağıdaki varsayımlardan hangisine katılıyorsun?</p>
+    <div class="q-card">
+      <div class="q-text">"İki sayının ortak katlarını bulmak için her iki sayının katlarını ayrı ayrı listeleyip, hangi sayıların her iki listede de bulunduğuna bakmak yeterlidir."</div>
+      <div class="choices">
+        <button class="choice-btn" data-v="dogru">Katılıyorum</button>
+        <button class="choice-btn" data-v="yanlis">Katılmıyorum</button>
+      </div>
+      <div class="feedback" id="varsayimFeedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. PAKET HAZIRLAMA (ORTAK BÖLEN) ============ -->
+<section class="tab-panel" id="model">
+  <div class="card">
+    <div class="card-title"><div class="icon">📦</div>Paket Hazırlama Problemi</div>
+    <p class="body-text">Yardıma muhtaç ailelere dağıtılmak üzere <b>24 defter</b> ve <b>36 kalem</b> toplanmıştır. Bu malzemeler, her pakette eşit sayıda defter ve eşit sayıda kalem olacak şekilde, artırılmadan en fazla kaç pakete ayrılabilir? Aşağıdaki çarpan çiftlerinden hangilerinin her iki sayıyı da tam böldüğünü keşfet.</p>
+    <div class="pair-row" id="paketPairs"></div>
+    <div class="venn-table" id="paketVenn"></div>
+    <div class="il-result" id="paketResult">Bir sayıya tıklayarak her iki sayıyı da bölüp bölmediğini kontrol et.</div>
+    <div class="gen-box" id="paketGenelleme" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧮</div>Ortak Bölen Bulucu</div>
+    <p class="body-text" style="margin-bottom:6px">İki doğal sayı gir (1-101 arası); ortak bölenlerini birlikte görelim.</p>
+    <div class="field-row">
+      <label for="obInputA">1. Sayı:</label><input class="answer-input" id="obInputA" inputmode="numeric" placeholder="ör. 18">
+      <label for="obInputB">2. Sayı:</label><input class="answer-input" id="obInputB" inputmode="numeric" placeholder="ör. 24">
+      <button class="submit-btn" id="obCheck">Ortak Bölenleri Bul</button>
+    </div>
+    <div class="il-result" id="obResult">İki sayı gir ve butona tıkla.</div>
+  </div>
+</section>
+
+<!-- ============ 4. GENELLEMEYİ SINA ============ -->
+<section class="tab-panel" id="genelleme">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔍</div>Doğru mu, Yanlış mı?</div>
+    <p class="body-text" style="margin-bottom:6px">Ortak kat ve ortak bölenle ilgili aşağıdaki önermeleri incele; doğru ya da yanlış olduğuna karar ver ve gerekçesini oku.</p>
+    <div class="q-card">
+      <div class="q-text" id="tfText"></div>
+      <div class="tf-row">
+        <button class="tf-btn" id="tfDogru">Doğru</button>
+        <button class="tf-btn" id="tfYanlis">Yanlış</button>
+      </div>
+      <div class="feedback" id="tfFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="tfNext">Sonraki Önerme →</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧭</div>Değerlendir</div>
+    <div class="tip-box">💡 Fidan probleminde ortak katları, paket probleminde ortak bölenleri sayı doğrusu ve tablo kullanarak buldun. Bu iki temsilin hangi durumda daha kullanışlı olduğunu bir arkadaşınla tartış.</div>
+  </div>
+</section>
+
+<!-- ============ 5. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">6 ile 8'in ortak katlarından ilk üçünü bulunuz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>6'nın katları: 6, 12, 18, 24, 30, 36, 42, 48, ...</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>8'in katları: 8, 16, 24, 32, 40, 48, 56, ...</div></div>
+        <div class="ex-result">✓ Ortak katlardan ilk üçü: 24, 48, 72</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">18 ile 24'ün ortak bölenlerini bulunuz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>18'in çarpanları: 1, 2, 3, 6, 9, 18</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>24'ün çarpanları: 1, 2, 3, 4, 6, 8, 12, 24</div></div>
+        <div class="ex-result">✓ Ortak bölenler: 1, 2, 3, 6 (en büyük ortak bölen 6'dır)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">9 ile 16 sayıları aralarında asal mıdır? Açıklayınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>9'un çarpanları: 1, 3, 9. 16'nın çarpanları: 1, 2, 4, 8, 16.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>İki listede ortak olan tek sayı 1'dir.</div></div>
+        <div class="ex-result">✓ 9 ile 16'nın ortak böleni sadece 1 olduğu için bu iki sayı aralarında asaldır.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">İki otobüs servisi aynı anda bir duraktan kalkıyor. Biri her 4 dakikada, diğeri her 6 dakikada bir aynı duraktan geçiyor. İki servis, kalkıştan kaç dakika sonra ilk kez yeniden aynı anda o duraktan geçer?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>4'ün katları: 4, 8, 12, 16, 20, 24, ... 6'nın katları: 6, 12, 18, 24, ...</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Bu iki listede ilk ortak sayı 12'dir.</div></div>
+        <div class="ex-result">✓ İki servis, kalkıştan 12 dakika sonra ilk kez yeniden aynı anda duraktan geçer.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">30 tane elma ile 45 tane armut, her sepette eşit sayıda elma ve eşit sayıda armut olacak şekilde en fazla kaç sepete paylaştırılabilir?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="ex-step"><div class="snum">1</div><div>30'un çarpanları: 1, 2, 3, 5, 6, 10, 15, 30. 45'in çarpanları: 1, 3, 5, 9, 15, 45.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Ortak bölenler: 1, 3, 5, 15. Bunların en büyüğü 15'tir.</div></div>
+        <div class="ex-result">✓ En fazla 15 sepete paylaştırılabilir (her sepette 2 elma, 3 armut olur).</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">ORTAK KAT-ORTAK BÖLEN · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 7. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Ortak Kat</b><span>İki sayının katları arasında ortak bulunan sayılardır.</span></div>
+      <div class="summary-item"><b>Ortak Bölen</b><span>İki sayının çarpanları arasında ortak bulunan sayılardır.</span></div>
+      <div class="summary-item"><b>Aralarında Asal</b><span>Ortak böleni yalnızca 1 olan iki sayıdır.</span></div>
+      <div class="summary-item"><b>Temsiller</b><span>Sayı doğrusu, tablo ve çizim ile ortak kat/bölen gösterilebilir.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. 10 ile 15'in ortak bölenlerini yazınız.</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1" style="width:150px"></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. 5 ile 9 sayıları aralarında asal mıdır? (Evet/Hayır yaz)</h4>
+      <div class="field-row"><label for="k2a">Cevap:</label><input class="answer-input" id="k2a"></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+function factorsOf(n){
+  var f=[];
+  for(var i=1;i<=n;i++){ if(n%i===0) f.push(i); }
+  return f;
+}
+function commonFactors(a,b){
+  var fa=factorsOf(a),fb=factorsOf(b);
+  return fa.filter(function(x){ return fb.indexOf(x)>=0; });
+}
+function multiplesUpTo(n,limit){
+  var m=[]; for(var i=1;i*n<=limit;i++){ m.push(i*n); } return m;
+}
+function commonMultiples(a,b,limit){
+  var ma=multiplesUpTo(a,limit),mb=multiplesUpTo(b,limit);
+  return ma.filter(function(x){ return mb.indexOf(x)>=0; });
+}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ================= FİDAN DİKME: ORTAK KAT ================= */
+  var limit=96;
+  var multA=multiplesUpTo(8,limit),multB=multiplesUpTo(12,limit);
+  var common=commonMultiples(8,12,limit);
+  var lineA=document.getElementById('lineA'),lineB=document.getElementById('lineB');
+  multA.forEach(function(n){
+    var t=document.createElement('div');t.className='il-tick a'+(common.indexOf(n)>=0?' common':'');t.textContent=n;
+    lineA.appendChild(t);
+  });
+  multB.forEach(function(n){
+    var t=document.createElement('div');t.className='il-tick b'+(common.indexOf(n)>=0?' common':'');t.textContent=n;
+    lineB.appendChild(t);
+  });
+  document.getElementById('fidanResult').innerHTML='8\'in katları (mavi) ile 12\'nin katları (pembe) arasında ortak olanlar (yeşil): <b>'+common.join(', ')+'</b>';
+
+  document.querySelectorAll('#varsayim .choice-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#varsayim .choice-btn').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById('varsayimFeedback');
+      var ok=btn.dataset.v==='dogru';
+      fb.className='feedback show '+(ok?'ok':'no');
+      if(ok){
+        btn.classList.add('correct');
+        fb.textContent='✓ Doğru! Sayı doğrusunda gördüğün gibi, her iki sayının katlarını listeleyip ortak olanları bulmak, ortak katları belirlemenin geçerli bir yoludur.';
+      }else{
+        btn.classList.add('wrong');
+        document.querySelector('#varsayim .choice-btn[data-v="dogru"]').classList.add('correct');
+        fb.textContent='✗ Aslında bu yöntem geçerlidir: 8 ve 12\'nin katlarını sıralayıp karşılaştırdığında ortak katları (24, 48, 72...) doğru biçimde bulabildin. Doğru cevap işaretlendi.';
+      }
+    });
+  });
+
+  /* ================= PAKET HAZIRLAMA: ORTAK BÖLEN ================= */
+  var fA=factorsOf(24),fB=factorsOf(36);
+  var candidatePairs=Array.from(new Set(fA.concat(fB))).sort(function(a,b){return a-b;});
+  var paketBox=document.getElementById('paketPairs');
+  var paketTried={};
+  candidatePairs.forEach(function(n){
+    var b=document.createElement('button');
+    b.type='button';b.className='pair-btn';b.textContent=n;
+    b.addEventListener('click',function(){
+      var divA=24%n===0,divB=36%n===0;
+      paketTried[n]=true;
+      if(divA&&divB){ b.classList.add('commonhit'); } else { b.classList.add('done'); }
+      var msg=n+' → 24 ' + (divA?'tam bölünür':'tam bölünmez') + ', 36 ' + (divB?'tam bölünür':'tam bölünmez') + '. ' + ((divA&&divB)?'Bu yüzden '+n+' ortak bölendir!':'Bu yüzden '+n+' ortak bölen değildir.');
+      document.getElementById('paketResult').textContent=msg;
+      if(Object.keys(paketTried).length===candidatePairs.length){
+        var cf=commonFactors(24,36);
+        document.getElementById('paketGenelleme').style.display='block';
+        document.getElementById('paketGenelleme').innerHTML='Genelleme: 24 ile 36\'nın ortak bölenleri: <b>'+cf.join(', ')+'</b>. <br>En büyük ortak bölen '+Math.max.apply(null,cf)+' olduğu için malzemeler en fazla <b>'+Math.max.apply(null,cf)+'</b>\'li paketlere ayrılabilir.';
+      }
+    });
+    paketBox.appendChild(b);
+  });
+  var vennBox=document.getElementById('paketVenn');
+  var onlyA=fA.filter(function(x){ return fB.indexOf(x)<0; });
+  var onlyB=fB.filter(function(x){ return fA.indexOf(x)<0; });
+  var cf0=commonFactors(24,36);
+  vennBox.innerHTML='<div class="venn-col"><h5>Sadece 24\'ün Çarpanı</h5><div class="nums">'+onlyA.join(', ')+'</div></div>'+
+    '<div class="venn-col common"><h5>Ortak Bölenler</h5><div class="nums">'+cf0.join(', ')+'</div></div>'+
+    '<div class="venn-col"><h5>Sadece 36\'nın Çarpanı</h5><div class="nums">'+onlyB.join(', ')+'</div></div>';
+
+  document.getElementById('obCheck').addEventListener('click',function(){
+    var a=parseInt(document.getElementById('obInputA').value,10);
+    var b=parseInt(document.getElementById('obInputB').value,10);
+    var res=document.getElementById('obResult');
+    if(!a||!b||a<2||b<2||a>100||b>100||!Number.isInteger(a)||!Number.isInteger(b)){ res.textContent='Lütfen 1 ile 101 arasında iki doğal sayı gir.'; return; }
+    var cf=commonFactors(a,b);
+    if(cf.length===1){
+      res.innerHTML=a+' ile '+b+'\'nin ortak böleni: <b>'+cf.join(', ')+'</b> → Bu iki sayı aralarında asaldır!';
+    }else{
+      res.innerHTML=a+' ile '+b+'\'nin ortak bölenleri: <b>'+cf.join(', ')+'</b> (en büyüğü '+Math.max.apply(null,cf)+')';
+    }
+  });
+
+  /* ================= GENELLEMEYİ SINA: DOĞRU/YANLIŞ ================= */
+  var tfPool=[
+    {text:'İki doğal sayının her zaman en az bir ortak katı vardır.',correct:true,exp:'İki sayının çarpımı (a×b), her zaman her iki sayının da bir katı olduğu için ortak kat her zaman bulunur.'},
+    {text:'İki doğal sayının her zaman en az bir ortak böleni vardır.',correct:true,exp:'1 sayısı her doğal sayıyı tam böldüğü için, 1 her zaman iki sayının ortak bölenidir.'},
+    {text:'Aralarında asal olan iki sayının ortak katı yoktur.',correct:false,exp:'Aralarında asal olmak sadece ortak bölenin 1 olduğu anlamına gelir; ortak kat her zaman vardır (örneğin iki sayının çarpımı).'},
+    {text:'9 ile 16 sayıları aralarında asaldır, çünkü ortak bölenleri sadece 1\'dir.',correct:true,exp:'9\'un çarpanları 1,3,9; 16\'nın çarpanları 1,2,4,8,16; tek ortak çarpanları 1 olduğu için aralarında asaldırlar.'},
+    {text:'Aralarında asal olan iki sayının kendisi de mutlaka asal sayı olmalıdır.',correct:false,exp:'9 ve 16 aralarında asaldır ama ikisi de asal sayı değildir (9=3×3, 16=2×2×2×2); aralarında asal olmak sayıların kendisinin asal olmasını gerektirmez.'},
+    {text:'İki farklı asal sayının ortak böleni her zaman sadece 1\'dir.',correct:true,exp:'Bir asal sayının çarpanları yalnızca 1 ve kendisidir; iki farklı asal sayının çarpanları arasında ortak olan tek sayı 1\'dir.'},
+    {text:'Bir sayının kendisi her zaman o sayının hem böleni hem de katıdır.',correct:true,exp:'Her sayı kendisine tam bölünür (bölen) ve kendisiyle 1\'in çarpımı da yine kendisidir (kat).'}
+  ];
+  var drawTf=makeDrawer(tfPool);
+  var curTf=null;
+  function renderTf(){
+    curTf=drawTf();
+    document.getElementById('tfText').textContent=curTf.text;
+    document.getElementById('tfFeedback').className='feedback';
+    document.getElementById('tfNext').classList.remove('show');
+    document.getElementById('tfDogru').disabled=false;
+    document.getElementById('tfYanlis').disabled=false;
+    document.getElementById('tfDogru').classList.remove('correct','wrong');
+    document.getElementById('tfYanlis').classList.remove('correct','wrong');
+  }
+  function answerTf(userVal){
+    document.getElementById('tfDogru').disabled=true;
+    document.getElementById('tfYanlis').disabled=true;
+    var ok=userVal===curTf.correct;
+    var correctBtn=curTf.correct?document.getElementById('tfDogru'):document.getElementById('tfYanlis');
+    correctBtn.classList.add('correct');
+    if(!ok){
+      (userVal?document.getElementById('tfDogru'):document.getElementById('tfYanlis')).classList.add('wrong');
+    }
+    var fb=document.getElementById('tfFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=(ok?'✓ Doğru! ':'✗ ')+curTf.exp;
+    document.getElementById('tfNext').classList.add('show');
+  }
+  document.getElementById('tfDogru').addEventListener('click',function(){answerTf(true);});
+  document.getElementById('tfYanlis').addEventListener('click',function(){answerTf(false);});
+  document.getElementById('tfNext').addEventListener('click',renderTf);
+  renderTf();
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var katPool=[
+    {a:4,b:6,options:[10,12,16,18],correct:12},
+    {a:5,b:8,options:[16,20,35,40],correct:40},
+    {a:6,b:9,options:[15,18,24,27],correct:18},
+    {a:8,b:10,options:[18,40,30,20],correct:40},
+    {a:3,b:7,options:[10,14,21,24],correct:21}
+  ];
+  var drawKat=makeDrawer(katPool);
+  var bolenPool=[
+    {a:12,b:18,options:[4,5,6,8],correct:6},
+    {a:20,b:30,options:[8,10,12,15],correct:10},
+    {a:16,b:24,options:[6,7,8,10],correct:8},
+    {a:15,b:25,options:[3,4,5,6],correct:5},
+    {a:21,b:14,options:[5,6,7,8],correct:7}
+  ];
+  var drawBolen=makeDrawer(bolenPool);
+  var drawTfQuiz=makeDrawer(tfPool);
+
+  function createQuestion(type){
+    var q={type:type};
+    if(type==='kat'){
+      var c=drawKat();
+      q.text=c.a+' ile '+c.b+'\'nın ortak katlarından biri hangisidir?';
+      q.choices=shuffle(c.options).map(String);q.correctText=String(c.correct);
+    }else if(type==='bolen'){
+      var c=drawBolen();
+      q.text=c.a+' ile '+c.b+'\'nin en büyük ortak böleni kaçtır?';
+      q.choices=shuffle(c.options).map(String);q.correctText=String(c.correct);
+    }else{
+      var c=drawTfQuiz();
+      q.text=c.text;
+      q.choices=['Doğru','Yanlış'];q.correctText=c.correct?'Doğru':'Yanlış';
+    }
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var qTypes=['kat','bolen','onerme','kat','bolen','onerme','kat','bolen','onerme','onerme'];
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(createQuestion);
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=document.getElementById('k1').value.trim().replace(/\s/g,''),fb=document.getElementById('kf1');
+    var normalized=v.split(/,|-/).map(function(x){return x.trim();}).sort().join(',');
+    var ok=(normalized==='1,5');
+    fb.textContent=ok?'✓ Doğru! 10\'un çarpanları 1,2,5,10; 15\'in çarpanları 1,3,5,15; ortak bölenler 1 ve 5\'tir.':'✗ Tekrar düşün ve yeniden dene (10 ve 15\'in çarpanlarını listele).';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var v=document.getElementById('k2a').value.trim().toLowerCase(),fb=document.getElementById('kf2');
+    var ok=(v==='evet'||v==='e');
+    fb.textContent=ok?'✓ Doğru! 5\'in çarpanları 1,5; 9\'un çarpanları 1,3,9; ortak bölenleri sadece 1 olduğu için aralarında asaldırlar.':'✗ Tekrar düşün: 5 ile 9\'un çarpanlarını listele ve ortak bölenlerine bak.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('konu'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>

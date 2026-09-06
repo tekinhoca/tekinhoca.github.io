@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bölünebilirlik Dedektifi | 6. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:560px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.context-list{margin:10px 0 4px 4px}
+.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:110px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+.pair-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.pair-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:9px 15px;font-weight:800;font-size:.92rem;cursor:pointer;color:var(--text)}
+.pair-btn:hover{border-color:var(--primary)}
+.pair-btn.done{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
+.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+mjx-container{margin:0!important}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.2em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+.tf-row{display:flex;gap:10px;margin:14px 0}
+.tf-btn{flex:1;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
+.tf-btn:hover{border-color:var(--primary)}
+.tf-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.tf-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.tf-btn:disabled{cursor:default}
+.toggle-row{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:12px 0}
+.toggle-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:10px;padding:8px 13px;font-weight:800;font-size:.85rem;cursor:pointer;color:var(--text)}
+.toggle-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.hchart{display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin:14px 0}
+.hcell{background:#f7f8ff;border:1.5px solid var(--border);border-radius:6px;text-align:center;padding:5px 0;font-size:.72rem;font-weight:800;color:var(--muted)}
+.hcell.hit{background:var(--primary);color:#fff;border-color:var(--primary)}
+.check-list{margin:12px 0}
+.check-item{display:flex;justify-content:space-between;align-items:center;background:#f7f8ff;border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;margin:7px 0;font-size:.9rem}
+.check-item.yes{border-color:var(--success);background:rgba(6,214,160,.08)}
+.check-item.no{border-color:var(--danger);background:rgba(239,68,68,.06)}
+.check-item b{font-family:'Baloo 2'}
+@media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}.hchart{grid-template-columns:repeat(10,1fr)}.hcell{font-size:.62rem;padding:4px 0}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">6. Sınıf Matematik · 1. Tema · MAT.6.1.2</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>🔍 Bölünebilirlik Dedektifi</h1>
+    <p>Bir doğal sayının 2, 3, 4, 5, 6, 9 ve 10 ile tam bölünebilme kriterlerine ilişkin çıkarım yapabilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+    <button class="tab-btn" data-tab="varsayim">🏁 Öğretmenle Yarış</button>
+    <button class="tab-btn" data-tab="model">🧱 Modelle Doğrula</button>
+    <button class="tab-btn" data-tab="genelleme">🔍 Genellemeyi Sına</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. KONU ANLATIMI ============ -->
+<section class="tab-panel active" id="konu">
+  <div class="card">
+    <div class="card-title"><div class="icon">2️⃣</div>2'ye Bölünebilme</div>
+    <div class="def-box">Son basamağı 0, 2, 4, 6 veya 8 (yani <b>çift</b>) olan her doğal sayı 2'ye tam bölünür.</div>
+    <div class="math-display">\[348 \to \text{son basamak }8 \to\text{ çift} \to 348, 2\text{'ye tam bölünür}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">5️⃣</div>5'e ve 10'a Bölünebilme</div>
+    <div class="def-box">Son basamağı <b>0 veya 5</b> olan bir doğal sayı 5'e; son basamağı yalnızca <b>0</b> olan bir doğal sayı ise 10'a tam bölünür.</div>
+    <div class="math-display">\[205 \to \text{son basamak }5 \to 5\text{'e bölünür}\]</div>
+    <div class="math-display">\[130 \to \text{son basamak }0 \to \text{hem }5\text{'e hem }10\text{'a bölünür}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">3️⃣</div>3'e ve 9'a Bölünebilme</div>
+    <div class="def-box"><b>Basamaklarının toplamı</b> 3'e bölünen bir doğal sayı 3'e; basamaklarının toplamı 9'a bölünen bir doğal sayı ise 9'a tam bölünür.</div>
+    <div class="math-display">\[2457 \to 2+4+5+7=18 \to 18, 3\text{'e bölündüğü için } 2457\text{ de 3'e bölünür}\]</div>
+    <div class="math-display">\[2457 \to 2+4+5+7=18 \to 18, 9\text{'a bölündüğü için } 2457\text{ de 9'a bölünür}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">4️⃣</div>4'e Bölünebilme</div>
+    <div class="def-box">Bir doğal sayının <b>son iki basamağındaki sayı</b> 4'e bölünüyorsa (ya da son iki basamak 00 ise) o sayı 4'e tam bölünür.</div>
+    <div class="math-display">\[1316 \to \text{son iki basamak }16 \to 16\div4=4 \to 1316, 4\text{'e tam bölünür}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">6️⃣</div>6'ya Bölünebilme</div>
+    <div class="def-box">Hem 2'ye hem de 3'e tam bölünen bir doğal sayı, 6'ya da tam bölünür. <br>6'ya bölünebilme, iki kriterin <b>birlikte</b> sağlanmasını gerektirir.</div>
+    <div class="math-display">\[7230 \to \text{Son basamak }0\text{ (çift) } \to 7230, 2\text{'ye bölünür}\text{ ✔}\]</div>
+    <div class="math-display">\[7230 \to \text{Rakamların toplamı: } \ 7+2+3+0=12 \to 7230, 3\text{'e bölünür}\text{ ✔}\]</div>
+    <div class="math-display">\[\to 7230 \text{ hem 2'ye hem 3'e bölünür } \to 7230, 6\text{'ya bölünür}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📌</div>Kısaca Bölünebilme Kriterleri</div>
+    <ul class="context-list">
+      <li><b>2:</b> Son basamak çift (0, 2, 4, 6, 8)</li>
+      <li><b>3:</b> Rakamlarının toplamı 3'e tam bölünür</li>
+      <li><b>4:</b> Son iki basamak 4'e tam bölünür ya da 00'dır</li>
+      <li><b>5:</b> Son basamak 0 veya 5</li>
+      <li><b>6:</b> Hem 2'ye hem de 3'e bölünür</li>
+      <li><b>9:</b> Rakamlarının toplamı 9'a tam bölünür</li>
+      <li><b>10:</b> Son basamak 0</li>
+    </ul>
+    <div class="gen-box">✓ Bu kriterler sayesinde büyük bir sayıyı doğrudan bölme işlemi yapmadan, sadece son basamaklarına ya da tüm rakamlarının toplamına bakarak bölünüp bölünmediğini hızlıca belirleyebiliriz.</div>
+  </div>
+</section>
+
+<!-- ============ 2. ÖĞRETMENLE YARIŞ ============ -->
+<section class="tab-panel" id="varsayim">
+  <div class="card">
+    <div class="card-title"><div class="icon">🏁</div>Öğretmeninle Yarış!</div>
+    <p class="body-text">Aşağıda görünen sayının sadece son basamaklarına ya da rakamlarının toplamına bakarak hangi sayılara tam bölündüğünü tahmin et. Tam bölündüğüne karar verdiğin bölenlerin hepsini seç, sonra "Kontrol Et"e bas ve öğretmeninin hızını yakalayıp yakalayamadığını gör!</p>
+    <div class="il-result" id="raceNumber" style="font-size:1.4rem"></div>
+    <div class="toggle-row" id="raceToggles"></div>
+    <div class="field-row" style="justify-content:center">
+      <button class="submit-btn" id="raceCheck">Kontrol Et</button>
+      <button class="ghost-btn show" id="raceNew">Yeni Sayı →</button>
+    </div>
+    <div class="check-list" id="raceResult"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">💭</div>Fark Ettin mi?</div>
+    <div class="tip-box" id="raceTip">💡 Birkaç sayı dene ve şu soruyu düşün: Bir sayının 2, 5 veya 10'a bölünüp bölünmediğini anlamak için sayının <b>tamamına</b> mı, yoksa sadece <b>son basamağına</b> mı bakman yeterli?</div>
+  </div>
+</section>
+
+<!-- ============ 3. MODELLE DOĞRULA ============ -->
+<section class="tab-panel" id="model">
+  <div class="card">
+    <div class="card-title"><div class="icon">💯</div>Yüzlük Tabloda Katları Gör</div>
+    <p class="body-text" style="margin-bottom:6px">Bir bölen seç; 100'e kadar o sayının katlarının tabloda nasıl bir örüntü oluşturduğunu incele.</p>
+    <div class="toggle-row" id="hchartToggles"></div>
+    <div class="hchart" id="hchart"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧮</div>Basamaklar Toplamı Hesaplayıcı (3'e ve 9'a Bölünebilme)</div>
+    <div class="field-row">
+      <label for="dsInput">Sayı:</label><input class="answer-input" id="dsInput" inputmode="numeric" placeholder="ör. 2457">
+      <button class="submit-btn" id="dsCheck">Hesapla</button>
+    </div>
+    <div class="il-result" id="dsResult">Bir sayı gir ve butona tıkla.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔟</div>Son İki Basamak Kontrolcüsü (4'e Bölünebilme)</div>
+    <div class="field-row">
+      <label for="fourInput">Sayı:</label><input class="answer-input" id="fourInput" inputmode="numeric" placeholder="ör. 1316">
+      <button class="submit-btn" id="fourCheck">Kontrol Et</button>
+    </div>
+    <div class="il-result" id="fourResult">Bir sayı gir ve butona tıkla.</div>
+  </div>
+</section>
+
+<!-- ============ 4. GENELLEMEYİ SINA ============ -->
+<section class="tab-panel" id="genelleme">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔍</div>Doğru mu, Yanlış mı?</div>
+    <p class="body-text" style="margin-bottom:6px">Bölünebilme kriterleriyle ilgili aşağıdaki önermeleri incele; doğru ya da yanlış olduğuna karar ver ve gerekçesini oku.</p>
+    <div class="q-card">
+      <div class="q-text" id="tfText"></div>
+      <div class="tf-row">
+        <button class="tf-btn" id="tfDogru">Doğru</button>
+        <button class="tf-btn" id="tfYanlis">Yanlış</button>
+      </div>
+      <div class="feedback" id="tfFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="tfNext">Sonraki Önerme →</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">⚡</div>Hangi Kriter Daha Kullanışlı?</div>
+    <p class="body-text" style="margin-bottom:6px">1.256 sayısının 4'e tam bölünüp bölünmediğini en hızlı şekilde nasıl anlarsın?</p>
+    <div class="q-card">
+      <div class="choices" id="usefulChoices">
+        <button class="choice-btn" data-v="wrong">Sayıyı 4'e bölüp kalana bakarım</button>
+        <button class="choice-btn" data-v="right">Son iki basamağına (56) bakarım</button>
+        <button class="choice-btn" data-v="wrong">Basamaklar toplamına bakarım</button>
+        <button class="choice-btn" data-v="wrong">Sayının çift olup olmadığına bakarım</button>
+      </div>
+      <div class="feedback" id="usefulFeedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">348 sayısı 2'ye tam bölünür mü?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>348 sayısının son basamağına bakarız: son basamak 8'dir.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>8 çift bir rakam olduğu için 2'ye tam bölünebilme kriteri sağlanır.</div></div>
+        <div class="ex-result">✓ 348 sayısı 2'ye tam bölünür.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">2.457 sayısı 3'e tam bölünür mü?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>Basamaklarını toplarız: \(2+4+5+7=18\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>18 sayısı 3'e tam bölündüğü için (\(18\div3=6\)) kriter sağlanır.</div></div>
+        <div class="ex-result">✓ 2.457 sayısı 3'e tam bölünür.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">1.316 sayısı 4'e tam bölünür mü?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>Sayının son iki basamağına bakarız: 16.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>16 sayısı 4'e tam bölündüğü için (\(16\div4=4\)) kriter sağlanır.</div></div>
+        <div class="ex-result">✓ 1.316 sayısı 4'e tam bölünür.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">5.184 sayısı 9'a tam bölünür mü?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>Basamaklarını toplarız: \(5+1+8+4=18\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>18 sayısı 9'a tam bölündüğü için (\(18\div9=2\)) kriter sağlanır.</div></div>
+        <div class="ex-result">✓ 5.184 sayısı 9'a tam bölünür.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">7.230 sayısı 6'ya tam bölünür mü?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="ex-step"><div class="snum">1</div><div>6'ya bölünebilmesi için hem 2'ye hem 3'e bölünmesi gerekir. Son basamak 0 (çift) olduğu için 2 kriteri sağlanır.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Basamaklar toplamı \(7+2+3+0=12\) olup 3'e tam bölünür, bu yüzden 3 kriteri de sağlanır.</div></div>
+        <div class="ex-result">✓ Hem 2'ye hem 3'e tam bölündüğü için 7.230 sayısı 6'ya da tam bölünür.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">BÖLÜNEBİLİRLİK DEDEKTİFİ · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 7. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>2 ve 10</b><span>Son basamağa bakılır: çiftse 2'ye, 0 ise 10'a bölünür.</span></div>
+      <div class="summary-item"><b>5</b><span>Son basamağı 0 veya 5 olan sayılar 5'e bölünür.</span></div>
+      <div class="summary-item"><b>3 ve 9</b><span>Basamaklar toplamı 3'e (9'a) bölünüyorsa sayı da bölünür.</span></div>
+      <div class="summary-item"><b>4</b><span>Son iki basamağı oluşturan sayı 4'e bölünmelidir.</span></div>
+      <div class="summary-item"><b>6</b><span>Hem 2 hem 3 kriteri birlikte sağlanmalıdır.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. 4.140 sayısı 9'a tam bölünür mü? (Evet/Hayır yaz)</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1"></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. 2.816 sayısının 4'e tam bölünüp bölünmediğini incelemek için hangi iki basamağına bakman gerekir?</h4>
+      <div class="field-row"><label for="k2a">Cevap:</label><input class="answer-input" id="k2a" style="width:150px"></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+function digitSum(n){ return String(n).split('').reduce(function(a,b){return a+Number(b);},0); }
+function checkAll(n){
+  var ds=digitSum(n),lastTwo=n%100;
+  return {
+    2:{ok:n%2===0,reason:'Son basamak ('+(n%10)+') '+(n%2===0?'çift olduğu için':'tek olduğu için')+' 2 kriteri '+(n%2===0?'sağlanır.':'sağlanmaz.')},
+    3:{ok:ds%3===0,reason:'Basamaklar toplamı ('+ds+') 3\'e '+(ds%3===0?'bölündüğü için sağlanır.':'bölünmediği için sağlanmaz.')},
+    4:{ok:lastTwo%4===0,reason:'Son iki basamak ('+lastTwo+') 4\'e '+(lastTwo%4===0?'bölündüğü için sağlanır.':'bölünmediği için sağlanmaz.')},
+    5:{ok:(n%10===0||n%10===5),reason:'Son basamak ('+(n%10)+') 0 veya 5 '+((n%10===0||n%10===5)?'olduğu için sağlanır.':'olmadığı için sağlanmaz.')},
+    6:{ok:(n%2===0&&ds%3===0),reason:'Hem 2 hem 3 kriteri '+((n%2===0&&ds%3===0)?'birlikte sağlandığı için sağlanır.':'birlikte sağlanmadığı için sağlanmaz.')},
+    9:{ok:ds%9===0,reason:'Basamaklar toplamı ('+ds+') 9\'a '+(ds%9===0?'bölündüğü için sağlanır.':'bölünmediği için sağlanmaz.')},
+    10:{ok:n%10===0,reason:'Son basamak ('+(n%10)+') 0 '+(n%10===0?'olduğu için sağlanır.':'olmadığı için sağlanmaz.')}
+  };
+}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  var divisors=[2,3,4,5,6,9,10];
+
+  /* ================= ÖĞRETMENLE YARIŞ ================= */
+  var raceSelected={};
+  var raceNumPool=[144,205,231,316,459,540,612,725,819,936,1024,1155];
+  var drawRace=makeDrawer(raceNumPool);
+  var curRaceNum=null;
+  function buildRaceToggles(){
+    var box=document.getElementById('raceToggles');
+    box.innerHTML='';
+    raceSelected={};
+    divisors.forEach(function(d){
+      var b=document.createElement('button');
+      b.type='button';b.className='toggle-btn';b.textContent=d;
+      b.addEventListener('click',function(){
+        b.classList.toggle('active');
+        raceSelected[d]=b.classList.contains('active');
+      });
+      box.appendChild(b);
+    });
+  }
+  function newRace(){
+    curRaceNum=drawRace();
+    document.getElementById('raceNumber').textContent=curRaceNum;
+    document.getElementById('raceResult').innerHTML='';
+    buildRaceToggles();
+  }
+  document.getElementById('raceCheck').addEventListener('click',function(){
+    var res=checkAll(curRaceNum);
+    var box=document.getElementById('raceResult');
+    box.innerHTML='';
+    var scoreOk=0;
+    divisors.forEach(function(d){
+      var picked=!!raceSelected[d];
+      var actual=res[d].ok;
+      var match=picked===actual;
+      if(match) scoreOk++;
+      var row=document.createElement('div');
+      row.className='check-item '+(actual?'yes':'no');
+      row.innerHTML='<span><b>'+d+'</b> sayısına bölünür mü?</span><span>'+(actual?'✓ Evet':'✗ Hayır')+' — '+res[d].reason+(match?' (Senin tahminin doğru!)':' (Senin tahminin farklıydı.)')+'</span>';
+      box.appendChild(row);
+    });
+    var summary=document.createElement('div');
+    summary.className='gen-box';
+    summary.textContent=curRaceNum+' sayısı için '+scoreOk+' / '+divisors.length+' tahminini doğru yaptın!';
+    box.appendChild(summary);
+  });
+  document.getElementById('raceNew').addEventListener('click',newRace);
+  newRace();
+
+  /* ================= MODELLE DOĞRULA: YÜZLÜK TABLO ================= */
+  var hchart=document.getElementById('hchart');
+  for(var i=1;i<=100;i++){
+    var c=document.createElement('div');
+    c.className='hcell';c.textContent=i;c.dataset.n=i;
+    hchart.appendChild(c);
+  }
+  var hchartToggles=document.getElementById('hchartToggles');
+  var activeDivisor=2;
+  function refreshChart(){
+    document.querySelectorAll('.hcell').forEach(function(cell){
+      var n=Number(cell.dataset.n);
+      cell.classList.toggle('hit',n%activeDivisor===0);
+    });
+  }
+  divisors.forEach(function(d){
+    var b=document.createElement('button');
+    b.type='button';b.className='toggle-btn'+(d===2?' active':'');b.textContent=d;
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#hchartToggles .toggle-btn').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      activeDivisor=d;
+      refreshChart();
+    });
+    hchartToggles.appendChild(b);
+  });
+  refreshChart();
+
+  document.getElementById('dsCheck').addEventListener('click',function(){
+    var v=parseInt(document.getElementById('dsInput').value,10);
+    var res=document.getElementById('dsResult');
+    if(!v||v<1||!Number.isInteger(v)){ res.textContent='Lütfen geçerli bir doğal sayı gir.'; return; }
+    var ds=digitSum(v);
+    res.innerHTML=v+' sayısının basamakları toplamı: <b>'+ds+'</b><br>'+ds+' sayısı 3\'e '+(ds%3===0?'bölündüğü için '+v+' 3\'e tam bölünür.':'bölünmediği için '+v+' 3\'e tam bölünmez.')+' <br>'+ds+' sayısı 9\'a '+(ds%9===0?'bölündüğü için '+v+' 9\'a tam bölünür.':'bölünmediği için '+v+' 9\'a tam bölünmez.');
+  });
+
+  document.getElementById('fourCheck').addEventListener('click',function(){
+    var v=parseInt(document.getElementById('fourInput').value,10);
+    var res=document.getElementById('fourResult');
+    if(!v||v<1||!Number.isInteger(v)){ res.textContent='Lütfen geçerli bir doğal sayı gir.'; return; }
+    var lastTwo=v%100;
+    res.innerHTML=v+' sayısının son iki basamağı: <b>'+lastTwo+'</b><br>'+lastTwo+' sayısı 4\'e '+(lastTwo%4===0?'bölündüğü için '+v+' 4\'e tam bölünür.':'bölünmediği için '+v+' 4\'e tam bölünmez.');
+  });
+
+  /* ================= GENELLEMEYİ SINA: DOĞRU/YANLIŞ ================= */
+  var tfPool=[
+    {text:'Son rakamı 0 olan her sayı hem 5\'e hem 10\'a tam bölünür.',correct:true,exp:'Son basamağı 0 olan bir sayı, hem 5 hem 10 kriterini aynı anda sağlar.'},
+    {text:'Basamakları toplamı 9\'a bölünen bir sayı her zaman 3\'e de bölünür.',correct:true,exp:'9\'un katı olan her sayı aynı zamanda 3\'ün de katıdır, çünkü 9=3×3\'tür.'},
+    {text:'2\'ye tam bölünen her sayı 4\'e de tam bölünür.',correct:false,exp:'Örneğin 126 sayısı çifttir (2\'ye bölünür) ama son iki basamağı olan 26, 4\'e bölünmediği için 126, 4\'e tam bölünmez.'},
+    {text:'6\'ya tam bölünen bir sayı hem 2\'ye hem 3\'e tam bölünür.',correct:true,exp:'6 ile bölünebilme kriteri, 2 ve 3 kriterlerinin birlikte sağlanmasını gerektirir.'},
+    {text:'Son iki basamağı 00 olan bir sayı her zaman 4\'e tam bölünür.',correct:true,exp:'Son iki basamağı 00 olduğunda sayı 4\'e kalansız bölünür.'},
+    {text:'Bir sayının basamakları toplamı 3\'e bölünmüyorsa, sayı 9\'a bölünebilir.',correct:false,exp:'9\'a bölünebilmenin ön koşulu basamaklar toplamının 9\'a bölünmesidir; bu da otomatik olarak 3\'e bölünmeyi gerektirir. Basamaklar toplamı 3\'e bölünmüyorsa sayı ne 3\'e ne de 9\'a bölünür.'},
+    {text:'Bir sayı hem 3\'e hem 4\'e tam bölünüyorsa, bu sayı kesinlikle 12\'ye de tam bölünür.',correct:true,exp:'3 ve 4 sayılarının ortak çarpanı 1 olduğu için (aralarında asal oldukları için), her ikisine birden bölünen bir sayı bunların çarpımı olan 12\'ye de tam bölünür.'}
+  ];
+  var drawTf=makeDrawer(tfPool);
+  var curTf=null;
+  function renderTf(){
+    curTf=drawTf();
+    document.getElementById('tfText').textContent=curTf.text;
+    document.getElementById('tfFeedback').className='feedback';
+    document.getElementById('tfNext').classList.remove('show');
+    document.getElementById('tfDogru').disabled=false;
+    document.getElementById('tfYanlis').disabled=false;
+    document.getElementById('tfDogru').classList.remove('correct','wrong');
+    document.getElementById('tfYanlis').classList.remove('correct','wrong');
+  }
+  function answerTf(userVal){
+    document.getElementById('tfDogru').disabled=true;
+    document.getElementById('tfYanlis').disabled=true;
+    var ok=userVal===curTf.correct;
+    var correctBtn=curTf.correct?document.getElementById('tfDogru'):document.getElementById('tfYanlis');
+    correctBtn.classList.add('correct');
+    if(!ok){
+      (userVal?document.getElementById('tfDogru'):document.getElementById('tfYanlis')).classList.add('wrong');
+    }
+    var fb=document.getElementById('tfFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=(ok?'✓ Doğru! ':'✗ ')+curTf.exp;
+    document.getElementById('tfNext').classList.add('show');
+  }
+  document.getElementById('tfDogru').addEventListener('click',function(){answerTf(true);});
+  document.getElementById('tfYanlis').addEventListener('click',function(){answerTf(false);});
+  document.getElementById('tfNext').addEventListener('click',renderTf);
+  renderTf();
+
+  document.querySelectorAll('#usefulChoices .choice-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#usefulChoices .choice-btn').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById('usefulFeedback');
+      var ok=btn.dataset.v==='right';
+      fb.className='feedback show '+(ok?'ok':'no');
+      if(ok){
+        btn.classList.add('correct');
+        fb.textContent='✓ Doğru! Son iki basamağa (56) bakmak, uzun bölme işlemi yapmaktan çok daha hızlı ve pratiktir: 56÷4=14, kalansız bölündüğü için 1.256 sayısı 4 ile tam bölünür.';
+      }else{
+        btn.classList.add('wrong');
+        document.querySelector('#usefulChoices .choice-btn[data-v="right"]').classList.add('correct');
+        fb.textContent='✗ En kullanışlı yöntem son iki basamağa (56) bakmaktır: 56÷4=14 olduğu için 1.256, 4 ile tam bölünür. Doğru seçenek işaretlendi.';
+      }
+    });
+  });
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var bolunurPool=[
+    {d:2,options:[143,256,377,489],correct:256},
+    {d:3,options:[124,153,268,341],correct:153},
+    {d:4,options:[326,512,730,915],correct:512},
+    {d:5,options:[124,205,338,441],correct:205},
+    {d:6,options:[124,132,245,361],correct:132},
+    {d:9,options:[126,143,208,355],correct:126},
+    {d:10,options:[130,247,358,461],correct:130}
+  ];
+  var drawBolunur=makeDrawer(bolunurPool);
+  var drawTfQuiz=makeDrawer(tfPool);
+
+  function createQuestion(type){
+    var q={type:type};
+    if(type==='bolunur'){
+      var c=drawBolunur();
+      q.text='Aşağıdakilerden hangisi '+c.d+' sayısına tam bölünür?';
+      q.choices=shuffle(c.options).map(String);q.correctText=String(c.correct);
+    }else{
+      var c=drawTfQuiz();
+      q.text=c.text;
+      q.choices=['Doğru','Yanlış'];q.correctText=c.correct?'Doğru':'Yanlış';
+    }
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var qTypes=['bolunur','onerme','bolunur','onerme','bolunur','onerme','bolunur','onerme','bolunur','bolunur'];
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(createQuestion);
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=document.getElementById('k1').value.trim().toLowerCase(),fb=document.getElementById('kf1');
+    var ok=(v==='evet'||v==='e');
+    fb.textContent=ok?'✓ Doğru! 4+1+4+0=9 olduğu için 4.140 sayısı 9 ile tam bölünür.':'✗ Tekrar düşün: basamaklar toplamını (4+1+4+0=9) hesapla ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var v=document.getElementById('k2a').value.trim(),fb=document.getElementById('kf2');
+    var ok=(v==='16');
+    fb.textContent=ok?'✓ Doğru! Son iki basamak 16\'dır ve 16÷4=4 olduğu için 2.816 sayısı 4 ile tam bölünür.':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('konu'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>

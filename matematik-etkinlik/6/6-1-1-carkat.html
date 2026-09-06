@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Çarpan-Kat Kâşifi | 6. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:560px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.context-list{margin:10px 0 4px 4px}
+.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:110px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+.il-wrap{overflow-x:auto;padding:6px 2px 2px}
+.il-track{height:3px;background:#dce2ff;border-radius:2px;margin:0 4px 6px;min-width:560px}
+.il-row{display:flex;justify-content:space-between;min-width:560px}
+.il-tick{background:#eef0fd;border:2px solid var(--border);border-radius:9px;min-width:34px;padding:6px 3px;font-weight:800;font-size:.75rem;color:var(--primary);cursor:pointer;font-family:'Nunito'}
+.il-tick:hover{border-color:var(--primary)}
+.il-tick.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+.grid-wrap{display:flex;justify-content:center;margin:16px 0;overflow-x:auto}
+.model-grid{display:grid;gap:3px}
+.model-cell{width:22px;height:22px;background:var(--primary-light);border:1.5px solid var(--primary);border-radius:4px}
+.pair-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.pair-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:9px 15px;font-weight:800;font-size:.92rem;cursor:pointer;color:var(--text)}
+.pair-btn:hover{border-color:var(--primary)}
+.pair-btn.done{background:var(--primary-light);border-color:var(--primary);color:var(--primary)}
+.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+mjx-container{margin:0!important}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.2em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+.tf-row{display:flex;gap:10px;margin:14px 0}
+.tf-btn{flex:1;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
+.tf-btn:hover{border-color:var(--primary)}
+.tf-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.tf-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.tf-btn:disabled{cursor:default}
+@media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}.model-cell{width:16px;height:16px}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">6. Sınıf Matematik · 1. Tema · MAT.6.1.1</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>🧩 Çarpan-Kat Kâşifi</h1>
+    <p>Karşılaştığı problem durumlarında bir doğal sayının çarpan ve katlarına yönelik muhakeme yapabilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+    <button class="tab-btn" data-tab="varsayim">🏫 Varsayım Kur</button>
+    <button class="tab-btn" data-tab="model">🧱 Modelle Doğrula</button>
+    <button class="tab-btn" data-tab="genelleme">🔍 Genellemeyi Sına</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. KONU ANLATIMI ============ -->
+<section class="tab-panel active" id="konu">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔢</div>Çarpan (Bölen) Nedir?</div>
+    <p class="body-text">Bir doğal sayıyı kalansız (tam) olarak bölen doğal sayılara, o sayının <b>çarpanı (böleni)</b> denir.</p>
+    <div class="math-display">\[12=1\times12=2\times6=3\times4\]</div>
+    <p class="body-text">Buna göre 12'nin çarpan çiftleri: (1, 12), (2, 6), (3, 4)'tür. 12'nin çarpanları küçükten büyüğe: 1, 2, 3, 4, 6, 12.</p>
+    <div class="def-box"><b>Dikkat:</b> Sıfır hariç bir doğal sayının çarpanları sınırlı (sonlu) sayıdadır; en küçük çarpanı 1, en büyük çarpanı ise kendisidir.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔁</div>Kat Nedir?</div>
+    <div class="def-box">Bir doğal sayının <b>katları</b>, o sayının 0, 1, 2, 3, ... doğal sayılarıyla çarpılmasıyla elde edilen sayılardır.</div>
+    <div class="math-display">\[4\times0=0 \quad 4\times1=4 \quad 4\times2=8 \quad 4\times3=12 \quad 4\times4=16 \ \dots\]</div>
+    <div class="gen-box">✓ Bir doğal sayının katları sonsuz sayıdadır ve o sayı kadar artan bir örüntü (ardışık ilerleme) oluşturur.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🏗️</div>Çarpan ile Kat Arasındaki İlişki</div>
+    <p class="body-text">\(a\times b=c\) ise; \(a\) ve \(b\) sayıları \(c\)'nin çarpanıdır, \(c\) ise hem \(a\)'nın hem de \(b\)'nin katıdır. Yani çarpan ve kat kavramları birbirinin tersidir.</p>
+    <div class="math-display">\[3\times5=15\]</div>
+    <p class="body-text">Buna göre 3 ve 5, 15'in çarpanlarıdır; 15 ise hem 3'ün hem de 5'in katıdır.<br>Aşağıda, günlük hayatta çarpanları ve katları kullandığımız bazı durumlara örnekler verilmiştir.</p>
+    <ul class="context-list">
+      <li>🧱 Dikdörtgen şeklindeki bir bahçeyi çevreleyen tel örgünün uzunluğunu bulma</li>
+      <li>📦 Eşit sayıda ürünleri kaç farklı şekilde kutulara paylaştırabileceğini belirleme</li>
+      <li>🪑 Bir sınıftaki sıraları eşit sütun ve sıralara dizme</li>
+      <li>🍬 Şekerleri arkadaşlar arasında eşit ve artıksız paylaştırma</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📐</div>Alan Modeliyle Çarpanları Görme</div>
+    <p class="body-text">Alanı sabit tutulan bir dikdörtgenin kenar uzunluklarını değiştirmek, o alanı veren sayının farklı çarpan çiftlerini bulmakla aynı şeydir. Örneğin alanı 24 birim kare olan bir dikdörtgen; 1×24, 2×12, 3×8 veya 4×6 kenar uzunluklarıyla oluşturulabilir. "Modelle Doğrula" sekmesinde bunu kendin deneyebilirsin.</p>
+  </div>
+</section>
+
+<!-- ============ 2. VARSAYIM KUR ============ -->
+<section class="tab-panel" id="varsayim">
+  <div class="card">
+    <div class="card-title"><div class="icon">🏫</div>Bahçe Duvarı Problemi</div>
+    <p class="body-text">Dikdörtgen şeklindeki bir okul bahçesinin alanı <b>24 metrekaredir</b>. Bahçeyi çevreleyen tel çitin uzunluğu (dikdörtgenin çevresi) en az ve en çok kaç metre olabilir? Aşağıdaki kenar çiftlerinden her birini sırayla seçerek dene ve sonucu gözlemle.</p>
+    <div class="pair-row" id="bahcePairs"></div>
+    <div class="il-result" id="bahceResult">Bir kenar çifti seçerek başla.</div>
+    <div class="tip-box" id="bahceIpucu" style="display:none">💡 Tüm çiftleri denedin! Şimdi hangi çiftin en kısa, hangisinin en uzun çevreyi verdiğini karşılaştır.</div>
+    <div class="gen-box" id="bahceGenelleme" style="display:none"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">💭</div>Varsayımını Sına</div>
+    <p class="body-text" style="margin-bottom:6px">Bahçe probleminden yola çıkarak aşağıdaki varsayımlardan hangisine katılıyorsun? Seç ve gerekçesini oku.</p>
+    <div class="q-card">
+      <div class="q-text">"24 sayısının çarpan çiftleri sınırlı (belirli) sayıda olduğu için, alanı 24 m² olan dikdörtgenin çevresi de belirli değerler arasında değişir."</div>
+      <div class="choices">
+        <button class="choice-btn" data-v="dogru">Katılıyorum</button>
+        <button class="choice-btn" data-v="yanlis">Katılmıyorum</button>
+      </div>
+      <div class="feedback" id="varsayimFeedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. MODELLE DOĞRULA ============ -->
+<section class="tab-panel" id="model">
+  <div class="card">
+    <div class="card-title"><div class="icon">🧮</div>Çarpanlarını Bul</div>
+    <p class="body-text" style="margin-bottom:6px">Kutuya 1 ile 101 arasında bir doğal sayı gir, sayının tüm çarpanlarını ve çarpan çiftlerini gör.</p>
+    <div class="field-row">
+      <label for="facInput">Sayı:</label><input class="answer-input" id="facInput" inputmode="numeric" placeholder="ör. 36">
+      <button class="submit-btn" id="facCheck">Çarpanlarını Bul</button>
+    </div>
+    <div class="il-result" id="facResult">Bir sayı gir ve butona tıkla.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📐</div>Alan Modeliyle Çarpan Çiftini Gör</div>
+    <p class="body-text" style="margin-bottom:6px">Alanı 24 birim kare olan dikdörtgenin farklı kenar uzunluklarını (çarpan çiftlerini) tıklayarak ızgara üzerinde gör.</p>
+    <div class="pair-row" id="modelPairs"></div>
+    <div class="grid-wrap"><div class="model-grid" id="modelGrid"></div></div>
+    <div class="il-result" id="modelResult">Bir kenar çifti seç.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔢</div>Katlarını Bul / Sayı Doğrusunda İncele</div>
+    <p class="body-text" style="margin-bottom:6px">Kutuya 0 ile 13 arasında bir doğal sayı gir, sayı doğrusunda katlarını gör.</p>
+    <div class="field-row">
+      <label for="katInput">Sayı:</label><input class="answer-input" id="katInput" inputmode="numeric" placeholder="ör. 4">
+      <button class="submit-btn" id="katCheck">Katlarını Göster</button>
+    </div>
+    <div class="il-wrap"><div id="katLine"></div></div>
+    <div class="il-result" id="katResult">Bir sayı gir ve butona tıkla.</div>
+  </div>
+</section>
+
+<!-- ============ 4. GENELLEMEYİ SINA ============ -->
+<section class="tab-panel" id="genelleme">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔍</div>Doğru mu, Yanlış mı?</div>
+    <p class="body-text" style="margin-bottom:6px">Çarpan ve katlarla ilgili aşağıdaki önermeleri incele; doğru ya da yanlış olduğuna karar ver ve gerekçesini oku.</p>
+    <div class="q-card">
+      <div class="q-text" id="tfText"></div>
+      <div class="tf-row">
+        <button class="tf-btn" id="tfDogru">Doğru</button>
+        <button class="tf-btn" id="tfYanlis">Yanlış</button>
+      </div>
+      <div class="feedback" id="tfFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="tfNext">Sonraki Önerme →</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧭</div>Doğrulamanı Değerlendir</div>
+    <div class="tip-box">💡 Alan modelini kullanarak "her doğal sayı iki doğal sayının çarpımı biçiminde yazılabilir" önermesini doğruladın. Aynı modeli, bir kesrin payını ve paydasını ortak çarpanlarına ayırarak sadeleştirme işleminde de kullanabilir misin? Bir arkadaşınla tartış ve bir örnek üzerinde göster.</div>
+  </div>
+</section>
+
+<!-- ============ 5. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">36 sayısının tüm çarpanlarını küçükten büyüğe yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>36'yı 1'den başlayarak sırasıyla doğal sayılara böleriz ve kalansız bölünenleri buluruz: \(36=1\times36=2\times18=3\times12=4\times9=6\times6\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Bulunan tüm çarpanları küçükten büyüğe sıralarız.</div></div>
+        <div class="ex-result">✓ 36'nın çarpanları: 1, 2, 3, 4, 6, 9, 12, 18, 36 (9 çarpan)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">7'nin sıfırdan farklı ilk 5 katını yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>7'nin katlarını bulmak için 7'yi sırasıyla 1, 2, 3, 4, 5 doğal sayılarıyla çarparız.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>\(7\times1=7,\ 7\times2=14,\ 7\times3=21,\ 7\times4=28,\ 7\times5=35\)</div></div>
+        <div class="ex-result">✓ 7'nin ilk 5 katı: 7, 14, 21, 28, 35</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">Alanı 18 birim kare olan dikdörtgenin olası tam sayı kenar uzunluklarını (çarpan çiftlerini) bulunuz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>18'i iki doğal sayının çarpımı biçiminde yazacak çarpan çiftlerini ararız.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>\(18=1\times18=2\times9=3\times6\)</div></div>
+        <div class="ex-result">✓ Olası kenar uzunlukları: (1, 18), (2, 9), (3, 6)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">45 sayısının çarpanlarını bulup kaç tane çarpanı olduğunu belirtiniz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>\(45=1\times45=3\times15=5\times9\) biçiminde yazılabilir.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Çarpanları küçükten büyüğe sıralarız: 1, 3, 5, 9, 15, 45.</div></div>
+        <div class="ex-result">✓ 45'in 6 çarpanı vardır: 1, 3, 5, 9, 15, 45</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">Bir öğretmen 60 kalemi öğrencilere eşit ve artıksız sayıda dağıtmak istiyor. 60'ın çarpanlarından yararlanarak kalemleri kaç farklı öğrenci sayısına eşit paylaştırabileceğini açıklayınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="ex-step"><div class="snum">1</div><div>60 kalemin artıksız paylaştırılabilmesi için öğrenci sayısının 60'ın bir çarpanı olması gerekir.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>60'ın çarpanları: 1, 2, 3, 4, 5, 6, 10, 12, 15, 20, 30, 60'tır.</div></div>
+        <div class="ex-result">✓ Öğretmen kalemleri; örneğin 4 öğrenciye 15'er, 6 öğrenciye 10'ar, 12 öğrenciye 5'er kalem olacak biçimde, bu çarpanlardan herhangi birine karşılık gelen öğrenci sayısına eşit paylaştırabilir.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">ÇARPAN-KAT KÂŞİFİ · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 7. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Çarpan</b><span>Bir doğal sayıyı tam bölen doğal sayılardır; sayıdaki çarpan sayısı sınırlıdır.</span></div>
+      <div class="summary-item"><b>Kat</b><span>Bir doğal sayının 0,1,2,3,... ile çarpılmasıyla elde edilen doğal sayılardır; sonsuz sayıdadır.</span></div>
+      <div class="summary-item"><b>İlişki</b><span>\(a\times b=c\) ise a ve b, c'nin çarpanı; c ise a'nın ve b'nin katıdır.</span></div>
+      <div class="summary-item"><b>Alan Modeli</b><span>Sabit alanlı bir dikdörtgenin farklı kenarları, o alanın çarpan çiftlerini verir.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. 28 sayısının kaç tane çarpanı vardır?</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1"></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. 9'un sıfırdan farklı ilk iki katını sırasıyla yazınız.</h4>
+      <div class="field-row"><label for="k2a">1. Kat:</label><input class="answer-input" id="k2a"><label for="k2b">2. Kat:</label><input class="answer-input" id="k2b"></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+function factorsOf(n){
+  var f=[];
+  for(var i=1;i<=n;i++){ if(n%i===0) f.push(i); }
+  return f;
+}
+function factorPairs(n){
+  var f=factorsOf(n),pairs=[],seen={};
+  f.forEach(function(a){
+    var b=n/a;
+    var key=Math.min(a,b)+'-'+Math.max(a,b);
+    if(!seen[key]){ seen[key]=true; pairs.push([Math.min(a,b),Math.max(a,b)]); }
+  });
+  return pairs;
+}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ================= VARSAYIM KUR: BAHÇE PROBLEMİ ================= */
+  var bahcePairs=factorPairs(24); // [[1,24],[2,12],[3,8],[4,6]]
+  var bahceTried={};
+  var bahcePairsBox=document.getElementById('bahcePairs');
+  bahcePairs.forEach(function(p,idx){
+    var b=document.createElement('button');
+    b.type='button';b.className='pair-btn';b.textContent=p[0]+' m × '+p[1]+' m';
+    b.addEventListener('click',function(){
+      var per=2*(p[0]+p[1]);
+      bahceTried[idx]=per;
+      b.classList.add('done');
+      document.getElementById('bahceResult').innerHTML='Seçilen kenarlar: '+p[0]+' m ve '+p[1]+' m &rarr; Çevre = 2×('+p[0]+'+'+p[1]+') = <b>'+per+' m</b>';
+      if(Object.keys(bahceTried).length===bahcePairs.length){
+        document.getElementById('bahceIpucu').style.display='block';
+        var vals=Object.values(bahceTried);
+        var min=Math.min.apply(null,vals),max=Math.max.apply(null,vals);
+        document.getElementById('bahceGenelleme').style.display='block';
+        document.getElementById('bahceGenelleme').innerHTML='Genelleme: 24 sayısının çarpan çiftleri sınırlı (4 çift) olduğu için bahçenin çevresi de belirli değerler arasında değişir. En kısa çevre kareye en yakın çiftte (4 m × 6 m = '+min+' m), en uzun çevre ise en "ince" dikdörtgende (1 m × 24 m = '+max+' m) elde edilir.';
+      }
+    });
+    bahcePairsBox.appendChild(b);
+  });
+
+  document.querySelectorAll('#varsayim .choice-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#varsayim .choice-btn').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById('varsayimFeedback');
+      var ok=btn.dataset.v==='dogru';
+      fb.className='feedback show '+(ok?'ok':'no');
+      if(ok){
+        btn.classList.add('correct');
+        fb.textContent='✓ Doğru! Çarpanlar sonlu olduğu için oluşturabileceğin dikdörtgen sayısı da sınırlıdır; bu yüzden çevre değerleri de belirli bir aralıkta kalır.';
+      }else{
+        btn.classList.add('wrong');
+        document.querySelector('#varsayim .choice-btn[data-v="dogru"]').classList.add('correct');
+        fb.textContent='✗ Bahçe probleminde denediğin 4 çiftin her biri farklı bir çevre verdi; bunun nedeni 24 sayısının sınırlı sayıda çarpan çiftine sahip olmasıdır. Doğru cevap işaretlendi.';
+      }
+    });
+  });
+
+  /* ================= MODELLE DOĞRULA ================= */
+  document.getElementById('facCheck').addEventListener('click',function(){
+    var v=parseInt(document.getElementById('facInput').value,10);
+    var res=document.getElementById('facResult');
+    if(!v||v<2||v>100||!Number.isInteger(v)){ res.textContent='Lütfen 1 ile 101 arasında bir doğal sayı gir.'; return; }
+    var f=factorsOf(v),pairs=factorPairs(v);
+    var pairText=pairs.map(function(p){return p[0]+'×'+p[1];}).join(', ');
+    res.innerHTML=v+' sayısının çarpanları: <b>'+f.join(', ')+'</b> (toplam '+f.length+' çarpan)<br>Çarpan çiftleri: '+pairText;
+  });
+
+  var modelPairs=factorPairs(24);
+  var modelPairsBox=document.getElementById('modelPairs');
+  var modelGrid=document.getElementById('modelGrid');
+  function drawGrid(rows,cols){
+    modelGrid.innerHTML='';
+    modelGrid.style.gridTemplateColumns='repeat('+cols+',1fr)';
+    for(var i=0;i<rows*cols;i++){
+      var c=document.createElement('div');
+      c.className='model-cell';
+      modelGrid.appendChild(c);
+    }
+  }
+  modelPairs.forEach(function(p){
+    var b=document.createElement('button');
+    b.type='button';b.className='pair-btn';b.textContent=p[0]+' × '+p[1];
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#modelPairs .pair-btn').forEach(function(x){x.classList.remove('done');});
+      b.classList.add('done');
+      drawGrid(p[0],p[1]);
+      document.getElementById('modelResult').innerHTML=p[0]+' satır × '+p[1]+' sütun = <b>'+(p[0]*p[1])+'</b> birim kare. Bu ızgara, 24 sayısının '+p[0]+' ve '+p[1]+' çarpanlarını görsel olarak doğrular.';
+    });
+    modelPairsBox.appendChild(b);
+  });
+  drawGrid(4,6);
+  document.querySelector('#modelPairs .pair-btn[data-init]');
+
+  document.getElementById('katCheck').addEventListener('click',function(){
+    var v=parseInt(document.getElementById('katInput').value,10);
+    var res=document.getElementById('katResult');
+    var lineBox=document.getElementById('katLine');
+    if(!v||v<1||v>12||!Number.isInteger(v)){ res.textContent='Lütfen 0 ile 13 arasında bir doğal sayı gir.'; lineBox.innerHTML=''; return; }
+    var mults=[];
+    for(var i=0;i<=10;i++){ mults.push(v*i); }
+    var row=document.createElement('div');row.className='il-row';
+    mults.forEach(function(m){
+      var t=document.createElement('div');t.className='il-tick active';t.textContent=m;
+      row.appendChild(t);
+    });
+    lineBox.innerHTML='';
+    var track=document.createElement('div');track.className='il-track';
+    lineBox.appendChild(track);
+    lineBox.appendChild(row);
+    res.innerHTML=v+'\'ün ilk 10 katı (0 dahil): <b>'+mults.join(', ')+'</b>';
+  });
+
+  /* ================= GENELLEMEYİ SINA: DOĞRU/YANLIŞ ================= */
+  var tfPool=[
+    {text:'Sıfır hariç her doğal sayının çarpanları sonlu (sınırlı) sayıdadır.',correct:true,exp:'Bir doğal sayının çarpanları 1 ile kendisi arasında kalır; bu yüzden çarpan kümesi her zaman sonludur.'},
+    {text:'Her doğal sayının katları sonlu sayıdadır.',correct:false,exp:'Bir sayının katları o sayı kadar artarak sonsuza kadar devam eder; bu yüzden kat kümesi sonsuzdur.'},
+    {text:'1 sayısı, sıfır hariç her doğal sayının çarpanıdır.',correct:true,exp:'Her doğal sayı 1\'e tam bölünebildiği için 1, tüm doğal sayıların ortak çarpanıdır.'},
+    {text:'0 sayısı, her doğal sayının katıdır.',correct:true,exp:'Herhangi bir doğal sayı 0 ile çarpıldığında sonuç 0 olduğundan, 0 her doğal sayının katıdır.'},
+    {text:'Sıfır hariç bir doğal sayının en büyük çarpanı kendisidir.',correct:true,exp:'Bir sayı her zaman kendisine tam bölünebildiği için, en büyük çarpanı kendisidir.'},
+    {text:'Bir doğal sayının en küçük katı her zaman kendisidir.',correct:false,exp:'Bir sayının en küçük katı 0\'dır, çünkü sayı×0=0. Sayının kendisi ise o sayının 1. katıdır.'},
+    {text:'24\'ün çarpanlarıyla 24\'ün katları aynı sayı kümesidir.',correct:false,exp:'Çarpanlar sonlu ve 24\'ten küçük ya da eşit sayılardır; katlar ise sonsuz ve 24\'ten büyük ya da eşit sayılardır. İki küme farklıdır.'},
+    {text:'a sayısı b sayısının çarpanıysa, b sayısı a sayısının katıdır.',correct:true,exp:'Çarpan ve kat kavramları birbirinin tersidir: a, b\'yi tam bölüyorsa b de a\'nın bir katıdır.'}
+  ];
+  var drawTf=makeDrawer(tfPool);
+  var curTf=null;
+  function renderTf(){
+    curTf=drawTf();
+    document.getElementById('tfText').textContent=curTf.text;
+    document.getElementById('tfFeedback').className='feedback';
+    document.getElementById('tfNext').classList.remove('show');
+    document.getElementById('tfDogru').disabled=false;
+    document.getElementById('tfYanlis').disabled=false;
+    document.getElementById('tfDogru').classList.remove('correct','wrong');
+    document.getElementById('tfYanlis').classList.remove('correct','wrong');
+  }
+  function answerTf(userVal){
+    document.getElementById('tfDogru').disabled=true;
+    document.getElementById('tfYanlis').disabled=true;
+    var ok=userVal===curTf.correct;
+    var correctBtn=curTf.correct?document.getElementById('tfDogru'):document.getElementById('tfYanlis');
+    correctBtn.classList.add('correct');
+    if(!ok){
+      (userVal?document.getElementById('tfDogru'):document.getElementById('tfYanlis')).classList.add('wrong');
+    }
+    var fb=document.getElementById('tfFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=(ok?'✓ Doğru! ':'✗ ')+curTf.exp;
+    document.getElementById('tfNext').classList.add('show');
+  }
+  document.getElementById('tfDogru').addEventListener('click',function(){answerTf(true);});
+  document.getElementById('tfYanlis').addEventListener('click',function(){answerTf(false);});
+  document.getElementById('tfNext').addEventListener('click',renderTf);
+  renderTf();
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var facPool=[
+    {n:24,factors:[1,2,3,4,6,8,12,24],notFactor:9},
+    {n:36,factors:[1,2,3,4,6,9,12,18,36],notFactor:8},
+    {n:18,factors:[1,2,3,6,9,18],notFactor:4},
+    {n:45,factors:[1,3,5,9,15,45],notFactor:6},
+    {n:60,factors:[1,2,3,4,5,6,10,12,15,20,30,60],notFactor:7},
+    {n:28,factors:[1,2,4,7,14,28],notFactor:9}
+  ];
+  var drawFac=makeDrawer(facPool);
+  var katPool=[
+    {n:4,mult:[4,8,12],notMult:10},
+    {n:6,mult:[6,12,18],notMult:16},
+    {n:7,mult:[7,14,21],notMult:20},
+    {n:9,mult:[9,18,27],notMult:24},
+    {n:5,mult:[5,10,15],notMult:18},
+    {n:8,mult:[8,16,24],notMult:20}
+  ];
+  var drawKat=makeDrawer(katPool);
+  var perPool=[
+    {area:24,pairs:[[1,24],[2,12],[3,8],[4,6]],ask:'min'},
+    {area:36,pairs:[[1,36],[2,18],[3,12],[4,9],[6,6]],ask:'min'},
+    {area:20,pairs:[[1,20],[2,10],[4,5]],ask:'max'},
+    {area:16,pairs:[[1,16],[2,8],[4,4]],ask:'min'}
+  ];
+  var drawPer=makeDrawer(perPool);
+  var drawTfQuiz=makeDrawer(tfPool);
+
+  function createQuestion(type){
+    var q={type:type};
+    if(type==='carpan'){
+      var c=drawFac();
+      var opts=shuffle(c.factors).slice(0,3).concat([c.notFactor]);
+      q.text=c.n+' sayısının çarpanlarından biri olmayan seçenek hangisidir?';
+      q.choices=shuffle(opts).map(String);q.correctText=String(c.notFactor);
+    }else if(type==='kat'){
+      var c=drawKat();
+      var opts=c.mult.concat([c.notMult]);
+      q.text=c.n+' sayısının katlarından biri olmayan seçenek hangisidir?';
+      q.choices=shuffle(opts).map(String);q.correctText=String(c.notMult);
+    }else if(type==='cevre'){
+      var c=drawPer();
+      var pers=c.pairs.map(function(p){return 2*(p[0]+p[1]);});
+      var target=(c.ask==='min')?Math.min.apply(null,pers):Math.max.apply(null,pers);
+      q.text='Alanı '+c.area+' m² olan dikdörtgen şeklindeki bir alanın çevresi en '+(c.ask==='min'?'az':'çok')+' kaç metre olabilir?';
+      q.choices=shuffle(pers.slice()).map(String);q.correctText=String(target);
+    }else{
+      var c=drawTfQuiz();
+      q.text=c.text;
+      q.choices=['Doğru','Yanlış'];q.correctText=c.correct?'Doğru':'Yanlış';
+    }
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var qTypes=['carpan','kat','onerme','cevre','carpan','kat','onerme','cevre','carpan','kat'];
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(function(t){ return createQuestion(t==='onerme'?'onerme':t); });
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=document.getElementById('k1').value.trim(),fb=document.getElementById('kf1');
+    var ok=v==='6';
+    fb.textContent=ok?'✓ Doğru! 28\'in çarpanları: 1, 2, 4, 7, 14, 28 (6 çarpan).':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var a=document.getElementById('k2a').value.trim(),b=document.getElementById('k2b').value.trim(),fb=document.getElementById('kf2');
+    var ok=a==='9'&&b==='18';
+    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('konu'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>

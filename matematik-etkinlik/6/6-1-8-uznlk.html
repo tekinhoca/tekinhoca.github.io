@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uzunluk Ölçme Atölyesi | 6. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:560px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.context-list{margin:10px 0 4px 4px}
+.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:100px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+.select-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;font-weight:800;outline:none;font-size:.88rem;background:#fff;color:var(--text)}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+.unit-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.82rem}
+.unit-table th,.unit-table td{border:1.5px solid var(--border);padding:8px 6px;text-align:center}
+.unit-table th{background:var(--primary-light);color:var(--primary);font-weight:800}
+.unit-table td.hit{background:rgba(6,214,160,.15);font-weight:800;color:#059669}
+mjx-container{margin:0!important}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.2em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+.tf-row{display:flex;gap:10px;margin:14px 0}
+.tf-btn{flex:1;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
+.tf-btn:hover{border-color:var(--primary)}
+.tf-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.tf-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.tf-btn:disabled{cursor:default}
+.tri-row{display:flex;gap:8px;justify-content:center;margin:12px 0;flex-wrap:wrap}
+.tri-btn{flex:1;min-width:90px;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:10px;font-weight:800;font-size:.85rem;cursor:pointer}
+.tri-btn:hover{border-color:var(--primary)}
+.tri-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.tri-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+@media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}.unit-table{font-size:.68rem}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">6. Sınıf Matematik · 1. Tema · MAT.6.1.8</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>📏 Uzunluk Ölçme Atölyesi</h1>
+    <p>Karşılaştığı günlük hayat ya da matematiksel durumlarda standart uzunluk ölçme birimlerini değerlendirebilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+    <button class="tab-btn" data-tab="varsayim">🎯 Doğru Birimi Seç</button>
+    <button class="tab-btn" data-tab="model">🔄 Birim Dönüştürücü</button>
+    <button class="tab-btn" data-tab="genelleme">⚖️ Karşılaştır ve Yargıla</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. KONU ANLATIMI ============ -->
+<section class="tab-panel active" id="konu">
+  <div class="card">
+    <div class="card-title"><div class="icon">📐</div>Metre: Uzunluğun Ölçütü</div>
+    <div class="def-box">Uzunluk ölçmede kullanılan temel (standart) birim <b>metredir (m)</b>. Diğer tüm uzunluk birimleri, metrenin katları ya da bölükleri olarak tanımlanır.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📊</div>Metrenin Ast ve Üst Katları</div>
+    <table class="unit-table">
+      <thead><tr><th>km</th><th>hm</th><th>dam</th><th>m</th><th>dm</th><th>cm</th><th>mm</th></tr></thead>
+      <tbody><tr><td>1000 m</td><td>100 m</td><td>10 m</td><td class="hit">1 m</td><td>0,1 m</td><td>0,01 m</td><td>0,001 m</td></tr></tbody>
+    </table>
+    <p class="body-text">Bir birimden komşu birime geçerken değer <b>10 ile çarpılır ya da 10'a bölünür</b>. Günlük hayatta ve okulda en çok kullanılan dönüşümler metre-kilometre ile metre-desimetre-santimetre-milimetre arasındadır.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔍</div>Bir Dönüşüm Örneği</div>
+    <p class="body-text">Bir ölçme sonucunun ondalık gösterimindeki basamak değerleri, farklı uzunluk birimlerini yorumlamamıza yardımcı olur.</p>
+    <div class="math-display">\[634,9\text{ cm} = 6\text{ m } 3\text{ dm } 4\text{ cm } 9\text{ mm} = 6\text{ m } 34\text{ cm } 9\text{ mm} = 6349\text{ mm}\]</div>
+    <div class="gen-box">✓ Ölçme sonuçları her zaman tam sayı olmayabilir; bu yüzden ondalık gösterimlerin basamak değerlerini doğru yorumlamak önemlidir.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧭</div>Uygun Birimi Seçmek</div>
+    <p class="body-text">Ölçülecek nesnenin büyüklüğüne göre en uygun birim seçilmelidir: çok küçük nesneler için milimetre veya santimetre, günlük nesneler için metre, uzun mesafeler için kilometre kullanılır.</p>
+    <ul class="context-list">
+      <li>🐜 Bir karıncanın boyu → milimetre (mm)</li>
+      <li>📏 Bir cetvelin uzunluğu → santimetre (cm)</li>
+      <li>🚪 Bir kapının yüksekliği → metre (m)</li>
+      <li>🛣️ İki şehir arası mesafe → kilometre (km)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ 2. DOĞRU BİRİMİ SEÇ ============ -->
+<section class="tab-panel" id="varsayim">
+  <div class="card">
+    <div class="card-title"><div class="icon">🎯</div>Bu Nesne İçin En Uygun Birim Hangisi?</div>
+    <p class="body-text" id="unitObjText" style="font-family:'Baloo 2';font-size:1.05rem"></p>
+    <div class="tri-row" id="unitChoices">
+      <button class="tri-btn" data-v="mm">mm</button>
+      <button class="tri-btn" data-v="cm">cm</button>
+      <button class="tri-btn" data-v="m">m</button>
+      <button class="tri-btn" data-v="km">km</button>
+    </div>
+    <div class="feedback" id="unitFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="unitNext">Sonraki Nesne →</button></div>
+  </div>
+</section>
+
+<!-- ============ 3. BİRİM DÖNÜŞTÜRÜCÜ ============ -->
+<section class="tab-panel" id="model">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔄</div>Birim Dönüştürücü</div>
+    <p class="body-text" style="margin-bottom:6px">Bir uzunluk değeri ve birimini gir; bu uzunluğun diğer birimler cinsinden karşılığını gör.</p>
+    <div class="field-row" style="justify-content:center">
+      <input class="answer-input" id="convValue" value="634,9">
+      <select class="select-input" id="convUnit">
+        <option value="km">km</option>
+        <option value="hm">hm</option>
+        <option value="dam">dam</option>
+        <option value="m">m</option>
+        <option value="dm">dm</option>
+        <option value="cm" selected>cm</option>
+        <option value="mm">mm</option>
+      </select>
+      <button class="submit-btn" id="convBtn">Dönüştür</button>
+    </div>
+    <table class="unit-table" id="convTable">
+      <thead><tr><th>km</th><th>hm</th><th>dam</th><th>m</th><th>dm</th><th>cm</th><th>mm</th></tr></thead>
+      <tbody><tr id="convRow"><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr></tbody>
+    </table>
+    <div class="il-result" id="convResult">Bir değer gir ve butona tıkla.</div>
+  </div>
+</section>
+
+<!-- ============ 4. KARŞILAŞTIR VE YARGILA ============ -->
+<section class="tab-panel" id="genelleme">
+  <div class="card">
+    <div class="card-title"><div class="icon">⚖️</div>Hangisi Daha Uzun?</div>
+    <p class="body-text" id="cmpText" style="font-family:'Baloo 2';font-size:1.05rem"></p>
+    <div class="tri-row" id="cmpChoices">
+      <button class="tri-btn" data-v="A">A Daha Uzun</button>
+      <button class="tri-btn" data-v="B">B Daha Uzun</button>
+      <button class="tri-btn" data-v="E">Eşittir</button>
+    </div>
+    <div class="feedback" id="cmpFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="cmpNext">Sonraki Karşılaştırma →</button></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔍</div>Doğru mu, Yanlış mı?</div>
+    <div class="q-card">
+      <div class="q-text" id="tfText"></div>
+      <div class="tf-row">
+        <button class="tf-btn" id="tfDogru">Doğru</button>
+        <button class="tf-btn" id="tfYanlis">Yanlış</button>
+      </div>
+      <div class="feedback" id="tfFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="tfNext">Sonraki Önerme →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">634,9 cm'yi metre-desimetre-santimetre-milimetre cinsinden ifade ediniz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>634,9 cm'yi metreye çevirmek için 100'e böleriz: \(634,9\div100=6,349\) m.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Ondalık kısmı basamak değerlerine ayırırız: 3 (dm), 4 (cm), 9 (mm).</div></div>
+        <div class="ex-result">✓ 634,9 cm = 6 m 3 dm 4 cm 9 mm</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">2,45 km'yi metre cinsinden yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>1 km = 1000 m olduğu için 2,45'i 1000 ile çarparız.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>\(2,45\times1000=2450\)</div></div>
+        <div class="ex-result">✓ 2,45 km = 2450 m</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">8 m 5 cm'yi santimetre cinsinden yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>1 m = 100 cm olduğu için 8 m = 800 cm'dir.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>800 cm üzerine kalan 5 cm'yi ekleriz: \(800+5=805\).</div></div>
+        <div class="ex-result">✓ 8 m 5 cm = 805 cm</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">1750 mm'yi metre cinsinden yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>1 m = 1000 mm olduğu için 1750'yi 1000'e böleriz.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>\(1750\div1000=1,75\)</div></div>
+        <div class="ex-result">✓ 1750 mm = 1,75 m</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">Ali'nin boyu 1 m 42 cm, kardeşinin boyu ise 138 cm'dir. Hangisi daha uzundur?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="ex-step"><div class="snum">1</div><div>Karşılaştırma yapabilmek için iki uzunluğu da aynı birime çeviririz: Ali'nin boyu \(1\text{ m }42\text{ cm}=142\) cm.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>142 cm ile 138 cm karşılaştırılır: 142 > 138.</div></div>
+        <div class="ex-result">✓ Ali, kardeşinden 4 cm daha uzundur.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">UZUNLUK ÖLÇME ATÖLYESİ · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 7. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Metre</b><span>Uzunluk ölçmede kullanılan temel standart birimdir.</span></div>
+      <div class="summary-item"><b>Büyük Birimler</b><span>km (1000 m), hm (100 m), dam (10 m)</span></div>
+      <div class="summary-item"><b>Küçük Birimler</b><span>dm (0,1 m), cm (0,01 m), mm (0,001 m)</span></div>
+      <div class="summary-item"><b>Karşılaştırma</b><span>Karşılaştırmadan önce uzunluklar aynı birime çevrilmelidir.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. 5 m 20 cm'yi santimetre cinsinden yazınız.</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1"></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. 1,2 km ile 1150 m'den hangisi daha uzundur?</h4>
+      <div class="field-row"><label for="k2a">Cevap:</label><input class="answer-input" id="k2a" style="width:150px"></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+function parseTRNumber(str){ if(!str) return NaN; return parseFloat(str.trim().replace(',','.')); }
+function formatTR(num){
+  var rounded=Math.round(num*10000)/10000;
+  return String(rounded).replace('.',',');
+}
+var UNIT_FACTOR={km:1000,hm:100,dam:10,m:1,dm:0.1,cm:0.01,mm:0.001};
+var UNIT_ORDER=['km','hm','dam','m','dm','cm','mm'];
+function convertUnit(value,fromU,toU){
+  var meters=value*UNIT_FACTOR[fromU];
+  return meters/UNIT_FACTOR[toU];
+}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ================= DOĞRU BİRİMİ SEÇ ================= */
+  var unitObjPool=[
+    {name:'Bir karıncanın boyu',unit:'mm'},
+    {name:'Bir cetvelin uzunluğu',unit:'cm'},
+    {name:'Bir sınıf kapısının yüksekliği',unit:'m'},
+    {name:'İstanbul ile Ankara arasındaki mesafe',unit:'km'},
+    {name:'Bir cep telefonunun uzunluğu',unit:'cm'},
+    {name:'Bir futbol sahasının uzunluğu',unit:'m'},
+    {name:'Bir karınca bacağının kalınlığı',unit:'mm'},
+    {name:'Bir şehirlerarası otobüs yolculuğunun mesafesi',unit:'km'}
+  ];
+  var drawUnitObj=makeDrawer(unitObjPool);
+  var curUnitObj=null;
+  function renderUnitObj(){
+    curUnitObj=drawUnitObj();
+    document.getElementById('unitObjText').textContent=curUnitObj.name+' ölçülürken hangi birim en uygundur?';
+    document.querySelectorAll('#unitChoices .tri-btn').forEach(function(b){ b.disabled=false; b.classList.remove('correct','wrong'); });
+    document.getElementById('unitFeedback').className='feedback';
+    document.getElementById('unitNext').classList.remove('show');
+  }
+  document.querySelectorAll('#unitChoices .tri-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#unitChoices .tri-btn').forEach(function(b){b.disabled=true;});
+      var ok=btn.dataset.v===curUnitObj.unit;
+      document.querySelector('#unitChoices .tri-btn[data-v="'+curUnitObj.unit+'"]').classList.add('correct');
+      if(!ok){ btn.classList.add('wrong'); }
+      var fb=document.getElementById('unitFeedback');
+      fb.className='feedback show '+(ok?'ok':'no');
+      fb.textContent=(ok?'✓ Doğru! ':'✗ ')+curUnitObj.name+' için en uygun birim '+curUnitObj.unit+'\'dir.';
+      document.getElementById('unitNext').classList.add('show');
+    });
+  });
+  document.getElementById('unitNext').addEventListener('click',renderUnitObj);
+  renderUnitObj();
+
+  /* ================= BİRİM DÖNÜŞTÜRÜCÜ ================= */
+  document.getElementById('convBtn').addEventListener('click',function(){
+    var v=parseTRNumber(document.getElementById('convValue').value);
+    var u=document.getElementById('convUnit').value;
+    var res=document.getElementById('convResult');
+    var row=document.getElementById('convRow');
+    if(isNaN(v)||v<0){ res.textContent='Lütfen geçerli bir uzunluk değeri gir.'; return; }
+    row.innerHTML='';
+    UNIT_ORDER.forEach(function(unit){
+      var td=document.createElement('td');
+      var val=convertUnit(v,u,unit);
+      td.textContent=formatTR(val);
+      if(unit===u){ td.className='hit'; }
+      row.appendChild(td);
+    });
+    res.innerHTML=formatTR(v)+' '+u+' değeri, tablodaki gibi diğer birimlere karşılık gelir.';
+  });
+  document.getElementById('convBtn').click();
+
+  /* ================= KARŞILAŞTIR VE YARGILA ================= */
+  var cmpPool=[
+    {aText:'634,9 cm',aVal:6.349,bText:'6 m 50 cm',bVal:6.5},
+    {aText:'2 km',aVal:2000,bText:'1850 m',bVal:1850},
+    {aText:'45 mm',aVal:4.5,bText:'4 cm',bVal:4,unitNote:'cm'},
+    {aText:'3,2 m',aVal:3.2,bText:'320 cm',bVal:3.2},
+    {aText:'0,75 km',aVal:750,bText:'750 m',bVal:750}
+  ];
+  var drawCmp=makeDrawer(cmpPool);
+  var curCmp=null;
+  function renderCmp(){
+    curCmp=drawCmp();
+    document.getElementById('cmpText').textContent='A: '+curCmp.aText+'   —   B: '+curCmp.bText;
+    document.querySelectorAll('#cmpChoices .tri-btn').forEach(function(b){ b.disabled=false; b.classList.remove('correct','wrong'); });
+    document.getElementById('cmpFeedback').className='feedback';
+    document.getElementById('cmpNext').classList.remove('show');
+  }
+  document.querySelectorAll('#cmpChoices .tri-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#cmpChoices .tri-btn').forEach(function(b){b.disabled=true;});
+      var correctV = Math.abs(curCmp.aVal-curCmp.bVal)<1e-9 ? 'E' : (curCmp.aVal>curCmp.bVal?'A':'B');
+      var ok=btn.dataset.v===correctV;
+      document.querySelector('#cmpChoices .tri-btn[data-v="'+correctV+'"]').classList.add('correct');
+      if(!ok){ btn.classList.add('wrong'); }
+      var fb=document.getElementById('cmpFeedback');
+      fb.className='feedback show '+(ok?'ok':'no');
+      var msg = correctV==='E' ? 'İki uzunluk aynı birime çevrildiğinde eşit çıkar.' : (correctV==='A'? curCmp.aText+' daha uzundur.' : curCmp.bText+' daha uzundur.');
+      fb.textContent=(ok?'✓ Doğru! ':'✗ ')+msg;
+      document.getElementById('cmpNext').classList.add('show');
+    });
+  });
+  document.getElementById('cmpNext').addEventListener('click',renderCmp);
+  renderCmp();
+
+  /* ================= GENELLEMEYİ SINA: DOĞRU/YANLIŞ ================= */
+  var tfPool=[
+    {text:'Metre, uzunluk ölçmede kullanılan standart (temel) birimdir.',correct:true,exp:'Uluslararası birim sisteminde uzunluk ölçmenin temel birimi metredir; diğer birimler ondan türetilir.'},
+    {text:'1 kilometre, 100 metreye eşittir.',correct:false,exp:'1 kilometre 1000 metreye eşittir, 100 metre değil.'},
+    {text:'Bir birimden komşu birime geçerken değer 10 ile çarpılır ya da 10\'a bölünür.',correct:true,exp:'Metrik sistemde birimler arasında onluk (10\'ar katlı) bir ilişki vardır.'},
+    {text:'634,9 cm ile 6,349 m birbirine eşit uzunluklardır.',correct:true,exp:'634,9 cm\'yi 100\'e bölersek 6,349 m elde ederiz; bu yüzden eşittirler.'},
+    {text:'İki farklı birimle verilen uzunlukları karşılaştırmadan önce aynı birime çevirmek gerekmez.',correct:false,exp:'Farklı birimlerdeki sayılar doğrudan karşılaştırılamaz; önce aynı birime çevrilmeleri gerekir.'},
+    {text:'1 metre, 1000 milimetreye eşittir.',correct:true,exp:'1 m = 1000 mm\'dir çünkü milimetre metrenin binde biridir.'},
+    {text:'Uzun mesafeleri (örneğin şehirler arası) ölçerken milimetre kullanmak pratiktir.',correct:false,exp:'Uzun mesafelerde milimetre kullanmak çok büyük sayılara yol açar; bu durumlarda kilometre kullanmak daha pratiktir.'}
+  ];
+  var drawTf=makeDrawer(tfPool);
+  var curTf=null;
+  function renderTf(){
+    curTf=drawTf();
+    document.getElementById('tfText').textContent=curTf.text;
+    document.getElementById('tfFeedback').className='feedback';
+    document.getElementById('tfNext').classList.remove('show');
+    document.getElementById('tfDogru').disabled=false;
+    document.getElementById('tfYanlis').disabled=false;
+    document.getElementById('tfDogru').classList.remove('correct','wrong');
+    document.getElementById('tfYanlis').classList.remove('correct','wrong');
+  }
+  function answerTf(userVal){
+    document.getElementById('tfDogru').disabled=true;
+    document.getElementById('tfYanlis').disabled=true;
+    var ok=userVal===curTf.correct;
+    var correctBtn=curTf.correct?document.getElementById('tfDogru'):document.getElementById('tfYanlis');
+    correctBtn.classList.add('correct');
+    if(!ok){
+      (userVal?document.getElementById('tfDogru'):document.getElementById('tfYanlis')).classList.add('wrong');
+    }
+    var fb=document.getElementById('tfFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=(ok?'✓ Doğru! ':'✗ ')+curTf.exp;
+    document.getElementById('tfNext').classList.add('show');
+  }
+  document.getElementById('tfDogru').addEventListener('click',function(){answerTf(true);});
+  document.getElementById('tfYanlis').addEventListener('click',function(){answerTf(false);});
+  document.getElementById('tfNext').addEventListener('click',renderTf);
+  renderTf();
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var donusumPool=[
+    {value:'3,5',from:'m',to:'cm',correct:'350',distractors:['35','3500','0,35']},
+    {value:'450',from:'cm',to:'m',correct:'4,5',distractors:['45','0,45','4500']},
+    {value:'2,2',from:'km',to:'m',correct:'2200',distractors:['220','22000','0,22']},
+    {value:'1250',from:'mm',to:'m',correct:'1,25',distractors:['12,5','125','0,125']},
+    {value:'7',from:'m',to:'mm',correct:'7000',distractors:['700','70','70000']}
+  ];
+  var drawDonusum=makeDrawer(donusumPool);
+  var karsPool=[
+    {aText:'520 cm',aVal:5.2,bText:'5 m 30 cm',bVal:5.3},
+    {aText:'3 km',aVal:3000,bText:'2900 m',bVal:2900},
+    {aText:'15 mm',aVal:1.5,bText:'2 cm',bVal:2},
+    {aText:'4,5 m',aVal:4.5,bText:'450 cm',bVal:4.5},
+    {aText:'1,1 km',aVal:1100,bText:'1050 m',bVal:1050}
+  ];
+  var drawKars=makeDrawer(karsPool);
+  var drawTfQuiz=makeDrawer(tfPool);
+
+  function createQuestion(type){
+    var q={type:type};
+    if(type==='donusum'){
+      var c=drawDonusum();
+      var opts=[c.correct].concat(c.distractors);
+      q.text=c.value+' '+c.from+' kaç '+c.to+'dir?';
+      q.choices=shuffle(opts);q.correctText=c.correct;
+    }else if(type==='karsilastir'){
+      var c=drawKars();
+      var correctV = Math.abs(c.aVal-c.bVal)<1e-9?'Eşittir':(c.aVal>c.bVal?c.aText+' daha uzundur':c.bText+' daha uzundur');
+      q.text='A: '+c.aText+'   —   B: '+c.bText+'.  Hangisi daha uzundur?';
+      var opts=[c.aText+' daha uzundur',c.bText+' daha uzundur','Eşittir'];
+      q.choices=opts;q.correctText=correctV;
+    }else{
+      var c=drawTfQuiz();
+      q.text=c.text;
+      q.choices=['Doğru','Yanlış'];q.correctText=c.correct?'Doğru':'Yanlış';
+    }
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var qTypes=['donusum','karsilastir','onerme','donusum','karsilastir','onerme','donusum','karsilastir','onerme','donusum'];
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(createQuestion);
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=document.getElementById('k1').value.trim().replace(/\s/g,''),fb=document.getElementById('kf1');
+    var ok=(v==='520');
+    fb.textContent=ok?'✓ Doğru! 5 m = 500 cm, 500+20=520 cm.':'✗ Tekrar düşün: önce 5 m\'yi cm\'ye çevir.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var v=document.getElementById('k2a').value.trim().toLowerCase(),fb=document.getElementById('kf2');
+    var ok=(v.indexOf('1,2')>=0 || v.indexOf('1.2')>=0);
+    fb.textContent=ok?'✓ Doğru! 1,2 km = 1200 m; 1200 m > 1150 m olduğu için 1,2 km daha uzundur.':'✗ Tekrar düşün: 1,2 km\'yi metreye çevirip karşılaştır.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('konu'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>

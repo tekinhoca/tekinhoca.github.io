@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dört İşlem Problem Atölyesi | 6. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:560px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.context-list{margin:10px 0 4px 4px}
+.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:80px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+.frac-input{display:flex;flex-direction:column;align-items:center;gap:3px}
+.frac-input input{width:56px;text-align:center}
+.frac-line{width:56px;height:2px;background:var(--text)}
+.area-grid{display:grid;gap:2px;max-width:280px;margin:16px auto}
+.area-cell{aspect-ratio:1;background:#eef0fd;border:1px solid #dce2ff;border-radius:2px}
+.area-cell.rowhit{background:#c7d2fe}
+.area-cell.overlap{background:var(--primary)}
+mjx-container{margin:0!important}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.2em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+.tf-row{display:flex;gap:10px;margin:14px 0}
+.tf-btn{flex:1;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
+.tf-btn:hover{border-color:var(--primary)}
+.tf-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.tf-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.tf-btn:disabled{cursor:default}
+.select-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;font-weight:800;outline:none;font-size:.85rem;background:#fff;color:var(--text)}
+.tri-row{display:flex;gap:8px;justify-content:center;margin:12px 0}
+.tri-btn{flex:1;max-width:110px;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:10px;font-weight:800;font-size:.9rem;cursor:pointer}
+.tri-btn:hover{border-color:var(--primary)}
+.tri-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.tri-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+@media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">6. Sınıf Matematik · 1. Tema · MAT.6.1.7</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>🧮 Dört İşlem Problem Atölyesi</h1>
+    <p>Gerçek yaşam durumlarında karşılaşılan kesir, ondalık ve yüzde gösterimleri ile ilgili dört işlem gerektiren problemleri çözebilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+    <button class="tab-btn" data-tab="varsayim">🍕 Alan Modeliyle Çarpma</button>
+    <button class="tab-btn" data-tab="model">🍰 Paylaşım mı, Gruplama mı?</button>
+    <button class="tab-btn" data-tab="genelleme">🎯 Tahmin ve Genelleme</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. KONU ANLATIMI ============ -->
+<section class="tab-panel active" id="konu">
+  <div class="card">
+    <div class="card-title"><div class="icon">➕</div>Kesirlerle Toplama ve Çıkarma</div>
+    <div class="def-box">Kesirlerle toplama ve çıkarma işlemi yapabilmek için kesirlerin <b>paydalarının eşit</b> (eş büyüklükte birim kesirler) olması gerekir.</div>
+    <div class="math-display">\[\dfrac{2}{6}+\dfrac{1}{10}=\dfrac{1}{3}+\dfrac{1}{10}=\dfrac{10}{30}+\dfrac{3}{30}=\dfrac{13}{30}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">✖️</div>Kesirlerle Çarpma</div>
+    <p class="body-text">Bir doğal sayı ile kesir çarpımının sırası sonucu değiştirmez.</p>
+    <div class="math-display">\[10\times\dfrac{1}{2}=5 \qquad \dfrac{1}{2}\times10=5\]</div>
+    <div class="gen-box">✓ Bir doğal sayı, 1'den büyük bir kesirle çarpıldığında sonuç bu sayıdan büyük; 1'den küçük bir kesirle çarpıldığında ise sonuç bu sayıdan küçük olur.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">➗</div>Kesirlerle Bölme: İki Farklı Anlam</div>
+    <ul class="context-list">
+      <li><b>Paylaşım:</b> Bir kesri eşit parçalara bölme. Örneğin \(\dfrac{1}{4}\div3\): bir pastanın 1/4'ünü 3 kişiye paylaştırmak.</li>
+      <li><b>Gruplama:</b> Bir büyüklüğün içinde kaç tane belirli kesir olduğunu bulma. Örneğin \(6\div\dfrac{1}{3}\): 6 kurabiyelik hamurdan 1/3'lük porsiyonlar çıkarmak.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔢</div>Ondalık Gösterimlerle İşlemler</div>
+    <p class="body-text">Toplama ve çıkarmada basamak değerlerinin alt alta gelmesine dikkat edilir. Çarpma ve bölmede ondalık sayılar kesre çevrilebilir ya da doğrudan işlem yapılabilir.</p>
+    <div class="gen-box">✓ Bir doğal sayı, 1'den küçük bir ondalık gösterimle çarpıldığında sonuç sayıdan küçük; 1'den küçük bir ondalık gösterime bölündüğünde ise sonuç sayıdan büyük olur.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">💯</div>Yüzde ile İşlemler</div>
+    <p class="body-text">Yüzde problemlerinde genellikle %1'lik kısım referans alınarak çözüme gidilir. Gerçek yaşamda indirim, kâr-zarar, KDV gibi ekonomi terimleriyle karşımıza çıkar.</p>
+    <div class="math-display">\[240\text{ TL'nin }\%25\text{'i}=240\times\dfrac{25}{100}=60\text{ TL}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🎯</div>Tahmin Stratejisi</div>
+    <p class="body-text">İşlem yapmadan önce sonucu tahmin etmek, hataları fark etmemizi sağlar. Kesirleri <b>0, 1/2 veya 1'e yakınlığına</b> göre sınıflandırmak iyi bir tahmin stratejisidir.</p>
+  </div>
+</section>
+
+<!-- ============ 2. ALAN MODELİYLE ÇARPMA ============ -->
+<section class="tab-panel" id="varsayim">
+  <div class="card">
+    <div class="card-title"><div class="icon">🍕</div>Bir Pizzanın Bir Kısmının Bir Kısmını Bul</div>
+    <p class="body-text">İki kesir seç; alan modelinde ilk kesrin satırları açık renk, ikinci kesrin sütunları ile kesişen hücreler koyu renk boyanacak. Koyu hücre sayısı, çarpımın payını verir!</p>
+    <div class="field-row" style="justify-content:center">
+      <div class="frac-input"><input class="answer-input" id="areaN1" value="3"><div class="frac-line"></div><input class="answer-input" id="areaD1" value="4"></div>
+      <span style="font-weight:900;font-size:1.2rem">×</span>
+      <div class="frac-input"><input class="answer-input" id="areaN2" value="1"><div class="frac-line"></div><input class="answer-input" id="areaD2" value="3"></div>
+      <button class="submit-btn" id="areaBtn">Göster</button>
+    </div>
+    <div class="area-grid" id="areaGrid"></div>
+    <div class="il-result" id="areaResult">Kesirleri gir ve butona tıkla.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">💭</div>Varsayımını Sına</div>
+    <div class="q-card">
+      <div class="q-text">"Bir doğal sayıyı 1'den küçük bir kesirle çarparsak, sonuç her zaman o doğal sayıdan küçük olur."</div>
+      <div class="choices">
+        <button class="choice-btn" data-v="dogru">Katılıyorum</button>
+        <button class="choice-btn" data-v="yanlis">Katılmıyorum</button>
+      </div>
+      <div class="feedback" id="varsayimFeedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. PAYLAŞIM MI, GRUPLAMA MI? ============ -->
+<section class="tab-panel" id="model">
+  <div class="card">
+    <div class="card-title"><div class="icon">🍰</div>Paylaşım Modeli: Kesri Doğal Sayıya Böl</div>
+    <p class="body-text" style="margin-bottom:6px">Bir kesir ve bir doğal sayı gir; kesrin doğal sayı kadar kişiye nasıl paylaştırılacağını gör.</p>
+    <div class="field-row" style="justify-content:center">
+      <div class="frac-input"><input class="answer-input" id="shareN" value="1"><div class="frac-line"></div><input class="answer-input" id="shareD" value="4"></div>
+      <span style="font-weight:900">÷</span>
+      <input class="answer-input" id="sharePeople" value="3">
+      <button class="submit-btn" id="shareBtn">Paylaştır</button>
+    </div>
+    <div class="il-result" id="shareResult">Değerleri gir ve butona tıkla.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧺</div>Gruplama Modeli: Doğal Sayıyı Kesre Böl</div>
+    <p class="body-text" style="margin-bottom:6px">Bir doğal sayı ve bir kesir gir; bu büyüklükten kaç tane o kesirlik porsiyon çıkacağını gör.</p>
+    <div class="field-row" style="justify-content:center">
+      <input class="answer-input" id="groupWhole" value="6">
+      <span style="font-weight:900">÷</span>
+      <div class="frac-input"><input class="answer-input" id="groupN" value="1"><div class="frac-line"></div><input class="answer-input" id="groupD" value="3"></div>
+      <button class="submit-btn" id="groupBtn">Gruplandır</button>
+    </div>
+    <div class="il-result" id="groupResult">Değerleri gir ve butona tıkla.</div>
+  </div>
+</section>
+
+<!-- ============ 4. TAHMİN VE GENELLEME ============ -->
+<section class="tab-panel" id="genelleme">
+  <div class="card">
+    <div class="card-title"><div class="icon">🎯</div>Bu Kesir 0'a mı, 1/2'ye mi, 1'e mi Yakın?</div>
+    <p class="body-text" id="tahminText" style="font-family:'Baloo 2';font-size:1.1rem"></p>
+    <div class="tri-row" id="tahminChoices">
+      <button class="tri-btn" data-v="0">0</button>
+      <button class="tri-btn" data-v="1/2">1/2</button>
+      <button class="tri-btn" data-v="1">1</button>
+    </div>
+    <div class="feedback" id="tahminFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="tahminNext">Sonraki Kesir →</button></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔍</div>Doğru mu, Yanlış mı?</div>
+    <div class="q-card">
+      <div class="q-text" id="tfText"></div>
+      <div class="tf-row">
+        <button class="tf-btn" id="tfDogru">Doğru</button>
+        <button class="tf-btn" id="tfYanlis">Yanlış</button>
+      </div>
+      <div class="feedback" id="tfFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="tfNext">Sonraki Önerme →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">Bir bahçenin 2/6'sına gül, 1/10'una lale dikilmiştir. Bahçenin ne kadarı ekilidir?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>2/6 kesrini sadeleştiririz: \(\dfrac{2}{6}=\dfrac{1}{3}\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>1/3 ile 1/10'u toplamak için ortak payda (30) buluruz: \(\dfrac{10}{30}+\dfrac{3}{30}=\dfrac{13}{30}\).</div></div>
+        <div class="ex-result">✓ Bahçenin 13/30'u ekilidir.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">Bir pizzanın 3/4'ü kalmıştır. Bu kalan kısmın 1/3'ünü yiyorsan, pizzanın ne kadarını yemiş olursun?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>"Kalanın 1/3'ü" ifadesi çarpma işlemine karşılık gelir: \(\dfrac{3}{4}\times\dfrac{1}{3}\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Payları ve paydaları çarparız: \(\dfrac{3\times1}{4\times3}=\dfrac{3}{12}=\dfrac{1}{4}\).</div></div>
+        <div class="ex-result">✓ Pizzanın 1/4'ünü yemiş olursun.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">Bir pastanın 1/4'ü kalmıştır. Bu kalan, 3 kardeş arasında eşit paylaştırılacaktır. Her biri pastanın kaçta kaçını alır?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>Bu bir paylaşım durumudur: \(\dfrac{1}{4}\div3\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Kesri bölerken paydayı doğal sayı ile çarparız: \(\dfrac{1}{4\times3}=\dfrac{1}{12}\).</div></div>
+        <div class="ex-result">✓ Her kardeş pastanın 1/12'sini alır.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">Ali'nin cüzdanında 45,50 TL vardır. Markette 18,75 TL harcıyor, sonra ailesinden 12,25 TL harçlık alıyor. Cüzdanında kaç TL kalır?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>Önce harcamayı çıkarırız: \(45,50-18,75=26,75\) TL.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Sonra harçlığı ekleriz: \(26,75+12,25=39,00\) TL.</div></div>
+        <div class="ex-result">✓ Ali'nin cüzdanında 39,00 TL kalır.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">Etiket fiyatı 240 TL olan bir üründe %25 indirim uygulanmıştır. İndirimli fiyat kaç TL'dir?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="ex-step"><div class="snum">1</div><div>İndirim miktarını buluruz: \(240\times\dfrac{25}{100}=60\) TL.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>İndirim miktarını etiket fiyatından çıkarırız: \(240-60=180\) TL.</div></div>
+        <div class="ex-result">✓ İndirimli fiyat 180 TL'dir.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">DÖRT İŞLEM PROBLEM ATÖLYESİ · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 7. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Toplama/Çıkarma</b><span>Kesirlerin paydaları eşitlenmelidir.</span></div>
+      <div class="summary-item"><b>Çarpma</b><span>1'den küçük kesirle çarpmak sayıyı küçültür.</span></div>
+      <div class="summary-item"><b>Bölme</b><span>Paylaşım (eşit parçalama) veya gruplama (kaç tane var) anlamına gelebilir.</span></div>
+      <div class="summary-item"><b>Yüzde</b><span>%1'lik kısım referans alınarak çözülür.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. 1/2 + 1/3 işleminin sonucunu bulunuz.</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1" style="width:100px"></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. Bir ürünün fiyatı 150 TL'dir. %10 indirim uygulanırsa indirimli fiyat kaç TL olur?</h4>
+      <div class="field-row"><label for="k2a">Cevap:</label><input class="answer-input" id="k2a"></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+function gcd(a,b){ return b===0?a:gcd(b,a%b); }
+function simplify(n,d){ var g=gcd(n,d)||1; return [n/g,d/g]; }
+function fracStr(n,d){ var s=simplify(n,d); return s[1]===1? String(s[0]) : s[0]+'/'+s[1]; }
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ================= ALAN MODELİYLE ÇARPMA ================= */
+  document.getElementById('areaBtn').addEventListener('click',function(){
+    var n1=parseInt(document.getElementById('areaN1').value,10);
+    var d1=parseInt(document.getElementById('areaD1').value,10);
+    var n2=parseInt(document.getElementById('areaN2').value,10);
+    var d2=parseInt(document.getElementById('areaD2').value,10);
+    var res=document.getElementById('areaResult');
+    var grid=document.getElementById('areaGrid');
+    if(!n1||!d1||!n2||!d2||n1>d1||n2>d2||d1>8||d2>8){ res.textContent='Lütfen 8\'e kadar paydalı, birden küçük iki kesir gir (pay ≤ payda).'; grid.innerHTML=''; return; }
+    grid.style.gridTemplateColumns='repeat('+d2+',1fr)';
+    grid.innerHTML='';
+    for(var r=0;r<d1;r++){
+      for(var c=0;c<d2;c++){
+        var cell=document.createElement('div');
+        cell.className='area-cell';
+        if(r<n1 && c<n2){ cell.className+=' overlap'; }
+        else if(r<n1){ cell.className+=' rowhit'; }
+        grid.appendChild(cell);
+      }
+    }
+    var resultFrac=fracStr(n1*n2,d1*d2);
+    res.innerHTML=n1+'/'+d1+' × '+n2+'/'+d2+' = <b>'+(n1*n2)+'/'+(d1*d2)+' = '+resultFrac+'</b>. Koyu renkli '+(n1*n2)+' hücre, toplam '+(d1*d2)+' hücrenin bu kadarını oluşturuyor.';
+  });
+  document.getElementById('areaBtn').click();
+
+  document.querySelectorAll('#varsayim .choice-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#varsayim .choice-btn').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById('varsayimFeedback');
+      var ok=btn.dataset.v==='dogru';
+      fb.className='feedback show '+(ok?'ok':'no');
+      if(ok){
+        btn.classList.add('correct');
+        fb.textContent='✓ Doğru! Alan modelinde gördüğün gibi, 1\'den küçük bir kesirle çarpmak her zaman orijinal büyüklüğün bir kısmını (dolayısıyla daha küçük bir değeri) verir.';
+      }else{
+        btn.classList.add('wrong');
+        document.querySelector('#varsayim .choice-btn[data-v="dogru"]').classList.add('correct');
+        fb.textContent='✗ Aslında bu doğrudur: 3/4×1/3 örneğinde gördüğün gibi sonuç (1/4), her iki çarpandan da küçüktür. Doğru cevap işaretlendi.';
+      }
+    });
+  });
+
+  /* ================= PAYLAŞIM / GRUPLAMA ================= */
+  document.getElementById('shareBtn').addEventListener('click',function(){
+    var n=parseInt(document.getElementById('shareN').value,10);
+    var d=parseInt(document.getElementById('shareD').value,10);
+    var k=parseInt(document.getElementById('sharePeople').value,10);
+    var res=document.getElementById('shareResult');
+    if(!n||!d||!k||n>=d||k<1||d>30||k>20){ res.textContent='Lütfen geçerli bir kesir (pay<payda) ve 1-20 arası bir kişi sayısı gir.'; return; }
+    res.innerHTML=n+'/'+d+' ÷ '+k+' = <b>'+fracStr(n,d*k)+'</b> — Yani bütünün '+n+'/'+d+'\'lik kısmı, '+k+' kişiye eşit paylaştırılırsa her kişiye bütünün '+fracStr(n,d*k)+' kadarı düşer.';
+  });
+  document.getElementById('shareBtn').click();
+
+  document.getElementById('groupBtn').addEventListener('click',function(){
+    var whole=parseInt(document.getElementById('groupWhole').value,10);
+    var n=parseInt(document.getElementById('groupN').value,10);
+    var d=parseInt(document.getElementById('groupD').value,10);
+    var res=document.getElementById('groupResult');
+    if(!whole||!n||!d||n>=d||whole<1||whole>50){ res.textContent='Lütfen geçerli bir doğal sayı ve birden küçük bir kesir gir.'; return; }
+    var resultVal=whole*d/n;
+    var isInt=Number.isInteger(resultVal);
+    res.innerHTML=whole+' ÷ '+n+'/'+d+' = <b>'+(isInt?resultVal:fracStr(whole*d,n))+'</b> — Yani '+whole+' birimlik büyüklükten, her biri '+n+'/'+d+' kadar olan <b>'+(isInt?resultVal:resultVal.toFixed(2))+'</b> tane grup/porsiyon çıkar.';
+  });
+  document.getElementById('groupBtn').click();
+
+  /* ================= TAHMİN: 0, 1/2, 1'E YAKINLIK ================= */
+  var tahminPool=[
+    {frac:'1/10',closest:'0'},
+    {frac:'9/10',closest:'1'},
+    {frac:'5/9',closest:'1/2'},
+    {frac:'2/11',closest:'0'},
+    {frac:'7/8',closest:'1'},
+    {frac:'4/9',closest:'1/2'}
+  ];
+  var drawTahmin=makeDrawer(tahminPool);
+  var curTahmin=null;
+  function renderTahmin(){
+    curTahmin=drawTahmin();
+    document.getElementById('tahminText').textContent=curTahmin.frac+' kesri hangisine daha yakındır?';
+    document.querySelectorAll('#tahminChoices .tri-btn').forEach(function(b){ b.disabled=false; b.classList.remove('correct','wrong'); });
+    document.getElementById('tahminFeedback').className='feedback';
+    document.getElementById('tahminNext').classList.remove('show');
+  }
+  document.querySelectorAll('#tahminChoices .tri-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#tahminChoices .tri-btn').forEach(function(b){b.disabled=true;});
+      var ok=btn.dataset.v===curTahmin.closest;
+      var correctBtn=document.querySelector('#tahminChoices .tri-btn[data-v="'+curTahmin.closest+'"]');
+      correctBtn.classList.add('correct');
+      if(!ok){ btn.classList.add('wrong'); }
+      var fb=document.getElementById('tahminFeedback');
+      fb.className='feedback show '+(ok?'ok':'no');
+      fb.textContent=(ok?'✓ Doğru! ':'✗ ')+curTahmin.frac+' kesri '+curTahmin.closest+'\'e en yakın değerdir.';
+      document.getElementById('tahminNext').classList.add('show');
+    });
+  });
+  document.getElementById('tahminNext').addEventListener('click',renderTahmin);
+  renderTahmin();
+
+  /* ================= GENELLEMEYİ SINA: DOĞRU/YANLIŞ ================= */
+  var tfPool=[
+    {text:'Kesirlerle toplama ve çıkarma işlemi yapabilmek için paydaların eşit olması gerekir.',correct:true,exp:'Ancak paydalar (bütünün kaça bölündüğü) eşitse birimler karşılaştırılabilir ve toplama-çıkarma yapılabilir.'},
+    {text:'Bir doğal sayı, 1\'den büyük bir kesirle çarpıldığında sonuç bu sayıdan küçük olur.',correct:false,exp:'1\'den büyük bir kesirle çarpmak sayıyı büyütür; küçülten, 1\'den küçük kesirlerle çarpmaktır.'},
+    {text:'"1/4 pastayı 3 kişiye paylaştırmak" ifadesi bir bölme işlemidir.',correct:true,exp:'Bu, bir bütünün belirli bir parçasını eşit gruplara ayırma anlamına gelen paylaşım tipi bir bölme işlemidir.'},
+    {text:'6÷(1/3) işlemi, "6 birimlik büyüklükte kaç tane 1/3\'lük parça vardır?" sorusuna cevap verir.',correct:true,exp:'Bu, bölmenin gruplama anlamına bir örnektir.'},
+    {text:'Yüzde problemlerinde genellikle %1\'lik kısmı bulmak, çözüme yardımcı bir stratejidir.',correct:true,exp:'%1\'lik kısım bulunduğunda, istenen herhangi bir yüzdelik kısım bu değerin katları alınarak kolayca hesaplanabilir.'},
+    {text:'Bir doğal sayı 1\'den küçük bir ondalık gösterime bölündüğünde sonuç sayıdan küçük olur.',correct:false,exp:'1\'den küçük bir ondalık sayıya bölmek sonucu büyütür; tam tersine 1\'den küçük bir sayıyla çarpmak sonucu küçültür.'},
+    {text:'Kesirleri 0, 1/2 ve 1\'e yakınlığına göre sınıflandırmak, işlem sonucunu tahmin etmede yardımcı bir stratejidir.',correct:true,exp:'Bu strateji, işlem yapılmadan önce sonucun büyüklük mertebesini tahmin etmeye yardımcı olur.'}
+  ];
+  var drawTf=makeDrawer(tfPool);
+  var curTf=null;
+  function renderTf(){
+    curTf=drawTf();
+    document.getElementById('tfText').textContent=curTf.text;
+    document.getElementById('tfFeedback').className='feedback';
+    document.getElementById('tfNext').classList.remove('show');
+    document.getElementById('tfDogru').disabled=false;
+    document.getElementById('tfYanlis').disabled=false;
+    document.getElementById('tfDogru').classList.remove('correct','wrong');
+    document.getElementById('tfYanlis').classList.remove('correct','wrong');
+  }
+  function answerTf(userVal){
+    document.getElementById('tfDogru').disabled=true;
+    document.getElementById('tfYanlis').disabled=true;
+    var ok=userVal===curTf.correct;
+    var correctBtn=curTf.correct?document.getElementById('tfDogru'):document.getElementById('tfYanlis');
+    correctBtn.classList.add('correct');
+    if(!ok){
+      (userVal?document.getElementById('tfDogru'):document.getElementById('tfYanlis')).classList.add('wrong');
+    }
+    var fb=document.getElementById('tfFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=(ok?'✓ Doğru! ':'✗ ')+curTf.exp;
+    document.getElementById('tfNext').classList.add('show');
+  }
+  document.getElementById('tfDogru').addEventListener('click',function(){answerTf(true);});
+  document.getElementById('tfYanlis').addEventListener('click',function(){answerTf(false);});
+  document.getElementById('tfNext').addEventListener('click',renderTf);
+  renderTf();
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var islemPool=[
+    {a:'1/4',b:'1/6',op:'+',correct:'5/12',distractors:['2/10','1/2','7/12']},
+    {a:'3/5',b:'1/10',op:'+',correct:'7/10',distractors:['4/15','1/2','4/5']},
+    {a:'5/6',b:'1/3',op:'-',correct:'1/2',distractors:['2/3','4/3','1/3']},
+    {a:'7/8',b:'3/8',op:'-',correct:'1/2',distractors:['3/4','5/4','1/4']}
+  ];
+  var drawIslem=makeDrawer(islemPool);
+  var carpmaPool=[
+    {a:'3/4',b:'1/3',correct:'1/4',distractors:['4/7','1/3','3/4']},
+    {a:'2/3',b:'3/5',correct:'2/5',distractors:['5/8','3/5','2/3']},
+    {a:'5/6',b:'2/5',correct:'1/3',distractors:['7/11','5/6','2/5']},
+    {a:'4/9',b:'3/8',correct:'1/6',distractors:['7/17','4/9','3/8']}
+  ];
+  var drawCarpma=makeDrawer(carpmaPool);
+  var bolmePool=[
+    {text:'1/4 ÷ 3 işleminin sonucu nedir?',correct:'1/12',distractors:['3/4','1/7','4/3']},
+    {text:'2/3 ÷ 4 işleminin sonucu nedir?',correct:'1/6',distractors:['8/3','2/12','3/2']},
+    {text:'6 ÷ 1/3 işleminin sonucu nedir?',correct:'18',distractors:['2','9','6,3']},
+    {text:'9 ÷ 3/4 işleminin sonucu nedir?',correct:'12',distractors:['6,75','3','27']}
+  ];
+  var drawBolme=makeDrawer(bolmePool);
+  var drawTfQuiz=makeDrawer(tfPool);
+
+  function createQuestion(type){
+    var q={type:type};
+    if(type==='islem'){
+      var c=drawIslem();
+      var opts=[c.correct].concat(c.distractors);
+      q.text=c.a+' '+c.op+' '+c.b+' işleminin sonucu nedir?';
+      q.choices=shuffle(opts);q.correctText=c.correct;
+    }else if(type==='carpma'){
+      var c=drawCarpma();
+      var opts=[c.correct].concat(c.distractors);
+      q.text=c.a+' × '+c.b+' işleminin sonucu nedir?';
+      q.choices=shuffle(opts);q.correctText=c.correct;
+    }else if(type==='bolme'){
+      var c=drawBolme();
+      var opts=[c.correct].concat(c.distractors);
+      q.text=c.text;
+      q.choices=shuffle(opts);q.correctText=c.correct;
+    }else{
+      var c=drawTfQuiz();
+      q.text=c.text;
+      q.choices=['Doğru','Yanlış'];q.correctText=c.correct?'Doğru':'Yanlış';
+    }
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var qTypes=['islem','carpma','onerme','bolme','islem','carpma','onerme','bolme','islem','onerme'];
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(createQuestion);
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=document.getElementById('k1').value.trim(),fb=document.getElementById('kf1');
+    var ok=(v==='5/6');
+    fb.textContent=ok?'✓ Doğru! 1/2+1/3 = 3/6+2/6 = 5/6':'✗ Tekrar düşün: ortak paydayı (6) bul.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var v=document.getElementById('k2a').value.trim(),fb=document.getElementById('kf2');
+    var ok=(v==='135');
+    fb.textContent=ok?'✓ Doğru! 150 TL\'nin %10\'u 15 TL\'dir, 150-15=135 TL.':'✗ Tekrar düşün: önce %10\'luk indirim miktarını bul.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('konu'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>
