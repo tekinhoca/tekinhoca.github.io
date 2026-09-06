@@ -78,20 +78,88 @@
 
   /* --- Akordiyon Yapısı --- */
   .grade-block { margin-bottom: 20px; }
-  .accordion-item { border: 1px solid rgba(122,92,30,0.15); border-radius: 8px; overflow: hidden; background: transparent; margin-bottom: 15px; }
-  .accordion-header { 
-    padding: 18px 25px; display: flex; justify-content: space-between; align-items: center; 
-    cursor: pointer; background: var(--cream); transition: background 0.2s; 
+
+  /* Üst seviye: sınıf başlıkları */
+  .grade-block > .accordion-item {
+    border: 1px solid rgba(122,92,30,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+    background: transparent;
+    margin-bottom: 15px;
   }
+
+  .accordion-header {
+    padding: 18px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: var(--cream);
+    transition: background 0.2s;
+  }
+
   .accordion-header:hover { background: #fdfaf3; }
+
   @media (prefers-color-scheme: dark) {
     .accordion-header { background: transparent !important; }
     .accordion-header:hover { background: rgba(122,92,30,0.12) !important; }
   }
-  .accordion-header h3 { margin: 0; font-family: 'Lora', serif; font-size: 1.25rem; color: var(--rust); }
-  /* Sadece üst seviye sınıf başlıkları (5/6/7/8. Sınıf) tamamen büyük harf olacak */
-  .grade-block > .accordion-item > .accordion-header h3 { text-transform: uppercase; }
-  .accordion-content { display: none; border-top: 1px solid rgba(122,92,30,0.1); background: transparent; }
+
+  .accordion-header h3 {
+    margin: 0;
+    font-family: 'Lora', serif;
+    font-size: 1.25rem;
+    color: var(--rust);
+  }
+
+  /* Sadece üst seviye sınıf başlıkları tamamen büyük harf olacak */
+  .grade-block > .accordion-item > .accordion-header h3 {
+    text-transform: uppercase;
+  }
+
+  /* Alt seviye: temalar — üst seviyeden belirgin ama zarif biçimde ayrılır */
+  .accordion-content > .accordion-item {
+    margin: 0 18px;
+    border: none;
+    border-radius: 0;
+    background: var(--aged);
+    overflow: hidden;
+  }
+
+  .accordion-content > .accordion-item + .accordion-item {
+    border-top: 1px solid rgba(122,92,30,0.10);
+  }
+
+  .accordion-content > .accordion-item > .accordion-header {
+    padding: 11px 18px;
+    background: var(--aged);
+  }
+
+  .accordion-content > .accordion-item > .accordion-header:hover {
+    background: rgba(122,92,30,0.07);
+  }
+
+  .accordion-content > .accordion-item > .accordion-header h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .accordion-content > .accordion-item > .accordion-header .toggle-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Alt akordeonların içerikleri de aynı girintiyi korur; kartlar kendi yüzeyini oluşturur. */
+  .accordion-content > .accordion-item > .accordion-content {
+    border-top: 1px solid rgba(122,92,30,0.08);
+    background: transparent;
+  }
+
+  /* Üst seviyenin içeriği için ek ayırıcı çizgi */
+  .grade-block > .accordion-item > .accordion-content {
+    border-top: 1px solid rgba(122,92,30,0.10);
+    background: transparent;
+  }
   
   /* --- Etkinlik Tablosu (Koyulaşma ve Çizgi Özellikleri Korundu) --- */
   .activity-table { width:100%; border-collapse:collapse; }
@@ -120,6 +188,19 @@
     .col-btn { width:auto; }
     .go-btn { font-size:0.68rem; padding:7px 10px; }
     .act-name { font-size:0.95rem; }
+
+    .accordion-content > .accordion-item {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+
+    .accordion-content > .accordion-item > .accordion-header {
+      padding: 10px 14px;
+    }
+
+    .accordion-content > .accordion-item > .accordion-header h3 {
+      font-size: 0.98rem;
+    }
   }
 
   /* --- Tema Etkinlik Kartları (ikonsuz, tıklanabilir) --- */
@@ -156,6 +237,18 @@
   [data-theme="dark"] .toggle-icon {
     fill: var(--gold);
   }
+
+  [data-theme="dark"] .accordion-content > .accordion-item > .accordion-header {
+    background: rgba(122,92,30,0.08);
+  }
+
+  [data-theme="dark"] .accordion-content > .accordion-item > .accordion-header:hover {
+    background: rgba(122,92,30,0.14);
+  }
+
+  [data-theme="dark"] .accordion-content > .accordion-item + .accordion-item {
+    border-top-color: rgba(186,117,23,0.14);
+  }
 </style>
 </head>
 <body>
@@ -186,6 +279,18 @@
   <h2 class="section-title">Matematik Oyunları</h2>
 
   <div class="game-grid">
+<a href="mat-oyunlar/puanlarkat.html" target="_blank" class="game-link">
+  <div class="game-card">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5">
+      <rect x="2" y="8" width="9.5" height="9.5" rx="1.6"/>
+      <rect x="12.5" y="2.5" width="9.5" height="9.5" rx="1.6"/>
+      <text x="6.75" y="15.6" text-anchor="middle" font-size="5.6" font-weight="700" fill="var(--rust)" stroke="none" font-family="Georgia, serif">x2</text>
+      <text x="17.25" y="10.1" text-anchor="middle" font-size="5" font-weight="700" fill="var(--rust)" stroke="none" font-family="Georgia, serif">+6</text>
+    </svg>
+    <span>Puanlar</span>
+    <span>Kat Kat</span>
+  </div>
+</a>
 <a href="mat-oyunlar/mat-av.html" target="_blank" class="game-link">
   <div class="game-card">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--rust)" stroke-width="1.5">
@@ -265,31 +370,539 @@
   <h2 class="section-title">Matematik Etkinlikleri</h2>
 
   <div class="grade-block">
-    <div class="accordion-item disabled-section">
-      <div class="accordion-header">
-        <h3>5. Sınıf Matematik Etkinlikleri (Hazırlanıyor)</h3>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>5. Sınıf Matematik Etkinlikleri</h3>
         <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="accordion-content">
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>1. Tema: Sayılar ve Nicelikler (1)</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/5/5-1-1-cokbas.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Çok Basamaklı Sayılar</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-1-2-dglpro.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Gerşek Yaşam Problemleri</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>1. Tema: Sayılar ve Nicelikler (2)</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/5/5-1-3.1-keslab.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Kesir Laboratuvarı</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-1-3-ksrlr.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Kesirlerin Farklı Gösterimleri</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-1-4-keskar.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Kesirleri Karşılaştırma</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>2. Tema: İşlemlerle Cebirsel Düşünme</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/5/5-2-1-estlk.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Eşitliğin Korunumu ve İşlemler</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-2-2-islmonclg.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>İşlem Önceliği</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-2-3-sysklrnt.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Sayı ve Şekil Örüntüleri</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-2-4-tmlalg.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Aritmetik İşlemlerde Algoritma</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>3. Tema: Geometrik Şekiller</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/5/5-3-1-tmlgeociz.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Temel Geometrik Çizimler</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-3-2-czmdnym.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Geometrik Çizimlere Dayalı Deneyimler</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-3-3-aciolc.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Açı Ölçme</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-3-4-dgrlraclr.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Düzlemde Doğruların Durumu</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-3-5-ckgnlr.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Çokgenler</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-3-6-ckgnozllk.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Düzgün Çokgenler ve Üçgenler</span></div>
+              </a>
+              <a href="matematik-etkinlik/5/5-3-7-ucgnestszlg.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Çemberden Üçgene</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>4. Tema: Geometrik Nicelikler</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>5. Tema: İstatistiksel Araştırma Süreci</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>6. Tema: Veriden Olasılığa</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="accordion-item disabled-section">
-      <div class="accordion-header">
-        <h3>6. Sınıf Matematik Etkinlikleri (Hazırlanıyor)</h3>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>6. Sınıf Matematik Etkinlikleri</h3>
         <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="accordion-content">
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>1. Tema: Sayılar ve Nicelikler (1)</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/6/6-1-1-carkat.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Çarpanlar Katlar</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-1-2-bol.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Bölünebilme</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-1-3-aslsay.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Asal Sayılar</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-1-4-ortbol.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Ortak Katlar/Bölenler</span></div>
+              </a>
+            </div>
+          </div>
+</div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>1. Tema: Sayılar ve Nicelikler (2)</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/6/6-1-5-basdeg.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Basamak Değeri</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-1-6-kesbol.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Kesirler ve Bölme</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-1-7-dort.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Dört İşlem</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-1-8-uznlk.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Uzunluk Ölçme</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>2. Tema: İşlemlerle Cebirsel Düşünme ve Dönüşümler</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/6/6-2-1-cbrsl.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Bilinmeyen Niceliklerden Cebirsel İfadelere</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-2-2-orntlr.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Sayı ve Şekil Örüntülerini Yorumlama</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-2-3-algrtm.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Cebirsel İfadeler İçeren Algoritmalar</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>3. Tema: Geometrik Şekiller</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/6/6-3-1-prllksn.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Paralel Doğrular ve Bir Kesenin Oluşturduğu Açılar</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-3-2-ikiksndrtgn.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>İki Kesenle Oluşan Dörtgenler</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-3-3-ksgndrtgn.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Köşegenleri Birbirini Ortalayan Dörtgenler</span></div>
+              </a>
+              <a href="matematik-etkinlik/6/6-3-4-geoprob.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Problemler</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>4. Tema: Geometrik Nicelikler</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>5. Tema: İstatistiksel Araştırma Süreci</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>6. Tema: Veriden Olasılığa</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="accordion-item disabled-section">
-      <div class="accordion-header">
-        <h3>7. Sınıf Matematik Etkinlikleri (Hazırlanıyor)</h3>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>7. Sınıf Matematik Etkinlikleri</h3>
         <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
       </div>
-    </div>
+      <div class="accordion-content">
 
-    <div class="accordion-item disabled-section">
-      <div class="accordion-header">
-        <h3>8. Sınıf Matematik Etkinlikleri (Hazırlanıyor)</h3>
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>1. Tema: Sayılar ve Nicelikler (1)</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/7/7-1-1-say.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Tam Sayılar</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-1-2-ond.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Ondalık Gösterim</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-1-3-srlm.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Rasyonal Sayıları Sıralama</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-1-4-prb.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Problemler</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>1. Tema: Sayılar ve Nicelikler (2)</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/7/7-1-5-oran.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Oran İlişkileri</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-1-6-ornt.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Orantılı mı Değil mi?</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-1-7-dgrornt.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Doğru Orantı Problemleri</span></div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>2. Tema: İşlemlerle Cebirsel Düşünme ve Dönüşümler</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/7/7-2-1-cbrislmlr.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Cebirsel İfadelerle İşlemler</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-2-2-dnkestszlk.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Denklem ve Eşitsizliklerle Problemler</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-2-3-cbrspt.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Sayılar ve Özellikleriyle Cebirsel İspat</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-2-4-cbralg.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Cebirsel İşlemler ve Algoritma</span></div>
+              </a>
+            </div>
+          </div>
+</div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>3. Tema: Dönüşüm</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/7/7-3-1-ynsm.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Yansıma Dönüşümü</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-3-2-ortdik.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Orta Dikme ve Açıortay İnşası</span></div>
+              </a>
+            </div>
+          </div>
+</div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" onclick="toggleAccordion(this)">
+            <h3>4. Tema: Geometrik Nicelikler (1)</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+          <div class="accordion-content">
+            <div class="theme-card-grid">
+              <a href="matematik-etkinlik/7/7-4-1-eskplr.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Eş Küplerle Oluşturulan Yapılar</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-4-2-yzyaln.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Dikdörtgen Prizmanın Yüzey Alanı</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-4-3-hcm1.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Birim Küplerle Hacim</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-4-4-hcm2.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Dikdörtgen Prizmanın Hacmi</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-4-5-hcmbrm.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Hacim Ölçme Birimleri</span></div>
+              </a>
+              <a href="matematik-etkinlik/7/7-4-6-gunpro.html" target="_blank" class="theme-card-link">
+                <div class="theme-card"><span>Günlük Yaşamdan Problemler</span></div>
+              </a>
+            </div>
+          </div>
+</div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>4. Tema: Geometrik Nicelikler (2)</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>5. Tema: Geometrik Şekiller</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>6. Tema: İstatistiksel Araştırma Süreci</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header">
+            <h3>7. Tema: Veriden Olasılığa</h3>
+            <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+</div>
+</div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <h3>8. Sınıf Matematik Etkinlikleri</h3>
         <svg class="toggle-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+      </div>
+      <div class="accordion-content">
+        <table class="activity-table">
+          <tr>
+            <td class="col-icon">
+              <svg width="64" height="64" viewBox="0 0 80 80">
+                <line x1="8" y1="62" x2="72" y2="62" stroke="#888780" stroke-width="1.5"/>
+                <line x1="8" y1="62" x2="8" y2="8" stroke="#888780" stroke-width="1.5"/>
+                <circle cx="8" cy="62" r="3" fill="#185FA5"/><circle cx="22" cy="50" r="3" fill="#185FA5"/><circle cx="36" cy="38" r="3" fill="#185FA5"/><circle cx="50" cy="26" r="3" fill="#185FA5"/><circle cx="64" cy="14" r="3" fill="#185FA5"/>
+                <line x1="8" y1="62" x2="64" y2="14" stroke="#185FA5" stroke-width="1.5"/>
+              </svg>
+            </td>
+            <td class="col-name"><div class="act-name">8. Sınıf Doğrusal İlişki</div></td>
+            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8dogrusaliliski.html" target="_blank">Etkinliğe Git</a></td>
+          </tr>
+          <tr>
+            <td class="col-icon">
+              <svg width="64" height="64" viewBox="0 0 80 80">
+                <line x1="8" y1="66" x2="74" y2="66" stroke="#888780" stroke-width="1.4"/><line x1="8" y1="66" x2="8" y2="8" stroke="#888780" stroke-width="1.4"/>
+                <line x1="12" y1="62" x2="66" y2="18" stroke="#185FA5" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="62" x2="66" y2="62" stroke="#185FA5" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <line x1="66" y1="62" x2="66" y2="18" stroke="#D85A30" stroke-width="1.2" stroke-dasharray="3,3"/>
+                <text x="39" y="74" text-anchor="middle" font-size="8" font-weight="700" fill="#185FA5" font-family="Georgia,serif">Δx</text>
+                <text x="74" y="42" text-anchor="middle" font-size="8" font-weight="700" fill="#D85A30" font-family="Georgia,serif">Δy</text>
+                <text x="28" y="38" text-anchor="middle" font-size="9" font-weight="700" fill="#185FA5" font-family="Georgia,serif">m=</text>
+                <line x1="36" y1="34" x2="52" y2="34" stroke="#185FA5" stroke-width="1"/>
+                <text x="44" y="32" text-anchor="middle" font-size="7" fill="#D85A30" font-family="Georgia,serif">Δy</text>
+                <text x="44" y="41" text-anchor="middle" font-size="7" fill="#185FA5" font-family="Georgia,serif">Δx</text>
+              </svg>
+            </td>
+            <td class="col-name"><div class="act-name">8. Sınıf Eğim</div></td>
+            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8egim.html" target="_blank">Etkinliğe Git</a></td>
+          </tr>
+          <tr>
+            <td class="col-icon">
+              <svg width="64" height="64" viewBox="0 0 80 80">
+                <text x="22" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="#D85A30" font-family="Georgia,serif">x</text>
+                <text x="40" y="38" text-anchor="middle" font-size="18" font-weight="700" fill="#993C1D" font-family="Georgia,serif">&gt;</text>
+                <text x="58" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="#D85A30" font-family="Georgia,serif">3</text>
+                <line x1="10" y1="54" x2="70" y2="54" stroke="#D85A30" stroke-width="2"/>
+                <circle cx="35" cy="54" r="5" fill="none" stroke="#D85A30" stroke-width="2"/>
+                <line x1="35" y1="54" x2="70" y2="54" stroke="#D85A30" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </td>
+            <td class="col-name"><div class="act-name">8. Sınıf Eşitsizlikler</div></td>
+            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8esitsizlikler.html" target="_blank">Etkinliğe Git</a></td>
+          </tr>
+          <tr>
+            <td class="col-icon">
+              <svg width="64" height="64" viewBox="0 0 80 80">
+                <polygon points="40,8 70,58 10,58" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.5"/>
+                <text x="40" y="50" text-anchor="middle" font-size="9" font-weight="700" fill="#854F0B" font-family="Georgia,serif">a &lt; b+c</text>
+              </svg>
+            </td>
+            <td class="col-name"><div class="act-name">8. Sınıf Üçgenlerde Kenarlar ve Açılar Arasındaki İlişkiler</div></td>
+            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8kenaraci.html" target="_blank">Etkinliğe Git</a></td>
+          </tr>
+          <tr>
+            <td class="col-icon">
+              <svg width="64" height="64" viewBox="0 0 80 80">
+                <polygon points="10,62 56,62 56,10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+                <rect x="48" y="54" width="8" height="8" fill="none" stroke="#0F6E56" stroke-width="1.2"/>
+                <text x="30" y="72" text-anchor="middle" font-size="8" fill="#0F6E56" font-family="Georgia,serif">a</text>
+                <text x="62" y="40" text-anchor="middle" font-size="8" fill="#0F6E56" font-family="Georgia,serif">b</text>
+                <text x="32" y="42" text-anchor="middle" font-size="8" font-weight="700" fill="#085041" font-family="Georgia,serif">c²=a²+b²</text>
+              </svg>
+            </td>
+            <td class="col-name"><div class="act-name">8. Sınıf Pisagor Kuralı</div></td>
+            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8pisagor.html" target="_blank">Etkinliğe Git</a></td>
+          </tr>
+          <tr>
+            <td class="col-icon">
+              <svg width="64" height="64" viewBox="0 0 80 80">
+                <!-- Büyük üçgen -->
+                <polygon points="8,64 52,64 52,16" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.6"/>
+                <!-- Küçük benzer üçgen (sağ üstte) -->
+                <polygon points="58,64 74,64 74,46" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.4"/>
+                <!-- Eşitlik işaretleri — karşılıklı kenarlar -->
+                <line x1="28" y1="68" x2="32" y2="68" stroke="#185FA5" stroke-width="1.8"/>
+                <line x1="64" y1="68" x2="66" y2="68" stroke="#BA7517" stroke-width="1.8"/>
+                <!-- ~ benzerlik sembolü -->
+                <text x="40" y="38" text-anchor="middle" font-size="13" font-weight="800" fill="#185FA5" font-family="Georgia,serif">~</text>
+                <!-- Dik açı işareti büyük -->
+                <rect x="44" y="56" width="8" height="8" fill="none" stroke="#185FA5" stroke-width="1.2"/>
+                <!-- Dik açı işareti küçük -->
+                <rect x="66" y="56" width="5" height="5" fill="none" stroke="#BA7517" stroke-width="1"/>
+              </svg>
+            </td>
+            <td class="col-name"><div class="act-name">8. Sınıf Eşlik ve Benzerlik</div></td>
+            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8eslikbenzerlik.html" target="_blank">Etkinliğe Git</a></td>
+          </tr>
+          <tr>
+            <td class="col-icon">
+              <svg width="64" height="64" viewBox="0 0 80 80">
+                <!-- Orijinal şekil (L benzeri) -->
+                <polygon points="6,58 18,58 18,46 14,46 14,28 6,28" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+                <!-- Öteleme oku -->
+                <line x1="20" y1="43" x2="36" y2="43" stroke="#BA7517" stroke-width="1.4" stroke-dasharray="3,2" marker-end="url(#arr)"/>
+                <defs>
+                  <marker id="arr" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="4" markerHeight="4" orient="auto">
+                    <path d="M0 1L5 3L0 5" fill="none" stroke="#BA7517" stroke-width="1.2"/>
+                  </marker>
+                </defs>
+                <!-- Ötelenmiş görüntü -->
+                <polygon points="38,58 50,58 50,46 46,46 46,28 38,28" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5" stroke-dasharray="4,2"/>
+                <!-- Simetri doğrusu -->
+                <line x1="62" y1="18" x2="62" y2="68" stroke="#D85A30" stroke-width="1.6" stroke-dasharray="5,3"/>
+                <!-- Yansıma görüntüsü -->
+                <polygon points="74,58 62,58 62,46 66,46 66,28 74,28" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.4" stroke-dasharray="4,2"/>
+              </svg>
+            </td>
+            <td class="col-name"><div class="act-name">8. Sınıf Öteleme ve Yansıma</div></td>
+            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8oteleme_yansima.html" target="_blank">Etkinliğe Git</a></td>
+          </tr>
+          <tr>
+            <td class="col-icon">
+              <svg width="64" height="64" viewBox="0 0 80 80">
+                <!-- Silindir -->
+                <ellipse cx="20" cy="22" rx="12" ry="5" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.4"/>
+                <rect x="8" y="22" width="24" height="22" fill="#D4E6F8" stroke="none"/>
+                <ellipse cx="20" cy="44" rx="12" ry="5" fill="#C8DBF5" stroke="#185FA5" stroke-width="1.4"/>
+                <line x1="8" y1="22" x2="8" y2="44" stroke="#185FA5" stroke-width="1.4"/>
+                <line x1="32" y1="22" x2="32" y2="44" stroke="#185FA5" stroke-width="1.4"/>
+                <!-- Kare tabanlı piramit -->
+                <polygon points="58,62 74,62 74,48 58,48" fill="#FAEEDA" stroke="#BA7517" stroke-width="1.4"/>
+                <line x1="58" y1="48" x2="58" y2="62" stroke="#BA7517" stroke-width="1.4"/>
+                <polygon points="58,48 74,48 66,30" fill="#F5DFB8" stroke="#BA7517" stroke-width="1.4"/>
+                <polygon points="74,48 74,62 66,30" fill="#EEDBB0" stroke="#BA7517" stroke-width="1.4"/>
+                <line x1="58" y1="62" x2="66" y2="30" stroke="#BA7517" stroke-width="1.2" stroke-dasharray="3,2"/>
+              </svg>
+            </td>
+            <td class="col-name"><div class="act-name">8. Sınıf Geometrik Cisimler</div></td>
+            <td class="col-btn"><a class="go-btn" href="matematik-etkinlik/8geocis.html" target="_blank">Etkinliğe Git</a></td>
+          </tr>
+        </table>
+        <a href="okul-quizler/quiz-orta.html" target="_blank" class="full-row-link">
+          <div class="full-row-card">8. Sınıflar Matematik Quiz</div>
+        </a>
       </div>
     </div>
   </div>
@@ -305,32 +918,54 @@
 
 <script src="menu.js"></script>
 <script>
+  function closeAccordion(item) {
+    const content = item.querySelector(':scope > .accordion-content');
+    const header = item.querySelector(':scope > .accordion-header');
+
+    if (content) {
+      content.style.display = 'none';
+
+      // İç içe tüm akordeonları da başlangıç durumuna döndür.
+      content.querySelectorAll('.accordion-item').forEach((nestedItem) => {
+        const nestedContent = nestedItem.querySelector(':scope > .accordion-content');
+        const nestedHeader = nestedItem.querySelector(':scope > .accordion-header');
+
+        if (nestedContent) nestedContent.style.display = 'none';
+        if (nestedHeader) nestedHeader.classList.remove('active');
+      });
+    }
+
+    if (header) header.classList.remove('active');
+  }
+
   function toggleAccordion(header) {
     const item = header.parentElement;
     const content = header.nextElementSibling;
     if (!content) return;
 
-    // Yalnızca aynı üst kapsayıcı (aynı seviye) içindeki kardeş akordeonları kapat.
-    // Bu sayede iç içe akordeonlarda (ör. 5. Sınıf içindeki temalar) bir tema açıldığında
-    // üst seviyedeki (5. Sınıf) akordeon kapanmaz.
+    const isOpen = content.style.display === 'block';
     const container = item.parentElement;
+
+    // Aynı seviyedeki kardeş akordeonları kapat.
+    // Bir üst sınıf kategorisi kapanırken, içindeki açık temalar da kapatılır.
     Array.from(container.children).forEach((sibling) => {
       if (sibling !== item && sibling.classList.contains('accordion-item')) {
-        const sibHeader = sibling.querySelector(':scope > .accordion-header');
-        const sibContent = sibling.querySelector(':scope > .accordion-content');
-        if (sibContent) sibContent.style.display = 'none';
-        if (sibHeader) sibHeader.classList.remove('active');
+        closeAccordion(sibling);
       }
     });
 
-    if (content.style.display === 'block') {
-      content.style.display = 'none';
-      header.classList.remove('active');
+    if (isOpen) {
+      closeAccordion(item);
     } else {
       content.style.display = 'block';
       header.classList.add('active');
     }
   }
+
+  // Sayfa ilk açıldığında bütün akordeonları kapalı başlat.
+  document.querySelectorAll('.accordion-item').forEach((item) => {
+    closeAccordion(item);
+  });
 
   const btn = document.getElementById('back-to-top');
   window.addEventListener('scroll', function() {
