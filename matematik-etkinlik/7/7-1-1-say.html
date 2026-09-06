@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sayı Pusulası | 7. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:520px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.72rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.context-list{margin:10px 0 4px 4px}
+.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:60px}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:110px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+/* Tam sayı doğrusu (tıklanabilir) */
+.il-wrap{overflow-x:auto;padding:6px 2px 2px}
+.il-track{height:3px;background:#dce2ff;border-radius:2px;margin:0 4px 6px;min-width:480px}
+.il-row{display:flex;justify-content:space-between;min-width:480px}
+.il-tick{background:#eef0fd;border:2px solid var(--border);border-radius:9px;min-width:28px;padding:6px 3px;font-weight:800;font-size:.75rem;color:var(--primary);cursor:pointer;font-family:'Nunito'}
+.il-tick:hover{border-color:var(--primary)}
+.il-tick.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+/* Mutlak değer / nokta sayı doğrusu */
+.al-box{background:#f7f8ff;border:1.5px solid var(--border);border-radius:16px;padding:20px 14px 12px;margin:14px 0}
+.al-track{position:relative;height:8px;background:#dce2ff;border-radius:5px;margin:22px 6px 8px}
+.al-fill{position:absolute;top:0;height:100%;background:linear-gradient(90deg,#4cc9f0,#4361ee);border-radius:5px}
+.al-zero{position:absolute;top:-7px;width:2px;height:22px;background:#1a1a2e;transform:translateX(-50%)}
+.al-point{position:absolute;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--accent);border:3px solid #fff;box-shadow:0 2px 8px rgba(247,37,133,.4);transform:translateX(-50%)}
+.al-labels{display:flex;justify-content:space-between;font-size:.72rem;color:var(--muted);padding:0 2px}
+/* Sıralama etkinliği */
+.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.order-btn{position:relative;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:16px 10px;font-weight:800;font-size:1rem;cursor:pointer;text-align:center}
+.order-btn .rank{position:absolute;top:-9px;left:-9px;background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.78rem;box-shadow:0 2px 6px rgba(67,97,238,.4)}
+.order-btn:disabled{opacity:.55;cursor:default}
+.order-btn.picked{border-color:var(--primary);background:var(--primary-light)}
+mjx-container{margin:0!important}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.35em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+@media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">7. Sınıf Matematik · 1. Tema · 1. Bölüm</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>🧭 Sayı Pusulası</h1>
+    <p>MAT.7.1.1. Gerçek yaşam ya da matematiksel durumlarda doğal sayı, tam sayı ve rasyonel sayıları yorumlayabilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+    <button class="tab-btn" data-tab="tamsayi">🔢 Tam Sayılar</button>
+    <button class="tab-btn" data-tab="rasyonel">🔁 Rasyonel Sayıya Geçiş</button>
+    <button class="tab-btn" data-tab="mutlak">📏 Mutlak Değer</button>
+    <button class="tab-btn" data-tab="sayidogrusu">📍 Sayı Doğrusu</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. KONU ANLATIMI ============ -->
+<section class="tab-panel active" id="konu">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔢</div>Tam Sayılar</div>
+    <p class="body-text">Doğal sayılar (0, 1, 2, 3, ...) ve bu sayıların sıfır hariç karşıtları (-1, -2, -3, ...) bir araya gelerek <b>tam sayılar kümesini</b> oluşturur.</p>
+    <div class="math-display">\[\mathbb{Z}=\{\dots,-3,-2,-1,0,1,2,3,\dots\}\]</div>
+    <p class="body-text">Tam sayılar, günlük hayatta yönü ve büyüklüğü birlikte ifade etmemiz gereken durumlarda karşımıza çıkar:</p>
+    <ul class="context-list">
+      <li>🌡️ Sıcaklık: "sıfırın 4 derece altı" → \(-4\)</li>
+      <li>💰 Gelir-gider / tasarruf: "150 TL borç" → \(-150\), "300 TL tasarruf" → \(+300\)</li>
+      <li>🌊 Yükseklik-derinlik: "deniz seviyesinin 20 m altı" → \(-20\)</li>
+      <li>🏢 Kat bilgisi: "girişin 1 kat aşağısı" → \(-1\)</li>
+    </ul>
+    <div class="def-box"><b>Dikkat:</b> Sıfır ne pozitiftir ne de negatiftir; işaretsiz tek tam sayıdır.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔁</div>Rasyonel Sayılar</div>
+    <div class="def-box">İki tam sayının oranı biçiminde, yani \(\dfrac{a}{b}\) şeklinde yazılabilen (a, b tam sayı ve \(b\neq0\)) sayılara <b>rasyonel sayı</b> denir. Rasyonel sayılar kümesi \(\mathbb{Q}\) ile gösterilir.</div>
+    <p class="body-text">Her tam sayı, paydası 1 olan bir rasyonel sayı olarak da yazılabilir:</p>
+    <div class="math-display">\[-4=\dfrac{-4}{1}\qquad 7=\dfrac{7}{1}\qquad 0=\dfrac{0}{1}\]</div>
+    <div class="gen-box">✓ Doğal sayılar ⊂ Tam sayılar ⊂ Rasyonel sayılar</div>
+    <p class="body-text">Pay ve paydası aynı sayıyla çarpılan kesirler <b>denk kesirlerdir</b> ve aynı rasyonel sayıyı gösterir:</p>
+    <div class="math-display">\[\dfrac{1}{2}=\dfrac{2}{4}=\dfrac{3}{6}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📏</div>Mutlak Değer</div>
+    <div class="def-box">Bir sayının sayı doğrusunda <b>0 noktasına olan uzaklığına</b> o sayının mutlak değeri denir. \(a\) sayısının mutlak değeri \(|a|\) ile gösterilir.</div>
+    <div class="math-display">\[|5|=5 \qquad |-5|=5 \qquad |0|=0\]</div>
+    <div class="gen-box">✓ Her sayının mutlak değeri 0'dan büyük ya da 0'a eşittir: \(|a|\ge0\)<br>✓ Karşıt (zıt işaretli) iki sayının mutlak değerleri birbirine eşittir: \(|a|=|-a|\)</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📍</div>Sayı Doğrusunda Rasyonel Sayılar</div>
+    <p class="body-text">Sayı doğrusu üzerindeki her nokta bir rasyonel sayıya, her rasyonel sayı da sayı doğrusu üzerinde bir noktaya karşılık gelir. Denk kesirler (örneğin \(\dfrac{1}{2}\) ve \(\dfrac{2}{4}\)) sayı doğrusunda <b>aynı noktayı</b> gösterir.</p>
+    <div class="tip-box">💡 İki farklı rasyonel sayı arasında, her zaman başka bir rasyonel sayı daha bulunabilir. Bu yüzden sayı doğrusu üzerinde rasyonel sayılar "sıkışık" biçimde yer alır.</div>
+  </div>
+</section>
+
+<!-- ============ 2. TAM SAYILAR ============ -->
+<section class="tab-panel" id="tamsayi">
+  <div class="card">
+    <div class="card-title"><div class="icon">🎯</div>Bağlamdan Sayıya</div>
+    <p class="body-text" style="margin-bottom:6px">Aşağıdaki gerçek yaşam durumunu doğru tam sayı ile eşleştir.</p>
+    <div class="q-card">
+      <div class="q-text" id="ctxText"></div>
+      <div class="choices" id="ctxChoices"></div>
+      <div class="feedback" id="ctxFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="ctxNext">Sonraki Durum →</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📐</div>Sayı Doğrusunda Tam Sayılar</div>
+    <p class="body-text">Aşağıdaki sayı doğrusundan bir tam sayıya tıkla; sayının türünü ve konumunu incele.</p>
+    <div class="il-wrap"><div id="tsLine"></div></div>
+    <div class="il-result" id="tsResult">Bir sayıya tıklayarak başla.</div>
+  </div>
+</section>
+
+<!-- ============ 3. RASYONEL SAYIYA GEÇİŞ ============ -->
+<section class="tab-panel" id="rasyonel">
+  <div class="card">
+    <div class="card-title"><div class="icon">🧩</div>Denk Kesirler Aynı Noktayı Gösterir</div>
+    <p class="body-text" style="margin-bottom:6px">Bir aile seç; bu ailedeki tüm kesirlerin sayı doğrusunda aynı noktaya karşılık geldiğini gözlemle.</p>
+    <div class="choices" id="famChoices" style="grid-template-columns:repeat(3,1fr)"></div>
+    <div class="math-display" id="famMath">\[\dfrac{1}{2}=\dfrac{2}{4}=\dfrac{3}{6}\]</div>
+    <div class="al-box"><div class="al-track" id="famTrack"></div><div class="al-labels"><span>-2</span><span>-1</span><span>0</span><span>1</span><span>2</span></div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">✍️</div>Tam Sayıyı Rasyonel Sayı Olarak Yaz</div>
+    <p class="q-text" id="rtqText" style="font-size:1rem"></p>
+    <div class="field-row">
+      <label for="rtPay">Pay:</label><input class="answer-input" id="rtPay" inputmode="numeric">
+      <label for="rtPayda">Payda:</label><input class="answer-input" id="rtPayda" inputmode="numeric">
+      <button class="submit-btn" id="rtCheck">Kontrol Et</button>
+    </div>
+    <div class="feedback" id="rtFeedback"></div>
+  </div>
+</section>
+
+<!-- ============ 4. MUTLAK DEĞER ============ -->
+<section class="tab-panel" id="mutlak">
+  <div class="card">
+    <div class="card-title"><div class="icon">📏</div>Mutlak Değer Hesaplayıcı</div>
+    <div class="field-row">
+      <label for="avInput">Sayı:</label><input class="answer-input" id="avInput" inputmode="numeric">
+      <button class="submit-btn" id="avCheck">Hesapla</button>
+    </div>
+    <div class="al-box"><div class="al-track" id="avTrack"></div><div class="al-labels"><span>-12</span><span>0</span><span>12</span></div></div>
+    <div class="il-result" id="avResult">Bir tam sayı gir ve "Hesapla"ya tıkla.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">⚖️</div>Hangisinin Mutlak Değeri Daha Büyük?</div>
+    <div class="q-card">
+      <div class="q-text" id="avqText"></div>
+      <div class="choices" id="avqChoices" style="grid-template-columns:repeat(3,1fr)"></div>
+      <div class="feedback" id="avqFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="avqNext">Sonraki Soru →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. SAYI DOĞRUSU ============ -->
+<section class="tab-panel" id="sayidogrusu">
+  <div class="card">
+    <div class="card-title"><div class="icon">🎯</div>İki Sayı Arasına Yerleştir</div>
+    <div class="q-card">
+      <div class="q-text" id="btwText"></div>
+      <div class="choices" id="btwChoices"></div>
+      <div class="feedback" id="btwFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="btwNext">Sonraki Soru →</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔢</div>Küçükten Büyüğe Sırala</div>
+    <p class="body-text" style="margin-bottom:6px">Sayılara, küçükten büyüğe doğru sırasıyla tıkla.</p>
+    <div class="order-grid" id="orderGrid"></div>
+    <div class="feedback" id="orderFeedback"></div>
+    <div class="action-row">
+      <button class="ghost-btn show" id="orderReset">Sıfırla</button>
+      <button class="ghost-btn" id="orderNext">Yeni Set →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">Bir dağcı, deniz seviyesinden 1250 m yükseklikten tırmanışa başlıyor ve 300 m daha yükseliyor. Dağcının bulunduğu son yüksekliği tam sayı ile yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>Başlangıç yüksekliği deniz seviyesinin üzerinde olduğu için pozitif tam sayı ile ifade edilir: \(+1250\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>300 m daha yükseldiği için bu değer başlangıç yüksekliğine eklenir: \(1250+300=1550\).</div></div>
+        <div class="ex-result">✓ Dağcının son yüksekliği \(+1550\) metredir.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">\(-6\) tam sayısını, paydası 1 olan bir rasyonel sayı biçiminde yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>Her tam sayı, paydası 1 olan bir rasyonel sayı olarak yazılabilir.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Bu kurala göre \(-6\) sayısının payı \(-6\), paydası \(1\) olur.</div></div>
+        <div class="ex-result">✓ \(-6=\dfrac{-6}{1}\)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">\(|-9|\) ifadesinin değerini bulunuz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>Mutlak değer, sayının sayı doğrusunda 0 noktasına olan uzaklığıdır.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>\(-9\) sayısının 0'a olan uzaklığı 9 birimdir.</div></div>
+        <div class="ex-result">✓ \(|-9|=9\)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">\(|-3|\) ile \(|5|\) ifadelerini karşılaştırınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>\(|-3|=3\) ve \(|5|=5\) olarak hesaplanır.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>3 sayısı 5 sayısından küçük olduğu için mutlak değerler arasındaki ilişki de aynı yönde olur.</div></div>
+        <div class="ex-result">✓ \(|-3|<|5|\)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">\(\dfrac{3}{10}\) ile \(\dfrac{4}{10}\) arasında kalan bir rasyonel sayı yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="ex-step"><div class="snum">1</div><div>Paydaları eşitlemek için her iki kesri de 10 ile genişletelim: \(\dfrac{3}{10}=\dfrac{30}{100}\), \(\dfrac{4}{10}=\dfrac{40}{100}\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>30 ile 40 arasında kalan herhangi bir sayı, örneğin 35, payda 100 ile yeni bir rasyonel sayı oluşturur: \(\dfrac{35}{100}=0{,}35\).</div></div>
+        <div class="ex-result">✓ \(\dfrac{3}{10}<\dfrac{35}{100}<\dfrac{4}{10}\)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">SAYI PUSULASI · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 8. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Tam Sayılar</b><span>Doğal sayılar ve karşıtlarından oluşur: \(\mathbb{Z}=\{\dots,-1,0,1,\dots\}\)</span></div>
+      <div class="summary-item"><b>Rasyonel Sayılar</b><span>\(\dfrac{a}{b}\) biçiminde yazılabilen sayılardır, \(b\neq0\).</span></div>
+      <div class="summary-item"><b>Mutlak Değer</b><span>Bir sayının 0'a olan uzaklığıdır: \(|a|\ge0\)</span></div>
+      <div class="summary-item"><b>Sayı Doğrusu</b><span>Her rasyonel sayı bir noktaya, her nokta bir rasyonel sayıya karşılık gelir.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. \(-8\) sayısının mutlak değeri kaçtır?</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1"></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. \(-5\) tam sayısını, paydası 1 olan bir rasyonel sayı biçiminde \(\dfrac{a}{b}\) olarak yazınız.</h4>
+      <div class="field-row"><label for="k2a">Pay:</label><input class="answer-input" id="k2a"><label for="k2b">Payda:</label><input class="answer-input" id="k2b"></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ================= TAM SAYILAR SEKMESİ ================= */
+  var ctxPool=[
+    {text:'Bir dalgıç, deniz seviyesinin 18 metre altında yüzüyor. Dalgıcın derinliğini tam sayı ile ifade ediniz.',choices:[-18,18,-8,8],correct:-18},
+    {text:'Bir şehirde hava sıcaklığı sıfırın 6 derece altındadır. Sıcaklığı tam sayı ile ifade ediniz.',choices:[-6,6,-16,16],correct:-6},
+    {text:'Ayşe bu ay 250 TL tasarruf etti. Bu durumu tam sayı ile ifade ediniz.',choices:[250,-250,25,-25],correct:250},
+    {text:'Bir mağaza bu ay 400 TL zarar etti. Bu durumu tam sayı ile ifade ediniz.',choices:[-400,400,-40,40],correct:-400},
+    {text:'Bir asansör, zemin kattan 3 kat aşağıdaki otopark katına iniyor. Bu konumu tam sayı ile ifade ediniz.',choices:[-3,3,-30,30],correct:-3},
+    {text:'Bir dağın zirvesi deniz seviyesinden 850 metre yüksektedir. Bu yüksekliği tam sayı ile ifade ediniz.',choices:[850,-850,85,-85],correct:850}
+  ];
+  var drawCtx=makeDrawer(ctxPool);
+  var ctxCurrent=null;
+  function loadCtx(){
+    ctxCurrent=drawCtx();
+    document.getElementById('ctxText').textContent=ctxCurrent.text;
+    var box=document.getElementById('ctxChoices');
+    box.innerHTML='';
+    shuffle(ctxCurrent.choices).forEach(function(c){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.textContent=c;
+      b.addEventListener('click',function(){ ctxAnswer(c,box); });
+      box.appendChild(b);
+    });
+    document.getElementById('ctxFeedback').className='feedback';
+    document.getElementById('ctxNext').classList.remove('show');
+  }
+  function ctxAnswer(val,box){
+    var ok=val===ctxCurrent.correct;
+    box.querySelectorAll('.choice-btn').forEach(function(b){
+      b.disabled=true;
+      if(Number(b.textContent)===ctxCurrent.correct){ b.classList.add('correct'); }
+      else if(Number(b.textContent)===val&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('ctxFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Doğru cevap: '+ctxCurrent.correct;
+    document.getElementById('ctxNext').classList.add('show');
+  }
+  document.getElementById('ctxNext').addEventListener('click',loadCtx);
+  loadCtx();
+
+  function buildIntLine(containerId,min,max,onSelect){
+    var wrap=document.getElementById(containerId);
+    wrap.innerHTML='';
+    var track=document.createElement('div');track.className='il-track';
+    var row=document.createElement('div');row.className='il-row';
+    for(var v=min;v<=max;v++){
+      (function(v){
+        var tick=document.createElement('button');
+        tick.type='button';tick.className='il-tick';tick.textContent=v;
+        tick.addEventListener('click',function(){
+          wrap.querySelectorAll('.il-tick').forEach(function(t){t.classList.remove('active');});
+          tick.classList.add('active');
+          onSelect(v);
+        });
+        row.appendChild(tick);
+      })(v);
+    }
+    wrap.appendChild(track);wrap.appendChild(row);
+  }
+  buildIntLine('tsLine',-8,8,function(v){
+    var tur=v>0?'pozitif tam sayı':(v<0?'negatif tam sayı':'ne pozitif ne negatiftir (sıfır)');
+    document.getElementById('tsResult').textContent='Seçilen sayı: '+v+' → '+tur+'.';
+  });
+
+  /* ================= RASYONEL SAYIYA GEÇİŞ SEKMESİ ================= */
+  var famPool=[
+    {label:'\\(\\dfrac{1}{2}\\) ailesi',tex:'\\dfrac{1}{2}=\\dfrac{2}{4}=\\dfrac{3}{6}',point:0.5},
+    {label:'\\(\\dfrac{1}{3}\\) ailesi',tex:'\\dfrac{1}{3}=\\dfrac{2}{6}=\\dfrac{3}{9}',point:0.333},
+    {label:'\\(-\\dfrac{1}{2}\\) ailesi',tex:'-\\dfrac{1}{2}=-\\dfrac{2}{4}=-\\dfrac{3}{6}',point:-0.5}
+  ];
+  var famBox=document.getElementById('famChoices');
+  famPool.forEach(function(f,i){
+    var b=document.createElement('button');
+    b.type='button';b.className='choice-btn';b.innerHTML=f.label;
+    b.addEventListener('click',function(){ showFamily(f); });
+    famBox.appendChild(b);
+  });
+  function renderPointTrack(containerId,value,min,max){
+    var el=document.getElementById(containerId);
+    var pct=function(v){return ((v-min)/(max-min))*100;};
+    el.innerHTML='<div class="al-zero" style="left:'+pct(0)+'%"></div><div class="al-point" style="left:'+pct(value)+'%"></div>';
+  }
+  function showFamily(f){
+    document.getElementById('famMath').innerHTML='\\['+f.tex+'\\]';
+    typeset(document.getElementById('famMath'));
+    renderPointTrack('famTrack',f.point,-2,2);
+  }
+  showFamily(famPool[0]);
+  typeset(famBox);
+
+  var rtPool=[-4,3,-7,5,-2,8];
+  var drawRt=makeDrawer(rtPool);
+  var rtCurrent=drawRt();
+  function loadRt(){
+    rtCurrent=drawRt();
+    document.getElementById('rtqText').innerHTML=rtCurrent+' tam sayısını, paydası 1 olan bir rasyonel sayı (kesir) biçiminde a/b yazınız.';
+    document.getElementById('rtPay').value='';document.getElementById('rtPayda').value='';
+    document.getElementById('rtFeedback').className='feedback';
+  }
+  document.getElementById('rtCheck').addEventListener('click',function(){
+    var p=Number(document.getElementById('rtPay').value),d=Number(document.getElementById('rtPayda').value),fb=document.getElementById('rtFeedback');
+    var ok=p===rtCurrent&&d===1;
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Payı '+rtCurrent+', paydayı 1 olacak şekilde yazmalısın.';
+    if(ok){ setTimeout(loadRt,1300); }
+  });
+  loadRt();
+
+  /* ================= MUTLAK DEĞER SEKMESİ ================= */
+  function renderAbsLine(containerId,value){
+    var min=-12,max=12;
+    var pct=function(v){return ((v-min)/(max-min))*100;};
+    var zp=pct(0),vp=pct(value);
+    var left=Math.min(zp,vp),width=Math.abs(vp-zp);
+    document.getElementById(containerId).innerHTML='<div class="al-fill" style="left:'+left+'%;width:'+width+'%"></div><div class="al-zero" style="left:'+zp+'%"></div><div class="al-point" style="left:'+vp+'%"></div>';
+  }
+  renderAbsLine('avTrack',0);
+  document.getElementById('avCheck').addEventListener('click',function(){
+    var v=Number(document.getElementById('avInput').value);
+    if(!Number.isInteger(v)){ document.getElementById('avResult').textContent='Lütfen bir tam sayı gir.'; return; }
+    v=Math.max(-12,Math.min(12,v));
+    renderAbsLine('avTrack',v);
+    document.getElementById('avResult').innerHTML='|'+v+'| = '+Math.abs(v)+'  (0 noktasına uzaklık: '+Math.abs(v)+' birim)';
+  });
+
+  var avqPool=[
+    {a:-7,b:4,correct:'>'},{a:3,b:-9,correct:'<'},{a:-5,b:5,correct:'='},{a:-2,b:-8,correct:'<'},{a:6,b:-1,correct:'>'}
+  ];
+  var drawAvq=makeDrawer(avqPool);
+  var avqCurrent=null;
+  function loadAvq(){
+    avqCurrent=drawAvq();
+    document.getElementById('avqText').textContent='|'+avqCurrent.a+'| ile |'+avqCurrent.b+'| karşılaştırıldığında doğru sembol hangisidir?';
+    var box=document.getElementById('avqChoices');
+    box.innerHTML='';
+    ['<','=','>'].forEach(function(s){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.textContent=s;
+      b.addEventListener('click',function(){ avqAnswer(s,box); });
+      box.appendChild(b);
+    });
+    document.getElementById('avqFeedback').className='feedback';
+    document.getElementById('avqNext').classList.remove('show');
+  }
+  function avqAnswer(s,box){
+    var ok=s===avqCurrent.correct;
+    box.querySelectorAll('.choice-btn').forEach(function(b){
+      b.disabled=true;
+      if(b.textContent===avqCurrent.correct){ b.classList.add('correct'); }
+      else if(b.textContent===s&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('avqFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Doğru sembol: '+avqCurrent.correct;
+    document.getElementById('avqNext').classList.add('show');
+  }
+  document.getElementById('avqNext').addEventListener('click',loadAvq);
+  loadAvq();
+
+  /* ================= SAYI DOĞRUSU SEKMESİ ================= */
+  var btwPool=[
+    {low:'-1',high:'0',choices:[-2,-0.5,1,2],correct:-0.5},
+    {low:'0,6',high:'0,8',choices:[0.3,0.7,0.9,1.2],correct:0.7},
+    {low:'-3',high:'-2',choices:[-4,-2.5,-1,0],correct:-2.5},
+    {low:'0,25',high:'0,5',choices:[0.1,0.4,0.6,0.8],correct:0.4},
+    {low:'-0,5',high:'0,5',choices:[-1,0,1,2],correct:0}
+  ];
+  var drawBtw=makeDrawer(btwPool);
+  var btwCurrent=null;
+  function loadBtw(){
+    btwCurrent=drawBtw();
+    document.getElementById('btwText').textContent=btwCurrent.low+' ile '+btwCurrent.high+' arasında kalan rasyonel sayı hangisidir?';
+    var box=document.getElementById('btwChoices');
+    box.innerHTML='';
+    shuffle(btwCurrent.choices).forEach(function(c){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.textContent=String(c).replace('.',',');
+      b.addEventListener('click',function(){ btwAnswer(c,box); });
+      box.appendChild(b);
+    });
+    document.getElementById('btwFeedback').className='feedback';
+    document.getElementById('btwNext').classList.remove('show');
+  }
+  function btwAnswer(val,box){
+    var ok=val===btwCurrent.correct;
+    box.querySelectorAll('.choice-btn').forEach(function(b){
+      b.disabled=true;
+      var bv=Number(b.textContent.replace(',','.'));
+      if(bv===btwCurrent.correct){ b.classList.add('correct'); }
+      else if(bv===val&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('btwFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Doğru cevap: '+String(btwCurrent.correct).replace('.',',');
+    document.getElementById('btwNext').classList.add('show');
+  }
+  document.getElementById('btwNext').addEventListener('click',loadBtw);
+  loadBtw();
+
+  var orderPool=[
+    [{d:'-\\dfrac{3}{4}',v:-0.75},{d:'0,5',v:0.5},{d:'-1',v:-1},{d:'\\dfrac{1}{4}',v:0.25}],
+    [{d:'\\dfrac{2}{5}',v:0.4},{d:'-0,6',v:-0.6},{d:'1',v:1},{d:'-\\dfrac{1}{5}',v:-0.2}],
+    [{d:'-2',v:-2},{d:'1,5',v:1.5},{d:'-\\dfrac{1}{2}',v:-0.5},{d:'0',v:0}]
+  ];
+  var drawOrder=makeDrawer(orderPool);
+  var orderCurrent=null,orderPicked=[];
+  function loadOrder(){
+    orderCurrent=drawOrder();
+    orderPicked=[];
+    var grid=document.getElementById('orderGrid');
+    grid.innerHTML='';
+    shuffle(orderCurrent).forEach(function(item){
+      var b=document.createElement('button');
+      b.type='button';b.className='order-btn';
+      b.innerHTML='\\('+item.d+'\\)';
+      b.dataset.v=item.v;
+      b.addEventListener('click',function(){ orderPick(b); });
+      grid.appendChild(b);
+    });
+    typeset(grid);
+    document.getElementById('orderFeedback').className='feedback';
+  }
+  function orderPick(btn){
+    if(btn.classList.contains('picked')) return;
+    orderPicked.push(Number(btn.dataset.v));
+    btn.classList.add('picked');
+    btn.disabled=true;
+    var rank=document.createElement('div');
+    rank.className='rank';rank.textContent=orderPicked.length;
+    btn.appendChild(rank);
+    if(orderPicked.length===4){
+      var sorted=orderCurrent.map(function(i){return i.v;}).slice().sort(function(a,b){return a-b;});
+      var ok=JSON.stringify(orderPicked)===JSON.stringify(sorted);
+      var fb=document.getElementById('orderFeedback');
+      fb.className='feedback show '+(ok?'ok':'no');
+      fb.textContent=ok?'✓ Doğru sıraladın!':'✗ Sıralama hatalı. "Sıfırla" ile tekrar dene.';
+    }
+  }
+  document.getElementById('orderReset').addEventListener('click',function(){
+    orderPicked=[];
+    document.querySelectorAll('#orderGrid .order-btn').forEach(function(b){
+      b.classList.remove('picked');b.disabled=false;
+      var r=b.querySelector('.rank'); if(r){ r.remove(); }
+    });
+    document.getElementById('orderFeedback').className='feedback';
+  });
+  document.getElementById('orderNext').addEventListener('click',loadOrder);
+  loadOrder();
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var qTypes=['tamsayi','mutlak','siralama','rasyonel','tamsayi','mutlak','siralama','rasyonel','tamsayi','siralama'];
+  var drawQCtx=makeDrawer(ctxPool);
+  var drawQAvq=makeDrawer(avqPool);
+  var drawQBtw=makeDrawer(btwPool);
+  var qRatPool=[
+    {x:-3,correct:'\\(\\dfrac{-3}{1}\\)',choices:['\\(\\dfrac{-3}{1}\\)','\\(\\dfrac{3}{1}\\)','\\(\\dfrac{-1}{3}\\)','\\(\\dfrac{1}{3}\\)']},
+    {x:5,correct:'\\(\\dfrac{5}{1}\\)',choices:['\\(\\dfrac{5}{1}\\)','\\(\\dfrac{-5}{1}\\)','\\(\\dfrac{1}{5}\\)','\\(\\dfrac{-1}{5}\\)']},
+    {x:-7,correct:'\\(\\dfrac{-7}{1}\\)',choices:['\\(\\dfrac{-7}{1}\\)','\\(\\dfrac{7}{1}\\)','\\(\\dfrac{-1}{7}\\)','\\(\\dfrac{1}{7}\\)']},
+    {x:2,correct:'\\(\\dfrac{2}{1}\\)',choices:['\\(\\dfrac{2}{1}\\)','\\(\\dfrac{-2}{1}\\)','\\(\\dfrac{1}{2}\\)','\\(\\dfrac{-1}{2}\\)']}
+  ];
+  var drawQRat=makeDrawer(qRatPool);
+
+  function createQuestion(type){
+    var q={type:type};
+    if(type==='tamsayi'){
+      var c=drawQCtx();
+      q.text=c.text;q.choices=shuffle(c.choices).map(String);q.correctText=String(c.correct);
+    }else if(type==='mutlak'){
+      var c=drawQAvq();
+      q.text='|'+c.a+'| ile |'+c.b+'| karşılaştırıldığında doğru sembol hangisidir?';q.choices=['<','=','>'];q.correctText=c.correct;
+    }else if(type==='siralama'){
+      var c=drawQBtw();
+      q.text=c.low+' ile '+c.high+' arasında kalan rasyonel sayı hangisidir?';
+      q.choices=shuffle(c.choices).map(function(v){return String(v).replace('.',',');});
+      q.correctText=String(c.correct).replace('.',',');
+    }else{
+      var c=drawQRat();
+      q.text=c.x+' sayısına eşit olan rasyonel sayı (kesir) gösterimi hangisidir?';
+      q.choices=shuffle(c.choices);q.correctText=c.correct;
+    }
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(createQuestion);
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=document.getElementById('k1').value.trim(),fb=document.getElementById('kf1');
+    var ok=v==='8';
+    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var a=document.getElementById('k2a').value.trim(),b=document.getElementById('k2b').value.trim(),fb=document.getElementById('kf2');
+    var ok=a==='-5'&&b==='1';
+    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('konu'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>

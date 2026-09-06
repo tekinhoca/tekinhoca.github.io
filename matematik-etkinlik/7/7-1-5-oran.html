@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oran İlişkileri Atölyesi | 7. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:560px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.context-list{margin:10px 0 4px 4px}
+.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+p.body-text{font-size:.93rem;margin:8px 0}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:80px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
+.dnl-wrap{overflow-x:auto;padding:10px 4px}
+.dnl-svg{display:block;margin:0 auto}
+.pair-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.pair-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:9px 15px;font-weight:800;font-size:.92rem;cursor:pointer;color:var(--text)}
+.pair-btn:hover{border-color:var(--primary)}
+.pair-btn.done{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.pair-btn.wrongd{background:rgba(239,68,68,.12);border-color:var(--danger);color:#dc2626}
+.ratio-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.85rem}
+.ratio-table th,.ratio-table td{border:1.5px solid var(--border);padding:8px 6px;text-align:center}
+.ratio-table th{background:var(--primary-light);color:var(--primary);font-weight:800}
+mjx-container{margin:0!important}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.2em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+.tf-row{display:flex;gap:10px;margin:14px 0}
+.tf-btn{flex:1;background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
+.tf-btn:hover{border-color:var(--primary)}
+.tf-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.tf-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.tf-btn:disabled{cursor:default}
+@media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}.ratio-table{font-size:.72rem}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">7. Sınıf Matematik · 1. Tema · 5. Etkinlik</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>📊 Oran İlişkileri Atölyesi</h1>
+    <p>MAT.7.1.5. Gerçek yaşam durumları üzerinden oran ilişkileri hakkında muhakeme yapabilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+    <button class="tab-btn" data-tab="varsayim">🌳 Fidan Boyu Karşılaştır</button>
+    <button class="tab-btn" data-tab="model">🎨 Boya Karıştırma</button>
+    <button class="tab-btn" data-tab="genelleme">🔍 Genellemeyi Sına</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. KONU ANLATIMI ============ -->
+<section class="tab-panel active" id="konu">
+  <div class="card">
+    <div class="card-title"><div class="icon">⚖️</div>Toplamsal mı, Çarpımsal mı?</div>
+    <p class="body-text">İki niceliği karşılaştırmanın iki farklı yolu vardır:</p>
+    <ul class="context-list">
+      <li><b>Toplamsal (mutlak) karşılaştırma:</b> Aradaki <u>farkı</u> bulmaktır. "A, B'den kaç fazla/eksik?"</li>
+      <li><b>Çarpımsal (bağıl) karşılaştırma:</b> Birinin diğerinin <u>kaç katı</u> olduğunu bulmaktır. "A, B'nin kaç katı?" İşte buna <b>oran</b> denir.</li>
+    </ul>
+    <div class="math-display">\[A=6\text{ m},\ B=3\text{ m} \to \text{Fark: }6-3=3\text{ m (toplamsal)} \qquad \text{Oran: }6\div3=2\text{ kat (çarpımsal)}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">📐</div>Oran Nedir?</div>
+    <div class="def-box">Oran, iki niceliğin <b>çarpımsal ilişki</b> kurularak yani <strong>bölünerek</strong> karşılaştırılmasıdır. \(a:b\) ya da \(\dfrac{a}{b}\) biçiminde gösterilir.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔢</div>Birimli Oran ve Birimsiz Oran</div>
+    <ul class="context-list">
+      <li><b>Birimsiz oran:</b> Aynı türden iki niceliğin oranıdır (ör. iki uzunluğun oranı). Birimler sadeleşir, sonuç sade bir sayıdır.</li>
+      <li><b>Birimli oran:</b> Farklı türden iki niceliğin oranıdır (ör. "3 bardak süte 4 kaşık kakao"). Sonuç birim taşır (ör. kaşık/bardak).</li>
+    </ul>
+    <div class="math-display">\[\text{75 km/sa} \quad \text{(alınan yol - zaman oranı, birimli oran)}\]</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔁</div>Denk Oran ve Birim Oran</div>
+    <div class="def-box">İki denk oranın eşitliği <b>orantıyı</b> belirtir. Bir oranın payı ve paydası aynı sayı ile çarpılırsa <b>denk oran</b> elde edilir; sonsuz sayıda denk oran vardır.</div>
+    <div class="math-display">\[3:4=6:8=9:12=12:16=\dots\]</div>
+    <div class="gen-box">✓ Bir oranı en küçük terimleriyle (aralarında asal sayılarla) yazmak, o oranın <b>birim oranını</b> (sade hâlini) verir.</div>
+  </div>
+</section>
+
+<!-- ============ 2. FİDAN BOYU KARŞILAŞTIR ============ -->
+<section class="tab-panel" id="varsayim">
+  <div class="card">
+    <div class="card-title"><div class="icon">🌳</div>A ve B Fidanlarının Boyunu Karşılaştır</div>
+    <p class="body-text">A fidanı ile B fidanının boylarını gir; hem toplamsal (fark) hem çarpımsal (oran) karşılaştırmayı birlikte gör.</p>
+    <div class="field-row" style="justify-content:center">
+      <label for="fidA">A Fidanı (m):</label><input class="answer-input" id="fidA" value="6">
+      <label for="fidB">B Fidanı (m):</label><input class="answer-input" id="fidB" value="3">
+      <button class="submit-btn" id="fidBtn">Karşılaştır</button>
+    </div>
+    <div class="il-result" id="fidResult">Değerleri gir ve butona tıkla.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">💭</div>Varsayımını Sına</div>
+    <div class="q-card">
+      <div class="q-text">"A fidanı B fidanından 3 metre uzunsa, A fidanının boyu her zaman B fidanının boyunun 2 katıdır."</div>
+      <div class="choices">
+        <button class="choice-btn" data-v="yanlis">Katılıyorum</button>
+        <button class="choice-btn" data-v="dogru">Katılmıyorum</button>
+      </div>
+      <div class="feedback" id="varsayimFeedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. BOYA KARIŞTIRMA ============ -->
+<section class="tab-panel" id="model">
+  <div class="card">
+    <div class="card-title"><div class="icon">🎨</div>Çift Sayı Doğrusunda Denk Oranlar</div>
+    <p class="body-text" style="margin-bottom:6px">2 kutu mavi boya : 5 kutu sarı boya karıştırılarak bir yeşil ton elde ediliyor. Aynı tonu koruyan denk oranları çift sayı doğrusunda gör.</p>
+    <div class="dnl-wrap"><svg class="dnl-svg" id="dnlSvg" width="620" height="150" viewBox="0 0 620 150"></svg></div>
+    <div class="il-result" id="dnlResult">Aynı yeşil tonu, 2:5 oranının denklerinde bulabilirsin.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🥛</div>Hangi Karışım Daha Kakaolu?</div>
+    <p class="body-text" style="margin-bottom:6px">İki farklı kakaolu süt karışımı var. Birim oranı (bardak başına kaşık kakao) hesaplayarak hangisinin daha kakaolu olduğunu bul.</p>
+    <div class="pair-row">
+      <button class="pair-btn" id="milkBtnA">3 kaşık kakao : 2 bardak süt</button>
+      <button class="pair-btn" id="milkBtnB">4 kaşık kakao : 3 bardak süt</button>
+    </div>
+    <div class="il-result" id="milkResult">Bir karışımı seçerek birim oranını hesapla.</div>
+  </div>
+</section>
+
+<!-- ============ 4. GENELLEMEYİ SINA ============ -->
+<section class="tab-panel" id="genelleme">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔍</div>Doğru mu, Yanlış mı?</div>
+    <p class="body-text" style="margin-bottom:6px">Oran kavramıyla ilgili aşağıdaki önermeleri incele; doğru ya da yanlış olduğuna karar ver ve gerekçesini oku.</p>
+    <div class="q-card">
+      <div class="q-text" id="tfText"></div>
+      <div class="tf-row">
+        <button class="tf-btn" id="tfDogru">Doğru</button>
+        <button class="tf-btn" id="tfYanlis">Yanlış</button>
+      </div>
+      <div class="feedback" id="tfFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="tfNext">Sonraki Önerme →</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">♻️</div>Birim Oran Hesapla: Atık Kağıt - Ağaç</div>
+    <p class="body-text" style="margin-bottom:6px">1000 kg atık kağıdın kağıt hamuruna katılmasıyla 8 ağacın kesilmesi önlenebiliyor. 1 ağacın kesilmemesi için kaç kg atık kağıt gerekir?</p>
+    <div class="field-row" style="justify-content:center">
+      <label for="treeAns">Cevap (kg/ağaç):</label><input class="answer-input" id="treeAns">
+      <button class="submit-btn" id="treeCheck">Kontrol Et</button>
+    </div>
+    <div class="il-result" id="treeResult"></div>
+  </div>
+</section>
+
+<!-- ============ 5. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">A fidanı 5 m, B fidanı ise 2 m'dir. Toplamsal ve çarpımsal karşılaştırmaları yapınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>Toplamsal karşılaştırma (fark): \(5-2=3\) m.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Çarpımsal karşılaştırma (oran): \(5\div2=2,5\) kat.</div></div>
+        <div class="ex-result">✓ A fidanı B'den 3 m uzun ve B'nin 2,5 katı uzunluğundadır.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">30 dakikada 6 sandviç yiyen bir yarışmacının birim oranını (dakikada kaç sandviç) bulunuz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>Sandviç sayısını dakikaya böleriz: \(6\div30=0,2\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Bu, dakikada 0,2 sandviç ya da her sandviç için 5 dakika anlamına gelir (\(30\div6=5\)).</div></div>
+        <div class="ex-result">✓ Birim oran: dakikada 0,2 sandviç (ya da bir sandviç için 5 dakika).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">2 kutu mavi : 5 kutu sarı boya oranıyla aynı tonu koruyan, 20 kutu sarı boya kullanan denk oranı bulunuz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>20, 5'in kaç katı olduğunu buluruz: \(20\div5=4\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Oranın her iki tarafını da 4 ile çarparız: \(2\times4=8\).</div></div>
+        <div class="ex-result">✓ 8 kutu mavi : 20 kutu sarı, aynı tonu korur.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">2 bardak süte 3 kaşık kakao ile 3 bardak süte 4 kaşık kakao karışımlarından hangisi daha kakaoludur?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>Birinci karışımın birim oranı: \(3\div2=1,5\) kaşık/bardak.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>İkinci karışımın birim oranı: \(4\div3\approx1,33\) kaşık/bardak. \(1,5>1,33\).</div></div>
+        <div class="ex-result">✓ 2 bardak süte 3 kaşık kakao karışımı daha kakaoludur.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">625 kg atık kağıt, kağıt hamuruna katılırsa (125 kg/ağaç oranını kullanarak) kaç ağacın kesilmesi önlenmiş olur?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="ex-step"><div class="snum">1</div><div>Birim oranı kullanırız: her 125 kg atık kağıt 1 ağacı kurtarır.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>\(625\div125=5\)</div></div>
+        <div class="ex-result">✓ 625 kg atık kağıt, 5 ağacın kesilmesini önler.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">ORAN İLİŞKİLERİ ATÖLYESİ · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 7. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Toplamsal Karşılaştırma</b><span>Fark bulmaktır (çıkarma işlemi).</span></div>
+      <div class="summary-item"><b>Çarpımsal Karşılaştırma (Oran)</b><span>Kaç kat olduğunu bulmaktır (bölme işlemi).</span></div>
+      <div class="summary-item"><b>Denk Oran</b><span>Bir oranın pay ve paydası aynı sayı ile çarpılarak elde edilir.</span></div>
+      <div class="summary-item"><b>Birim Oran</b><span>Oranın en sade (aralarında asal) hâlidir.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. Bir arabanın deposu 40 litre benzinle 480 km gidiyorsa, birim oranı (km/litre) kaçtır?</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1"></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. 4:9 oranıyla denk olan, ikinci terimi 27 olan oranı yazınız.</h4>
+      <div class="field-row"><label for="k2a">Cevap:</label><input class="answer-input" id="k2a" style="width:110px" placeholder="ör. 8:18"></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+function gcd(a,b){ return b===0?a:gcd(b,a%b); }
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ================= FİDAN KARŞILAŞTIRMA ================= */
+  document.getElementById('fidBtn').addEventListener('click',function(){
+    var a=parseFloat(document.getElementById('fidA').value.replace(',','.'));
+    var b=parseFloat(document.getElementById('fidB').value.replace(',','.'));
+    var res=document.getElementById('fidResult');
+    if(!a||!b||a<=0||b<=0){ res.textContent='Lütfen geçerli iki pozitif değer gir.'; return; }
+    var fark=(a-b).toFixed(2).replace(/\.00$/,'').replace('.',',');
+    var oran=(a/b).toFixed(2).replace(/\.00$/,'').replace('.',',');
+    res.innerHTML='Toplamsal (fark): A - B = '+fark+' m &nbsp;|&nbsp; Çarpımsal (oran): A ÷ B = <b>'+oran+' kat</b>';
+  });
+  document.getElementById('fidBtn').click();
+
+  document.querySelectorAll('#varsayim .choice-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('#varsayim .choice-btn').forEach(function(b){b.disabled=true;});
+      var fb=document.getElementById('varsayimFeedback');
+      var ok=btn.dataset.v==='dogru';
+      fb.className='feedback show '+(ok?'ok':'no');
+      if(ok){
+        btn.classList.add('correct');
+        fb.textContent='✓ Doğru! Fark sabit (3 m) olsa da oran, fidanların kendi boylarına göre değişir. Örneğin A=5,B=2 iken fark yine 3 m ama oran 2,5 kattır; A=103,B=100 iken de fark 3 m ama oran sadece 1,03 kattır.';
+      }else{
+        btn.classList.add('wrong');
+        document.querySelector('#varsayim .choice-btn[data-v="dogru"]').classList.add('correct');
+        fb.textContent='✗ Sabit bir fark, sabit bir oran anlamına gelmez. Örneğin A=5 m, B=2 m olsaydı fark yine 3 m olurdu ama oran 2,5 kat olurdu, 2 kat değil. Doğru cevap işaretlendi.';
+      }
+    });
+  });
+
+  /* ================= ÇİFT SAYI DOĞRUSU (2:5) ================= */
+  var svg=document.getElementById('dnlSvg');
+  var svgNS='http://www.w3.org/2000/svg';
+  function el(tag,attrs){
+    var e=document.createElementNS(svgNS,tag);
+    for(var k in attrs){ e.setAttribute(k,attrs[k]); }
+    return e;
+  }
+  (function drawDNL(){
+    var topVals=[0,2,4,6,8], botVals=[0,5,10,15,20];
+    var startX=40, endX=580, y1=45, y2=105;
+    var n=topVals.length;
+    svg.innerHTML='';
+    svg.appendChild(el('line',{x1:startX,y1:y1,x2:endX,y2:y1,stroke:'#333',"stroke-width":2}));
+    svg.appendChild(el('line',{x1:startX,y1:y2,x2:endX,y2:y2,stroke:'#333',"stroke-width":2}));
+    for(var i=0;i<n;i++){
+      var x=startX+(endX-startX)*(i/(n-1));
+      svg.appendChild(el('circle',{cx:x,cy:y1,r:5,fill:'#4361ee'}));
+      var t1=el('text',{x:x,y:y1-12,'text-anchor':'middle','font-size':'13',fill:'#4361ee','font-weight':'800'});
+      t1.textContent=topVals[i];
+      svg.appendChild(t1);
+      svg.appendChild(el('circle',{cx:x,cy:y2,r:5,fill:'#f72585'}));
+      var t2=el('text',{x:x,y:y2+20,'text-anchor':'middle','font-size':'13',fill:'#f72585','font-weight':'800'});
+      t2.textContent=botVals[i];
+      svg.appendChild(t2);
+      svg.appendChild(el('line',{x1:x,y1:y1+6,x2:x,y2:y2-6,stroke:'#9aa3c9',"stroke-width":1.3,'stroke-dasharray':'3,3'}));
+    }
+    var lblTop=el('text',{x:10,y:y1+4,'font-size':'12',fill:'#4361ee','font-weight':'800'});
+    lblTop.textContent='mavi';
+    svg.appendChild(lblTop);
+    var lblBot=el('text',{x:10,y:y2+4,'font-size':'12',fill:'#f72585','font-weight':'800'});
+    lblBot.textContent='sarı';
+    svg.appendChild(lblBot);
+  })();
+
+  document.querySelectorAll('#milkBtnA, #milkBtnB').forEach(function(){});
+  document.getElementById('milkBtnA').addEventListener('click',function(){
+    var res=document.getElementById('milkResult');
+    document.getElementById('milkBtnA').classList.add('done');
+    document.getElementById('milkBtnB').classList.remove('done');
+    res.innerHTML='3 kaşık kakao : 2 bardak süt &rarr; birimli oran = 3 ÷ 2 = 1,5 kaşık/bardak<br><b>(1 bardak süte 1,5 kaşık kakao)</b>';
+  });
+  document.getElementById('milkBtnB').addEventListener('click',function(){
+    var res=document.getElementById('milkResult');
+    document.getElementById('milkBtnB').classList.add('done');
+    document.getElementById('milkBtnA').classList.remove('done');
+    res.innerHTML='4 kaşık kakao : 3 bardak süt &rarr; birimli oran = 4 ÷ 3 ≈ 1,33 kaşık/bardak<br><b>(1 bardak süte 1,33 kaşık kakao)</b>';
+  });
+
+  /* ================= GENELLEMEYİ SINA: DOĞRU/YANLIŞ ================= */
+  var tfPool=[
+    {text:'Oran, iki niceliğin çarpımsal ilişki kurularak karşılaştırılmasıdır.',correct:true,exp:'Bu, oranın temel tanımıdır; farkı değil, kaç kat olduğunu ifade eder.'},
+    {text:'Bir oranın sonsuz sayıda denk oranı vardır.',correct:true,exp:'Payı ve paydayı aynı sayı ile çarparak istediğimiz kadar denk oran üretebiliriz.'},
+    {text:'Aynı türden iki niceliğin oranı birimli orandır.',correct:false,exp:'Aynı türden iki niceliğin oranı birimsiz orandır; birimler sadeleşir. Birimli oran, farklı türden niceliklerin oranıdır.'},
+    {text:'Toplamsal karşılaştırmada sabit bir fark, her zaman sabit bir oran anlamına gelir.',correct:false,exp:'Fidan örneğinde gördüğümüz gibi, fark sabit olsa da niceliklerin büyüklüğüne göre oran değişebilir.'},
+    {text:'Bir oranı en sade hâline getirmek, o oranın birim oranını verir.',correct:true,exp:'Payı ve paydayı aralarında asal olacak şekilde sadeleştirmek, oranın birim (temel) hâlini verir.'},
+    {text:'İki denk oranın eşitliği bir orantı oluşturur.',correct:true,exp:'Orantı, iki oranın eşit olduğunu belirten bir ifadedir (a:b = c:d).'},
+    {text:'Bir birim oranı bulmak için her zaman büyük sayıyı küçük sayıya bölmek gerekir.',correct:false,exp:'Birim oran, hangi niceliğin "1 birimi" için hesaplama yapıldığına göre değişir; bazen küçük sayı büyük sayıya bölünür (ör. dakikada sandviç sayısı).'}
+  ];
+  var drawTf=makeDrawer(tfPool);
+  var curTf=null;
+  function renderTf(){
+    curTf=drawTf();
+    document.getElementById('tfText').textContent=curTf.text;
+    document.getElementById('tfFeedback').className='feedback';
+    document.getElementById('tfNext').classList.remove('show');
+    document.getElementById('tfDogru').disabled=false;
+    document.getElementById('tfYanlis').disabled=false;
+    document.getElementById('tfDogru').classList.remove('correct','wrong');
+    document.getElementById('tfYanlis').classList.remove('correct','wrong');
+  }
+  function answerTf(userVal){
+    document.getElementById('tfDogru').disabled=true;
+    document.getElementById('tfYanlis').disabled=true;
+    var ok=userVal===curTf.correct;
+    var correctBtn=curTf.correct?document.getElementById('tfDogru'):document.getElementById('tfYanlis');
+    correctBtn.classList.add('correct');
+    if(!ok){
+      (userVal?document.getElementById('tfDogru'):document.getElementById('tfYanlis')).classList.add('wrong');
+    }
+    var fb=document.getElementById('tfFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=(ok?'✓ Doğru! ':'✗ ')+curTf.exp;
+    document.getElementById('tfNext').classList.add('show');
+  }
+  document.getElementById('tfDogru').addEventListener('click',function(){answerTf(true);});
+  document.getElementById('tfYanlis').addEventListener('click',function(){answerTf(false);});
+  document.getElementById('tfNext').addEventListener('click',renderTf);
+  renderTf();
+
+  document.getElementById('treeCheck').addEventListener('click',function(){
+    var v=document.getElementById('treeAns').value.trim().replace(',','.'),fb=document.getElementById('treeResult');
+    var ok=(parseFloat(v)===125);
+    fb.className='il-result';
+    fb.innerHTML=ok?'✓ Doğru! 1000 kg ÷ 8 ağaç = 125 kg/ağaç.':'✗ Tekrar düşün: 1000 kg\'ı 8 ağaca böl.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var karsilastirmaPool=[
+    {a:8,b:4,askOran:true,correct:'2 kat',distractors:['4 kat','8 kat','0,5 kat']},
+    {a:10,b:5,askOran:true,correct:'2 kat',distractors:['5 kat','10 kat','15 kat']},
+    {a:6,b:3,askOran:false,correct:'3',distractors:['2','9','18']},
+    {a:12,b:4,askOran:false,correct:'8',distractors:['3','16','48']},
+    {a:9,b:3,askOran:true,correct:'3 kat',distractors:['6 kat','9 kat','1,5 kat']}
+  ];
+  var drawKarsilastirma=makeDrawer(karsilastirmaPool);
+  var denkPool=[
+    {ratio:'2:5',target:20,correct:'8:20',distractors:['10:20','4:20','2:20']},
+    {ratio:'3:4',target:16,correct:'12:16',distractors:['9:16','16:16','8:16']},
+    {ratio:'5:2',target:8,correct:'20:8',distractors:['10:8','16:8','5:8']},
+    {ratio:'4:9',target:27,correct:'12:27',distractors:['9:27','16:27','3:27']}
+  ];
+  var drawDenk=makeDrawer(denkPool);
+  var birimPool=[
+    {text:'40 litre benzinle 480 km giden bir araba için birim oran (km/litre) kaçtır?',correct:'12',distractors:['10','40','480']},
+    {text:'6 saatte 240 sayfa okuyan biri için birim oran (sayfa/saat) kaçtır?',correct:'40',distractors:['6','240','36']},
+    {text:'1500 kg atık kağıtla (125 kg/ağaç oranıyla) kaç ağaç kurtarılır?',correct:'12',distractors:['15','8','125']},
+    {text:'5 kg elmanın fiyatı 75 TL ise birim oran (TL/kg) kaçtır?',correct:'15',distractors:['5','75','25']}
+  ];
+  var drawBirim=makeDrawer(birimPool);
+  var drawTfQuiz=makeDrawer(tfPool);
+
+  function createQuestion(type){
+    var q={type:type};
+    if(type==='karsilastirma'){
+      var c=drawKarsilastirma();
+      var opts=[c.correct].concat(c.distractors);
+      q.text=c.askOran ? (c.a+' sayısı, '+c.b+' sayısının kaç katıdır?') : ('Toplamsal karşılaştırmada '+c.a+' ile '+c.b+' arasındaki fark kaçtır?');
+      q.choices=shuffle(opts);q.correctText=c.correct;
+    }else if(type==='denk'){
+      var c=drawDenk();
+      var opts=[c.correct].concat(c.distractors);
+      q.text=c.ratio+' oranıyla denk olan ve ikinci terimi '+c.target+' olan oran hangisidir?';
+      q.choices=shuffle(opts);q.correctText=c.correct;
+    }else if(type==='birim'){
+      var c=drawBirim();
+      var opts=[c.correct].concat(c.distractors);
+      q.text=c.text;
+      q.choices=shuffle(opts);q.correctText=c.correct;
+    }else{
+      var c=drawTfQuiz();
+      q.text=c.text;
+      q.choices=['Doğru','Yanlış'];q.correctText=c.correct?'Doğru':'Yanlış';
+    }
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var qTypes=['karsilastirma','denk','onerme','birim','karsilastirma','denk','onerme','birim','karsilastirma','onerme'];
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(createQuestion);
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=document.getElementById('k1').value.trim(),fb=document.getElementById('kf1');
+    var ok=(v==='12');
+    fb.textContent=ok?'✓ Doğru! 480 ÷ 40 = 12 km/litre.':'✗ Tekrar düşün: 480\'i 40\'a böl.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var v=document.getElementById('k2a').value.trim().replace(/\s/g,''),fb=document.getElementById('kf2');
+    var ok=(v==='12:27');
+    fb.textContent=ok?'✓ Doğru! 27, 9\'un 3 katı olduğu için 4×3=12, yani 12:27.':'✗ Tekrar düşün: 27, 9\'un kaç katı?';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('konu'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Devir Dünyası | 7. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:520px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.72rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+p.body-text{font-size:.93rem;margin:8px 0}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.feedback .hint{display:block;font-weight:600;font-size:.85rem;margin-top:6px;opacity:.85}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:60px}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:110px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+.reveal-list{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.reveal-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:9px 14px;font-weight:800;cursor:pointer;font-size:.92rem}
+.reveal-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.factor-tag{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:8px;padding:3px 10px;font-weight:800;font-size:.82rem;margin:2px 3px}
+mjx-container{margin:0!important}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.35em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+@media(max-width:480px){.choices,.summary-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">7. Sınıf Matematik · 1. Tema · 2. Bölüm</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>🔁 Devir Dünyası</h1>
+    <p>MAT.7.1.2. Gerçek yaşam durumlarında rasyonel sayıların ondalık gösterimlerini yansıtabilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
+    <button class="tab-btn" data-tab="bolme">➗ Bölme ile Ondalık</button>
+    <button class="tab-btn" data-tab="siniflandirma">🔁 Sonlu mu, Devirli mi?</button>
+    <button class="tab-btn" data-tab="kesirdenondalik">🔄 Kesirden Ondalığa</button>
+    <button class="tab-btn" data-tab="ondaliktankesire">🔃 Ondalıktan Kesire</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. KONU ANLATIMI ============ -->
+<section class="tab-panel active" id="konu">
+  <div class="card">
+    <div class="card-title"><div class="icon">➗</div>Bölme İşlemi ile Ondalık Gösterim</div>
+    <p class="body-text">Bir rasyonel sayının ondalık gösterimi, payın paydaya bölünmesiyle elde edilir.</p>
+    <div class="math-display">\[\dfrac{3}{4}=3\div4=0{,}75\]</div>
+    <div class="gen-box">✓ Her rasyonel sayının bir ondalık gösterimi vardır.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🏁</div>Sonlu Ondalık Gösterim</div>
+    <div class="def-box">Bölme işlemi bir noktada <b>kalansız</b> bittiğinde elde edilen ondalık gösterime <b>sonlu ondalık gösterim</b> denir.</div>
+    <div class="math-display">\[\dfrac{1}{4}=0{,}25\qquad\dfrac{7}{20}=0{,}35\]</div>
+    <p class="body-text">Bir kesrin en sade halinde paydası yalnızca <b>2</b> ve/veya <b>5</b> asal çarpanlarından oluşuyorsa, o kesrin ondalık gösterimi sonludur.</p>
+    <div class="tip-box">💡 \(8=2^3\) → sadece 2 var → sonlu.<br>💡 \(20=2^2\times5\) → sadece 2 ve 5 var → sonlu.</div>
+    <p class="body-text">Bir kesir genişletilerek/sadeleştirlerek paydası 10, 100, 1000 gibi 10'un kuvvetlerinden biri olarak yazılabiliyorsa, o kesrin ondalık gösterimi sonludur.</p>
+    <div class="tip-box">💡 Paydası 25 → 4 ile genişletilerek 100 yapılabilir → sonlu.<br>💡 Paydası 8 → 125 ile genişletilerek 1000 yapılabilir → sonlu.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔁</div>Devirli Ondalık Gösterim</div>
+    <div class="def-box">Bölme işlemi hiç bitmeyip aynı rakam ya da rakam grubu sürekli tekrar ediyorsa elde edilen ondalık gösterime <b>devirli ondalık gösterim</b> denir.</div>
+    <div class="math-display">\[\dfrac{1}{6}=0{,}1666\ldots=0{,}1\overline{6}\qquad\dfrac{1}{7}=0{,}14285714\ldots=0{,}\overline{142857}\]</div>
+    <p class="body-text">Tekrar eden rakam ya da rakam grubunun üzerine çizgi çizilerek kısaca gösterilir. Paydası sadeleştirildiğinde 2 ve 5 dışında bir asal çarpan içeren kesirlerin ondalık gösterimi devirlidir.</p>
+    <div class="tip-box">💡 \(6=2\times3\) → 3 olduğu için devirli.<br>💡 \(7\)'nin kendisi asaldır, 2 ve 5'ten farklı olduğu için devirli.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧭</div>Üçüncü Bir Seçenek Yok</div>
+    <div class="gen-box">✓ Her rasyonel sayı ya sonlu ya da devirli bir ondalık gösterime sahiptir.</div>
+    <div class="tip-box">💡 <b>Tartışma:</b> \(0{,}999\ldots\) sayısı aslında \(1\)'e eşittir! Çünkü \(\dfrac{1}{3}=0{,}333\ldots\) ise, her iki tarafı 3 ile çarptığımızda \(\dfrac{3}{3}=0{,}999\ldots\) olur; ancak \(\dfrac{3}{3}=1\)'dir. Demek ki \(0{,}999\ldots=1\).</div>
+  </div>
+</section>
+
+<!-- ============ 2. BÖLME İLE ONDALIK ============ -->
+<section class="tab-panel" id="bolme">
+  <div class="card">
+    <div class="card-title"><div class="icon">✍️</div>Payı Paydaya Böl</div>
+    <p class="q-text" id="divqText" style="font-size:1rem"></p>
+    <div class="field-row">
+      <label for="divInput">Sonuç:</label><input class="answer-input" id="divInput">
+      <button class="submit-btn" id="divCheck">Kontrol Et</button>
+    </div>
+    <div class="feedback" id="divFeedback"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🔍</div>Her Rasyonel Sayının Bir Ondalık Gösterimi Vardır</div>
+    <p class="body-text" style="margin-bottom:6px">Aşağıdaki rasyonel sayılardan birine tıkla; bölme işleminin sonucunu gör.</p>
+    <div class="reveal-list" id="revealList"></div>
+    <div class="math-display" id="revealMath">\[\dfrac{5}{8}=5\div8=0{,}625\]</div>
+  </div>
+</section>
+
+<!-- ============ 3. SONLU MU, DEVİRLİ Mİ? ============ -->
+<section class="tab-panel" id="siniflandirma">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔎</div>Paydaya Bakarak Tahmin Et</div>
+    <div class="q-card">
+      <div class="q-text" id="clsText"></div>
+      <div class="choices" id="clsChoices"></div>
+      <div class="feedback" id="clsFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="clsNext">Sonraki Kesir →</button></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">〰️</div>Devirli Gösterimi Tanı</div>
+    <div class="q-card">
+      <div class="q-text" id="notText"></div>
+      <div class="choices" id="notChoices"></div>
+      <div class="feedback" id="notFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="notNext">Sonraki Soru →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 4. KESİRDEN ONDALIĞA ============ -->
+<section class="tab-panel" id="kesirdenondalik">
+  <div class="card">
+    <div class="card-title"><div class="icon">✖️</div>Kaç ile Genişletmelisin?</div>
+    <p class="body-text" style="margin-bottom:6px">Paydayı 10'un bir kuvveti yapmak için kesri hangi sayı ile genişletmelisin?</p>
+    <div class="q-card">
+      <div class="q-text" id="expText"></div>
+      <div class="choices" id="expChoices"></div>
+      <div class="feedback" id="expFeedback"></div>
+      <div class="next-row"><button class="ghost-btn" id="expNext">Sonraki Kesir →</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. ONDALIKTAN KESİRE ============ -->
+<section class="tab-panel" id="ondaliktankesire">
+  <div class="card">
+    <div class="card-title"><div class="icon">🔃</div>Ondalık Sayıyı Kesir Olarak Yaz</div>
+    <div class="tip-box">💡 Ondalık kısımdaki basamak sayısı kadar paydaya sıfır eklenir (1 basamak → 10, 2 basamak → 100, 3 basamak → 1000...).</div>
+    <p class="q-text" id="otkText" style="font-size:1rem"></p>
+    <div class="field-row">
+      <label for="otkPay">Pay:</label><input class="answer-input" id="otkPay">
+      <label for="otkPayda">Payda:</label><input class="answer-input" id="otkPayda">
+      <button class="submit-btn" id="otkCheck">Kontrol Et</button>
+    </div>
+    <div class="feedback" id="otkFeedback"></div>
+  </div>
+</section>
+
+<!-- ============ 6. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">\(\dfrac{5}{8}\) kesrini bölme işlemi ile ondalık gösterime çeviriniz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>Payı paydaya böleriz: \(5\div8\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Bölme işlemi 3 basamakta kalansız biter, yani sonlu bir ondalık gösterim elde edilir.</div></div>
+        <div class="ex-result">✓ \(\dfrac{5}{8}=0{,}625\)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">\(\dfrac{2}{3}\) kesrini ondalık gösterime çeviriniz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>Payı paydaya böleriz: \(2\div3\). Bölme işlemi hiç bitmez, 6 rakamı sürekli tekrar eder.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Tekrar eden rakamın üzerine çizgi çizilerek kısaca gösterilir.</div></div>
+        <div class="ex-result">✓ \(\dfrac{2}{3}=0{,}666\ldots=0{,}\overline{6}\)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">\(\dfrac{7}{12}\) kesrinin ondalık gösteriminin sonlu mu devirli mi olduğunu belirleyiniz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>Paydanın asal çarpanlarına bakılır: \(12=2^2\times3\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Payda, 2 ve 5 dışında bir asal çarpan olan 3'ü içerdiği için ondalık gösterim devirli olur.</div></div>
+        <div class="ex-result">✓ \(\dfrac{7}{12}\) devirli bir ondalık gösterime sahiptir.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">\(0{,}84\) ondalık sayısını sadeleştirmeden kesir (a/b) biçiminde yazınız.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>Ondalık kısımda 2 basamak olduğu için payda 100 olur.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Pay, virgülden sonraki rakamlar kullanılarak 84 olur.</div></div>
+        <div class="ex-result">✓ \(0{,}84=\dfrac{84}{100}\)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">Bir tarifte 1 su bardağının \(\dfrac{3}{4}\) kadarı un kullanılıyor. Bu miktarı ondalık gösterimle ifade ediniz.</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="ex-step"><div class="snum">1</div><div>Paydayı 10'un kuvveti yapmak için 25 ile genişletiriz: \(\dfrac{3}{4}=\dfrac{75}{100}\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Yüzde birlikler basamağına göre ondalık gösterim yazılır.</div></div>
+        <div class="ex-result">✓ \(\dfrac{3}{4}=0{,}75\) su bardağı</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">DEVİR DÜNYASI · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 8. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Bölme ile Ondalık</b><span>Her rasyonel sayı payı paydaya bölerek ondalık gösterime çevrilebilir.</span></div>
+      <div class="summary-item"><b>Sonlu Ondalık</b><span>Bölme kalansız biter. Payda yalnızca 2 ve/veya 5 çarpanı içerir.</span></div>
+      <div class="summary-item"><b>Devirli Ondalık</b><span>Bir rakam grubu sonsuza dek tekrar eder: \(0{,}\overline{3}\)</span></div>
+      <div class="summary-item"><b>Genelleme</b><span>Her rasyonel sayı ya sonlu ya da devirli bir ondalık gösterime sahiptir.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. \(\dfrac{5}{6}\) kesrinin ondalık gösterimi SONLU mudur yoksa DEVİRLİ midir?</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1"></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. \(0{,}35\) ondalık gösterimini kesir (a/b) biçiminde, sadeleştirmeden yazınız.</h4>
+      <div class="field-row"><label for="k2a">Pay:</label><input class="answer-input" id="k2a"><label for="k2b">Payda:</label><input class="answer-input" id="k2b"></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+function fracText(a,b){return '\\(\\dfrac{'+a+'}{'+b+'}\\)';}
+function normDec(s){return s.trim().replace(/\s+/g,'').replace(/\./g,',');}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ================= BÖLME İLE ONDALIK SEKMESİ ================= */
+  var divPool=[
+    {a:1,b:4,dec:'0,25'},{a:3,b:4,dec:'0,75'},{a:1,b:2,dec:'0,5'},{a:7,b:20,dec:'0,35'},{a:9,b:25,dec:'0,36'},{a:1,b:8,dec:'0,125'}
+  ];
+  var drawDiv=makeDrawer(divPool);
+  var divCurrent=null;
+  function loadDiv(){
+    divCurrent=drawDiv();
+    document.getElementById('divqText').innerHTML=fracText(divCurrent.a,divCurrent.b)+' kesrini payı paydaya bölerek ondalık gösterime çevir.';
+    typeset(document.getElementById('divqText'));
+    document.getElementById('divInput').value='';
+    document.getElementById('divFeedback').className='feedback';
+  }
+  document.getElementById('divCheck').addEventListener('click',function(){
+    var v=normDec(document.getElementById('divInput').value),fb=document.getElementById('divFeedback');
+    var ok=v===divCurrent.dec;
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Doğru cevap: '+divCurrent.dec;
+    if(ok){ setTimeout(loadDiv,1300); }
+  });
+  loadDiv();
+
+  var revealPool=[
+    {a:5,b:8,tex:'\\dfrac{5}{8}=5\\div8=0{,}625'},
+    {a:-2,b:5,tex:'\\dfrac{-2}{5}=-2\\div5=-0{,}4'},
+    {a:7,b:4,tex:'\\dfrac{7}{4}=7\\div4=1{,}75'},
+    {a:1,b:3,tex:'\\dfrac{1}{3}=1\\div3=0{,}\\overline{3}'}
+  ];
+  var revealBox=document.getElementById('revealList');
+  revealPool.forEach(function(item,i){
+    var b=document.createElement('button');
+    b.type='button';b.className='reveal-btn'+(i===0?' active':'');
+    b.innerHTML=fracText(item.a,item.b);
+    b.addEventListener('click',function(){
+      revealBox.querySelectorAll('.reveal-btn').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      document.getElementById('revealMath').innerHTML='\\['+item.tex+'\\]';
+      typeset(document.getElementById('revealMath'));
+    });
+    revealBox.appendChild(b);
+  });
+  typeset(revealBox);
+
+  /* ================= SONLU MU DEVİRLİ Mİ SEKMESİ ================= */
+  var clsPool=[
+    {a:3,b:8,ans:'Sonlu',fac:'8=2^3'},
+    {a:5,b:6,ans:'Devirli',fac:'6=2\\times3'},
+    {a:7,b:25,ans:'Sonlu',fac:'25=5^2'},
+    {a:2,b:9,ans:'Devirli',fac:'9=3^2'},
+    {a:11,b:40,ans:'Sonlu',fac:'40=2^3\\times5'},
+    {a:4,b:7,ans:'Devirli',fac:'7\\ \\text{asal, }2\\text{ veya }5\\text{ değil}'}
+  ];
+  var drawCls=makeDrawer(clsPool);
+  var clsCurrent=null;
+  function loadCls(){
+    clsCurrent=drawCls();
+    document.getElementById('clsText').innerHTML=fracText(clsCurrent.a,clsCurrent.b)+' kesrinin ondalık gösterimi sonlu mudur, devirli midir?';
+    typeset(document.getElementById('clsText'));
+    var box=document.getElementById('clsChoices');
+    box.innerHTML='';
+    ['Sonlu','Devirli'].forEach(function(s){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.textContent=s;
+      b.addEventListener('click',function(){ clsAnswer(s,box); });
+      box.appendChild(b);
+    });
+    document.getElementById('clsFeedback').className='feedback';
+    document.getElementById('clsNext').classList.remove('show');
+  }
+  function clsAnswer(s,box){
+    var ok=s===clsCurrent.ans;
+    box.querySelectorAll('.choice-btn').forEach(function(b){
+      b.disabled=true;
+      if(b.textContent===clsCurrent.ans){ b.classList.add('correct'); }
+      else if(b.textContent===s&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('clsFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.innerHTML=(ok?'✓ Doğru!':'✗ Doğru cevap: '+clsCurrent.ans)+'<span class="hint">\\('+clsCurrent.fac+'\\)</span>';
+    typeset(fb);
+    document.getElementById('clsNext').classList.add('show');
+  }
+  document.getElementById('clsNext').addEventListener('click',loadCls);
+  loadCls();
+
+  var notPool=[
+    {display:'0,454545...',correct:'\\(0,\\overline{45}\\)',choices:['\\(0,\\overline{45}\\)','\\(0,4\\overline{5}\\)','\\(\\overline{0,45}\\)','\\(0,\\overline{4}5\\)']},
+    {display:'0,3333...',correct:'\\(0,\\overline{3}\\)',choices:['\\(0,\\overline{3}\\)','\\(\\overline{0,3}\\)','\\(0,\\overline{03}\\)','\\(3,\\overline{0}\\)']},
+    {display:'0,1666...',correct:'\\(0,1\\overline{6}\\)',choices:['\\(0,1\\overline{6}\\)','\\(0,\\overline{16}\\)','\\(0,\\overline{1}6\\)','\\(1,\\overline{6}\\)']},
+    {display:'0,272727...',correct:'\\(0,\\overline{27}\\)',choices:['\\(0,\\overline{27}\\)','\\(0,2\\overline{7}\\)','\\(0,\\overline{2}7\\)','\\(2,\\overline{7}\\)']}
+  ];
+  var drawNot=makeDrawer(notPool);
+  var notCurrent=null;
+  function loadNot(){
+    notCurrent=drawNot();
+    document.getElementById('notText').textContent=notCurrent.display+' ondalık gösterimi kısaca nasıl yazılır?';
+    var box=document.getElementById('notChoices');
+    box.innerHTML='';
+    shuffle(notCurrent.choices).forEach(function(c){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;
+      b.addEventListener('click',function(){ notAnswer(c,box); });
+      box.appendChild(b);
+    });
+    typeset(box);
+    document.getElementById('notFeedback').className='feedback';
+    document.getElementById('notNext').classList.remove('show');
+  }
+  function notAnswer(c,box){
+    var ok=c===notCurrent.correct;
+    box.querySelectorAll('.choice-btn').forEach(function(b){
+      b.disabled=true;
+      if(b.innerHTML===notCurrent.correct){ b.classList.add('correct'); }
+      else if(b.innerHTML===c&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('notFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.innerHTML=ok?'✓ Doğru!':'✗ Doğru cevap: '+notCurrent.correct;
+    typeset(fb);
+    document.getElementById('notNext').classList.add('show');
+  }
+  document.getElementById('notNext').addEventListener('click',loadNot);
+  loadNot();
+
+  /* ================= KESİRDEN ONDALIĞA SEKMESİ ================= */
+  var expPool=[
+    {a:1,b:2,mult:5,dec:'0,5',choices:[2,5,10,4]},
+    {a:3,b:4,mult:25,dec:'0,75',choices:[2,25,5,10]},
+    {a:7,b:20,mult:5,dec:'0,35',choices:[5,2,4,10]},
+    {a:9,b:25,mult:4,dec:'0,36',choices:[4,2,5,10]},
+    {a:3,b:8,mult:125,dec:'0,375',choices:[125,25,2,5]}
+  ];
+  var drawExp=makeDrawer(expPool);
+  var expCurrent=null;
+  function loadExp(){
+    expCurrent=drawExp();
+    document.getElementById('expText').innerHTML=fracText(expCurrent.a,expCurrent.b)+' kesrinin paydasını 10\'un bir kuvveti yapmak için hangi sayı ile genişletmelisin?';
+    typeset(document.getElementById('expText'));
+    var box=document.getElementById('expChoices');
+    box.innerHTML='';
+    shuffle(expCurrent.choices).forEach(function(m){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.textContent='×'+m;
+      b.addEventListener('click',function(){ expAnswer(m,box); });
+      box.appendChild(b);
+    });
+    document.getElementById('expFeedback').className='feedback';
+    document.getElementById('expNext').classList.remove('show');
+  }
+  function expAnswer(m,box){
+    var ok=m===expCurrent.mult;
+    box.querySelectorAll('.choice-btn').forEach(function(b){
+      b.disabled=true;
+      var bv=Number(b.textContent.replace('×',''));
+      if(bv===expCurrent.mult){ b.classList.add('correct'); }
+      else if(bv===m&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('expFeedback');
+    var newA=expCurrent.a*expCurrent.mult,newB=expCurrent.b*expCurrent.mult;
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.innerHTML=(ok?'✓ Doğru! ':'✗ Doğru sayı: ×'+expCurrent.mult+'. ')+'\\('+fracText(expCurrent.a,expCurrent.b).replace(/\\\(|\\\)/g,'')+'=\\dfrac{'+newA+'}{'+newB+'}='+expCurrent.dec+'\\)';
+    typeset(fb);
+    document.getElementById('expNext').classList.add('show');
+  }
+  document.getElementById('expNext').addEventListener('click',loadExp);
+  loadExp();
+
+  /* ================= ONDALIKTAN KESİRE SEKMESİ ================= */
+  var otkPool=[
+    {dec:'0,7',pay:7,payda:10},{dec:'0,45',pay:45,payda:100},{dec:'0,125',pay:125,payda:1000},{dec:'0,6',pay:6,payda:10},{dec:'0,08',pay:8,payda:100}
+  ];
+  var drawOtk=makeDrawer(otkPool);
+  var otkCurrent=null;
+  function loadOtk(){
+    otkCurrent=drawOtk();
+    document.getElementById('otkText').textContent=otkCurrent.dec+' ondalık sayısını sadeleştirmeden kesir (a/b) biçiminde yazınız.';
+    document.getElementById('otkPay').value='';document.getElementById('otkPayda').value='';
+    document.getElementById('otkFeedback').className='feedback';
+  }
+  document.getElementById('otkCheck').addEventListener('click',function(){
+    var p=Number(document.getElementById('otkPay').value),d=Number(document.getElementById('otkPayda').value),fb=document.getElementById('otkFeedback');
+    var ok=p===otkCurrent.pay&&d===otkCurrent.payda;
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Doğru cevap: '+otkCurrent.pay+'/'+otkCurrent.payda;
+    if(ok){ setTimeout(loadOtk,1300); }
+  });
+  loadOtk();
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var qTypes=['siniflandirma','donusum','notasyon','ondaliktankesire','siniflandirma','donusum','notasyon','ondaliktankesire','siniflandirma','donusum'];
+  var drawQCls=makeDrawer(clsPool);
+  var drawQExp=makeDrawer(expPool);
+  var drawQNot=makeDrawer(notPool);
+  var drawQOtk=makeDrawer(otkPool);
+
+  function createQuestion(type){
+    var q={type:type};
+    if(type==='siniflandirma'){
+      var c=drawQCls();
+      q.text=fracText(c.a,c.b)+' kesrinin ondalık gösterimi sonlu mudur, devirli midir?';q.choices=['Sonlu','Devirli'];q.correctText=c.ans;
+    }else if(type==='donusum'){
+      var c=drawQExp();
+      q.text=fracText(c.a,c.b)+' kesri ondalık gösterimde hangisine eşittir?';
+      var correct=c.dec;
+      var wrongPool=['0,4','0,5','0,25','0,75','0,35','0,36','0,375','0,6','0,8'].filter(function(w){return w!==correct;});
+      q.choices=shuffle([correct].concat(shuffle(wrongPool).slice(0,3)));
+      q.correctText=correct;
+    }else if(type==='notasyon'){
+      var c=drawQNot();
+      q.text=c.display+' ondalık gösterimi kısaca nasıl yazılır?';q.choices=shuffle(c.choices);q.correctText=c.correct;
+    }else{
+      var c=drawQOtk();
+      q.text=c.dec+' ondalık sayısı, sadeleştirmeden hangi kesre eşittir?';
+      var correct=fracText(c.pay,c.payda);
+      var distractors=otkPool.filter(function(o){return o.dec!==c.dec;}).map(function(o){return fracText(o.pay,o.payda);});
+      q.choices=shuffle([correct].concat(shuffle(distractors).slice(0,3)));
+      q.correctText=correct;
+    }
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(createQuestion);
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.innerHTML=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=document.getElementById('k1').value.trim().toLocaleLowerCase('tr-TR'),fb=document.getElementById('kf1');
+    var ok=v==='devirli';
+    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var a=document.getElementById('k2a').value.trim(),b=document.getElementById('k2b').value.trim(),fb=document.getElementById('kf2');
+    var ok=a==='35'&&b==='100';
+    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('konu'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>

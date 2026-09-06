@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Problem Atölyesi | 7. Sınıf Matematik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>
+window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#4361ee;--primary-light:#e8ebff;--accent:#f72585;--success:#06d6a0;--danger:#ef4444;--text:#1a1a2e;--muted:#6b7280;--border:#e5e7eb;--bg:#f9fafc}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:40px}
+h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
+.container{max-width:900px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#4a006b 70%,#7b1fa2 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(75,0,110,.35)}
+.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(220,180,255,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:9px;color:#e8d5ff;position:relative}
+header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
+header h1{font-family:'Baloo 2',cursive;font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(220,160,255,.25);margin-top:6px;position:relative}
+header p{font-size:.94rem;color:rgba(245,235,255,.72);margin-top:3px;max-width:520px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,#4361ee,#7209b7);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(67,97,238,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
+.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.7rem,2vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
+.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+.tab-panel{display:none;animation:fadeIn .35s}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:0 2px 10px rgba(20,20,50,.04)}
+.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
+.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
+.def-box b{color:var(--primary)}
+.tip-box{background:#fff7e6;border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
+.gen-box{background:#eafaf3;border-left:4px solid var(--success);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
+.step-list{margin:10px 0 4px 0;counter-reset:steps}
+.step-list li{list-style:none;display:flex;gap:10px;margin:9px 0;font-size:.92rem;line-height:1.55}
+.step-list li::before{counter-increment:steps;content:counter(steps);background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+p.body-text{font-size:.93rem;margin:8px 0}
+.math-display{background:#0d1b3d;color:#4cc9f0;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
+.math-display mjx-container{color:#4cc9f0!important}
+mjx-container{margin:0!important}
+/* Problem kartı */
+.problem-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:16px;margin-bottom:14px}
+.problem-context{display:inline-block;background:var(--primary-light);color:var(--primary);font-weight:800;font-size:.78rem;padding:4px 12px;border-radius:99px;margin-bottom:10px}
+.problem-text{font-size:.95rem;line-height:1.6;margin-bottom:12px}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}
+.field-row label{font-weight:800;font-size:.85rem;color:var(--text)}
+.answer-input{border:2px solid #dce2ff;border-radius:12px;padding:9px 12px;width:110px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
+.answer-input:focus{border-color:var(--primary)}
+.unit-tag{font-weight:800;color:var(--muted);font-size:.88rem}
+.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
+.submit-btn:hover{filter:brightness(1.08)}
+.hint-btn{background:none;border:1.5px solid #f59e0b;color:#b45309;border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-top:4px;margin-right:8px}
+.sol-btn{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-top:4px}
+.hint-box{background:#fff7e6;border:1.5px dashed #f59e0b;border-radius:10px;padding:12px 14px;margin-top:10px;font-size:.88rem;display:none}
+.hint-box.show{display:block}
+.solution-box{display:none;margin-top:10px}
+.solution-box.show{display:block}
+.feedback{border-radius:12px;padding:12px 14px;margin-top:11px;font-weight:800;text-align:center;display:none;line-height:1.55}
+.feedback.show{display:block;animation:fadeIn .3s}
+.feedback.ok{background:rgba(6,214,160,.12);border:1.5px solid var(--success);color:#059669}
+.feedback.no{background:rgba(239,68,68,.12);border:1.5px solid var(--danger);color:#dc2626}
+.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
+.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.ex-result{background:#eafaf3;border:1.5px solid var(--success);border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#059669}
+/* Örnekler */
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3e8ff);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}
+.ex-result mjx-container{font-size:1.3em!important}
+.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
+.ex-body{padding:16px}
+.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
+.ex-steps{display:none}
+.ex-steps.show{display:block}
+.method-label{font-weight:800;color:var(--primary);font-size:.86rem;margin:12px 0 4px}
+/* Quiz */
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
+.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.15rem);color:var(--text);margin-bottom:14px;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice-btn{background:#f7f8ff;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
+.choice-btn:hover{border-color:var(--primary)}
+.choice-btn.correct{background:rgba(6,214,160,.15);border-color:var(--success);color:#059669}
+.choice-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:#dc2626}
+.choice-btn:disabled{cursor:default}
+.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}
+.ghost-btn.show{display:inline-block}
+.progress-bar{background:#0d1b3d;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
+.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
+.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4cc9f0,#7209b7);border-radius:5px;transition:.4s}
+.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.score-num{font-size:1.6rem;font-weight:900;color:#ffd60a}
+.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}
+.action-row.hidden{display:none}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.summary-item{background:#f7f8ff;border:1.5px solid var(--border);border-radius:14px;padding:14px}
+.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}
+.summary-item span{font-size:.85rem;color:var(--muted)}
+.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}
+.mini-task h4{font-family:'Baloo 2';color:var(--primary);margin-bottom:9px}
+.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
+.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
+@media(max-width:480px){.choices,.summary-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<button class="basa-don" id="basaDon">↑ Başa Dön</button>
+<header>
+  <div class="container">
+    <span class="badge">7. Sınıf Matematik · 1. Tema · 4. Bölüm</span>
+    <img class="logo" src="logo.gif" alt="TekinHoca Logo">
+    <h1>🧰 Problem Atölyesi</h1>
+    <p>MAT.7.1.4. Rasyonel sayılar ve işlemler içeren gerçek yaşam problemlerini çözebilme</p>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="strateji">📖 Strateji</button>
+    <button class="tab-btn" data-tab="toplamacikarma">🌡️ Toplama-Çıkarma</button>
+    <button class="tab-btn" data-tab="tasarruf">💰 Tasarruf</button>
+    <button class="tab-btn" data-tab="alisveris">🛒 Alışveriş</button>
+    <button class="tab-btn" data-tab="carpmabolme">✖️➗ Çarpma-Bölme</button>
+    <button class="tab-btn" data-tab="cokadimli">🧩 Çok Adımlı</button>
+    <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
+    <button class="tab-btn" data-tab="ozet">📋 Özet</button>
+  </nav>
+
+<!-- ============ 1. STRATEJİ ============ -->
+<section class="tab-panel active" id="strateji">
+  <div class="card">
+    <div class="card-title"><div class="icon">🧭</div>Problem Çözme Adımları</div>
+    <ul class="step-list">
+      <li>Problemde verilenleri ve istenenleri belirle.</li>
+      <li>İstenene ulaştıracak işlemi (toplama, çıkarma, çarpma, bölme) seç.</li>
+      <li>Probleme uygun bir temsil kullan (sayı doğrusu, şekil, sayı cümlesi).</li>
+      <li>Kullandığın temsil üzerinden problemi kendi cümlelerinle açıkla.</li>
+      <li>Çözüm için bir strateji oluştur ve uygula.</li>
+      <li>Bulduğun sonucu kontrol et.</li>
+      <li>Farklı bir çözüm yolu olup olmadığını incele.</li>
+      <li>Ulaştığın stratejiye uygun bir genelleme yap ve geçerliliğini değerlendir.</li>
+    </ul>
+    <div class="tip-box">💡 Bir problemi çözemediğinde stratejini değiştirmekten çekinme; bazen cevaba birden fazla yoldan ulaşılabilir.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧮</div>İşlem Önceliği ve Çok Adımlı İşlemler</div>
+    <div class="def-box">Çok adımlı işlemlerde önce <b>parantez içi</b>, sonra <b>çarpma ve bölme</b>, en son <b>toplama ve çıkarma</b> yapılır.</div>
+    <div class="math-display">\[(-8+3)\times(-2)=(-5)\times(-2)=10\]</div>
+    <p class="body-text">Kesir çizgisi de bir parantez gibi davranır: payda ve payı önce kendi içinde işleme sokulur.</p>
+    <div class="tip-box">💡 Bu bölümdeki problemler en fazla 3 işlem adımı içerir; hangi işlemin önce yapılacağını belirlemek çözümün ilk adımıdır.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">🧩</div>Temsil Seçimi</div>
+    <div class="gen-box">✓ Sayı doğrusu: toplama-çıkarma problemlerinde yön ve büyüklüğü gösterir.<br>✓ Sayma pulları: pozitif-negatif tam sayılarla toplama-çıkarmada "sıfır çiftleri" mantığını gösterir.<br>✓ Örüntü yaklaşımı: çarpma-bölmede işaret kurallarını açıklamada kullanılır.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="icon">⚖️</div>Çarpma-Bölmede İşaret Kuralları</div>
+    <div class="math-display">\[(+)\times(+)=(+)\qquad(+)\times(-)=(-)\qquad(-)\times(-)=(+)\]</div>
+    <p class="body-text">Aynı kural bölme işlemi için de geçerlidir: aynı işaretli iki sayının bölümü pozitif, farklı işaretli iki sayının bölümü negatiftir.</p>
+  </div>
+</section>
+
+<!-- ============ 2. TOPLAMA-ÇIKARMA ============ -->
+<section class="tab-panel" id="toplamacikarma">
+  <div class="card">
+    <div class="card-title"><div class="icon">🌡️</div>Toplama-Çıkarma Problemleri</div>
+    <p class="body-text" style="margin-bottom:10px">Önce kendi cevabını bul, ardından ipucuna ya da çözüme bakabilirsin.</p>
+    <div id="topcikList"></div>
+  </div>
+</section>
+
+<!-- ============ 3. TASARRUF ============ -->
+<section class="tab-panel" id="tasarruf">
+  <div class="card">
+    <div class="card-title"><div class="icon">💰</div>Tasarruf ve Bütçe Problemleri</div>
+    <p class="body-text" style="margin-bottom:10px">Gelir, gider ve tasarruf ilişkisini kullanarak problemleri çöz.</p>
+    <div id="tasarrufList"></div>
+  </div>
+</section>
+
+<!-- ============ 4. ALIŞVERİŞ ============ -->
+<section class="tab-panel" id="alisveris">
+  <div class="card">
+    <div class="card-title"><div class="icon">🛒</div>Alışveriş ve Fiyat Araştırması</div>
+    <p class="body-text" style="margin-bottom:10px">Birim fiyat ve indirim hesaplarıyla bilinçli tüketici ol.</p>
+    <div id="alisverisList"></div>
+  </div>
+</section>
+
+<!-- ============ 5. ÇARPMA-BÖLME ============ -->
+<section class="tab-panel" id="carpmabolme">
+  <div class="card">
+    <div class="card-title"><div class="icon">✖️➗</div>Çarpma-Bölme Problemleri</div>
+    <p class="body-text" style="margin-bottom:10px">İşaret kurallarını gerçek yaşam bağlamlarında uygula.</p>
+    <div id="carpmaBolmeList"></div>
+  </div>
+</section>
+
+<!-- ============ 6. ÇOK ADIMLI ============ -->
+<section class="tab-panel" id="cokadimli">
+  <div class="card">
+    <div class="card-title"><div class="icon">🧩</div>Çok Adımlı Problemler</div>
+    <p class="body-text" style="margin-bottom:10px">İşlem önceliğine dikkat ederek adım adım ilerle.</p>
+    <div id="cokAdimliList"></div>
+  </div>
+</section>
+
+<!-- ============ 7. ÖRNEKLER ============ -->
+<section class="tab-panel" id="ornekler">
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">Bir kuş, deniz seviyesinden 40 m yükseklikte uçarken 65 m aşağı iniyor. Kuşun yeni konumu nedir?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s1">Çözümü Göster</button>
+      <div class="ex-steps" id="s1">
+        <div class="ex-step"><div class="snum">1</div><div>Başlangıç yüksekliği \(+40\), aşağı inme ise \(-65\) olarak ifade edilir.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Toplama işlemi yapılır: \(40+(-65)=-25\).</div></div>
+        <div class="ex-result">✓ Kuşun yeni konumu deniz seviyesinin \(25\) metre altındadır: \(-25\).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">Bir öğrenci her hafta 120 TL tasarruf ediyor. 12 hafta sonunda toplam ne kadar tasarruf etmiş olur?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s2">Çözümü Göster</button>
+      <div class="ex-steps" id="s2">
+        <div class="ex-step"><div class="snum">1</div><div>Haftalık tasarruf miktarı sabittir: 120 TL.</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>Eşit miktarların tekrar eden toplamı çarpma işlemi ile bulunur: \(120\times12=1440\).</div></div>
+        <div class="ex-result">✓ Öğrenci 12 haftada toplam \(1440\) TL tasarruf etmiş olur.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">400 TL'lik bir ürüne %15 indirim uygulanıyor. İndirimli fiyat kaç TL'dir?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s3">Çözümü Göster</button>
+      <div class="ex-steps" id="s3">
+        <div class="ex-step"><div class="snum">1</div><div>İndirim tutarı hesaplanır: \(400\times0{,}15=60\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>İndirimli fiyat, orijinal fiyattan indirim tutarı çıkarılarak bulunur: \(400-60=340\).</div></div>
+        <div class="ex-result">✓ İndirimli fiyat \(340\) TL'dir.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">Bir su deposu her saat 3,5 litre su kaybediyor. 4 saat sonunda toplam kaç litre su kaybetmiş olur?</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s4">Çözümü Göster</button>
+      <div class="ex-steps" id="s4">
+        <div class="ex-step"><div class="snum">1</div><div>Saatlik kayıp negatif bir değerdir: \(-3{,}5\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>4 saatlik toplam kayıp: \((-3{,}5)\times4=-14\).</div></div>
+        <div class="ex-result">✓ Depo 4 saatte \(14\) litre su kaybetmiştir.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex-card">
+    <div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">Bir ürünün fiyatı önce %10 zamlanıyor, sonra yeni fiyata %10 indirim uygulanıyor. Ürünün son fiyatı başlangıç fiyatına eşit midir? (Başlangıç fiyatı: 80 TL)</span></div>
+    <div class="ex-body">
+      <button class="ex-toggle" data-target="s5">Çözümü Göster</button>
+      <div class="ex-steps" id="s5">
+        <div class="method-label">Yöntem 1 · Adım Adım</div>
+        <div class="ex-step"><div class="snum">1</div><div>%10 zam sonrası fiyat: \(80\times1{,}10=88\).</div></div>
+        <div class="ex-step"><div class="snum">2</div><div>%10 indirim sonrası fiyat: \(88\times0{,}90=79{,}2\).</div></div>
+        <div class="method-label">Yöntem 2 · Tek İşlemde</div>
+        <div class="ex-step"><div class="snum">1</div><div>Zam ve indirim çarpanları birleştirilir: \(80\times1{,}10\times0{,}90=80\times0{,}99=79{,}2\).</div></div>
+        <div class="ex-result">✓ Son fiyat \(79{,}2\) TL'dir; başlangıç fiyatından \(0{,}8\) TL azdır. <b>Genelleme:</b> Bir orandaki zam ile aynı orandaki indirim birbirini götürmez; sonuç her zaman başlangıç değerinden küçük çıkar.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 8. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="oyun">
+  <div class="progress-bar">
+    <div class="progress-top"><span id="progLabel">PROBLEM ATÖLYESİ · 10 SORU</span><span id="progCount">1 / 10</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+    <div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">TOPLAM PUAN</div><div class="score-num" id="scoreNum">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="correctNum">0</b></div></div>
+  </div>
+  <div class="q-card">
+    <div class="q-text" id="quizText"></div>
+    <div class="choices" id="quizChoices"></div>
+    <div class="feedback" id="quizFeedback"></div>
+    <div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div>
+  </div>
+  <div class="action-row hidden" id="quizEnd">
+    <button class="submit-btn" id="quizRestart">Yeniden Başla</button>
+  </div>
+</section>
+
+<!-- ============ 9. ÖZET ============ -->
+<section class="tab-panel" id="ozet">
+  <div class="card">
+    <div class="card-title"><div class="icon">📋</div>Hızlı Özet</div>
+    <div class="summary-grid">
+      <div class="summary-item"><b>Problem Çözme Adımları</b><span>Verilenleri belirle → temsil seç → strateji uygula → kontrol et → genelle.</span></div>
+      <div class="summary-item"><b>İşlem Önceliği</b><span>Önce parantez, sonra çarpma-bölme, en son toplama-çıkarma.</span></div>
+      <div class="summary-item"><b>İşaret Kuralları</b><span>Aynı işaretli çarpım/bölüm pozitif, farklı işaretli çarpım/bölüm negatiftir.</span></div>
+      <div class="summary-item"><b>Farklı Stratejiler</b><span>Bir problem birden fazla yolla çözülebilir; sonuçlar karşılaştırılarak kontrol edilir.</span></div>
+    </div>
+  </div>
+
+  <div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
+    <div class="mini-task">
+      <h4>1. Bir kuş, deniz seviyesinden \(-8\) m yükseklikte (yani 8 m altında) uçarken 3 m yukarı çıkıyor. Kuşun yeni yüksekliği kaç metredir?</h4>
+      <div class="field-row"><label for="k1">Cevap:</label><input class="answer-input" id="k1"><span class="unit-tag">m</span></div>
+      <button class="check-mini" id="k1check">Kontrol</button>
+      <div class="mini-feedback" id="kf1"></div>
+    </div>
+    <div class="mini-task">
+      <h4>2. Bir kişi her ay düzenli olarak 350 TL tasarruf ediyor. 6 ay sonunda toplam tasarrufu kaç TL olur?</h4>
+      <div class="field-row"><label for="k2">Cevap:</label><input class="answer-input" id="k2"><span class="unit-tag">TL</span></div>
+      <button class="check-mini" id="k2check">Kontrol</button>
+      <div class="mini-feedback" id="kf2"></div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+function typeset(el){ if(window.MathJax&&MathJax.typesetPromise){ MathJax.typesetPromise([el]); } }
+function shuffle(a){return a.slice().sort(function(){return Math.random()-.5;});}
+function makeDrawer(pool){
+  var deck=[];
+  return function(){
+    if(deck.length===0){ deck=shuffle(pool); }
+    return deck.pop();
+  };
+}
+function parseNum(str){
+  str=String(str).trim().replace(/\s+/g,'');
+  if(str==='') return NaN;
+  return Number(str.replace(',','.'));
+}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.ex-toggle').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=document.getElementById(this.dataset.target);
+    var showing=target.classList.toggle('show');
+    this.textContent=showing?'Çözümü Gizle':'Çözümü Göster';
+    if(showing){ typeset(target); }
+  });
+});
+
+document.addEventListener('DOMContentLoaded',function(){
+
+  var basaDonBtn=document.getElementById('basaDon');
+  window.addEventListener('scroll',function(){basaDonBtn.classList.toggle('gorunsun',window.scrollY>300)});
+  basaDonBtn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
+
+  /* ================= PROBLEM KARTI OLUŞTURUCU ================= */
+  var pcCounter=0;
+  function buildProblemCard(container,data){
+    pcCounter++;
+    var idx=pcCounter;
+    var wrap=document.createElement('div');
+    wrap.className='problem-card';
+    var stepsHTML=data.steps.map(function(s,i){return '<div class="ex-step"><div class="snum">'+(i+1)+'</div><div>'+s+'</div></div>';}).join('');
+    wrap.innerHTML=
+      '<span class="problem-context">'+data.context+'</span>'+
+      '<p class="problem-text">'+data.text+'</p>'+
+      '<div class="field-row"><label>Cevap:</label><input class="answer-input" id="pc'+idx+'_input">'+(data.unit?'<span class="unit-tag">'+data.unit+'</span>':'')+'<button class="submit-btn" id="pc'+idx+'_check">Kontrol Et</button></div>'+
+      '<div class="feedback" id="pc'+idx+'_fb"></div>'+
+      '<button class="hint-btn" id="pc'+idx+'_hintbtn">💡 İpucu Göster</button>'+
+      '<button class="sol-btn" id="pc'+idx+'_solbtn">✓ Çözümü Göster</button>'+
+      '<div class="hint-box" id="pc'+idx+'_hint">'+data.hint+'</div>'+
+      '<div class="solution-box" id="pc'+idx+'_sol">'+stepsHTML+'<div class="ex-result">✓ '+data.result+'</div></div>';
+    container.appendChild(wrap);
+
+    document.getElementById('pc'+idx+'_check').addEventListener('click',function(){
+      var v=parseNum(document.getElementById('pc'+idx+'_input').value);
+      var fb=document.getElementById('pc'+idx+'_fb');
+      var ok=!isNaN(v)&&Math.abs(v-data.answer)<0.01;
+      fb.className='feedback show '+(ok?'ok':'no');
+      fb.textContent=ok?'✓ Doğru!':'✗ Tekrar dene ya da ipucuna bak.';
+    });
+    document.getElementById('pc'+idx+'_hintbtn').addEventListener('click',function(){
+      var box=document.getElementById('pc'+idx+'_hint');
+      var showing=box.classList.toggle('show');
+      this.textContent=showing?'💡 İpucuyu Gizle':'💡 İpucu Göster';
+      if(showing){ typeset(box); }
+    });
+    document.getElementById('pc'+idx+'_solbtn').addEventListener('click',function(){
+      var box=document.getElementById('pc'+idx+'_sol');
+      var showing=box.classList.toggle('show');
+      this.textContent=showing?'✓ Çözümü Gizle':'✓ Çözümü Göster';
+      if(showing){ typeset(box); }
+    });
+  }
+
+  var topcikPool=[
+    {context:'🏔️ Yükseklik-Derinlik',text:'Bir dağcı deniz seviyesinden 1200 m yükseklikte bulunuyor. Fırtına nedeniyle 350 m aşağı iniyor. Dağcının yeni yüksekliği kaç metredir?',answer:850,unit:'m',hint:'Aşağı inme negatif bir değer olarak düşünülebilir: \\(1200+(-350)\\).',steps:['Yükseklik pozitif, aşağı inme negatif olarak ifade edilir: \\(1200+(-350)\\).','Toplama işlemi yapılır: \\(1200-350=850\\).'],result:'Dağcının yeni yüksekliği \\(850\\) metredir.'},
+    {context:'🌊 Derinlik',text:"Bir dalgıç deniz yüzeyinin 2 metre altındadır. Bulunduğu noktadan 1 metre daha aşağı dalıyor. Dalgıcın son konumu neresidir?",answer:-3,unit:'m',hint:'Her iki değer de yüzeyin altında olduğu için negatiftir: \\((-2)+(-1)\\).',steps:['Başlangıç konumu \\(-2\\) metredir.','1 metre daha aşağı inme eklenir: \\(-2+(-1)=-3\\).'],result:'Dalgıcın son konumu deniz yüzeyinin \\(3\\) metre altındadır: \\(-3\\).'},
+    {context:'🌡️ Sıcaklık',text:'Sabah hava sıcaklığı \\(-4°C\\) idi. Öğleye kadar sıcaklık 9°C arttı. Öğle sıcaklığı kaç derecedir?',answer:5,unit:'°C',hint:'Artış pozitif bir değer olarak eklenir: \\(-4+9\\).',steps:['Sabah sıcaklığı \\(-4°C\\) olarak alınır.','9°C artış eklenir: \\(-4+9=5\\).'],result:'Öğle sıcaklığı \\(5°C\\)\'dir.'},
+    {context:'💳 Hesap Bakiyesi',text:"Ali'nin banka hesabında \\(-350\\) TL (borç) bulunmaktadır. Hesabına 500 TL yatırıyor. Hesabındaki son bakiyesi kaç TL'dir?",answer:150,unit:'TL',hint:'Borç negatif, yatırılan para pozitiftir: \\(-350+500\\).',steps:['Başlangıç bakiyesi \\(-350\\) TL\'dir.','500 TL yatırılınca: \\(-350+500=150\\).'],result:"Ali'nin son bakiyesi \\(150\\) TL'dir."}
+  ];
+  topcikPool.forEach(function(p){ buildProblemCard(document.getElementById('topcikList'),p); });
+
+  var tasarrufPool=[
+    {context:'💰 Düzenli Tasarruf',text:'Elif her ay düzenli olarak 250 TL tasarruf ediyor. 8 ay sonunda toplam ne kadar tasarruf etmiş olur?',answer:2000,unit:'TL',hint:'Eşit miktarların tekrar eden toplamı çarpma işlemidir: \\(250\\times8\\).',steps:['Her ay tasarruf edilen miktar 250 TL\'dir.','8 ay boyunca tasarruf: \\(250\\times8=2000\\).'],result:'Elif 8 ayda toplam \\(2000\\) TL tasarruf etmiş olur.'},
+    {context:'🏠 Aile Bütçesi',text:"Bir ailenin aylık geliri 32000 TL, aylık gideri 27500 TL'dir. Bu ailenin ay sonunda ne kadar tasarrufu kalır?",answer:4500,unit:'TL',hint:'Tasarruf, gelirden giderin çıkarılmasıyla bulunur.',steps:['Gelir 32000 TL, gider 27500 TL\'dir.','Tasarruf: \\(32000-27500=4500\\).'],result:'Ailenin ay sonunda \\(4500\\) TL tasarrufu kalır.'},
+    {context:'📉 Borç Ödeme',text:'Bir kişi 3600 TL borcunu eşit taksitlerle 6 ayda ödeyecektir. Her ay kaç TL ödemesi gerekir?',answer:600,unit:'TL',hint:'Toplam borç, ay sayısına bölünür.',steps:['Toplam borç 3600 TL, taksit sayısı 6\'dır.','Aylık ödeme: \\(3600\\div6=600\\).'],result:'Kişi her ay \\(600\\) TL ödemelidir.'},
+    {context:'🎯 Harçlık Tasarrufu',text:'Bir öğrenci aylık harçlığının \\(\\dfrac{3}{4}\\)\'ünü tasarruf ediyor. Aylık harçlığı 400 TL ise ne kadar tasarruf eder?',answer:300,unit:'TL',hint:'Kesirle çarpma işlemi kullanılır: \\(400\\times\\dfrac{3}{4}\\).',steps:['Aylık harçlık 400 TL\'dir.','Tasarruf miktarı: \\(400\\times\\dfrac{3}{4}=300\\).'],result:'Öğrenci aylık \\(300\\) TL tasarruf eder.'}
+  ];
+  tasarrufPool.forEach(function(p){ buildProblemCard(document.getElementById('tasarrufList'),p); });
+
+  var alisverisPool=[
+    {context:'🍎 Birim Fiyat',text:"1 kg elmanın fiyatı 45,50 TL'dir. 2,5 kg elma alan biri kaç TL öder?",answer:113.75,unit:'TL',hint:'Birim fiyat, alınan miktar ile çarpılır.',steps:['1 kg elmanın fiyatı 45,50 TL\'dir.','2,5 kg için: \\(45{,}5\\times2{,}5=113{,}75\\).'],result:'Toplam ödenecek tutar \\(113{,}75\\) TL\'dir.'},
+    {context:'🍬 Birim Fiyat Bulma',text:"Bir markette 3 kg şeker 127,50 TL'ye satılıyor. 1 kg şekerin fiyatı kaç TL'dir?",answer:42.5,unit:'TL',hint:'Toplam fiyat, kilogram sayısına bölünür.',steps:['Toplam fiyat 127,50 TL, miktar 3 kg\'dır.','1 kg fiyatı: \\(127{,}5\\div3=42{,}5\\).'],result:"1 kg şekerin fiyatı \\(42{,}5\\) TL'dir."},
+    {context:'🏷️ İndirim Hesabı',text:"Bir ürünün fiyatı 240 TL iken üzerine %25 indirim uygulanıyor. İndirimli fiyat kaç TL'dir?",answer:180,unit:'TL',hint:'Önce indirim tutarı bulunur, sonra fiyattan çıkarılır: \\(240-240\\times0{,}25\\).',steps:['İndirim tutarı: \\(240\\times0{,}25=60\\).','İndirimli fiyat: \\(240-60=180\\).'],result:"İndirimli fiyat \\(180\\) TL'dir."},
+    {context:'🔍 Fiyat Araştırması',text:'A marketinde 3 adet defter 54 TL\'ye, B marketinde 5 adet aynı defter 87,50 TL\'ye satılıyor. Ucuz olan marketin birim fiyatını TL olarak yazınız.',answer:17.5,unit:'TL',hint:'Her iki markette de toplam fiyatı adet sayısına bölerek birim fiyatları karşılaştır.',steps:['A marketinde birim fiyat: \\(54\\div3=18\\) TL.','B marketinde birim fiyat: \\(87{,}5\\div5=17{,}5\\) TL.','\\(17{,}5<18\\) olduğundan B marketi daha ucuzdur.'],result:'B marketinde birim fiyat \\(17{,}5\\) TL ile daha ucuzdur.'}
+  ];
+  alisverisPool.forEach(function(p){ buildProblemCard(document.getElementById('alisverisList'),p); });
+
+  var carpmaBolmePool=[
+    {context:'✖️ İşaret Kuralı',text:'\\((-3)\\times(-5)\\) işleminin sonucunu bulunuz.',answer:15,unit:'',hint:'İki negatif sayının çarpımı pozitiftir.',steps:['İki sayı da negatiftir.','\\((-3)\\times(-5)=15\\).'],result:'Sonuç \\(15\\)\'tir (pozitif).'},
+    {context:'➗ İşaret Kuralı',text:'\\((-24)\\div4\\) işleminin sonucunu bulunuz.',answer:-6,unit:'',hint:'Negatif sayının pozitif sayıya bölümü negatiftir.',steps:['\\(-24\\), 4\'e bölünür.','\\((-24)\\div4=-6\\).'],result:'Sonuç \\(-6\\)\'dır.'},
+    {context:'🛗 Asansör',text:'Bir asansör her katta zeminden 3 metre aşağı inmektedir. Asansör 4 kat aşağı indiğinde zeminden kaç metre aşağıdadır?',answer:-12,unit:'m',hint:'Her kat için \\(-3\\) metre; 4 kat için bu değer 4 ile çarpılır.',steps:['Her kat inişi \\(-3\\) metredir.','4 kat için: \\((-3)\\times4=-12\\).'],result:'Asansör zeminden \\(12\\) metre aşağıdadır: \\(-12\\).'},
+    {context:'💧 Su Kaybı',text:'Bir su deposu sızıntı nedeniyle her saat 2,5 litre su kaybediyor. 6 saat sonunda depo toplam kaç litre su kaybetmiş olur?',answer:-15,unit:'litre',hint:'Kayıp negatif bir değerdir; saat sayısı ile çarpılır.',steps:['Saatlik kayıp \\(-2{,}5\\) litredir.','6 saat için: \\((-2{,}5)\\times6=-15\\).'],result:'Depo 6 saatte \\(15\\) litre su kaybetmiştir: \\(-15\\).'}
+  ];
+  carpmaBolmePool.forEach(function(p){ buildProblemCard(document.getElementById('carpmaBolmeList'),p); });
+
+  var cokAdimliPool=[
+    {context:'🧮 İşlem Önceliği',text:'\\((-8+3)\\times(-2)\\) işleminin sonucunu bulunuz.',answer:10,unit:'',hint:'Önce parantez içi hesaplanır, sonra çarpma yapılır.',steps:['Parantez içi: \\(-8+3=-5\\).','Çarpma: \\((-5)\\times(-2)=10\\).'],result:'Sonuç \\(10\\)\'dur.'},
+    {context:'🏪 Mağaza Kazancı',text:"Bir mağaza sabah 250 TL kazanç, öğleden sonra ise 80 TL'lik bir ürün iadesi (kayıp) yaşıyor. Günün net kazancının 2 katı kaç TL'dir?",answer:340,unit:'TL',hint:'Önce günün net kazancı bulunur: \\(250+(-80)\\), sonra 2 ile çarpılır.',steps:['Günün net kazancı: \\(250+(-80)=170\\).','2 katı: \\(170\\times2=340\\).'],result:'Günün net kazancının 2 katı \\(340\\) TL\'dir.'},
+    {context:'👛 Cüzdan Takibi',text:"Ayşe cüzdanında 120 TL ile alışverişe çıkıyor. Önce 45 TL'lik bir ürün alıyor, sonra arkadaşından 30 TL borç alıyor ve son olarak 60 TL'lik ikinci bir ürün alıyor. Ayşe'nin cüzdanında kaç TL kalmıştır?",answer:45,unit:'TL',hint:'İşlemler sırasıyla uygulanır: \\(120-45+30-60\\).',steps:['Başlangıç: 120 TL.','45 TL harcama: \\(120-45=75\\).','30 TL borç alma: \\(75+30=105\\).','60 TL harcama: \\(105-60=45\\).'],result:"Ayşe'nin cüzdanında \\(45\\) TL kalmıştır."}
+  ];
+  cokAdimliPool.forEach(function(p){ buildProblemCard(document.getElementById('cokAdimliList'),p); });
+
+  /* ================= KENDİNİ DENE (QUIZ) ================= */
+  var qTypes=['toplama_cikarma','tasarruf','alisveris','carpma_bolme','cokadimli','toplama_cikarma','tasarruf','alisveris','carpma_bolme','cokadimli'];
+
+  var quizToplamaCikarmaPool=[
+    {text:'Bir kuş, bulunduğu 15 m yükseklikten 22 m aşağı iniyor. Kuşun yeni yüksekliği kaç metredir?',choices:[-7,7,-37,37],correct:-7},
+    {text:'Sabah sıcaklık \\(-6°C\\) idi, akşama kadar 4°C düştü. Akşam sıcaklığı kaçtır?',choices:[-10,-2,2,10],correct:-10},
+    {text:'Bir mağazanın hesabında \\(-220\\) TL borç var. 300 TL ödeme yapılıyor. Yeni bakiye kaçtır?',choices:[80,-80,520,-520],correct:80},
+    {text:'Bir dalgıç \\(-12\\) m derinlikte. 5 m yukarı çıkıyor. Yeni konumu kaçtır?',choices:[-7,7,-17,17],correct:-7}
+  ];
+  var quizTasarrufPool=[
+    {text:'Bir kişi her hafta 180 TL tasarruf ediyor. 5 hafta sonunda toplam tasarrufu kaç TL olur?',choices:[900,720,185,36],correct:900},
+    {text:'Aylık gelir 18000 TL, gider 15250 TL. Ay sonu tasarruf kaç TL?',choices:[2750,3250,33250,2250],correct:2750},
+    {text:'2400 TL borç, 8 eşit taksitle ödeniyor. Taksit tutarı kaç TL?',choices:[300,192,320,400],correct:300},
+    {text:'Aylık 600 TL harçlığın \\(\\dfrac{2}{5}\\)\'i tasarruf ediliyor. Tasarruf kaç TL?',choices:[240,360,120,300],correct:240}
+  ];
+  var quizAlisverisPool=[
+    {text:'1 kg muz 32,80 TL. 1,5 kg muz kaç TL\'dir?',choices:[49.2,48.8,32.8,65.6],correct:49.2},
+    {text:'4 kg pirinç 158 TL. 1 kg pirincin fiyatı kaç TL?',choices:[39.5,42,36,632],correct:39.5},
+    {text:'160 TL\'lik ürüne %20 indirim uygulanıyor. İndirimli fiyat kaç TL?',choices:[128,140,32,192],correct:128},
+    {text:'A markette 2 adet 30 TL, B markette 3 adet 42 TL. Ucuz olan birim fiyat kaç TL\'dir?',choices:[14,15,12,16],correct:14}
+  ];
+  var quizCarpmaBolmePool=[
+    {text:'\\((-4)\\times(-6)\\) işleminin sonucu kaçtır?',choices:[24,-24,10,-10],correct:24},
+    {text:'\\((-36)\\div6\\) işleminin sonucu kaçtır?',choices:[-6,6,-30,30],correct:-6},
+    {text:'Bir asansör her katta 2,5 m aşağı iniyor. 3 kat aşağı indiğinde konumu kaçtır?',choices:[-7.5,7.5,-5.5,-8.5],correct:-7.5},
+    {text:'Bir musluk her dakika 1,2 litre su kaybediyor. 5 dakikada toplam kayıp kaç litredir?',choices:[-6,6,-5,-7.2],correct:-6}
+  ];
+  var quizCokAdimliPool=[
+    {text:'\\((-5+2)\\times(-4)\\) işleminin sonucu kaçtır?',choices:[12,-12,28,-28],correct:12},
+    {text:'Bir mağaza 180 TL kazanç, 50 TL iade kaybı yaşıyor. Net kazancın 3 katı kaç TL?',choices:[390,690,130,360],correct:390},
+    {text:'Cüzdanda 90 TL var. 25 TL harcanıyor, 40 TL bulunuyor, 30 TL harcanıyor. Kalan kaç TL?',choices:[75,65,145,15],correct:75}
+  ];
+  var drawQTop=makeDrawer(quizToplamaCikarmaPool);
+  var drawQTas=makeDrawer(quizTasarrufPool);
+  var drawQAli=makeDrawer(quizAlisverisPool);
+  var drawQCarp=makeDrawer(quizCarpmaBolmePool);
+  var drawQCok=makeDrawer(quizCokAdimliPool);
+
+  function fmtNum(v){ return String(v).replace('.',','); }
+  function createQuestion(type){
+    var q={type:type},c;
+    if(type==='toplama_cikarma'){ c=drawQTop(); }
+    else if(type==='tasarruf'){ c=drawQTas(); }
+    else if(type==='alisveris'){ c=drawQAli(); }
+    else if(type==='carpma_bolme'){ c=drawQCarp(); }
+    else{ c=drawQCok(); }
+    q.text=c.text;
+    q.choices=shuffle(c.choices).map(fmtNum);
+    q.correctText=fmtNum(c.correct);
+    q.correctIndex=q.choices.indexOf(q.correctText);
+    return q;
+  }
+
+  var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
+  function start(){
+    score=0;correct=0;current=0;answered=false;
+    questions=qTypes.map(createQuestion);
+    document.getElementById('quizEnd').classList.add('hidden');
+    document.querySelector('#oyun .q-card').style.display='block';
+    render();
+  }
+  function render(){
+    var q=questions[current];
+    document.getElementById('progCount').textContent=(current+1)+' / '+TOTAL;
+    document.getElementById('progFill').style.width=((current+1)/TOTAL*100)+'%';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    document.getElementById('quizText').innerHTML=q.text;
+    var box=document.getElementById('quizChoices');
+    box.innerHTML='';
+    q.choices.forEach(function(c,i){
+      var b=document.createElement('button');
+      b.type='button';b.className='choice-btn';b.textContent=c;b.dataset.i=i;
+      b.addEventListener('click',function(){ answer(i); });
+      box.appendChild(b);
+    });
+    typeset(box);typeset(document.getElementById('quizText'));
+    document.getElementById('quizFeedback').className='feedback';
+    document.getElementById('quizNext').classList.remove('show');
+    answered=false;
+  }
+  function answer(i){
+    if(answered) return;
+    answered=true;
+    var q=questions[current],ok=i===q.correctIndex;
+    if(ok){ score+=10;correct++; }
+    document.querySelectorAll('#quizChoices .choice-btn').forEach(function(b,idx){
+      b.disabled=true;
+      if(idx===q.correctIndex){ b.classList.add('correct'); }
+      else if(idx===i&&!ok){ b.classList.add('wrong'); }
+    });
+    var fb=document.getElementById('quizFeedback');
+    fb.className='feedback show '+(ok?'ok':'no');
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    document.getElementById('scoreNum').textContent=score;
+    document.getElementById('correctNum').textContent=correct;
+    if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
+    else{
+      setTimeout(function(){
+        document.querySelector('#oyun .q-card').style.display='none';
+        document.getElementById('quizEnd').classList.remove('hidden');
+      },900);
+    }
+  }
+  function next(){ current++; render(); }
+  document.getElementById('quizNext').addEventListener('click',next);
+  document.getElementById('quizRestart').addEventListener('click',start);
+  start();
+
+  /* ================= ÖZET · KENDİNE SOR ================= */
+  document.getElementById('k1check').addEventListener('click',function(){
+    var v=parseNum(document.getElementById('k1').value),fb=document.getElementById('kf1');
+    var ok=!isNaN(v)&&Math.abs(v-(-5))<0.01;
+    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+  document.getElementById('k2check').addEventListener('click',function(){
+    var v=parseNum(document.getElementById('k2').value),fb=document.getElementById('kf2');
+    var ok=!isNaN(v)&&Math.abs(v-2100)<0.01;
+    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.style.color=ok?'#059669':'#dc2626';
+  });
+
+  typeset(document.getElementById('strateji'));
+  typeset(document.getElementById('ozet'));
+});
+</script>
+</body>
+</html>
