@@ -177,7 +177,7 @@ button.ghost{
 
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .modal-overlay.hidden{display:none}
-.modal-box{background:#1c0f3d;border:2px solid #ffd93d;border-radius:12px;padding:20px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px}
+.modal-box{background:#1c0f3d;border:2px solid #ffd93d;border-radius:12px;padding:20px;max-width:360px;width:100%;max-height:calc(100dvh - 32px);overflow-y:auto;display:flex;flex-direction:column;gap:12px}
 .modal-title{font-family:'Baloo 2',cursive;color:#ffd93d;font-size:18px;text-align:center}
 .modal-rules{font-size:12.5px;color:#e6d9ff;line-height:1.7;list-style:none;border-top:1px solid rgba(255,217,61,.25);border-bottom:1px solid rgba(255,217,61,.25);padding:10px 4px}
 .modal-rules li{margin-bottom:4px}
@@ -200,6 +200,21 @@ button.ghost{
 .mode-btn:active{ transform:translateY(0); }
 .mode-btn-title{ font-family:'Baloo 2',cursive;font-weight:700;font-size:15.5px;color:#ffd93d; }
 .mode-btn-sub{ font-family:'Nunito',sans-serif;font-size:11px;color:#c9a8ff; }
+.task-select-list{display:flex;flex-direction:column;gap:8px}
+.task-choice{
+  display:flex;align-items:center;gap:11px;width:100%;min-height:48px;
+  padding:9px 11px;border:2px solid rgba(255,217,61,.28);border-radius:11px;
+  background:linear-gradient(180deg,#2a1550,#1c0f3d);cursor:pointer;text-align:left;
+  transition:border-color .15s,background .15s,transform .1s;
+}
+.task-choice:active{transform:scale(.99)}
+.task-choice.selected{border-color:#4ade80;background:linear-gradient(180deg,rgba(74,222,128,.18),rgba(28,15,61,.95))}
+.task-choice input{width:22px;height:22px;flex:0 0 22px;accent-color:#4ade80;cursor:pointer}
+.task-choice-text{font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;line-height:1.3;color:#fff2c8}
+.task-select-actions{display:flex;gap:10px;justify-content:center;margin-top:2px}
+.task-select-actions .a{min-width:126px}
+.task-select-actions .ghost{min-width:96px}
+.task-select-note{font-size:11.5px;color:#c9a8ff;text-align:center;line-height:1.45}
 .modal-logo{display:flex;justify-content:center;padding-top:2px}
 
 .demo-badge{text-align:center;font-size:10.5px;color:#c9a8ff;letter-spacing:.05em}
@@ -222,9 +237,9 @@ button.ghost{
     <div class="modal-title">MATEMATİK AVI</div>
     <ul class="modal-rules">
       <li>Seçeceğin oyun moduna göre farklı görevler karışık sırayla ekrana gelir.</li>
-      <li>Amacın ne olduğunu, göreve başlarken öğrenebilirsin.</li>
-      <li>Deliklerden çıkan yumurtalarda yazan sayıları dikkatli oku.</li>
-      <li>Hangi sayı görev tanımına uyuyorsa o yumurtaya dokun / tıkla.</li>
+      <li>Görevin başlangıcında, amacın ne olduğunu öğrenebilirsin.</li>
+      <li>Görevini ve yumurtalarda yazan ifadeleri dikkatli oku.</li>
+      <li>Hangi ifade görev tanımına uyuyorsa o yumurtaya dokun / tıkla.</li>
       <li>Hızlı hareket etmezsen yumurtayı kaçırırsın.</li>
       <li>Doğru yumurta 10 puan kazandırır, yanlış yumurta 5 puan kaybettirir.</li>
     </ul>
@@ -255,6 +270,31 @@ button.ghost{
         <span class="mode-btn-title">Tüm Görevleri Tamamla</span>
         <span class="mode-btn-sub">8 görevin tamamı — yaklaşık 8 dakika</span>
       </button>
+      <button class="mode-btn" id="customModeBtn" type="button">
+        <span class="mode-btn-title">Görev(ler)i Ben Seçmek İstiyorum</span>
+        <span class="mode-btn-sub">İstediğin görevleri seç — kendi oyununu oluştur</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="taskSelectModal">
+  <div class="modal-box">
+    <div class="modal-title">GÖREVLERİ SEÇ</div>
+    <div class="task-select-note">Oynamak istediğin görevleri seç. Bir veya daha fazla görev seçebilirsin.</div>
+    <div class="task-select-list" id="taskSelectList">
+      <label class="task-choice"><input type="checkbox" value="0"><span class="task-choice-text">Bir sayının katlarını bul</span></label>
+      <label class="task-choice"><input type="checkbox" value="1"><span class="task-choice-text">Bir sayıya eşit olan işlemleri bul</span></label>
+      <label class="task-choice"><input type="checkbox" value="2"><span class="task-choice-text">Negatif olan ifadeleri bul</span></label>
+      <label class="task-choice"><input type="checkbox" value="3"><span class="task-choice-text">Bir sayıya eşit olmayan işlemleri bul</span></label>
+      <label class="task-choice"><input type="checkbox" value="4"><span class="task-choice-text">Asal sayı olanları bul</span></label>
+      <label class="task-choice"><input type="checkbox" value="5"><span class="task-choice-text">Tam kare olan sayıları bul</span></label>
+      <label class="task-choice"><input type="checkbox" value="6"><span class="task-choice-text">Bir sayının çarpanlarını bul</span></label>
+      <label class="task-choice"><input type="checkbox" value="7"><span class="task-choice-text">Bir sayıya bölünemeyen sayıları bul</span></label>
+    </div>
+    <div class="task-select-actions">
+      <button class="a" id="taskSelectStartBtn" type="button" disabled>▶ Başlat</button>
+      <button class="ghost" id="taskSelectCancelBtn" type="button">Vazgeç</button>
     </div>
   </div>
 </div>
@@ -316,9 +356,9 @@ button.ghost{
     <div class="modal-title">KURALLAR</div>
     <ul class="modal-rules">
       <li>Seçeceğin oyun moduna göre farklı görevler karışık sırayla ekrana gelir.</li>
-      <li>Amacın ne olduğunu, göreve başlarken öğrenebilirsin.</li>
-      <li>Deliklerden çıkan yumurtalarda yazan sayıları dikkatli oku.</li>
-      <li>Hangi sayı görev tanımına uyuyorsa o yumurtaya dokun / tıkla.</li>
+      <li>Görevin başlangıcında, amacının ne olacağını öğrenebilirsin.</li>
+      <li>Görevini ve yumurtalarda yazan ifadeleri dikkatli oku.</li>
+      <li>Hangi ifade görev tanımına uyuyorsa o yumurtaya dokun / tıkla.</li>
       <li>Hızlı hareket etmezsen yumurtayı kaçırırsın.</li>
       <li>Doğru yumurta 10 puan kazandırır, yanlış yumurta 5 puan kaybettirir.</li>
     </ul>
@@ -529,23 +569,23 @@ button.ghost{
     return { title, correct: correct.map(String), wrong: wrong.map(String) };
   }
 
-  function genBolunebilirlikBul(){
+  function genBolunemeyenBul(){
     const rules = [2,3,4,5,6,9,10,15];
     const divisor = randChoice(rules);
-    const title = divisor + "'" + dativeSuffix(divisor) + " Bölünebilen Sayıları Bul";
+    const title = divisor + "'" + dativeSuffix(divisor) + " Bölünemeyen Sayıları Bul";
     const correct = [], wrong = [];
     for(let i=10; i<=80; i++){
-      if(i % divisor === 0) correct.push(i);
+      if(i % divisor !== 0) correct.push(i);
       else wrong.push(i);
     }
-    return { 
-      title, 
-      correct: shuffle(correct).slice(0,10).map(String), 
-      wrong: shuffle(wrong).slice(0,10).map(String) 
+    return {
+      title,
+      correct: shuffle(correct).slice(0,10).map(String),
+      wrong: shuffle(wrong).slice(0,10).map(String)
     };
   }
 
-  const GENERATORS = [genKatlariniBul, genEsitOlanlariBul, genNegatifOlanlariBul, genEsitOlmayanlariBul, genAsalSayilariBul, genTamKareBul, genCarpanlariniBul, genBolunebilirlikBul];
+  const GENERATORS = [genKatlariniBul, genEsitOlanlariBul, genNegatifOlanlariBul, genEsitOlmayanlariBul, genAsalSayilariBul, genTamKareBul, genCarpanlariniBul, genBolunemeyenBul];
 
   /* ---------------- Oyun durumu ---------------- */
   const HOLE_COUNT = 6;
@@ -622,9 +662,14 @@ button.ghost{
     }
   }
 
-  function generateAllTasks(count){
-    let gens = shuffle(GENERATORS);
-    if(count && count < gens.length){ gens = gens.slice(0, count); }
+  function generateAllTasks(count, selectedIndices=null){
+    let gens;
+    if(Array.isArray(selectedIndices)){
+      gens = shuffle(selectedIndices).map(i => GENERATORS[i]);
+    } else {
+      gens = shuffle(GENERATORS);
+      if(count && count < gens.length){ gens = gens.slice(0, count); }
+    }
     tasks = gens.map(fn => fn());
   }
 
@@ -788,9 +833,9 @@ button.ghost{
   function shakeBoard(){ boardEl.classList.remove('shake'); void boardEl.offsetWidth; boardEl.classList.add('shake'); }
 
   /* ---------------- Görev akışı ---------------- */
-  function startGame(count){
+  function startGame(count, selectedIndices=null){
     ensureAudio();
-    generateAllTasks(count);
+    generateAllTasks(count, selectedIndices);
     taskIndex = 0; score = 0; correctCount = 0; wrongCount = 0; totalCorrectSpawned = 0;
     overlay.classList.remove('show');
     finishBtn.style.display = 'none';
@@ -961,13 +1006,54 @@ button.ghost{
   window.addEventListener('resize', resizeFx);
 
   /* ---------------- Kontroller ---------------- */
-  document.querySelectorAll('.mode-btn').forEach(btn=>{
+  document.querySelectorAll('.mode-btn[data-count]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const count = parseInt(btn.dataset.count, 10);
       document.getElementById('modeModal').classList.add('hidden');
       startGame(count);
     });
   });
+
+  const taskSelectModal = document.getElementById('taskSelectModal');
+  const taskSelectStartBtn = document.getElementById('taskSelectStartBtn');
+  const taskSelectCancelBtn = document.getElementById('taskSelectCancelBtn');
+  const taskChoiceEls = Array.from(document.querySelectorAll('.task-choice'));
+
+  function updateTaskSelectionState(){
+    let selectedCount = 0;
+    taskChoiceEls.forEach(choice=>{
+      const checked = choice.querySelector('input').checked;
+      choice.classList.toggle('selected', checked);
+      if(checked) selectedCount++;
+    });
+    taskSelectStartBtn.disabled = selectedCount === 0;
+  }
+
+  taskChoiceEls.forEach(choice=>{
+    const input = choice.querySelector('input');
+    input.addEventListener('change', updateTaskSelectionState);
+  });
+
+  document.getElementById('customModeBtn').addEventListener('click', ()=>{
+    document.getElementById('modeModal').classList.add('hidden');
+    taskSelectModal.classList.remove('hidden');
+    updateTaskSelectionState();
+  });
+
+  taskSelectStartBtn.addEventListener('click', ()=>{
+    const selectedIndices = taskChoiceEls
+      .filter(choice=>choice.querySelector('input').checked)
+      .map(choice=>Number(choice.querySelector('input').value));
+    if(selectedIndices.length === 0) return;
+    taskSelectModal.classList.add('hidden');
+    startGame(selectedIndices.length, selectedIndices);
+  });
+
+  taskSelectCancelBtn.addEventListener('click', ()=>{
+    taskSelectModal.classList.add('hidden');
+    document.getElementById('modeModal').classList.remove('hidden');
+  });
+
   document.getElementById('playAgainBtn').addEventListener('click', showModeSelect);
   document.getElementById('modalStartBtn').addEventListener('click', ()=>{
     document.getElementById('startModal').classList.add('hidden');
