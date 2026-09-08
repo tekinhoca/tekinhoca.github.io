@@ -125,7 +125,7 @@ button.a:disabled{opacity:.35;cursor:default}
 <!-- ── HEDEF SAYI SEÇİM MODALI ── -->
 <div class="modal-overlay" id="diffModal">
   <div class="modal-box">
-    <div class="modal-title">Hangi Sayının Katlarıyla Oynayacaksınız?</div>
+    <div class="modal-title">Hedefiniz Hangi Sayının Katları Olsun İstersiniz?</div>
     <div class="modal-sub">Bilgisayara karşı oynayacaksınız</div>
     <div class="modal-btns col">
       <button class="modal-start" onclick="startGame(2)">2'nin Katları</button>
@@ -141,8 +141,7 @@ button.a:disabled{opacity:.35;cursor:default}
 <!-- ── KURALLAR MODALI ── -->
 <div class="modal-overlay hidden" id="rulesModal">
   <div class="modal-box">
-    <div class="character-box"><img src="../img/mecetru.webp" alt="Maskot"></div>
-    <div class="modal-title">Kurallar</div>
+    <div class="modal-title">KURALLAR</div>
     <div class="modal-rules" id="rulesText"></div>
     <div class="modal-btns">
       <button class="modal-close" onclick="closeModal('rulesModal')">Kapat</button>
@@ -712,11 +711,11 @@ function updateRulesText(){
   const n = targetMultiple;
   const ifade = katIfadesi(n);
   document.getElementById('rulesText').innerHTML = `
-    Beş taşlık rafınızdan, toplamı <b>${ifade} katı</b> olan bir veya daha fazla taşı düz bir sırada tahtaya yerleştirirsiniz.<br><br>
-    İlk hamle mutlaka <b>merkez kareden</b> geçmelidir. Sonraki hamlelerde, yerleştirdiğiniz taşlardan en az biri tahtada zaten bulunan bir taşa <b>bitişik</b> olmalıdır.<br><br>
-    Bir hamlede oluşan veya uzayan <b>tüm</b> yatay ve dikey diziler (2 veya daha fazla taş) <b>${ifade} katına</b> tamamlanmalı ve <b>en fazla 5 taş</b> uzunluğunda olmalıdır.<br><br>
-    <b>Puanlama:</b> Dizideki taşların toplamı puan olarak yazılır. <b>+${n} / +${n*2}</b> kareleri diziye sabit puan ekler; <b>×2 / ×3</b> kareleri dizinin toplamını (bonuslar dahil) çarpar. Bonuslar yalnızca taşın <b>o tur</b> yerleştirildiği karede geçerlidir. Merkez kare gizli bir ×2 bonusu taşır.<br><br>
-    Kesedeki taşlar biterse ve bir oyuncu tüm taşlarını oynarsa, ya da art arda iki pas geçilirse oyun sona erer. Rafta kalan her taş için <b>5 puan</b> kaybedilir. En yüksek puan kazanır.
+    <b>Toplamı ${ifade} katı olan</b> bir veya daha fazla taşı yatay ya da dikey düz bir sırada tahtaya yerleştirirsiniz.<br><br>
+    İlk hamle mutlaka <b>MERKEZDEKİ KAREDEN</b> geçmeli. Sonraki hamlelerde, yerleştirdiğiniz taşlardan en az biri, tahtada zaten bulunan en az bir taşa <b>bitişik</b> olmak zorunda.<br><br>
+    Bir hamlede oluşan veya uzayan <b>tüm</b> yatay ve dikey diziler (2 veya daha fazla taş) <b>${ifade} katına</b> tamamlanmalı ve <b>en fazla 5 taş</b> uzunluğunda olmalı.<br><br>
+    <b>Puanlama:</b><br>Dizideki taşların toplamı, puan olarak yazılır.<br><b>+${n}</b> / <b>+${n*2}</b> kareleri diziye sabit puan ekler; <b>×2</b> / <b>×3</b> kareleri ise dizinin bonuslar dahil toplam puanını 2 ya da 3 ile çarpar. Bonuslar yalnızca ilk taş konulduğunda geçerlidir. Merkez kare gizli bir <b>×2</b> bonusu taşır.<br><br>
+    Art arda birer kez pas geçilirse ya da bir oyuncu tüm taşlarını bitirirse oyun sona erer. Elde kalan her taş için <b>5 puan</b> kaybedilir. Yüksek puanlu oyuncu kazanır.
   `;
 }
 function startGame(n){
