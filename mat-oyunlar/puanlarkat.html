@@ -96,28 +96,25 @@ button.a:disabled{opacity:.35;cursor:default}
 
 /* ══════════════ MOBİL ══════════════ */
 .mobile-scoreboard{display:none}
-@media (max-width:900px){
-  .game-wrap{flex-direction:column;padding:8px;gap:4px;padding-top:calc(8px + env(safe-area-inset-top))}
-  .left-col{display:contents}
-  .right-col{display:contents}
-  .mobile-scoreboard{display:flex;flex-direction:column;gap:3px;order:1;flex-shrink:0}
-  .msb-row{display:flex;gap:4px}
-  .msb-box{flex:1;border:1px solid rgba(200,150,12,.5);border-radius:6px;background:rgba(10,22,10,.55);text-align:center;padding:5px 2px;overflow:hidden}
-  .msb-row.labels .msb-box{font-family:'Baloo 2',cursive;font-weight:800;color:#f0c040;font-size:12px;letter-spacing:.03em}
-  .msb-row.labels .msb-target{font-size:9.5px;letter-spacing:.01em}
-  .msb-row.values .msb-box{font-family:'Space Mono',monospace;font-size:19px;font-weight:700;color:rgba(247,242,232,.92)}
-  .status-line{display:block;order:2;font-size:16px;font-weight:800;min-height:auto;padding:1px 0}
-  .board-wrap{order:3;justify-content:center}
-  .logo-box,.reminder-box,.score-mini-row{display:none}
-  .rack{order:4;min-height:38px;padding:6px}
-  .main-actions{order:5}
-  .buttons-row:last-child{order:6}
-  .rack-tile{width:38px;height:38px;font-size:17px}
-  .bonus-label{font-size:calc(var(--cell,40px) * 0.32) !important}
-  .buttons-row .a{padding:12px 6px;font-size:13px}
-  .main-actions button{padding:13px 4px}
-  .game-wrap{padding-bottom:calc(8px + env(safe-area-inset-bottom))}
-}
+body.layout-mobile .game-wrap{flex-direction:column;padding:8px;gap:4px;padding-top:calc(8px + env(safe-area-inset-top));padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+body.layout-mobile .left-col{display:contents}
+body.layout-mobile .right-col{display:contents}
+body.layout-mobile .mobile-scoreboard{display:flex;flex-direction:column;gap:3px;order:1;flex-shrink:0}
+body.layout-mobile .msb-row{display:flex;gap:4px}
+body.layout-mobile .msb-box{flex:1;border:1px solid rgba(200,150,12,.5);border-radius:6px;background:rgba(10,22,10,.55);text-align:center;padding:5px 2px;overflow:hidden}
+body.layout-mobile .msb-row.labels .msb-box{font-family:'Baloo 2',cursive;font-weight:800;color:#f0c040;font-size:12px;letter-spacing:.03em}
+body.layout-mobile .msb-row.labels .msb-target{font-size:9.5px;letter-spacing:.01em}
+body.layout-mobile .msb-row.values .msb-box{font-family:'Space Mono',monospace;font-size:19px;font-weight:700;color:rgba(247,242,232,.92)}
+body.layout-mobile .status-line{display:block;order:2;font-size:16px;font-weight:800;min-height:auto;padding:1px 0}
+body.layout-mobile .board-wrap{order:3;justify-content:center}
+body.layout-mobile .logo-box,body.layout-mobile .reminder-box,body.layout-mobile .score-mini-row{display:none}
+body.layout-mobile .rack{order:4;min-height:38px;padding:6px}
+body.layout-mobile .main-actions{order:5}
+body.layout-mobile .buttons-row:last-child{order:6}
+body.layout-mobile .rack-tile{width:38px;height:38px;font-size:17px}
+body.layout-mobile .bonus-label{font-size:calc(var(--cell,40px) * 0.32) !important}
+body.layout-mobile .buttons-row .a{padding:12px 6px;font-size:13px}
+body.layout-mobile .main-actions button{padding:13px 4px}
 </style>
 </head>
 <body>
@@ -234,7 +231,7 @@ button.a:disabled{opacity:.35;cursor:default}
 
 <script>
 /* ══════════════════════ BONUS TAHTASI ══════════════════════ */
-const ROW_TEMPLATES = [
+const ROW_TEMPLATES_11 = [
   [[0,'x3'],[5,'x3'],[10,'x3']],
   [[1,'x2'],[4,'p5'],[6,'p5'],[9,'x2']],
   [[2,'x2'],[5,'p10'],[8,'x2']],
@@ -242,13 +239,23 @@ const ROW_TEMPLATES = [
   [[1,'p5'],[4,'p5'],[6,'p5'],[9,'p5']],
   [[0,'x3'],[2,'p10'],[5,'x2'],[8,'p10'],[10,'x3']]
 ];
-function buildBonusGrid(){
-  const g = Array.from({length:11},()=>Array(11).fill(null));
-  for(let r=0;r<=5;r++) for(const [c,v] of ROW_TEMPLATES[r]) g[r][c]=v;
-  for(let r=6;r<=10;r++) for(const [c,v] of ROW_TEMPLATES[10-r]) g[r][c]=v;
+// 9x9 tahta: 11x11'in 4. ve 6. satır/sütunları (0-indeksli) çıkarılarak elde edildi.
+const ROW_TEMPLATES_9 = [
+  [[0,'x3'],[4,'x3'],[8,'x3']],
+  [[1,'x2'],[7,'x2']],
+  [[2,'x2'],[4,'p10'],[6,'x2']],
+  [[3,'p10'],[5,'p10']],
+  [[0,'x3'],[2,'p10'],[4,'x2'],[6,'p10'],[8,'x3']]
+];
+function buildBonusGrid(size){
+  const templates = size===9 ? ROW_TEMPLATES_9 : ROW_TEMPLATES_11;
+  const centerRowIdx = templates.length-1; // son şablon = merkez satır
+  const g = Array.from({length:size},()=>Array(size).fill(null));
+  for(let r=0;r<centerRowIdx;r++) for(const [c,v] of templates[r]) g[r][c]=v;
+  for(let r=centerRowIdx;r<size;r++) for(const [c,v] of templates[(size-1)-r]) g[r][c]=v;
   return g;
 }
-const BONUS = buildBonusGrid();
+let BONUS = buildBonusGrid(11);
 function bonusLabel(b){
   if(b==='x2') return '×2';
   if(b==='x3') return '×3';
@@ -263,6 +270,17 @@ let staged, selectedRackIndex, isFirstMove, passStreak, gameOver, turn, difficul
 let lastPlayerGain = null, lastComputerGain = null;
 let lastComputerPlacement = [];
 let targetMultiple = 5;
+let BOARD_SIZE = 11, CENTER = 5;
+let uiLayout = 'desktop';
+function isDesktopLayout(){ return uiLayout==='desktop'; }
+function decideLayout(){
+  const isDesktop = window.matchMedia('(min-width:901px)').matches;
+  uiLayout = isDesktop ? 'desktop' : 'mobile';
+  document.body.classList.toggle('layout-mobile', !isDesktop);
+  document.body.classList.toggle('layout-desktop', isDesktop);
+  BOARD_SIZE = isDesktop ? 11 : 9;
+  CENTER = Math.floor(BOARD_SIZE/2);
+}
 
 function katEki(n){
   const map={2:'nin',3:'ün',4:'ün',5:'in',6:'nın'};
@@ -270,7 +288,7 @@ function katEki(n){
 }
 function katIfadesi(n){ return n+"'"+katEki(n); }
 
-function emptyBoard(){ return Array.from({length:11},()=>Array(11).fill(null)); }
+function emptyBoard(){ return Array.from({length:BOARD_SIZE},()=>Array(BOARD_SIZE).fill(null)); }
 function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
 function createBag(){ const b=[]; for(let v=1;v<=10;v++) for(let i=0;i<7;i++) b.push(v); return shuffle(b); }
 function drawFromBag(n){ const out=[]; for(let i=0;i<n && bag.length>0;i++) out.push(bag.pop()); return out; }
@@ -281,11 +299,11 @@ function getMergedLine(bd, stg, r, c, dir){
   const cells=[];
   if(dir==='h'){
     let left=c; while(left-1>=0 && getCell(bd,stg,r,left-1)!=null) left--;
-    let right=c; while(right+1<=10 && getCell(bd,stg,r,right+1)!=null) right++;
+    let right=c; while(right+1<=BOARD_SIZE-1 && getCell(bd,stg,r,right+1)!=null) right++;
     for(let cc=left;cc<=right;cc++) cells.push({r,c:cc,value:getCell(bd,stg,r,cc)});
   } else {
     let top=r; while(top-1>=0 && getCell(bd,stg,top-1,c)!=null) top--;
-    let bot=r; while(bot+1<=10 && getCell(bd,stg,bot+1,c)!=null) bot++;
+    let bot=r; while(bot+1<=BOARD_SIZE-1 && getCell(bd,stg,bot+1,c)!=null) bot++;
     for(let rr=top;rr<=bot;rr++) cells.push({r:rr,c,value:getCell(bd,stg,rr,c)});
   }
   return cells;
@@ -305,7 +323,7 @@ function isAdjacentToFilled(bd,r,c){
   const dirs=[[-1,0],[1,0],[0,-1],[0,1]];
   for(const [dr,dc] of dirs){
     const rr=r+dr, cc=c+dc;
-    if(rr<0||rr>10||cc<0||cc>10) continue;
+    if(rr<0||rr>BOARD_SIZE-1||cc<0||cc>BOARD_SIZE-1) continue;
     if(bd[rr][cc]!=null) return true;
   }
   return false;
@@ -322,7 +340,7 @@ function validateAndScorePlacement(bd, stg, firstMove){
     for(let r=rs[0];r<=rs[rs.length-1];r++) if(getCell(bd,stg,r,c)==null) return {valid:false,msg:'Taşlarınızın arasında boşluk var.'};
   }
   if(firstMove){
-    if(!stg.some(t=>t.r===5&&t.c===5)) return {valid:false,msg:'İlk hamle merkez kareden geçmelidir.'};
+    if(!stg.some(t=>t.r===CENTER&&t.c===CENTER)) return {valid:false,msg:'İlk hamle merkez kareden geçmelidir.'};
     const firstSum = stg.reduce((s,t)=>s+t.value,0);
     if(firstSum%targetMultiple!==0) return {valid:false,msg:'İlk hamledeki taşların toplamı '+katIfadesi(targetMultiple)+' katı olmalı.'};
   } else {
@@ -384,12 +402,12 @@ function permsOfLength(arr,k){
 }
 function getEmptySegments(bd, isRow, idx){
   const segs=[]; let start=null;
-  for(let i=0;i<11;i++){
+  for(let i=0;i<BOARD_SIZE;i++){
     const val = isRow ? bd[idx][i] : bd[i][idx];
     if(val==null){ if(start===null) start=i; }
     else { if(start!==null){ segs.push([start,i-1]); start=null; } }
   }
-  if(start!==null) segs.push([start,10]);
+  if(start!==null) segs.push([start,BOARD_SIZE-1]);
   return segs;
 }
 function windowTouchesBoard(bd, isRow, idx, start, k){
@@ -398,7 +416,7 @@ function windowTouchesBoard(bd, isRow, idx, start, k){
     const dirs=[[-1,0],[1,0],[0,-1],[0,1]];
     for(const [dr,dc] of dirs){
       const rr=r+dr, cc=c+dc;
-      if(rr<0||rr>10||cc<0||cc>10) continue;
+      if(rr<0||rr>BOARD_SIZE-1||cc<0||cc>BOARD_SIZE-1) continue;
       if(bd[rr][cc]!=null) return true;
     }
   }
@@ -409,14 +427,14 @@ function generateCandidates(bd, rack, firstMove, maxCand){
   const cands=[];
   if(firstMove){
     for(let k=1;k<=Math.min(5,rack.length);k++){
-      for(let start=Math.max(0,5-k+1); start<=5 && start+k-1<=10; start++){
-        if(!(start<=5 && 5<=start+k-1)) continue;
-        for(const perm of permsOfLength(rack,k)) cands.push(perm.map((v,i)=>({r:5,c:start+i,value:v})));
+      for(let start=Math.max(0,CENTER-k+1); start<=CENTER && start+k-1<=BOARD_SIZE-1; start++){
+        if(!(start<=CENTER && CENTER<=start+k-1)) continue;
+        for(const perm of permsOfLength(rack,k)) cands.push(perm.map((v,i)=>({r:CENTER,c:start+i,value:v})));
       }
     }
     return cands;
   }
-  for(let r=0;r<11;r++){
+  for(let r=0;r<BOARD_SIZE;r++){
     const segs=getEmptySegments(bd,true,r);
     for(const [s0,e0] of segs){
       const segLen=e0-s0+1;
@@ -431,7 +449,7 @@ function generateCandidates(bd, rack, firstMove, maxCand){
       }
     }
   }
-  for(let c=0;c<11;c++){
+  for(let c=0;c<BOARD_SIZE;c++){
     const segs=getEmptySegments(bd,false,c);
     for(const [s0,e0] of segs){
       const segLen=e0-s0+1;
@@ -466,29 +484,29 @@ const rackEl=document.getElementById('rack');
 function fitBoard(){
   const gameWrap=document.querySelector('.game-wrap');
   const wrap=document.querySelector('.board-wrap');
-  const isDesktop=window.matchMedia('(min-width:901px)').matches;
+  const isDesktop=isDesktopLayout();
   const availH=wrap.clientHeight;
-  let cell=Math.max(18, Math.floor((availH-14)/11));
+  let cell=Math.max(18, Math.floor((availH-14)/BOARD_SIZE));
   if(isDesktop){
     // Masaüstünde: sidebar tahtaya göre boyutlanacağı için döngüsel bağımlılık
     // oluşmasın diye tahta genişliği yüksekliğe göre belirleniyor. Yine de
     // sidebar'a en az ~200px yer kalmasını garantiliyoruz.
     const totalW=gameWrap.clientWidth;
     const maxBoardWidth=totalW-200-24;
-    const maxCellFromWidth=Math.floor((maxBoardWidth-20)/11);
+    const maxCellFromWidth=Math.floor((maxBoardWidth-20)/BOARD_SIZE);
     if(cell>maxCellFromWidth) cell=Math.max(18, maxCellFromWidth);
   } else {
     // Mobilde sidebar yok, tahta tam genişliği kullanır; ekstra bir pay ayırmaya
     // gerek yok (aksi halde tahta gereksiz küçülür).
     const availW=wrap.clientWidth;
-    const maxCellFromWidth=Math.floor((availW-20)/11);
+    const maxCellFromWidth=Math.floor((availW-20)/BOARD_SIZE);
     if(cell>maxCellFromWidth) cell=Math.max(18, maxCellFromWidth);
   }
   document.documentElement.style.setProperty('--cell', cell+'px');
-  boardEl.style.gridTemplateColumns=`repeat(11, ${cell}px)`;
-  boardEl.style.gridTemplateRows=`repeat(11, ${cell}px)`;
+  boardEl.style.gridTemplateColumns=`repeat(${BOARD_SIZE}, ${cell}px)`;
+  boardEl.style.gridTemplateRows=`repeat(${BOARD_SIZE}, ${cell}px)`;
   if(isDesktop){
-    const boardWidthPx = cell*11 + 2*10 + 6*2; // 11 hücre + 10 ara boşluk(2px) + iç boşluk(6px x2)
+    const boardWidthPx = cell*BOARD_SIZE + 2*(BOARD_SIZE-1) + 6*2; // hücreler + ara boşluklar(2px) + iç boşluk(6px x2)
     document.querySelector('.left-col').style.width = boardWidthPx+'px';
   }
 }
@@ -505,13 +523,13 @@ function renderBoard(){
       liveBadge = {r:lastTile.r, c:lastTile.c, score:res.score};
     }
   }
-  for(let r=0;r<11;r++){
-    for(let c=0;c<11;c++){
+  for(let r=0;r<BOARD_SIZE;r++){
+    for(let c=0;c<BOARD_SIZE;c++){
       const div=document.createElement('div');
       div.className='cell';
       div.style.width=cellPx; div.style.height=cellPx;
       const b=BONUS[r][c];
-      if(r===5&&c===5){ div.classList.add('center-cell'); }
+      if(r===CENTER&&c===CENTER){ div.classList.add('center-cell'); }
       else if(b){ div.classList.add('bonus-'+b); }
       const value = getCell(board, staged, r, c);
       if(value!=null){
@@ -521,7 +539,7 @@ function renderBoard(){
         tb.className='tile-box'+(isStagedTile?' staged':'')+(isPcLast?' pc-last':'');
         tb.textContent=value;
         div.appendChild(tb);
-      } else if(b && !(r===5&&c===5)){
+      } else if(b && !(r===CENTER&&c===CENTER)){
         const lbl=document.createElement('div');
         lbl.className='bonus-label';
         lbl.textContent=bonusLabel(b);
@@ -640,7 +658,7 @@ function onOyna(){
   setStatus(res.score+' PUAN KAZANDINIZ!');
   renderAll();
   if(checkEndConditions()) return;
-  const isDesktop = window.matchMedia('(min-width:901px)').matches;
+  const isDesktop = isDesktopLayout();
   const pauseMs = isDesktop ? 2000 : 3000;
   if(isDesktop) showScoreFloat(res.score, pauseMs);
   setTimeout(computerTurn, pauseMs);
@@ -722,6 +740,8 @@ function updateRulesText(){
 function startGame(n){
   targetMultiple = n;
   difficulty='easy';
+  decideLayout();
+  BONUS = buildBonusGrid(BOARD_SIZE);
   bag=createBag();
   board=emptyBoard();
   playerRack=drawFromBag(5);
@@ -743,7 +763,7 @@ function resetGame(){
 }
 
 function fitSidebar(){
-  const isDesktop=window.matchMedia('(min-width:901px)').matches;
+  const isDesktop=isDesktopLayout();
   if(!isDesktop) return;
   const rightCol=document.querySelector('.right-col');
   const totalH=rightCol.clientHeight;
@@ -765,6 +785,7 @@ function fitSidebar(){
 
 window.addEventListener('resize', ()=>{ fitBoard(); fitSidebar(); renderBoard(); });
 showModal('diffModal');
+decideLayout();
 board=emptyBoard(); playerRack=[]; computerRack=[]; playerScore=0; computerScore=0;
 staged=[]; selectedRackIndex=null; isFirstMove=true; passStreak=0; gameOver=true; turn='player'; difficulty='easy'; lastComputerPlacement=[]; bag=[];
 updateRulesText();
