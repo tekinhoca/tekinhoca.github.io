@@ -177,18 +177,6 @@ main { max-width:760px; }
 }
 
 /* ── HAFTALIK GÖRSEL KARTI ── */
-.weekly-image-kicker {
-  text-align: center;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--rust);
-  opacity: 0.75;
-  margin-bottom: 6px;
-}
-[data-theme="dark"] .weekly-image-kicker { color: var(--gold); }
-
 .weekly-image-title {
   font-family: 'Source Serif 4', serif;
   font-size: 1rem;
@@ -201,7 +189,9 @@ main { max-width:760px; }
 [data-theme="dark"] .weekly-image-title { color: var(--gold); }
 
 .weekly-image-subtitle {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   color: var(--muted);
   text-align: center;
   line-height: 1.6;
@@ -212,7 +202,7 @@ main { max-width:760px; }
 .weekly-image-frame {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 1536 / 250;
   border-radius: 6px;
   overflow: hidden;
   border: 1px solid rgba(122,92,30,0.25);
@@ -229,6 +219,9 @@ main { max-width:760px; }
   height: 100%;
   object-fit: cover;
   display: block;
+}
+@media (max-width: 640px) {
+  .weekly-image-frame { aspect-ratio: 3.8 / 1; }
 }
 
 /* ── LIGHTBOX ── */
@@ -255,7 +248,10 @@ main { max-width:760px; }
   object-fit: contain;
   border-radius: 4px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
+.lightbox-overlay img.loaded { opacity: 1; }
 .lightbox-close {
   position: absolute;
   top: 20px;
@@ -289,19 +285,17 @@ main { max-width:760px; }
       <p class="quote-text">"Hayatta en hakiki mürşit ilimdir."</p>
       <p class="quote-attr">Mustafa Kemal ATATÜRK</p>
     </div>
-
     <div class="intro-box soft-box">
       <p>Matematik öğretmeni <strong>Tekin Canıtez</strong> tarafından hazırlanan bu sitede,<br>her yaştan kullanıcıya hitap eden interaktif hesaplama araçları ve zekâ oyunları ile<br>ortaokul öğrencilerine hitap eden matematik dersi etkinlikleri ve matematik oyunları sunulmaktadır.</p>
     </div>
 
     <div class="fade-in-b">
       <div class="weekly-info-box soft-box">
-        <p class="weekly-image-kicker">Çok Yakında</p>
-        <h2 class="weekly-image-title">MATECE'NİN HAFTALIK BİLİM DURAKLARI</h2>
+        <h2 class="weekly-image-title">YAKINDA<br>MATECE'NİN HAFTALIK BİLİM DURAKLARI</h2>
         <p class="weekly-image-subtitle">Her hafta sizleri şaşırtacak bir optik illüzyon ile<br>ya da ilham verici bir bilim insanı ile karşılaşacağınız<br>yeni bir görsel seri, <strong>28 EYLÜL'DEN İTİBAREN</strong> bu sayfada olacak.</p>
       </div>
-      <div class="weekly-image-frame" id="weeklyImageTrigger" tabindex="0" role="button" aria-label="Görseli büyüt">
-        <img src="hafres/00neg.webp" alt="Matece'nin Haftalık Bilim Durakları" loading="lazy">
+      <div class="weekly-image-frame" id="weeklyImageTrigger" tabindex="0" role="button" aria-label="Görseli büyüt" data-full="hafres/00neg.webp">
+        <img src="hafres/00negb.webp" alt="Matece'nin Haftalık Bilim Durakları" loading="lazy">
       </div>
     </div>
 
@@ -329,7 +323,7 @@ main { max-width:760px; }
         </div>
         <div class="feature-arrow">→</div>
       </a>
-      <a href="matematik-hikayeleri.html" class="feature-card">
+      <a href="ortaokul-matematik.html" class="feature-card">
         <div class="feature-icon"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;color-scheme:only light;">
           <path d="M50,24 C42,16 26,16 16,20 V78 C26,74 42,74 50,82 C58,74 74,74 84,78 V20 C74,16 58,16 50,24 Z" fill="none" stroke="var(--gold)" stroke-width="3.5" stroke-linejoin="round"/>
           <line x1="50" y1="24" x2="50" y2="82" stroke="var(--rust)" stroke-width="2.5"/>
@@ -339,7 +333,7 @@ main { max-width:760px; }
           <line x1="58" y1="40" x2="76" y2="42" stroke="var(--rust)" stroke-width="1.8" opacity="0.6"/>
         </svg></div>
         <div class="feature-text">
-          <div class="feature-title">Matematik Hikayeleri</div>
+          <div class="feature-title">Ortaokul Matematik</div>
         </div>
         <div class="feature-arrow">→</div>
       </a>
@@ -350,7 +344,7 @@ main { max-width:760px; }
       <a href="ataturk-matematik.html" class="other-page-link">Atatürk ve Matematik <span class="feature-arrow">→</span></a>
       <a href="matematik-tarihi.html" class="other-page-link">Matematik Tarihi <span class="feature-arrow">→</span></a>
       <a href="estetik-matematik.html" class="other-page-link">Estetik Matematik <span class="feature-arrow">→</span></a>
-      <a href="ortaokul-matematik.html" class="other-page-link">Ortaokul Matematik <span class="feature-arrow">→</span></a>
+      <a href="matematik-hikayeleri.html" class="other-page-link">Matematik Hikayeleri <span class="feature-arrow">→</span></a>
       <a href="kulup-dosyalari.html" class="other-page-link">Kulüp Dosyaları <span class="feature-arrow">→</span></a>
     </div>
     </div>
@@ -402,7 +396,6 @@ main { max-width:760px; }
   (function(){
     const trigger = document.getElementById('weeklyImageTrigger');
     if(!trigger) return;
-    const sourceImg = trigger.querySelector('img');
 
     const overlay = document.createElement('div');
     overlay.className = 'lightbox-overlay';
@@ -413,8 +406,7 @@ main { max-width:760px; }
     closeBtn.textContent = '×';
 
     const bigImg = document.createElement('img');
-    bigImg.src = sourceImg.src;
-    bigImg.alt = sourceImg.alt;
+    bigImg.decoding = 'async';
 
     overlay.appendChild(closeBtn);
     overlay.appendChild(bigImg);
@@ -436,8 +428,22 @@ main { max-width:760px; }
       window.scrollTo(0, scrollLockY);
     }
 
-    function openLightbox(){ overlay.classList.add('show'); bodyScrollLock(); }
-    function closeLightbox(){ overlay.classList.remove('show'); bodyScrollUnlock(); }
+    function openLightbox(){
+      bigImg.classList.remove('loaded');
+      bigImg.alt = trigger.querySelector('img').alt;
+      bigImg.onload = function () { bigImg.classList.add('loaded'); };
+      bigImg.src = trigger.getAttribute('data-full');
+      overlay.classList.add('show');
+      bodyScrollLock();
+    }
+    function closeLightbox(){
+      overlay.classList.remove('show');
+      bodyScrollUnlock();
+      setTimeout(function () {
+        bigImg.src = '';
+        bigImg.classList.remove('loaded');
+      }, 250);
+    }
 
     trigger.addEventListener('click', openLightbox);
     trigger.addEventListener('keydown', function(e){
