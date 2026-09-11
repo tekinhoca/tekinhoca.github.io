@@ -1,0 +1,624 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>8. Sınıf Matematik — M.8.1.3 Kareköklü İfadeler</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--primary:#7a0e0e;--primary2:#4a0808;--primary-light:#fbeaea;--accent:#c81e1e;--success:#059669;--success-light:#eafaf3;--danger:#b91c1c;--warning:#d97706;--warning-light:#fff7e6;--text:#221515;--muted:#8a6f6f;--border:#ecd9d9;--bg:#faf6f6;--dark:#050505;--shadow:0 4px 18px rgba(122,14,14,.10)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#3a0000 66%,#8b0000 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(60,0,0,.4)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#c81e1e;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#7a0e0e;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,140,140,.3);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#ffd9d9;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(245,180,180,.2);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(255,238,238,.8);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#2c0505);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(60,0,0,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.64rem,2vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(80,10,10,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#f6f0f0;border-left:4px solid #a08080}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fdfafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#faf7f7;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #e6cccc;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#fdf5f5);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.svg-wrap{display:flex;justify-content:center;align-items:center;margin:14px auto;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;max-width:780px}.svg-wrap svg{width:min(100%,740px);height:auto;display:block}.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#1a0808;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#ffd9d9}.badge-mini{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:99px;padding:4px 12px;font-size:.8rem;font-weight:900;margin:3px}
+footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.tf-row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap;align-items:center;background:#fdfafa;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px}.tf-statement{flex:1;min-width:220px;font-weight:700;font-size:.92rem}.tf-btn{border:2px solid var(--border);background:#fff;border-radius:10px;padding:7px 16px;font-weight:800;cursor:pointer;font-size:.86rem}.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}
+.slider-wrap{margin:18px 0}.slider-wrap input[type=range]{width:100%;accent-color:var(--primary)}.slider-label{display:flex;justify-content:space-between;font-weight:800;color:var(--primary);font-size:.92rem;margin-bottom:6px}
+.progress-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.pdot{width:10px;height:10px;border-radius:50%;background:var(--border)}.pdot.done{background:var(--success)}.pdot.now{background:var(--primary)}
+.step-list{counter-reset:step;margin:12px 0}.step-list li{list-style:none;counter-increment:step;position:relative;padding:8px 8px 8px 40px;margin:6px 0;font-size:.92rem;background:#fdfafa;border:1.5px solid var(--border);border-radius:12px}.step-list li:before{content:counter(step);position:absolute;left:8px;top:8px;background:var(--primary);color:#fff;font-weight:800;font-size:.78rem;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;min-height:34px}
+.result-strip{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:150px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;text-align:center}.result-pill .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.4rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:2.5em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap}
+.chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+</head><body>
+<header><div class="badge">8. SINIF MATEMATİK · M.8.1.3</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Kareköklü İfadeler</h1><p>Tam kare sayılar, karekök tahmini, a√b biçimi, kareköklü ifadelerde işlemler, ondalık kareköklü ifadeler ve gerçek sayılar</p></header>
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="tab0">GİRİŞ</button>
+<button class="tab-btn" data-tab="tab1">TAHMİN ETME</button>
+<button class="tab-btn" data-tab="tab2">a√b BİÇİMİ</button>
+<button class="tab-btn" data-tab="tab3">ÇARPMA-BÖLME</button>
+<button class="tab-btn" data-tab="tab4">TOPLAMA-ÇIKARMA</button>
+<button class="tab-btn" data-tab="tab5">ONDALIK & GERÇEK SAYILAR</button>
+<button class="tab-btn" data-tab="tab6">ÖRNEKLER</button>
+<button class="tab-btn" data-tab="tab7">ÇALIŞMA</button>
+<button class="tab-btn" data-tab="tab8">ÖZET</button>
+<button class="tab-btn" data-tab="tab9">KENDİNİ DENE</button>
+</nav>
+<main class="container">
+
+<section class="tab-panel active" id="tab0">
+<div class="card"><div class="card-title"><div class="icon">◻️</div>Tam Kare Sayılar ve Karekök</div>
+<div class="def-box"><b>Tam kare pozitif tam sayı:</b> Bir doğal sayının karesi olan sayılara tam kare denir (1, 4, 9, 16, 25, 36, …).<br><b>Karekök:</b> Karesi a olan pozitif sayıya a'nın karekökü denir ve \(\sqrt{a}\) ile gösterilir: \(\sqrt{a} = b \Leftrightarrow b^2 = a\) (b ≥ 0).</div>
+<p class="body-text">Bir kenarı n birim olan karenin alanı n² birim karedir; tersine, alanı bilinen bir karenin kenar uzunluğu, alanın karekökü alınarak bulunur. Aşağıdaki araçta kaydırıcıyla kenar uzunluğunu değiştirin:</p>
+<div class="svg-wrap" style="max-width:300px"><svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" id="gridSvg" role="img" aria-label="Kenar uzunluğu ile alan arasındaki ilişkiyi gösteren kare ızgara"><g id="gridGroup"></g></svg></div>
+<div class="slider-wrap"><div class="slider-label"><span>Kenar uzunluğu</span><span id="gridNOut">5</span></div><input type="range" id="gridN" min="1" max="15" step="1" value="5"></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Alan (kenar²)</div><div class="val" id="gridArea">25</div></div>
+<div class="result-pill"><div class="lbl">Kenar (√alan)</div><div class="val" id="gridSide">5</div></div>
+</div>
+<div class="tip-box">Bu ızgarada gördüğünüz her tam kare sayı (1, 4, 9, 16, 25, …), bir karenin alanı olarak düşünülebilir; karekök ise bu karenin kenar uzunluğudur.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab1">
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Tam Kare Olmayan Sayılarda Tahmin</div>
+<div class="def-box"><b>Tam kare olmayan bir sayının karekökü</b> iki ardışık doğal sayı arasındadır. Bu iki sayıyı bulmak için, verilen sayıya en yakın küçük ve büyük tam kareler belirlenir.</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">\(\sqrt{31}\) sayısı hangi iki doğal sayı arasındadır?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>31'e en yakın küçük tam kare 25 = 5², en yakın büyük tam kare ise 36 = 6²'dir.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>25 &lt; 31 &lt; 36 olduğundan, \(5 &lt; \sqrt{31} &lt; 6\)'dır.</div></div>
+<div class="ex-step"><div class="snum">3</div><div>31, 25'e 6 birim, 36'ya ise 5 birim uzaklıktadır; 36'ya daha yakın olduğundan \(\sqrt{31}\) de 6'ya daha yakındır.</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{31}\) sayısı 5 ile 6 arasındadır ve 6'ya daha yakındır.</div>
+</div>
+</div></div>
+<p class="body-text">Aşağıdaki araçta kaydırıcıyla bir sayı seçin; bu sayının karekökünün hangi iki doğal sayı arasında olduğunu görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>Sayı</span><span id="guessNOut">31</span></div><input type="range" id="guessN" min="2" max="99" step="1" value="31"></div>
+<div class="note-box" id="guessOut" style="font-weight:700"></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab2">
+<div class="card"><div class="card-title"><div class="icon">✂️</div>a√b Biçimi</div>
+<div class="def-box"><b>Kareköklü bir ifadeyi sadeleştirme:</b> Kök içindeki sayının bir tam kare çarpanı varsa, bu çarpanın karekökü kökün dışına çıkarılarak ifade <b>a√b</b> biçiminde (b'nin içinde artık tam kare çarpan kalmayacak şekilde) yazılabilir. Aynı işlem tersine de yapılabilir: a√b biçimindeki bir ifadede katsayı, karesi alınarak kökün içine sokulabilir: \(a\sqrt{b} = \sqrt{a^2 \cdot b}\).</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">\(\sqrt{18}\) ifadesini a√b biçiminde yazınız.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>18 sayısı, biri tam kare olan iki çarpanın çarpımı şeklinde yazılır: 18 = 9 × 2</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\sqrt{18} = \sqrt{9\times2} = \sqrt{9}\times\sqrt{2} = 3\sqrt{2}\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{18} = 3\sqrt{2}\)</div>
+</div>
+</div></div>
+<p class="body-text">Aşağıdaki araçta kaydırıcıyla bir sayı seçin; en büyük tam kare çarpanı bulunarak yapılan sadeleştirmeyi görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>Sayı</span><span id="simNOut">18</span></div><input type="range" id="simN" min="2" max="200" step="1" value="18"></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl">Sadeleştirilmiş hâl</div><div class="val" id="simResult">—</div></div></div>
+<div class="note-box" id="simNote"></div>
+<div class="body-text" id="simFactorsLabel" style="font-weight:800;display:none">Bu kareköklü ifadeyi doğal sayı yapan çarpanlara örnekler:</div>
+<div class="chip-row" id="simFactors"></div>
+<div class="tip-box">Kareköklü bir ifadeyi doğal sayı yapan tek bir çarpan yoktur; kök içindeki sadeleşmemiş kısmın karekökü ile çarpılan her ifade (örneğin √2, 5√2 veya √18'in kendisi) sonucu doğal sayı yapar.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab3">
+<div class="card"><div class="card-title"><div class="icon">✖️</div>Çarpma ve Bölme İşlemleri</div>
+<div class="def-box"><b>a, b ≥ 0 (bölmede b &gt; 0) olmak üzere:</b><br>\(\sqrt{a}\times\sqrt{b} = \sqrt{a\times b}\) &nbsp;&nbsp;·&nbsp;&nbsp; \(\sqrt{a}\div\sqrt{b} = \sqrt{a\div b}\)</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek</div><div class="ex-q">\(\sqrt{12}\times\sqrt{3}\) işlemini yapınız.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>\(\sqrt{12}\times\sqrt{3} = \sqrt{12\times3} = \sqrt{36}\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{12}\times\sqrt{3} = 6\)</div>
+</div>
+</div></div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek</div><div class="ex-q">\(\sqrt{72}\div\sqrt{8}\) işlemini yapınız.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>\(\sqrt{72}\div\sqrt{8} = \sqrt{72\div8} = \sqrt{9}\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{72}\div\sqrt{8} = 3\)</div>
+</div>
+</div></div>
+<p class="body-text">Aşağıdaki araçta iki sayıyı kaydırıcılarla seçin; çarpma işleminin sonucunu görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>Sayı 1</span><span id="mulPOut">6</span></div><input type="range" id="mulP" min="2" max="40" step="1" value="6"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Sayı 2</span><span id="mulQOut">3</span></div><input type="range" id="mulQ" min="2" max="40" step="1" value="3"></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl">√Sayı1 × √Sayı2</div><div class="val" id="mulResult">—</div></div></div>
+<div class="def-box"><b>Paydası tek terimli olan kesirlerin rasyonelleştirilmesi:</b> \(\dfrac{1}{\sqrt{a}} = \dfrac{\sqrt{a}}{a}\) &nbsp;(a &gt; 0), pay ve payda √a ile çarpılarak yapılır.</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek</div><div class="ex-q">\(\dfrac{1}{\sqrt{3}}\) kesrinin paydasını rasyonel yapınız.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Pay ve payda \(\sqrt{3}\) ile çarpılır.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Payda \(\sqrt{3}\times\sqrt{3} = 3\) olur.</div></div>
+<div class="ex-result">Sonuç: \(\dfrac{1}{\sqrt{3}} = \dfrac{\sqrt{3}}{3}\)</div>
+</div>
+</div></div>
+<div class="tip-box">Paydasında √a + c veya √a + √b gibi <b>birden fazla terim</b> bulunan kesirlerle rasyonelleştirme işlemine bu derste girilmez.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab4">
+<div class="card"><div class="card-title"><div class="icon">➕</div>Toplama ve Çıkarma İşlemleri</div>
+<div class="def-box"><b>Benzer kareköklü ifadeler</b> (kök içindeki sayıları aynı olan ifadeler) toplanıp çıkarılırken, yalnızca katsayılar toplanır/çıkarılır: \(a\sqrt{c} \pm b\sqrt{c} = (a \pm b)\sqrt{c}\). Farklı görünen kareköklü ifadeler bazen sadeleştirildiğinde benzer hâle gelebilir.</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek</div><div class="ex-q">\(\sqrt{8} + \sqrt{18}\) toplamını bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Önce her iki ifade de sadeleştirilir: \(\sqrt{8} = 2\sqrt{2}\), \(\sqrt{18} = 3\sqrt{2}\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Artık benzer kareköklü ifadeler hâline geldiler: \(2\sqrt{2} + 3\sqrt{2}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Katsayılar toplanır: 2 + 3 = 5</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{8} + \sqrt{18} = 5\sqrt{2}\)</div>
+</div>
+</div></div>
+<p class="body-text">Aşağıdaki araçta katsayıları kaydırıcılarla, işlemi de butonla seçin; benzer kareköklü ifadelerin nasıl toplanıp çıkarıldığını gözlemleyin.</p>
+<div class="chip-row"><button class="chip-btn active" id="opPlus" onclick="setOp('+')">Toplama (+)</button><button class="chip-btn" id="opMinus" onclick="setOp('-')">Çıkarma (−)</button></div>
+<div class="slider-wrap"><div class="slider-label"><span>1. katsayı</span><span id="sumAOut">4</span></div><input type="range" id="sumA" min="1" max="9" step="1" value="4"></div>
+<div class="slider-wrap"><div class="slider-label"><span>2. katsayı</span><span id="sumBOut">3</span></div><input type="range" id="sumB" min="1" max="9" step="1" value="3"></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl">Sonuç</div><div class="val" id="sumResult">—</div></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab5">
+<div class="card"><div class="card-title"><div class="icon">🔢</div>Ondalık Kareköklü İfadeler ve Gerçek Sayılar</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Yöntem 1</div><div class="ex-q">\(\sqrt{0,25}\) ifadesinin değerini bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>\(0,25 = \dfrac{25}{100}\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\sqrt{0,25} = \sqrt{\dfrac{25}{100}}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>\(\sqrt{\dfrac{25}{100}} = \dfrac{\sqrt{25}}{\sqrt{100}} = \dfrac{5}{10} = 0,5\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{0,25} = 0,5\)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Yöntem 1</div><div class="ex-q">\(\sqrt{1,44}\) ifadesinin değerini bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>\(1,44 = \dfrac{144}{100}\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\sqrt{1,44} = \sqrt{\dfrac{144}{100}}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>\(\sqrt{\dfrac{144}{100}} = \dfrac{\sqrt{144}}{\sqrt{100}} = \dfrac{12}{10} = 1,2\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{1,44} = 1,2\)</div>
+</div>
+</div></div>
+
+<div class="tip-box"><b>Önemli:</b> Karekök içindeki ondalık gösterimde virgülden sonra <b>çift sayıda basamak</b> varsa, baştaki sıfırlar ve virgül olmasaydı bu sayı tam kare olur muydu diye bakılır; tam kare oluyorsa bu kareköklü ifadenin değeri kesinlikle bir rasyonel sayıdır. Bu durumda aşağıdaki gibi ikinci (kısa) bir yöntem de kullanılabilir.</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Yöntem 2</div><div class="ex-q">\(\sqrt{0,64}\) ifadesinin değerini bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>0,64 sayısında virgülden sonra çift sayıda (2) basamak vardır; baştaki sıfır ve virgül olmasaydı 64 olurdu.</div></div>
+<div class="ex-step"><div class="snum">2</div><div><b>64 sayısı tam kare olduğuna göre 0,64 sayısı da tam karedir.</b></div></div>
+<div class="ex-step"><div class="snum">3</div><div>Tam kare olan ondalık gösterimin karekökü, virgülden sonraki her iki basamak için bir basamak olacak şekilde ondalıklı yazılır.</div></div>
+<div class="ex-step"><div class="snum">4</div><div>\(\sqrt{64} = 8\) olduğuna göre, \(\sqrt{0,64} = 0,8\) yazılabilir.</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{0,64} = 0,8\)</div>
+</div>
+</div></div>
+
+<div class="tip-box"><b>Önemli:</b> Karekök içindeki ondalık gösterimde virgülden sonra <b>tek sayıda basamak</b> varsa, bu kareköklü ifadenin değeri kesinlikle bir rasyonel sayı olmaz. Bu durumda mutlaka 1. yöntem kullanılmalı ve kök içindeki ondalık gösterim kesir şeklinde yazılarak sonuca ulaşılmalıdır.</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Yöntem 1</div><div class="ex-q">\(\sqrt{6,4}\) ifadesinin değerini bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>\(6,4 = \dfrac{64}{10}\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\sqrt{6,4} = \sqrt{\dfrac{64}{10}} = \dfrac{\sqrt{64}}{\sqrt{10}} = \dfrac{8}{\sqrt{10}}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Payda rasyonel yapılır: \(\dfrac{8}{\sqrt{10}} = \dfrac{8\sqrt{10}}{10} = \dfrac{4\sqrt{10}}{5}\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{6,4} = \dfrac{4\sqrt{10}}{5}\)</div>
+</div>
+</div></div>
+
+<div class="def-box"><b>Gerçek sayılar (ℝ):</b> Rasyonel sayılar (iki tam sayının oranı, yani kesir şeklinde yazılabilen sayılar) ile irrasyonel sayılar (bu şekilde yazılamayan sayılar) birlikte gerçek sayılar kümesini oluşturur. Tam kare olmayan bir sayının karekökü her zaman irrasyoneldir.</div>
+<div class="note-box">π sayısı da bir irrasyonel sayıdır. İrrasyonel olmasına rağmen işlemlerde kolaylık sağlaması açısından π yerine yaklaşık olarak 3, 3,14 veya \(\dfrac{22}{7}\) alınabilir.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab6">
+<div class="card"><div class="card-title"><div class="icon">✏️</div>Çözümlü örnekler</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 1</div><div class="ex-q">\(\sqrt{150}\) ifadesini a√b biçiminde yazınız.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>150 = 25 × 6 ve 25 tam kare bir sayı olduğuna göre,</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\sqrt{150} = \sqrt{25\times6} = \sqrt{25}\times\sqrt{6} = 5\sqrt{6}\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{150} = 5\sqrt{6}\)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 2</div><div class="ex-q">\(\sqrt{48}\times\sqrt{3}\) işleminin sonucunu bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>\(\sqrt{48}\times\sqrt{3} = \sqrt{48\times3} = \sqrt{144}\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{48}\times\sqrt{3} = 12\)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 3</div><div class="ex-q">\(4\sqrt{2} + 3\sqrt{8}\) toplamını bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Önce \(\sqrt{8}\) sadeleştirilir: \(\sqrt{8} = 2\sqrt{2}\), dolayısıyla \(3\sqrt{8} = 3\times2\sqrt{2} = 6\sqrt{2}\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Artık benzer kareköklü ifadeler toplanır: \(4\sqrt{2} + 6\sqrt{2}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Katsayılar toplanır: 4 + 6 = 10</div></div>
+<div class="ex-result">Sonuç: \(4\sqrt{2} + 3\sqrt{8} = 10\sqrt{2}\)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 4</div><div class="ex-q">\(\sqrt{1,69}\) değerini bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>\(1,69 = \dfrac{169}{100}\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\sqrt{1,69} = \sqrt{\dfrac{169}{100}} = \dfrac{\sqrt{169}}{\sqrt{100}}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>\(\sqrt{169}=13\) ve \(\sqrt{100}=10\) olduğundan sonuç \(\dfrac{13}{10}\) olur.</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{1,69} = 1,3\)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 5</div><div class="ex-q">\(\dfrac{1}{\sqrt{5}}\) kesrinin paydasını rasyonel yapınız.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Pay ve payda \(\sqrt{5}\) ile çarpılır: payda \(\sqrt{5}\times\sqrt{5} = 5\) olur.</div></div>
+<div class="ex-result">Sonuç: \(\dfrac{1}{\sqrt{5}} = \dfrac{\sqrt{5}}{5}\)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 6</div><div class="ex-q">\(\sqrt{62,5}\) değerini bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>62,5 sayısında virgülden sonra tek basamak (1) olduğundan kesir yöntemi kullanılır: \(62,5 = \dfrac{625}{10}\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\sqrt{62,5} = \sqrt{\dfrac{625}{10}} = \dfrac{\sqrt{625}}{\sqrt{10}} = \dfrac{25}{\sqrt{10}}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Payda rasyonel yapılır: \(\dfrac{25}{\sqrt{10}} = \dfrac{25\sqrt{10}}{10}\)</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Pay ve payda 5 ile sadeleştirilir: \(\dfrac{25\sqrt{10}}{10} = \dfrac{5\sqrt{10}}{2}\)</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{62,5} = \dfrac{5\sqrt{10}}{2}\)</div>
+</div>
+</div></div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab7">
+<div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
+
+<div class="q-card" data-okmsg="Doğru! \(98 = 49\times2\) olduğundan \(\sqrt{98} = \sqrt{49}\times\sqrt{2} = 7\sqrt{2}\)." data-nomsg="Tekrar düşünelim: 98'i, biri tam kare olan iki çarpanın çarpımı şeklinde yazmayı deneyin.">
+<div class="q-text">1) \(\sqrt{98}\) ifadesinin a√b biçimindeki sadeleştirilmiş hâli hangisidir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(7\sqrt{2}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(49\sqrt{2}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(2\sqrt{7}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(14\sqrt{2}\)</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! \(45\times5=225\) ve \(\sqrt{225}=15\)." data-nomsg="Tekrar düşünelim: önce √45×√5=√(45×5) işlemini yapıp sonucun karekökünü alın.">
+<div class="q-text">2) \(\sqrt{45}\times\sqrt{5}\) işleminin sonucu kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">15</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(9\sqrt{5}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">225</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">50</button>
+</div><div class="feedback"></div></div>
+
+<p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
+<div class="field-row"><span class="body-text" style="margin:0">\(\sqrt{1,21}\) değeri (virgülle yazınız):</span><input type="text" class="answer-input" id="fillDec2" placeholder="?"><button class="submit-btn" onclick="checkFillDecimal('fillDec2',1.1,'fbDec2')">Kontrol Et</button></div>
+<div id="fbDec2" class="feedback"></div>
+<div class="field-row"><span class="body-text" style="margin:0">\(\sqrt{64} + \sqrt{36}\) toplamı:</span><input type="text" class="answer-input" id="fillSum" placeholder="?"><button class="submit-btn" onclick="checkFill('fillSum',14,'fbSum')">Kontrol Et</button></div>
+<div id="fbSum" class="feedback"></div>
+
+<p class="body-text" style="margin-top:16px"><b>Doğru mu, yanlış mı?</b></p>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">\(\sqrt{7}\) sayısı bir irrasyonel sayıdır.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">\(\sqrt{2} + \sqrt{3}\) işleminin sonucu \(\sqrt{5}\)'tir.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">22/7, π sayısı için işlemlerde kolaylık sağlaması amacıyla kullanılabilecek bir yaklaşık değerdir.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">8. sınıfta, paydasında \(\sqrt{a} + b\) gibi birden fazla terim bulunan kesirleri de rasyonelleştireceğiz.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
+</div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab8">
+<div class="card"><div class="card-title"><div class="icon">📌</div>Özet</div>
+<div class="gen-box">Bir tam kare pozitif tam sayının karekökü, o sayıyı alan kabul eden karenin kenar uzunluğudur.</div>
+<div class="gen-box">Tam kare olmayan bir sayının karekökü, o sayıya en yakın küçük ve büyük tam karelerin kareköklerinin (ardışık iki doğal sayının) arasındadır.</div>
+<div class="gen-box">\(\sqrt{a}\times\sqrt{b} = \sqrt{a\times b}\) ve \(\sqrt{a}\div\sqrt{b} = \sqrt{a\div b}\); benzer kareköklü ifadelerde ise yalnızca katsayılar toplanır/çıkarılır: \(a\sqrt{c} \pm b\sqrt{c} = (a\pm b)\sqrt{c}\).</div>
+<div class="gen-box">Payı ve paydası tam kare olan kesir biçimindeki ondalık sayıların karekökü, payın ve paydanın kareköklerinin oranıdır. Tam kare olmayan sayıların karekökleri irrasyoneldir.</div>
+<table class="mini-table">
+<tr><th>Kavram</th><th>Açıklama</th></tr>
+<tr><td>Tam kare</td><td>Bir doğal sayının karesi olan sayı</td></tr>
+<tr><td>a√b biçimi</td><td>Kök içindeki tam kare çarpanın dışarı çıkarılmış hâli</td></tr>
+<tr><td>Rasyonelleştirme</td><td>Tek terimli kareköklü paydayı kesirsiz (rasyonel) hâle getirme</td></tr>
+<tr><td>İrrasyonel sayı</td><td>İki tam sayının oranı şeklinde yazılamayan sayı</td></tr>
+<tr><td>Gerçek sayılar (ℝ)</td><td>Rasyonel ve irrasyonel sayıların birleşimi</td></tr>
+</table>
+<div class="note-box"><b>M.8.1.3 kapsamı:</b> Paydasında √a±c veya √a±√b gibi birden fazla terim bulunan ifadelerle işlemlere girilmez; iki nokta arası uzaklık formülü bu ünitede verilmez.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab9">
+<div class="card"><div class="card-title"><div class="icon">🏆</div>Kendini Dene</div>
+<div class="progress-dots" id="progressDots"></div>
+<div id="quizArea"></div>
+</div>
+</section>
+
+</main>
+<button class="basa-don" id="basaDon" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Başa Dön</button>
+<footer><div class="foot-title">Tekin Hoca — 8. Sınıf Matematik</div><div>M.8.1.3 Kareköklü İfadeler</div></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+window.addEventListener('scroll',()=>{
+  document.getElementById('basaDon').classList.toggle('gorunsun',window.scrollY>400);
+});
+function typesetMJ(el){
+  if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]).catch(()=>{});}
+}
+function checkChoice(btn,isCorrect){
+  const card=btn.closest('.q-card');
+  if(card.dataset.answered)return;
+  card.dataset.answered='1';
+  card.querySelectorAll('.choice-btn').forEach(b=>{
+    if(b.dataset.correct==='1')b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  const fb=card.querySelector('.feedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.innerHTML=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
+  typesetMJ(fb);
+}
+function checkTF(btn,chosenTrue,actualTrue){
+  const row=btn.closest('.tf-row');
+  if(row.dataset.answered)return;
+  row.dataset.answered='1';
+  const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');
+  correctBtn.classList.add('correct');
+  if(chosenTrue!==actualTrue)btn.classList.add('wrong');
+}
+function checkFill(inputId,correctVal,fbId){
+  const inp=document.getElementById(inputId);
+  const fb=document.getElementById(fbId);
+  const val=parseInt(inp.value.trim(),10);
+  fb.classList.add('show');
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+}
+function checkFillDecimal(inputId,correctVal,fbId){
+  const inp=document.getElementById(inputId);
+  const fb=document.getElementById(fbId);
+  const raw=inp.value.trim().replace(',', '.');
+  const val=parseFloat(raw);
+  fb.classList.add('show');
+  const correctStr=String(correctVal).replace('.',',');
+  if(!isNaN(val) && Math.abs(val-correctVal)<1e-9){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctStr+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctStr+' olmalıydı, tekrar deneyin.';}
+}
+
+/* ---- Kare ızgara aracı (tab0) ---- */
+function updateGrid(){
+  const n=parseInt(document.getElementById('gridN').value,10);
+  document.getElementById('gridNOut').textContent=n;
+  const size=n*n;
+  document.getElementById('gridArea').textContent=size;
+  document.getElementById('gridSide').textContent=n;
+  const svgNS='http://www.w3.org/2000/svg';
+  const g=document.getElementById('gridGroup');
+  g.innerHTML='';
+  const cell=280/n;
+  const offset=20;
+  for(let r=0;r<n;r++){
+    for(let c=0;c<n;c++){
+      const rect=document.createElementNS(svgNS,'rect');
+      rect.setAttribute('x',(offset+c*cell).toFixed(1));
+      rect.setAttribute('y',(offset+r*cell).toFixed(1));
+      rect.setAttribute('width',Math.max(cell-1,1).toFixed(1));
+      rect.setAttribute('height',Math.max(cell-1,1).toFixed(1));
+      rect.setAttribute('fill','#fbeaea');
+      rect.setAttribute('stroke','#7a0e0e');
+      rect.setAttribute('stroke-width','1');
+      g.appendChild(rect);
+    }
+  }
+}
+document.getElementById('gridN').addEventListener('input',updateGrid);
+updateGrid();
+
+/* ---- Tahmin etme aracı (tab1) ---- */
+function updateGuess(){
+  const m=parseInt(document.getElementById('guessN').value,10);
+  document.getElementById('guessNOut').textContent=m;
+  const a=Math.floor(Math.sqrt(m));
+  let tex;
+  if(a*a===m){
+    tex='\\('+m+'\\) bir tam karedir; \\(\\sqrt{'+m+'} = '+a+'\\) (tam sayı).';
+  }else{
+    const b=a+1;
+    const distA=m-a*a, distB=b*b-m;
+    let closeTxt;
+    if(distA<distB)closeTxt='Bu nedenle \\(\\sqrt{'+m+'}\\) değeri, '+a+' sayısına daha yakındır.';
+    else if(distB<distA)closeTxt='Bu nedenle \\(\\sqrt{'+m+'}\\) değeri, '+b+' sayısına daha yakındır.';
+    else closeTxt='\\(\\sqrt{'+m+'}\\) değeri, '+a+' sayısına ve '+b+' sayısına eşit uzaklıktadır.';
+    tex='\\(\\sqrt{'+m+'}\\) sayısı, \\('+a+'^2='+(a*a)+'\\) ile \\('+b+'^2='+(b*b)+'\\) arasında olduğundan, '+a+' ile '+b+' arasındadır. '+m+' sayısı ile '+(a*a)+' arasındaki fark '+distA+' birim, '+m+' sayısı ile '+(b*b)+' arasındaki fark '+distB+' birimdir. '+closeTxt;
+  }
+  const el=document.getElementById('guessOut');
+  el.innerHTML=tex;
+  typesetMJ(el);
+}
+document.getElementById('guessN').addEventListener('input',updateGuess);
+updateGuess();
+
+/* ---- a√b sadeleştirme aracı (tab2) ---- */
+function simplifyRadical(n){
+  let coef=1,rest=n;
+  for(let i=Math.floor(Math.sqrt(n));i>=1;i--){
+    if(n%(i*i)===0){coef=i;rest=n/(i*i);break;}
+  }
+  return {coef:coef,rest:rest};
+}
+function updateSimplify(){
+  const n=parseInt(document.getElementById('simN').value,10);
+  document.getElementById('simNOut').textContent=n;
+  const r=simplifyRadical(n);
+  let resultTex, note, showFactors=false;
+  if(r.rest===1){
+    resultTex='\\(\\sqrt{'+n+'} = '+r.coef+'\\)';
+    note='Bu sayı bir tam karedir; karekökü doğrudan bir doğal sayıdır.';
+  }else if(r.coef===1){
+    resultTex='\\(\\sqrt{'+n+'}\\) (sadeleştirilemez)';
+    note='İçindeki sayı, 1\'den büyük bir tam kare çarpana sahip olmadığından bu ifade zaten en sade hâldedir.';
+  }else{
+    resultTex='\\(\\sqrt{'+n+'} = '+r.coef+'\\sqrt{'+r.rest+'}\\)';
+    note='En büyük tam kare çarpan '+(r.coef*r.coef)+' olduğundan \\(\\sqrt{'+n+'} = \\sqrt{'+(r.coef*r.coef)+'\\times'+r.rest+'} = '+r.coef+'\\sqrt{'+r.rest+'}\\) şeklinde sadeleştirilir.';
+    showFactors=true;
+  }
+  const resEl=document.getElementById('simResult');
+  resEl.innerHTML=resultTex;
+  const noteEl=document.getElementById('simNote');
+  noteEl.innerHTML=note;
+  typesetMJ(resEl);typesetMJ(noteEl);
+  const label=document.getElementById('simFactorsLabel');
+  const chipRow=document.getElementById('simFactors');
+  if(showFactors){
+    label.style.display='block';
+    chipRow.innerHTML='<span class="badge-mini">\\(\\sqrt{'+r.rest+'}\\)</span><span class="badge-mini">\\(5\\sqrt{'+r.rest+'}\\)</span><span class="badge-mini">\\(\\sqrt{'+n+'}\\) (kendisi)</span>';
+    typesetMJ(chipRow);
+  }else{
+    label.style.display='none';
+    chipRow.innerHTML='';
+  }
+}
+document.getElementById('simN').addEventListener('input',updateSimplify);
+updateSimplify();
+
+/* ---- Çarpma aracı (tab3) ---- */
+function updateMul(){
+  const p=parseInt(document.getElementById('mulP').value,10);
+  const q=parseInt(document.getElementById('mulQ').value,10);
+  document.getElementById('mulPOut').textContent=p;
+  document.getElementById('mulQOut').textContent=q;
+  const product=p*q;
+  const r=simplifyRadical(product);
+  let simp;
+  if(r.rest===1)simp=String(r.coef);
+  else if(r.coef===1)simp='\\sqrt{'+product+'}';
+  else simp=r.coef+'\\sqrt{'+r.rest+'}';
+  const el=document.getElementById('mulResult');
+  el.innerHTML='\\(\\sqrt{'+p+'}\\times\\sqrt{'+q+'} = \\sqrt{'+product+'} = '+simp+'\\)';
+  typesetMJ(el);
+}
+document.getElementById('mulP').addEventListener('input',updateMul);
+document.getElementById('mulQ').addEventListener('input',updateMul);
+updateMul();
+
+/* ---- Toplama-çıkarma aracı (tab4) ---- */
+let sumOp='+';
+function setOp(op){
+  sumOp=op;
+  document.getElementById('opPlus').classList.toggle('active',op==='+');
+  document.getElementById('opMinus').classList.toggle('active',op==='-');
+  updateSum();
+}
+function updateSum(){
+  const a=parseInt(document.getElementById('sumA').value,10);
+  const b=parseInt(document.getElementById('sumB').value,10);
+  document.getElementById('sumAOut').textContent=a;
+  document.getElementById('sumBOut').textContent=b;
+  const result=sumOp==='+'?a+b:a-b;
+  let resultTex;
+  if(result===0)resultTex='0';
+  else if(result>0)resultTex=result+'\\sqrt{5}';
+  else resultTex='-'+Math.abs(result)+'\\sqrt{5}';
+  const el=document.getElementById('sumResult');
+  el.innerHTML='\\('+a+'\\sqrt{5} '+sumOp+' '+b+'\\sqrt{5} = '+resultTex+'\\)';
+  typesetMJ(el);
+}
+document.getElementById('sumA').addEventListener('input',updateSum);
+document.getElementById('sumB').addEventListener('input',updateSum);
+updateSum();
+
+/* ---- Kendini Dene quiz ---- */
+const quizData=[
+ {q:"\\(\\sqrt{180}\\) ifadesinin a√b biçimindeki sadeleştirilmiş hâli hangisidir?",
+  choices:["\\(6\\sqrt{5}\\)","\\(36\\sqrt{5}\\)","\\(5\\sqrt{6}\\)","\\(9\\sqrt{20}\\)"],correct:0,
+  expl:"180 = 36×5, 36 bir tam kare olduğundan \\(\\sqrt{180} = \\sqrt{36}\\times\\sqrt{5} = 6\\sqrt{5}\\)."},
+ {q:"\\(\\sqrt{12}\\times\\sqrt{3}\\) işleminin sonucu kaçtır?",
+  choices:["6","36","15","9"],correct:0,
+  expl:"\\(\\sqrt{12}\\times\\sqrt{3} = \\sqrt{12\\times3} = \\sqrt{36} = 6\\)."},
+ {q:"\\(2\\sqrt{3} + 5\\sqrt{3}\\) toplamının sonucu nedir?",
+  choices:["\\(7\\sqrt{3}\\)","\\(10\\sqrt{3}\\)","\\(7\\sqrt{6}\\)","\\(3\\sqrt{3}\\)"],correct:0,
+  expl:"Benzer kareköklü ifadelerde yalnızca katsayılar toplanır: 2+5=7, sonuç \\(7\\sqrt{3}\\)."},
+ {q:"\\(\\sqrt{0,36}\\) değeri kaçtır?",
+  choices:["0,6","3,6","0,18","6"],correct:0,
+  expl:"\\(0,36 = \\dfrac{36}{100}\\) olduğundan \\(\\sqrt{0,36} = \\dfrac{6}{10} = 0,6\\)."},
+ {q:"\\(\\sqrt{50}\\) sayısı hangi iki doğal sayı arasındadır?",
+  choices:["7 ile 8 arasında","6 ile 7 arasında","8 ile 9 arasında","5 ile 6 arasında"],correct:0,
+  expl:"49 = 7² &lt; 50 &lt; 64 = 8² olduğundan \\(\\sqrt{50}\\), 7 ile 8 arasındadır."},
+ {q:"Aşağıdakilerden hangisi bir irrasyonel sayıdır?",
+  choices:["\\(\\sqrt{7}\\)","\\(\\sqrt{16}\\)","0,75","\\(\\dfrac{22}{7}\\)"],correct:0,
+  expl:"\\(\\sqrt{16} = 4\\) ve 0,75 ile \\(\\dfrac{22}{7}\\) birer rasyonel sayıdır; 7 bir tam kare olmadığından \\(\\sqrt{7}\\) irrasyoneldir."},
+ {q:"\\(\\dfrac{1}{\\sqrt{2}}\\) ifadesinin rasyonelleştirilmiş hâli hangisidir?",
+  choices:["\\(\\dfrac{\\sqrt{2}}{2}\\)","\\(\\dfrac{1}{2}\\)","\\(\\sqrt{2}\\)","\\(2\\sqrt{2}\\)"],correct:0,
+  expl:"Pay ve payda √2 ile çarpılırsa payda 2 olur: \\(\\dfrac{1}{\\sqrt{2}} = \\dfrac{\\sqrt{2}}{2}\\)."}
+];
+let qIndex=0,qScore=0,qAnswered=false;
+function renderDots(){
+  const wrap=document.getElementById('progressDots');wrap.innerHTML='';
+  quizData.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='pdot'+(i<qIndex?' done':i===qIndex?' now':'');
+    wrap.appendChild(d);
+  });
+}
+function renderQuiz(){
+  if(qIndex>=quizData.length){
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    renderDots();return;
+  }
+  qAnswered=false;
+  const item=quizData[qIndex];
+  let html='<div class="q-card"><div class="q-text">'+(qIndex+1)+'. '+item.q+'</div><div class="choices">';
+  item.choices.forEach((c,i)=>{html+='<button class="choice-btn" onclick="answerQuiz('+i+')">'+c+'</button>';});
+  html+='</div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="submit-btn" id="quizNext" style="display:none" onclick="nextQuiz()">Sonraki →</button></div></div>';
+  document.getElementById('quizArea').innerHTML=html;
+  typesetMJ(document.getElementById('quizArea'));
+  renderDots();
+}
+function answerQuiz(i){
+  if(qAnswered)return;qAnswered=true;
+  const item=quizData[qIndex];
+  const isCorrect=i===item.correct;
+  if(isCorrect)qScore++;
+  document.querySelectorAll('#quizArea .choice-btn').forEach((b,idx)=>{
+    if(idx===item.correct)b.classList.add('correct');
+    else if(idx===i)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('quizFeedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.innerHTML=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  typesetMJ(fb);
+  document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuiz(){qIndex++;renderQuiz();}
+function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
+renderQuiz();
+</script>
+</body></html>
