@@ -41,7 +41,7 @@ button.modal-close:hover{background:rgba(255,255,255,0.06)}
 .game-wrap{width:100%;height:100%;display:flex;padding:12px;gap:12px}
 .left-col{flex:0 0 auto;display:flex;flex-direction:column;gap:6px;min-height:0}
 .status-line{display:none;font-size:12px;font-weight:800;color:rgba(240,192,64,.85);text-align:center;min-height:14px;flex-shrink:0;letter-spacing:.02em}
-.board-wrap{flex:1;display:flex;align-items:center;justify-content:flex-start;min-height:0;min-width:0;position:relative;overflow:hidden}
+.board-wrap{flex:1;display:flex;align-items:center;justify-content:flex-start;min-height:0;min-width:0;position:relative}
 .board{display:grid;gap:2px;background:#5a3d22;padding:6px;border-radius:6px;box-shadow:0 4px 18px rgba(0,0,0,.5);transition:filter .25s}
 .board.blurred{filter:blur(6px)}
 .cell{background:#c9b389;display:flex;align-items:center;justify-content:center;position:relative;border-radius:3px;cursor:pointer;overflow:hidden}
@@ -55,11 +55,7 @@ button.modal-close:hover{background:rgba(255,255,255,0.06)}
 .tile-box.staged{outline:4px solid #f0c040;outline-offset:2px;box-shadow:0 0 18px 3px rgba(240,192,64,.95),0 0 6px rgba(240,192,64,1)}
 .tile-box.pc-last{outline:4px solid #5cc8ff;outline-offset:2px;box-shadow:0 0 18px 3px rgba(92,200,255,.9),0 0 6px rgba(92,200,255,1)}
 .score-float{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);font-family:'Baloo 2',cursive;font-weight:800;color:#f0c040;-webkit-text-stroke:3px #140d04;paint-order:stroke fill;text-shadow:0 0 10px rgba(240,192,64,1),0 0 24px rgba(240,192,64,.95),0 0 40px rgba(240,192,64,.7);opacity:0;pointer-events:none;z-index:60;font-size:calc(var(--cell,40px) * 0.56);white-space:nowrap;background:rgba(8,14,6,.62);padding:3px 18px;border-radius:14px;box-shadow:0 0 26px 5px rgba(240,192,64,.5)}
-body.layout-mobile .score-float{font-size:calc(var(--cell,40px) * 0.7);bottom:18px;padding:2px 12px}
-body.layout-mobile .score-float.pc{top:18px;bottom:auto}
 .score-float.show{animation-name:scoreFloatPop;animation-timing-function:ease;animation-fill-mode:forwards;animation-duration:2000ms}
-.score-float.pc{top:36px;bottom:auto;color:#ff5c5c;-webkit-text-stroke:3px #1a0505;text-shadow:0 0 10px rgba(255,92,92,1),0 0 24px rgba(255,92,92,.95),0 0 40px rgba(255,92,92,.7);box-shadow:0 0 26px 5px rgba(255,92,92,.5)}
-.score-float.pc.show{animation-name:scoreFloatPopPc}
 .live-badge{position:absolute;top:1px;right:1px;background:#1a1005;color:#f0c040;font-family:'Space Mono',monospace;font-weight:700;font-size:calc(var(--cell,40px)*0.24);line-height:1;padding:2px 4px;border-radius:5px;border:1px solid rgba(240,192,64,.85);box-shadow:0 0 7px rgba(240,192,64,.65);pointer-events:none;z-index:5}
 @keyframes scoreFloatPop{
   0%{opacity:0;transform:translateX(-50%) translateY(10px) scale(.5)}
@@ -67,13 +63,6 @@ body.layout-mobile .score-float.pc{top:18px;bottom:auto}
   55%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
   82%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
   100%{opacity:0;transform:translateX(-50%) translateY(-8px) scale(.9)}
-}
-@keyframes scoreFloatPopPc{
-  0%{opacity:0;transform:translateX(-50%) translateY(-10px) scale(.5)}
-  30%{opacity:1;transform:translateX(-50%) translateY(0) scale(1.35)}
-  55%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
-  82%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}
-  100%{opacity:0;transform:translateX(-50%) translateY(8px) scale(.9)}
 }
 
 .rack{display:flex;gap:8px;flex-wrap:wrap;min-height:54px;justify-content:center;align-items:center;background:#c9b389;border:2px solid #5a3d22;border-radius:10px;padding:14px;flex-shrink:0;overflow:hidden}
@@ -107,53 +96,28 @@ button.a:disabled{opacity:.35;cursor:default}
 
 /* ══════════════ MOBİL ══════════════ */
 .mobile-scoreboard{display:none}
-body.layout-mobile .game-wrap{flex-direction:column;padding:8px;gap:4px;padding-top:calc(8px + env(safe-area-inset-top));padding-bottom:calc(8px + env(safe-area-inset-bottom))}
-body.layout-mobile .left-col{display:contents}
-body.layout-mobile .right-col{display:contents}
-body.layout-mobile .mobile-scoreboard{display:flex;flex-direction:column;gap:3px;order:1;flex-shrink:0}
-body.layout-mobile .msb-row{display:flex;gap:4px}
-body.layout-mobile .msb-box{flex:1;border:1px solid rgba(200,150,12,.5);border-radius:6px;background:rgba(10,22,10,.55);text-align:center;padding:5px 2px;overflow:hidden}
-body.layout-mobile .msb-row.labels .msb-box{font-family:'Baloo 2',cursive;font-weight:800;color:#f0c040;font-size:12px;letter-spacing:.03em}
-body.layout-mobile .msb-row.labels .msb-target{font-size:11px;letter-spacing:.01em}
-body.layout-mobile .msb-row.values .msb-box{font-family:'Space Mono',monospace;font-size:19px;font-weight:700;color:rgba(247,242,232,.92)}
-body.layout-mobile .status-line{display:block;order:2;font-size:16px;font-weight:800;min-height:auto;padding:1px 0}
-body.layout-mobile .board-wrap{order:3;justify-content:center}
-body.layout-mobile .logo-box,body.layout-mobile .reminder-box,body.layout-mobile .score-mini-row{display:none}
-body.layout-mobile .rack{order:4;min-height:50px;padding:6px}
-body.layout-mobile .main-actions{order:5}
-body.layout-mobile .buttons-row:last-child{order:6}
-body.layout-mobile .rack-tile{width:38px;height:38px;font-size:17px}
-body.layout-mobile .bonus-label{font-size:calc(var(--cell,40px) * 0.32) !important}
-body.layout-mobile .buttons-row .a{padding:13px 6px;font-size:15px}
-body.layout-mobile .main-actions button{padding:14px 4px;font-size:16px}
-
-/* ── MOBİL YATAY (döndürülmüş telefon): dikeyde yer dar, yatayda bol ──
-   Dikey istifleme yerine tahta solda, kompakt bir kontrol sütunu sağda. */
-body.layout-mobile.orientation-landscape .game-wrap{
-  flex-direction:row;padding:6px;gap:6px;
-  padding-top:calc(6px + env(safe-area-inset-top));
-  padding-bottom:calc(6px + env(safe-area-inset-bottom));
+@media (max-width:900px){
+  .game-wrap{flex-direction:column;padding:8px;gap:4px;padding-top:calc(8px + env(safe-area-inset-top))}
+  .left-col{display:contents}
+  .right-col{display:contents}
+  .mobile-scoreboard{display:flex;flex-direction:column;gap:3px;order:1;flex-shrink:0}
+  .msb-row{display:flex;gap:4px}
+  .msb-box{flex:1;border:1px solid rgba(200,150,12,.5);border-radius:6px;background:rgba(10,22,10,.55);text-align:center;padding:5px 2px;overflow:hidden}
+  .msb-row.labels .msb-box{font-family:'Baloo 2',cursive;font-weight:800;color:#f0c040;font-size:12px;letter-spacing:.03em}
+  .msb-row.labels .msb-target{font-size:9.5px;letter-spacing:.01em}
+  .msb-row.values .msb-box{font-family:'Space Mono',monospace;font-size:19px;font-weight:700;color:rgba(247,242,232,.92)}
+  .status-line{display:block;order:2;font-size:16px;font-weight:800;min-height:auto;padding:1px 0}
+  .board-wrap{order:3;justify-content:center}
+  .logo-box,.reminder-box,.score-mini-row{display:none}
+  .rack{order:4;min-height:38px;padding:6px}
+  .main-actions{order:5}
+  .buttons-row:last-child{order:6}
+  .rack-tile{width:38px;height:38px;font-size:17px}
+  .bonus-label{font-size:calc(var(--cell,40px) * 0.32) !important}
+  .buttons-row .a{padding:12px 6px;font-size:13px}
+  .main-actions button{padding:13px 4px}
+  .game-wrap{padding-bottom:calc(8px + env(safe-area-inset-bottom))}
 }
-body.layout-mobile.orientation-landscape .left-col{display:flex;flex-direction:column;flex:1;min-width:0;gap:4px}
-body.layout-mobile.orientation-landscape .right-col{display:flex;flex-direction:column;width:150px;flex:0 0 150px;gap:5px;overflow-y:auto}
-body.layout-mobile.orientation-landscape .mobile-scoreboard,
-body.layout-mobile.orientation-landscape .status-line,
-body.layout-mobile.orientation-landscape .logo-box{display:none}
-body.layout-mobile.orientation-landscape .board-wrap{justify-content:center}
-body.layout-mobile.orientation-landscape .reminder-box{padding:5px 6px;flex-shrink:0}
-body.layout-mobile.orientation-landscape .reminder-target{font-size:13px}
-body.layout-mobile.orientation-landscape .rack{padding:5px;gap:4px;min-height:auto;flex-shrink:0}
-body.layout-mobile.orientation-landscape .rack-tile{width:27px;height:27px;font-size:13px}
-body.layout-mobile.orientation-landscape .main-actions{flex-direction:column;gap:4px;flex-shrink:0}
-body.layout-mobile.orientation-landscape .main-actions button{padding:7px 4px;font-size:11px}
-body.layout-mobile.orientation-landscape .score-mini-row{gap:4px;flex-shrink:0}
-body.layout-mobile.orientation-landscape .score-mini{padding:4px 2px}
-body.layout-mobile.orientation-landscape .sm-label{font-size:9px}
-body.layout-mobile.orientation-landscape .sm-total{font-size:13px}
-body.layout-mobile.orientation-landscape .sm-last{font-size:9px;min-height:12px}
-body.layout-mobile.orientation-landscape .sm-arrow{font-size:15px;margin-top:4px}
-body.layout-mobile.orientation-landscape .bottom-actions{flex-direction:column;gap:4px;flex-shrink:0}
-body.layout-mobile.orientation-landscape .bottom-actions .a{padding:7px 4px;font-size:10px}
 </style>
 </head>
 <body>
@@ -230,7 +194,7 @@ body.layout-mobile.orientation-landscape .bottom-actions .a{padding:7px 4px;font
   </div>
   <div class="left-col">
     <div class="status-line" id="statusLine"></div>
-    <div class="board-wrap"><div class="board" id="board"></div><div class="score-float" id="scoreFloat"></div><div class="score-float pc" id="scoreFloatPc"></div></div>
+    <div class="board-wrap"><div class="board" id="board"></div><div class="score-float" id="scoreFloat"></div></div>
   </div>
   <div class="right-col">
     <div class="logo-box"><img src="../img/katkat.webp" alt="Puanlar Kat Kat logosu" onerror="this.style.display='none'"></div>
@@ -260,7 +224,7 @@ body.layout-mobile.orientation-landscape .bottom-actions .a{padding:7px 4px;font
       </div>
     </div>
     <div class="buttons-row bottom-actions">
-      <button class="a" onclick="resetGame()">BAŞA DÖN</button>
+      <button class="a" onclick="resetGame()">BAŞTAN</button>
       <div class="a kalan-label" id="tilesRemaining">KALAN: 0</div>
       <button class="a" onclick="showModal('rulesModal')">KURALLAR</button>
     </div>
@@ -298,24 +262,6 @@ let staged, selectedRackIndex, isFirstMove, passStreak, gameOver, turn, difficul
 let lastPlayerGain = null, lastComputerGain = null;
 let lastComputerPlacement = [];
 let targetMultiple = 5;
-let uiLayout = 'desktop';
-function isDesktopLayout(){ return uiLayout==='desktop'; }
-function decideLayout(){
-  const isDesktop = window.matchMedia('(min-width:901px)').matches;
-  uiLayout = isDesktop ? 'desktop' : 'mobile';
-  document.body.classList.toggle('layout-mobile', !isDesktop);
-  document.body.classList.toggle('layout-desktop', isDesktop);
-  updateMobileOrientation();
-}
-function updateMobileOrientation(){
-  // Mobil/masaüstü ayrımı oyun boyunca kilitli kalır, ama mobil içinde dikey/yatay
-  // ayrımı CANLI güncellenir — ikisi de "mobil ölçek" kullandığı için (aynı font/taş
-  // boyutları), aralarında geçiş masaüstü/mobil geçişi gibi rahatsız edici olmuyor.
-  if(uiLayout!=='mobile'){ document.body.classList.remove('orientation-landscape','orientation-portrait'); return; }
-  const landscape = window.innerWidth > window.innerHeight;
-  document.body.classList.toggle('orientation-landscape', landscape);
-  document.body.classList.toggle('orientation-portrait', !landscape);
-}
 
 function katEki(n){
   const map={2:'nin',3:'ün',4:'ün',5:'in',6:'nın'};
@@ -519,7 +465,7 @@ const rackEl=document.getElementById('rack');
 function fitBoard(){
   const gameWrap=document.querySelector('.game-wrap');
   const wrap=document.querySelector('.board-wrap');
-  const isDesktop=isDesktopLayout();
+  const isDesktop=window.matchMedia('(min-width:901px)').matches;
   const availH=wrap.clientHeight;
   let cell=Math.max(18, Math.floor((availH-14)/11));
   if(isDesktop){
@@ -643,14 +589,6 @@ function showScoreFloat(score, durationMs){
   el.style.animationDuration=(durationMs||2000)+'ms';
   el.classList.add('show');
 }
-function showScoreFloatPc(gain, durationMs){
-  const el=document.getElementById('scoreFloatPc');
-  el.classList.remove('show');
-  void el.offsetWidth;
-  el.textContent = gain==='PAS' ? 'PAS' : '+'+gain;
-  el.style.animationDuration=(durationMs||3000)+'ms';
-  el.classList.add('show');
-}
 function renderAll(){
   renderBoard(); renderRack(); renderSidebar(); renderTilesRemaining(); renderMobileScoreboard(); renderButtons();
 }
@@ -701,8 +639,9 @@ function onOyna(){
   setStatus(res.score+' PUAN KAZANDINIZ!');
   renderAll();
   if(checkEndConditions()) return;
-  const pauseMs = 3000;
-  showScoreFloat(res.score, pauseMs);
+  const isDesktop = window.matchMedia('(min-width:901px)').matches;
+  const pauseMs = isDesktop ? 2000 : 3000;
+  if(isDesktop) showScoreFloat(res.score, pauseMs);
   setTimeout(computerTurn, pauseMs);
 }
 function onPasGec(){
@@ -742,8 +681,7 @@ function computerTurn(){
   }
   renderAll();
   if(checkEndConditions()) return;
-  showScoreFloatPc(lastComputerGain, 3000);
-  setTimeout(()=>{ turn='player'; renderAll(); }, 3000);
+  turn='player'; renderAll();
 }
 
 /* ══════════════════════ OYUN SONU ══════════════════════ */
@@ -783,7 +721,6 @@ function updateRulesText(){
 function startGame(n){
   targetMultiple = n;
   difficulty='easy';
-  decideLayout();
   bag=createBag();
   board=emptyBoard();
   playerRack=drawFromBag(5);
@@ -805,7 +742,7 @@ function resetGame(){
 }
 
 function fitSidebar(){
-  const isDesktop=isDesktopLayout();
+  const isDesktop=window.matchMedia('(min-width:901px)').matches;
   if(!isDesktop) return;
   const rightCol=document.querySelector('.right-col');
   const totalH=rightCol.clientHeight;
@@ -825,21 +762,8 @@ function fitSidebar(){
   document.querySelector('.bottom-actions').style.height=h.bottom+'px';
 }
 
-window.addEventListener('resize', ()=>{ updateMobileOrientation(); fitBoard(); fitSidebar(); renderBoard(); });
-// Mobil tarayıcılarda "orientationchange" anında clientHeight/clientWidth henüz
-// kesinleşmemiş olabiliyor (adres çubuğu animasyonu vb. yüzünden). Bu yüzden
-// döndürme olayını ayrıca dinleyip, tarayıcı boyutları oturtana kadar kısa bir
-// gecikmeyle yeniden ölçüyoruz. Güvenlik için birkaç kez (farklı gecikmelerle) deniyoruz.
-window.addEventListener('orientationchange', ()=>{
-  [50,250,600].forEach(ms=>setTimeout(()=>{ updateMobileOrientation(); fitBoard(); fitSidebar(); renderBoard(); }, ms));
-});
-if(screen && screen.orientation && screen.orientation.addEventListener){
-  screen.orientation.addEventListener('change', ()=>{
-    [50,250,600].forEach(ms=>setTimeout(()=>{ updateMobileOrientation(); fitBoard(); fitSidebar(); renderBoard(); }, ms));
-  });
-}
+window.addEventListener('resize', ()=>{ fitBoard(); fitSidebar(); renderBoard(); });
 showModal('diffModal');
-decideLayout();
 board=emptyBoard(); playerRack=[]; computerRack=[]; playerScore=0; computerScore=0;
 staged=[]; selectedRackIndex=null; isFirstMove=true; passStreak=0; gameOver=true; turn='player'; difficulty='easy'; lastComputerPlacement=[]; bag=[];
 updateRulesText();
@@ -856,7 +780,7 @@ if('ResizeObserver' in window){
   const ro=new ResizeObserver(()=>{
     if(roPending) return;
     roPending=true;
-    requestAnimationFrame(()=>{ roPending=false; updateMobileOrientation(); fitBoard(); fitSidebar(); renderBoard(); });
+    requestAnimationFrame(()=>{ roPending=false; fitBoard(); fitSidebar(); renderBoard(); });
   });
   ro.observe(document.querySelector('.board-wrap'));
 }
