@@ -1,0 +1,615 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>8. Sınıf Matematik — M.8.2.2.1-2.2 Denklem Çözme ve Koordinat Sistemi</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--primary:#7a0e0e;--primary2:#4a0808;--primary-light:#fbeaea;--accent:#c81e1e;--success:#059669;--success-light:#eafaf3;--danger:#b91c1c;--warning:#d97706;--warning-light:#fff7e6;--text:#221515;--muted:#8a6f6f;--border:#ecd9d9;--bg:#faf6f6;--dark:#050505;--shadow:0 4px 18px rgba(122,14,14,.10)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#3a0000 66%,#8b0000 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(60,0,0,.4)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#c81e1e;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#7a0e0e;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,140,140,.3);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#ffd9d9;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.4rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(245,180,180,.2);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(255,238,238,.8);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#2c0505);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(60,0,0,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.62rem,2vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(80,10,10,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#f6f0f0;border-left:4px solid #a08080}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fdfafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#faf7f7;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #e6cccc;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#fdf5f5);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.svg-wrap{display:flex;justify-content:center;align-items:center;margin:14px auto;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;max-width:780px}.svg-wrap svg{width:min(100%,740px);height:auto;display:block}.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#1a0808;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#ffd9d9}.badge-mini{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:99px;padding:4px 12px;font-size:.8rem;font-weight:900;margin:3px}
+footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.tf-row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap;align-items:center;background:#fdfafa;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px}.tf-statement{flex:1;min-width:220px;font-weight:700;font-size:.92rem}.tf-btn{border:2px solid var(--border);background:#fff;border-radius:10px;padding:7px 16px;font-weight:800;cursor:pointer;font-size:.86rem}.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}
+.slider-wrap{margin:18px 0}.slider-wrap input[type=range]{width:100%;accent-color:var(--primary)}.slider-label{display:flex;justify-content:space-between;font-weight:800;color:var(--primary);font-size:.92rem;margin-bottom:6px}
+.progress-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.pdot{width:10px;height:10px;border-radius:50%;background:var(--border)}.pdot.done{background:var(--success)}.pdot.now{background:var(--primary)}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;min-height:34px}
+.result-strip{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:150px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;text-align:center}.result-pill .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.2rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:1.9em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;word-break:break-word}
+.chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+</style>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+<script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+</head><body>
+<header><div class="badge">8. SINIF MATEMATİK · M.8.2.2.1 - M.8.2.2.2</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Denklem Çözme ve Koordinat Sistemi</h1><p>Birinci dereceden bir bilinmeyenli (rasyonel katsayılı) denklemleri çözme<br>Koordinat sistemini tanıma ve sıralı ikilileri gösterme</p></header>
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="tab0">GİRİŞ</button>
+<button class="tab-btn" data-tab="tab1">DENKLEM ÇÖZME</button>
+<button class="tab-btn" data-tab="tab2">RASYONEL KATSAYILI</button>
+<button class="tab-btn" data-tab="tab3">KOORDİNAT SİSTEMİ</button>
+<button class="tab-btn" data-tab="tab4">SIRALI İKİLİLER</button>
+<button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
+<button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
+<button class="tab-btn" data-tab="tab7">ÖZET</button>
+<button class="tab-btn" data-tab="tab8">KENDİNİ DENE</button>
+</nav>
+<main class="container">
+
+<section class="tab-panel active" id="tab0">
+<div class="card"><div class="card-title"><div class="icon">🧮</div>Bu Haftaya Genel Bakış</div>
+<div class="def-box"><b>Terimler ve kavramlar:</b> Bu konuda denklem, koordinat sistemi, orijin ve sıralı ikili kavramlarını işleyeceğiz.</div>
+<p class="body-text">Bu etkinlik dosyasında birbiriyle bağlantılı iki farklı konumuz var:</p>
+<div class="two-col">
+<div class="info-tile"><h4>🧮 Denklem Çözme</h4><p class="body-text" style="font-size:.86rem;margin:0">Birinci dereceden bir bilinmeyenli denklemleri çözeceğiz. Önceki yıllarda bu konuda edindiğimiz becerileri biraz daha geliştireceğiz. Ayrıca 8. sınıf düzeyinde katsayılar artık kesirli (rasyonel) sayılar da olabilecek.</p></div>
+<div class="info-tile"><h4>📍 Koordinat Sistemi</h4><p class="body-text" style="font-size:.86rem;margin:0">Bir düzlemde bir noktanın yerini sıralı ikili (x, y) ile nasıl belirttiğimizi öğreneceğiz.</p></div>
+</div>
+<div class="tip-box">Önümüzdeki haftalarda, bu iki beceriyi birleştirerek doğrusal denklemlerin grafiklerini çizeceğiz; bu yüzden ikisini de sağlam öğrenmemiz önemli.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab1">
+<div class="card"><div class="card-title"><div class="icon">⚖️</div>Birinci Dereceden Bir Bilinmeyenli Denklemleri Çözme</div>
+<div class="def-box"><b>Özdeşlik</b>, içinde en az bir tane bilinmeyen bulunan ve bilinmeyene verilen <b>tüm değerler için doğru olan</b> eşitliklerdir.<br><b>Denklem</b> ise içinde en az bir tane bilinmeyen bulunan ve bilinmeyene verilen <b>bazı değerler için doğru olan</b> eşitliklerdir. Bir denklemi çözmek, eşitliği doğru yapan bilinmeyenin değerini bulmaktır. Denklem çözmenin temel mantığı, bilinmeyenleri eşitliğin bir tarafına, bilinenleri de eşitliğin diğer tarafına taşımaktır. Bilinmeyen yalnız kaldığında denklem çözülmüş olur. Denklemin her iki tarafına aynı işlem (aynı sayıyı ekleme/çıkarma, aynı sayı ile çarpma/bölme) uygulandığında eşitlik bozulmaz.</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">3x + 7 = 22 denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Her iki taraftan 7 çıkarılır: 3x = 15</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Her iki taraf 3'e bölünür: x = 5</div></div>
+<div class="ex-result">Sonuç: x = 5</div>
+</div>
+</div></div>
+<p class="body-text">Aşağıdaki araçta "ax + b = c" biçimindeki bir denklemin katsayılarını kaydırıcılarla seçin; çözümün canlı olarak nasıl bulunduğunu görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>a</span><span id="d1AOut">3</span></div><input type="range" id="d1A" min="1" max="9" step="1" value="3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>b</span><span id="d1BOut">7</span></div><input type="range" id="d1B" min="-15" max="15" step="1" value="7"></div>
+<div class="slider-wrap"><div class="slider-label"><span>c</span><span id="d1COut">22</span></div><input type="range" id="d1C" min="-20" max="20" step="1" value="22"></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Denklem</div><div class="val" id="d1Expr">—</div></div>
+<div class="result-pill"><div class="lbl">Çözüm</div><div class="val" id="d1Result">—</div></div>
+</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab2">
+<div class="card"><div class="card-title"><div class="icon">➗</div>Rasyonel Katsayılı Denklemler</div>
+<div class="def-box">Bu sınıf düzeyinde denklemlerdeki katsayılar kesir veya ondalık gösterimli <b>rasyonel sayılar</b> da olabilir. Çözüm yöntemi aynıdır; sadece işlemler kesirlerle yapılır.</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">\(\dfrac{1}{3}x - 2 = 5\) denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Her iki tarafa 2 eklenir: \(\dfrac{1}{3}x = 7\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Her iki taraf 3 ile çarpılır (ya da \(\dfrac{1}{3}\)'e bölünür): x = 21</div></div>
+<div class="ex-result">Sonuç: x = 21</div>
+</div>
+</div></div>
+<p class="body-text">Aşağıdaki araçta \(\dfrac{p}{q}x + b = c\) biçimindeki bir denklemin katsayılarını kaydırıcılarla seçin; çözümün kesir olarak nasıl bulunduğunu canlı olarak görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>p (pay)</span><span id="d2POut">1</span></div><input type="range" id="d2P" min="1" max="9" step="1" value="1"></div>
+<div class="slider-wrap"><div class="slider-label"><span>q (payda)</span><span id="d2QOut">3</span></div><input type="range" id="d2Q" min="2" max="9" step="1" value="3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>b</span><span id="d2BOut">-2</span></div><input type="range" id="d2B" min="-10" max="10" step="1" value="-2"></div>
+<div class="slider-wrap"><div class="slider-label"><span>c</span><span id="d2COut">5</span></div><input type="range" id="d2C" min="-10" max="10" step="1" value="5"></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Denklem</div><div class="val" id="d2Expr">—</div></div>
+<div class="result-pill"><div class="lbl">Çözüm</div><div class="val" id="d2Result">—</div></div>
+</div>
+<div class="tip-box">Kesirli denklemlerde çözümün de bir kesir çıkması normaldir; sonucu her zaman en sade hâlde bırakmalıyız.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab3">
+<div class="card"><div class="card-title"><div class="icon">📍</div>Koordinat Sistemi</div>
+<div class="def-box">İki sayı doğrusunun (yatay <b>x ekseni</b> ve dikey <b>y ekseni</b>) birbirine dik biçimde, sıfır noktalarında (<b>orijin</b>: O(0, 0)) kesişmesiyle oluşan sisteme <b>koordinat sistemi</b> denir. <b>x</b> eksenine <b>Apsisler</b> Ekseni, <b>y</b> eksenine ise <b>Ordinatlar</b> Ekseni adı verilir. Bu eksenler düzlemi dört bölgeye ayırır.</div>
+<table class="mini-table">
+<tr><th>Bölge</th><th>x işareti</th><th>y işareti</th></tr>
+<tr><td>I. Bölge</td><td>+</td><td>+</td></tr>
+<tr><td>II. Bölge</td><td>−</td><td>+</td></tr>
+<tr><td>III. Bölge</td><td>−</td><td>−</td></tr>
+<tr><td>IV. Bölge</td><td>+</td><td>−</td></tr>
+</table>
+<p class="body-text">Aşağıdaki araçta x ve y değerlerini kaydırıcılarla seçin; noktanın koordinat düzleminde nereye düştüğünü ve hangi bölgede (veya eksen üzerinde) olduğunu görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>x (apsis)</span><span id="csXOut">3</span></div><input type="range" id="csX" min="-6" max="6" step="1" value="3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>y (ordinat)</span><span id="csYOut">2</span></div><input type="range" id="csY" min="-6" max="6" step="1" value="2"></div>
+<div class="svg-wrap" style="max-width:380px"><svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" id="csSvg" role="img" aria-label="Koordinat düzleminde bir noktayı gösteren ızgara"><g id="csGrid"></g><g id="csPointGroup"></g></svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Sıralı ikili</div><div class="val" id="csPair">(3, 2)</div></div>
+<div class="result-pill"><div class="lbl">Konum</div><div class="val" id="csRegion" style="font-size:1rem">—</div></div>
+</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab4">
+<div class="card"><div class="card-title"><div class="icon">🗺️</div>Sıralı İkilileri Gösterme</div>
+<div class="def-box">Koordinat sistemi, gerçek hayatta bir yerin konumunu belirtmek için de kullanılır.<br>Sinemaya, tiyatroya gittiğimizde biletimizde yazan sıralı ikili sayesinde doğru koltuğu bulmamız kolaylaşır; <b>A5</b>, <b>E12</b>, <b>K9</b>, vs gibi sıralı ikililer yardımıyla, hangi sıradaki kaçıncı koltuğa oturmamız gerektiğini anlarız. Örneğin 250 koltuk olan bir tiyatro salonunda koltuk numaraları 1'den 250'ye kadar sıralanmış olsaydı ve biletimizde "<b>Koltuk No: 142</b>" yazıyor olsaydı, yerimizi bulmamız oldukça zorlaşırdı.<br>Koordinatlar ve sıralı ikililer, haritaların da temel elemanlarıdır; haritadaki bir noktanın yerini tarif etmek için sıralı ikilileri kullanmak, işleri oldukça kolaylaştırı. Örnek olarak, bir haritadaki üç önemli noktanın koordinatlarını (tam yerini) gösteren sıralı ikililer aşağıda verilmiştir:</div>
+<div class="svg-wrap" style="max-width:380px"><svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kütüphane, okul ve market konumlarını gösteren koordinat düzlemi"><g id="mapGrid"></g><g id="mapPoints"></g></svg></div>
+<div class="note-box">Kütüphane I. bölgede, Okul II. bölgede, Market ise III. bölgededir. Her nokta, x ekseninde kaç birim ve y ekseninde kaç birim gidileceğini gösteren bir sıralı ikili ile tam olarak tanımlanır.</div>
+<p class="body-text">Aşağıdaki araçta kendi noktanızı (örneğin "Ev") kaydırıcılarla yerleştirin; sıralı ikilisini ve düştüğü bölgeyi görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>x</span><span id="p2XOut">-3</span></div><input type="range" id="p2X" min="-6" max="6" step="1" value="-3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>y</span><span id="p2YOut">-1</span></div><input type="range" id="p2Y" min="-6" max="6" step="1" value="-1"></div>
+<div class="svg-wrap" style="max-width:380px"><svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" id="p2Svg" role="img" aria-label="Kullanıcının seçtiği yeni noktayı gösteren koordinat düzlemi"><g id="p2Grid"></g><g id="p2PointGroup"></g></svg></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl">Ev noktası</div><div class="val" id="p2Pair">—</div></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab5">
+<div class="card"><div class="card-title"><div class="icon">✏️</div>Çözümlü Örnekler</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 1</div><div class="ex-q">5x − 9 = 2x + 12 denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Bilinmeyenli terimler bir tarafta toplanır: 5x − 2x = 12 + 9</div></div>
+<div class="ex-step"><div class="snum">2</div><div>3x = 21</div></div>
+<div class="ex-result">Sonuç: x = 7</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 2</div><div class="ex-q">2(x − 4) = 10 denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Parantez dağıtılır: 2x − 8 = 10</div></div>
+<div class="ex-step"><div class="snum">2</div><div>2x = 18</div></div>
+<div class="ex-result">Sonuç: x = 9</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 3</div><div class="ex-q">\(\dfrac{2}{5}x - 3 = 1\) denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Her iki tarafa 3 eklenir: \(\dfrac{2}{5}x = 4\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Her iki taraf \(\dfrac{5}{2}\) ile çarpılır: x = 10</div></div>
+<div class="ex-result">Sonuç: x = 10</div>
+</div>
+</div></div>
+
+<div class="tip-box"><b>Paydasında harf bulunmamak şartıyla</b>, birden fazla rasyonel ifade (kesir) içeren denklemleri çözmek için kullanılabilecek pratik bir yöntem şudur:
+<br>• Paydası olmayan terimler varsa önce onlara yalancı payda yazılır.
+<br>• Cebirsel ifadedeki tüm paydalar eşitlenir.
+<br>• Cebirsel ifadedeki tüm paydalar silinir.
+<br>• Artık kesir içermeyen denklem, temel yöntemler kullanılarak çözülür.</div>
+<div class="note-box"><b>ÖNEMLİ:</b> Bu yöntemde yapılacak en büyük hata, kesirlerin paydalarını eşitlemeden paydaları silmektir.</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 4</div><div class="ex-q">\(\dfrac{x+1}{2} = \dfrac{x-1}{3} + 2\) denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Kesirli ifadeler içerdiği için, paydası olmayan terime yalancı payda yazıp paydaları eşitleriz.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\dfrac{x+1}{2} = \dfrac{x-1}{3} + \dfrac{2}{1} \Rightarrow \dfrac{3x+3}{6} = \dfrac{2x-2}{6} + \dfrac{12}{6}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Tüm paydalar eşitlendiğine göre, paydaları sileriz: \(3x+3 = 2x-2+12\)</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Bilinmeyenleri eşitliğin bir tarafına, bilinenleri ise diğer tarafına taşırız: \(3x-2x = -2+12-3\)</div></div>
+<div class="ex-result">Sonuç: x = 7</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 5</div><div class="ex-q">\(\dfrac{x+6}{4} - 2x = \dfrac{3x-4}{6} + 10\) denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Kesirli ifadeler içerdiği için, paydası olmayan terimlere yalancı payda yazıp paydaları eşitleriz.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\dfrac{x+6}{4} - \dfrac{2x}{1} = \dfrac{3x-4}{6} + \dfrac{10}{1}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>\(\dfrac{3x+18}{12} - \dfrac{24x}{12} = \dfrac{6x-8}{12} + \dfrac{120}{12}\)</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Tüm paydalar eşitlendiğine göre, paydaları sileriz: \(3x+18-24x = 6x-8+120\)</div></div>
+<div class="ex-step"><div class="snum">5</div><div>Bilinmeyenleri eşitliğin bir tarafına, bilinenleri ise diğer tarafına taşırız: \(3x-24x-6x = -8+120-18 \Rightarrow -27x = 94\)</div></div>
+<div class="ex-result">Sonuç: \(x = -\dfrac{94}{27}\)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 6</div><div class="ex-q">\(\dfrac{a+4}{4} = 5 - \dfrac{a-4}{2}\) denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Kesirli ifadeler içerdiği için, paydası olmayan terimlere yalancı payda yazıp paydaları eşitleriz.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\(\dfrac{a+4}{4} = \dfrac{5}{1} - \dfrac{a-4}{2} \Rightarrow \dfrac{a+4}{4} = \dfrac{20}{4} - \dfrac{2a-8}{4}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Tüm paydalar eşitlendiğine göre, paydaları sileriz.</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Önemli nokta: kesrin önünde "−" işareti varsa, o kesrin paydası silindiğinde payındaki işaretler değişir: \(a+4 = 20-(2a-8) \Rightarrow a+4=20-2a+8\)</div></div>
+<div class="ex-step"><div class="snum">5</div><div>Bilinmeyenleri eşitliğin bir tarafına, bilinenleri ise diğer tarafına taşırız: \(a+2a=20+8-4 \Rightarrow 3a=24\)</div></div>
+<div class="ex-result">Sonuç: a = 8</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 7</div><div class="ex-q">\(\dfrac{m-8}{6} = \dfrac{m+2}{4}\) denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Kesirli ifadeler içerdiği için paydaları eşitleriz: \(\dfrac{2m-16}{12} = \dfrac{3m+6}{12}\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Tüm paydalar eşitlendiğine göre, paydaları sileriz: \(2m-16 = 3m+6\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Bilinmeyenleri eşitliğin bir tarafına, bilinenleri ise diğer tarafına taşırız: \(-16-6 = 3m-2m\)</div></div>
+<div class="ex-result">Sonuç: m = −22</div>
+</div>
+</div></div>
+
+<div class="note-box">Çözülmesi istenen denklemde eşitliğin her iki tarafında birer rasyonel ifade varsa kullanılacak bir başka pratik yöntem de <b>içler-dışlar çarpımı (çapraz çarpım)</b> yaparak kesirlerden kurtulmaktır.</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 8</div><div class="ex-q">\(\dfrac{m-8}{6} = \dfrac{m+2}{4}\) denklemini çözünüz. (Yukarıda çözülen denklemi başka bir yöntemle çözelim.)</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Eşitliğin her iki tarafında birer rasyonel ifade olduğuna göre, içler-dışlar çarpımı yaparız: \(4(m-8) = 6(m+2)\)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Dağılma özelliğini kullanırız: \(4m-32 = 6m+12\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Bilinmeyenleri eşitliğin bir tarafına, bilinenleri ise diğer tarafına taşırız: \(-32-12 = 6m-4m \Rightarrow -44=2m\)</div></div>
+<div class="ex-result">Sonuç: m = −22</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 9</div><div class="ex-q">Bir sayının yarısı ile yine aynı sayının beşte ikisinin toplamı 108 olduğuna göre bu sayı kaçtır?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Bilinmeyen sayı "x" olsun.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Sayının yarısı: \(\dfrac{x}{2}\); sayının beşte ikisi: \(\dfrac{2x}{5}\)</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Toplam: \(\dfrac{x}{2}+\dfrac{2x}{5}=108\)</div></div>
+<div class="ex-step"><div class="snum">4</div><div>\(\dfrac{5x}{10}+\dfrac{4x}{10}=108 \Rightarrow \dfrac{9x}{10}=108\)</div></div>
+<div class="ex-step"><div class="snum">5</div><div>Eşitliğin iki tarafında birer kesir olduğuna göre içler-dışlar çarpımı yapılır: \(9x \cdot 1 = 108 \cdot 10 \Rightarrow 9x=1080\)</div></div>
+<div class="ex-result">Sonuç: x = 120</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 10</div><div class="ex-q">\(\dfrac{x+1}{2} = \dfrac{x-1}{3} + 2\) denklemini çözünüz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Tüm paydaları 6'da eşitleyip paydaları sileriz: 3(x+1) = 2(x−1) + 12</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Parantezleri dağıtırız: 3x + 3 = 2x − 2 + 12 → 3x + 3 = 2x + 10</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Bilinmeyenleri bir tarafta toplarız: 3x − 2x = 10 − 3</div></div>
+<div class="ex-result">Sonuç: x = 7</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 11</div><div class="ex-q">A(4, −5) noktası hangi bölgededir?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>x koordinatı (4) pozitif, y koordinatı (−5) negatiftir.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>x'in pozitif, y'nin negatif olduğu bölge IV. bölgedir.</div></div>
+<div class="ex-result">Sonuç: A noktası IV. bölgededir.</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 12</div><div class="ex-q">Bir noktanın koordinatları (a − 3, 2a + 1) olarak veriliyor. Bu nokta y ekseni üzerinde olduğuna göre a kaçtır?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>y ekseni üzerindeki noktaların apsisi 0'dır.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>x = 0 → a − 3 = 0</div></div>
+<div class="ex-result">Sonuç: a = 3</div>
+</div>
+</div></div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab6">
+<div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
+
+<div class="q-card" data-okmsg="Doğru! 4x-5=11 → 4x=16 → x=4." data-nomsg="Tekrar düşünelim: önce her iki tarafa 5 ekleyin, sonra 4'e bölün.">
+<div class="q-text">1) 4x − 5 = 11 denkleminin çözümü kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">3</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">4</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">5</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">16</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! (1/2)x+4=9 → (1/2)x=5 → x=10." data-nomsg="Tekrar düşünelim: önce her iki taraftan 4 çıkarın, sonra 2 ile çarpın.">
+<div class="q-text">2) \(\dfrac{1}{2}x + 4 = 9\) denkleminin çözümü kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">5</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">13</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">10</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">18</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! x koordinatı negatif, y koordinatı pozitif olduğundan B noktası II. bölgededir." data-nomsg="Tekrar düşünelim: x ve y koordinatlarının işaretlerine bakıp bölge tablosunu kullanın.">
+<div class="q-text">3) B(−4, 5) noktası hangi bölgededir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">I. Bölge</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">II. Bölge</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">III. Bölge</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">IV. Bölge</button>
+</div><div class="feedback"></div></div>
+
+<p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
+<div class="field-row"><span class="body-text" style="margin:0">3x + 2 = 17 denkleminin çözümü:</span><input type="text" class="answer-input" id="fillF1" placeholder="?"><button class="submit-btn" onclick="checkFill('fillF1',5,'fbF1')">Kontrol Et</button></div>
+<div id="fbF1" class="feedback"></div>
+<div class="field-row"><span class="body-text" style="margin:0">\(\dfrac{2}{3}x = 8\) denkleminin çözümü:</span><input type="text" class="answer-input" id="fillF2" placeholder="?"><button class="submit-btn" onclick="checkFill('fillF2',12,'fbF2')">Kontrol Et</button></div>
+<div id="fbF2" class="feedback"></div>
+
+<p class="body-text" style="margin-top:16px"><b>Doğru mu, yanlış mı?</b></p>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">x ekseni üzerindeki noktaların ordinatı (y) 0'dır.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">(0, 0) noktası koordinat sisteminin orijinidir.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">II. bölgedeki noktaların hem x hem y koordinatı pozitiftir.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">Bir denklemin her iki tarafına aynı sayı eklenirse denklemin çözümü değişmez.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
+</div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab7">
+<div class="card"><div class="card-title"><div class="icon">📌</div>Özet</div>
+<div class="gen-box">Bir denklemi çözmek için her iki tarafa aynı işlem uygulanır.</div>
+<div class="gen-box">Koordinat sistemi, birbirine dik x ve y eksenlerinin orijinde (0, 0) kesişmesiyle oluşur ve düzlemi dört bölgeye ayırır.</div>
+<div class="gen-box">Bir noktanın konumu, (x, y) şeklinde yazılan bir sıralı ikili ile tam olarak belirtilir;<br>x ekseni üzerindeki noktalarda y = 0, y ekseni üzerindeki noktalarda x = 0'dır.</div>
+<table class="mini-table">
+<tr><th>Bölge</th><th>x işareti</th><th>y işareti</th></tr>
+<tr><td>I</td><td>+</td><td>+</td></tr>
+<tr><td>II</td><td>−</td><td>+</td></tr>
+<tr><td>III</td><td>−</td><td>−</td></tr>
+<tr><td>IV</td><td>+</td><td>−</td></tr>
+</table>
+<div class="note-box">8. sınıf konularında denklemlerdeki katsayılar rasyonel sayı da olabilir.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab8">
+<div class="card"><div class="card-title"><div class="icon">🏆</div>Kendini Dene</div>
+<div class="progress-dots" id="progressDots"></div>
+<div id="quizArea"></div>
+</div>
+</section>
+
+</main>
+<button class="basa-don" id="basaDon" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Başa Dön</button>
+<footer><div class="foot-title">Tekin Hoca — 8. Sınıf Matematik</div><div>M.8.2.2.1 - M.8.2.2.2 Denklem Çözme ve Koordinat Sistemi</div></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+window.addEventListener('scroll',()=>{
+  document.getElementById('basaDon').classList.toggle('gorunsun',window.scrollY>400);
+});
+function typesetMJ(el){
+  if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]).catch(()=>{});}
+}
+function checkChoice(btn,isCorrect){
+  const card=btn.closest('.q-card');
+  if(card.dataset.answered)return;
+  card.dataset.answered='1';
+  card.querySelectorAll('.choice-btn').forEach(b=>{
+    if(b.dataset.correct==='1')b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  const fb=card.querySelector('.feedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.innerHTML=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
+  typesetMJ(fb);
+}
+function checkTF(btn,chosenTrue,actualTrue){
+  const row=btn.closest('.tf-row');
+  if(row.dataset.answered)return;
+  row.dataset.answered='1';
+  const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');
+  correctBtn.classList.add('correct');
+  if(chosenTrue!==actualTrue)btn.classList.add('wrong');
+}
+function checkFill(inputId,correctVal,fbId){
+  const inp=document.getElementById(inputId);
+  const fb=document.getElementById(fbId);
+  const val=parseInt(inp.value.trim(),10);
+  fb.classList.add('show');
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+}
+function gcdNum(a,b){return b===0?a:gcdNum(b,a%b);}
+function fracTex(num,den){
+  if(num===0)return '0';
+  if(den<0){den=-den;num=-num;}
+  const g=gcdNum(Math.abs(num),den)||1;
+  const n=num/g, d=den/g;
+  if(d===1)return String(n);
+  return '\\dfrac{'+n+'}{'+d+'}';
+}
+
+/* ---- Tam sayı katsayılı denklem aracı (tab1) ---- */
+function updateD1(){
+  const a=parseInt(document.getElementById('d1A').value,10);
+  const b=parseInt(document.getElementById('d1B').value,10);
+  const c=parseInt(document.getElementById('d1C').value,10);
+  document.getElementById('d1AOut').textContent=a;
+  document.getElementById('d1BOut').textContent=b;
+  document.getElementById('d1COut').textContent=c;
+  const bSign=b>=0?(' + '+b):(' − '+Math.abs(b));
+  document.getElementById('d1Expr').textContent=a+'x'+bSign+' = '+c;
+  const el=document.getElementById('d1Result');
+  el.innerHTML='x = \\('+fracTex(c-b,a)+'\\)';
+  typesetMJ(el);
+}
+['d1A','d1B','d1C'].forEach(id=>document.getElementById(id).addEventListener('input',updateD1));
+updateD1();
+
+/* ---- Rasyonel katsayılı denklem aracı (tab2) ---- */
+function updateD2(){
+  const p=parseInt(document.getElementById('d2P').value,10);
+  const q=parseInt(document.getElementById('d2Q').value,10);
+  const b=parseInt(document.getElementById('d2B').value,10);
+  const c=parseInt(document.getElementById('d2C').value,10);
+  document.getElementById('d2POut').textContent=p;
+  document.getElementById('d2QOut').textContent=q;
+  document.getElementById('d2BOut').textContent=b;
+  document.getElementById('d2COut').textContent=c;
+  const bSign=b>=0?(' + '+b):(' − '+Math.abs(b));
+  const exprEl=document.getElementById('d2Expr');
+  exprEl.innerHTML='\\(\\dfrac{'+p+'}{'+q+'}x'+bSign+' = '+c+'\\)';
+  const resEl=document.getElementById('d2Result');
+  resEl.innerHTML='x = \\('+fracTex(q*(c-b),p)+'\\)';
+  typesetMJ(exprEl);typesetMJ(resEl);
+}
+['d2P','d2Q','d2B','d2C'].forEach(id=>document.getElementById(id).addEventListener('input',updateD2));
+updateD2();
+
+/* ---- Koordinat düzlemi çizim yardımcıları ---- */
+const SVGNS='http://www.w3.org/2000/svg';
+function addLine(g,x1,y1,x2,y2,stroke,w){const l=document.createElementNS(SVGNS,'line');l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',w);g.appendChild(l);}
+function addText(g,x,y,txt,fill,size,weight){const t=document.createElementNS(SVGNS,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor','middle');t.setAttribute('font-size',size||11);t.setAttribute('font-weight',weight||700);t.setAttribute('fill',fill);t.textContent=txt;g.appendChild(t);}
+function addCircle(g,cx,cy,r,fill){const c=document.createElementNS(SVGNS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill',fill);c.setAttribute('stroke','#fff');c.setAttribute('stroke-width','1.5');g.appendChild(c);}
+const GRID_CX=180, GRID_CY=180, GRID_UNIT=24, GRID_RANGE=6;
+function drawGrid(g){
+  g.innerHTML='';
+  for(let i=-GRID_RANGE;i<=GRID_RANGE;i++){
+    const x=GRID_CX+i*GRID_UNIT;
+    const y=GRID_CY-i*GRID_UNIT;
+    addLine(g,x,GRID_CY-GRID_RANGE*GRID_UNIT,x,GRID_CY+GRID_RANGE*GRID_UNIT,'#ecd9d9',1);
+    addLine(g,GRID_CX-GRID_RANGE*GRID_UNIT,y,GRID_CX+GRID_RANGE*GRID_UNIT,y,'#ecd9d9',1);
+  }
+  addLine(g,GRID_CX-GRID_RANGE*GRID_UNIT,GRID_CY,GRID_CX+GRID_RANGE*GRID_UNIT,GRID_CY,'#221515',2);
+  addLine(g,GRID_CX,GRID_CY-GRID_RANGE*GRID_UNIT,GRID_CX,GRID_CY+GRID_RANGE*GRID_UNIT,'#221515',2);
+  for(let i=-GRID_RANGE;i<=GRID_RANGE;i+=2){
+    if(i===0)continue;
+    addText(g,GRID_CX+i*GRID_UNIT,GRID_CY+16,String(i),'#8a6f6f',9);
+    addText(g,GRID_CX-12,GRID_CY-i*GRID_UNIT+3,String(i),'#8a6f6f',9);
+  }
+  addText(g,GRID_CX-12,GRID_CY+16,'0','#8a6f6f',9);
+  addText(g,GRID_CX+GRID_RANGE*GRID_UNIT+10,GRID_CY+4,'x','#7a0e0e',13,800);
+  addText(g,GRID_CX,GRID_CY-GRID_RANGE*GRID_UNIT-8,'y','#7a0e0e',13,800);
+}
+function toPixel(x,y){return {px:GRID_CX+x*GRID_UNIT, py:GRID_CY-y*GRID_UNIT};}
+function regionOf(x,y){
+  if(x===0&&y===0)return 'Orijin O(0, 0)';
+  if(x===0)return 'y ekseni üzerinde';
+  if(y===0)return 'x ekseni üzerinde';
+  if(x>0&&y>0)return 'I. Bölge';
+  if(x<0&&y>0)return 'II. Bölge';
+  if(x<0&&y<0)return 'III. Bölge';
+  return 'IV. Bölge';
+}
+
+/* ---- Koordinat sistemi aracı (tab3) ---- */
+drawGrid(document.getElementById('csGrid'));
+function updateCS(){
+  const x=parseInt(document.getElementById('csX').value,10);
+  const y=parseInt(document.getElementById('csY').value,10);
+  document.getElementById('csXOut').textContent=x;
+  document.getElementById('csYOut').textContent=y;
+  const g=document.getElementById('csPointGroup');g.innerHTML='';
+  const p=toPixel(x,y);
+  addCircle(g,p.px,p.py,6,'#c81e1e');
+  addText(g,p.px,p.py-12,'('+x+', '+y+')','#7a0e0e',12,800);
+  document.getElementById('csPair').textContent='('+x+', '+y+')';
+  document.getElementById('csRegion').textContent=regionOf(x,y);
+}
+['csX','csY'].forEach(id=>document.getElementById(id).addEventListener('input',updateCS));
+updateCS();
+
+/* ---- Sıralı ikili harita örneği (tab4, sabit) ---- */
+drawGrid(document.getElementById('mapGrid'));
+(function(){
+  const g=document.getElementById('mapPoints');
+  const pts=[{x:3,y:2,label:'Kütüphane'},{x:-4,y:3,label:'Okul'},{x:-2,y:-4,label:'Market'}];
+  pts.forEach(pt=>{
+    const p=toPixel(pt.x,pt.y);
+    addCircle(g,p.px,p.py,6,'#7a0e0e');
+    addText(g,p.px,p.py-12,pt.label+' ('+pt.x+', '+pt.y+')','#221515',10,800);
+  });
+})();
+
+/* ---- Sıralı ikili aracı - kullanıcı noktası (tab4) ---- */
+drawGrid(document.getElementById('p2Grid'));
+function updateP2(){
+  const x=parseInt(document.getElementById('p2X').value,10);
+  const y=parseInt(document.getElementById('p2Y').value,10);
+  document.getElementById('p2XOut').textContent=x;
+  document.getElementById('p2YOut').textContent=y;
+  const g=document.getElementById('p2PointGroup');g.innerHTML='';
+  const p=toPixel(x,y);
+  addCircle(g,p.px,p.py,6,'#2b2b2b');
+  addText(g,p.px,p.py-12,'Ev ('+x+', '+y+')','#221515',11,800);
+  document.getElementById('p2Pair').textContent='Ev('+x+', '+y+') — '+regionOf(x,y);
+}
+['p2X','p2Y'].forEach(id=>document.getElementById(id).addEventListener('input',updateP2));
+updateP2();
+
+/* ---- Kendini Dene quiz ---- */
+const quizData=[
+ {q:"6x − 4 = 20 denkleminin çözümü kaçtır?",
+  choices:["3","4","5","6"],correct:1,
+  expl:"6x=24 olduğundan x=4."},
+ {q:"\\(\\dfrac{3}{4}x = 9\\) denkleminin çözümü kaçtır?",
+  choices:["9","12","6","15"],correct:1,
+  expl:"x=9×(4/3)=12."},
+ {q:"2(x + 5) = 3x − 1 denkleminin çözümü kaçtır?",
+  choices:["9","10","11","12"],correct:2,
+  expl:"2x+10=3x−1 → 11=x."},
+ {q:"\\(\\dfrac{x-2}{3} = 4\\) denkleminin çözümü kaçtır?",
+  choices:["10","12","14","16"],correct:2,
+  expl:"x−2=12 olduğundan x=14."},
+ {q:"C(3, −2) noktası hangi bölgededir?",
+  choices:["I. Bölge","II. Bölge","III. Bölge","IV. Bölge"],correct:3,
+  expl:"x pozitif, y negatif olduğundan C noktası IV. bölgededir."},
+ {q:"Bir noktanın koordinatları (2a+1, a−4) olarak veriliyor. Bu nokta x ekseni üzerinde olduğuna göre a kaçtır?",
+  choices:["3","4","5","−4"],correct:1,
+  expl:"x ekseni üzerindeki noktalarda y=0 olduğundan a−4=0, a=4."},
+ {q:"\\(\\dfrac{x+3}{4} - \\dfrac{x-1}{2} = 1\\) denkleminin çözümü kaçtır?",
+  choices:["-1","0","1","2"],correct:2,
+  expl:"Her iki taraf 4 ile çarpılırsa: (x+3)−2(x−1)=4 → −x+5=4 → x=1."},
+ {q:"III. bölgedeki bir noktanın koordinatları için aşağıdakilerden hangisi doğru olabilir?",
+  choices:["(3, 5)","(−3, 5)","(3, −5)","(−3, −5)"],correct:3,
+  expl:"III. bölgede hem x hem y negatiftir; bu nedenle (−3, −5) uygun bir örnektir."},
+ {q:"Hangi doğal sayının üçte biri ile aynı sayının yarısının farkı 25 eder?",
+  choices:["100","120","150","75"],correct:2,
+  expl:"Sayı x olsun: \\(\\dfrac{x}{2}-\\dfrac{x}{3}=25\\). Paydalar eşitlenirse \\(\\dfrac{3x-2x}{6}=25 \\Rightarrow \\dfrac{x}{6}=25 \\Rightarrow x=150\\)."}
+];
+let qIndex=0,qScore=0,qAnswered=false;
+function renderDots(){
+  const wrap=document.getElementById('progressDots');wrap.innerHTML='';
+  quizData.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='pdot'+(i<qIndex?' done':i===qIndex?' now':'');
+    wrap.appendChild(d);
+  });
+}
+function renderQuiz(){
+  if(qIndex>=quizData.length){
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    renderDots();return;
+  }
+  qAnswered=false;
+  const item=quizData[qIndex];
+  let html='<div class="q-card"><div class="q-text">'+(qIndex+1)+'. '+item.q+'</div><div class="choices">';
+  item.choices.forEach((c,i)=>{html+='<button class="choice-btn" onclick="answerQuiz('+i+')">'+c+'</button>';});
+  html+='</div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="submit-btn" id="quizNext" style="display:none" onclick="nextQuiz()">Sonraki →</button></div></div>';
+  document.getElementById('quizArea').innerHTML=html;
+  typesetMJ(document.getElementById('quizArea'));
+  renderDots();
+}
+function answerQuiz(i){
+  if(qAnswered)return;qAnswered=true;
+  const item=quizData[qIndex];
+  const isCorrect=i===item.correct;
+  if(isCorrect)qScore++;
+  document.querySelectorAll('#quizArea .choice-btn').forEach((b,idx)=>{
+    if(idx===item.correct)b.classList.add('correct');
+    else if(idx===i)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('quizFeedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.innerHTML=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  typesetMJ(fb);
+  document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuiz(){qIndex++;renderQuiz();}
+function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
+renderQuiz();
+</script>
+</body></html>

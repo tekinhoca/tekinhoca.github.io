@@ -1,0 +1,553 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>8. Sınıf Matematik — M.8.2.2.3 Doğrusal İlişkiyi Tablo ve Denklemle İfade Etme</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--primary:#7a0e0e;--primary2:#4a0808;--primary-light:#fbeaea;--accent:#c81e1e;--success:#059669;--success-light:#eafaf3;--danger:#b91c1c;--warning:#d97706;--warning-light:#fff7e6;--text:#221515;--muted:#8a6f6f;--border:#ecd9d9;--bg:#faf6f6;--dark:#050505;--shadow:0 4px 18px rgba(122,14,14,.10)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#3a0000 66%,#8b0000 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(60,0,0,.4)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#c81e1e;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#7a0e0e;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,140,140,.3);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#ffd9d9;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.35rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(245,180,180,.2);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(255,238,238,.8);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#2c0505);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(60,0,0,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.6rem,2vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(80,10,10,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#f6f0f0;border-left:4px solid #a08080}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fdfafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#faf7f7;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #e6cccc;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#fdf5f5);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.svg-wrap{display:flex;justify-content:center;align-items:center;margin:14px auto;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;max-width:780px}.svg-wrap svg{width:min(100%,740px);height:auto;display:block}.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#1a0808;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#ffd9d9}.badge-mini{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:99px;padding:4px 12px;font-size:.8rem;font-weight:900;margin:3px}
+footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.tf-row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap;align-items:center;background:#fdfafa;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px}.tf-statement{flex:1;min-width:220px;font-weight:700;font-size:.92rem}.tf-btn{border:2px solid var(--border);background:#fff;border-radius:10px;padding:7px 16px;font-weight:800;cursor:pointer;font-size:.86rem}.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}
+.slider-wrap{margin:18px 0}.slider-wrap input[type=range]{width:100%;accent-color:var(--primary)}.slider-label{display:flex;justify-content:space-between;font-weight:800;color:var(--primary);font-size:.92rem;margin-bottom:6px}
+.progress-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.pdot{width:10px;height:10px;border-radius:50%;background:var(--border)}.pdot.done{background:var(--success)}.pdot.now{background:var(--primary)}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;min-height:34px}
+.result-strip{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:150px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;text-align:center}.result-pill .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.2rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:1.9em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;word-break:break-word}
+.chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+</style></head><body>
+<header><div class="badge">8. SINIF MATEMATİK · M.8.2.2.3</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Doğrusal İlişkiyi Tablo ve Denklemle İfade Etme</h1><p>Bağımlı ve bağımsız değişken, doğrusal ilişkiyi tablo, sıralı ikili ve denklemle ifade etme</p></header>
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="tab0">GİRİŞ</button>
+<button class="tab-btn" data-tab="tab1">BAĞIMLI-BAĞIMSIZ</button>
+<button class="tab-btn" data-tab="tab2">TABLOYLA İFADE</button>
+<button class="tab-btn" data-tab="tab3">SIRALI İKİLİLER</button>
+<button class="tab-btn" data-tab="tab4">DENKLEMLE İFADE</button>
+<button class="tab-btn" data-tab="tab5">TABLO ↔ DENKLEM</button>
+<button class="tab-btn" data-tab="tab6">ÖRNEKLER</button>
+<button class="tab-btn" data-tab="tab7">ÇALIŞMA</button>
+<button class="tab-btn" data-tab="tab8">ÖZET</button>
+<button class="tab-btn" data-tab="tab9">KENDİNİ DENE</button>
+</nav>
+<main class="container">
+
+<section class="tab-panel active" id="tab0">
+<div class="card"><div class="card-title"><div class="icon">🔗</div>Bu Derse Genel Bakış</div>
+<p class="body-text">Önceki derste birinci dereceden denklemleri çözmeyi ve koordinat sistemini öğrenmiştik. Bu derste, aralarında <b>doğrusal ilişki</b> bulunan iki değişkenden birinin diğerine bağlı olarak nasıl değiştiğini; bu ilişkiyi <b>tablo</b>, <b>sıralı ikili</b> ve <b>denklem</b> ile nasıl ifade edebileceğimizi öğreneceğiz.</p>
+<div class="three-col">
+<div class="info-tile"><h4>📋 Tablo</h4><p class="body-text" style="font-size:.86rem;margin:0">Bir değişkenin çeşitli değerlerine karşılık gelen diğer değişkenin değerlerini düzenli biçimde gösterir.</p></div>
+<div class="info-tile"><h4>📍 Sıralı İkili</h4><p class="body-text" style="font-size:.86rem;margin:0">Tablodaki her satır, bir (x, y) sıralı ikilisi olarak da yazılabilir.</p></div>
+<div class="info-tile"><h4>✏️ Denklem</h4><p class="body-text" style="font-size:.86rem;margin:0">İki değişken arasındaki ilişkiyi genel bir kuralla (örneğin y = kx + b) ifade eder.</p></div>
+</div>
+<div class="tip-box">Bu üç gösterim biçimi (tablo, sıralı ikili, denklem) aynı ilişkiyi farklı biçimlerde anlatır; birinden diğerine geçebilmek bu dersin temel becerisidir.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab1">
+<div class="card"><div class="card-title"><div class="icon">🔄</div>Bağımlı ve Bağımsız Değişken</div>
+<div class="def-box"><b>Bağımsız değişken:</b> Değeri serbestçe seçilen, diğer değişkeni etkileyen değişkendir (genellikle x ile gösterilir).<br><b>Bağımlı değişken:</b> Değeri, bağımsız değişkenin aldığı değere göre belirlenen değişkendir (genellikle y ile gösterilir).</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">Bir otoparkta araç başına saatlik ücret 8 TL'dir. Kalınan saat sayısı ile ödenecek ücret arasındaki ilişkide hangisi bağımlı, hangisi bağımsız değişkendir?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Önce kalınan saat sayısı belirlenir; ödenecek ücret bu saat sayısına göre hesaplanır.</div></div>
+<div class="ex-result">Sonuç: Kalınan saat sayısı bağımsız değişken, ödenecek ücret ise bağımlı değişkendir.</div>
+</div>
+</div></div>
+<div class="q-card" data-okmsg="Doğru! Harcanan elektrik miktarı önce oluşur, fatura tutarı buna göre hesaplanır; bu nedenle elektrik miktarı bağımsız değişkendir." data-nomsg="Tekrar düşünelim: hangi değer önce oluşur, hangisi ona göre hesaplanır?">
+<div class="q-text">Bir ailenin bir ayda harcadığı elektrik miktarı (kWh) ile ödeyeceği aylık elektrik faturası arasındaki ilişkide hangisi bağımsız değişkendir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Elektrik faturası</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">İkisi de bağımlıdır</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Harcanan elektrik miktarı</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">İkisi de bağımsızdır</button>
+</div><div class="feedback"></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab2">
+<div class="card"><div class="card-title"><div class="icon">📋</div>Doğrusal İlişkiyi Tablo İle İfade Etme</div>
+<div class="def-box">Aralarında doğrusal ilişki bulunan iki değişken, bağımsız değişkenin çeşitli değerlerine karşılık gelen bağımlı değişken değerlerinin yazıldığı bir <b>değer tablosu</b> ile ifade edilebilir.</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">Bir kırtasiyede 1 defterin fiyatı 12 TL'dir. Alınan defter sayısı (n) ile ödenecek ücret (y) arasındaki ilişkiyi tablo ile gösteriniz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Defter sayısı bağımsız, ücret bağımlı değişkendir; her defter için 12 TL ödenir.</div></div>
+<table class="mini-table"><tr><th>n (defter)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><th>y (TL)</th><td>12</td><td>24</td><td>36</td><td>48</td><td>60</td></tr></table>
+</div>
+</div></div>
+<p class="body-text">Aşağıdaki araçta defter sayısını kaydırıcıyla seçin; ödenecek ücretin nasıl hesaplandığını canlı olarak görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>Defter sayısı (n)</span><span id="tblNOut">3</span></div><input type="range" id="tblN" min="1" max="10" step="1" value="3"></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl">Cebirsel ifade = Ücret</div><div class="val" id="tblResult">12n = 36 TL</div></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab3">
+<div class="card"><div class="card-title"><div class="icon">📍</div>Sıralı İkililer ve Tablo</div>
+<div class="def-box">Bir tablodaki her satır, bir (x, y) <b>sıralı ikilisi</b> olarak da yazılabilir. Bu sıralı ikililer, koordinat düzleminde birer nokta olarak gösterilebilir.</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">y = 2x + 1 ilişkisine göre x = 0, 1, 2, 3, 4, 5 için oluşan sıralı ikilileri yazınız ve koordinat düzleminde gösteriniz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Her x değeri için y = 2x + 1 formülü uygulanır:</div></div>
+<table class="mini-table"><tr><th>x</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr><tr><th>y</th><td>1</td><td>3</td><td>5</td><td>7</td><td>9</td><td>11</td></tr></table>
+<div class="ex-result">Sonuç: Sıralı ikililer (0,1), (1,3), (2,5), (3,7), (4,9), (5,11)'dir.</div>
+</div>
+</div></div>
+<div class="svg-wrap" style="max-width:380px"><svg viewBox="0 0 340 320" xmlns="http://www.w3.org/2000/svg" id="q1Svg" role="img" aria-label="y=2x+1 ilişkisine ait sıralı ikilileri gösteren koordinat düzlemi"><g id="q1Grid"></g><g id="q1Points"></g></svg></div>
+<div class="note-box">Noktaların bir doğru üzerinde sıralandığını görebilirsiniz; bu, ilişkinin <b>doğrusal</b> olduğunun görsel bir işaretidir (doğrunun kendisini önümüzdeki haftalarda çizeceğiz).</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab4">
+<div class="card"><div class="card-title"><div class="icon">✏️</div>Doğrusal İlişkiyi Denklemle İfade Etme</div>
+<div class="def-box">Tablodaki örüntü genelleştirilerek, bağımsız değişken (x) ile bağımlı değişken (y) arasındaki ilişki bir <b>denklemle</b> ifade edilebilir: y = kx + b biçiminde, k bağımsız değişkenin katsayısını, b ise sabit terimi gösterir.</div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">Bir taksinin açılış ücreti 10 TL, kilometre başına ücreti ise 5 TL'dir. Aşağıdaki tabloyu inceleyerek gidilen kilometre (x) ile ödenecek ücret (y) arasındaki ilişkiyi denklemle ifade ediniz.</div></div>
+<div class="ex-body">
+<table class="mini-table"><tr><th>x (km)</th><td>0</td><td>1</td><td>2</td><td>3</td></tr><tr><th>y (TL)</th><td>10</td><td>15</td><td>20</td><td>25</td></tr></table>
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>x=0 iken y=10 olduğundan sabit terim 10'dur (açılış ücreti).</div></div>
+<div class="ex-step"><div class="snum">2</div><div>x her 1 birim arttığında y 5 birim artmaktadır; bu nedenle x'in katsayısı 5'tir.</div></div>
+<div class="ex-result">Sonuç: y = 5x + 10</div>
+</div>
+</div></div>
+<p class="body-text">Aşağıdaki araçta k ve b değerlerini kaydırıcılarla seçerek kendi doğrusal ilişkinizi oluşturun; denklemin ve buna karşılık gelen tablonun nasıl değiştiğini görün.</p>
+<div class="slider-wrap"><div class="slider-label"><span>k (x katsayısı)</span><span id="eqKOut">3</span></div><input type="range" id="eqK" min="-5" max="5" step="1" value="3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>b (sabit terim)</span><span id="eqBOut">2</span></div><input type="range" id="eqB" min="-10" max="10" step="1" value="2"></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl">Denklem</div><div class="val" id="eqExpr">—</div></div></div>
+<table class="mini-table" id="eqTable"></table>
+</div>
+</section>
+
+<section class="tab-panel" id="tab5">
+<div class="card"><div class="card-title"><div class="icon">🔁</div>Tablodan Denkleme, Denklemden Tabloya</div>
+<div class="def-box">Bir tablodan denklem çıkarırken önce x=0 için y değerine (sabit terim), ardından x her 1 arttığında y'nin ne kadar değiştiğine (katsayı) bakılır.</div>
+
+<div class="q-card" data-okmsg="Doğru! n her 1 arttığında y 5 artıyor (katsayı 5), n=0 iken y=2 (sabit terim 2): y=5n+2." data-nomsg="Tekrar düşünelim: n=0 iken y kaçtır? n her 1 arttığında y ne kadar artıyor?">
+<div class="q-text">Aşağıdaki tabloya göre n ile y arasındaki ilişkiyi ifade eden denklem hangisidir?</div>
+<table class="mini-table"><tr><th>n</th><td>0</td><td>1</td><td>2</td><td>3</td></tr><tr><th>y</th><td>2</td><td>7</td><td>12</td><td>17</td></tr></table>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">y = 5n + 2</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 2n + 5</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 5n + 7</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 7n</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! n her 1 arttığında y 1 artıyor (katsayı 1), n=0 iken y=7 (sabit terim 7): y=n+7." data-nomsg="Tekrar düşünelim: n=0 iken y kaçtır? n her 1 arttığında y ne kadar artıyor?">
+<div class="q-text">Aşağıdaki tabloya göre n ile y arasındaki ilişkiyi ifade eden denklem hangisidir?</div>
+<table class="mini-table"><tr><th>n</th><td>0</td><td>1</td><td>2</td><td>3</td></tr><tr><th>y</th><td>7</td><td>8</td><td>9</td><td>10</td></tr></table>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 7n</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = n + 8</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">y = n + 7</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 8n</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! n=0 için y=0 olacağından bu tablo n=1'den başlatılmıştır; n her 1 arttığında y 8 artıyor ve sabit terim yoktur (0): y=8n." data-nomsg="Tekrar düşünelim: n her 1 arttığında y ne kadar artıyor? Sabit bir terim var mı?">
+<div class="q-text">Aşağıdaki tabloya göre n ile y arasındaki ilişkiyi ifade eden denklem hangisidir?</div>
+<table class="mini-table"><tr><th>n</th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>y</th><td>8</td><td>16</td><td>24</td><td>32</td></tr></table>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = n + 8</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">y = 8n</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 8n + 1</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 4n</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! n her 1 arttığında y 20 artıyor (katsayı 20), n=0 iken y=-1 (sabit terim -1): y=20n-1." data-nomsg="Tekrar düşünelim: n=0 iken y kaçtır? n her 1 arttığında y ne kadar artıyor?">
+<div class="q-text">Aşağıdaki tabloya göre n ile y arasındaki ilişkiyi ifade eden denklem hangisidir?</div>
+<table class="mini-table"><tr><th>n</th><td>0</td><td>1</td><td>2</td><td>3</td></tr><tr><th>y</th><td>−1</td><td>19</td><td>39</td><td>59</td></tr></table>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 19n</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 20n + 1</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 21n − 1</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">y = 20n − 1</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! n her 1 arttığında y 5 azalıyor (katsayı -5), n=0 iken y=6 (sabit terim 6): y=-5n+6." data-nomsg="Tekrar düşünelim: n=0 iken y kaçtır? n her 1 arttığında y ne kadar değişiyor (artıyor mu azalıyor mu)?">
+<div class="q-text">Aşağıdaki tabloya göre n ile y arasındaki ilişkiyi ifade eden denklem hangisidir?</div>
+<table class="mini-table"><tr><th>n</th><td>0</td><td>1</td><td>2</td><td>3</td></tr><tr><th>y</th><td>6</td><td>1</td><td>−4</td><td>−9</td></tr></table>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 5n + 6</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = −5n − 6</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">y = −5n + 6</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = −6n + 5</button>
+</div><div class="feedback"></div></div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab6">
+<div class="card"><div class="card-title"><div class="icon">✏️</div>Çözümlü Örnekler</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 1</div><div class="ex-q">Okul kantininde bir simit 25 TL'den satılıyor. n tane simit alan Ece'nin ödeyeceği ücret y TL olduğuna göre, y ile n arasındaki ilişkiyi denklemle ifade ediniz ve n = 1, 2, 3, 4 değerleri için tabloyu oluşturunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Her simit 25 TL olduğundan denklem: y = 25n</div></div>
+<div class="ex-result">Sonuç: y = 25n</div>
+<table class="mini-table"><tr><th>n</th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>y</th><td>25</td><td>50</td><td>75</td><td>100</td></tr></table>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 2</div><div class="ex-q">y = 3x − 2 doğrusal ilişkisine göre x = 0, 1, 2, 3, 4 için y değerlerini bulup tabloyu oluşturunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>y = 3x − 2 denkleminde x yerine 0, 1, 2, 3 ve 4 yazarak bu sayılara karşılık gelen y değerlerini buluruz:</div></div>
+<div class="ex-step"><div class="snum">2</div><div>x = 0 → y = 3 · 0 −2 → y = −2</div></div>
+<div class="ex-step"><div class="snum">3</div><div>x = 1 → y = 3 · 1 −2 → y = 1</div></div>
+<div class="ex-step"><div class="snum">4</div><div>x = 2 → y = 3 · 2 −2 → y = 4</div></div>
+<div class="ex-step"><div class="snum">5</div><div>x = 3 → y = 3 · 3 −2 → y = 7</div></div>
+<div class="ex-step"><div class="snum">6</div><div>x = 4 → y = 3 · 4 −2 → y = 10</div></div>
+<div class="ex-result">Sonuç: y değerleri sırasıyla −2, 1, 4, 7, 10'dur.</div>
+<table class="mini-table"><tr><th>x</th><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>y</th><td>−2</td><td>1</td><td>4</td><td>7</td><td>10</td></tr></table>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 3</div><div class="ex-q">Aşağıdaki tabloya göre x ile y arasındaki denklemi bulunuz.</div></div>
+<div class="ex-body">
+<table class="mini-table"><tr><th>x</th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>y</th><td>7</td><td>10</td><td>13</td><td>16</td></tr></table>
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>x değeri her 1 birim arttığında y değeri 3 birim artıyor. Bu nedenle denklemde x'in katsayısı 3'tür.</div></div>
+<div class="ex-step"><div class="snum">→</div><div>Denklem "<b>y = 3x</b>" şeklinde başlıyor.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>"3x"ten sonra gelecek sabit terimi bulmak için x değerlerinden herhangi bir tanesini y = 3x ifadesinde yerine yazarak tabloda karşılık gelen y değerine ulaşıp ulaşamadığımıza bakarız.</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Örneğin x = 1 değerini deneyelim:</div></div>
+<div class="ex-step"><div class="snum">4</div><div>x = 1 → y = 3 · 1 = 3</div></div>
+<div class="ex-step"><div class="snum">5</div><div>Tabloda x = 1 değerine karşılık gelen y değeri 7 olduğu halde biz 3'e ulaştık (Ulaşmamız gereken sayının 4 eksiğine ulaştık).</div></div>
+<div class="ex-step"><div class="snum">6</div><div>O halde sabit terim olarak 4 eklersek bu eksikliği gidermiş oluruz.</div></div>
+<div class="ex-step"><div class="snum">→</div><div>Sabit terim <b>+4</b>'tür.</div></div>
+<div class="ex-result">Sonuç: y = 3x + 4</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 4</div><div class="ex-q">Bir su deposunda başlangıçta 500 litre su vardır ve depo dakikada 20 litre boşalmaktadır. Kalan su miktarı (y) ile geçen süre (x) arasındaki ilişkiyi denklemle ifade ediniz. 10 dakika sonra depoda kaç litre su kalır?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Başlangıç miktarı 500 litre, her dakika 20 litre azaldığından: y = 500 − 20x</div></div>
+<div class="ex-step"><div class="snum">2</div><div>x=10 için: y = 500 − 20(10) = 500 − 200</div></div>
+<div class="ex-result">Sonuç: y = 500 − 20x; 10 dakika sonra depoda 300 litre su kalır.</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 5</div><div class="ex-q">Aşağıdaki tabloda bir yakıt deposundaki mazot miktarının zamana göre değişimi verilmiştir. Bu ilişkiyi ifade eden denklemi bulunuz ve hangi değişkenin bağımlı, hangisinin bağımsız olduğunu belirtiniz.</div></div>
+<div class="ex-body">
+<table class="mini-table"><tr><th>Süre (dk)</th><td>0</td><td>10</td><td>20</td><td>30</td></tr><tr><th>Mazot (L)</th><td>80</td><td>60</td><td>40</td><td>20</td></tr></table>
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div><b>Yakıt</b> miktarı süreye <b>bağlı</b> olarak değiştiğine göre; süre bağımsız değişken, <b>yakıt</b> miktarı ise <b>bağımlı</b> değişkendir.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Her 10 dakikada yakıt miktarı 20 litre azalmaktadır; her bir dakikada kaç litre azaldığını bulmalıyız:</div></div>
+<div class="ex-step"><div class="snum">3</div><div>20 ÷ 10 = 2 litre</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Azalma olduğu için, denklem "<b>y = -2x</b>" şeklinde başlamalıdır.</div></div>
+<div class="ex-step"><div class="snum">5</div><div>x = 0 iken y = 80 olduğuna göre sabit terim "+80" olur.</div></div>
+<div class="ex-result">Sonuç: Süre (x) bağımsız değişken, mazot miktarı (y) ise bağımlı değişkendir. Denklem: y = -2x + 80 ("y = 80 − 2x" de yazabiliriz) </div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 6</div><div class="ex-q">Bir fabrikada üretilen ürün sayısı ile geçen süre arasındaki ilişki y = 45x + 120 denklemiyle ifade edilmektedir (x: saat, y: ürün sayısı). 6 saat sonra kaç ürün üretilmiş olur?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>x=6 denklemde yerine konur: y = 45(6) + 120 = 270 + 120</div></div>
+<div class="ex-result">Sonuç: 6 saat sonra 390 ürün üretilmiş olur.</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 7</div><div class="ex-q">Aşağıdaki tabloda x ve y arasında doğrusal bir ilişki vardır. Buna göre x = 25 için y değeri kaçtır?</div></div>
+<div class="ex-body">
+<table class="mini-table"><tr><th>x</th><td>1</td><td>2</td><td>3</td><td>4</td></tr><tr><th>y</th><td>5</td><td>13</td><td>21</td><td>29</td></tr></table>
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>x değeri her 1 birim arttığında y değeri 8 birim artıyor. Bu nedenle denklemde x'in katsayısı 8'dir.</div></div>
+<div class="ex-step"><div class="snum">→</div><div>Denklem "<b>y = 8x</b>" şeklinde başlıyor.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>"8x"ten sonra gelecek sabit terimi bulmak için x değerlerinden herhangi bir tanesini y = 8x ifadesinde yerine yazarız ve tabloda karşılık gelen y değerine ulaşıp ulaşamadığımıza bakarız.</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Örneğin x = 1 değerini deneyelim:</div></div>
+<div class="ex-step"><div class="snum">4</div><div>x = 1 → y = 8 · 1 = 8</div></div>
+<div class="ex-step"><div class="snum">5</div><div>Tabloda x = 1 değerine karşılık gelen y değeri 5 olduğu halde biz 8'e ulaştık (Ulaşmamız gereken sayının 3 fazlasına ulaştık).</div></div>
+<div class="ex-step"><div class="snum">6</div><div>O halde sabit terim olarak 3 çıkarırsak bu fazlalığı gidermiş oluruz.</div></div>
+<div class="ex-step"><div class="snum">→</div><div>Sabit terim "<b>−3</b>" olur.</div></div>
+<div class="ex-step"><div class="snum">7</div><div>Doğrusal ilişkinin denklemini "<b>y = 8x - 3</b>" şeklinde belirlemiş olduk.</div></div>
+<div class="ex-step"><div class="snum">8</div><div>y = 8x - 3 ifadesinde x yerine 25 yazarsak, y = 8 · 25 − 3</div></div>
+<div class="ex-result">Sonuç: x = 25 için y = 197</div>
+</div>
+</div></div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab7">
+<div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
+
+<div class="q-card" data-okmsg="Doğru! Yaya asılan ağırlık önce belirlenir, uzunluk buna göre değişir; bu nedenle ağırlık bağımsız değişkendir." data-nomsg="Tekrar düşünelim: hangi değer önce seçilir, hangisi ona göre değişir?">
+<div class="q-text">1) Bir yayın uzunluğu, üzerine asılan ağırlığa bağlı olarak değişmektedir. Bu ilişkide hangi değişken bağımsızdır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yayın uzunluğu</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Asılan ağırlık</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">İkisi de bağımlıdır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Belirlenemez</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! x=0 iken y=4 (sabit terim), x her 1 arttığında y 3 arttığından (katsayı 3): y=3x+4." data-nomsg="Tekrar düşünelim: x=0 için y kaçtır? x 1 arttığında y ne kadar artıyor?">
+<div class="q-text">2) x: 0, 1, 2, 3 için y: 4, 7, 10, 13 olduğuna göre denklem hangisidir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 4x + 3</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">y = 3x + 4</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 3x + 7</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 7x</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! y=2(3)+5=11." data-nomsg="Tekrar düşünelim: x=3'ü denklemde yerine koyup işlemi yapın.">
+<div class="q-text">3) y = 2x + 5 denklemine göre x = 3 için y kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">9</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">11</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">13</button>
+</div><div class="feedback"></div></div>
+
+<p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
+<div class="field-row"><span class="body-text" style="margin:0">y = 7x − 3 ilişkisinde x = 4 için y:</span><input type="text" class="answer-input" id="fillG1" placeholder="?"><button class="submit-btn" onclick="checkFill('fillG1',25,'fbG1')">Kontrol Et</button></div>
+<div id="fbG1" class="feedback"></div>
+<div class="field-row"><span class="body-text" style="margin:0">Bir tabloda x=2 iken y=9, x=5 iken y=21 ise x'in katsayısı:</span><input type="text" class="answer-input" id="fillG2" placeholder="?"><button class="submit-btn" onclick="checkFill('fillG2',4,'fbG2')">Kontrol Et</button></div>
+<div id="fbG2" class="feedback"></div>
+
+<p class="body-text" style="margin-top:16px"><b>Doğru mu, yanlış mı?</b></p>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">Bağımsız değişkenin değeri, bağımlı değişkenin değerine göre belirlenir.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">Bir doğrusal ilişkiye ait tablodaki her (x, y) satırı bir sıralı ikili olarak yazılabilir.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">y = 4x + 7 ilişkisinde x bağımsız, y bağımlı değişkendir.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
+</div>
+<div class="tf-row" data-answered="">
+<div class="tf-statement">Doğrusal bir ilişkide bağımsız değişken 1 birim arttığında bağımlı değişken her zaman aynı miktarda değişir.</div>
+<button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
+<button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
+</div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab8">
+<div class="card"><div class="card-title"><div class="icon">📌</div>Özet</div>
+<div class="gen-box">Bağımsız değişken serbestçe seçilir; bağımlı değişkenin değeri, bağımsız değişkenin aldığı değere göre belirlenir.</div>
+<div class="gen-box">Doğrusal bir ilişki, bağımsız değişkenin değerlerine karşılık gelen bağımlı değişken değerlerini gösteren bir tablo ile ifade edilebilir.</div>
+<div class="gen-box">Tablodaki her (x, y) satırı bir sıralı ikili olarak da yazılabilir.</div>
+<div class="gen-box">Bir tablodaki örüntü genelleştirilerek y = kx + b biçiminde bir denklem elde edilir: b, x=0 iken y'nin değeridir; k ise x her 1 arttığında y'nin ne kadar değiştiğidir.</div>
+<table class="mini-table">
+<tr><th>Gösterim</th><th>Açıklama</th></tr>
+<tr><td>Tablo</td><td>x ve y değerlerini satır/sütun hâlinde gösterir</td></tr>
+<tr><td>Sıralı ikili</td><td>(x, y) biçiminde tek bir çift</td></tr>
+<tr><td>Denklem</td><td>y = kx + b biçiminde genel kural</td></tr>
+</table>
+<div class="note-box"><b>M.8.2.2.3 kapsamı:</b> Tablo gösterimlerinde sıralı ikili biçimindeki ifadelere de yer verilir; hangi değişkenin bağımlı, hangisinin bağımsız olduğu incelenir.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab9">
+<div class="card"><div class="card-title"><div class="icon">🏆</div>Kendini Dene</div>
+<div class="progress-dots" id="progressDots"></div>
+<div id="quizArea"></div>
+</div>
+</section>
+
+</main>
+<button class="basa-don" id="basaDon" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Başa Dön</button>
+<footer><div class="foot-title">Tekin Hoca — 8. Sınıf Matematik</div><div>M.8.2.2.3 Doğrusal İlişkiyi Tablo ve Denklemle İfade Etme</div></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+window.addEventListener('scroll',()=>{
+  document.getElementById('basaDon').classList.toggle('gorunsun',window.scrollY>400);
+});
+function checkChoice(btn,isCorrect){
+  const card=btn.closest('.q-card');
+  if(card.dataset.answered)return;
+  card.dataset.answered='1';
+  card.querySelectorAll('.choice-btn').forEach(b=>{
+    if(b.dataset.correct==='1')b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  const fb=card.querySelector('.feedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
+}
+function checkTF(btn,chosenTrue,actualTrue){
+  const row=btn.closest('.tf-row');
+  if(row.dataset.answered)return;
+  row.dataset.answered='1';
+  const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');
+  correctBtn.classList.add('correct');
+  if(chosenTrue!==actualTrue)btn.classList.add('wrong');
+}
+function checkFill(inputId,correctVal,fbId){
+  const inp=document.getElementById(inputId);
+  const fb=document.getElementById(fbId);
+  const val=parseInt(inp.value.trim(),10);
+  fb.classList.add('show');
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+}
+
+/* ---- Tablo aracı (tab2) ---- */
+function updateTbl(){
+  const n=parseInt(document.getElementById('tblN').value,10);
+  document.getElementById('tblNOut').textContent=n;
+  document.getElementById('tblResult').textContent='12n = '+(n*12)+' TL';
+}
+document.getElementById('tblN').addEventListener('input',updateTbl);
+updateTbl();
+
+/* ---- SVG yardımcı fonksiyonlar ---- */
+const SVGNS='http://www.w3.org/2000/svg';
+function addLine(g,x1,y1,x2,y2,stroke,w){const l=document.createElementNS(SVGNS,'line');l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',w);g.appendChild(l);}
+function addText(g,x,y,txt,fill,size,weight){const t=document.createElementNS(SVGNS,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor','middle');t.setAttribute('font-size',size||11);t.setAttribute('font-weight',weight||700);t.setAttribute('fill',fill);t.textContent=txt;g.appendChild(t);}
+function addCircle(g,cx,cy,r,fill){const c=document.createElementNS(SVGNS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill',fill);c.setAttribute('stroke','#fff');c.setAttribute('stroke-width','1.5');g.appendChild(c);}
+
+/* ---- İlk bölge (Q1) ızgara: x 0-6, y 0-12 (tab3) ---- */
+function drawQ1Grid(g){
+  g.innerHTML='';
+  const ox=40, oy=280, ux=40, uy=20;
+  for(let i=0;i<=6;i++){addLine(g,ox+i*ux,oy,ox+i*ux,20,'#ecd9d9',1);}
+  for(let j=0;j<=12;j+=2){addLine(g,ox,oy-j*uy,300,oy-j*uy,'#ecd9d9',1);}
+  addLine(g,ox,oy,300,oy,'#221515',2);
+  addLine(g,ox,20,ox,oy,'#221515',2);
+  for(let i=0;i<=6;i++){addText(g,ox+i*ux,oy+16,String(i),'#8a6f6f',9);}
+  for(let j=0;j<=12;j+=2){addText(g,ox-14,oy-j*uy+3,String(j),'#8a6f6f',9);}
+  addText(g,310,oy+4,'x','#7a0e0e',12,800);
+  addText(g,ox,14,'y','#7a0e0e',12,800);
+}
+function q1Pixel(x,y){return {px:40+x*40, py:280-y*20};}
+drawQ1Grid(document.getElementById('q1Grid'));
+(function(){
+  const g=document.getElementById('q1Points');
+  const pts=[0,1,2,3,4,5].map(x=>({x:x,y:2*x+1}));
+  let polyPts=[];
+  pts.forEach(pt=>{
+    const p=q1Pixel(pt.x,pt.y);
+    polyPts.push(p.px+','+p.py);
+    addCircle(g,p.px,p.py,5,'#c81e1e');
+    addText(g,p.px,p.py-10,'('+pt.x+','+pt.y+')','#7a0e0e',9,800);
+  });
+  const poly=document.createElementNS(SVGNS,'polyline');
+  poly.setAttribute('points',polyPts.join(' '));
+  poly.setAttribute('fill','none');
+  poly.setAttribute('stroke','#c81e1e');
+  poly.setAttribute('stroke-width','1.5');
+  poly.setAttribute('stroke-dasharray','4,3');
+  g.insertBefore(poly,g.firstChild);
+})();
+
+/* ---- Denklem-tablo aracı (tab4) ---- */
+function updateEq(){
+  const k=parseInt(document.getElementById('eqK').value,10);
+  const b=parseInt(document.getElementById('eqB').value,10);
+  document.getElementById('eqKOut').textContent=k;
+  document.getElementById('eqBOut').textContent=b;
+  const bSign=b===0?'':(b>0?(' + '+b):(' − '+Math.abs(b)));
+  let kPart;
+  if(k===0)kPart='0';
+  else if(k===1)kPart='x';
+  else if(k===-1)kPart='−x';
+  else kPart=k+'x';
+  document.getElementById('eqExpr').textContent='y = '+kPart+bSign;
+  let rowX='<tr><th>x</th>', rowY='<tr><th>y</th>';
+  for(let x=0;x<=5;x++){
+    rowX+='<td>'+x+'</td>';
+    rowY+='<td>'+(k*x+b)+'</td>';
+  }
+  rowX+='</tr>';rowY+='</tr>';
+  document.getElementById('eqTable').innerHTML=rowX+rowY;
+}
+['eqK','eqB'].forEach(id=>document.getElementById(id).addEventListener('input',updateEq));
+updateEq();
+
+/* ---- Kendini Dene quiz ---- */
+const quizData=[
+ {q:"y = 6x ilişkisinde x = 5 için y kaçtır?",
+  choices:["25","30","35","11"],correct:1,
+  expl:"y=6×5=30."},
+ {q:"Bir otobüs biletinin fiyatı, gidilen mesafeye göre değişmektedir. Bu ilişkide bağımlı değişken hangisidir?",
+  choices:["Gidilen mesafe","Bilet fiyatı","Otobüsün hızı","Yolcu sayısı"],correct:1,
+  expl:"Bilet fiyatı, gidilen mesafeye göre belirlendiğinden bağımlı değişkendir."},
+ {q:"x: 1, 2, 3 için y: 5, 8, 11 olduğuna göre denklem hangisidir?",
+  choices:["y = 2x + 3","y = 3x + 2","y = 3x + 5","y = 5x"],correct:1,
+  expl:"x her 1 arttığında y 3 artıyor (katsayı 3); x=1,y=5 için 5=3(1)+b → b=2: y=3x+2."},
+ {q:"y = 4x − 9 ilişkisinde y = 15 ise x kaçtır?",
+  choices:["4","5","6","7"],correct:2,
+  expl:"4x=24 olduğundan x=6."},
+ {q:"Bir su ısıtıcısının başlangıç sıcaklığı 20°C'dir ve her dakika sıcaklık 4°C artmaktadır. 15 dakika sonra sıcaklık kaç derece olur?",
+  choices:["60°C","70°C","80°C","90°C"],correct:2,
+  expl:"y=20+4x; x=15 için y=20+60=80°C."},
+ {q:"Bir tabloda x: 1, 2, 3 için y: 7, 7, 7 ise bu ilişkiyi ifade eden denklem hangisidir?",
+  choices:["y = 7x","y = x + 7","y = 7","y = 7 − x"],correct:2,
+  expl:"y, x'in değerinden etkilenmediği (her zaman 7 olduğu) için denklem y=7'dir (x'in katsayısı 0)."},
+ {q:"Bir yayın doğal uzunluğu 15 cm'dir; her 1 kg ağırlık asıldığında yay 3 cm uzamaktadır. 4 kg asıldığında yayın uzunluğu kaç cm olur?",
+  choices:["18 cm","21 cm","24 cm","27 cm"],correct:3,
+  expl:"y=15+3x; x=4 için y=15+12=27 cm."},
+ {q:"Aşağıdaki ilişkilerden hangisinde x ile y arasında doğrusal bir ilişki YOKTUR?",
+  choices:["y = 2x + 5","y = x² + 1","y = 7x","y = 4x − 3"],correct:1,
+  expl:"y=x²+1 ilişkisinde x'in kuvveti 1 olmadığından (karesi alındığından) bu ilişki doğrusal değildir; diğerleri y=kx+b biçimindedir."}
+];
+let qIndex=0,qScore=0,qAnswered=false;
+function renderDots(){
+  const wrap=document.getElementById('progressDots');wrap.innerHTML='';
+  quizData.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='pdot'+(i<qIndex?' done':i===qIndex?' now':'');
+    wrap.appendChild(d);
+  });
+}
+function renderQuiz(){
+  if(qIndex>=quizData.length){
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    renderDots();return;
+  }
+  qAnswered=false;
+  const item=quizData[qIndex];
+  let html='<div class="q-card"><div class="q-text">'+(qIndex+1)+'. '+item.q+'</div><div class="choices">';
+  item.choices.forEach((c,i)=>{html+='<button class="choice-btn" onclick="answerQuiz('+i+')">'+c+'</button>';});
+  html+='</div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="submit-btn" id="quizNext" style="display:none" onclick="nextQuiz()">Sonraki →</button></div></div>';
+  document.getElementById('quizArea').innerHTML=html;
+  renderDots();
+}
+function answerQuiz(i){
+  if(qAnswered)return;qAnswered=true;
+  const item=quizData[qIndex];
+  const isCorrect=i===item.correct;
+  if(isCorrect)qScore++;
+  document.querySelectorAll('#quizArea .choice-btn').forEach((b,idx)=>{
+    if(idx===item.correct)b.classList.add('correct');
+    else if(idx===i)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('quizFeedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuiz(){qIndex++;renderQuiz();}
+function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
+renderQuiz();
+</script>
+</body></html>
