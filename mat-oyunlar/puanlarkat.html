@@ -379,7 +379,7 @@ function validateAndScorePlacement(bd, stg, firstMove){
     const firstSum = stg.reduce((s,t)=>s+t.value,0);
     if(firstSum%targetMultiple!==0) return {valid:false,msg:'İlk hamledeki taşların toplamı '+katIfadesi(targetMultiple)+' katı olmalı.'};
   } else {
-    if(!stg.some(t=>isAdjacentToFilled(bd,t.r,t.c))) return {valid:false,msg:'En az bir taş, tahtada zaten bulunan bir taşa bitişik olmalı.'};
+    if(!stg.some(t=>isAdjacentToFilled(bd,t.r,t.c))) return {valid:false,msg:'En az bir taş, tahtada zaten bulunan en az bir taşa bitişik olmak zorunda.'};
   }
   const lines = gatherLines(bd, stg);
   for(const line of lines){
@@ -389,23 +389,60 @@ function validateAndScorePlacement(bd, stg, firstMove){
       if(sum%targetMultiple!==0) return {valid:false,msg:'Dizilerinizden biri '+katIfadesi(targetMultiple)+' katına tamamlanmıyor.'};
     }
   }
+
+  const scoredLines = lines.filter(line=>line.cells.length>=2);
   let score=0;
-  let anyScored=false;
-  for(const line of lines){
-    if(line.cells.length<2) continue;
-    anyScored=true;
-    const base=line.cells.reduce((s,x)=>s+x.value,0);
-    let bonus=0, mult=1;
-    for(const cell of line.cells){
-      if(stg.find(t=>t.r===cell.r&&t.c===cell.c)){
-        const b=BONUS[cell.r][cell.c];
-        if(b==='p5') bonus+=targetMultiple; else if(b==='p10') bonus+=targetMultiple*2;
-        else if(b==='x2') mult*=2; else if(b==='x3') mult*=3;
+
+  if(scoredLines.length>0){
+    // Bir bonus karesine bu hamlede ilk kez taş konuluyorsa ve aynı taş hem
+    // yatay hem dikey bir dizi oluşturuyorsa, bonus yalnızca puanı yüksek
+    // olan diziye verilir. Diğer dizi bonusu normal şekilde alır.
+    const linesAtCell = new Map();
+    const bonusOwner = new Map();
+
+    for(const line of scoredLines){
+      for(const cell of line.cells){
+        const key=cell.r+','+cell.c;
+        if(!linesAtCell.has(key)) linesAtCell.set(key,{});
+        linesAtCell.get(key)[line.dir]=line;
       }
     }
-    score += (base+bonus)*mult;
-  }
-  if(!anyScored){
+
+    for(const line of scoredLines){
+      for(const cell of line.cells){
+        if(!stg.some(t=>t.r===cell.r&&t.c===cell.c)) continue;
+        const b=BONUS[cell.r][cell.c];
+        const key=cell.r+','+cell.c;
+        if(!b || bonusOwner.has(key)) continue;
+
+        const atCell=linesAtCell.get(key);
+        const h=atCell && atCell.h;
+        const v=atCell && atCell.v;
+        if(h && v){
+          const hBase=h.cells.reduce((s,x)=>s+x.value,0);
+          const vBase=v.cells.reduce((s,x)=>s+x.value,0);
+          bonusOwner.set(key, hBase >= vBase ? 'h' : 'v');
+        } else {
+          bonusOwner.set(key,line.dir);
+        }
+      }
+    }
+
+    for(const line of scoredLines){
+      const base=line.cells.reduce((s,x)=>s+x.value,0);
+      let bonus=0, mult=1;
+      for(const cell of line.cells){
+        if(!stg.some(t=>t.r===cell.r&&t.c===cell.c)) continue;
+        const b=BONUS[cell.r][cell.c];
+        if(!b || bonusOwner.get(cell.r+','+cell.c)!==line.dir) continue;
+        if(b==='p5') bonus+=targetMultiple;
+        else if(b==='p10') bonus+=targetMultiple*2;
+        else if(b==='x2') mult*=2;
+        else if(b==='x3') mult*=3;
+      }
+      score += (base+bonus)*mult;
+    }
+  } else {
     // İlk hamle, taşların hiçbiri 2+ uzunluklu bir diziye dahil olmuyor (tek başına taş/taşlar).
     // Bu durumda yerleştirilen taşların kendisi "ilk dizi" sayılır ve puanlanır.
     const base = stg.reduce((s,t)=>s+t.value,0);
