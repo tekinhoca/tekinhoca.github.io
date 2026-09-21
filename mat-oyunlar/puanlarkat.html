@@ -51,9 +51,11 @@ button.modal-close:hover{background:rgba(255,255,255,0.06)}
 .cell.bonus-p10{background:#7fa3c4}
 .cell.center-cell{background-image:url('../img/th-ikon2.webp');background-size:cover;background-position:center}
 .cell .bonus-label{font-family:'Baloo 2',cursive;font-weight:800;color:rgba(35,22,8,.5);pointer-events:none;font-size:calc(var(--cell,40px) * 0.26)}
-.tile-box{width:88%;height:88%;background:linear-gradient(150deg,#f3e8cc,#d7c496);border:2px solid #8a6a3a;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;color:#2f2010;font-size:calc(var(--cell,40px) * 0.48);box-shadow:1px 2px 3px rgba(0,0,0,.35)}
+.tile-box{width:88%;height:88%;background:linear-gradient(150deg,#f3e8cc,#d7c496);border:2px solid #8a6a3a;border-radius:5px;display:flex;align-items:center;justify-content:center;position:relative;font-family:'Baloo 2',cursive;font-weight:800;color:#2f2010;font-size:calc(var(--cell,40px) * 0.48);box-shadow:1px 2px 3px rgba(0,0,0,.35)}
 .tile-box.staged{outline:4px solid #f0c040;outline-offset:2px;box-shadow:0 0 18px 3px rgba(240,192,64,.95),0 0 6px rgba(240,192,64,1)}
-.tile-box.pc-last{outline:4px solid #5cc8ff;outline-offset:2px;box-shadow:0 0 18px 3px rgba(92,200,255,.9),0 0 6px rgba(92,200,255,1)}
+.tile-box.pc-last{outline:4px solid #ff5c5c;outline-offset:2px;box-shadow:0 0 14px 2px rgba(255,92,92,.78),0 0 5px rgba(255,92,92,.95)}
+.pc-flight-layer{position:absolute;inset:0;z-index:55;pointer-events:none;overflow:hidden}
+.pc-flight-tile{position:absolute;width:var(--flight-size,36px);height:var(--flight-size,36px);background:linear-gradient(150deg,#f3e8cc,#d7c496);border:2px solid #8a6a3a;border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Baloo 2',cursive;font-weight:800;color:#2f2010;font-size:calc(var(--flight-size,36px) * .48);box-shadow:0 2px 5px rgba(0,0,0,.45),0 0 0 4px rgba(255,92,92,.95),0 0 12px 2px rgba(255,92,92,.8);transform:translate3d(0,0,0);will-change:transform}
 .score-float{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);font-family:'Baloo 2',cursive;font-weight:800;color:#f0c040;-webkit-text-stroke:3px #140d04;paint-order:stroke fill;text-shadow:0 0 10px rgba(240,192,64,1),0 0 24px rgba(240,192,64,.95),0 0 40px rgba(240,192,64,.7);opacity:0;pointer-events:none;z-index:60;font-size:calc(var(--cell,40px) * 0.56);white-space:nowrap;background:rgba(8,14,6,.62);padding:3px 18px;border-radius:14px;box-shadow:0 0 26px 5px rgba(240,192,64,.5)}
 body.layout-mobile .score-float{font-size:calc(var(--cell,40px) * 0.7);bottom:18px;padding:2px 12px}
 body.layout-mobile .score-float.pc{top:18px;bottom:auto}
@@ -230,7 +232,7 @@ body.layout-mobile.orientation-landscape .bottom-actions .a{padding:7px 4px;font
   </div>
   <div class="left-col">
     <div class="status-line" id="statusLine"></div>
-    <div class="board-wrap"><div class="board" id="board"></div><div class="score-float" id="scoreFloat"></div><div class="score-float pc" id="scoreFloatPc"></div></div>
+    <div class="board-wrap"><div class="board" id="board"></div><div class="pc-flight-layer" id="pcFlightLayer"></div><div class="score-float" id="scoreFloat"></div><div class="score-float pc" id="scoreFloatPc"></div></div>
   </div>
   <div class="right-col">
     <div class="logo-box"><img src="../img/katkat.webp" alt="Puanlar Kat Kat logosu" onerror="this.style.display='none'"></div>
@@ -752,29 +754,72 @@ function onPasGec(){
   turn='computer'; setStatus('Bilgisayar düşünüyor…'); renderAll();
   setTimeout(computerTurn, 700);
 }
-function computerTurn(){
+async function animateComputerPlacement(chosen){
+  const layer=document.getElementById('pcFlightLayer');
+  layer.innerHTML='';
+  const wrapRect=document.querySelector('.board-wrap').getBoundingClientRect();
+  const cellSize=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cell'))||40;
+  const tileSize=Math.max(18,cellSize*.88);
+  const startX=Math.max(4,wrapRect.width-tileSize-10);
+  const startY=8;
+  const duration=480;
+  const gap=150;
+  for(let i=0;i<chosen.placement.length;i++){
+    if(gameOver) return false;
+    const t=chosen.placement[i];
+    const cell=boardEl.children[t.r*11+t.c];
+    if(!cell) return false;
+    const cellRect=cell.getBoundingClientRect();
+    const targetX=cellRect.left-wrapRect.left+(cellRect.width-tileSize)/2;
+    const targetY=cellRect.top-wrapRect.top+(cellRect.height-tileSize)/2;
+    const fly=document.createElement('div');
+    fly.className='pc-flight-tile';
+    fly.style.setProperty('--flight-size',tileSize+'px');
+    fly.style.left=startX+'px';
+    fly.style.top=startY+'px';
+    fly.textContent=t.value;
+    layer.appendChild(fly);
+    const dx=targetX-startX;
+    const dy=targetY-startY;
+    const anim=fly.animate([
+      {transform:'translate3d(0,0,0) scale(.88)',opacity:0},
+      {transform:'translate3d('+dx*.18+'px,'+dy*.18+'px,0) scale(1.08)',opacity:1,offset:.18},
+      {transform:'translate3d('+dx+'px,'+dy+'px,0) scale(1)',opacity:1}
+    ],{duration,easing:'cubic-bezier(.22,.72,.18,1)',fill:'forwards'});
+    await anim.finished;
+    fly.remove();
+    board[t.r][t.c]=t.value;
+    const idx=computerRack.indexOf(t.value);
+    if(idx>=0) computerRack.splice(idx,1);
+    lastComputerPlacement.push({r:t.r,c:t.c});
+    renderBoard();
+    if(i<chosen.placement.length-1) await new Promise(resolve=>setTimeout(resolve,gap));
+  }
+  layer.innerHTML='';
+  return true;
+}
+
+async function computerTurn(){
   if(gameOver) return;
   const moves = findValidMoves(board, computerRack, isFirstMove);
   let chosen=null;
   if(moves.length>0){
     chosen = moves[Math.floor(Math.random()*moves.length)];
   }
+  lastComputerPlacement=[];
   if(chosen){
-    for(const t of chosen.placement){
-      board[t.r][t.c]=t.value;
-      const idx=computerRack.indexOf(t.value);
-      computerRack.splice(idx,1);
-    }
+    const placementDone=await animateComputerPlacement(chosen);
+    if(!placementDone || gameOver) return;
     computerScore += chosen.score;
     lastComputerGain = chosen.score;
     const drawn = drawFromBag(chosen.placement.length);
     computerRack.push(...drawn);
     passStreak=0; isFirstMove=false;
-    lastComputerPlacement = chosen.placement.map(t=>({r:t.r,c:t.c}));
     setStatus('PC '+chosen.score+' PUAN KAZANDI!');
   } else {
     passStreak++;
     lastComputerGain = 'PAS';
+    lastComputerPlacement=[];
     setStatus('PC pas geçti.');
   }
   renderAll();
