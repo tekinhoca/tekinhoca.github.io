@@ -74,27 +74,44 @@ function checkMatch(){let correct=0,total=0;for(const id in matchKey){total++;co
 
 /* ---- İnşa Et: kesişen çemberlerden üçgen ---- */
 const NS='http://www.w3.org/2000/svg';
-const TA={x:200,y:220}, TB={x:400,y:220}, TD=200;
+const TD=200;
 function triInit(){
   const svg=$('tri-svg');
   function mk(tag,attrs){const el=document.createElementNS(NS,tag);for(const k in attrs)el.setAttribute(k,attrs[k]);svg.appendChild(el);return el;}
   mk('circle',{id:'tri-c1',fill:'none',stroke:'#4f8db5','stroke-width':3});
   mk('circle',{id:'tri-c2',fill:'none',stroke:'#d97706','stroke-width':3});
   mk('polygon',{id:'tri-poly',fill:'rgba(31,78,121,.12)',stroke:'#102a43','stroke-width':3,points:''});
-  mk('circle',{id:'tri-A',r:5,fill:'#102a43',cx:TA.x,cy:TA.y});
-  mk('circle',{id:'tri-B',r:5,fill:'#102a43',cx:TB.x,cy:TB.y});
+  mk('circle',{id:'tri-A',r:5,fill:'#102a43'});
+  mk('circle',{id:'tri-B',r:5,fill:'#102a43'});
   mk('circle',{id:'tri-C',r:5,fill:'#102a43'});
-  mk('text',{x:TA.x-20,y:TA.y+25,'font-size':17,fill:'#102a43'}).textContent='A';
-  mk('text',{x:TB.x+8,y:TB.y+25,'font-size':17,fill:'#102a43'}).textContent='B';
+  mk('text',{id:'tri-At','font-size':17,fill:'#102a43'}).textContent='A';
+  mk('text',{id:'tri-Bt','font-size':17,fill:'#102a43'}).textContent='B';
   mk('text',{id:'tri-Ct',x:0,y:0,'font-size':17,fill:'#102a43'}).textContent='C';
+}
+function triLayout(r1,r2){
+  const viewW=600, viewH=340, margin=30;
+  const span=r1+TD+r2;
+  const drawScale=Math.min((viewW-2*margin)/span, (viewH/2-margin)/Math.max(r1,r2,TD/2,1));
+  const spanPx=span*drawScale;
+  const startX=margin+((viewW-2*margin)-spanPx)/2;
+  const baseY=viewH/2+10;
+  const A={x:startX+r1*drawScale,y:baseY};
+  const B={x:A.x+TD*drawScale,y:baseY};
+  return {A,B,drawScale};
 }
 function triUpdate(){
   const r1=parseFloat($('r1').value), r2=parseFloat($('r2').value);
   $('r1out').textContent=r1; $('r2out').textContent=r2;
-  $('tri-c1').setAttribute('cx',TA.x); $('tri-c1').setAttribute('cy',TA.y); $('tri-c1').setAttribute('r',r1);
-  $('tri-c2').setAttribute('cx',TB.x); $('tri-c2').setAttribute('cy',TB.y); $('tri-c2').setAttribute('r',r2);
-  const a=(TD*TD-r2*r2+r1*r1)/(2*TD);
-  const h2=r1*r1-a*a;
+  const {A,B,drawScale:s}=triLayout(r1,r2);
+  const R1=r1*s, R2=r2*s, D=TD*s;
+  $('tri-c1').setAttribute('cx',A.x); $('tri-c1').setAttribute('cy',A.y); $('tri-c1').setAttribute('r',R1);
+  $('tri-c2').setAttribute('cx',B.x); $('tri-c2').setAttribute('cy',B.y); $('tri-c2').setAttribute('r',R2);
+  $('tri-A').setAttribute('cx',A.x); $('tri-A').setAttribute('cy',A.y);
+  $('tri-B').setAttribute('cx',B.x); $('tri-B').setAttribute('cy',B.y);
+  $('tri-At').setAttribute('x',A.x-20); $('tri-At').setAttribute('y',A.y+25);
+  $('tri-Bt').setAttribute('x',B.x+8); $('tri-Bt').setAttribute('y',B.y+25);
+  const a=(D*D-R2*R2+R1*R1)/(2*D);
+  const h2=R1*R1-a*a;
   const triangleInequalityViolation=(r1+r2<=TD)||(Math.abs(r1-r2)>=TD);
   if(h2<0 || triangleInequalityViolation){
     $('tri-poly').setAttribute('points','');
@@ -112,8 +129,8 @@ function triUpdate(){
   }
   $('triWarning').style.display='none';
   const h=Math.sqrt(h2);
-  const C={x:TA.x+a,y:TA.y-h};
-  $('tri-poly').setAttribute('points',TA.x+','+TA.y+' '+TB.x+','+TB.y+' '+C.x.toFixed(1)+','+C.y.toFixed(1));
+  const C={x:A.x+a,y:A.y-h};
+  $('tri-poly').setAttribute('points',A.x+','+A.y+' '+B.x+','+B.y+' '+C.x.toFixed(1)+','+C.y.toFixed(1));
   $('tri-C').setAttribute('cx',C.x.toFixed(1)); $('tri-C').setAttribute('cy',C.y.toFixed(1)); $('tri-C').setAttribute('r',5);
   $('tri-Ct').setAttribute('x',(C.x+6).toFixed(1)); $('tri-Ct').setAttribute('y',(C.y-8).toFixed(1)); $('tri-Ct').textContent='C';
   const AB=TD, AC=r1, BC=r2, tol=2;
