@@ -1,0 +1,504 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>8. Sınıf Matematik — M.8.2.2.6 Doğrunun Eğimi</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--primary:#7a0e0e;--primary2:#4a0808;--primary-light:#fbeaea;--accent:#c81e1e;--success:#059669;--success-light:#eafaf3;--danger:#b91c1c;--warning:#d97706;--warning-light:#fff7e6;--text:#221515;--muted:#8a6f6f;--border:#ecd9d9;--bg:#faf6f6;--dark:#050505;--shadow:0 4px 18px rgba(122,14,14,.10)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#3a0000 66%,#8b0000 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(60,0,0,.4)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#c81e1e;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#7a0e0e;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,140,140,.3);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#ffd9d9;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(245,180,180,.2);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(255,238,238,.8);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#2c0505);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(60,0,0,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.6rem,2vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(80,10,10,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#f6f0f0;border-left:4px solid #a08080}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fdfafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#faf7f7;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #e6cccc;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#fdf5f5);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.svg-wrap{display:flex;justify-content:center;align-items:center;margin:14px auto;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;max-width:780px}.svg-wrap svg{width:min(100%,740px);height:auto;display:block}.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#1a0808;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#ffd9d9}.badge-mini{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:99px;padding:4px 12px;font-size:.8rem;font-weight:900;margin:3px}
+footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.slider-wrap{margin:18px 0}.slider-wrap input[type=range]{width:100%;accent-color:var(--primary)}.slider-label{display:flex;justify-content:space-between;font-weight:800;color:var(--primary);font-size:.92rem;margin-bottom:6px}
+.progress-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.pdot{width:10px;height:10px;border-radius:50%;background:var(--border)}.pdot.done{background:var(--success)}.pdot.now{background:var(--primary)}
+.step-list{counter-reset:step;margin:12px 0}.step-list li{list-style:none;counter-increment:step;position:relative;padding:8px 8px 8px 40px;margin:6px 0;font-size:.92rem;background:#fdfafa;border:1.5px solid var(--border);border-radius:12px}.step-list li:before{content:counter(step);position:absolute;left:8px;top:8px;background:var(--primary);color:#fff;font-weight:800;font-size:.78rem;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.result-strip{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:150px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;text-align:center}.result-pill .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.25rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:1.8em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;word-break:break-word}
+.chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
+.ghost-btn:disabled,.submit-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+.type-badge{display:inline-block;font-family:'Baloo 2';font-weight:800;font-size:1rem;border-radius:12px;padding:6px 14px;margin-top:6px}
+.type-pos{background:rgba(5,150,105,.12);color:#047857}.type-neg{background:rgba(220,38,38,.1);color:#b91c1c}.type-zero{background:#eef0f6;color:#3b4a6b}.type-undef{background:var(--warning-light);color:#b45309}
+</style></head><body>
+<header><div class="badge">8. SINIF MATEMATİK · M.8.2.2.6</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Doğrunun Eğimi</h1><p>Eğimin işaretini ve büyüklüğünü modellerle açıklar, doğrusal denklemleri ve grafiklerini eğimle ilişkilendirir.</p></header>
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="tab0">GİRİŞ</button>
+<button class="tab-btn" data-tab="tab1">EĞİM NEDİR?</button>
+<button class="tab-btn" data-tab="tab2">EĞİMİN İŞARETİ</button>
+<button class="tab-btn" data-tab="tab3">İKİ NOKTADAN EĞİM</button>
+<button class="tab-btn" data-tab="tab4">GÜNLÜK HAYAT MODELLERİ</button>
+<button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
+<button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
+<button class="tab-btn" data-tab="tab7">ÖZET</button>
+<button class="tab-btn" data-tab="tab8">KENDİNİ DENE</button>
+</nav>
+<main class="container">
+
+<section class="tab-panel active" id="tab0">
+<div class="card"><div class="card-title"><div class="icon">📐</div>Eğim Kavramına Giriş</div>
+<div class="def-box"><b>Eğim</b>, bir doğrunun ne kadar dik olduğunu ve hangi yönde ilerlediğini gösteren sayıdır. Bir doğru üzerinde iki nokta arasındaki <b>dikey uzunluğun</b> (yükseklik değişimi), <b>yatay uzunluğa</b> (yatay değişim) oranı olarak tanımlanır ve genellikle <b>m</b> harfiyle gösterilir.</div>
+<div class="gen-box" style="text-align:center;font-size:1.1rem">eğim = m = dikey uzunluk ÷ yatay uzunluk</div>
+<p class="body-text">Merdiven basamaklarının dikliği, bir rampanın eğimi, bir yolun yokuş açısı ya da bir çatının meyli — bunların hepsi günlük hayatta karşılaştığımız eğim örnekleridir. Bu sayfada eğimi hem soyut bir doğru üzerinde hem de günlük hayattan modellerle inceleyeceğiz.</p>
+<div class="three-col">
+<div class="info-tile"><h4>Dikey Uzunluk</h4><p class="body-text" style="font-size:.86rem;margin:0">Yukarı–aşağı yöndeki değişim (Δy)</p></div>
+<div class="info-tile"><h4>Yatay Uzunluk</h4><p class="body-text" style="font-size:.86rem;margin:0">Sağa–sola yöndeki değişim (Δx)</p></div>
+<div class="info-tile"><h4>Eğim (m)</h4><p class="body-text" style="font-size:.86rem;margin:0">Dikey uzunluğun yatay uzunluğa oranı</p></div>
+</div>
+<div class="tip-box">Eğimin <b>işareti</b> doğrunun yönünü (yükselen mi, alçalan mı), <b>büyüklüğü (mutlak değeri)</b> ise doğrunun ne kadar dik olduğunu gösterir. Sayfadaki kaydırma çubuklarıyla bu ilişkiyi canlı olarak gözlemleyebilirsiniz.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab1">
+<div class="card"><div class="card-title"><div class="icon">🔄</div>Doğruyu Döndür, Eğimi Gözlemle</div>
+<p class="body-text">Aşağıdaki kaydırma çubuğunu hareket ettirerek A noktasından geçen doğru parçasını döndürün. Doğru döndükçe dikey uzunluk, yatay uzunluk ve eğim değerinin nasıl değiştiğini gözlemleyin.</p>
+<div class="slider-wrap"><div class="slider-label"><span>Doğrunun açısı</span><span id="slpAngleOut">40°</span></div><input type="range" id="slpAngle" min="0" max="179" step="1" value="40"></div>
+<div class="svg-wrap" style="max-width:380px"><svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Döndürülebilir doğru parçası ile eğim modeli">
+<g id="slpGrid"></g>
+<line id="slpAxisX" x1="20" y1="270" x2="320" y2="270" stroke="#e6cccc" stroke-width="1.5"/>
+<line id="slpAxisY" x1="70" y1="20" x2="70" y2="320" stroke="#e6cccc" stroke-width="1.5"/>
+<line id="slpFull" x1="0" y1="0" x2="0" y2="0" stroke="#f0d5d5" stroke-width="2"/>
+<line id="slpRun" x1="0" y1="0" x2="0" y2="0" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4"/>
+<line id="slpRiseLine" x1="0" y1="0" x2="0" y2="0" stroke="#059669" stroke-width="2" stroke-dasharray="5 4"/>
+<line id="slpSeg" x1="0" y1="0" x2="0" y2="0" stroke="#7a0e0e" stroke-width="4" stroke-linecap="round"/>
+<circle id="slpA" r="6" fill="#221515"/>
+<circle id="slpB" r="6" fill="#7a0e0e"/>
+<text id="slpALabel" font-size="13" font-weight="800" fill="#221515">A</text>
+<text id="slpBLabel" font-size="13" font-weight="800" fill="#7a0e0e">B</text>
+</svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Dikey Uzunluk</div><div class="val" id="slpRiseVal" style="font-size:1rem">—</div></div>
+<div class="result-pill"><div class="lbl">Yatay Uzunluk</div><div class="val" id="slpRunVal" style="font-size:1rem">—</div></div>
+<div class="result-pill"><div class="lbl">Eğim (m)</div><div class="val" id="slpSlopeVal" style="font-size:1rem">—</div></div>
+</div>
+<div style="text-align:center"><span class="type-badge" id="slpTypeBadge">—</span></div>
+<div class="note-box" style="margin-top:14px">Doğru tam dikey konuma geldiğinde (açı 90°) yatay uzunluk 0 olur; bir sayı 0'a bölünemeyeceği için bu doğrunun eğimi <b>tanımsızdır</b>.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab2">
+<div class="card"><div class="card-title"><div class="icon">🎚️</div>Eğimin İşareti ve Anlamı</div>
+<p class="body-text">Bir doğrunun eğiminin işareti, soldan sağa doğru bakıldığında doğrunun nasıl ilerlediğini anlatır. Aşağıdaki dört durumu karşılaştırın.</p>
+<div class="four-col">
+<div class="info-tile" style="text-align:center">
+<svg viewBox="0 0 100 100" width="100%" height="90"><line x1="15" y1="85" x2="85" y2="15" stroke="#059669" stroke-width="4"/><circle cx="15" cy="85" r="4" fill="#059669"/><circle cx="85" cy="15" r="4" fill="#059669"/></svg>
+<h4 style="font-size:.85rem">Artan Doğru</h4><p class="body-text" style="font-size:.78rem;margin:0">Eğim <b>pozitif</b> (m &gt; 0)</p></div>
+<div class="info-tile" style="text-align:center">
+<svg viewBox="0 0 100 100" width="100%" height="90"><line x1="15" y1="15" x2="85" y2="85" stroke="#b91c1c" stroke-width="4"/><circle cx="15" cy="15" r="4" fill="#b91c1c"/><circle cx="85" cy="85" r="4" fill="#b91c1c"/></svg>
+<h4 style="font-size:.85rem">Azalan Doğru</h4><p class="body-text" style="font-size:.78rem;margin:0">Eğim <b>negatif</b> (m &lt; 0)</p></div>
+<div class="info-tile" style="text-align:center">
+<svg viewBox="0 0 100 100" width="100%" height="90"><line x1="10" y1="50" x2="90" y2="50" stroke="#3b4a6b" stroke-width="4"/><circle cx="10" cy="50" r="4" fill="#3b4a6b"/><circle cx="90" cy="50" r="4" fill="#3b4a6b"/></svg>
+<h4 style="font-size:.85rem">Yatay Doğru</h4><p class="body-text" style="font-size:.78rem;margin:0">Eğim <b>sıfır</b> (m = 0)</p></div>
+<div class="info-tile" style="text-align:center">
+<svg viewBox="0 0 100 100" width="100%" height="90"><line x1="50" y1="10" x2="50" y2="90" stroke="#b45309" stroke-width="4"/><circle cx="50" cy="10" r="4" fill="#b45309"/><circle cx="50" cy="90" r="4" fill="#b45309"/></svg>
+<h4 style="font-size:.85rem">Dikey Doğru</h4><p class="body-text" style="font-size:.78rem;margin:0">Eğim <b>tanımsız</b></p></div>
+</div>
+<div class="def-box" style="margin-top:16px"><b>Büyüklük (mutlak değer)</b> ise dikliği gösterir: |m| büyüdükçe doğru dikleşir, |m| küçüldükçe doğru yatıklaşır. Örneğin eğimi 3 olan bir doğru, eğimi 1/2 olan bir doğrudan daha diktir.</div>
+<div class="two-col">
+<div class="info-tile"><h4>m = 3</h4><svg viewBox="0 0 100 60" width="100%" height="55"><line x1="20" y1="55" x2="60" y2="5" stroke="#7a0e0e" stroke-width="4"/></svg><p class="body-text" style="font-size:.8rem;margin:0">Dik bir doğru — küçük bir yatay adımda büyük yükseliş</p></div>
+<div class="info-tile"><h4>m = 1/3</h4><svg viewBox="0 0 100 60" width="100%" height="55"><line x1="10" y1="50" x2="90" y2="25" stroke="#7a0e0e" stroke-width="4"/></svg><p class="body-text" style="font-size:.8rem;margin:0">Yatık bir doğru — büyük bir yatay adımda küçük yükseliş</p></div>
+</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab3">
+<div class="card"><div class="card-title"><div class="icon">📍</div>İki Noktadan Eğim Hesabı</div>
+<p class="body-text">Bir doğru üzerindeki A(x₁, y₁) ve B(x₂, y₂) noktalarının koordinatları biliniyorsa eğim şu formülle hesaplanır:</p>
+<div class="gen-box" style="text-align:center;font-size:1.1rem">m = (y₂ − y₁) ÷ (x₂ − x₁)</div>
+<p class="body-text">Aşağıdaki kaydırma çubuklarıyla A ve B noktalarının koordinatlarını değiştirin; doğrunun ve eğimin nasıl değiştiğini izleyin.</p>
+<div class="two-col">
+<div>
+<div class="slider-wrap"><div class="slider-label"><span>A noktası — x₁</span><span id="tpX1Out">1</span></div><input type="range" id="tpX1" min="0" max="8" step="1" value="1"></div>
+<div class="slider-wrap"><div class="slider-label"><span>A noktası — y₁</span><span id="tpY1Out">1</span></div><input type="range" id="tpY1" min="0" max="8" step="1" value="1"></div>
+</div>
+<div>
+<div class="slider-wrap"><div class="slider-label"><span>B noktası — x₂</span><span id="tpX2Out">6</span></div><input type="range" id="tpX2" min="0" max="8" step="1" value="6"></div>
+<div class="slider-wrap"><div class="slider-label"><span>B noktası — y₂</span><span id="tpY2Out">4</span></div><input type="range" id="tpY2" min="0" max="8" step="1" value="4"></div>
+</div>
+</div>
+<div class="svg-wrap" style="max-width:380px"><svg viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="İki noktadan geçen doğru ile eğim modeli">
+<g id="tpGrid"></g>
+<line id="tpAxisX" x1="20" y1="300" x2="320" y2="300" stroke="#e6cccc" stroke-width="1.5"/>
+<line id="tpAxisY" x1="20" y1="20" x2="20" y2="320" stroke="#e6cccc" stroke-width="1.5"/>
+<line id="tpFull" x1="0" y1="0" x2="0" y2="0" stroke="#f0d5d5" stroke-width="2"/>
+<line id="tpDxLine" x1="0" y1="0" x2="0" y2="0" stroke="#d97706" stroke-width="2" stroke-dasharray="5 4"/>
+<line id="tpDyLine" x1="0" y1="0" x2="0" y2="0" stroke="#059669" stroke-width="2" stroke-dasharray="5 4"/>
+<line id="tpSeg" x1="0" y1="0" x2="0" y2="0" stroke="#7a0e0e" stroke-width="4" stroke-linecap="round"/>
+<circle id="tpA" r="6" fill="#221515"/>
+<circle id="tpB" r="6" fill="#7a0e0e"/>
+<text id="tpALabel" font-size="13" font-weight="800" fill="#221515">A</text>
+<text id="tpBLabel" font-size="13" font-weight="800" fill="#7a0e0e">B</text>
+</svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Δy = y₂ − y₁</div><div class="val" id="tpDyVal" style="font-size:1rem">—</div></div>
+<div class="result-pill"><div class="lbl">Δx = x₂ − x₁</div><div class="val" id="tpDxVal" style="font-size:1rem">—</div></div>
+<div class="result-pill"><div class="lbl">Eğim (m)</div><div class="val" id="tpSlopeVal" style="font-size:1rem">—</div></div>
+</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab4">
+<div class="card"><div class="card-title"><div class="icon">🛑</div>Günlük Hayattan Eğim Modelleri</div>
+<div class="note-box">Günlük hayatla ilişkili modellemelerde eğim, dikey uzunluğun yatay uzunluğa oranı olarak ele alınır; bu bölümde <b>işaret üzerinde durulmaz</b>, yalnızca oran ve büyüklük incelenir.</div>
+<p class="body-text">Engelli erişimi için yapılan bir rampanın güvenli kabul edilebilmesi için eğiminin genellikle <b>1/12</b> değerini aşmaması önerilir; yani her 1 birim yükseklik için en az 12 birim yatay uzunluk bırakılır. Aşağıdaki kaydırıcılarla rampanın yüksekliğini ve yatay uzunluğunu değiştirip eğim oranının nasıl değiştiğini gözlemleyin.</p>
+<div class="slider-wrap"><div class="slider-label"><span>Rampanın yüksekliği (dikey)</span><span id="rampHOut">1</span> birim</div><input type="range" id="rampH" min="1" max="6" step="1" value="1"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Rampanın uzunluğu (yatay)</span><span id="rampWOut">12</span> birim</div><input type="range" id="rampW" min="4" max="18" step="1" value="12"></div>
+<div class="svg-wrap" style="max-width:520px"><svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg" id="rampSvg" role="img" aria-label="Erişim rampası eğim modeli">
+<line x1="30" y1="170" x2="370" y2="170" stroke="#8a6f6f" stroke-width="3"/>
+<polygon id="rampTri" points="30,170 370,170 370,170" fill="#7a0e0e" opacity=".85"/>
+<line id="rampVert" x1="370" y1="170" x2="370" y2="170" stroke="#059669" stroke-width="3" stroke-dasharray="5 4"/>
+<text id="rampVertLabel" x="385" y="140" font-size="12" font-weight="800" fill="#059669"></text>
+<text x="200" y="188" text-anchor="middle" font-size="12" font-weight="800" fill="#d97706">yatay uzunluk</text>
+</svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Eğim Oranı</div><div class="val" id="rampRatioVal" style="font-size:1rem">—</div></div>
+<div class="result-pill"><div class="lbl">Ondalık Değer</div><div class="val" id="rampDecVal" style="font-size:1rem">—</div></div>
+<div class="result-pill"><div class="lbl">Erişilebilirlik</div><div class="val" id="rampSafeVal" style="font-size:.9rem">—</div></div>
+</div>
+<div class="tip-box">Bir çatının meyli, bir kayak pistinin dikliği ya da bir yolun "%8 eğimlidir" şeklindeki tabelası da aynı mantıkla, yalnızca dikey/yatay oranı üzerinden ifade edilir.</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab5">
+<div class="card"><div class="card-title"><div class="icon">✏️</div>Çözümlü Örnekler</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 1</div><div class="ex-q">A(2, 1) ve B(6, 9) noktalarından geçen doğrunun eğimini bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Formülde x₁=2, y₁=1, x₂=6, y₂=9 yazılır: m = (y₂−y₁)/(x₂−x₁)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>m = (9−1)/(6−2) = 8/4</div></div>
+<div class="ex-result">Sonuç: m = 2 (pozitif eğim, artan doğru)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 2</div><div class="ex-q">A(−1, 5) ve B(3, −3) noktalarından geçen doğrunun eğimini bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>m = (y₂−y₁)/(x₂−x₁) = (−3−5)/(3−(−1))</div></div>
+<div class="ex-step"><div class="snum">2</div><div>m = −8/4</div></div>
+<div class="ex-result">Sonuç: m = −2 (negatif eğim, azalan doğru)</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 3</div><div class="ex-q">Bir merdivenin her basamağı 18 cm yükseklikte ve 27 cm derinliğindedir. Bu merdivenin eğimini (oran olarak) bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Günlük hayat modeli olduğundan yalnızca oran incelenir: eğim = dikey/yatay = 18/27</div></div>
+<div class="ex-step"><div class="snum">2</div><div>18/27 kesri sadeleştirilir: 18/27 = 2/3</div></div>
+<div class="ex-result">Sonuç: Merdivenin eğimi 2/3 ≈ 0,67'dir.</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 4</div><div class="ex-q">x ekseni ile çakışık olan bir doğrunun eğimi nedir? y ekseni ile çakışık olan bir doğrunun eğimi nedir?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>x ekseni tamamen yataydır; herhangi iki noktası arasında dikey uzunluk (Δy) her zaman 0'dır.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>y ekseni tamamen dikeydir; herhangi iki noktası arasında yatay uzunluk (Δx) her zaman 0'dır.</div></div>
+<div class="ex-result">Sonuç: x ekseninin eğimi 0'dır; y ekseninin eğimi tanımsızdır.</div>
+</div>
+</div></div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab6">
+<div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
+
+<div class="q-card" data-okmsg="Doğru! m = (7−3)/(5−1) = 4/4 = 1'dir." data-nomsg="Tekrar düşünelim: m = (y₂−y₁)/(x₂−x₁) formülünü kullanın.">
+<div class="q-text">A(1, 3) ve B(5, 7) noktalarından geçen doğrunun eğimi kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">1</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">4</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">−1</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">1/4</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! Eğimi negatif olan doğrular soldan sağa doğru alçalır." data-nomsg="Tekrar düşünelim: eğimin işareti doğrunun yönünü belirler.">
+<div class="q-text">Eğimi negatif olan bir doğru için aşağıdakilerden hangisi doğrudur?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Doğru yataydır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Doğru dikeydir</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Doğru soldan sağa alçalır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Doğru soldan sağa yükselir</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! Yatay uzunluk (Δx) sıfır olduğunda eğim tanımsızdır; bu doğru dikeydir." data-nomsg="Tekrar düşünelim: hangi durumda bir sayı sıfıra bölünmüş olur?">
+<div class="q-text">A(4, 2) ve B(4, 9) noktalarından geçen doğrunun eğimi için ne söylenebilir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Eğim tanımsızdır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Eğim sıfırdır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Eğim 7'dir</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Eğim −7'dir</button>
+</div><div class="feedback"></div></div>
+
+<div class="field-row"><span class="body-text" style="margin:0">Bir çatının yüksekliği 4 m, yatay uzunluğu 8 m ise çatının eğim oranı (sadeleştirilmiş, x/y biçiminde payı):</span><input type="text" class="answer-input" id="fillE1" placeholder="pay"><button class="submit-btn" onclick="checkFill('fillE1',1,'fbE1')">Kontrol Et</button></div>
+<div class="feedback" id="fbE1"></div>
+
+<div class="field-row"><span class="body-text" style="margin:0">A(0, −2) ve B(3, 4) noktalarından geçen doğrunun eğimi:</span><input type="text" class="answer-input" id="fillE2" placeholder="?"><button class="submit-btn" onclick="checkFill('fillE2',2,'fbE2')">Kontrol Et</button></div>
+<div class="feedback" id="fbE2"></div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab7">
+<div class="card"><div class="card-title"><div class="icon">📌</div>Özet</div>
+<ul class="step-list">
+<li>Eğim (m), bir doğru üzerindeki dikey uzunluğun yatay uzunluğa oranıdır: m = dikey uzunluk ÷ yatay uzunluk.</li>
+<li>İki nokta biliniyorsa eğim m = (y₂−y₁)/(x₂−x₁) formülüyle hesaplanır (x₁ ≠ x₂ olmalıdır).</li>
+<li>Eğimin <b>işareti</b> doğrunun yönünü belirler: pozitifse doğru artar, negatifse doğru azalır.</li>
+<li>Eğim sıfırsa doğru yataydır; yatay uzunluk sıfırsa (dikey doğru) eğim tanımsızdır.</li>
+<li>Eğimin <b>büyüklüğü (mutlak değeri)</b> dikliği gösterir: büyüdükçe doğru dikleşir.</li>
+<li>Günlük hayattan modellerde (rampa, merdiven, çatı, yol eğimi) eğim yalnızca oran/büyüklük olarak ele alınır; işaret üzerinde durulmaz.</li>
+</ul>
+</div>
+</section>
+
+<section class="tab-panel" id="tab8">
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Kendini Dene</div>
+<div class="progress-dots" id="progressDots"></div>
+<div id="quizArea"></div>
+</div>
+</section>
+
+</main>
+<button class="basa-don" id="basaDon" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Başa Dön</button>
+<footer><div class="foot-title">Tekin Hoca — 8. Sınıf Matematik</div><div>M.8.2.2.6 Doğrunun Eğimi</div></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+window.addEventListener('scroll',()=>{
+  document.getElementById('basaDon').classList.toggle('gorunsun',window.scrollY>400);
+});
+function checkChoice(btn,isCorrect){
+  const card=btn.closest('.q-card');
+  if(card.dataset.answered)return;
+  card.dataset.answered='1';
+  card.querySelectorAll('.choice-btn').forEach(b=>{
+    if(b.dataset.correct==='1')b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  const fb=card.querySelector('.feedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
+}
+function checkFill(inputId,correctVal,fbId){
+  const inp=document.getElementById(inputId);
+  const fb=document.getElementById(fbId);
+  const raw=inp.value.trim().replace(',','.');
+  const val=parseFloat(raw);
+  fb.classList.add('show');
+  if(Math.abs(val-correctVal)<0.001){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+}
+const SVGNS='http://www.w3.org/2000/svg';
+function drawGrid(parentId,ox,oy,cols,rows,unit){
+  const g=document.getElementById(parentId); g.innerHTML='';
+  for(let i=0;i<=cols;i++){
+    const ln=document.createElementNS(SVGNS,'line');
+    ln.setAttribute('x1',ox+i*unit);ln.setAttribute('y1',oy);
+    ln.setAttribute('x2',ox+i*unit);ln.setAttribute('y2',oy+rows*unit);
+    ln.setAttribute('stroke','#f3e6e6');ln.setAttribute('stroke-width','1');
+    g.appendChild(ln);
+  }
+  for(let j=0;j<=rows;j++){
+    const ln=document.createElementNS(SVGNS,'line');
+    ln.setAttribute('x1',ox);ln.setAttribute('y1',oy+j*unit);
+    ln.setAttribute('x2',ox+cols*unit);ln.setAttribute('y2',oy+j*unit);
+    ln.setAttribute('stroke','#f3e6e6');ln.setAttribute('stroke-width','1');
+    g.appendChild(ln);
+  }
+}
+
+/* ---- tab1: döndürülebilir doğru parçası ---- */
+const slpAx=70, slpAy=270, slpR=110;
+drawGrid('slpGrid',20,20,15,12.5,20);
+function updateSlope(){
+  const deg=parseInt(document.getElementById('slpAngle').value,10);
+  document.getElementById('slpAngleOut').textContent=deg+'°';
+  const rad=deg*Math.PI/180;
+  const bx=slpAx+slpR*Math.cos(rad);
+  const by=slpAy-slpR*Math.sin(rad);
+  const dx=Math.cos(rad), dy=-Math.sin(rad);
+  document.getElementById('slpFull').setAttribute('x1',slpAx-dx*400);
+  document.getElementById('slpFull').setAttribute('y1',slpAy-dy*400);
+  document.getElementById('slpFull').setAttribute('x2',slpAx+dx*400);
+  document.getElementById('slpFull').setAttribute('y2',slpAy+dy*400);
+  document.getElementById('slpSeg').setAttribute('x1',slpAx);
+  document.getElementById('slpSeg').setAttribute('y1',slpAy);
+  document.getElementById('slpSeg').setAttribute('x2',bx);
+  document.getElementById('slpSeg').setAttribute('y2',by);
+  document.getElementById('slpRun').setAttribute('x1',slpAx);
+  document.getElementById('slpRun').setAttribute('y1',slpAy);
+  document.getElementById('slpRun').setAttribute('x2',bx);
+  document.getElementById('slpRun').setAttribute('y2',slpAy);
+  document.getElementById('slpRiseLine').setAttribute('x1',bx);
+  document.getElementById('slpRiseLine').setAttribute('y1',slpAy);
+  document.getElementById('slpRiseLine').setAttribute('x2',bx);
+  document.getElementById('slpRiseLine').setAttribute('y2',by);
+  document.getElementById('slpA').setAttribute('cx',slpAx);document.getElementById('slpA').setAttribute('cy',slpAy);
+  document.getElementById('slpB').setAttribute('cx',bx);document.getElementById('slpB').setAttribute('cy',by);
+  document.getElementById('slpALabel').setAttribute('x',slpAx-16);document.getElementById('slpALabel').setAttribute('y',slpAy+16);
+  document.getElementById('slpBLabel').setAttribute('x',bx+(dx>=0?10:-20));document.getElementById('slpBLabel').setAttribute('y',by+(dy<0?-8:18));
+  const rise=(slpAy-by)/20, run=(bx-slpAx)/20;
+  const riseTxt=(Math.round(rise*100)/100).toString();
+  const runTxt=(Math.round(run*100)/100).toString();
+  document.getElementById('slpRiseVal').textContent=riseTxt+' birim';
+  document.getElementById('slpRunVal').textContent=runTxt+' birim';
+  const badge=document.getElementById('slpTypeBadge');
+  if(Math.abs(run)<0.04){
+    document.getElementById('slpSlopeVal').textContent='Tanımsız';
+    badge.textContent='Dikey doğru — eğim tanımsız';
+    badge.className='type-badge type-undef';
+  } else {
+    const m=rise/run;
+    const mTxt=(Math.round(m*100)/100).toString();
+    document.getElementById('slpSlopeVal').textContent='m = '+mTxt;
+    if(Math.abs(m)<0.04){badge.textContent='Yatay doğru — eğim sıfır';badge.className='type-badge type-zero';}
+    else if(m>0){badge.textContent='Artan doğru — eğim pozitif';badge.className='type-badge type-pos';}
+    else {badge.textContent='Azalan doğru — eğim negatif';badge.className='type-badge type-neg';}
+  }
+}
+document.getElementById('slpAngle').addEventListener('input',updateSlope);
+updateSlope();
+
+/* ---- tab3: iki noktadan eğim ---- */
+const tpOx=20, tpOy=300, tpUnit=32;
+drawGrid('tpGrid',tpOx,20,9,8.75,tpUnit);
+function toPx(x,y){return [tpOx+x*tpUnit, tpOy-y*tpUnit];}
+function updateTwoPoint(){
+  const x1=parseInt(document.getElementById('tpX1').value,10);
+  const y1=parseInt(document.getElementById('tpY1').value,10);
+  const x2=parseInt(document.getElementById('tpX2').value,10);
+  const y2=parseInt(document.getElementById('tpY2').value,10);
+  document.getElementById('tpX1Out').textContent=x1;
+  document.getElementById('tpY1Out').textContent=y1;
+  document.getElementById('tpX2Out').textContent=x2;
+  document.getElementById('tpY2Out').textContent=y2;
+  const [ax,ay]=toPx(x1,y1), [bx,by]=toPx(x2,y2);
+  let dx=bx-ax, dy=by-ay, len=Math.hypot(dx,dy)||1;
+  const ux=dx/len, uy=dy/len;
+  document.getElementById('tpFull').setAttribute('x1',ax-ux*500);
+  document.getElementById('tpFull').setAttribute('y1',ay-uy*500);
+  document.getElementById('tpFull').setAttribute('x2',ax+ux*500);
+  document.getElementById('tpFull').setAttribute('y2',ay+uy*500);
+  document.getElementById('tpSeg').setAttribute('x1',ax);document.getElementById('tpSeg').setAttribute('y1',ay);
+  document.getElementById('tpSeg').setAttribute('x2',bx);document.getElementById('tpSeg').setAttribute('y2',by);
+  document.getElementById('tpDxLine').setAttribute('x1',ax);document.getElementById('tpDxLine').setAttribute('y1',ay);
+  document.getElementById('tpDxLine').setAttribute('x2',bx);document.getElementById('tpDxLine').setAttribute('y2',ay);
+  document.getElementById('tpDyLine').setAttribute('x1',bx);document.getElementById('tpDyLine').setAttribute('y1',ay);
+  document.getElementById('tpDyLine').setAttribute('x2',bx);document.getElementById('tpDyLine').setAttribute('y2',by);
+  document.getElementById('tpA').setAttribute('cx',ax);document.getElementById('tpA').setAttribute('cy',ay);
+  document.getElementById('tpB').setAttribute('cx',bx);document.getElementById('tpB').setAttribute('cy',by);
+  document.getElementById('tpALabel').setAttribute('x',ax-16);document.getElementById('tpALabel').setAttribute('y',ay+16);
+  document.getElementById('tpBLabel').setAttribute('x',bx+8);document.getElementById('tpBLabel').setAttribute('y',by-10);
+  const rdx=x2-x1, rdy=y2-y1;
+  document.getElementById('tpDxVal').textContent=rdx;
+  document.getElementById('tpDyVal').textContent=rdy;
+  document.getElementById('tpSlopeVal').textContent= rdx===0 ? 'Tanımsız' : 'm = '+(Math.round((rdy/rdx)*100)/100);
+}
+['tpX1','tpY1','tpX2','tpY2'].forEach(id=>document.getElementById(id).addEventListener('input',updateTwoPoint));
+updateTwoPoint();
+
+/* ---- tab4: rampa modeli ---- */
+function updateRamp(){
+  const h=parseInt(document.getElementById('rampH').value,10);
+  const w=parseInt(document.getElementById('rampW').value,10);
+  document.getElementById('rampHOut').textContent=h;
+  document.getElementById('rampWOut').textContent=w;
+  const baseX=30, baseY=170, endX=370;
+  const scaleW=(endX-baseX)/18;
+  const topX=baseX+w*scaleW;
+  const scaleH=130/6;
+  const topY=baseY-h*scaleH;
+  document.getElementById('rampTri').setAttribute('points',baseX+','+baseY+' '+topX+','+baseY+' '+topX+','+topY);
+  document.getElementById('rampVert').setAttribute('x1',topX);document.getElementById('rampVert').setAttribute('y1',baseY);
+  document.getElementById('rampVert').setAttribute('x2',topX);document.getElementById('rampVert').setAttribute('y2',topY);
+  const vlab=document.getElementById('rampVertLabel');
+  vlab.setAttribute('x',Math.min(topX+15,390));vlab.setAttribute('y',(baseY+topY)/2);
+  vlab.textContent='dikey: '+h;
+  function gcd(a,b){return b===0?a:gcd(b,a%b);}
+  const g=gcd(h,w);
+  document.getElementById('rampRatioVal').textContent=(h/g)+' : '+(w/g);
+  const dec=h/w;
+  document.getElementById('rampDecVal').textContent=(Math.round(dec*1000)/1000).toString();
+  const safeEl=document.getElementById('rampSafeVal');
+  if(dec<=1/12+0.0001){safeEl.textContent='Uygun (≤ 1:12)';safeEl.style.color='#047857';}
+  else{safeEl.textContent='Çok dik (> 1:12)';safeEl.style.color='#b91c1c';}
+}
+['rampH','rampW'].forEach(id=>document.getElementById(id).addEventListener('input',updateRamp));
+updateRamp();
+
+/* ---- tab8: kendini dene ---- */
+const quizData=[
+ {q:"Eğim, bir doğru üzerindeki hangi iki büyüklüğün oranıdır?",
+  choices:["Dikey uzunluğun yatay uzunluğa oranı","Yatay uzunluğun dikey uzunluğa oranı","İki noktanın x koordinatlarının oranı","Doğrunun uzunluğunun açısına oranı"],correct:0,
+  expl:"Eğim, dikey uzunluğun (Δy) yatay uzunluğa (Δx) oranı olarak tanımlanır."},
+ {q:"A(2, 5) ve B(4, 9) noktalarından geçen doğrunun eğimi kaçtır?",
+  choices:["1","2","4","1/2"],correct:1,
+  expl:"m = (9−5)/(4−2) = 4/2 = 2."},
+ {q:"Eğimi 0 olan bir doğru için ne söylenebilir?",
+  choices:["Doğru dikeydir","Doğru yataydır","Doğru artandır","Eğim tanımsızdır"],correct:1,
+  expl:"Eğim 0 ise dikey uzunluk (Δy) 0'dır; bu doğru yataydır."},
+ {q:"C(3, −2) ve D(3, 6) noktalarından geçen doğrunun eğimi için ne söylenebilir?",
+  choices:["m = 0","m = 8","m = −8","Tanımsızdır"],correct:3,
+  expl:"x koordinatları eşit olduğundan yatay uzunluk 0'dır; eğim tanımsızdır (dikey doğru)."},
+ {q:"Bir yolun eğimi −1/5 ise bu ne anlama gelir?",
+  choices:["Yol yataydır","Yol soldan sağa yükselir","Yol soldan sağa alçalır","Yol dikeydir"],correct:2,
+  expl:"Negatif eğim, soldan sağa gidildikçe doğrunun (yolun) alçaldığını gösterir."},
+ {q:"Bir çatının yüksekliği 3 m, yatay uzunluğu 9 m ise çatının eğim oranı (sadeleştirilmiş) nedir?",
+  choices:["1/3","3/9","1/9","3"],correct:0,
+  expl:"3/9 kesri sadeleştirilirse 1/3 elde edilir; günlük hayat modelinde yalnızca bu oran önemlidir."}
+];
+let qIndex=0,qScore=0,qAnswered=false;
+function renderDots(){
+  const wrap=document.getElementById('progressDots');wrap.innerHTML='';
+  quizData.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='pdot'+(i<qIndex?' done':i===qIndex?' now':'');
+    wrap.appendChild(d);
+  });
+}
+function renderQuiz(){
+  if(qIndex>=quizData.length){
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    renderDots();return;
+  }
+  qAnswered=false;
+  const item=quizData[qIndex];
+  let html='<div class="q-card"><div class="q-text">'+(qIndex+1)+'. '+item.q+'</div><div class="choices">';
+  item.choices.forEach((c,i)=>{html+='<button class="choice-btn" onclick="answerQuiz('+i+')">'+c+'</button>';});
+  html+='</div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="submit-btn" id="quizNext" style="display:none" onclick="nextQuiz()">Sonraki →</button></div></div>';
+  document.getElementById('quizArea').innerHTML=html;
+  renderDots();
+}
+function answerQuiz(i){
+  if(qAnswered)return;qAnswered=true;
+  const item=quizData[qIndex];
+  const isCorrect=i===item.correct;
+  if(isCorrect)qScore++;
+  document.querySelectorAll('#quizArea .choice-btn').forEach((b,idx)=>{
+    if(idx===item.correct)b.classList.add('correct');
+    else if(idx===i)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('quizFeedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuiz(){qIndex++;renderQuiz();}
+function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
+renderQuiz();
+</script>
+</body></html>
