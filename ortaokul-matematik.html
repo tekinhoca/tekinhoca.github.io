@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tekin Hoca — Ortaokul Matematik</title>
-<meta name="description" content="6. ve 8. sınıf konularına yönelik interaktif matematik etkinlikleri. Matematik öğretmeni Tekin Canıtez (Tekin CANITEZ) tarafından hazırlanmıştır.">
+<meta name="description" content="Ortaokul matematik konularına yönelik interaktif etkinlikler. Matematik öğretmeni Tekin Canıtez (Tekin CANITEZ) tarafından hazırlanmıştır.">
 <meta property="og:title" content="Tekin Hoca — Ortaokul Matematik">
-<meta property="og:description" content="6. ve 8. sınıf konularına yönelik interaktif matematik etkinlikleri.">
+<meta property="og:description" content="Ortaokul matematik konularına yönelik interaktif etkinlikler">
 <meta property="og:image" content="https://tekinhoca.github.io/og-image.png">
 <meta property="og:url" content="https://tekinhoca.github.io/ortaokul-matematik.html">
-<meta name="keywords" content="ortaokul matematik, interaktif etkinlik, 6. sınıf matematik, 8. sınıf matematik, Tekin CANITEZ, Tekin Canıtez, tekinhoca">
+<meta name="keywords" content="ortaokul matematik, interaktif etkinlik, Tekin CANITEZ, Tekin Canıtez, tekinhoca">
 <meta name="author" content="Tekin Canıtez">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="common.css">
@@ -124,46 +124,71 @@
   /* --- Akordiyon Yapısı --- */
   .grade-block { margin-bottom: 20px; }
 
-  /* Üst seviye: sınıf başlıkları */
-  .grade-block > .accordion-item {
-    border: 1px solid rgba(122,92,30,0.15);
+  /* 1. kademe: ana bölümler */
+  .breadcrumb + .grade-block > .accordion-item,
+  .breadcrumb + .grade-block + .accordion-item {
+    border: 1px solid rgba(122,92,30,0.24);
+    border-radius: 9px;
+    overflow: hidden;
+    background: #eee4cf;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(80,55,20,0.06);
+  }
+
+  .breadcrumb + .grade-block > .accordion-item > .accordion-header,
+  .breadcrumb + .grade-block + .accordion-item > .accordion-header {
+    padding: 18px 25px;
+    background: #eee4cf;
+  }
+
+  .breadcrumb + .grade-block > .accordion-item > .accordion-header:hover,
+  .breadcrumb + .grade-block + .accordion-item > .accordion-header:hover {
+    background: #e9ddc5;
+  }
+
+  .breadcrumb + .grade-block > .accordion-item > .accordion-header h3,
+  .breadcrumb + .grade-block + .accordion-item > .accordion-header h3 {
+    font-size: 1.18rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+
+  /* 2. kademe: sınıf başlıkları — ana bölümden içeri alınır */
+  .accordion-content > .grade-block {
+    margin: 0 28px 20px;
+  }
+
+  .accordion-content > .grade-block > .accordion-item {
+    border: 1px solid rgba(122,92,30,0.17);
     border-radius: 8px;
     overflow: hidden;
-    background: transparent;
-    margin-bottom: 15px;
+    background: #f5eedf;
+    margin-bottom: 13px;
   }
 
-  .accordion-header {
-    padding: 18px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    background: var(--cream);
-    transition: background 0.2s;
+  .accordion-content > .grade-block > .accordion-item > .accordion-header {
+    padding: 14px 22px;
+    background: #f5eedf;
   }
 
-  .accordion-header:hover { background: #fdfaf3; }
-
-  @media (prefers-color-scheme: dark) {
-    .accordion-header { background: transparent !important; }
-    .accordion-header:hover { background: rgba(122,92,30,0.12) !important; }
+  .accordion-content > .grade-block > .accordion-item > .accordion-header:hover {
+    background: #f0e7d5;
   }
 
-  .accordion-header h3 {
-    margin: 0;
-    font-family: 'Lora', serif;
-    font-size: 1.25rem;
-    color: var(--rust);
-  }
-
-  /* Sadece üst seviye sınıf başlıkları tamamen büyük harf olacak */
-  .grade-block > .accordion-item > .accordion-header h3 {
+  .accordion-content > .grade-block > .accordion-item > .accordion-header h3 {
+    font-size: 1.08rem;
+    font-weight: 700;
+    letter-spacing: 0.005em;
     text-transform: uppercase;
   }
 
-  /* Alt seviye: temalar — üst seviyeden belirgin ama zarif biçimde ayrılır */
-  .accordion-content > .accordion-item {
+  .accordion-content > .grade-block > .accordion-item > .accordion-header .toggle-icon {
+    width: 21px;
+    height: 21px;
+  }
+
+  /* 3. kademe: tema / ünite başlıkları */
+  .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item {
     margin: 0 18px;
     border: none;
     border-radius: 0;
@@ -171,41 +196,45 @@
     overflow: hidden;
   }
 
-  .accordion-content > .accordion-item + .accordion-item {
+  .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item + .accordion-item {
     border-top: 1px solid rgba(122,92,30,0.10);
   }
 
-  .accordion-content > .accordion-item > .accordion-header {
-    padding: 11px 18px;
+  .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-header {
+    padding: 10px 22px;
     background: var(--aged);
   }
 
-  .accordion-content > .accordion-item > .accordion-header:hover {
+  .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-header:hover {
     background: rgba(122,92,30,0.07);
   }
 
-  .accordion-content > .accordion-item > .accordion-header h3 {
-    font-size: 1.05rem;
+  .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-header h3 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.98rem;
     font-weight: 600;
+    letter-spacing: 0.01em;
   }
 
-  .accordion-content > .accordion-item > .accordion-header .toggle-icon {
-    width: 20px;
-    height: 20px;
+  .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-header .toggle-icon {
+    width: 19px;
+    height: 19px;
   }
 
-  /* Alt akordeonların içerikleri de aynı girintiyi korur; kartlar kendi yüzeyini oluşturur. */
-  .accordion-content > .accordion-item > .accordion-content {
+  /* Alt akordeonların içerikleri */
+  .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-content {
     border-top: 1px solid rgba(122,92,30,0.08);
     background: transparent;
   }
 
-  /* Üst seviyenin içeriği için ek ayırıcı çizgi */
-  .grade-block > .accordion-item > .accordion-content {
+  /* 1. ve 2. kademelerin açılan içerikleri */
+  .breadcrumb + .grade-block > .accordion-item > .accordion-content,
+  .breadcrumb + .grade-block + .accordion-item > .accordion-content,
+  .accordion-content > .grade-block > .accordion-item > .accordion-content {
     border-top: 1px solid rgba(122,92,30,0.10);
     background: transparent;
   }
-  
+
   /* --- Etkinlik Tablosu (Koyulaşma ve Çizgi Özellikleri Korundu) --- */
   .activity-table { width:100%; border-collapse:collapse; }
   .activity-table tr { border-bottom:1px solid rgba(122,92,30,0.15); transition:background 0.2s; }
@@ -234,17 +263,40 @@
     .go-btn { font-size:0.68rem; padding:7px 10px; }
     .act-name { font-size:0.95rem; }
 
-    .accordion-content > .accordion-item {
+    .breadcrumb + .grade-block > .accordion-item > .accordion-header,
+    .breadcrumb + .grade-block + .accordion-item > .accordion-header {
+      padding: 15px 18px;
+    }
+
+    .breadcrumb + .grade-block > .accordion-item > .accordion-header h3,
+    .breadcrumb + .grade-block + .accordion-item > .accordion-header h3 {
+      font-size: 1.05rem;
+    }
+
+    .accordion-content > .grade-block {
+      margin-left: 14px;
+      margin-right: 14px;
+    }
+
+    .accordion-content > .grade-block > .accordion-item > .accordion-header {
+      padding: 12px 16px;
+    }
+
+    .accordion-content > .grade-block > .accordion-item > .accordion-header h3 {
+      font-size: 0.98rem;
+    }
+
+    .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item {
       margin-left: 10px;
       margin-right: 10px;
     }
 
-    .accordion-content > .accordion-item > .accordion-header {
-      padding: 10px 14px;
+    .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-header {
+      padding: 9px 15px;
     }
 
-    .accordion-content > .accordion-item > .accordion-header h3 {
-      font-size: 0.98rem;
+    .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-header h3 {
+      font-size: 0.91rem;
     }
   }
 
@@ -283,15 +335,40 @@
     fill: var(--gold);
   }
 
-  [data-theme="dark"] .accordion-content > .accordion-item > .accordion-header {
+  /* --- Koyu Mod: üç kademeli akordeon yüzeyleri --- */
+  [data-theme="dark"] .breadcrumb + .grade-block > .accordion-item,
+  [data-theme="dark"] .breadcrumb + .grade-block > .accordion-item > .accordion-header,
+  [data-theme="dark"] .breadcrumb + .grade-block + .accordion-item,
+  [data-theme="dark"] .breadcrumb + .grade-block + .accordion-item > .accordion-header {
+    background: rgba(186,117,23,0.16);
+    border-color: rgba(186,117,23,0.28);
+  }
+
+  [data-theme="dark"] .breadcrumb + .grade-block > .accordion-item > .accordion-header:hover,
+  [data-theme="dark"] .breadcrumb + .grade-block + .accordion-item > .accordion-header:hover {
+    background: rgba(186,117,23,0.21);
+  }
+
+  [data-theme="dark"] .accordion-content > .grade-block > .accordion-item,
+  [data-theme="dark"] .accordion-content > .grade-block > .accordion-item > .accordion-header {
+    background: rgba(186,117,23,0.10);
+    border-color: rgba(186,117,23,0.18);
+  }
+
+  [data-theme="dark"] .accordion-content > .grade-block > .accordion-item > .accordion-header:hover {
+    background: rgba(186,117,23,0.14);
+  }
+
+  [data-theme="dark"] .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item,
+  [data-theme="dark"] .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-header {
     background: rgba(122,92,30,0.08);
   }
 
-  [data-theme="dark"] .accordion-content > .accordion-item > .accordion-header:hover {
+  [data-theme="dark"] .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item > .accordion-header:hover {
     background: rgba(122,92,30,0.14);
   }
 
-  [data-theme="dark"] .accordion-content > .accordion-item + .accordion-item {
+  [data-theme="dark"] .accordion-content > .grade-block > .accordion-item > .accordion-content > .accordion-item + .accordion-item {
     border-top-color: rgba(186,117,23,0.14);
   }
 </style>
