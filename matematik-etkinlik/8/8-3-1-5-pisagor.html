@@ -1,0 +1,611 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>8. Sınıf Matematik — M.8.3.1.5 Pisagor Bağıntısı</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#7a0e0e;--primary2:#4a0808;--primary-light:#fbeaea;--accent:#c81e1e;--success:#059669;--success-light:#eafaf3;--danger:#b91c1c;--warning:#d97706;--warning-light:#fff7e6;--text:#221515;--muted:#8a6f6f;--border:#ecd9d9;--bg:#faf6f6;--dark:#050505;--shadow:0 4px 18px rgba(122,14,14,.10)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#3a0000 66%,#8b0000 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(60,0,0,.4)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#c81e1e;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#7a0e0e;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,140,140,.3);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#ffd9d9;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(245,180,180,.2);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(255,238,238,.8);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#2c0505);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(60,0,0,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.6rem,2vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(80,10,10,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#f6f0f0;border-left:4px solid #a08080}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fdfafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#faf7f7;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #e6cccc;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#fdf5f5);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.svg-wrap{display:flex;justify-content:center;align-items:center;margin:8px auto;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;max-width:780px}.svg-wrap svg{width:min(100%,540px);height:auto;display:block}.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#1a0808;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#ffd9d9}.badge-mini{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:99px;padding:4px 12px;font-size:.8rem;font-weight:900;margin:3px}
+footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.slider-wrap{margin:12px 0}.slider-wrap input[type=range]{width:100%;accent-color:var(--primary)}.slider-label{display:flex;justify-content:space-between;font-weight:800;color:var(--primary);font-size:.92rem;margin-bottom:6px}
+.progress-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.pdot{width:10px;height:10px;border-radius:50%;background:var(--border)}.pdot.done{background:var(--success)}.pdot.now{background:var(--primary)}
+.step-list{counter-reset:step;margin:12px 0}.step-list li{list-style:none;counter-increment:step;position:relative;padding:8px 8px 8px 40px;margin:6px 0;font-size:.92rem;background:#fdfafa;border:1.5px solid var(--border);border-radius:12px}.step-list li:before{content:counter(step);position:absolute;left:8px;top:8px;background:var(--primary);color:#fff;font-weight:800;font-size:.78rem;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.result-strip{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:140px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;text-align:center}.result-pill .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:1.6em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;word-break:break-word}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
+.ghost-btn:disabled,.submit-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+.status-badge{display:inline-block;font-family:'Baloo 2';font-weight:800;font-size:1.05rem;border-radius:12px;padding:7px 16px;margin-top:6px}
+</style></head><body>
+<header><div class="badge">8. SINIF MATEMATİK · M.8.3.1.5</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Pisagor Bağıntısı</h1><p>Pisagor bağıntısını oluşturur, ilgili problemleri çözer.</p></header>
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="tab0">GİRİŞ</button>
+<button class="tab-btn" data-tab="tab1">BAĞINTIYI OLUŞTURALIM</button>
+<button class="tab-btn" data-tab="tab2">GERÇEK HAYAT</button>
+<button class="tab-btn" data-tab="tab3">KOORDİNAT DÜZLEMİ</button>
+<button class="tab-btn" data-tab="tab4">DİK ÜÇGEN Mİ?</button>
+<button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
+<button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
+<button class="tab-btn" data-tab="tab7">ÖZET</button>
+<button class="tab-btn" data-tab="tab8">KENDİNİ DENE</button>
+</nav>
+<main class="container">
+
+<section class="tab-panel active" id="tab0">
+<div class="card"><div class="card-title"><div class="icon">📐</div>Pisagor Bağıntısına Giriş</div>
+<p class="body-text">Bir dik üçgende, dik açının bulunduğu köşenin karşısındaki (dik açıyı gören) en uzun kenara <b>hipotenüs</b>, dik açıyı oluşturan diğer iki kenara <b>dik kenarlar</b> denir.</p>
+<div class="two-col">
+<div class="info-tile"><h4>Dik Kenarlar</h4><p class="body-text" style="font-size:.85rem;margin:0">Dik açıyı oluşturan iki kenar (genellikle a ve b ile gösterilir).</p></div>
+<div class="info-tile"><h4>Hipotenüs</h4><p class="body-text" style="font-size:.85rem;margin:0">Dik açının karşısındaki en uzun kenar (genellikle c ile gösterilir).</p></div>
+</div>
+<div class="gen-box" style="text-align:center;font-size:1.15rem">\( a^2 + b^2 = c^2 \)</div>
+<p class="body-text">Bu bağıntıya <b>Pisagor bağıntısı</b> denir: bir dik üçgende, dik kenarların uzunluklarının kareleri toplamı, hipotenüsün uzunluğunun karesine eşittir. Bu sayfada bu bağıntıyı canlı modellerle oluşturacak, gerçek hayat problemlerinde, koordinat düzleminde iki nokta arasındaki uzaklığı bulmada ve bir üçgenin dik üçgen olup olmadığına karar vermede kullanacağız.</p>
+</div>
+</section>
+
+<section class="tab-panel" id="tab1">
+<div class="card"><div class="card-title"><div class="icon">🟧</div>Bağıntıyı Oluşturalım</div>
+<p class="body-text">Dik kenarları a ve b olan bir dik üçgenin her kenarı üzerine, o kenarı bir kenar kabul eden birer kare çizelim. Kaydırıcılarla a ve b değerlerini değiştirip karelerin alanları arasındaki ilişkiyi gözlemleyin.</p>
+<div class="two-col">
+<div class="slider-wrap"><div class="slider-label"><span>Dik kenar a</span><span id="pfAOut">3</span></div><input type="range" id="pfA" min="2" max="8" step="1" value="3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Dik kenar b</span><span id="pfBOut">4</span></div><input type="range" id="pfB" min="2" max="8" step="1" value="4"></div>
+</div>
+<div class="svg-wrap"><svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pisagor bağıntısının kareler modeliyle gösterimi"><g id="pfGrid"></g></svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">a²</div><div class="val" id="pfA2">—</div></div>
+<div class="result-pill"><div class="lbl">b²</div><div class="val" id="pfB2">—</div></div>
+<div class="result-pill"><div class="lbl">a² + b²</div><div class="val" id="pfSum">—</div></div>
+<div class="result-pill"><div class="lbl">c²</div><div class="val" id="pfC2">—</div></div>
+</div>
+<div class="gen-box" style="text-align:center" id="pfEq">—</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab2">
+<div class="card"><div class="card-title"><div class="icon">🌍</div>Gerçek Hayat Uygulamaları</div>
+<div class="chip-row">
+<button class="chip-btn active" id="modeLadder" onclick="setRLMode('ladder')">Merdiven-Duvar</button>
+<button class="chip-btn" id="modeGarden" onclick="setRLMode('garden')">Dikdörtgen Köşegeni</button>
+</div>
+
+<div id="ladderBlock">
+<p class="body-text">Bir merdiven duvara yaslanıyor. Merdivenin uzunluğunu ve duvarda ulaştığı yüksekliği kaydırıcılarla belirleyin; merdivenin dibinin duvardan uzaklığı canlı hesaplanır.</p>
+<div class="two-col">
+<div class="slider-wrap"><div class="slider-label"><span>Merdivenin uzunluğu (c)</span><span id="ladCOut">5</span> m</div><input type="range" id="ladC" min="4" max="12" step="1" value="5"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Duvardaki yükseklik (b)</span><span id="ladBOut">3</span> m</div><input type="range" id="ladB" min="1" max="11" step="1" value="3"></div>
+</div>
+<div class="svg-wrap"><svg viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Merdiven-duvar modeli"><g id="ladGrid"></g></svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Merdiven (c)</div><div class="val" id="ladCVal">—</div></div>
+<div class="result-pill"><div class="lbl">Duvar (b)</div><div class="val" id="ladBVal">—</div></div>
+<div class="result-pill"><div class="lbl">Duvardan Uzaklık (a)</div><div class="val" id="ladAVal">—</div></div>
+</div>
+<div class="def-box" id="ladExplain"></div>
+</div>
+
+<div id="gardenBlock" style="display:none">
+<p class="body-text">Dikdörtgen biçimindeki bir bahçenin uzunluğunu ve genişliğini kaydırıcılarla belirleyin; köşegen uzunluğu canlı hesaplanır.</p>
+<div class="two-col">
+<div class="slider-wrap"><div class="slider-label"><span>Uzunluk (a)</span><span id="gdAOut">8</span> m</div><input type="range" id="gdA" min="2" max="12" step="1" value="8"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Genişlik (b)</span><span id="gdBOut">6</span> m</div><input type="range" id="gdB" min="2" max="12" step="1" value="6"></div>
+</div>
+<div class="svg-wrap"><svg viewBox="0 0 460 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dikdörtgen köşegeni modeli"><g id="gdGrid"></g></svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Uzunluk (a)</div><div class="val" id="gdAVal">—</div></div>
+<div class="result-pill"><div class="lbl">Genişlik (b)</div><div class="val" id="gdBVal">—</div></div>
+<div class="result-pill"><div class="lbl">Köşegen (c)</div><div class="val" id="gdCVal">—</div></div>
+</div>
+<div class="def-box" id="gdExplain"></div>
+</div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab3">
+<div class="card"><div class="card-title"><div class="icon">🗺️</div>Koordinat Düzleminde İki Nokta Arasındaki Uzaklık</div>
+<p class="body-text">A ve B noktalarının koordinatlarını kaydırıcılarla belirleyin. İki nokta arasında, kenarları eksenlere paralel bir dik üçgen oluşturup Pisagor bağıntısını uygulayarak aradaki uzaklığı bulacağız.</p>
+<div class="two-col">
+<div>
+<div class="slider-wrap"><div class="slider-label"><span>A noktası — x₁</span><span id="cdX1Out">1</span></div><input type="range" id="cdX1" min="-6" max="6" step="1" value="1"></div>
+<div class="slider-wrap"><div class="slider-label"><span>A noktası — y₁</span><span id="cdY1Out">1</span></div><input type="range" id="cdY1" min="-6" max="6" step="1" value="1"></div>
+</div>
+<div>
+<div class="slider-wrap"><div class="slider-label"><span>B noktası — x₂</span><span id="cdX2Out">5</span></div><input type="range" id="cdX2" min="-6" max="6" step="1" value="5"></div>
+<div class="slider-wrap"><div class="slider-label"><span>B noktası — y₂</span><span id="cdY2Out">4</span></div><input type="range" id="cdY2" min="-6" max="6" step="1" value="4"></div>
+</div>
+</div>
+<div class="svg-wrap"><svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Koordinat düzleminde iki nokta arası uzaklık modeli"><g id="cdGrid"></g></svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Yatay Uzaklık |Δx|</div><div class="val" id="cdDx">—</div></div>
+<div class="result-pill"><div class="lbl">Dikey Uzaklık |Δy|</div><div class="val" id="cdDy">—</div></div>
+<div class="result-pill"><div class="lbl">|AB|</div><div class="val" id="cdDist">—</div></div>
+</div>
+<div class="def-box" id="cdExplain"></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab4">
+<div class="card"><div class="card-title"><div class="icon">❓</div>Bu Üçgen Dik Üçgen mi?</div>
+<p class="body-text">Üç kenar uzunluğunu kaydırıcılarla belirleyin. En uzun kenarın karesi ile diğer iki kenarın kareleri toplamı karşılaştırılarak üçgenin dik, dar açılı ya da geniş açılı olup olmadığına karar verilir.</p>
+<div class="three-col">
+<div class="slider-wrap"><div class="slider-label"><span>Kenar 1</span><span id="rtS1Out">3</span></div><input type="range" id="rtS1" min="3" max="9" step="1" value="3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Kenar 2</span><span id="rtS2Out">4</span></div><input type="range" id="rtS2" min="3" max="9" step="1" value="4"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Kenar 3</span><span id="rtS3Out">5</span></div><input type="range" id="rtS3" min="3" max="9" step="1" value="5"></div>
+</div>
+<div class="svg-wrap"><svg viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dik üçgen kontrolü modeli"><g id="rtGrid"></g></svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">En Uzun Kenarın Karesi</div><div class="val" id="rtLongSq">—</div></div>
+<div class="result-pill"><div class="lbl">Diğer İkisinin Kareleri Toplamı</div><div class="val" id="rtSumSq">—</div></div>
+</div>
+<div style="text-align:center"><span class="status-badge" id="rtBadge">—</span></div>
+<div class="def-box" id="rtExplain" style="margin-top:12px"></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tab5">
+<div class="card"><div class="card-title"><div class="icon">📚</div>Çözümlü Örnekler</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 1</div><div class="ex-q">Dik kenarları 6 cm ve 8 cm olan bir dik üçgenin hipotenüsünü bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Pisagor bağıntısı yazılır: \( a^2+b^2=c^2 \)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\( 6^2+8^2=c^2 \Rightarrow 36+64=c^2 \Rightarrow c^2=100 \)</div></div>
+<div class="ex-result">Sonuç: c = 10 cm</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 2</div><div class="ex-q">Hipotenüsü 13 cm, bir dik kenarı 5 cm olan dik üçgenin diğer dik kenarını bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>\( a^2+5^2=13^2 \Rightarrow a^2+25=169 \)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\( a^2=169-25=144 \)</div></div>
+<div class="ex-result">Sonuç: a = 12 cm</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 3</div><div class="ex-q">A(2, 3) ve B(7, 15) noktaları arasındaki uzaklığı bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>A ve B noktalarıyla, kenarları eksenlere paralel bir dik üçgen oluşturulur: yatay kenar = 7−2 = 5, dikey kenar = 15−3 = 12</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Pisagor bağıntısı uygulanır: \( |AB|^2 = 5^2+12^2 = 25+144=169 \)</div></div>
+<div class="ex-result">Sonuç: |AB| = 13 birim</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 4</div><div class="ex-q">Kenar uzunlukları 7 cm, 24 cm, 25 cm olan üçgen dik üçgen midir?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>En uzun kenarın karesi hesaplanır: \( 25^2=625 \)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Diğer iki kenarın kareleri toplamı hesaplanır: \( 7^2+24^2=49+576=625 \)</div></div>
+<div class="ex-result">Sonuç: 625 = 625 olduğundan bu üçgen bir dik üçgendir.</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 5</div><div class="ex-q">5 metre uzunluğundaki bir merdiven, duvardan 3 metre uzaklığa yerleştiriliyor. Merdiven duvarda hangi yükseklikte durur?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Merdiven hipotenüs (c=5), duvardan uzaklık bir dik kenardır (a=3); duvardaki yükseklik b bulunacaktır.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>\( 3^2+b^2=5^2 \Rightarrow 9+b^2=25 \Rightarrow b^2=16 \)</div></div>
+<div class="ex-result">Sonuç: Merdiven duvarda 4 metre yükseklikte durur.</div>
+</div>
+</div></div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab6">
+<div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
+
+<div class="q-card" data-okmsg="Doğru! 5² + 12² = 25 + 144 = 169 = 13²." data-nomsg="Tekrar düşünelim: Pisagor bağıntısını uygulayın.">
+<div class="q-text">Dik kenarları 5 cm ve 12 cm olan dik üçgenin hipotenüsü kaç cm'dir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">13</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">17</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">60</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">7</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! 9²=81, 12²=144, toplamları 225=15². Bu bir dik üçgendir." data-nomsg="Tekrar düşünelim: en uzun kenarın karesini diğer ikisinin kareleri toplamıyla karşılaştırın.">
+<div class="q-text">Kenar uzunlukları 9 cm, 12 cm, 15 cm olan üçgen dik üçgen midir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Evet, dik üçgendir</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hayır, dar açılıdır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hayır, geniş açılıdır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Üçgen oluşmaz</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! Koordinat farkları dik kenarları oluşturur, Pisagor ile uzaklık bulunur." data-nomsg="Tekrar düşünelim: iki nokta arasındaki uzaklığı bulmak için hangi yöntem kullanılır?">
+<div class="q-text">Koordinat düzleminde iki nokta arasındaki uzaklığı bulmak için nasıl bir yol izlenir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yalnızca x koordinatları farkı alınır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yalnızca y koordinatları farkı alınır</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Eksenlere paralel bir dik üçgen oluşturulup Pisagor bağıntısı uygulanır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Noktaların çarpımı alınır</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! Bir dik üçgende hipotenüs her zaman en uzun kenardır." data-nomsg="Tekrar düşünelim: hipotenüs, dik açının karşısındaki kenardır.">
+<div class="q-text">Bir dik üçgende hipotenüs için ne söylenebilir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Her zaman en kısa kenardır</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Her zaman en uzun kenardır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Diğer kenarlarla aynı uzunluktadır</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Uzunluğu belirsizdir</button>
+</div><div class="feedback"></div></div>
+
+<div class="field-row"><span class="body-text" style="margin:0">Dik kenarları 9 cm ve 12 cm olan dik üçgenin hipotenüsü (cm):</span><input type="text" class="answer-input" id="fillK1" placeholder="?"><button class="submit-btn" onclick="checkFill('fillK1',15,'fbK1')">Kontrol Et</button></div>
+<div class="feedback" id="fbK1"></div>
+
+<div class="field-row"><span class="body-text" style="margin:0">A(0,0) ve B(6,8) noktaları arasındaki uzaklık (birim):</span><input type="text" class="answer-input" id="fillK2" placeholder="?"><button class="submit-btn" onclick="checkFill('fillK2',10,'fbK2')">Kontrol Et</button></div>
+<div class="feedback" id="fbK2"></div>
+
+</div>
+</section>
+
+<section class="tab-panel" id="tab7">
+<div class="card"><div class="card-title"><div class="icon">📌</div>Özet</div>
+<ul class="step-list">
+<li>Dik üçgende dik açıyı oluşturan kenarlara <b>dik kenarlar</b>, dik açının karşısındaki en uzun kenara <b>hipotenüs</b> denir.</li>
+<li><b>Pisagor bağıntısı:</b> \( a^2+b^2=c^2 \) — dik kenarların kareleri toplamı, hipotenüsün karesine eşittir.</li>
+<li>Merdiven-duvar, dikdörtgenin köşegeni gibi gerçek hayat problemlerinde bilinmeyen bir uzunluk Pisagor bağıntısıyla bulunabilir.</li>
+<li>Koordinat düzleminde iki nokta arasındaki uzaklık, eksenlere paralel bir dik üçgen oluşturularak Pisagor bağıntısıyla hesaplanır.</li>
+<li>Kenar uzunlukları verilen bir üçgende, en uzun kenarın karesi diğer iki kenarın kareleri toplamına <b>eşitse</b> üçgen <b>dik üçgendir</b>.</li>
+</ul>
+</div>
+</section>
+
+<section class="tab-panel" id="tab8">
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Kendini Dene</div>
+<div class="progress-dots" id="progressDots"></div>
+<div id="quizArea"></div>
+</div>
+</section>
+
+</main>
+<button class="basa-don" id="basaDon" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Başa Dön</button>
+<footer><div class="foot-title">Tekin Hoca — 8. Sınıf Matematik</div><div>M.8.3.1.5 Pisagor Bağıntısı</div></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+window.addEventListener('scroll',()=>{
+  document.getElementById('basaDon').classList.toggle('gorunsun',window.scrollY>400);
+});
+function checkChoice(btn,isCorrect){
+  const card=btn.closest('.q-card');
+  if(card.dataset.answered)return;
+  card.dataset.answered='1';
+  card.querySelectorAll('.choice-btn').forEach(b=>{
+    if(b.dataset.correct==='1')b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  const fb=card.querySelector('.feedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
+}
+function checkFill(inputId,correctVal,fbId){
+  const inp=document.getElementById(inputId);
+  const fb=document.getElementById(fbId);
+  const raw=inp.value.trim().replace(',','.');
+  const val=parseFloat(raw);
+  fb.classList.add('show');
+  if(Math.abs(val-correctVal)<0.001){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış, tekrar deneyin.';}
+}
+
+/* ---- SVG ve vektör yardımcı fonksiyonlar ---- */
+const SVGNS='http://www.w3.org/2000/svg';
+function addLine(g,x1,y1,x2,y2,stroke,width,dash){const l=document.createElementNS(SVGNS,'line');l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',width);l.setAttribute('stroke-linecap','round');if(dash)l.setAttribute('stroke-dasharray',dash);g.appendChild(l);}
+function addCircleEl(g,cx,cy,r,fill,stroke){const c=document.createElementNS(SVGNS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill',fill);c.setAttribute('stroke',stroke);c.setAttribute('stroke-width','2.5');g.appendChild(c);}
+function addCircleOutline(g,cx,cy,r,color){const c=document.createElementNS(SVGNS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',Math.max(r,0));c.setAttribute('fill','none');c.setAttribute('stroke',color);c.setAttribute('stroke-width','1.5');c.setAttribute('stroke-dasharray','4 4');g.appendChild(c);}
+function addTextEl(g,x,y,txt,fill,size,anchor){const t=document.createElementNS(SVGNS,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor',anchor||'middle');t.setAttribute('font-size',size||13);t.setAttribute('font-weight','800');t.setAttribute('fill',fill);t.textContent=txt;g.appendChild(t);}
+function addPolygon(g,pts,fill,stroke){const p=document.createElementNS(SVGNS,'polygon');p.setAttribute('points',pts.map(pt=>pt.x+','+pt.y).join(' '));p.setAttribute('fill',fill);p.setAttribute('stroke',stroke||'none');p.setAttribute('stroke-width','2');g.appendChild(p);}
+function clearGroup(id){document.getElementById(id).innerHTML='';}
+function vsub(P,Q){return {x:P.x-Q.x,y:P.y-Q.y};}
+function vadd(P,Q){return {x:P.x+Q.x,y:P.y+Q.y};}
+function vscale(P,s){return {x:P.x*s,y:P.y*s};}
+function vlen(P){return Math.hypot(P.x,P.y);}
+function vnorm(P){const l=vlen(P)||1;return {x:P.x/l,y:P.y/l};}
+function vdot(P,Q){return P.x*Q.x+P.y*Q.y;}
+function dist(P,Q){return vlen(vsub(P,Q));}
+function circleIntersect(P1,r1,P2,r2){
+  const dx=P2.x-P1.x, dy=P2.y-P1.y;
+  const d=Math.hypot(dx,dy);
+  if(d===0 || d>= r1+r2 || d<= Math.abs(r1-r2)) return null;
+  const a_=(d*d - r2*r2 + r1*r1)/(2*d);
+  const hh=r1*r1-a_*a_;
+  if(hh<0) return null;
+  const h_=Math.sqrt(hh);
+  const ux=dx/d, uy=dy/d;
+  const fx=P1.x+a_*ux, fy=P1.y+a_*uy;
+  const px=-uy, py=ux;
+  return {x:fx+h_*px, y:fy+h_*py};
+}
+function drawGridBg(gId,scale,viewW,viewH,originX,originY){
+  const g=document.getElementById(gId);
+  const color='#f1e4e4';
+  let xStart=originX%scale; if(xStart<0)xStart+=scale;
+  for(let x=xStart;x<=viewW;x+=scale)addLine(g,x,0,x,viewH,color,1);
+  let yStart=originY%scale; if(yStart<0)yStart+=scale;
+  for(let y=yStart;y<=viewH;y+=scale)addLine(g,0,y,viewW,y,color,1);
+}
+
+/* ---- Tab1: bağıntıyı oluşturalım (üç kare modeli) — sabit ölçek: 1 birim = 16 px, C köşesi hep aynı pikselde sabit ---- */
+const PF_SCALE=16, PF_C={x:158,y:294}, PF_VIEW={w:620,h:460};
+function updatePF(){
+  const a=parseInt(document.getElementById('pfA').value,10);
+  const b=parseInt(document.getElementById('pfB').value,10);
+  document.getElementById('pfAOut').textContent=a;
+  document.getElementById('pfBOut').textContent=b;
+  const c=Math.sqrt(a*a+b*b);
+  const C={x:0,y:0}, B={x:a,y:0}, A={x:0,y:b};
+  const sqCB=[C,B,{x:B.x,y:B.y-a},{x:C.x,y:C.y-a}];
+  const sqCA=[C,A,{x:A.x-b,y:A.y},{x:C.x-b,y:C.y}];
+  const abDir=vsub(B,A);
+  const mid={x:(A.x+B.x)/2,y:(A.y+B.y)/2};
+  const toC=vsub(C,mid);
+  const perp1={x:-abDir.y,y:abDir.x}, perp2={x:abDir.y,y:-abDir.x};
+  const chosen=(vdot(perp1,toC)<0)?perp1:perp2;
+  const sideVec=vscale(vnorm(chosen),dist(A,B));
+  const sqAB=[A,B,vadd(B,sideVec),vadd(A,sideVec)];
+  function tx(p){return {x:PF_C.x+p.x*PF_SCALE, y:PF_C.y-p.y*PF_SCALE};}
+  clearGroup('pfGrid');
+  const g=document.getElementById('pfGrid');
+  drawGridBg('pfGrid',PF_SCALE,PF_VIEW.w,PF_VIEW.h,PF_C.x,PF_C.y);
+  addPolygon(g,sqCB.map(tx),'rgba(217,119,6,.22)','#d97706');
+  addPolygon(g,sqCA.map(tx),'rgba(5,150,105,.2)','#059669');
+  addPolygon(g,sqAB.map(tx),'rgba(122,14,14,.18)','#7a0e0e');
+  addPolygon(g,[C,B,A].map(tx),'rgba(34,21,21,.06)','#221515');
+  const cCB=tx({x:(sqCB[0].x+sqCB[2].x)/2,y:(sqCB[0].y+sqCB[2].y)/2});
+  const cCA=tx({x:(sqCA[0].x+sqCA[2].x)/2,y:(sqCA[0].y+sqCA[2].y)/2});
+  const cAB=tx({x:(sqAB[0].x+sqAB[2].x)/2,y:(sqAB[0].y+sqAB[2].y)/2});
+  addTextEl(g,cCB.x,cCB.y,'a²','#b45309',15);
+  addTextEl(g,cCA.x,cCA.y,'b²','#047857',15);
+  addTextEl(g,cAB.x,cAB.y,'c²','#7a0e0e',15);
+  const Cs=tx(C),Bs=tx(B),As=tx(A);
+  addTextEl(g,Cs.x-14,Cs.y+16,'C','#221515',13);
+  addTextEl(g,Bs.x+10,Bs.y+16,'B','#221515',13);
+  addTextEl(g,As.x-12,As.y-8,'A','#221515',13);
+  document.getElementById('pfA2').textContent=(a*a);
+  document.getElementById('pfB2').textContent=(b*b);
+  document.getElementById('pfSum').textContent=(a*a+b*b);
+  const c2=Math.round(c*c*100)/100;
+  document.getElementById('pfC2').textContent=c2;
+  document.getElementById('pfEq').textContent=a+'² + '+b+'² = '+(a*a)+' + '+(b*b)+' = '+(a*a+b*b)+' = c²  ⟹  c = '+ (Math.round(c*100)/100);
+}
+['pfA','pfB'].forEach(id=>document.getElementById(id).addEventListener('input',updatePF));
+updatePF();
+
+/* ---- Tab2: gerçek hayat ---- */
+function setRLMode(mode){
+  document.getElementById('modeLadder').classList.toggle('active',mode==='ladder');
+  document.getElementById('modeGarden').classList.toggle('active',mode==='garden');
+  document.getElementById('ladderBlock').style.display=mode==='ladder'?'block':'none';
+  document.getElementById('gardenBlock').style.display=mode==='garden'?'block':'none';
+  if(mode==='ladder')updateLadder();else updateGarden();
+}
+const LAD_SCALE=24, LAD_ANCHOR={x:40,y:300}, LAD_VIEW={w:400,h:340};
+function updateLadder(){
+  let c=parseInt(document.getElementById('ladC').value,10);
+  let b=parseInt(document.getElementById('ladB').value,10);
+  if(b>=c){b=c-1;document.getElementById('ladB').value=b;}
+  document.getElementById('ladCOut').textContent=c;
+  document.getElementById('ladBOut').textContent=b;
+  const a=Math.sqrt(c*c-b*b);
+  document.getElementById('ladCVal').textContent=c+' m';
+  document.getElementById('ladBVal').textContent=b+' m';
+  document.getElementById('ladAVal').textContent=(Math.round(a*100)/100)+' m';
+  document.getElementById('ladExplain').innerHTML='\\( a^2 = c^2-b^2 = '+c+'^2-'+b+'^2 = '+(c*c)+'-'+(b*b)+' = '+(c*c-b*b)+' \\Rightarrow a \\approx '+(Math.round(a*100)/100)+'\\) m';
+  const WallBase={x:0,y:0}, WallTop={x:0,y:b}, GroundPt={x:Math.sqrt(c*c-b*b),y:0};
+  function tx(p){return {x:LAD_ANCHOR.x+p.x*LAD_SCALE, y:LAD_ANCHOR.y-p.y*LAD_SCALE};}
+  clearGroup('ladGrid');
+  const g=document.getElementById('ladGrid');
+  drawGridBg('ladGrid',LAD_SCALE,LAD_VIEW.w,LAD_VIEW.h,LAD_ANCHOR.x,LAD_ANCHOR.y);
+  const Ws=tx(WallBase),Fs=tx(WallTop),Gs=tx(GroundPt);
+  addLine(g,Ws.x,Ws.y,Fs.x,Fs.y,'#221515',4);
+  addLine(g,Ws.x,Ws.y,Gs.x,Gs.y,'#221515',4);
+  addLine(g,Fs.x,Fs.y,Gs.x,Gs.y,'#7a0e0e',4);
+  addTextEl(g,Fs.x-16,Fs.y,'Duvar üstü','#059669',11);
+  addTextEl(g,(Ws.x+Gs.x)/2,Ws.y+18,'Zemin','#d97706',11);
+  addTextEl(g,(Fs.x+Gs.x)/2+18,(Fs.y+Gs.y)/2-6,'Merdiven','#7a0e0e',11);
+}
+['ladC','ladB'].forEach(id=>document.getElementById(id).addEventListener('input',updateLadder));
+const GD_SCALE=20, GD_ANCHOR={x:40,y:286}, GD_VIEW={w:460,h:320};
+function updateGarden(){
+  const a=parseInt(document.getElementById('gdA').value,10);
+  const b=parseInt(document.getElementById('gdB').value,10);
+  document.getElementById('gdAOut').textContent=a;
+  document.getElementById('gdBOut').textContent=b;
+  const c=Math.sqrt(a*a+b*b);
+  document.getElementById('gdAVal').textContent=a+' m';
+  document.getElementById('gdBVal').textContent=b+' m';
+  document.getElementById('gdCVal').textContent=(Math.round(c*100)/100)+' m';
+  document.getElementById('gdExplain').innerHTML='\\( c^2=a^2+b^2='+a+'^2+'+b+'^2='+(a*a)+'+'+(b*b)+'='+(a*a+b*b)+' \\Rightarrow c \\approx '+(Math.round(c*100)/100)+'\\) m';
+  const P0={x:0,y:0},P1={x:a,y:0},P2={x:a,y:b},P3={x:0,y:b};
+  function tx(p){return {x:GD_ANCHOR.x+p.x*GD_SCALE, y:GD_ANCHOR.y-p.y*GD_SCALE};}
+  clearGroup('gdGrid');
+  const g=document.getElementById('gdGrid');
+  drawGridBg('gdGrid',GD_SCALE,GD_VIEW.w,GD_VIEW.h,GD_ANCHOR.x,GD_ANCHOR.y);
+  addPolygon(g,[P0,P1,P2,P3].map(tx),'rgba(122,14,14,.08)','#221515');
+  addLine(g,tx(P0).x,tx(P0).y,tx(P2).x,tx(P2).y,'#7a0e0e',3);
+}
+['gdA','gdB'].forEach(id=>document.getElementById(id).addEventListener('input',updateGarden));
+updateLadder();
+
+/* ---- Tab3: koordinat düzleminde uzaklık ---- */
+function pt2px(x,y){return {x:210+x*22, y:210-y*22};}
+function drawGrid2D(gId){
+  const g=document.getElementById(gId);
+  for(let v=-8;v<=8;v++){
+    const p1=pt2px(v,-8), p2=pt2px(v,8);
+    addLine(g,p1.x,p1.y,p2.x,p2.y,'#f3e6e6',1);
+    const q1=pt2px(-8,v), q2=pt2px(8,v);
+    addLine(g,q1.x,q1.y,q2.x,q2.y,'#f3e6e6',1);
+  }
+  const ax1=pt2px(-8,0), ax2=pt2px(8,0), ay1=pt2px(0,-8), ay2=pt2px(0,8);
+  addLine(g,ax1.x,ax1.y,ax2.x,ax2.y,'#c9b3b3',1.5);
+  addLine(g,ay1.x,ay1.y,ay2.x,ay2.y,'#c9b3b3',1.5);
+  for(let v=-6;v<=6;v+=2){
+    if(v===0)continue;
+    const lp=pt2px(v,0);
+    addTextEl(g,lp.x,lp.y+14,String(v),'#8a6f6f',10);
+    const lp2=pt2px(0,v);
+    addTextEl(g,lp2.x-10,lp2.y+4,String(v),'#8a6f6f',10);
+  }
+}
+function updateCoord(){
+  const x1=parseInt(document.getElementById('cdX1').value,10);
+  const y1=parseInt(document.getElementById('cdY1').value,10);
+  const x2=parseInt(document.getElementById('cdX2').value,10);
+  const y2=parseInt(document.getElementById('cdY2').value,10);
+  document.getElementById('cdX1Out').textContent=x1;
+  document.getElementById('cdY1Out').textContent=y1;
+  document.getElementById('cdX2Out').textContent=x2;
+  document.getElementById('cdY2Out').textContent=y2;
+  clearGroup('cdGrid');
+  const g=document.getElementById('cdGrid');
+  drawGrid2D('cdGrid');
+  const P1=pt2px(x1,y1), P2=pt2px(x2,y2), Corner=pt2px(x2,y1);
+  addLine(g,P1.x,P1.y,Corner.x,Corner.y,'#d97706',2.5,'5 4');
+  addLine(g,Corner.x,Corner.y,P2.x,P2.y,'#059669',2.5,'5 4');
+  addLine(g,P1.x,P1.y,P2.x,P2.y,'#7a0e0e',3);
+  addCircleEl(g,P1.x,P1.y,5,'#221515','#221515');
+  addCircleEl(g,P2.x,P2.y,5,'#221515','#221515');
+  addTextEl(g,P1.x-8,P1.y-10,'A('+x1+','+y1+')','#221515',11);
+  addTextEl(g,P2.x+8,P2.y-10,'B('+x2+','+y2+')','#221515',11);
+  const dx=Math.abs(x2-x1), dy=Math.abs(y2-y1);
+  const distv=Math.sqrt(dx*dx+dy*dy);
+  document.getElementById('cdDx').textContent=dx;
+  document.getElementById('cdDy').textContent=dy;
+  document.getElementById('cdDist').textContent=(Math.round(distv*100)/100);
+  document.getElementById('cdExplain').innerHTML='A ve B noktalarıyla kenarları eksenlere paralel bir dik üçgen oluşturuldu: yatay kenar = '+dx+', dikey kenar = '+dy+'. Pisagor bağıntısına göre: \\( |AB|^2 = '+dx+'^2+'+dy+'^2='+(dx*dx)+'+'+(dy*dy)+'='+(dx*dx+dy*dy)+' \\Rightarrow |AB| \\approx '+(Math.round(distv*100)/100)+'\\) birim.';
+}
+['cdX1','cdY1','cdX2','cdY2'].forEach(id=>document.getElementById(id).addEventListener('input',updateCoord));
+updateCoord();
+
+/* ---- Tab4: dik üçgen mi? — sabit ölçek: 1 birim = 36 px, P köşesi hep aynı pikselde sabit ---- */
+const RT_SCALE=36, RT_P={x:60,y:320}, RT_VIEW={w:600,h:380};
+function updateRT(){
+  const vals=[parseInt(document.getElementById('rtS1').value,10),parseInt(document.getElementById('rtS2').value,10),parseInt(document.getElementById('rtS3').value,10)];
+  document.getElementById('rtS1Out').textContent=vals[0];
+  document.getElementById('rtS2Out').textContent=vals[1];
+  document.getElementById('rtS3Out').textContent=vals[2];
+  const sorted=[...vals].sort((a,b)=>a-b);
+  const [s,m,l]=sorted;
+  const badge=document.getElementById('rtBadge');
+  const explain=document.getElementById('rtExplain');
+  clearGroup('rtGrid');
+  const g=document.getElementById('rtGrid');
+  if(s+m<=l){
+    document.getElementById('rtLongSq').textContent='—';
+    document.getElementById('rtSumSq').textContent='—';
+    badge.textContent='Üçgen Oluşmaz ✗';badge.style.color='#b91c1c';badge.style.background='rgba(220,38,38,.1)';
+    explain.innerHTML='Bu üç uzunluk üçgen eşitsizliğini sağlamadığından ('+s+' + '+m+' ≤ '+l+') bir üçgen oluşturulamaz.';
+    return;
+  }
+  const longSq=l*l, sumSq=s*s+m*m;
+  document.getElementById('rtLongSq').textContent=l+'² = '+longSq;
+  document.getElementById('rtSumSq').textContent=s+'² + '+m+'² = '+sumSq;
+  drawGridBg('rtGrid',RT_SCALE,RT_VIEW.w,RT_VIEW.h,RT_P.x,RT_P.y);
+  const P=RT_P, R={x:P.x+l*RT_SCALE,y:P.y};
+  const QptRaw=circleIntersect(P,s*RT_SCALE,R,m*RT_SCALE);
+  const Qpt=QptRaw?{x:QptRaw.x,y:2*P.y-QptRaw.y}:null;
+  const Ps=P, Rs=R, Qs=Qpt||{x:P.x+l*RT_SCALE/2,y:P.y-l*RT_SCALE/2};
+  addLine(g,Ps.x,Ps.y,Rs.x,Rs.y,'#7a0e0e',3);
+  addLine(g,Ps.x,Ps.y,Qs.x,Qs.y,'#7a0e0e',3);
+  addLine(g,Rs.x,Rs.y,Qs.x,Qs.y,'#7a0e0e',3);
+  addCircleEl(g,Ps.x,Ps.y,4.5,'#221515','#221515');
+  addCircleEl(g,Rs.x,Rs.y,4.5,'#221515','#221515');
+  addCircleEl(g,Qs.x,Qs.y,4.5,'#221515','#221515');
+  if(longSq===sumSq){
+    badge.textContent='Dik Üçgen ✓';badge.style.color='#047857';badge.style.background='rgba(5,150,105,.12)';
+    explain.innerHTML=l+'² = '+longSq+' = '+s+'² + '+m+'² olduğundan (Pisagor bağıntısı sağlandığından) bu üçgen bir <b>dik üçgendir</b>.';
+  } else if(longSq<sumSq){
+    badge.textContent='Dar Açılı Üçgen';badge.style.color='#047857';badge.style.background='rgba(5,150,105,.12)';
+    explain.innerHTML=l+'² = '+longSq+' &lt; '+s+'² + '+m+'² = '+sumSq+' olduğundan bu üçgen <b>dar açılı</b> bir üçgendir (dik üçgen değildir).';
+  } else {
+    badge.textContent='Geniş Açılı Üçgen';badge.style.color='#b45309';badge.style.background='rgba(217,119,6,.12)';
+    explain.innerHTML=l+'² = '+longSq+' &gt; '+s+'² + '+m+'² = '+sumSq+' olduğundan bu üçgen <b>geniş açılı</b> bir üçgendir (dik üçgen değildir).';
+  }
+}
+['rtS1','rtS2','rtS3'].forEach(id=>document.getElementById(id).addEventListener('input',updateRT));
+updateRT();
+
+/* ---- Tab8: kendini dene ---- */
+const quizData=[
+ {q:"Dik kenarları 9 cm ve 12 cm olan dik üçgenin hipotenüsü kaç cm'dir?",
+  choices:["15","21","144","10"],correct:0,
+  expl:"9²+12²=81+144=225=15²  olduğundan hipotenüs 15 cm'dir."},
+ {q:"Hipotenüsü 25 cm, bir dik kenarı 7 cm olan dik üçgenin diğer dik kenarı kaç cm'dir?",
+  choices:["18","24","32","20"],correct:1,
+  expl:"25²−7²=625−49=576=24² olduğundan diğer dik kenar 24 cm'dir."},
+ {q:"A(1,1) ve B(4,5) noktaları arasındaki uzaklık kaç birimdir?",
+  choices:["4","5","7","3"],correct:1,
+  expl:"Yatay fark 3, dikey fark 4; 3²+4²=9+16=25=5² olduğundan uzaklık 5 birimdir."},
+ {q:"Kenar uzunlukları 8 cm, 15 cm, 17 cm olan üçgen için ne söylenebilir?",
+  choices:["Dik üçgendir","Dar açılıdır","Geniş açılıdır","Üçgen oluşmaz"],correct:0,
+  expl:"8²+15²=64+225=289=17² olduğundan bu üçgen bir dik üçgendir."},
+ {q:"Kenar uzunlukları 5 cm, 6 cm, 9 cm olan üçgen için ne söylenebilir?",
+  choices:["Dik üçgendir","Dar açılıdır","Geniş açılıdır","Üçgen oluşmaz"],correct:2,
+  expl:"9²=81, 5²+6²=25+36=61; 81>61 olduğundan bu üçgen geniş açılıdır."},
+ {q:"6 metrelik bir merdiven, yerden duvara doğru yatay olarak 3,6 metre uzaklıkta yerleştiriliyor. Merdiven duvarda hangi yükseklikte durur?",
+  choices:["2,4 m","4,8 m","3,6 m","6 m"],correct:1,
+  expl:"6²−3,6²=36−12,96=23,04; karekökü 4,8'dir."}
+];
+let qIndex=0,qScore=0,qAnswered=false;
+function renderDots(){
+  const wrap=document.getElementById('progressDots');wrap.innerHTML='';
+  quizData.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='pdot'+(i<qIndex?' done':i===qIndex?' now':'');
+    wrap.appendChild(d);
+  });
+}
+function renderQuiz(){
+  if(qIndex>=quizData.length){
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    renderDots();return;
+  }
+  qAnswered=false;
+  const item=quizData[qIndex];
+  let html='<div class="q-card"><div class="q-text">'+(qIndex+1)+'. '+item.q+'</div><div class="choices">';
+  item.choices.forEach((c,i)=>{html+='<button class="choice-btn" onclick="answerQuiz('+i+')">'+c+'</button>';});
+  html+='</div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="submit-btn" id="quizNext" style="display:none" onclick="nextQuiz()">Sonraki →</button></div></div>';
+  document.getElementById('quizArea').innerHTML=html;
+  renderDots();
+}
+function answerQuiz(i){
+  if(qAnswered)return;qAnswered=true;
+  const item=quizData[qIndex];
+  const isCorrect=i===item.correct;
+  if(isCorrect)qScore++;
+  document.querySelectorAll('#quizArea .choice-btn').forEach((b,idx)=>{
+    if(idx===item.correct)b.classList.add('correct');
+    else if(idx===i)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('quizFeedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuiz(){qIndex++;renderQuiz();}
+function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
+renderQuiz();
+</script>
+</body></html>
