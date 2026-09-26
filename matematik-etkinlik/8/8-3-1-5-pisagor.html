@@ -413,14 +413,13 @@ function updateLadder(){
   document.getElementById('ladCVal').textContent=c+' m';
   document.getElementById('ladBVal').textContent=b+' m';
   
-  if(isInt){
+if(isInt){
     document.getElementById('ladAVal').textContent=aExact+' m';
-    document.getElementById('ladExplain').innerHTML='\\( a^{2}=c^{2}-b^{2}\\Rightarrow a^{2}='+c+'^{2}-'+b+'^{2}='+(c*c)+'-'+(b*b)+'='+aSq+'\\Rightarrow a=\\sqrt{'+aSq+'}=\\'+aExact+'\\)';
+    document.getElementById('ladExplain').innerHTML='\\( a^{2}=c^{2}-b^{2}\\Rightarrow a^{2}='+c+'^{2}-'+b+'^{2}='+(c*c)+'-'+(b*b)+'='+aSq+'\\Rightarrow a=\\sqrt{'+aSq+'}='+aExact+'\\)';
   } else {
     document.getElementById('ladAVal').textContent='√' + aSq + ' m';
     document.getElementById('ladExplain').innerHTML='\\( a^{2}=c^{2}-b^{2}\\Rightarrow a^{2}='+c+'^{2}-'+b+'^{2}='+(c*c)+'-'+(b*b)+'='+aSq+'\\Rightarrow a=\\sqrt{'+aSq+'}\\)';
-  }
-  
+  }  
   const WallBase={x:0,y:0}, WallTop={x:0,y:b}, GroundPt={x:aExact,y:0};
   function tx(p){return {x:LAD_ANCHOR.x+p.x*LAD_SCALE, y:LAD_ANCHOR.y-p.y*LAD_SCALE};}
   clearGroup('ladGrid');
