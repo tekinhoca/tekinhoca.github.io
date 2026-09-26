@@ -86,7 +86,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <div class="result-pill"><div class="lbl">Duvar (b)</div><div class="val" id="ladBVal">—</div></div>
 <div class="result-pill"><div class="lbl">Duvardan Uzaklık (a)</div><div class="val" id="ladAVal">—</div></div>
 </div>
-<div class="def-box" id="ladExplain"></div>
+<div class="def-box" id="ladExplain" style="text-align:center;"></div>
 </div>
 
 <div id="gardenBlock" style="display:none">
@@ -108,7 +108,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 
 <section class="tab-panel" id="tab3">
 <div class="card"><div class="card-title"><div class="icon">🗺️</div>Koordinat Düzleminde İki Nokta Arasındaki Uzaklık</div>
-<p class="body-text">A ve B noktalarının koordinatlarını kaydırıcılarla belirleyin. İki nokta arasında, kenarları eksenlere paralel bir dik üçgen oluşturup Pisagor bağıntısını uygulayarak aradaki uzaklığı bulacağız.</p>
+<p class="body-text">A and B noktalarının koordinatlarını kaydırıcılarla belirleyin. İki nokta arasında, kenarları eksenlere paralel bir dik üçgen oluşturup Pisagor bağıntısını uygulayarak aradaki uzaklığı bulacağız.</p>
 <div class="two-col">
 <div>
 <div class="slider-wrap"><div class="slider-label"><span>A noktası — x₁</span><span id="cdX1Out">1</span></div><input type="range" id="cdX1" min="-6" max="6" step="1" value="1"></div>
@@ -407,12 +407,21 @@ function updateLadder(){
   if(b>=c){b=c-1;document.getElementById('ladB').value=b;}
   document.getElementById('ladCOut').textContent=c;
   document.getElementById('ladBOut').textContent=b;
-  const a=Math.sqrt(c*c-b*b);
+  const aSq=c*c-b*b;
+  const aExact=Math.sqrt(aSq);
+  const isInt=Number.isInteger(aExact);
   document.getElementById('ladCVal').textContent=c+' m';
   document.getElementById('ladBVal').textContent=b+' m';
-  document.getElementById('ladAVal').textContent=(Math.round(a*100)/100)+' m';
-  document.getElementById('ladExplain').innerHTML='\\( a^2 = c^2-b^2 = '+c+'^2-'+b+'^2 = '+(c*c)+'-'+(b*b)+' = '+(c*c-b*b)+' \\Rightarrow a \\approx '+(Math.round(a*100)/100)+'\\) m';
-  const WallBase={x:0,y:0}, WallTop={x:0,y:b}, GroundPt={x:Math.sqrt(c*c-b*b),y:0};
+  
+  if(isInt){
+    document.getElementById('ladAVal').textContent=aExact+' m';
+    document.getElementById('ladExplain').innerHTML='\\( a^{2}=c^{2}-b^{2}\\Rightarrow a^{2}='+c+'^{2}-'+b+'^{2}='+(c*c)+'-'+(b*b)+'='+aSq+'\\Rightarrow a=\\sqrt{'+aSq+'}=\\'+aExact+'\\)';
+  } else {
+    document.getElementById('ladAVal').textContent='√' + aSq + ' m';
+    document.getElementById('ladExplain').innerHTML='\\( a^{2}=c^{2}-b^{2}\\Rightarrow a^{2}='+c+'^{2}-'+b+'^{2}='+(c*c)+'-'+(b*b)+'='+aSq+'\\Rightarrow a=\\sqrt{'+aSq+'}\\)';
+  }
+  
+  const WallBase={x:0,y:0}, WallTop={x:0,y:b}, GroundPt={x:aExact,y:0};
   function tx(p){return {x:LAD_ANCHOR.x+p.x*LAD_SCALE, y:LAD_ANCHOR.y-p.y*LAD_SCALE};}
   clearGroup('ladGrid');
   const g=document.getElementById('ladGrid');
@@ -424,6 +433,7 @@ function updateLadder(){
   addTextEl(g,Fs.x-16,Fs.y,'Duvar üstü','#059669',11);
   addTextEl(g,(Ws.x+Gs.x)/2,Ws.y+18,'Zemin','#d97706',11);
   addTextEl(g,(Fs.x+Gs.x)/2+18,(Fs.y+Gs.y)/2-6,'Merdiven','#7a0e0e',11);
+  if(window.MathJax && window.MathJax.typeset){window.MathJax.typeset([document.getElementById('ladExplain')]);}
 }
 ['ladC','ladB'].forEach(id=>document.getElementById(id).addEventListener('input',updateLadder));
 const GD_SCALE=20, GD_ANCHOR={x:40,y:286}, GD_VIEW={w:460,h:320};
@@ -432,11 +442,20 @@ function updateGarden(){
   const b=parseInt(document.getElementById('gdB').value,10);
   document.getElementById('gdAOut').textContent=a;
   document.getElementById('gdBOut').textContent=b;
-  const c=Math.sqrt(a*a+b*b);
+  const cSq=a*a+b*b;
+  const cExact=Math.sqrt(cSq);
+  const isInt=Number.isInteger(cExact);
   document.getElementById('gdAVal').textContent=a+' m';
   document.getElementById('gdBVal').textContent=b+' m';
-  document.getElementById('gdCVal').textContent=(Math.round(c*100)/100)+' m';
-  document.getElementById('gdExplain').innerHTML='\\( c^2=a^2+b^2='+a+'^2+'+b+'^2='+(a*a)+'+'+(b*b)+'='+(a*a+b*b)+' \\Rightarrow c \\approx '+(Math.round(c*100)/100)+'\\) m';
+  
+  if(isInt){
+    document.getElementById('gdCVal').textContent=cExact+' m';
+    document.getElementById('gdExplain').innerHTML='\\( c^{2}=a^{2}+b^{2}\\Rightarrow c^{2}='+a+'^{2}+'+b+'^{2}='+(a*a)+'+'+(b*b)+'='+cSq+'\\Rightarrow c=\\sqrt{'+cSq+'}=\\'+cExact+'\\)';
+  } else {
+    document.getElementById('gdCVal').textContent='√' + cSq + ' m';
+    document.getElementById('gdExplain').innerHTML='\\( c^{2}=a^{2}+b^{2}\\Rightarrow c^{2}='+a+'^{2}+'+b+'^{2}='+(a*a)+'+'+(b*b)+'='+cSq+'\\Rightarrow c=\\sqrt{'+cSq+'}\\)';
+  }
+  
   const P0={x:0,y:0},P1={x:a,y:0},P2={x:a,y:b},P3={x:0,y:b};
   function tx(p){return {x:GD_ANCHOR.x+p.x*GD_SCALE, y:GD_ANCHOR.y-p.y*GD_SCALE};}
   clearGroup('gdGrid');
@@ -444,6 +463,7 @@ function updateGarden(){
   drawGridBg('gdGrid',GD_SCALE,GD_VIEW.w,GD_VIEW.h,GD_ANCHOR.x,GD_ANCHOR.y);
   addPolygon(g,[P0,P1,P2,P3].map(tx),'rgba(122,14,14,.08)','#221515');
   addLine(g,tx(P0).x,tx(P0).y,tx(P2).x,tx(P2).y,'#7a0e0e',3);
+  if(window.MathJax && window.MathJax.typeset){window.MathJax.typeset([document.getElementById('gdExplain')]);}
 }
 ['gdA','gdB'].forEach(id=>document.getElementById(id).addEventListener('input',updateGarden));
 updateLadder();
@@ -490,11 +510,21 @@ function updateCoord(){
   addTextEl(g,P1.x-8,P1.y-10,'A('+x1+','+y1+')','#221515',11);
   addTextEl(g,P2.x+8,P2.y-10,'B('+x2+','+y2+')','#221515',11);
   const dx=Math.abs(x2-x1), dy=Math.abs(y2-y1);
-  const distv=Math.sqrt(dx*dx+dy*dy);
+  const sumSq=(dx*dx)+(dy*dy);
+  const distv=Math.sqrt(sumSq);
+  const isInt=Number.isInteger(distv);
+  
   document.getElementById('cdDx').textContent=dx;
   document.getElementById('cdDy').textContent=dy;
-  document.getElementById('cdDist').textContent=(Math.round(distv*100)/100);
-  document.getElementById('cdExplain').innerHTML='A ve B noktalarıyla kenarları eksenlere paralel bir dik üçgen oluşturuldu: yatay kenar = '+dx+', dikey kenar = '+dy+'. Pisagor bağıntısına göre: \\( |AB|^2 = '+dx+'^2+'+dy+'^2='+(dx*dx)+'+'+(dy*dy)+'='+(dx*dx+dy*dy)+' \\Rightarrow |AB| \\approx '+(Math.round(distv*100)/100)+'\\) birim.';
+  
+  if(isInt){
+    document.getElementById('cdDist').textContent=distv;
+    document.getElementById('cdExplain').innerHTML='AB doğru parçasını hipotenüs kabul eden hayali dik üçgeni yukarıda görebilirsiniz.<br>Yatay kenar = '+dx+' ve dikey kenar = '+dy+'<br>Pisagor bağıntısına göre:<br>\\( |AB|^{2}='+dx+'^{2}+'+dy+'^{2}='+(dx*dx)+'+'+(dy*dy)+'='+sumSq+'\\Rightarrow|AB|=\\sqrt{'+sumSq+'}='+distv+' \\)';
+  } else {
+    document.getElementById('cdDist').textContent='√' + sumSq;
+    document.getElementById('cdExplain').innerHTML='AB doğru parçasını hipotenüs kabul eden hayali dik üçgeni yukarıda görebilirsiniz.<br>Yatay kenar = '+dx+' ve dikey kenar = '+dy+'<br>Pisagor bağıntısına göre:<br>\\( |AB|^{2}='+dx+'^{2}+'+dy+'^{2}='+(dx*dx)+'+'+(dy*dy)+'='+sumSq+'\\Rightarrow|AB|=\\sqrt{'+sumSq+'} \\)';
+  }
+  if(window.MathJax && window.MathJax.typeset){window.MathJax.typeset([document.getElementById('cdExplain')]);}
 }
 ['cdX1','cdY1','cdX2','cdY2'].forEach(id=>document.getElementById(id).addEventListener('input',updateCoord));
 updateCoord();
@@ -516,7 +546,7 @@ function updateRT(){
     document.getElementById('rtLongSq').textContent='—';
     document.getElementById('rtSumSq').textContent='—';
     badge.textContent='Üçgen Oluşmaz ✗';badge.style.color='#b91c1c';badge.style.background='rgba(220,38,38,.1)';
-    explain.innerHTML='Bu üç uzunluk üçgen eşitsizliğini sağlamadığından ('+s+' + '+m+' ≤ '+l+') bir üçgen oluşturulamaz.';
+    explain.innerHTML='Bu uzunluklar üçgen eşitsizliğini sağlamadığından ('+s+' + '+m+' ≤ '+l+') bir üçgen oluşturulamaz.';
     return;
   }
   const longSq=l*l, sumSq=s*s+m*m;
@@ -551,7 +581,7 @@ updateRT();
 const quizData=[
  {q:"Dik kenarları 9 cm ve 12 cm olan dik üçgenin hipotenüsü kaç cm'dir?",
   choices:["15","21","144","10"],correct:0,
-  expl:"9²+12²=81+144=225=15²  olduğundan hipotenüs 15 cm'dir."},
+  expl:"9²+12²=81+144=225=15² olduğundan hipotenüs 15 cm'dir."},
  {q:"Hipotenüsü 25 cm, bir dik kenarı 7 cm olan dik üçgenin diğer dik kenarı kaç cm'dir?",
   choices:["18","24","32","20"],correct:1,
   expl:"25²−7²=625−49=576=24² olduğundan diğer dik kenar 24 cm'dir."},
