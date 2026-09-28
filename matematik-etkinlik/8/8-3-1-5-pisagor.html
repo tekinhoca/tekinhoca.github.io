@@ -53,8 +53,8 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <div class="card"><div class="card-title"><div class="icon">🟧</div>Bağıntıyı Oluşturalım</div>
 <p class="body-text">Dik kenarları a ve b olan bir dik üçgenin her kenarı üzerine, o kenarı bir kenar kabul eden birer kare çizelim. Kaydırıcılarla a ve b değerlerini değiştirip karelerin alanları arasındaki ilişkiyi gözlemleyin.</p>
 <div class="two-col">
-<div class="slider-wrap"><div class="slider-label"><span>Dik kenar a</span><span id="pfAOut">3</span></div><input type="range" id="pfA" min="2" max="8" step="1" value="3"></div>
-<div class="slider-wrap"><div class="slider-label"><span>Dik kenar b</span><span id="pfBOut">4</span></div><input type="range" id="pfB" min="2" max="8" step="1" value="4"></div>
+<div class="slider-wrap"><div class="slider-label"><span>|BC| = a</span><span id="pfAOut">3</span></div><input type="range" id="pfA" min="2" max="8" step="1" value="3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>|AC| = b</span><span id="pfBOut">4</span></div><input type="range" id="pfB" min="2" max="8" step="1" value="4"></div>
 </div>
 <div class="svg-wrap"><svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pisagor bağıntısının kareler modeliyle gösterimi"><g id="pfGrid"></g></svg></div>
 <div class="result-strip">
@@ -427,14 +427,16 @@ function updatePF(){
   document.getElementById('pfB2').textContent=(b*b);
   document.getElementById('pfSum').textContent=cSq;
   
+document.getElementById('pfA2').textContent=(a*a);
+  document.getElementById('pfB2').textContent=(b*b);
+  document.getElementById('pfSum').textContent=cSq;
+  document.getElementById('pfC2').textContent=cSq;
+
   if(isInt){
-    document.getElementById('pfC2').textContent=c;
     document.getElementById('pfEq').innerHTML='\\( a^{2}+b^{2}=c^{2}\\Rightarrow '+a+'^{2}+'+b+'^{2}='+(a*a)+'+'+(b*b)+'='+cSq+'\\Rightarrow c=\\sqrt{'+cSq+'}='+c+'\\)';
   } else {
-    document.getElementById('pfC2').textContent='√' + cSq;
     document.getElementById('pfEq').innerHTML='\\( a^{2}+b^{2}=c^{2}\\Rightarrow '+a+'^{2}+'+b+'^{2}='+(a*a)+'+'+(b*b)+'='+cSq+'\\Rightarrow c=\\sqrt{'+cSq+'}\\)';
-  }
-  if(window.MathJax && window.MathJax.typeset){window.MathJax.typeset([document.getElementById('pfEq')]);}
+  }  if(window.MathJax && window.MathJax.typeset){window.MathJax.typeset([document.getElementById('pfEq')]);}
 }
 ['pfA','pfB'].forEach(id=>document.getElementById(id).addEventListener('input',updatePF));
 updatePF();
