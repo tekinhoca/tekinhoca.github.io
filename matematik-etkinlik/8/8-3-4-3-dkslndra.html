@@ -1,0 +1,499 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>8. Sınıf Matematik — M.8.3.4.3 Silindirin Yüzey Alanı</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre','code']}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+<style>
+:root{--primary:#7a0e0e;--primary2:#4a0808;--primary-light:#fbeaea;--accent:#c81e1e;--success:#059669;--success-light:#eafaf3;--danger:#b91c1c;--warning:#d97706;--warning-light:#fff7e6;--text:#221515;--muted:#8a6f6f;--border:#ecd9d9;--bg:#faf6f6;--dark:#050505;--shadow:0 4px 18px rgba(122,14,14,.10)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#3a0000 66%,#8b0000 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(60,0,0,.4)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#c81e1e;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#7a0e0e;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,140,140,.3);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#ffd9d9;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(245,180,180,.2);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(255,238,238,.8);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#2c0505);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(60,0,0,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.6rem,2vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(80,10,10,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#f6f0f0;border-left:4px solid #a08080}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fdfafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#faf7f7;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #e6cccc;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#fdf5f5);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.svg-wrap{display:flex;justify-content:center;align-items:center;margin:8px auto;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;max-width:780px}.svg-wrap svg{width:min(100%,560px);height:auto;display:block}.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#1a0808;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#ffd9d9}.badge-mini{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:99px;padding:4px 12px;font-size:.8rem;font-weight:900;margin:3px}
+footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.slider-wrap{margin:12px 0}.slider-wrap input[type=range]{width:100%;accent-color:var(--primary)}.slider-label{display:flex;justify-content:space-between;font-weight:800;color:var(--primary);font-size:.92rem;margin-bottom:6px}
+.progress-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.pdot{width:10px;height:10px;border-radius:50%;background:var(--border)}.pdot.done{background:var(--success)}.pdot.now{background:var(--primary)}
+.step-list{counter-reset:step;margin:12px 0}.step-list li{list-style:none;counter-increment:step;position:relative;padding:8px 8px 8px 40px;margin:6px 0;font-size:.92rem;background:#fdfafa;border:1.5px solid var(--border);border-radius:12px}.step-list li:before{content:counter(step);position:absolute;left:8px;top:8px;background:var(--primary);color:#fff;font-weight:800;font-size:.78rem;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.result-strip{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:140px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;text-align:center}.result-pill .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:1.6em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;word-break:break-word}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
+.ghost-btn:disabled,.submit-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+.status-badge{display:inline-block;font-family:'Baloo 2';font-weight:800;font-size:1rem;border-radius:12px;padding:6px 14px;margin-top:6px}.ratio-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}.ratio-input{width:90px;border:2px solid #e6cccc;border-radius:12px;padding:8px 10px;text-align:center;font-weight:900;font-size:.95rem;outline:none}.ratio-input:focus{border-color:var(--primary)}.ratio-visual{display:flex;justify-content:space-around;align-items:center;gap:18px;margin:14px 0;padding:12px;border:1px solid var(--border);border-radius:16px;background:#fff;overflow:hidden}.ratio-visual svg{width:100%;max-width:700px;height:auto;display:block}.ratio-formula{text-align:center;font-weight:800;margin:10px 0}.ratio-note{margin-top:10px}
+.chip-btn.on{background:var(--primary);color:#fff;border-color:var(--primary)}</style></head><body>
+<header><div class="badge">8. SINIF MATEMATİK · M.8.3.4.3</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Dik Dairesel Silindirin Yüzey Alanı</h1><p>Dik dairesel silindirin yüzey alanı bağıntısını oluşturur, ilgili problemleri çözer.</p></header>
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="tab0">GİRİŞ</button>
+<button class="tab-btn" data-tab="tab1">AÇINIMDAN ALANA</button>
+<button class="tab-btn" data-tab="tab2">YANAL ALAN</button>
+<button class="tab-btn" data-tab="tab3">TABAN ALANI</button>
+<button class="tab-btn" data-tab="tab4">YÜZEY ALANI BAĞINTISI</button>
+<button class="tab-btn" data-tab="tab5">HANGİ YÜZEYLER?</button>
+<button class="tab-btn" data-tab="tab6">MODELLE KEŞFEDELİM</button>
+<button class="tab-btn" data-tab="tab7">ÖRNEKLER</button>
+<button class="tab-btn" data-tab="tab8">ÇALIŞMA</button>
+<button class="tab-btn" data-tab="tab9">ÖZET</button>
+<button class="tab-btn" data-tab="tab10">KENDİNİ DENE</button>
+</nav>
+<main class="container">
+<section class="tab-panel active" id="tab0">
+<div class="card"><div class="card-title"><div class="icon">🥫</div>Yüzey Alanına Giriş</div>
+<p class="body-text">Bir konserve kutusunun etiketini ve kapaklarını hazırlamak ya da bir kovanın içini boyamak için gereken malzemeyi bilmek isterseniz silindirin yüzeyinin ne kadar yer kapladığını hesaplamanız gerekir.</p>
+<div class="def-box"><b>Yüzey alanı:</b> Bir cismi çevreleyen tüm yüzeylerin alanları toplamıdır.</div>
+<div class="gen-box">Silindirin yüzey alanı, <b>açınımını oluşturan 2 daire ve 1 dikdörtgenin</b> alanları toplamına eşittir. Bu dosyada bu alanları parça parça bulacak, sonra yüzey alanı bağıntısını oluşturacaksınız.</div>
+<div class="note-box"><b>Terimler:</b> silindir, taban, yüzey alanı. Alanları \(\text{cm}^2\) cinsinden ifade edeceksiniz.</div></div>
+</section>
+<section class="tab-panel" id="tab1">
+<div class="card"><div class="card-title"><div class="icon">🔓</div>Açınımdan Alana</div>
+<p class="body-text">Silindirin açınımında 2 daire ve 1 dikdörtgen vardır. Düğmelerle hangi parçanın alanına bakmak istediğinizi seçin, r ve h değerlerini kaydırıcılarla değiştirin.</p>
+<div id="ya1"></div>
+<div class="tip-box">Yüzey alanı bu üç parçanın alanları toplamıdır. π sembolü yerine π = 3 ya da π = 3,14 seçerek sayısal değeri de görebilirsiniz.</div></div>
+</section>
+<section class="tab-panel" id="tab2">
+<div class="card"><div class="card-title"><div class="icon">📏</div>Yanal Alan</div>
+<p class="body-text">Yan yüzün açınımı bir dikdörtgendir. Bu dikdörtgenin kenarlarını silindirin elemanlarıyla ilişkilendirin.</p>
+<div id="ya2"></div>
+<div class="def-box"><b>Yanal alan</b> (yan yüzün alanı) = dikdörtgenin alanı = uzun kenar × kısa kenar<br>\(A_{yanal}=2\pi r\cdot h\)</div></div>
+</section>
+<section class="tab-panel" id="tab3">
+<div class="card"><div class="card-title"><div class="icon">⭕</div>Taban Alanı</div>
+<p class="body-text">Silindirin iki tabanı birbirine eş dairelerdir. Yarıçapı değiştirerek tabanların alanının nasıl değiştiğini izleyin.</p>
+<div id="ya3"></div>
+<div class="def-box">Bir dairenin alanı \(\pi r^2\) olduğundan iki tabanın alanı: \(A_{taban}=2\cdot\pi r^2=2\pi r^2\)</div></div>
+</section>
+<section class="tab-panel" id="tab4">
+<div class="card"><div class="card-title"><div class="icon">🧮</div>Yüzey Alanı Bağıntısı</div>
+<p class="body-text">Taban alanları ile yanal alanı toplayarak silindirin yüzey alanını bulursunuz.</p>
+<div class="def-box">\(A=A_{taban}+A_{yanal}=2\pi r^2+2\pi rh\)<br>Ortak çarpan \(2\pi r\) parantezine alınırsa: \(A=2\pi r\,(r+h)\)</div>
+<div id="ya4"></div>
+<div class="tip-box">Son satırdaki kontrol, iki yazılışın aynı sonucu verdiğini gösterir.</div></div>
+</section>
+<section class="tab-panel" id="tab5">
+<div class="card"><div class="card-title"><div class="icon">🧩</div>Hangi Yüzeyler Hesaba Katılır?</div>
+<p class="body-text">Problemlerde silindirin tamamı değil, yalnızca bir kısmı söz konusu olabilir. Bir durum seçin; hesaba katılan yüzeyler turuncu ile gösterilir.</p>
+<div id="ya5"></div>
+<div class="note-box">Problemi okurken önce “hangi yüzeylerin alanı isteniyor?” sorusunu yanıtlayın: kapaklı kutu, kapaksız kova, etiket, boru…</div></div>
+</section>
+<section class="tab-panel" id="tab6">
+<div class="card"><div class="card-title"><div class="icon">✂️</div>Modelle Keşfedelim</div>
+<p class="body-text">Bir konserve kutusu ya da karton silindir kullanarak yüzey alanı bağıntısını kendiniz de doğrulayabilirsiniz.</p>
+<ul class="step-list"><li>Kutunun etiketini dikkatle çıkarın ve düz bir dikdörtgen olarak açın.</li><li>Dikdörtgenin uzun kenarını cetvelle ölçün. Bu, kutunun taban çevresine eşittir. Kısa kenarı yükseklik olarak ölçün.</li><li>Kapak dairesinin yarıçapını ölçün ve \(2\pi r\) değerinin uzun kenara yakın çıktığını kontrol edin.</li><li>Kutunun toplam yüzey alanını bağıntıdan hesaplayın ve iki daire ile dikdörtgenin alanlarını ayrı ayrı bulup toplayarak karşılaştırın.</li></ul>
+<p class="body-text">Aşağıda seçtiğiniz ölçülere göre bir modelin açınımı kareli zeminde çizilir. Çizimi kareli kâğıda aktarıp keserek model yapabilirsiniz.</p>
+<div id="ya6"></div></div>
+</section>
+<section class="tab-panel" id="tab7">
+<div class="card"><div class="card-title"><div class="icon">📚</div>Çözümlü Örnekler</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 1</div><div class="ex-q">Taban yarıçapı 3 cm, yüksekliği 5 cm olan silindirin yüzey alanı kaç cm²’dir? (π = 3 alınız.)</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Bir taban alanı: πr² = 3 · 3² = 27 cm²; iki taban: 54 cm²</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Yanal alan: 2πrh = 2 · 3 · 3 · 5 = 90 cm²</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Yüzey alanı: 54 + 90 = 144 cm²</div></div>
+<div class="ex-result">Sonuç: 144 cm²</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 2</div><div class="ex-q">Taban yarıçapı 5 cm, yüksekliği 10 cm olan silindirin yüzey alanı kaç cm²’dir? (π = 3,14 alınız.)</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Bağıntıyı kullanalım: A = 2πr(r + h)</div></div>
+<div class="ex-step"><div class="snum">2</div><div>A = 2 · 3,14 · 5 · (5 + 10) = 31,4 · 15 = 471</div></div>
+<div class="ex-result">Sonuç: 471 cm²</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 3</div><div class="ex-q">Taban yarıçapı 10 cm, yüksekliği 30 cm olan üstü açık silindir biçimli kovanın dış yüzey alanı kaç cm²’dir? (π = 3 alınız.)</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Kova üstü açık olduğu için 1 taban ve yan yüz hesaba katılır</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Taban alanı: πr² = 3 · 100 = 300 cm²</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Yanal alan: 2πrh = 2 · 3 · 10 · 30 = 1800 cm²</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Toplam: 300 + 1800 = 2100 cm²</div></div>
+<div class="ex-result">Sonuç: 2100 cm²</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 4</div><div class="ex-q">Yanal alanı 120π cm², yüksekliği 10 cm olan silindirin taban yarıçapı kaç cm’dir?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>2πrh = 120π → 2πr · 10 = 120π</div></div>
+<div class="ex-step"><div class="snum">2</div><div>20πr = 120π → r = 6</div></div>
+<div class="ex-result">Sonuç: r = 6 cm</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 5</div><div class="ex-q">Taban yarıçapı 6 cm olan silindirin yüzey alanı 96π cm² ise yüksekliği kaç cm’dir?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>A = 2πr(r + h) = 96π → 2π · 6 · (6 + h) = 96π</div></div>
+<div class="ex-step"><div class="snum">2</div><div>12(6 + h) = 96 → 6 + h = 8</div></div>
+<div class="ex-step"><div class="snum">3</div><div>h = 2</div></div>
+<div class="ex-result">Sonuç: h = 2 cm</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 6</div><div class="ex-q">Yarıçapı 4 cm, yüksekliği 12 cm olan konserve kutusunun etiketi yan yüzün tamamını kaplıyor. Etiketin alanı kaç cm²’dir? (π = 3 alınız.)</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Etiket yan yüzü kaplar: yanal alan istenmektedir</div></div>
+<div class="ex-step"><div class="snum">2</div><div>2πrh = 2 · 3 · 4 · 12 = 288</div></div>
+<div class="ex-result">Sonuç: 288 cm²</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 7</div><div class="ex-q">Açınımındaki dikdörtgen kare olan silindirin taban yarıçapı 2 cm ise yüzey alanı kaç cm²’dir? (π = 3 alınız.)</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Dikdörtgen kare ise kenarları eşittir: h = 2πr = 2 · 3 · 2 = 12 cm</div></div>
+<div class="ex-step"><div class="snum">2</div><div>İki taban: 2πr² = 2 · 3 · 4 = 24 cm²</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Yanal alan: 12 · 12 = 144 cm²</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Yüzey alanı: 24 + 144 = 168 cm²</div></div>
+<div class="ex-result">Sonuç: 168 cm²</div>
+</div>
+</div></div>
+
+</div>
+</section>
+<section class="tab-panel" id="tab8">
+<div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
+<div class="q-card" data-okmsg="Doğru! Taban alanları 2 · 3 · 4 = 24 cm², yanal alan 2 · 3 · 2 · 5 = 60 cm². Toplam 84 cm²." data-nomsg="Yanlış. Yeşille gösterilen seçenek doğrudur. Taban alanları 2 · 3 · 4 = 24 cm², yanal alan 2 · 3 · 2 · 5 = 60 cm². Toplam 84 cm²."><div class="q-text">Taban yarıçapı 2 cm, yüksekliği 5 cm olan silindirin yüzey alanı kaç cm²’dir? (π = 3 alınız.)</div><div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">60</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">96</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">84</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">132</button>
+</div><div class="feedback"></div></div>
+<div class="q-card" data-okmsg="Doğru! 2πrh = 2π · 3 · 7 = 42π cm²." data-nomsg="Yanlış. Yeşille gösterilen seçenek doğrudur. 2πrh = 2π · 3 · 7 = 42π cm²."><div class="q-text">Taban yarıçapı 3 cm, yüksekliği 7 cm olan silindirin yanal alanı kaç cm²’dir?</div><div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">42π</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">21π</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">63π</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">126π</button>
+</div><div class="feedback"></div></div>
+<div class="q-card" data-okmsg="Doğru! A = 2πr² + 2πrh = 2πr(r + h)." data-nomsg="Yanlış. Yeşille gösterilen seçenek doğrudur. A = 2πr² + 2πrh = 2πr(r + h)."><div class="q-text">Silindirin yüzey alanı bağıntısı aşağıdakilerden hangisidir?</div><div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2πr² + πrh</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">πr² + 2πrh</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">πr(r + h)</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">2πr(r + h)</button>
+</div><div class="feedback"></div></div>
+<div class="q-card" data-okmsg="Doğru! Bir taban: 3 · 16 = 48 cm²; yanal alan: 2 · 3 · 4 · 9 = 216 cm². Toplam 264 cm²." data-nomsg="Yanlış. Yeşille gösterilen seçenek doğrudur. Bir taban: 3 · 16 = 48 cm²; yanal alan: 2 · 3 · 4 · 9 = 216 cm². Toplam 264 cm²."><div class="q-text">Taban yarıçapı 4 cm, yüksekliği 9 cm olan üstü açık silindir biçimli kovanın dış yüzey alanı kaç cm²’dir? (π = 3 alınız.)</div><div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">312</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">264</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">192</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">216</button>
+</div><div class="feedback"></div></div>
+<div class="q-card" data-okmsg="Doğru! 2π · 5 · h = 100π → 10πh = 100π → h = 10 cm." data-nomsg="Yanlış. Yeşille gösterilen seçenek doğrudur. 2π · 5 · h = 100π → 10πh = 100π → h = 10 cm."><div class="q-text">Yanal alanı 100π cm², taban yarıçapı 5 cm olan silindirin yüksekliği kaç cm’dir?</div><div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">5</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">20</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">10</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">50</button>
+</div><div class="feedback"></div></div>
+</div>
+</section>
+<section class="tab-panel" id="tab9">
+<div class="card"><div class="card-title"><div class="icon">📌</div>Özet</div>
+<ul class="step-list">
+<li><b>Yüzey alanı:</b> Silindirin tüm yüzeylerinin alanları toplamıdır; açınımındaki 2 daire ile 1 dikdörtgenin alanları toplamına eşittir.</li>
+<li><b>Taban alanı:</b> İki taban için \(2\pi r^2\).</li>
+<li><b>Yanal alan:</b> Dikdörtgenin alanı: \(2\pi r\cdot h\).</li>
+<li><b>Yüzey alanı:</b> \(A=2\pi r^2+2\pi rh=2\pi r\,(r+h)\).</li>
+<li>Üstü açık kovada \(\pi r^2+2\pi rh\), etiket ya da boruda yalnızca \(2\pi rh\) hesaba katılır. Problemde hangi yüzeylerin istendiğine dikkat edin.</li></ul></div>
+</section>
+<section class="tab-panel" id="tab10">
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Kendini Dene</div>
+<div class="progress-dots" id="progressDots"></div>
+<div id="quizArea"></div>
+</div>
+</section>
+</main>
+<button class="basa-don" id="basaDon" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Başa Dön</button>
+<footer><div class="foot-title">Tekin Hoca — 8. Sınıf Matematik</div><div>M.8.3.4.3 Silindirin Yüzey Alanı</div></footer>
+<script>
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+window.addEventListener('scroll',()=>{
+  document.getElementById('basaDon').classList.toggle('gorunsun',window.scrollY>400);
+});
+function checkChoice(btn,isCorrect){
+  const card=btn.closest('.q-card');
+  if(card.dataset.answered)return;
+  card.dataset.answered='1';
+  card.querySelectorAll('.choice-btn').forEach(b=>{
+    if(b.dataset.correct==='1')b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  const fb=card.querySelector('.feedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
+}
+function checkFill(inputId,correctVal,fbId){
+  const inp=document.getElementById(inputId);
+  const fb=document.getElementById(fbId);
+  const raw=inp.value.trim().replace(',','.');
+  const val=parseFloat(raw);
+  fb.classList.add('show');
+  if(Math.abs(val-correctVal)<0.001){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış, tekrar deneyin.';}
+}
+
+/* ---- SVG ve vektör yardımcı fonksiyonlar ---- */
+const SVGNS='http://www.w3.org/2000/svg';
+function addLine(g,x1,y1,x2,y2,stroke,width,dash){const l=document.createElementNS(SVGNS,'line');l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',width);l.setAttribute('stroke-linecap','round');if(dash)l.setAttribute('stroke-dasharray',dash);g.appendChild(l);}
+function addCircleEl(g,cx,cy,r,fill,stroke){const c=document.createElementNS(SVGNS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill',fill);c.setAttribute('stroke',stroke||fill);c.setAttribute('stroke-width','2');g.appendChild(c);}
+function addTextEl(g,x,y,txt,fill,size,anchor){const t=document.createElementNS(SVGNS,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor',anchor||'middle');t.setAttribute('font-size',size||13);t.setAttribute('font-weight','800');t.setAttribute('fill',fill);t.textContent=txt;g.appendChild(t);}
+function addPolygon(g,pts,fill,stroke,width){const p=document.createElementNS(SVGNS,'polygon');p.setAttribute('points',pts.map(pt=>pt.x+','+pt.y).join(' '));p.setAttribute('fill',fill);p.setAttribute('stroke',stroke||'none');p.setAttribute('stroke-width',width||2);g.appendChild(p);}
+function clearGroup(id){document.getElementById(id).innerHTML='';}
+function vsub(P,Q){return {x:P.x-Q.x,y:P.y-Q.y};}
+function vadd(P,Q){return {x:P.x+Q.x,y:P.y+Q.y};}
+function vscale(P,s){return {x:P.x*s,y:P.y*s};}
+function vlen(P){return Math.hypot(P.x,P.y);}
+function dist(P,Q){return vlen(vsub(P,Q));}
+function drawGridBg(gId,scale,viewW,viewH,originX,originY){
+  const g=document.getElementById(gId);
+  const color='#f3e6e6';
+  let xStart=originX%scale; if(xStart<0)xStart+=scale;
+  for(let x=xStart;x<=viewW;x+=scale)addLine(g,x,0,x,viewH,color,1);
+  let yStart=originY%scale; if(yStart<0)yStart+=scale;
+  for(let y=yStart;y<=viewH;y+=scale)addLine(g,0,y,viewW,y,color,1);
+}
+
+/* ---- Dik prizma: 3B motor (ortografik izdüşüm, SVG) ---- */
+const D2R=Math.PI/180;
+const gid=i=>document.getElementById(i);
+function el(g,t,a,txt){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;g.appendChild(e);return e;}
+const fl=n=>(Math.round(n*100)/100).toString().replace('.',',');
+const sq=n=>{const r=Math.sqrt(n);return Number.isInteger(r)?String(r):'√'+n+' ≈ '+fl(r);};
+function mkPoly(kind,a,b){
+  let p;
+  if(kind==='tri')p=[[0,0],[a,0],[0,b]];
+  else if(kind==='rect')p=[[0,0],[a,0],[a,b],[0,b]];
+  else{const n=kind==='pent'?5:6,s=1.8,R=s/(2*Math.sin(Math.PI/n));p=[];for(let i=0;i<n;i++){const t=(-90-180/n+360*i/n)*D2R;p.push([R*Math.cos(t),R*Math.sin(t)]);}}
+  const cx=p.reduce((s,q)=>s+q[0],0)/p.length,cy=p.reduce((s,q)=>s+q[1],0)/p.length;
+  return p.map(q=>[q[0]-cx,q[1]-cy]);
+}
+const KN={tri:'Dik üçgen prizma',rect:'Dikdörtgenler prizması',pent:'Dik beşgen prizma',hex:'Dik altıgen prizma'};
+const NN={tri:3,rect:4,pent:5,hex:6};
+const DM={tri:[2.4,3.2],rect:[3,2]};
+const polyOf=k=>{const d=DM[k]||[0,0];return mkPoly(k,d[0],d[1]);};
+function proj(yaw,pit){
+  const cy=Math.cos(yaw*D2R),sy=Math.sin(yaw*D2R),cp=Math.cos(pit*D2R),sp=Math.sin(pit*D2R);
+  return p=>{const x1=p[0]*cy-p[1]*sy,y1=p[0]*sy+p[1]*cy;return{x:x1,y:p[2]*cp+y1*sp,d:y1*cp-p[2]*sp};};
+}
+/* t=0 kapalı prizma, t=1 tam açık açınım. Alt taban sabit; yan yüzler alt ayrıtları, üst taban Y1'in üst ayrıtı etrafında döner. */
+function unfoldFaces(P,h,t){
+  const n=P.length,be=90*(1-t)*D2R,c=Math.cos(be),s=Math.sin(be),c2=Math.cos(2*be),s2=Math.sin(2*be);
+  const F=[{k:'b',nm:'Alt taban',pts:P.map(p=>[p[0],p[1],0])}];
+  for(let i=0;i<n;i++){
+    const A=P[i],B=P[(i+1)%n],dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy),nx=dy/L,ny=-dx/L,d=[nx*c*h,ny*c*h,s*h];
+    F.push({k:'s',nm:'Y'+(i+1),pts:[[A[0],A[1],0],[B[0],B[1],0],[B[0]+d[0],B[1]+d[1],d[2]],[A[0]+d[0],A[1]+d[1],d[2]]]});
+  }
+  const A=P[0],B=P[1],dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy),ex=dx/L,ey=dy/L,nx=ey,ny=-ex;
+  F.push({k:'t',nm:'Üst taban',pts:P.map(q=>{
+    const xe=(q[0]-A[0])*ex+(q[1]-A[1])*ey,ye=-((q[0]-A[0])*nx+(q[1]-A[1])*ny);
+    return[A[0]+xe*ex+nx*c*h+ye*nx*c2,A[1]+xe*ey+ny*c*h+ye*ny*c2,s*h+ye*s2];})});
+  return F;
+}
+const PIT=t=>28+52*t;
+function fit(P,h,yaw,ts,pf,W,H,mx){
+  const xs=[],ys=[];
+  ts.forEach(t=>{const pr=proj(yaw,pf(t));unfoldFaces(P,h,t).forEach(f=>f.pts.forEach(q=>{const r=pr(q);xs.push(r.x);ys.push(r.y);}));});
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  return{sc:Math.min((W-36)/(x1-x0),(H-36)/(y1-y0),mx),cx:(x0+x1)/2,cy:(y0+y1)/2,ox:W/2,oy:H/2};
+}
+function draw3D(g,faces,pr,fr,o){
+  o=o||{};g.innerHTML='';
+  const S=p=>{const q=pr(p);return{x:fr.ox+fr.sc*(q.x-fr.cx),y:fr.oy-fr.sc*(q.y-fr.cy),d:q.d};};
+  faces.map(f=>{const q=f.pts.map(S);return{f,q,d:q.reduce((s,p)=>s+p.d,0)/q.length};}).sort((a,b)=>b.d-a.d).forEach(({f,q})=>{
+    el(g,'polygon',{points:q.map(p=>p.x+','+p.y).join(' '),fill:o.fill?o.fill(f):(f.k==='s'?'rgba(5,150,105,.36)':'rgba(122,14,14,.30)'),stroke:'#4b1d1d','stroke-width':1.6,'stroke-linejoin':'round'});
+    if(o.labels)el(g,'text',{x:q.reduce((s,p)=>s+p.x,0)/q.length,y:q.reduce((s,p)=>s+p.y,0)/q.length+4,'text-anchor':'middle','font-size':12,'font-weight':800,fill:'#3b0a0a',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},f.nm);
+  });
+  return S;
+}
+function chipRow(id,items,cur){return'<div class="chip-row" id="'+id+'">'+items.map(([v,l])=>'<button class="chip-btn'+(v===cur?' on':'')+'" data-v="'+v+'">'+l+'</button>').join('')+'</div>';}
+function onChips(id,cb){const r=gid(id);r.addEventListener('click',e=>{const b=e.target.closest('.chip-btn');if(!b)return;r.querySelectorAll('.chip-btn').forEach(x=>x.classList.toggle('on',x===b));cb(b.dataset.v);});}
+function slider(id,lab,min,max,step,val){return'<div class="slider-wrap"><div class="slider-label"><span>'+lab+'</span><span id="'+id+'Out"></span></div><input type="range" id="'+id+'" min="'+min+'" max="'+max+'" step="'+step+'" value="'+val+'"></div>';}
+const svgBox=(id,vb,lab)=>'<div class="svg-wrap"><svg viewBox="'+vb+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+lab+'"><g id="'+id+'"></g></svg></div>';
+const TB='<table style="width:100%;border-collapse:collapse">';
+const KIND4=[['tri','Üçgen'],['rect','Dikdörtgen'],['pent','Beşgen'],['hex','Altıgen']];
+
+
+/* ---- Dik dairesel silindir ---- */
+function drawCyl(g,faces,pr,fr,o){
+  g.innerHTML='';
+  const S=p=>{const q=pr(p);return{x:fr.ox+fr.sc*(q.x-fr.cx),y:fr.oy-fr.sc*(q.y-fr.cy),d:q.d};};
+  faces.map(f=>{const q=f.pts.map(S);return{f,q,d:q.reduce((s,p)=>s+p.d,0)/q.length};}).sort((a,b)=>b.d-a.d).forEach(({f,q})=>{
+    const fill=o&&o.fill?o.fill(f):(f.k==='s'?'rgba(5,150,105,.36)':'rgba(122,14,14,.30)');
+    el(g,'polygon',{points:q.map(p=>p.x+','+p.y).join(' '),fill:fill,stroke:f.fine?fill:'#4b1d1d','stroke-width':f.fine?.8:2,'stroke-linejoin':'round'});
+  });
+  const st=faces.filter(f=>f.fine);
+  if(st.length){
+    const bot=[],top=[];st.forEach(f=>{bot.push(S(f.pts[0]));top.push(S(f.pts[3]));});
+    const lq=st[st.length-1].pts,b2=S(lq[1]),t2=S(lq[2]);bot.push(b2);top.push(t2);
+    [bot,top,[bot[0],top[0]],[bot[bot.length-1],top[top.length-1]]].forEach(pl=>el(g,'polyline',{points:pl.map(p=>p.x+','+p.y).join(' '),fill:'none',stroke:'#4b1d1d','stroke-width':2,'stroke-linejoin':'round'}));
+  }
+  if(o&&o.labels)faces.forEach(f=>{if(!f.nm)return;const q=f.pts.map(S);el(g,'text',{x:q.reduce((s,p)=>s+p.x,0)/q.length,y:q.reduce((s,p)=>s+p.y,0)/q.length+4,'text-anchor':'middle','font-size':12,'font-weight':800,fill:'#3b0a0a',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},f.nm);});
+  return S;
+}
+const PITC=t=>t<0.6?28:28+52*(t-0.6)/0.4;
+function cylFaces(r,h,t){
+  const L=2*Math.PI*r,N=64,M=64,t1=Math.min(t/0.6,1),t2=Math.max(0,(t-0.6)/0.4),phi=2*Math.PI*(1-t1),be=90*(1-t2)*D2R;
+  const cb=Math.cos(be),sb=Math.sin(be),c2=Math.cos(2*be),s2=Math.sin(2*be);
+  const bp=s=>{if(t1>=1||phi<1e-4)return[s,-r,0];const rho=L/phi,th=phi*s/L;return[rho*Math.sin(th),-r+rho*(1-Math.cos(th)),0];};
+  const F=[],A=[];for(let j=0;j<M;j++)A.push(2*Math.PI*j/M);
+  F.push({k:'b',nm:'Alt taban',pts:A.map(a=>[r*Math.sin(a),-r*Math.cos(a),0])});
+  for(let i=0;i<N;i++){
+    const p=bp(-L/2+L*i/N),q=bp(-L/2+L*(i+1)/N),d=[0,-cb*h,sb*h];
+    F.push({k:'s',fine:1,nm:i===N/2?'Yan yüz':'',pts:[p,q,[q[0]+d[0],q[1]+d[1],q[2]+d[2]],[p[0]+d[0],p[1]+d[1],p[2]+d[2]]]});
+  }
+  F.push({k:'t',nm:'Üst taban',pts:A.map(a=>{const xe=r*Math.sin(a),ye=r-r*Math.cos(a);return[xe,-r-h*cb-ye*c2,h*sb+ye*s2];})});
+  return F;
+}
+function fitG(gf,yaw,ts,pf,W,H,mx){
+  const xs=[],ys=[];
+  ts.forEach(t=>{const pr=proj(yaw,pf(t));gf(t).forEach(f=>f.pts.forEach(q=>{const r=pr(q);xs.push(r.x);ys.push(r.y);}));});
+  const x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);
+  return{sc:Math.min((W-36)/(x1-x0),(H-36)/(y1-y0),mx),cx:(x0+x1)/2,cy:(y0+y1)/2,ox:W/2,oy:H/2};
+}
+const CSTY=(f,st,hl)=>f.k==='s'?(hl==='yan'?st:'rgba(5,150,105,.30)'):(hl==='taban'?st:'rgba(122,14,14,.28)');
+
+/* ---- Silindirin yüzey alanı ---- */
+const PIV={'3':3,'3,14':3.14};
+const piChips=id=>'<div class="chip-row" id="'+id+'p">'+[['s','π (sembolik)'],['3','π = 3'],['3,14','π = 3,14']].map(([v,l],i)=>'<button class="chip-btn'+(i?'':' on')+'" data-v="'+v+'">'+l+'</button>').join('')+'</div>';
+const vs=(c,pk)=>pk==='s'?(c===1?'':fl(c))+'π cm²':fl(c*PIV[pk])+' cm²';
+const cl=(c,pk)=>pk==='s'?(c===1?'':fl(c))+'π cm':fl(c*PIV[pk])+' cm';
+function txt(g,x,y,s,sz,col){return el(g,'text',{x:x,y:y,'text-anchor':'middle','font-size':sz,'font-weight':800,fill:col||'#3b0a0a',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},s);}
+
+/* Ölçülü açınım + alan */
+function mkNet(id,hlOn){
+  const box=gid(id);let hl='hepsi',pk='s';
+  box.innerHTML=slider(id+'r','Taban yarıçapı r (cm)',1,5,1,3)+slider(id+'h','Yükseklik h (cm)',1,8,1,5)+(hlOn?chipRow(id+'k',[['taban','Taban alanları'],['yan','Yanal alan'],['hepsi','Yüzey alanı']],hl):'')+(hlOn?piChips(id):'')+svgBox(id+'G','0 0 600 360','Silindirin ölçülü açınımı')+'<div class="mini-table" id="'+id+'T"></div>';
+  function draw(){
+    const r=+gid(id+'r').value,h=+gid(id+'h').value,g=gid(id+'G');g.innerHTML='';
+    gid(id+'rOut').textContent=r+' cm';gid(id+'hOut').textContent=h+' cm';
+    const L=2*Math.PI*r,W=L,H=4*r+h,sc=Math.min(560/W,330/H,45),X=x=>300+sc*x,Y=y=>180-sc*(y+h/2);
+    if(sc>=8){const gx=Math.floor(W/2);for(let i=-gx-1;i<=gx+1;i++)el(g,'line',{x1:X(i),y1:Y(-h-2*r),x2:X(i),y2:Y(2*r),stroke:'#efe1e1','stroke-width':1});for(let j=Math.ceil(-h-2*r);j<=Math.floor(2*r);j++)el(g,'line',{x1:X(-W/2),y1:Y(j),x2:X(W/2),y2:Y(j),stroke:'#efe1e1','stroke-width':1});}
+    const hiT=hl==='taban'||hl==='hepsi',hiY=hl==='yan'||hl==='hepsi',am='rgba(217,119,6,.5)';
+    const fc=hlOn?(hiT?am:'rgba(122,14,14,.10)'):'rgba(122,14,14,.24)',fy=hlOn?(hiY?am:'rgba(5,150,105,.10)'):'rgba(5,150,105,.28)';
+    el(g,'circle',{cx:X(0),cy:Y(r),r:sc*r,fill:fc,stroke:'#4b1d1d','stroke-width':3});
+    el(g,'circle',{cx:X(0),cy:Y(-h-r),r:sc*r,fill:fc,stroke:'#4b1d1d','stroke-width':3});
+    el(g,'rect',{x:X(-L/2),y:Y(0),width:sc*L,height:sc*h,fill:fy,stroke:'#4b1d1d','stroke-width':3});
+    const fs=Math.max(10,Math.min(14,sc*.6));
+    txt(g,X(0),Y(r)+4,'Taban (r = '+r+')',fs);txt(g,X(0),Y(-h-r)+4,'Taban (r = '+r+')',fs);txt(g,X(0),Y(-h/2)+4,'Yan yüz: 2πr × h',fs+1);
+    if(hlOn){
+      const c1=r*r,c2=2*r*r,c3=2*r*h,c4=c2+c3;
+      gid(id+'T').innerHTML=TB+'<tr><th>Parça</th><th>Alan</th><th>Değer</th></tr><tr><td>Bir taban (daire)</td><td>πr² = π·'+r+'²</td><td>'+vs(c1,pk)+'</td></tr><tr><td>İki taban</td><td>2πr²</td><td>'+vs(c2,pk)+'</td></tr><tr><td>Yan yüz (dikdörtgen)</td><td>2πr · h = 2π·'+r+'·'+h+'</td><td>'+vs(c3,pk)+'</td></tr><tr><td><b>Yüzey alanı</b></td><td>2πr² + 2πrh</td><td><b>'+vs(c4,pk)+'</b></td></tr></table>';
+    }else{
+      gid(id+'T').innerHTML=TB+'<tr><th>Parça</th><th>Ölçüler (π ≈ 3,14)</th></tr><tr><td>2 daire</td><td>yarıçap '+r+' cm</td></tr><tr><td>1 dikdörtgen</td><td>'+fl(L)+' cm × '+h+' cm</td></tr><tr><td>Gereken kâğıt (yüzey alanı)</td><td>yaklaşık '+fl((2*r*r+2*r*h)*3.14)+' cm²</td></tr></table>';
+    }
+  }
+  if(hlOn){onChips(id+'k',v=>{hl=v;draw();});onChips(id+'p',v=>{pk=v;draw();});}
+  box.addEventListener('input',draw);draw();
+}
+/* Yanal alan / taban alanı: solda 3B, sağda ilgili düzlemsel parça */
+function mkAlan(id,mode){
+  const box=gid(id);let pk='s';
+  box.innerHTML=slider(id+'r','Taban yarıçapı r (cm)',1,5,1,3)+slider(id+'h','Yükseklik h (cm)',1,8,1,5)+piChips(id)+'<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px"><div class="svg-wrap"><svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Silindir"><g id="'+id+'L"></g></svg></div><div class="svg-wrap"><svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Açınımdaki parça"><g id="'+id+'R"></g></svg></div></div><div class="mini-table" id="'+id+'T"></div>';
+  function draw(){
+    const r=+gid(id+'r').value,h=+gid(id+'h').value;gid(id+'rOut').textContent=r+' cm';gid(id+'hOut').textContent=h+' cm';
+    const pr=proj(30,25),st='rgba(217,119,6,.6)',L=gid(id+'L'),R=gid(id+'R');R.innerHTML='';
+    drawCyl(L,cylFaces(r,h,0),pr,{sc:21,cx:0,cy:pr([0,0,h/2]).y,ox:150,oy:150},{fill:f=>mode==='yan'?(f.k==='s'?st:'rgba(122,14,14,.10)'):(f.k==='s'?'rgba(5,150,105,.10)':st)});
+    if(mode==='yan'){
+      const Wd=2*Math.PI*r,sc=Math.min(250/Wd,190/h,30),x0=150-sc*Wd/2,y0=150-sc*h/2;
+      el(R,'rect',{x:x0,y:y0,width:sc*Wd,height:sc*h,fill:'rgba(217,119,6,.5)',stroke:'#4b1d1d','stroke-width':3});
+      txt(R,150,y0-8,'uzun kenar = taban çevresi = 2πr',12,'#c81e1e');txt(R,150,y0+sc*h+18,'kısa kenar = yükseklik = h',12,'#c81e1e');
+      const c1=2*r,c2=2*r*h;
+      gid(id+'T').innerHTML=TB+'<tr><th>Adım</th><th>Hesap</th><th>Sonuç</th></tr><tr><td>Taban çevresi</td><td>2πr = 2π·'+r+'</td><td>'+cl(c1,pk)+'</td></tr><tr><td>Yükseklik</td><td>h</td><td>'+h+' cm</td></tr><tr><td><b>Yanal alan</b></td><td>2πr · h = '+(pk==='s'?'2π·'+r+'·'+h:cl(c1,pk)+' · '+h)+'</td><td><b>'+vs(c2,pk)+'</b></td></tr></table>';
+    }else{
+      const sc=Math.min(115/r,30);
+      [[75,150],[225,150]].forEach(p=>{el(R,'circle',{cx:p[0],cy:p[1],r:sc*r,fill:'rgba(217,119,6,.5)',stroke:'#4b1d1d','stroke-width':3});el(R,'line',{x1:p[0],y1:p[1],x2:p[0]+sc*r,y2:p[1],stroke:'#c81e1e','stroke-width':2.5});el(R,'circle',{cx:p[0],cy:p[1],r:3,fill:'#c81e1e'});txt(R,p[0]+sc*r/2,p[1]-7,'r',13,'#c81e1e');});
+      txt(R,150,285,'2 taban: her biri πr²',12,'#c81e1e');
+      const c1=r*r;
+      gid(id+'T').innerHTML=TB+'<tr><th>Adım</th><th>Hesap</th><th>Sonuç</th></tr><tr><td>Bir taban alanı</td><td>πr² = π·'+r+'²</td><td>'+vs(c1,pk)+'</td></tr><tr><td><b>İki taban alanı</b></td><td>2πr² = 2 · '+(pk==='s'?'π·'+c1:vs(c1,pk))+'</td><td><b>'+vs(2*c1,pk)+'</b></td></tr></table>';
+    }
+  }
+  onChips(id+'p',v=>{pk=v;draw();});box.addEventListener('input',draw);draw();
+}
+/* Yüzey alanı hesaplayıcı */
+(function(){
+  const box=gid('ya4');let pk='s';
+  box.innerHTML=slider('ya4r','Taban yarıçapı r (cm)',1,10,1,4)+slider('ya4h','Yükseklik h (cm)',1,15,1,6)+piChips('ya4')+svgBox('ya4G','0 0 600 300','Silindir')+'<div class="mini-table" id="ya4T"></div>';
+  function draw(){
+    const r=+gid('ya4r').value,h=+gid('ya4h').value;gid('ya4rOut').textContent=r+' cm';gid('ya4hOut').textContent=h+' cm';
+    const pr=proj(30,25);drawCyl(gid('ya4G'),cylFaces(r,h,0),pr,{sc:Math.min(20,250/(2*r+0.5),250/(h*.91+r*.8)),cx:0,cy:pr([0,0,h/2]).y,ox:300,oy:150},{});
+    const a=r*r,b=2*r*h,c=2*a+b,d=2*r*(r+h);
+    gid('ya4T').innerHTML=TB+'<tr><th>Adım</th><th>Hesap</th><th>Sonuç</th></tr><tr><td>İki taban alanı</td><td>2πr² = 2π·'+r+'²</td><td>'+vs(2*a,pk)+'</td></tr><tr><td>Yanal alan</td><td>2πrh = 2π·'+r+'·'+h+'</td><td>'+vs(b,pk)+'</td></tr><tr><td><b>Yüzey alanı</b></td><td>2πr² + 2πrh</td><td><b>'+vs(c,pk)+'</b></td></tr><tr><td>Kontrol</td><td>2πr(r + h) = 2π·'+r+'·('+r+' + '+h+')</td><td>'+vs(d,pk)+'</td></tr></table>';
+  }
+  onChips('ya4p',v=>{pk=v;draw();});box.addEventListener('input',draw);draw();
+})();
+/* Hangi yüzeyler? */
+(function(){
+  const box=gid('ya5');let ty='kapali',pk='s';
+  const TY={kapali:['Kapalı kutu (konserve)','Alt taban, üst taban ve yan yüz','2πr² + 2πrh'],acik:['Üstü açık (kova)','Alt taban ve yan yüz','πr² + 2πrh'],yan:['Yalnızca yan yüz (etiket, boru)','Yan yüz','2πrh'],kapak:['Yalnızca iki kapak','Alt ve üst taban','2πr²']};
+  box.innerHTML=chipRow('ya5t',Object.keys(TY).map(k=>[k,TY[k][0]]),ty)+slider('ya5r','Taban yarıçapı r (cm)',1,6,1,3)+slider('ya5h','Yükseklik h (cm)',1,10,1,5)+piChips('ya5')+svgBox('ya5G','0 0 600 300','Seçilen yüzeyler')+'<div class="mini-table" id="ya5T"></div>';
+  function draw(){
+    const r=+gid('ya5r').value,h=+gid('ya5h').value;gid('ya5rOut').textContent=r+' cm';gid('ya5hOut').textContent=h+' cm';
+    const on={kapali:{b:1,t:1,s:1},acik:{b:1,t:0,s:1},yan:{b:0,t:0,s:1},kapak:{b:1,t:1,s:0}}[ty],pr=proj(30,25),st='rgba(217,119,6,.6)';
+    drawCyl(gid('ya5G'),cylFaces(r,h,0),pr,{sc:Math.min(22,250/(2*r+0.5),250/(h*.91+r*.8)),cx:0,cy:pr([0,0,h/2]).y,ox:300,oy:150},{fill:f=>on[f.k]?st:'rgba(0,0,0,.04)'});
+    const c=(on.b+on.t)*r*r+on.s*2*r*h;
+    gid('ya5T').innerHTML=TB+'<tr><th>Seçim</th><th>Hangi yüzeyler?</th><th>Bağıntı</th><th>Alan</th></tr><tr><td>'+TY[ty][0]+'</td><td>'+TY[ty][1]+'</td><td>'+TY[ty][2]+'</td><td><b>'+vs(c,pk)+'</b></td></tr></table><div class="body-text" style="margin:8px 0 0">Turuncu yüzeyler alana katılır, silik yüzeyler katılmaz.</div>';
+  }
+  onChips('ya5t',v=>{ty=v;draw();});onChips('ya5p',v=>{pk=v;draw();});box.addEventListener('input',draw);draw();
+})();
+mkNet('ya1',true);mkAlan('ya2','yan');mkAlan('ya3','taban');mkNet('ya6',false);
+function typesetDyn(e){if(window.MathJax&&typeof MathJax.typesetPromise==='function')MathJax.typesetPromise([e]).catch(()=>{});}
+
+/* ---- Kendini dene ---- */
+const quizData=[{"q": "Silindirin açınımındaki dikdörtgenin alanı silindirin hangi alanını verir?", "choices": ["Çevresini", "Taban alanını", "Hacmini", "Yanal alanını"], "correct": 3, "expl": "Açınımdaki dikdörtgen yan yüzün açılmış hâlidir; alanı yanal alandır."}, {"q": "Taban yarıçapı 1 cm, yüksekliği 4 cm olan silindirin yüzey alanı kaç cm²’dir? (π = 3 alınız.)", "choices": ["24", "30", "42", "15"], "correct": 1, "expl": "A = 2πr(r + h) = 2 · 3 · 1 · (1 + 4) = 30 cm²."}, {"q": "Taban yarıçapı 5 cm, yüksekliği 12 cm olan silindirin yanal alanı kaç cm²’dir? (π = 3,14 alınız.)", "choices": ["188,4", "942", "376,8", "471"], "correct": 2, "expl": "2πrh = 2 · 3,14 · 5 · 12 = 376,8 cm²."}, {"q": "Taban yarıçapı 6 cm olan silindirin iki tabanının alanları toplamı kaç cm²’dir?", "choices": ["72π", "36π", "12π", "144π"], "correct": 0, "expl": "2πr² = 2π · 36 = 72π cm²."}, {"q": "Yüzey alanı 160π cm², taban yarıçapı 8 cm olan silindirin yüksekliği kaç cm’dir?", "choices": ["10", "8", "2", "12"], "correct": 2, "expl": "2π · 8 · (8 + h) = 160π → 16(8 + h) = 160 → 8 + h = 10 → h = 2 cm."}, {"q": "Yanal alanı, bir tabanının alanına eşit olan silindirin yüksekliği taban yarıçapının kaç katıdır?", "choices": ["2 katı", "4 katı", "Eşittir", "Yarısı"], "correct": 3, "expl": "2πrh = πr² → 2h = r → h = r/2. Yükseklik yarıçapın yarısıdır."}, {"q": "Taban yarıçapı 3 cm, yüksekliği 4 cm olan üstü açık silindirin dış yüzey alanı kaç cm²’dir? (π = 3 alınız.)", "choices": ["99", "126", "90", "72"], "correct": 0, "expl": "Bir taban: 3 · 9 = 27 cm². Yanal alan: 2 · 3 · 3 · 4 = 72 cm². Toplam 99 cm²."}, {"q": "Açınımındaki dikdörtgen kare olan silindirin taban yarıçapı 1 cm ise yüzey alanı kaç cm²’dir? (π = 3 alınız.)", "choices": ["36", "42", "48", "30"], "correct": 1, "expl": "h = 2πr = 6 cm. İki taban: 2 · 3 · 1 = 6 cm²; yanal alan: 6 · 6 = 36 cm². Toplam 42 cm²."}, {"q": "Yüksekliği 12 cm olan konserve kutusunun etiketinin alanı 288 cm² ise taban yarıçapı kaç cm’dir? (π = 3 alınız.)", "choices": ["3", "8", "6", "4"], "correct": 3, "expl": "Etiketin alanı yanal alandır: 2 · 3 · r · 12 = 288 → 72r = 288 → r = 4 cm."}, {"q": "Yüksekliği sabit tutulup taban yarıçapı 2 katına çıkarılan silindirin yanal alanı nasıl değişir?", "choices": ["Değişmez", "4 katına çıkar", "2 katına çıkar", "8 katına çıkar"], "correct": 2, "expl": "Yanal alan 2πrh ifadesinde r ile doğru orantılıdır: r 2 katına çıkarsa alan da 2 katına çıkar."}];
+let qIndex=0,qScore=0,qAnswered=false;
+function renderDots(){
+  const wrap=document.getElementById('progressDots');wrap.innerHTML='';
+  quizData.forEach((_,i)=>{const d=document.createElement('div');d.className='pdot'+(i<qIndex?' done':i===qIndex?' now':'');wrap.appendChild(d);});
+}
+function renderQuiz(){
+  if(qIndex>=quizData.length){
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    renderDots();return;
+  }
+  qAnswered=false;
+  const item=quizData[qIndex];
+  let html='<div class="q-card"><div class="q-text">'+(qIndex+1)+'. '+item.q+'</div><div class="choices">';
+  item.choices.forEach((c,i)=>{html+='<button class="choice-btn" onclick="answerQuiz('+i+')">'+c+'</button>';});
+  html+='</div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="submit-btn" id="quizNext" style="display:none" onclick="nextQuiz()">Sonraki →</button></div></div>';
+  document.getElementById('quizArea').innerHTML=html;typesetDyn(document.getElementById('quizArea'));
+  renderDots();
+}
+function answerQuiz(i){
+  if(qAnswered)return;qAnswered=true;
+  const item=quizData[qIndex];const isCorrect=i===item.correct;
+  if(isCorrect)qScore++;
+  document.querySelectorAll('#quizArea .choice-btn').forEach((b,idx)=>{
+    if(idx===item.correct)b.classList.add('correct');else if(idx===i)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('quizFeedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuiz(){qIndex++;renderQuiz();}
+function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
+renderQuiz();
+
+</script>
+</body>
+</html>
