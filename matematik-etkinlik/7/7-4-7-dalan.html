@@ -18,7 +18,7 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 .calc-result{background:linear-gradient(135deg,#eafaf3,#eaf2f8);border:1.5px solid #10b981;border-radius:14px;padding:16px;text-align:center;font-family:'Baloo 2';font-size:1.15rem;font-weight:800;color:#047857;margin-top:10px}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
-</style>
+.submit-btn:disabled{opacity:.45;cursor:not-allowed}</style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
 <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
 </head><body>
@@ -51,8 +51,9 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <div class="card"><div class="card-title"><div class="icon">🍕</div>Daire Dilimlerinden Dikdörtgene</div>
 <p class="body-text">Bir daireyi eş dilimlere ayırıp, dilimleri sırayla (biri yukarı biri aşağı bakacak şekilde) yan yana dizersek, aşağıdaki gibi bir şekil elde ederiz. Dilim sayısı arttıkça bu şekil, bir <b>dikdörtgene</b> daha çok benzer.</p>
 <div class="svg-wrap">
-<img src="img/dlmdr.gif" alt="Dilimlere ayrılmış daireden yaklaşık alan hesabı" style="max-width:80%;height:auto">
+<img id="dlmdrGif" alt="Dilimlere ayrılmış daireden yaklaşık alan hesabı" style="max-width:80%;height:auto">
 </div>
+<div style="text-align:center;margin:8px 0 14px"><button class="submit-btn" id="dlmdrBtn" disabled>↻ Tekrar Oynat</button></div>
 <div class="def-box">Oluşan dikdörtgen benzeri şeklin <b>uzun kenarı</b>, dairenin çevresinin yarısına eşittir<br>(çünkü dilimlerin yarısı üstte, yarısı altta yer alır):<br>Uzun kenar ≈ \(\dfrac{2\pi r}{2} = \pi r\)<br>Şeklin <b>kısa kenarı</b> ise dairenin yarıçapına (r) eşittir.</div>
 <div class="gen-box">Alan = (Uzun kenar) × (Kısa kenar) = πr × r = <b>π × r²</b></div>
 <div class="tip-box">Bu çıkarımı, farklı yarıçaplı dairelerde ve farklı sayıda dilimle de deneyerek (dilim sayısı arttıkça yaklaşımın iyileştiğini görerek) değerlendirebiliriz.</div>
@@ -354,5 +355,31 @@ function answerQuiz(i){
 function nextQuiz(){qIndex++;renderQuiz();}
 function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
+
+/* ---- "Dilimlerden Dikdörtgene" GIF'i: bir kez oynar, bitince "Tekrar Oynat" düğmesi etkinleşir ---- */
+const GIF_DOSYA='img/dlmdr.gif';
+const GIF_MS=null; /* null: GIF süresi dosyadan otomatik okunur. Elle vermek isterseniz milisaniye yazın (örn. 9500) */
+function gifSure(buf){ /* son kare hariç kare gecikmelerinin toplamı (ms); okunamazsa null */
+  const b=new Uint8Array(buf);if(b.length<14||String.fromCharCode(b[0],b[1],b[2])!=='GIF')return null;
+  let p=13;if(b[10]&0x80)p+=3*(1<<((b[10]&7)+1));const d=[];
+  while(p<b.length){const t=b[p];if(t===0x3B)break;
+    if(t===0x21){if(b[p+1]===0xF9)d.push(b[p+4]|(b[p+5]<<8));p+=2;while(b[p]!==0)p+=b[p]+1;p++;}
+    else if(t===0x2C){const f=b[p+9];p+=10;if(f&0x80)p+=3*(1<<((f&7)+1));p++;while(b[p]!==0)p+=b[p]+1;p++;}
+    else break;}
+  if(d.length<2)return null;
+  return d.slice(0,-1).reduce((s,x)=>s+(x<=1?10:x)*10,0);
+}
+(function(){
+  const img=document.getElementById('dlmdrGif'),btn=document.getElementById('dlmdrBtn');if(!img||!btn)return;
+  const sureP=(GIF_MS===null&&typeof fetch==='function')?fetch(GIF_DOSYA).then(r=>r.arrayBuffer()).then(gifSure).catch(()=>null):Promise.resolve(null);
+  let tm=0,basladi=false;
+  function bitis(){clearTimeout(tm);sureP.then(o=>{const ms=GIF_MS!==null?GIF_MS:(o||0);tm=setTimeout(()=>{btn.disabled=false;},ms+300);});}
+  function oynat(){
+    btn.disabled=true;clearTimeout(tm);img.removeAttribute('src');
+    setTimeout(()=>{img.onload=bitis;img.onerror=()=>{img.onerror=null;img.src=GIF_DOSYA;};img.src=GIF_DOSYA+'?t='+Date.now();},30);
+  }
+  btn.addEventListener('click',oynat);
+  document.querySelector('.tab-btn[data-tab="tab1"]').addEventListener('click',()=>{if(!basladi){basladi=true;oynat();}});
+})();
 </script>
 </body></html>
