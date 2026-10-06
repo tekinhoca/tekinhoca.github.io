@@ -1,0 +1,536 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>7. Sınıf Matematik — MAT.7.6.1 İstatistiksel Araştırma Süreci</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#0d9488;--primary2:#134e4a;--primary-light:#e6f7f5;--accent:#14b8a6;--amber:#b45309;--success:#059669;--success-light:#eafaf3;--danger:#b91c1c;--warning:#b45309;--warning-light:#fff7e6;--text:#0b2422;--muted:#5f8a85;--border:#d7ece9;--bg:#f6fbfa;--dark:#050505;--shadow:0 4px 18px rgba(13,148,136,.12)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#000 0%,#000 34%,#042f2c 66%,#0f766e 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(0,40,35,.4)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#2dd4bf;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#0d9488;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(120,220,210,.3);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#a8f0e6;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(160,240,230,.25);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(225,250,247,.85);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#042f2c);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(0,40,35,.4);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.58rem,2vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(13,148,136,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid var(--warning)}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#eef5f4;border-left:4px solid #9db8b5}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fbfefe;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#f6fbfb;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #cbe6e2;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#f3fbfa);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.svg-wrap{display:flex;justify-content:center;align-items:center;margin:8px auto;overflow:hidden;border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;max-width:780px}.svg-wrap svg{width:min(100%,560px);height:auto;display:block}.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#04211e;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#a8f0e6}.badge-mini{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:99px;padding:4px 12px;font-size:.8rem;font-weight:900;margin:3px}
+footer{margin-top:28px;background:#03201d;color:#dff4f0;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.slider-wrap{margin:10px 0}.slider-wrap input[type=range]{width:100%;accent-color:var(--primary)}.slider-label{display:flex;justify-content:space-between;font-weight:800;color:var(--primary);font-size:.9rem;margin-bottom:5px}
+.progress-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.pdot{width:10px;height:10px;border-radius:50%;background:var(--border)}.pdot.done{background:var(--success)}.pdot.now{background:var(--primary)}
+.step-list{counter-reset:step;margin:12px 0}.step-list li{list-style:none;counter-increment:step;position:relative;padding:8px 8px 8px 40px;margin:6px 0;font-size:.92rem;background:#fbfefe;border:1.5px solid var(--border);border-radius:12px}.step-list li:before{content:counter(step);position:absolute;left:8px;top:8px;background:var(--primary);color:#fff;font-weight:800;font-size:.78rem;width:22px;height:22px;border-radius:7px;display:flex;align-items:center;justify-content:center}
+.result-strip{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:120px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:10px 12px;text-align:center}.result-pill .lbl{font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.05rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:1.5em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;word-break:break-word}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.chip-btn{background:#fbfefe;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
+.ghost-btn:disabled,.submit-btn:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+.tf-row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap;align-items:center;background:#fafcfe;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px}.tf-statement{flex:1;min-width:220px;font-weight:700;font-size:.92rem}.tf-btn{border:2px solid var(--border);background:#fff;border-radius:10px;padding:7px 16px;font-weight:800;cursor:pointer;font-size:.86rem}.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.sl-row{display:flex;align-items:center;gap:12px;margin:10px 0;font-weight:700}.sl-row input{flex:1;accent-color:var(--primary)}.sl-row .v{min-width:70px;text-align:center;background:var(--primary-light);color:var(--primary);border-radius:8px;padding:4px 8px}.tool{background:var(--bg);border:2px solid var(--border);border-radius:14px;padding:14px;margin:12px 0}.tool-out{display:flex;flex-wrap:wrap;gap:14px;justify-content:center}.gi{width:70px}.match-row select{padding:6px;border-radius:8px;border:2px solid var(--border);font-family:inherit}.pbar{height:14px;border-radius:99px;background:var(--border);overflow:hidden}.pbar div{height:100%;background:var(--success);width:0;transition:width .3s}</style></head><body>
+<header><div class="badge">7. SINIF MATEMATİK · 6. TEMA · MAT.7.6.1</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>İstatistiksel Araştırma Süreci</h1><p>Kategorik veya nicel (sürekli) veriyle çalışır; araştırma sorusu oluşturur, veri toplar, görselleştirir, özetler, analiz eder ve sonuçlara dayalı karar verir.</p></header>
+<nav class="tab-bar">
+<button class="tab-btn active" data-tab="tab0">GİRİŞ</button>
+<button class="tab-btn" data-tab="tab1">SORU, EVREN, ÖRNEKLEM</button>
+<button class="tab-btn" data-tab="tab2">VERİ TOPLAMA</button>
+<button class="tab-btn" data-tab="tab3">ÇİZGİ / NOKTA GRAFİĞİ</button>
+<button class="tab-btn" data-tab="tab4">KATEGORİK VERİ VE ARAÇ SEÇİMİ</button>
+<button class="tab-btn" data-tab="tab5">MERKEZİ EĞİLİM</button>
+<button class="tab-btn" data-tab="tab6">YAYILIM</button>
+<button class="tab-btn" data-tab="tab7">SONUÇ VE KARAR</button>
+<button class="tab-btn" data-tab="tab8">PERFORMANS GÖREVİ</button>
+<button class="tab-btn" data-tab="tab9">ÖRNEKLER</button>
+<button class="tab-btn" data-tab="tab10">ÇALIŞMA</button>
+<button class="tab-btn" data-tab="tab11">ÖZET</button>
+<button class="tab-btn" data-tab="tab12">KENDİNİ DENE</button>
+</nav>
+<main class="container">
+
+<section class="tab-panel active" id="tab0">
+
+<div class="card"><div class="card-title"><div class="icon">🔄</div>İstatistiksel Araştırma Süreci</div>
+<p class="body-text">İstatistiksel araştırma, belirli adımları izleyen ve gerektiğinde başa dönülebilen <b>döngüsel bir süreçtir</b>.<br>Bu süreçte iki tür veriyle çalışılır:<br><b>1- Kategorik veri:</b> Favori renk, kan grubu gibi sınıflara ayrılan veri<br><b>2- Nicel (sürekli) veri:</b> Boy, sıcaklık, süre gibi ölçülebilen ve ara değerler alabilen sayısal veri</p>
+<div class="svg-wrap"><svg viewBox="0 0 560 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="İstatistiksel araştırma süreci döngüsü"><g id="cycleGrid"></g></svg></div>
+<div class="tip-box">Süreç, sonuçların araştırma sorusunu yeterince yanıtlayıp yanıtlamadığının değerlendirilmesiyle biter.<br>Ama gerekirse buradan sürecin herhangi bir adımına geri dönülüp o adım yeniden planlanır. Bu yüzden sürece <b>döngüsel</b> denir.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🧐</div>İstatistiksel Araştırma Gerektiren Durumları Fark Etme</div><p class="body-text">Her durum için veri toplayarak ya da hazır veriyi inceleyerek yanıt aramak gerekir mi? Karar verin; cevaptan sonra gerekçeyi okuyun.</p><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Sınıftaki öğrencilerin bir gecede kaç saat uyuduğunu öğrenmek istiyorsun.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Gerektirir</button><button class="tf-btn" data-val="false" onclick="chk(this)">Gerektirmez</button></div><div class="note-box" style="display:none">Cevap öğrenciden öğrenciye değişir ve veri toplanarak yanıtlanabilir; bu durum istatistiksel araştırma gerektirir.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Okulunun kaç sınıftan oluştuğunu söylemek istiyorsun.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Gerektirir</button><button class="tf-btn" data-val="false" onclick="chk(this)">Gerektirmez</button></div><div class="note-box" style="display:none">Cevap tektir ve değişmez; sayarak bulunur, istatistiksel araştırma gerekmez.</div><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Mahalledeki marketlerde satılan makarna çeşitlerini karşılaştırmak istiyorsun.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Gerektirir</button><button class="tf-btn" data-val="false" onclick="chk(this)">Gerektirmez</button></div><div class="note-box" style="display:none">Marketten markete değişen bir durumdur; veri toplanarak karşılaştırılabilir.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Matematik öğretmeninin adını yazmak istiyorsun.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Gerektirir</button><button class="tf-btn" data-val="false" onclick="chk(this)">Gerektirmez</button></div><div class="note-box" style="display:none">Cevap tek ve bellidir; veri toplamaya gerek yoktur.</div><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Kuraklıkla ilgili yayımlanmış bir raporda yer alan grafiği incelemek ve yorumlamak istiyorsun.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Gerektirir</button><button class="tf-btn" data-val="false" onclick="chk(this)">Gerektirmez</button></div><div class="note-box" style="display:none">Hazır bir veri ya da rapor üzerinden de araştırma yapılabilir; veriyi inceleme ve yorumlama becerisi gerekir.</div></div>
+</section>
+
+<section class="tab-panel" id="tab1">
+
+<div class="card"><div class="card-title"><div class="icon">❓</div>Araştırma Sorusu, Evren ve Örneklem</div>
+<div class="def-box"><b>Evren:</b> Araştırmacının, hakkında bilgi edinmek istediği en geniş grup (ör. okuldaki tüm öğrenciler).<br><b>Örneklem:</b> Evrenin içinden seçilen ve evreni temsil etmesi beklenen daha küçük alt grup (ör. her sınıftan seçilen 5 öğrenci).</div>
+<p class="body-text">İyi bir araştırma sorusu şu dört özelliği taşımalıdır:<br>- Amacı net olmalı<br>- Değişkeni belirlenebilir olmalı<br>- Veri toplanarak cevaplanabilir olmalı<br>- Cevaplar <b>değişebilir</b> (herkeste/her ölçümde aynı çıkmayan) olmalı</p>
+<div class="chip-row" id="t1Chips"></div>
+<div class="def-box" id="t1Info"></div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🌡️</div>Verinin Değişebilirliği</div><p class="body-text">İyi bir araştırma sorusunda verinin <b>değişebilir</b> olması gerekir.<br>Nabız ölçme örneğini ele alırsak, değişebilirlik aşağıdaki üç kaynaktan gelebilir:</p><div class="three-col"><div class="info-tile"><h4>Doğal ortam</h4><p class="body-text" style="font-size:.86rem;margin:0">Dinlenme hâlindeki kalp atış sayısı; kişinin yaşına, kütlesine ve ölçümün yapıldığı yere göre değişir.</p></div><div class="info-tile"><h4>Müdahale Zamanı</h4><p class="body-text" style="font-size:.86rem;margin:0">Koşudan sonra ölçülen kalp atış sayısı, koşudan önce ölçülen değerden farklı çıkar.</p></div><div class="info-tile"><h4>Ölçüm</h4><p class="body-text" style="font-size:.86rem;margin:0">Aynı kişinin nabzı iki kez sayılırsa sayım ya da ölçüm farkı nedeniyle sonuçlar değişebilir.</p></div></div><div class="q-card" data-okmsg="Doğru! Aynı kişide sayım ya da ölçüm farkı nedeniyle oluşan değişim ölçümden kaynaklıdır." data-nomsg="Yanlış: Aynı kişide sayım ya da ölçüm farkı nedeniyle oluşan değişim ölçümden kaynaklıdır."><div class="q-text">Aynı kişinin nabzı iki kez sayılıyor ve farklı değerler bulunuyor. Bu değişebilirlik hangi kaynaktan gelir?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Doğal ortamdan kaynaklı değişebilirlik</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Müdahaleden kaynaklı değişebilirlik</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Değişebilirlik yoktur</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Ölçümden kaynaklı değişebilirlik</button></div><div class="feedback"></div></div></div><div class="card"><div class="card-title"><div class="icon">✅</div>Araştırma Sorusu Uygun mu?</div><p class="body-text">Dört ölçüte göre karar verin: amaç net mi, değişken belirlenebilir mi, veri toplanarak cevaplanabilir mi, veri değişebilir mi? Cevaptan sonra gerekçeyi okuyun.</p><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Sınıfımızdaki öğrencilerin dinlenme hâlinde dakikadaki kalp atış sayıları nasıl dağılıyor?</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Amaç net, değişken (kalp atış sayısı) belli, veri toplanarak cevaplanabilir ve cevap kişiden kişiye değişir.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Matematik dersi güzel mi?</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Amaç net değil; “güzel” ölçülebilir bir değişken olarak tanımlanmamış.</div><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Sınıfımızdaki öğrencilerin günlük ortalama süresiyle 7A'dakilerin günlük ortalama uyku sürelerini karşılaştıralım.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Karşılaştırma gerektiren, veriyle cevaplanabilir ve cevabı değişebilen bir sorudur.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Okulumuzun adresi nedir?</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Cevap tektir ve değişmez; verinin değişebilirliği ölçütü sağlanmıyor.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Dünyadaki bütün insanların günlük su tüketimi ortalama kaç litredir?</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Herkese ulaşılamayacağı için bu soru, öğrencinin toplayabileceği veriyle cevaplanamaz.</div><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Mahalledeki marketlerde satılan makarna çeşitleri marketten markete farklılık gösteriyor mu?</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Marketlerden veri toplanarak karşılaştırma yapılabilir; cevap marketten markete değişebilir.</div><div class="tool"><p class="body-text"><b>Arkadaşının sorusunu incele:</b> Arkadaşının araştırma sorusunu aşağıya yaz ve ölçütleri işaretle. Eksik ölçüt varsa soruyu birlikte düzeltin.</p><textarea rows="2" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:8px;font-family:inherit" placeholder="Araştırma sorusu..."></textarea><div id="qevA"><label style="display:block"><input type="checkbox" onchange="uqv()"> Amacı net.</label><label style="display:block"><input type="checkbox" onchange="uqv()"> Değişkeni belirlenebilir.</label><label style="display:block"><input type="checkbox" onchange="uqv()"> Veri toplanarak cevaplanabilir.</label><label style="display:block"><input type="checkbox" onchange="uqv()"> Verisi değişebilir.</label></div><div class="def-box" id="qvoA"></div></div></div><div class="card"><div class="card-title"><div class="icon">🌍</div>Evren ve Örneklem Uygun mu?</div><p class="body-text">Önce araştırmanın çerçevesine uygun <b>evren</b> belirlenir; ardından evreni temsil eden bir <b>örneklem</b> seçilir. Aşağıdaki tanımlar uygun mu?</p><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Araştırma: Mahalledeki marketlerde satılan makarna çeşitleri. Evren: Mahalledeki bütün marketler.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Evren, araştırma çerçevesine uygun belirlenmiş: soru marketlerle ilgili ve mahalleyle sınırlı.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Aynı araştırma. Evren: Yalnızca mahalledeki tek bir büyük market.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Tek market, mahalledeki bütün marketleri temsil etmez; evren çerçeveye uygun değil.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Araştırma: Okulumuzdaki 7. sınıfların uyku süreleri. Evren: Şehirdeki bütün öğrenciler.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Araştırma yalnızca okuldaki 7. sınıfları kapsıyor; şehirdeki bütün öğrenciler çerçevenin dışına taşar.</div><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Aynı araştırma. Evren: Okulumuzdaki bütün 7. sınıf öğrencileri; örneklem: her şubeden rastgele seçilen 5 öğrenci.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Uygun</button><button class="tf-btn" data-val="false" onclick="chk(this)">Uygun değil</button></div><div class="note-box" style="display:none">Evren çerçeveye uygun; örneklem her şubeden seçildiği için evreni temsil etme olasılığı yüksektir.</div></div>
+</section>
+
+<section class="tab-panel" id="tab2">
+
+<div class="card"><div class="card-title"><div class="icon">🔒</div>Veri Toplama ve Mahremiyet</div>
+<p class="body-text">Veriye iki şekilde ulaşılabilir:<br>- Kendi anketini oluşturup veri toplamak<br>- Hazır bir veri setine (resmî kurum, güvenilir kaynak) ulaşmak.<br>Kendi anketinizi hazırlarken sorular açık, anlaşılır ve araştırmanın kaynağı olan soruya uygun olmalıdır.</p>
+<div class="two-col">
+<div class="ex-card"><div class="ex-header"><div class="ex-num">✓</div><div class="ex-q">"Günde kaç saat uyuyorsun?"</div></div><div class="ex-body"><button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Değerlendirmeyi Gör</button><div class="ex-steps"><div class="ex-result">Uygun: Açık, net, ölçülebilir bir cevap istiyor.</div></div></div></div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">✗</div><div class="ex-q">"Yeterince uyumuyorsun, değil mi?"</div></div><div class="ex-body"><button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Değerlendirmeyi Gör</button><div class="ex-steps"><div class="ex-result">Uygun değil: Katılımcıyı belirli bir cevaba yönlendiriyor.</div></div></div></div>
+</div>
+<div class="tip-box"><b>Mahremiyet:</b> Kişisel verileri (isim, aile bilgisi, özel mesajlar gibi) toplarken ve paylaşırken ilgili kişilerden izin almak gerekir; bu bilgiler üçüncü kişilerle paylaşılmamalıdır. Dijital ortamda verilen izinlerin ne anlama geldiğine dikkat edilmelidir.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🗺️</div>Veri Toplama Planı</div><p class="body-text">Veriyi kendin toplayacaksan şunlara karar vermelisin: <b>anketi oluşturma</b>, <b>örneklemi seçme</b>, verilerin <b>nerede, ne zaman, nasıl</b> toplanacağı ve <b>nasıl kaydedileceği</b>. Bir araştırma seçin; planı inceleyin.</p><div class="chip-row" id="planChips"></div><div class="tool"><div id="upt"></div></div><div class="tip-box">Anketi hazırlarken ve veriyi toplarken grup arkadaşlarınla iş bölümü yapabilirsin. Çevrim içi anket uygulamalarından ve elektronik tablodan (Excel) yararlanabilirsin. Veri sınıf dışında toplanırsa analiz ve yorumlama sınıfta sürdürülür.</div><div class="note-box"><b>Hazır veri:</b> Medyadan ya da resmî kanallardan hazır veriye de ulaşabilirsin. İlerleyen çalışmalarda Türkiye İstatistik Kurumu (TÜİK), Ekonomik Kalkınma ve İşbirliği Örgütü (OECD) ya da Dünya Sağlık Örgütü (WHO) gibi resmî platformların yayımladığı verileri inceleyebilirsin.</div></div><div class="card"><div class="card-title"><div class="icon">🔐</div>Kişisel Veri, İzin ve Mahremiyet</div><p class="body-text">Anketin kişisel bilgi (isim, aile bilgisi, özel mesaj gibi) içeren sorular barındırıyorsa şu soruları arkadaşlarınla tartışın:</p><ul class="step-list"><li>“Sana ait bu bilgileri istememde sakınca var mı?”</li><li>“Arkadaşlarından bu tür bilgileri toplarken izin alıyor musun?”</li><li>“Kişisel bilgilerini istemen arkadaşlarını rahatsız ediyor mu?”</li></ul><div class="def-box"><b>Dijital ortamda:</b> Kişisel verinin gizliliğinin ihlali ciddi sonuçlar doğurabilir. Özel konuşmalar ve mesajlar başkalarıyla paylaşılmaz. Veri toplamadan önce arkadaşlarından, katılımcılardan ya da kurumlardan izin alınmalıdır.</div><div class="q-card" data-okmsg="Doğru! Kişisel bilgi toplamadan önce izin alınır; araştırma için gerekmeyen bilgi istenmez." data-nomsg="Yanlış: Kişisel bilgi toplamadan önce izin alınır; araştırma için gerekmeyen bilgi istenmez."><div class="q-text">Anketine arkadaşlarının kişisel bilgilerini eklemeden önce ne yapmalısın?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hiçbir şey yapmadan bilgileri toplamalıyım</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Bilgileri herkesle paylaşmalıyım</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">İzin almalı ve bu bilgilerin araştırma için gerçekten gerekli olup olmadığını düşünmeliyim</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yalnızca bilgisi olmayan arkadaşlarıma sormalıyım</button></div><div class="feedback"></div></div></div>
+</section>
+
+<section class="tab-panel" id="tab3">
+
+<div class="card"><div class="card-title"><div class="icon">📊</div>Çizgi Grafiği ve Nokta Grafiği</div>
+<div class="def-box"><b>Çizgi Grafiği:</b> Genellikle zaman içerisindeki değişimi ve eğilimleri göstermek için kullanılır.<br><b>Nokta Grafiği:</b>  Küçük veri gruplarında her bir verinin kaç kez tekrar ettiğini, doğrudan bir sayı doğrusu üzerine konan noktalarla gösterir. Özellikle tepe değeri (mod) ve verilerin yayılımını gözle görmek için çok uygundur.</div>
+<p class="body-text">Aşağıda, bir kasabada 6 gün boyunca elde edilen sıcaklık verilerini düzenleyeceğiniz bir etkinlik var.<br>Kaydırıcıları kullanarak sıcaklık değerlerini değiştirin.<br>Verileri hem <b>çizgi grafiğinde</b> hem de <b>nokta grafiğinde</b> anında görebilirsiniz.<br><b>Nicel (sürekli) veriler, çizgi grafiğiyle daha iyi anlaşılır.</b></p>
+<div class="three-col">
+<div class="slider-wrap"><div class="slider-label"><span>Pzt</span><span id="lg0Out">18°</span></div><input type="range" id="lg0" min="10" max="30" step="1" value="18"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Sal</span><span id="lg1Out">20°</span></div><input type="range" id="lg1" min="10" max="30" step="1" value="20"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Çar</span><span id="lg2Out">19°</span></div><input type="range" id="lg2" min="10" max="30" step="1" value="19"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Per</span><span id="lg3Out">23°</span></div><input type="range" id="lg3" min="10" max="30" step="1" value="23"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Cum</span><span id="lg4Out">25°</span></div><input type="range" id="lg4" min="10" max="30" step="1" value="25"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Cmt</span><span id="lg5Out">24°</span></div><input type="range" id="lg5" min="10" max="30" step="1" value="24"></div>
+</div>
+<div class="svg-wrap"><svg viewBox="0 0 620 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nokta grafiği ve çizgi grafiği modeli"><g id="lgGrid"></g></svg></div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🔗</div>Noktalardan Çizgiye</div><p class="body-text">Sıcaklık gibi <b>sürekli</b> veriler iki ölçüm arasında da değer alabilir. Bu yüzden noktalar arasında boşluk bırakmak yerine noktaları yaklaştırıp <b>birleştiririz</b>; ortaya çıkan <b>çizgi grafiği</b> verinin sürekli olarak değiştiğini gösterir. Yukarıdaki etkinlikte kaydırıcıları oynatırken noktalardan çizgiye geçişi izleyin.</p><div class="q-card" data-okmsg="Doğru! Sürekli veri iki ölçüm arasında da değer alabildiği için noktalar çizgiyle birleştirilir." data-nomsg="Yanlış: Sürekli veri iki ölçüm arasında da değer alabildiği için noktalar çizgiyle birleştirilir."><div class="q-text">Sürekli veri için noktaları birleştirmeye neden ihtiyaç duyarız?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Noktalar çok küçük olduğu için</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çizgi grafiği daha renkli olduğu için</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Veri sayısını azaltmak için</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Sürekli veri iki ölçüm arasında da değer alabildiği için noktalar arasında boşluk bırakılmaz</button></div><div class="feedback"></div></div></div>
+</section>
+
+<section class="tab-panel" id="tab4">
+<div class="card"><div class="card-title"><div class="icon">🥧</div>Kategorik Veride Sütun ve Daire Grafiği</div><p class="body-text">Kategorik veriyi sıklık değerleriyle gösterebiliriz. Bir veri seti ve bir grafik türü seçin. Kategorik veride merkez için <b>tepe değer</b> (mod) kullanılır: en çok tekrar eden kategori.</p><div class="chip-row" id="uk1"></div><div class="chip-row" id="uk2"></div><div class="tool"><div class="tool-out" id="u4o"></div><div class="def-box" id="u4i"></div></div></div><div class="card"><div class="card-title"><div class="icon">🧰</div>Görselleştirme Aracını Seç ve Gerekçelendir</div><p class="body-text">Hangi aracı seçeceğin <b>veri türüne</b> ve <b>amacına</b> bağlıdır. Veri türünü ve amacı seçin; önerilen aracı, gerekçesini ve zayıf yönünü okuyun.</p><div class="chip-row" id="ua1"></div><div class="chip-row" id="ua2"></div><div class="def-box" id="ua3"></div><table class="mini-table"><tr><th>Araç</th><th>Güçlü yönü</th><th>Zayıf yönü</th></tr><tr><td>Sütun grafiği</td><td>Kategorileri yükseklikle karşılaştırır</td><td>Parça-bütün ilişkisi doğrudan görünmez</td></tr><tr><td>Daire grafiği</td><td>Parçaların bütündeki payını gösterir</td><td>Çok kategoride dilimler ayırt edilemez</td></tr><tr><td>Çizgi grafiği</td><td>Zamana bağlı değişimi gösterir</td><td>Her ölçümün tekrar sayısını göstermez</td></tr><tr><td>Nokta grafiği</td><td>Her veriyi ve yayılımı gösterir</td><td>Çok veride kalabalıklaşır</td></tr></table><p class="body-text"><b>Eşleştirme:</b> Her durum için uygun aracı seçin.</p><div id="mtC"><div class="match-row" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;margin:4px 0"><span style="flex:1">Bir kasabada 6 günlük sıcaklık değişimi</span><select data-ans="Çizgi grafiği"><option value="">Seç</option><option>Sütun grafiği</option><option>Daire grafiği</option><option>Çizgi grafiği</option><option>Nokta grafiği</option></select></div><div class="match-row" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;margin:4px 0"><span style="flex:1">Okula ulaşım şekillerinin sınıf içindeki payları</span><select data-ans="Daire grafiği"><option value="">Seç</option><option>Sütun grafiği</option><option>Daire grafiği</option><option>Çizgi grafiği</option><option>Nokta grafiği</option></select></div><div class="match-row" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;margin:4px 0"><span style="flex:1">Ulaşım şekillerinin sıklıklarını karşılaştırmak</span><select data-ans="Sütun grafiği"><option value="">Seç</option><option>Sütun grafiği</option><option>Daire grafiği</option><option>Çizgi grafiği</option><option>Nokta grafiği</option></select></div><div class="match-row" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;margin:4px 0"><span style="flex:1">Küçük bir gruptaki test puanlarının tekrar sayıları</span><select data-ans="Nokta grafiği"><option value="">Seç</option><option>Sütun grafiği</option><option>Daire grafiği</option><option>Çizgi grafiği</option><option>Nokta grafiği</option></select></div></div><button class="submit-btn" onclick="checkMatch('mtC')">Kontrol Et</button><div class="feedback" id="mtCFb"></div><div class="q-card" data-okmsg="Doğru! Daire grafiği parçaların bütün içindeki payını gösterir." data-nomsg="Yanlış: Daire grafiği parçaların bütün içindeki payını gösterir."><div class="q-text">Okula ulaşım şekillerinin bütün içindeki paylarını göstermek için hangi grafik daha uygundur?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çizgi grafiği</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Daire grafiği</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Nokta grafiği</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hiçbiri uygun değildir</button></div><div class="feedback"></div></div></div>
+</section>
+
+<section class="tab-panel" id="tab5">
+
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Merkezi Eğilim Ölçüleri</div>
+<div class="def-box"><b>Aritmetik Ortalama:</b> Veri grubundaki tüm sayıların toplamının, veri sayısına bölünmesiyle bulunur.<br>Aşırı büyük ya da aşırı küçük değerlerden (aykırı değerler) kolayca etkilenir<br><b>Ortanca: (Medyan)</b> Veriler küçükten büyüğe (veya büyükten küçüğe) sıralandığında tam ortada kalan sayıdır.<br>Mutlaka bir tane ortanca vardır.<br>Eğer veri sayısı çift ise, ortadaki iki sayının aritmetik ortalaması alınır.<br><b>Tepe Değer: (Mod)</b> Veri grubunda en çok tekrar eden (en sık görülen) sayıdır.<br>Tekrar eden sayı yoksa tepe değer yoktur. Birden fazla tepe değer de olabilir.</div>
+<p class="body-text">Aşağıda, 7 sayıdan oluşan bir veri seti bulunuyor. Kaydırıcıları kullanarak sayıları değiştirin; <b>aritmetik ortalama</b>, <b>ortanca</b> ve <b>tepe değer</b> canlı olarak hesaplansın.</p>
+<div class="four-col" style="grid-template-columns:repeat(7,1fr)">
+<div class="slider-wrap"><div class="slider-label"><span>A →</span><span id="ce0Out">6</span></div><input type="range" id="ce0" min="1" max="10" step="1" value="6"></div>
+<div class="slider-wrap"><div class="slider-label"><span>B →</span><span id="ce1Out">7</span></div><input type="range" id="ce1" min="1" max="10" step="1" value="7"></div>
+<div class="slider-wrap"><div class="slider-label"><span>C →</span><span id="ce2Out">5</span></div><input type="range" id="ce2" min="1" max="10" step="1" value="5"></div>
+<div class="slider-wrap"><div class="slider-label"><span>D →</span><span id="ce3Out">8</span></div><input type="range" id="ce3" min="1" max="10" step="1" value="8"></div>
+<div class="slider-wrap"><div class="slider-label"><span>E →</span><span id="ce4Out">7</span></div><input type="range" id="ce4" min="1" max="10" step="1" value="7"></div>
+<div class="slider-wrap"><div class="slider-label"><span>F →</span><span id="ce5Out">4</span></div><input type="range" id="ce5" min="1" max="10" step="1" value="4"></div>
+<div class="slider-wrap"><div class="slider-label"><span>G →</span><span id="ce6Out">7</span></div><input type="range" id="ce6" min="1" max="10" step="1" value="7"></div>
+</div>
+<div class="svg-wrap"><svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Merkezi eğilim ölçüleri modeli"><g id="ceGrid"></g></svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Aritmetik Ortalama</div><div class="val" id="ceMean">—</div></div>
+<div class="result-pill"><div class="lbl">Ortanca</div><div class="val" id="ceMedian">—</div></div>
+<div class="result-pill"><div class="lbl">Tepe Değer</div><div class="val" id="ceMode">—</div></div>
+</div>
+<div class="def-box" id="ceExplain"></div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">📍</div>Merkez Veri Setinde Bulunmak Zorunda mı?</div><p class="body-text">Merkez, veri setindeki bir sayı olmak zorunda değildir; veri setinin ortalarını gösteren bir <b>bölgeyi</b> ifade edebilir.<br>Aşağıdaki etkinlikte bir veri seti seçin; üçgen, aritmetik ortalamanın yerini gösterir.</p><div class="chip-row" id="um1"></div><div class="tool"><div class="tool-out" id="u6o"></div><div class="def-box" id="u6i"></div></div><div class="note-box"><b>Veri türüne göre yorum:</b> Kategorik veride merkez, en çok tekrar eden kategoridir (tepe değer). Nicel veride aritmetik ortalama, ortanca ve tepe değer birlikte yorumlanır.</div></div><div class="card"><div class="card-title"><div class="icon">✂️</div>Bir Veriyi Çıkarırsak Ne Değişir?</div><p class="body-text">Bir veri setinden bir verinin çıkarılması merkezî eğilim ölçülerini değiştirebilir. Aşağıdaki sayılardan istediğinizi çıkarın ya da geri ekleyin (en az iki veri kalmalıdır). Sonuçları kendiniz hesaplamak zorunda değilsiniz, değişimi inceleyin.</p><div class="chip-row" id="u7b"></div><div class="tool"><div id="u7i"></div></div><div class="q-card" data-okmsg="Doğru! Aşırı büyük ya da küçük değerler aritmetik ortalamayı ortancadan ve tepe değerden daha çok etkiler." data-nomsg="Yanlış: Aşırı büyük ya da küçük değerler aritmetik ortalamayı ortancadan ve tepe değerden daha çok etkiler."><div class="q-text">Bir veri setinden aşırı büyük bir değer çıkarılınca hangisinin değeri genellikle en çok değişir?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Ortanca</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Tepe değer</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Aritmetik ortalama</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hiçbiri değişmez</button></div><div class="feedback"></div></div></div>
+</section>
+
+<section class="tab-panel" id="tab6">
+
+<div class="card"><div class="card-title"><div class="icon">📏</div>Yayılım Ölçüleri</div>
+<div class="def-box"><b>Açıklık:</b> Veri grubundaki en büyük sayı ile en küçük sayının arasındaki farktır. Verinin ne kadarlık bir genişliğe yayıldığını gösteren en basit ölçüdür.<br><b>Ortalama Mutlak Sapma:</b> Veri setindeki her bir sayının ortalamadan ne kadar saptığını gösteren sayıdır. Verilerin ortalamaya göre ne kadar kararlı veya değişken olduğunu gösterir. Önce aritmetik ortalama hesaplanır. Veri grubundaki her bir sayının ortalamadan ne kadar eksik/fazla olduğu hesaplanır. Bulunan değerlerin mutlak değerleri alınır. Bu değerler toplanarak veri sayısına bölünür.</div>
+<p class="body-text">Aşağıda, 5 sayıdan oluşan bir veri seti bulunuyor. Kaydırıcıları kullanarak bu sayıları değiştirin. <b>Açıklık</b> ve <b>ortalama mutlak sapma</b>nın anlık değişimlerini inceleyin.</p>
+<div class="four-col" style="grid-template-columns:repeat(5,1fr)">
+<div class="slider-wrap"><div class="slider-label"><span>A →</span><span id="sp0Out">8</span></div><input type="range" id="sp0" min="1" max="20" step="1" value="8"></div>
+<div class="slider-wrap"><div class="slider-label"><span>B →</span><span id="sp1Out">12</span></div><input type="range" id="sp1" min="1" max="20" step="1" value="12"></div>
+<div class="slider-wrap"><div class="slider-label"><span>C →</span><span id="sp2Out">10</span></div><input type="range" id="sp2" min="1" max="20" step="1" value="10"></div>
+<div class="slider-wrap"><div class="slider-label"><span>D →</span><span id="sp3Out">15</span></div><input type="range" id="sp3" min="1" max="20" step="1" value="15"></div>
+<div class="slider-wrap"><div class="slider-label"><span>E →</span><span id="sp4Out">9</span></div><input type="range" id="sp4" min="1" max="20" step="1" value="9"></div>
+</div>
+<div class="svg-wrap"><svg viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Yayılım ölçüleri modeli"><g id="spGrid"></g></svg></div>
+<div class="mini-table" id="spTable"></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Açıklık</div><div class="val" id="spRange">—</div></div>
+<div class="result-pill"><div class="lbl">Ortalama Mutlak Sapma</div><div class="val" id="spMad">—</div></div>
+</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">📊</div>Dağılım ve İki Sınıfın Karşılaştırılması</div><div class="def-box"><b>Dağılım:</b> Verilerin hangi değerlerde yoğunlaştığını ve ne kadar yayıldığını gösteren genel görünümdür. Merkez ölçüleri dağılımın merkezinin nerede olduğunu, yayılım ölçüleri verilerin ne kadar dağıldığını gösterir.</div><p class="body-text">İki farklı sınıfın sınav puanları verilmiş. Bir sınav seçin; iki sınıfın puanlarını nokta grafiğinde ve ölçülerde karşılaştırın.</p><div class="chip-row" id="us1"></div><div class="tool"><div id="u8o"></div></div><div class="q-card" data-okmsg="Doğru! Aritmetik ortalama aynı olsa bile veriler farklı genişlikte yayılabilir." data-nomsg="Yanlış: Aritmetik ortalama aynı olsa bile veriler farklı genişlikte yayılabilir."><div class="q-text">Aritmetik ortalamaları eşit olan iki sınıfın açıklıkları farklı olabilir mi?</div><div class="choices"><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Evet; ortalama aynı olsa da puanlar farklı genişlikte yayılabilir</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hayır; ortalama aynıysa açıklık da aynı olmalıdır</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hayır; açıklık her zaman 0’dır</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Evet; ama yalnızca veri sayısı farklıysa</button></div><div class="feedback"></div></div></div>
+</section>
+
+<section class="tab-panel" id="tab7">
+
+<div class="card"><div class="card-title"><div class="icon">✅</div>Sonuç, Karar ve Süreci Değerlendirme</div>
+<p class="body-text">Verileri analiz ettikten sonra ulaşılan sonuçlar için <b>gerekçe</b> sunulmalıdır:<br>"Neden bu sonuca ulaştım?", "Veriler bu sonucu nasıl destekliyor?"</p>
+<ul class="step-list">
+<li>Sonuçlar, araştırma sorusunu ne ölçüde yanıtladığı açısından değerlendirilir.</li>
+<li>Eğer sonuçlar soruyu yeterince yanıtlamıyorsa (ör. örneklem evreni temsil etmiyorsa, veri yetersizse), sürecin ilgili adımı (soru, evren/örneklem, veri toplama, analiz) yeniden planlanır.</li>
+<li>Sonuçlardan yola çıkarak geleceğe yönelik tahminlerde ve önerilerde bulunulabilir.</li>
+</ul>
+<div class="tip-box">Örnek: Bir öğrenci yalnızca kendi sınıfından veri toplayarak "okuldaki tüm öğrenciler günde ortalama 7 saat uyuyor" sonucuna ulaşırsa, bu sonuç güvenilir olmayabilir — çünkü örneklem (tek bir sınıf) okulun tamamını (evreni) temsil etmeyebilir. Bu durumda örneklem seçimi adımı yeniden planlanmalıdır.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🧠</div>Sonuca Gerekçe Sunma ve Yeniden Planlama</div><p class="body-text">Gerekçe cümlesi “çünkü” ile kurulur ve veriye dayanır. Örnek: “Sınıfın günlük uyku süresi ortalaması 7 saattir; çünkü 25 öğrencinin uyku sürelerinin toplamı 175 saattir ve 175 ÷ 25 = 7’dir.”</p><div class="tip-box"><b>Karşılaştırma ve tahmin:</b> Sonuçları farklı gruplarla karşılaştırabilir, verinin ötesine geçerek geleceğe yönelik tahmin ve öneride bulunabilirsin. Örnek: “Uyku süresi kısa olan öğrencilerin sayısı fazlaysa okul saatleri ve ders yükü hakkında öneri geliştirilebilir.”</div><div class="q-card" data-okmsg="Doğru! Tek bir sınıf okulun tamamını temsil etmediği için örneklem seçimi yeniden planlanmalıdır." data-nomsg="Yanlış: Tek bir sınıf okulun tamamını temsil etmediği için örneklem seçimi yeniden planlanmalıdır."><div class="q-text">Okul genelinde uyku süresi araştırılırken yalnızca tek bir sınıftan veri toplanmış. Hangi adım yeniden planlanmalıdır?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Grafiğin başlığı</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Sunum sırası</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Anketin rengi</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Örneklem seçimi</button></div><div class="feedback"></div></div><div class="q-card" data-okmsg="Doğru! Gerekçe, sonucu veriyle ve işlemle destekler." data-nomsg="Yanlış: Gerekçe, sonucu veriyle ve işlemle destekler."><div class="q-text">“Sınıfın uyku süresi ortalaması 7 saattir.” sonucu için hangisi gerekçe sunar?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çünkü ben öyle düşünüyorum</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">25 öğrencinin sürelerinin toplamı 175 saattir ve 175 ÷ 25 = 7’dir</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çünkü herkes böyle diyor</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çünkü sınıf büyüktür</button></div><div class="feedback"></div></div></div>
+</section>
+
+<section class="tab-panel" id="tab8">
+<div class="card"><div class="card-title"><div class="icon">🖼️</div>Performans Görevi 1: Araştırma Ürünü</div><p class="body-text">Ders dışında, gerçek yaşamla ilişkili bir konuda istatistiksel araştırma sürecinin <b>tamamını</b> yürütün ve sonuçlarınızı bir ürünle (poster, afiş, broşür) sınıfta sunun. Konu önerileri: <b>iklim değişikliği, afet bilinci, kuraklık, yapay zekâ, yeterli ve dengeli beslenme, göç</b>. Çevresel sürdürülebilirlik bağlamında küresel su sorunu ya da su tasarrufu konularını seçebilirsiniz.</p><div class="tool"><b>Araştırma planlayıcı</b><div id="pk1" style="margin-top:6px"><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Konu ve araştırma sorusu yazıldı; dört ölçüt kontrol edildi.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Evren ve örneklem belirlendi.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Veri toplama planı yapıldı (nerede, ne zaman, nasıl, nasıl kaydedilecek).</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Anket soruları açık ve tarafsız; kişisel bilgi istenmedi, gerekli izinler alındı.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Veri türüne uygun görselleştirme aracı seçildi ve gerekçesi yazıldı.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Uygun özetleme araçları (ortalama, ortanca, tepe değer, açıklık, ortalama mutlak sapma) kullanıldı.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Sonuçlar gerekçeyle yorumlandı; araştırma sorusunu ne düzeyde yanıtladığı değerlendirildi.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Uygun olmayan bir adım varsa yeniden planlandı.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk1','pb1','po1')"> Ürün düzenli ve anlaşılır tasarlandı; sunuma hazırlanıldı.</label></div><div class="pbar" style="margin-top:8px"><div id="pb1"></div></div><div class="def-box" id="po1"></div></div><table class="mini-table"><tr><th>Ölçüt (analitik puanlama anahtarı)</th><th>Geliştirilmeli</th><th>Yeterli</th><th>Çok iyi</th></tr><tr><td>Araştırma sürecinin araştırma sorusuna uygunluğu</td><td>Soru ile süreç adımları uyumsuz</td><td>Süreç büyük ölçüde soruya uygun</td><td>Her adım soruya uygun ve tutarlı</td></tr><tr><td>Veri özetleme araçlarının kullanımı</td><td>Araçlar yanlış ya da eksik</td><td>Araçlar çoğunlukla doğru kullanılmış</td><td>Araçlar doğru ve gerekçeli seçilmiş</td></tr><tr><td>Sonuçların yorumlanması</td><td>Yorum veriyle ilişkisiz</td><td>Yorum soruyu kısmen yanıtlıyor</td><td>Yorum gerekçeli ve soruyu tam yanıtlıyor</td></tr><tr><td>Ürün düzeni ve sunum</td><td>Düzensiz, anlaşılması zor</td><td>Düzenli</td><td>Düzenli, özgün ve akıcı sunum</td></tr></table><div class="note-box"><b>Akran değerlendirme formu:</b> Arkadaşının sunumu için işaretle.<div id="pe1" style="margin-top:6px"><label style="display:block"><input type="checkbox" onchange="upe('pe1','peo1',4)"> Araştırma süreci araştırma sorusuna uygun ilerledi.</label><label style="display:block"><input type="checkbox" onchange="upe('pe1','peo1',4)"> Görselleştirme ve özetleme araçları uygun kullanıldı.</label><label style="display:block"><input type="checkbox" onchange="upe('pe1','peo1',4)"> Sonuçlar gerekçeyle ve araştırma sorusu bağlamında yorumlandı.</label><label style="display:block"><input type="checkbox" onchange="upe('pe1','peo1',4)"> Ürün düzenli ve anlaşılır.</label></div><b id="peo1"></b></div><div class="note-box"><b>Öz değerlendirme:</b> Araştırma sürecinde en çok hangi adımda zorlandın? Hangi adımı yeniden planladın ve neden? Grup çalışmasında üzerine düşen görevi nasıl yerine getirdin?<textarea rows="3" style="width:100%;border:2px solid var(--border);border-radius:10px;padding:8px;font-family:inherit;margin-top:6px" placeholder="Düşüncelerini yaz..."></textarea></div><div class="note-box"><b>Gözlem formu (öğretmen için kontrol listesi):</b><div id="gz1" style="margin-top:6px"><label style="display:block"><input type="checkbox" onchange="upe('gz1','gzo1',4)"> Süreci döngüsel olarak açıklıyor.</label><label style="display:block"><input type="checkbox" onchange="upe('gz1','gzo1',4)"> Araştırma sorusunu dört ölçüte göre değerlendiriyor.</label><label style="display:block"><input type="checkbox" onchange="upe('gz1','gzo1',4)"> Veri türüne uygun aracı seçip gerekçelendiriyor.</label><label style="display:block"><input type="checkbox" onchange="upe('gz1','gzo1',4)"> Sonuçlarına gerekçe sunuyor ve gerekirse adımı yeniden planlıyor.</label></div><b id="gzo1"></b></div></div><div class="card"><div class="card-title"><div class="icon">📰</div>Performans Görevi 2: Hazır Veri Seti ya da Rapor İncelemesi</div><p class="body-text">Medyada ilginizi çeken ve sınıf düzeyinize uygun bir hazır veri seti ya da rapor seçin, inceleyin ve sınıfta sunun. Sunumunuz araştırma sürecinin nasıl ilerlediğini, görselleştirme ve özetleme araçlarının uygun kullanılıp kullanılmadığını ve sonuçların araştırma sorusu bağlamındaki yorumunu içersin.</p><div class="tool"><b>Sunum hazırlık listesi</b><div id="pk2" style="margin-top:6px"><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk2','pb2','po2')"> Medyada ilgimi çeken, sınıf düzeyime uygun bir hazır veri seti ya da rapor seçtim.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk2','pb2','po2')"> Araştırmanın hangi adımlardan oluştuğunu ve nasıl ilerlediğini belirledim.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk2','pb2','po2')"> Verinin türünü belirleyip kullanılan görselleştirme ve özetleme araçlarını inceledim.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk2','pb2','po2')"> Araçların uygun kullanılıp kullanılmadığını gerekçeleriyle değerlendirdim.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk2','pb2','po2')"> Sonuçları araştırma sorusu bağlamında yorumladım.</label><label style="display:block;margin:4px 0"><input type="checkbox" onchange="upc('pk2','pb2','po2')"> Sunumu hazırladım ve arkadaşlarımın sorularına hazırım.</label></div><div class="pbar" style="margin-top:8px"><div id="pb2"></div></div><div class="def-box" id="po2"></div></div><table class="mini-table"><tr><th>Ölçüt (analitik puanlama anahtarı)</th><th>Geliştirilmeli</th><th>Yeterli</th><th>Çok iyi</th></tr><tr><td>Araştırma süreci adımlarının ilerlemesi</td><td>Adımlar eksik ya da sırasız</td><td>Adımların çoğu doğru sırada</td><td>Bütün adımlar doğru sırada ve açıklanmış</td></tr><tr><td>Görselleştirme ve özetleme araçlarının uygun kullanılması</td><td>Uygun olmayan araç seçimi</td><td>Araçlar çoğunlukla uygun</td><td>Araçlar uygun ve gerekçeli</td></tr><tr><td>Sonuçların araştırma sorusu bağlamında yorumlanması</td><td>Yorum bağlamdan kopuk</td><td>Yorum bağlama kısmen uygun</td><td>Yorum bağlama tam uygun ve gerekçeli</td></tr></table><div class="tip-box"><b>Zenginleştirme:</b> TÜİK, OECD ya da WHO gibi resmî platformlardaki verilerden betimleme veya karşılaştırma gerektiren araştırma soruları oluşturabilir, araştırmanın evren ve örnekleminin nasıl belirlendiğini sorgulayabilirsin.</div></div>
+</section>
+
+<section class="tab-panel" id="tab9">
+
+<div class="card"><div class="card-title"><div class="icon">📚</div>Çözümlü Örnekler</div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 1</div><div class="ex-q">"Sınıfımdaki öğrencilerin favori mevsimi nedir?" araştırma sorusunda veri türü nedir? Evren ne olabilir?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Cevabı Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Favori mevsim, sınırlı sayıda kategoriden (ilkbahar, yaz, sonbahar, kış) biri olduğundan <b>kategorik veridir</b>.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Araştırma sorusu "sınıfımdaki öğrenciler" ile sınırlı olduğundan evren, o sınıftaki tüm öğrencilerdir.</div></div>
+<div class="ex-result">Sonuç: Veri türü kategorik; evren sınıftaki tüm öğrencilerdir (sınıf küçük olduğundan örneklemeye gerek yoktur, tüm evren taranabilir).</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 2</div><div class="ex-q">Bir grubun sınav puanları: 65, 70, 70, 80, 90 olduğuna göre aritmetik ortalama, ortanca ve tepe değeri bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Ortalama: (65+70+70+80+90) ÷ 5 = 375 ÷ 5 = 75</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Ortanca: veriler zaten sıralı, ortadaki değer (3. değer) = 70</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Tepe değer: en sık tekrar eden değer = 70 (iki kez tekrar ediyor)</div></div>
+<div class="ex-result">Sonuç: Ortalama = 75, Ortanca = 70, Tepe değer = 70</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 3</div><div class="ex-q">Yukarıdaki veri setinin açıklığını ve ortalama mutlak sapmasını bulunuz.</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Açıklık = en büyük − en küçük = 90 − 65 = 25</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Ortalama: (65+70+70+80+90) ÷ 5 = 375 ÷ 5 = 75</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Ortalamadan (75) sapmalar: |65−75|=10, |70−75|=5, |70−75|=5, |80−75|=5, |90−75|=15</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Ortalama mutlak sapma = (10+5+5+5+15) ÷ 5 = 40 ÷ 5 = 8</div></div>
+<div class="ex-result">Sonuç: Açıklık = 25, Ortalama mutlak sapma = 8</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 4</div><div class="ex-q">Bir öğrenci "Şehrimizdeki herkes günde 2 litre su içiyor." sonucuna, yalnızca 5 arkadaşına sorarak ulaşmıştır. Bu süreçte hangi adım yeniden planlanmalıdır?</div></div>
+<div class="ex-body">
+<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Cevabı Göster / Gizle</button>
+<div class="ex-steps">
+<div class="ex-step"><div class="snum">1</div><div>Evren "şehirdeki herkes" olarak tanımlanmış ama örneklem yalnızca 5 arkadaştan oluşuyor.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Bu kadar küçük ve rastgele olmayan bir örneklem, şehrin tamamını temsil edemez.</div></div>
+<div class="ex-result">Sonuç: Örneklem seçimi adımı yeniden planlanmalı; daha büyük ve şehri temsil eden çeşitli bir örneklem oluşturulmalıdır.</div>
+</div>
+</div></div>
+
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 5</div><div class="ex-q">Okula ulaşım şekillerini gösteren sütun grafiğinde çubuklar şöyle: Yürüyerek 9, Servis 7, Aile aracı 6, Toplu taşıma 4, Bisiklet 2. Veri sayısını ve tepe değeri bulunuz.</div></div><div class="ex-body"><button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Cevabı Göster / Gizle</button><div class="ex-steps"><div class="ex-step"><div class="snum">1</div><div>Veri sayısı: 9 + 7 + 6 + 4 + 2 = 28.</div></div><div class="ex-step"><div class="snum">2</div><div>En yüksek çubuk Yürüyerek (9); en çok tekrar eden kategori budur.</div></div><div class="ex-result">Veri sayısı 28; tepe değer: Yürüyerek</div></div></div></div><div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 6</div><div class="ex-q">Bir kasabada 6 günlük sıcaklıklar 18°, 20°, 19°, 23°, 25°, 24° olarak ölçülmüştür. Hangi grafik uygundur ve neden?</div></div><div class="ex-body"><button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Cevabı Göster / Gizle</button><div class="ex-steps"><div class="ex-step"><div class="snum">1</div><div>Sıcaklık sürekli bir veridir; iki ölçüm arasında da değer alabilir.</div></div><div class="ex-step"><div class="snum">2</div><div>Zamana bağlı değişimi göstermek istiyoruz.</div></div><div class="ex-result">Çizgi grafiği; sıcaklığın günlere göre değişimi çizgiyle izlenir.</div></div></div></div><div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 7</div><div class="ex-q">7-A sınıfının puanları 60, 70, 70, 70, 80; 7-B sınıfının puanları 40, 60, 70, 80, 100’dür. İki sınıfı karşılaştırınız.</div></div><div class="ex-body"><button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Cevabı Göster / Gizle</button><div class="ex-steps"><div class="ex-step"><div class="snum">1</div><div>Ortalamalar: 7-A: 350 ÷ 5 = 70; 7-B: 350 ÷ 5 = 70.</div></div><div class="ex-step"><div class="snum">2</div><div>Açıklıklar: 7-A: 80 − 60 = 20; 7-B: 100 − 40 = 60.</div></div><div class="ex-step"><div class="snum">3</div><div>Ortalama mutlak sapmalar: 7-A: (10+0+0+0+10) ÷ 5 = 4; 7-B: (30+10+0+10+30) ÷ 5 = 16.</div></div><div class="ex-result">Ortalamalar eşit, ama 7-B’nin puanları çok daha geniş yayılmış (açıklık 60, ortalama mutlak sapma 16).</div></div></div></div></div>
+
+</section>
+
+<section class="tab-panel" id="tab10">
+<div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div><div class="q-card" data-okmsg="Doğru! Boy, ara değerler alabilen (ölçülebilen) bir veridir." data-nomsg="Yanlış: Boy, ara değerler alabilen (ölçülebilen) bir veridir."><div class="q-text">“Öğrencilerin boy uzunluğu” hangi veri türüne örnektir?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Kategorik veri</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Ne kategorik ne nicel</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Nicel (sürekli) veri</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Belirlenemez</button></div><div class="feedback"></div></div><div class="q-card" data-okmsg="Doğru! Örneklem, evreni temsil edecek şekilde seçilmelidir." data-nomsg="Yanlış: Örneklem, evreni temsil edecek şekilde seçilmelidir."><div class="q-text">Bir örneklemin iyi bir örneklem sayılabilmesi için en önemli özelliği nedir?</div><div class="choices"><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Evreni iyi temsil etmesi</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Mümkün olduğunca küçük olması</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yalnızca arkadaşlardan oluşması</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Evrenle aynı büyüklükte olması</button></div><div class="feedback"></div></div><div class="q-card" data-okmsg="Doğru! Sürekli veriler zamana bağlı değişimi göstermek için çizgi grafiğiyle daha iyi ifade edilir." data-nomsg="Yanlış: Sürekli veriler zamana bağlı değişimi göstermek için çizgi grafiğiyle daha iyi ifade edilir."><div class="q-text">Günlük sıcaklık gibi sürekli bir veriyi zaman içindeki değişimiyle göstermek için en uygun grafik türü hangisidir?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Sütun grafiği</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Daire grafiği</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yalnızca nokta grafiği</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Çizgi grafiği</button></div><div class="feedback"></div></div><div class="q-card" data-okmsg="Doğru! Yönlendirici sorular katılımcıyı belirli bir cevaba iter, güvenilir veri vermez." data-nomsg="Yanlış: Yönlendirici sorular katılımcıyı belirli bir cevaba iter, güvenilir veri vermez."><div class="q-text">“Okulumuzun en güzel dersi matematik değil mi?” anket sorusu neden uygun değildir?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çok uzundur</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Yönlendirici bir sorudur</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Kategorik veri istiyor</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Anlaşılmazdır</button></div><div class="feedback"></div></div><div class="q-card" data-okmsg="Doğru! Açıklık ve ortalama mutlak sapma, verilerin ne kadar yayıldığını gösterir." data-nomsg="Yanlış: Açıklık ve ortalama mutlak sapma, verilerin ne kadar yayıldığını gösterir."><div class="q-text">Aritmetik ortalaması aynı olan iki sınıftan birinin puanları çok geniş bir aralığa yayılmış, diğerinin puanları birbirine çok yakın. Bu durum hangi ölçüyle anlaşılır?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yalnızca tepe değer</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yalnızca sınıf mevcudu</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Açıklık ve ortalama mutlak sapma</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hiçbir ölçüyle anlaşılamaz</button></div><div class="feedback"></div></div><div class="q-card" data-okmsg="Doğru! Ortadaki iki sayının (4 ve 6) aritmetik ortalaması (4 + 6) ÷ 2 = 5’tir." data-nomsg="Yanlış: Ortadaki iki sayının (4 ve 6) aritmetik ortalaması (4 + 6) ÷ 2 = 5’tir."><div class="q-text">Veri seti 2, 4, 6, 8 ise ortanca kaçtır?</div><div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">3</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">4</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">5</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">6</button></div><div class="feedback"></div></div><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Aritmetik ortalamaları eşit olan iki veri setinin yayılımları farklı olabilir.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Doğru</button><button class="tf-btn" data-val="false" onclick="chk(this)">Yanlış</button></div><div class="note-box" style="display:none">Örneğin 60, 70, 70, 70, 80 ve 40, 60, 70, 80, 100 veri setlerinin ortalaması 70’tir ama yayılımları farklıdır.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Merkez, her zaman veri setinde bulunan bir sayıdır.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Doğru</button><button class="tf-btn" data-val="false" onclick="chk(this)">Yanlış</button></div><div class="note-box" style="display:none">Merkez bir bölgeyi ifade edebilir; örneğin 2, 4, 6, 8 veri setinin ortancası 5’tir ve veri setinde yoktur.</div><div class="tf-row" data-answered="" data-act="true"><div class="tf-statement">Sürekli bir veriyi zaman içindeki değişimiyle göstermek için çizgi grafiği uygundur.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Doğru</button><button class="tf-btn" data-val="false" onclick="chk(this)">Yanlış</button></div><div class="note-box" style="display:none">Çizgi grafiği, sürekli verinin zamana bağlı değişimini gösterir.</div><div class="tf-row" data-answered="" data-act="false"><div class="tf-statement">Kategorik veri için aritmetik ortalama hesaplanarak merkez bulunur.</div><button class="tf-btn" data-val="true" onclick="chk(this)">Doğru</button><button class="tf-btn" data-val="false" onclick="chk(this)">Yanlış</button></div><div class="note-box" style="display:none">Kategorik veride merkez, en çok tekrar eden kategori olan tepe değerdir.</div><div class="field-row"><span class="body-text" style="margin:0">Veri seti: 4, 6, 6, 8, 6. Bu verilerin tepe değeri:</span><input type="text" class="answer-input" id="fillN1" placeholder="?"><button class="submit-btn" onclick="checkFill('fillN1',6,'fbN1')">Kontrol Et</button></div>
+<div class="feedback" id="fbN1"></div><div class="field-row"><span class="body-text" style="margin:0">Veri seti: 3, 5, 9, 11. Bu verilerin açıklığı:</span><input type="text" class="answer-input" id="fillN2" placeholder="?"><button class="submit-btn" onclick="checkFill('fillN2',8,'fbN2')">Kontrol Et</button></div>
+<div class="feedback" id="fbN2"></div><div class="field-row"><span class="body-text" style="margin:0">Veri seti: 60, 70, 70, 70, 80. Aritmetik ortalaması 70’tir. Ortalama mutlak sapma:</span><input type="text" class="answer-input" id="fillN3" placeholder="?"><button class="submit-btn" onclick="checkFill('fillN3',4,'fbN3')">Kontrol Et</button></div>
+<div class="feedback" id="fbN3"></div><div class="field-row"><span class="body-text" style="margin:0">Veri seti: 5, 7, 9, 11, 13. Bu verilerin aritmetik ortalaması:</span><input type="text" class="answer-input" id="fillN4" placeholder="?"><button class="submit-btn" onclick="checkFill('fillN4',9,'fbN4')">Kontrol Et</button></div>
+<div class="feedback" id="fbN4"></div><p class="body-text"><b>Yapılandırılmış grid:</b> Boş hücreleri tamamlayın.</p><table class="mini-table" id="gr1"><tr><th>Veri seti</th><th>Aritmetik ortalama</th><th>Ortanca</th><th>Açıklık</th></tr><tr><td>2, 4, 6, 8</td><td><input class="answer-input gi" data-ans="5"></td><td><input class="answer-input gi" data-ans="5"></td><td>6</td></tr><tr><td>3, 5, 5, 7, 10</td><td>6</td><td><input class="answer-input gi" data-ans="5"></td><td><input class="answer-input gi" data-ans="7"></td></tr></table><button class="submit-btn" onclick="checkGrid('gr1')">Kontrol Et</button><div class="feedback" id="gr1Fb"></div><p class="body-text"><b>Eşleştirme:</b> Her ifadeyi uygun kavramla eşleştirin.</p><div id="mtD"><div class="match-row" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;margin:4px 0"><span style="flex:1">Veri grubundaki en büyük sayı ile en küçük sayı arasındaki fark</span><select data-ans="Açıklık"><option value="">Seç</option><option>Açıklık</option><option>Ortalama mutlak sapma</option><option>Ortanca</option><option>Tepe değer</option></select></div><div class="match-row" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;margin:4px 0"><span style="flex:1">Her verinin ortalamadan ortalama ne kadar saptığını gösteren ölçü</span><select data-ans="Ortalama mutlak sapma"><option value="">Seç</option><option>Açıklık</option><option>Ortalama mutlak sapma</option><option>Ortanca</option><option>Tepe değer</option></select></div><div class="match-row" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;margin:4px 0"><span style="flex:1">Sıralanmış verilerin ortasında kalan değer</span><select data-ans="Ortanca"><option value="">Seç</option><option>Açıklık</option><option>Ortalama mutlak sapma</option><option>Ortanca</option><option>Tepe değer</option></select></div><div class="match-row" style="display:flex;gap:10px;align-items:center;padding:6px 8px;border-radius:8px;margin:4px 0"><span style="flex:1">En çok tekrar eden veri</span><select data-ans="Tepe değer"><option value="">Seç</option><option>Açıklık</option><option>Ortalama mutlak sapma</option><option>Ortanca</option><option>Tepe değer</option></select></div></div><button class="submit-btn" onclick="checkMatch('mtD')">Kontrol Et</button><div class="feedback" id="mtDFb"></div><div class="ex-card"><div class="ex-header"><div class="ex-num">Açık uçlu 1</div><div class="ex-q">İki sınıfın sınav puanlarının aritmetik ortalaması 70’tir. Ancak birinin açıklığı 20, diğerinin 60’tır. Bu iki sınıf için karar verirken ortalamaya bakmak yeterli midir? Gerekçenizi yazın.</div></div><div class="ex-body"><button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Cevabı Göster / Gizle</button><div class="ex-steps"><div class="ex-step"><div class="snum">1</div><div>Ortalamalar eşit olsa da puanların yayılımı farklıdır.</div></div><div class="ex-step"><div class="snum">2</div><div>Açıklığı 60 olan sınıfta çok düşük ve çok yüksek puanlar bir arada bulunur.</div></div><div class="ex-result">Yeterli değildir; ortalamanın yanında açıklık ve ortalama mutlak sapma gibi yayılım ölçülerine de bakılmalıdır.</div></div></div></div><div class="ex-card"><div class="ex-header"><div class="ex-num">Açık uçlu 2</div><div class="ex-q">Okul genelinde uyku süresi araştırmanızda örneklemi yalnızca kendi sınıfınızdan seçtiniz. Araştırmayı nasıl yeniden planlarsınız?</div></div><div class="ex-body"><button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Cevabı Göster / Gizle</button><div class="ex-steps"><div class="ex-step"><div class="snum">1</div><div>Evreni belirleyin: okuldaki bütün öğrenciler.</div></div><div class="ex-step"><div class="snum">2</div><div>Her sınıf düzeyinden ve her şubeden öğrenci seçin.</div></div><div class="ex-result">Örneklem seçimi adımı, evreni temsil edecek biçimde yeniden planlanır.</div></div></div></div></div>
+</section>
+
+<section class="tab-panel" id="tab11">
+<div class="card"><div class="card-title"><div class="icon">📌</div>Özet</div><ul class="step-list"><li>İstatistiksel araştırma <b>döngüsel</b> bir süreçtir: soru → evren/örneklem → veri toplama → görselleştirme/özetleme → analiz → sonuç → değerlendirme (gerekirse yeniden planlama).</li><li><b>Kategorik veri</b> sınıflara ayrılır (favori renk gibi); <b>nicel (sürekli) veri</b> ölçülür ve ara değerler alabilir (boy, süre gibi).</li><li>Araştırma sorusu; amacı net, değişkeni belirlenebilir, veriyle cevaplanabilir ve verisi değişebilir (doğal ortamdan, müdahaleden ya da ölçümden) olmalıdır.</li><li><b>Evren</b>, hakkında bilgi edinilmek istenen bütün grup; <b>örneklem</b>, evrenden seçilen ve evreni temsil eden alt gruptur.</li><li>Veri toplarken anketi oluşturma, örneklemi seçme, nerede/ne zaman/nasıl toplanacağı ve nasıl kaydedileceği planlanır; kişisel verilerde <b>izin alınır ve mahremiyet</b> gözetilir.</li><li>Kategorik veriyi sütun ya da daire grafiğiyle, sürekli veriyi çizgi ya da nokta grafiğiyle gösterebiliriz; seçimin gerekçesi (veri türü, amaç, güçlü ve zayıf yön) belirtilmelidir.</li><li><b>Merkezî eğilim ölçüleri:</b> aritmetik ortalama, ortanca, tepe değer. Merkez veri setinde bulunmak zorunda değildir; bir bölgeyi ifade edebilir.</li><li><b>Yayılım ölçüleri:</b> açıklık, ortalama mutlak sapma. Ortalamaları aynı olan dağılımların yayılımları farklı olabilir.</li><li>Bir veriyi çıkarmak merkez ve yayılım ölçülerini değiştirebilir; aşırı değerler en çok aritmetik ortalamayı etkiler.</li><li>Sonuçlar için gerekçe sunulmalı; sonuçlar araştırma sorusunu yeterince yanıtlamıyorsa uygun olmayan adım yeniden planlanmalıdır.</li></ul><div class="note-box"><b>MAT.7.6.1 süreç bileşenleri:</b><br>a) Araştırma gerektiren durumları fark etme · b) Araştırma sorusu oluşturma · c) Veriye ulaşmak için plan yapma · ç) Veri toplama ya da hazır veriye ulaşma · d) Görselleştirme ve özetleme araçlarını seçme gerekçesi · e) Veriyi analiz etme · f) Sonuçlara gerekçe sunma · g) Sonuçları değerlendirip uygun olmayan adımı yeniden planlama</div></div>
+</section>
+
+<section class="tab-panel" id="tab12">
+
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Kendini Dene</div>
+<div class="progress-dots" id="progressDots"></div>
+<div id="quizArea"></div>
+</div>
+
+</section>
+
+</main>
+<button class="basa-don" id="basaDon" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Başa Dön</button>
+<footer><div class="foot-title">Tekin Hoca — 7. Sınıf Matematik</div><div>6. Tema: İstatistiksel Araştırma Süreci — MAT.7.6.1</div></footer>
+
+<script>
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+window.addEventListener('scroll',()=>{
+  document.getElementById('basaDon').classList.toggle('gorunsun',window.scrollY>400);
+});
+function checkChoice(btn,isCorrect){
+  const card=btn.closest('.q-card');
+  if(card.dataset.answered)return;
+  card.dataset.answered='1';
+  card.querySelectorAll('.choice-btn').forEach(b=>{
+    if(b.dataset.correct==='1')b.classList.add('correct');
+    else if(b===btn)b.classList.add('wrong');
+  });
+  const fb=card.querySelector('.feedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
+}
+function checkFill(inputId,correctVal,fbId){
+  const inp=document.getElementById(inputId);
+  const fb=document.getElementById(fbId);
+  const raw=inp.value.trim().replace(',','.');
+  const val=parseFloat(raw);
+  fb.classList.add('show');
+  if(Math.abs(val-correctVal)<0.001){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış: Cevap '+correctVal+'. Adımları yeniden gözden geçirin.';}
+}
+
+/* ---- SVG yardımcı fonksiyonlar ---- */
+const SVGNS='http://www.w3.org/2000/svg';
+function addLine(g,x1,y1,x2,y2,stroke,width,dash){const l=document.createElementNS(SVGNS,'line');l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',width);l.setAttribute('stroke-linecap','round');if(dash)l.setAttribute('stroke-dasharray',dash);g.appendChild(l);}
+function addCircleEl(g,cx,cy,r,fill,stroke){const c=document.createElementNS(SVGNS,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('fill',fill);c.setAttribute('stroke',stroke||fill);c.setAttribute('stroke-width','1.5');g.appendChild(c);}
+function addTextEl(g,x,y,txt,fill,size,anchor){const t=document.createElementNS(SVGNS,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor',anchor||'middle');t.setAttribute('font-size',size||12);t.setAttribute('font-weight','800');t.setAttribute('fill',fill);t.textContent=txt;g.appendChild(t);}
+function addPath(g,d,stroke,width,fill){const p=document.createElementNS(SVGNS,'path');p.setAttribute('d',d);p.setAttribute('fill',fill||'none');p.setAttribute('stroke',stroke);p.setAttribute('stroke-width',width||2);g.appendChild(p);}
+function clearGroup(id){document.getElementById(id).innerHTML='';}
+
+/* ---- Tab0: döngü diyagramı ---- */
+function drawCycle(){
+  clearGroup('cycleGrid');
+  const g=document.getElementById('cycleGrid');
+  const steps=['Araştırma\\nsorusu','Evren /\\nörneklem','Veri\\ntoplama','Görselleştirme /\\nözetleme','Analiz','Sonuç ve\\nkarar','Süreci\\ndeğerlendirme'];
+  const cx=280,cy=200,R=150;
+  const n=steps.length;
+  const pts=[];
+  for(let i=0;i<n;i++){
+    const ang=-Math.PI/2+i*(2*Math.PI/n);
+    pts.push({x:cx+R*Math.cos(ang),y:cy+R*Math.sin(ang)});
+  }
+  for(let i=0;i<n;i++){
+    const a=pts[i], b=pts[(i+1)%n];
+    const mx=(a.x+b.x)/2, my=(a.y+b.y)/2;
+    const dx=b.x-a.x, dy=b.y-a.y, len=Math.hypot(dx,dy);
+    const ux=dx/len*10, uy=dy/len*10;
+    addLine(g,a.x,a.y,b.x-ux,b.y-uy,'#0d9488',2.5);
+    const perp={x:-dy/len,y:dx/len};
+    const tipx=b.x-ux, tipy=b.y-uy;
+    addPath(g,`M ${tipx-perp.x*6-ux*0.6} ${tipy-perp.y*6-uy*0.6} L ${tipx} ${tipy} L ${tipx+perp.x*6-ux*0.6} ${tipy+perp.y*6-uy*0.6}`,'#0d9488',2.5);
+  }
+  pts.forEach((p,i)=>{
+    addCircleEl(g,p.x,p.y,34,'#e6f7f5','#0d9488');
+    const lines=steps[i].split('\\n');
+    lines.forEach((ln,j)=>addTextEl(g,p.x,p.y-4+j*13,ln,'#0b2422',10.5));
+  });
+  addCircleEl(g,cx,cy,3,'#0d9488','#0d9488');
+}
+drawCycle();
+
+/* ---- Tab1: araştırma sorusu senaryoları ---- */
+const T1_SCEN=[
+ {key:'uyku',label:'Uyku süresi',veri:'Nicel (sürekli) veri',evren:'Okuldaki tüm öğrenciler',ornek:'Her sınıftan rastgele seçilen 5 öğrenci',soru:'"Okulumuzdaki öğrenciler günde ortalama kaç saat uyuyor?"'},
+ {key:'renk',label:'Favori renk',veri:'Kategorik veri',evren:'Bir ilçedeki tüm ilkokul öğrencileri',ornek:'Rastgele seçilen 3 okuldan 60 öğrenci',soru:'"En çok tercih edilen favori renk hangisidir?"'},
+ {key:'spor',label:'Haftalık spor süresi',veri:'Nicel (sürekli) veri',evren:'Bir şehirdeki 12-14 yaş grubu',ornek:'Şehrin farklı semtlerinden seçilen 100 öğrenci',soru:'"12-14 yaş grubu haftada ortalama kaç saat spor yapıyor?"'}
+];
+let t1Key='uyku';
+function refreshT1(){
+  const wrap=document.getElementById('t1Chips');wrap.innerHTML='';
+  T1_SCEN.forEach(s=>{
+    const b=document.createElement('button');
+    b.className='chip-btn'+(s.key===t1Key?' active':'');
+    b.textContent=s.label;
+    b.onclick=()=>{t1Key=s.key;refreshT1();};
+    wrap.appendChild(b);
+  });
+  const s=T1_SCEN.find(x=>x.key===t1Key);
+  document.getElementById('t1Info').innerHTML='<b>Araştırma sorusu:</b> '+s.soru+'<br><b>Veri türü:</b> '+s.veri+'<br><b>Evren:</b> '+s.evren+'<br><b>Örneklem:</b> '+s.ornek;
+}
+refreshT1();
+
+/* ---- Tab3: nokta grafiği + çizgi grafiği ---- */
+const DAYS=['Pzt','Sal','Çar','Per','Cum','Cmt'];
+function lgX(i){return 60+i*(520/5);}
+function lgY(val){return 220-(val-10)/20*180;}
+function dotX(val){return 60+(val-10)/20*520;}
+function updateLG(){
+  const vals=[0,1,2,3,4,5].map(i=>parseInt(document.getElementById('lg'+i).value,10));
+  vals.forEach((v,i)=>{document.getElementById('lg'+i+'Out').textContent=v+'°';});
+  clearGroup('lgGrid');
+  const g=document.getElementById('lgGrid');
+  addTextEl(g,310,24,'Çizgi Grafiği','#0d9488',14);
+  for(let v=10;v<=30;v+=5){
+    const y=lgY(v);
+    addLine(g,55,y,585,y,'#e2f1ef',1);
+    addTextEl(g,42,y+4,String(v),'#5f8a85',10,'end');
+  }
+  addLine(g,55,220,585,220,'#9db8b5',1.5);
+  const pts=vals.map((v,i)=>({x:lgX(i),y:lgY(v)}));
+  for(let i=0;i<pts.length-1;i++)addLine(g,pts[i].x,pts[i].y,pts[i+1].x,pts[i+1].y,'#0d9488',3);
+  pts.forEach((p,i)=>{
+    addCircleEl(g,p.x,p.y,5,'#0d9488');
+    addTextEl(g,p.x,238,DAYS[i],'#0b2422',11);
+    addTextEl(g,p.x,p.y-12,String(vals[i]),'#0d9488',11);
+  });
+  addTextEl(g,310,270,'Nokta Grafiği (aynı veriler, sayı doğrusunda)','#b45309',13);
+  addLine(g,55,330,585,330,'#9db8b5',1.5);
+  for(let v=10;v<=30;v+=5){
+    const x=dotX(v);
+    addLine(g,x,325,x,335,'#9db8b5',1.5);
+    addTextEl(g,x,352,String(v),'#5f8a85',10);
+  }
+  const freq={};
+  vals.forEach(v=>{freq[v]=(freq[v]||0)+1;});
+  Object.keys(freq).forEach(v=>{
+    const x=dotX(parseInt(v,10));
+    for(let k=0;k<freq[v];k++){
+      addCircleEl(g,x,318-k*15,6,'#b45309');
+    }
+  });
+}
+[0,1,2,3,4,5].forEach(i=>document.getElementById('lg'+i).addEventListener('input',updateLG));
+updateLG();
+
+/* ---- Tab4: merkezi eğilim ---- */
+function ceX(val){return 60+(val-1)/9*500;}
+function updateCE(){
+  const vals=[0,1,2,3,4,5,6].map(i=>parseInt(document.getElementById('ce'+i).value,10));
+  vals.forEach((v,i)=>{document.getElementById('ce'+i+'Out').textContent=v;});
+  document.getElementById('ceMean').textContent='—';
+  clearGroup('ceGrid');
+  const g=document.getElementById('ceGrid');
+  addLine(g,55,120,585,120,'#9db8b5',1.5);
+  for(let v=1;v<=10;v++){
+    const x=ceX(v);
+    addLine(g,x,115,x,125,'#9db8b5',1);
+    addTextEl(g,x,142,String(v),'#5f8a85',10);
+  }
+  const freq={};
+  vals.forEach(v=>{freq[v]=(freq[v]||0)+1;});
+  Object.keys(freq).forEach(v=>{
+    const x=ceX(parseInt(v,10));
+    for(let k=0;k<freq[v];k++)addCircleEl(g,x,108-k*15,6,'#0d9488');
+  });
+  const sum=vals.reduce((a,b)=>a+b,0);
+  const mean=sum/vals.length;
+  const sorted=[...vals].sort((a,b)=>a-b);
+  const median=sorted[3];
+  let maxFreq=0;Object.values(freq).forEach(f=>{if(f>maxFreq)maxFreq=f;});
+  const modes=Object.keys(freq).filter(v=>freq[v]===maxFreq);
+  const modeTxt=maxFreq>1?modes.join(', '):'Yok (tümü farklı)';
+  const meanX=ceX(mean);
+  addPath(g,`M ${meanX-8} 160 L ${meanX+8} 160 L ${meanX} 148 Z`,'#b45309','1',"#b45309");
+  addTextEl(g,meanX,178,'Ortalama','#b45309',10);
+  const medianX=ceX(median);
+  addPath(g,`M ${medianX-8} 92 L ${medianX+8} 92 L ${medianX} 80 Z`,'#7c3aed','1','#7c3aed');
+  addTextEl(g,medianX,72,'Ortanca','#7c3aed',10);
+  document.getElementById('ceMean').textContent=(Math.round(mean*100)/100);
+  document.getElementById('ceMedian').textContent=median;
+  document.getElementById('ceMode').textContent=modeTxt;
+  document.getElementById('ceExplain').innerHTML='Ortalama = ('+vals.join(' + ')+') ÷ 7 = '+sum+' ÷ 7 = '+(Math.round(mean*100)/100)+'. <br>Ortanca bulmak için veriler küçükten büyüğe sıralanır: '+sorted.join(', ')+'; ortadaki (4.) değer ortancadır.';
+}
+[0,1,2,3,4,5,6].forEach(i=>document.getElementById('ce'+i).addEventListener('input',updateCE));
+updateCE();
+
+/* ---- Tab5: yayılım ---- */
+function spX(val){return 60+(val-1)/19*500;}
+function updateSP(){
+  const vals=[0,1,2,3,4].map(i=>parseInt(document.getElementById('sp'+i).value,10));
+  vals.forEach((v,i)=>{document.getElementById('sp'+i+'Out').textContent=v;});
+  clearGroup('spGrid');
+  const g=document.getElementById('spGrid');
+  addLine(g,55,130,585,130,'#9db8b5',1.5);
+  for(let v=1;v<=20;v+=1){
+    const x=spX(v);
+    if(v%2===1){addLine(g,x,125,x,135,'#e2f1ef',1);}
+  }
+  [1,5,10,15,20].forEach(v=>{
+    const x=spX(v);
+    addLine(g,x,120,x,140,'#9db8b5',1.2);
+    addTextEl(g,x,155,String(v),'#5f8a85',10);
+  });
+  const sum=vals.reduce((a,b)=>a+b,0);
+  const mean=sum/vals.length;
+  const meanX=spX(mean);
+  addLine(g,meanX,60,meanX,130,'#b45309',2,'4 3');
+  addTextEl(g,meanX,48,'Ortalama = '+(Math.round(mean*100)/100),'#b45309',12);
+  vals.forEach((v,i)=>{
+    const x=spX(v);
+    addCircleEl(g,x,118,6,'#0d9488');
+    addLine(g,x,118,meanX,118,'#cfe6e3',1.5,'3 3');
+  });
+  const maxV=Math.max(...vals), minV=Math.min(...vals);
+  const range=maxV-minV;
+  const devs=vals.map(v=>Math.abs(v-mean));
+  const mad=devs.reduce((a,b)=>a+b,0)/vals.length;
+  document.getElementById('spRange').textContent=range;
+  document.getElementById('spMad').textContent=(Math.round(mad*100)/100);
+  let html='<table style="width:100%;border-collapse:collapse"><tr><th>Veri</th><th>Ortalamadan sapma</th></tr>';
+  vals.forEach((v,i)=>{html+='<tr><td>'+v+'</td><td>'+(Math.round(devs[i]*100)/100)+'</td></tr>';});
+  html+='</table>';
+  document.getElementById('spTable').innerHTML=html;
+}
+[0,1,2,3,4].forEach(i=>document.getElementById('sp'+i).addEventListener('input',updateSP));
+updateSP();
+
+/* ---- Tab10: kendini dene ---- */
+const quizData=[{"q": "'Öğrencilerin 100 metreyi koşma süresi' hangi veri türüne örnektir?", "choices": ["Nicel (sürekli) veri", "Kategorik veri", "Ne kategorik ne nicel", "Belirlenemez"], "correct": 0, "expl": "Süre ölçülerek elde edilir ve ara değerler (14,2 saniye gibi) alabilir; bu yüzden nicel (sürekli) bir veridir."}, {"q": "Bir araştırmada 'okuldaki tüm öğrenciler' evren olarak belirlenmişse, örneklem için ne söylenebilir?", "choices": ["Evrenle tamamen aynı olmalıdır", "Yalnızca öğretmenlerden oluşmalıdır", "Örneklem gerekmez", "Evrenden seçilen ve evreni temsil eden bir alt grup olmalıdır"], "correct": 3, "expl": "Örneklem, evrenden seçilen ve evreni iyi temsil etmesi beklenen bir alt gruptur."}, {"q": "Veri seti: 12, 15, 15, 18, 20. Bu verilerin tepe değeri kaçtır?", "choices": ["12", "15", "16", "20"], "correct": 1, "expl": "En sık tekrar eden değer 15'tir (iki kez tekrar ediyor)."}, {"q": "Veri seti: 12, 15, 15, 18, 20. Bu verilerin ortancası kaçtır?", "choices": ["15", "16", "18", "20"], "correct": 0, "expl": "Veriler zaten sıralı; ortadaki (3.) değer 15'tir."}, {"q": "'Bu kadar pahalı bir ürünü kim alır ki?' bir anket sorusu için ne söylenebilir?", "choices": ["Uygun bir sorudur", "Yönlendirici olduğu için uygun değildir", "Kategorik veri istediği için uygun değildir", "Çok kısa olduğu için uygun değildir"], "correct": 1, "expl": "Bu soru katılımcıyı belirli bir cevaba (olumsuz) yönlendirdiği için uygun değildir."}, {"q": "Bir öğrenci topladığı verilerle araştırma sorusunu yeterince yanıtlayamadığını fark ederse ne yapmalıdır?", "choices": ["Sonuçları olduğu gibi sunmalıdır", "Araştırmayı tamamen bırakmalıdır", "Sürecin ilgili adımını yeniden planlamalıdır", "Verileri değiştirmelidir"], "correct": 2, "expl": "İstatistiksel araştırma süreci döngüseldir; sonuçlar yetersizse ilgili adım (soru, örneklem, veri toplama vb.) yeniden planlanır."}, {"q": "İki sınıfın aritmetik ortalaması 70'tir. Birinin açıklığı 20, diğerinin açıklığı 60'tır. Hangisi doğrudur?", "choices": ["Açıklığı 60 olan sınıfta puanlar daha geniş bir aralığa yayılmıştır", "Açıklığı 20 olan sınıfta puanlar daha geniş bir aralığa yayılmıştır", "İki sınıfın puanları aynı şekilde dağılmıştır", "Açıklık, ortalama aynı olduğunda hesaplanamaz"], "correct": 0, "expl": "Açıklık büyüdükçe verilerin yayıldığı aralık genişler; ortalamalar eşit olsa da dağılımlar farklı olabilir."}, {"q": "Merkez ile ilgili hangisi doğrudur?", "choices": ["Merkez her zaman veri setindeki en büyük sayıdır", "Merkez her zaman veri setindeki en küçük sayıdır", "Merkez yalnızca kategorik veride bulunur", "Merkez, veri setinde bulunan bir sayı olmak zorunda değildir"], "correct": 3, "expl": "Merkez bir bölgeyi ifade edebilir; örneğin 2, 4, 6, 8 veri setinin ortancası 5'tir ve bu sayı veri setinde yoktur."}, {"q": "Okula ulaşım şekillerinin sınıf içindeki paylarını göstermek için hangi grafik uygundur?", "choices": ["Çizgi grafiği", "Daire grafiği", "Nokta grafiği", "Hiçbiri uygun değildir"], "correct": 1, "expl": "Daire grafiği, parçaların bütün içindeki payını göstermek için uygundur."}, {"q": "Veri seti: 3, 5, 5, 7, 10. Bu verilerin aritmetik ortalaması kaçtır?", "choices": ["6", "7", "8", "10"], "correct": 0, "expl": "Toplam 3 + 5 + 5 + 7 + 10 = 30; 30 ÷ 5 = 6."}];
+
+/* ===== Güncelleme: yeni araçlar ve etkinlikler ===== */
+const $=id=>document.getElementById(id);
+function chipsU(id,arr,cur,f){const w=$(id);w.innerHTML='';arr.forEach((a,k)=>{const b=document.createElement('button');b.className='chip-btn'+(k===cur?' active':'');b.textContent=a;b.onclick=()=>f(k);w.appendChild(b);});}
+function chk(btn){const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';row.querySelector('[data-val="'+row.dataset.act+'"]').classList.add('correct');if(btn.dataset.val!==row.dataset.act)btn.classList.add('wrong');row.nextElementSibling.style.display='block';}
+function checkMatch(id){const rows=document.querySelectorAll('#'+id+' .match-row');let ok=0;rows.forEach(r=>{const s=r.querySelector('select'),g=s.value===s.dataset.ans;r.style.background=g?'var(--success-light)':'#fdecea';if(g)ok++;});const f=$(id+'Fb');f.classList.remove('ok','no');f.classList.add('show',ok===rows.length?'ok':'no');f.textContent=ok+' / '+rows.length+' eşleştirme doğru.';}
+function checkGrid(id){let ok=0,n=0;document.querySelectorAll('#'+id+' .gi').forEach(i=>{n++;const g=parseFloat(i.value.replace(',','.'))===+i.dataset.ans;i.style.borderColor=g?'var(--success)':'var(--danger)';if(g)ok++;});const f=$(id+'Fb');f.classList.remove('ok','no');f.classList.add('show',ok===n?'ok':'no');f.textContent=ok+' / '+n+' hücre doğru.';}
+function uqv(){const n=document.querySelectorAll('#qevA input:checked').length;$('qvoA').textContent=n+' / 4 ölçüt sağlandı.'+(n===4?' Soru dört ölçütü de sağlıyor.':' Eksik ölçütü tamamlamak için soruyu birlikte düzeltin.');}
+function upc(c,b,o){const a=[...document.querySelectorAll('#'+c+' input')],n=a.filter(x=>x.checked).length;$(b).style.width=(n/a.length*100)+'%';$(o).textContent=n+' / '+a.length+' adım tamamlandı.';}
+function upe(c,o,t){const n=document.querySelectorAll('#'+c+' input:checked').length;$(o).textContent=n+' / '+t+' madde işaretlendi.';}
+const ufm=x=>String(+x.toFixed(2)).replace('.',',');
+function umet(a){const s=a.slice().sort((x,y)=>x-y),n=s.length,m=s.reduce((x,y)=>x+y,0)/n,md=n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2,f={};s.forEach(v=>f[v]=(f[v]||0)+1);const mx=Math.max(...Object.values(f)),mo=mx===1?[]:Object.keys(f).filter(k=>f[k]===mx).map(Number);return{m:m,md:md,mo:mo,r:s[n-1]-s[0],mad:s.reduce((x,y)=>x+Math.abs(y-m),0)/n};}
+function udot(a,lo,hi,st,col,mk){const W=520,H=110,L=20,R=20,sx=v=>L+(v-lo)/(hi-lo)*(W-L-R);let s='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;max-width:560px"><line x1="'+L+'" y1="80" x2="'+(W-R)+'" y2="80" stroke="var(--text)"/>';for(let v=lo;v<=hi;v+=st)s+='<line x1="'+sx(v)+'" y1="80" x2="'+sx(v)+'" y2="85" stroke="var(--text)"/><text x="'+sx(v)+'" y="102" text-anchor="middle" font-size="11" fill="var(--muted)">'+v+'</text>';const c={};a.slice().sort((x,y)=>x-y).forEach(v=>{c[v]=(c[v]||0)+1;s+='<circle cx="'+sx(v)+'" cy="'+(72-(c[v]-1)*16)+'" r="7" fill="'+col+'"/>';});if(mk!==undefined)s+='<path d="M'+sx(mk)+' 82 l-6 12 h12 z" fill="var(--danger)"/>';return s+'</svg>';}
+const UCOL=['#0d9488','#b45309','#2563eb','#7c3aed','#dc2626','#059669'];
+function UCH(v,c){const m=v.length,W=76,L=30,T=14,H=Math.max(...v),cell=18,sw=L+m*W+8,sh=T+H*cell+34;let s='<svg viewBox="0 0 '+sw+' '+sh+'" style="width:'+sw+'px;max-width:100%">';for(let y=0;y<=H;y+=(H>8?2:1)){const yy=T+(H-y)*cell;s+='<line x1="'+L+'" y1="'+yy+'" x2="'+(sw-6)+'" y2="'+yy+'" stroke="var(--border)"/><text x="'+(L-6)+'" y="'+(yy+4)+'" text-anchor="end" font-size="11" fill="var(--muted)">'+y+'</text>';}
+v.forEach((n,i)=>{const x=L+i*W+W/2;s+='<rect x="'+(x-19)+'" y="'+(T+(H-n)*cell)+'" width="38" height="'+n*cell+'" fill="'+UCOL[i]+'"/><text x="'+x+'" y="'+(T+(H-n)*cell-4)+'" text-anchor="middle" font-size="12" font-weight="800" fill="var(--primary2)">'+n+'</text><text x="'+x+'" y="'+(T+H*cell+16)+'" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--text)">'+c[i]+'</text>';});return s+'</svg>';}
+function upie(v,r){const T=v.reduce((a,b)=>a+b,0),nz=v.filter(x=>x>0).length;let s='<svg viewBox="-110 -110 220 220" style="width:'+(2*r+20)+'px;max-width:100%">',a0=-Math.PI/2;v.forEach((c,i)=>{if(c<=0)return;if(nz===1){s+='<circle r="'+r+'" fill="'+UCOL[i]+'" stroke="#fff" stroke-width="2"/>';return;}const a1=a0+2*Math.PI*c/T;s+='<path d="M0 0 L'+r*Math.cos(a0)+' '+r*Math.sin(a0)+' A'+r+' '+r+' 0 '+(a1-a0>Math.PI?1:0)+' 1 '+r*Math.cos(a1)+' '+r*Math.sin(a1)+' Z" fill="'+UCOL[i]+'" stroke="#fff" stroke-width="2"/>';a0=a1;});return s+'</svg>';}
+const UPL=[{n:'Uyku süresi',soru:'Okulumuzdaki 7. sınıf öğrencileri okul günlerinde günde kaç saat uyuyor?',veri:'Nicel (sürekli) veri',evren:'Okuldaki bütün 7. sınıf öğrencileri',ornek:'Her şubeden rastgele seçilen 5 öğrenci',nerede:'Sınıfta, ders arasında yüz yüze',zaman:'Bir okul haftasının sabahı',nasil:'Anket sorusu: “Dün gece kaç saat kaç dakika uyudun?”',kayit:'Elektronik tabloda (Excel) her öğrenci için bir satıra yazılacak'},
+{n:'Makarna markaları',soru:'Mahalledeki marketlerde en çok hangi makarna markası satılıyor?',veri:'Kategorik veri',evren:'Mahalledeki bütün marketler',ornek:'Market türü, büyüklüğü ve sayısı dikkate alınarak seçilen 8 market',nerede:'Marketlerde, yetkililerden izin alınarak',zaman:'Hafta sonu gündüz',nasil:'Raflara bakıp bulunan makarna markalarını işaretleme',kayit:'Önce not defterine, sonra elektronik tabloya aktarılacak'},
+{n:'Su tasarrufu',soru:'Öğrenciler diş fırçalarken musluğu kaç saniye açık tutuyor?',veri:'Nicel (sürekli) veri',evren:'Okuldaki 6., 7. ve 8. sınıf öğrencileri',ornek:'Her sınıf düzeyinden rastgele seçilen 10 öğrenci',nerede:'Okulda, öğrencilerin rahat edeceği bir ortamda',zaman:'Okul saatleri içinde bir gün',nasil:'Öğrencilerin kendi ölçtüğü süreyi (kronometreyle) yazması istenecek',kayit:'Çevrim içi bir formda ve elektronik tabloda'}];let upi=0;
+function plan2(){chipsU('planChips',UPL.map(x=>x.n),upi,k=>{upi=k;plan2();});const p=UPL[upi],r=[['Araştırma sorusu',p.soru],['Veri türü',p.veri],['Evren',p.evren],['Örneklem',p.ornek],['Nerede toplanacak?',p.nerede],['Ne zaman toplanacak?',p.zaman],['Nasıl toplanacak?',p.nasil],['Nasıl kaydedilecek?',p.kayit]];$('upt').innerHTML='<table class="mini-table"><tr><th>Plan öğesi</th><th>Karar</th></tr>'+r.map(x=>'<tr><td>'+x[0]+'</td><td>'+x[1]+'</td></tr>').join('')+'</table>';}
+const UKD=[{n:'Okula ulaşım şekli',c:['Yürüyerek','Servis','Aile aracı','Toplu taşıma','Bisiklet'],v:[9,7,6,4,2]},{n:'Çok kullanılan uygulama türü',c:['Video','Mesajlaşma','Oyun','Fotoğraf'],v:[10,8,6,4]}];let uk=0,ukt=0;
+function u4(){chipsU('uk1',UKD.map(d=>d.n),uk,k=>{uk=k;u4();});chipsU('uk2',['Sütun grafiği','Daire grafiği'],ukt,k=>{ukt=k;u4();});const d=UKD[uk],T=d.v.reduce((a,b)=>a+b,0),mx=Math.max(...d.v);$('u4o').innerHTML=ukt===0?UCH(d.v,d.c):'<div style="text-align:center">'+upie(d.v,90)+'</div><div style="align-self:center">'+d.c.map((c,i)=>'<div><span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:'+UCOL[i]+'"></span> '+c+': <b>'+d.v[i]+'/'+T+'</b></div>').join('')+'</div>';$('u4i').innerHTML='Veri sayısı: <b>'+T+'</b>. Tepe değer (en çok tekrar eden kategori): <b>'+d.c[d.v.indexOf(mx)]+'</b> ('+mx+').';}
+const UAR={Kategorik:{'Kategorilerin sıklıklarını karşılaştırmak':{t:'Sütun grafiği',w:'Çubukların yüksekliklerini yan yana karşılaştırmak kolaydır.',z:'Parçaların bütün içindeki payı doğrudan görünmez.',alt:'Daire grafiği ya da sıklık tablosu'},'Parçaların bütün içindeki payını göstermek':{t:'Daire grafiği',w:'Her kategorinin bütün içindeki payı bir bakışta görülür.',z:'Çok sayıda kategori olunca dilimler birbirine karışır ve kesin değerler okunamaz.',alt:'Sütun grafiği'}},Sürekli:{'Zamana bağlı değişimi göstermek':{t:'Çizgi grafiği',w:'Ölçümler arasındaki artış ve azalışlar çizgiyle izlenir.',z:'Her ölçümün kaç kez tekrar ettiği görünmez.',alt:'Nokta grafiği'},'Küçük veri grubunda her ölçümü ve tekrarını göstermek':{t:'Nokta grafiği',w:'Her veri bir nokta olarak görünür; tekrar eden değerler üst üste yığılır ve yayılım gözle görülür.',z:'Veri sayısı çoğalınca noktalar kalabalıklaşır.',alt:'Çizgi grafiği (zaman bilgisi varsa)'}}};let ua1='Kategorik',ua2=0;
+function u5(){const keys=Object.keys(UAR[ua1]);chipsU('ua1',['Kategorik veri','Sürekli veri'],ua1==='Kategorik'?0:1,k=>{ua1=k?'Sürekli':'Kategorik';ua2=0;u5();});chipsU('ua2',keys,ua2,k=>{ua2=k;u5();});const r=UAR[ua1][keys[ua2]];$('ua3').innerHTML='<b>Veri türü:</b> '+ua1+' veri<br><b>Amaç:</b> '+keys[ua2]+'<br><b>Önerilen araç:</b> '+r.t+'<br><b>Gerekçe:</b> '+r.w+'<br><b>Zayıf yönü:</b> '+r.z+'<br><b>Alternatif:</b> '+r.alt;}
+const UMS=[[2,4,6,8],[3,3,4,9,11],[5,7,7,9,10,12]];let um=0;
+function u6(){chipsU('um1',UMS.map(a=>a.join(', ')),um,k=>{um=k;u6();});const a=UMS[um],r=umet(a),inD=x=>a.includes(x),li=(n,v)=>n+': <b>'+ufm(v)+'</b> → veri setinde '+(inD(v)?'bulunuyor':'bulunmuyor');$('u6o').innerHTML=udot(a,0,14,2,'var(--primary)',r.m);$('u6i').innerHTML=li('Aritmetik ortalama',r.m)+'<br>'+li('Ortanca',r.md)+'<br>Tepe değer: '+(r.mo.length?'<b>'+r.mo.join(', ')+'</b> → veri setinde bulunuyor':'<b>yok</b> (hiçbir veri diğerlerinden fazla tekrar etmiyor)')+'<br><span style="color:var(--muted)">Kırmızı üçgen aritmetik ortalamanın yerini gösterir.</span>';}
+const UB=[12,14,15,15,16,48];let uoff=[];
+function u7(){const w=$('u7b');w.innerHTML='';UB.forEach((v,i)=>{const b=document.createElement('button');b.className='chip-btn'+(uoff.includes(i)?'':' active');b.textContent=v;b.onclick=()=>u7t(i);w.appendChild(b);});const all=umet(UB),cur=umet(UB.filter((v,i)=>!uoff.includes(i))),mo=r=>r.mo.length?r.mo.join(', '):'yok',dir=(a,b)=>b>a?'↑ arttı':b<a?'↓ azaldı':'değişmedi';
+$('u7i').innerHTML='<table class="mini-table"><tr><th>Ölçü</th><th>Tüm veri</th><th>Seçili veri</th><th>Değişim</th></tr><tr><td>Aritmetik ortalama</td><td>'+ufm(all.m)+'</td><td>'+ufm(cur.m)+'</td><td>'+dir(all.m,cur.m)+'</td></tr><tr><td>Ortanca</td><td>'+ufm(all.md)+'</td><td>'+ufm(cur.md)+'</td><td>'+dir(all.md,cur.md)+'</td></tr><tr><td>Tepe değer</td><td>'+mo(all)+'</td><td>'+mo(cur)+'</td><td>'+(mo(all)===mo(cur)?'değişmedi':'değişti')+'</td></tr><tr><td>Açıklık</td><td>'+all.r+'</td><td>'+cur.r+'</td><td>'+dir(all.r,cur.r)+'</td></tr></table>'+(uoff.length?'':'Henüz veri çıkarılmadı. 48 değerini çıkarmayı deneyin.');}
+function u7t(i){if(uoff.includes(i))uoff=uoff.filter(x=>x!==i);else if(UB.length-uoff.length>2)uoff.push(i);u7();}
+const USS=[{n:'1. sınav: 7-A ve 7-B',a:[60,70,70,70,80],b:[40,60,70,80,100]},{n:'2. sınav: 7-C ve 7-D',a:[50,60,70,80,90],b:[65,68,70,72,75]}];let us=0;
+function u8(){chipsU('us1',USS.map(x=>x.n),us,k=>{us=k;u8();});const p=USS[us],A=umet(p.a),B=umet(p.b),nm=p.n.split(': ')[1].split(' ve ');
+$('u8o').innerHTML='<div style="font-weight:800;margin:10px 0 0">'+nm[0]+'</div>'+udot(p.a,30,110,10,'#0d9488',A.m)+'<div style="font-weight:800;margin:10px 0 0">'+nm[1]+'</div>'+udot(p.b,30,110,10,'#b45309',B.m)+'<table class="mini-table"><tr><th>Ölçü</th><th>'+nm[0]+'</th><th>'+nm[1]+'</th></tr><tr><td>Aritmetik ortalama</td><td>'+ufm(A.m)+'</td><td>'+ufm(B.m)+'</td></tr><tr><td>Ortanca</td><td>'+ufm(A.md)+'</td><td>'+ufm(B.md)+'</td></tr><tr><td>Açıklık</td><td>'+A.r+'</td><td>'+B.r+'</td></tr><tr><td>Ortalama mutlak sapma</td><td>'+ufm(A.mad)+'</td><td>'+ufm(B.mad)+'</td></tr></table><div class="def-box">Kırmızı üçgen aritmetik ortalamayı gösterir. Ortalamalar '+(A.m===B.m?'eşit ('+ufm(A.m)+')':'farklı')+'; ancak '+(B.r>A.r?nm[1]:nm[0])+' sınıfının puanları daha geniş bir aralığa yayılmıştır.</div>';}
+plan2();u4();u5();u6();u7();u8();
+
+let qIndex=0,qScore=0,qAnswered=false;
+function renderDots(){
+  const wrap=document.getElementById('progressDots');wrap.innerHTML='';
+  quizData.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='pdot'+(i<qIndex?' done':i===qIndex?' now':'');
+    wrap.appendChild(d);
+  });
+}
+function renderQuiz(){
+  if(qIndex>=quizData.length){
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    renderDots();return;
+  }
+  qAnswered=false;
+  const item=quizData[qIndex];
+  let html='<div class="q-card"><div class="q-text">'+(qIndex+1)+'. '+item.q+'</div><div class="choices">';
+  item.choices.forEach((c,i)=>{html+='<button class="choice-btn" onclick="answerQuiz('+i+')">'+c+'</button>';});
+  html+='</div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="submit-btn" id="quizNext" style="display:none" onclick="nextQuiz()">Sonraki →</button></div></div>';
+  document.getElementById('quizArea').innerHTML=html;
+  renderDots();
+}
+function answerQuiz(i){
+  if(qAnswered)return;qAnswered=true;
+  const item=quizData[qIndex];
+  const isCorrect=i===item.correct;
+  if(isCorrect)qScore++;
+  document.querySelectorAll('#quizArea .choice-btn').forEach((b,idx)=>{
+    if(idx===item.correct)b.classList.add('correct');
+    else if(idx===i)b.classList.add('wrong');
+  });
+  const fb=document.getElementById('quizFeedback');
+  fb.classList.add('show',isCorrect?'ok':'no');
+  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  document.getElementById('quizNext').style.display='inline-block';
+}
+function nextQuiz(){qIndex++;renderQuiz();}
+function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
+renderQuiz();
+</script>
+</body></html>
