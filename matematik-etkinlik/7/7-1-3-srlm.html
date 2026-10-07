@@ -107,6 +107,34 @@ mjx-container{margin:0!important}
 .mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
 @media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}}
 </style>
+<style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
 </head>
 <body>
 <button class="basa-don" id="basaDon">↑ Başa Dön</button>
@@ -127,6 +155,7 @@ mjx-container{margin:0!important}
     <button class="tab-btn" data-tab="siralama">🔀 Sıralama</button>
     <button class="tab-btn" data-tab="arasindaki">🎯 Aradaki Sayı</button>
     <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="yogun">🔍 İki Sayı Arasında</button>
     <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
     <button class="tab-btn" data-tab="ozet">📋 Özet</button>
   </nav>
@@ -295,6 +324,17 @@ mjx-container{margin:0!important}
 </section>
 
 <!-- ============ 7. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="yogun">
+
+<div class="card"><div class="card-title"><div class="icon">🔍</div>İki Rasyonel Sayı Arasında Sonsuz Sayıda Rasyonel Sayı Vardır</div>
+<p class="body-text">İki rasyonel sayı yazın. "Ortasını bul" düğmesi, geçerli aralığın tam ortasındaki sayıyı bulur ve aralığı daraltır. Bu işlem bitmez.</p>
+<div class="nx-row"><label>Küçük:</label><input class="nx-in" id="yg_a" value="-1/2"><label>Büyük:</label><input class="nx-in" id="yg_b" value="0"><button class="nx-btn" id="yg_s">Başlat</button><button class="nx-btn alt" id="yg_m" disabled>Ortasını bul</button></div>
+<div class="feedback" id="yg_f"></div>
+<svg id="yg_svg" viewBox="0 0 640 90" style="width:100%;max-width:640px;display:block;margin:8px 0"></svg>
+<ol class="body-text" id="yg_l"></ol></div>
+
+</section>
+
 <section class="tab-panel" id="oyun">
   <div class="progress-bar">
     <div class="progress-top"><span id="progLabel">SIRALAMA ROTASI · 10 SORU</span><span id="progCount">1 / 10</span></div>
@@ -464,7 +504,7 @@ document.addEventListener('DOMContentLoaded',function(){
         var ok=JSON.stringify(picked)===JSON.stringify(sorted);
         var fb=document.getElementById(feedbackId);
         fb.className='feedback show '+(ok?'ok':'no');
-        fb.textContent=ok?'✓ Doğru sıraladın!':'✗ Sıralama hatalı. "Sıfırla" ile tekrar dene.';
+        fb.innerHTML=ok?'✓ Doğru sıraladın!':'✗ Yanlış: Doğru sıra (küçükten büyüğe): '+current.slice().sort(function(a,b){return a.v-b.v;}).map(function(i){return i.d.indexOf('\\')!==-1?'\\('+i.d+'\\)':i.d;}).join(' &lt; ');typeset(fb);
       }
     }
     document.getElementById(resetId).addEventListener('click',function(){
@@ -553,7 +593,7 @@ document.addEventListener('DOMContentLoaded',function(){
     var v=parseNum(document.getElementById('btwInput').value),fb=document.getElementById('btwFeedback');
     var ok=!isNaN(v)&&v>btwOpenCurrent.low+1e-9&&v<btwOpenCurrent.high-1e-9;
     fb.className='feedback show '+(ok?'ok':'no');
-    fb.textContent=ok?'✓ Doğru! Bu sayı aralıkta.':(isNaN(v)?'✗ Geçerli bir sayı yaz (örn. 0,25 ya da 1/4).':'✗ Bu sayı aralıkta değil. Tekrar dene.');
+    fb.textContent=ok?'✓ Doğru! Bu sayı aralıkta.':(isNaN(v)?'✗ Geçerli bir sayı yaz (örn. 0,25 ya da 1/4).':'✗ Yanlış: Yazılan sayı verilen iki sayının arasında değil; alt sınırdan büyük, üst sınırdan küçük olmalıdır. Örneğin '+String(Math.round((btwOpenCurrent.low+btwOpenCurrent.high)/2*1000)/1000).replace('.',',')+' bu aralıktadır.');
     if(ok){ document.getElementById('btwNext').classList.add('show'); }
   });
   document.getElementById('btwNext').addEventListener('click',loadBtwOpen);
@@ -576,6 +616,33 @@ document.addEventListener('DOMContentLoaded',function(){
     {choices:['-0,5, 0, 0,25, 0,75','0,75, 0,25, 0, -0,5','0, -0,5, 0,25, 0,75','-0,5, 0,25, 0, 0,75'],correctIndex:0}
   ];
   var drawQSiralama=makeDrawer(siralamaQPool);
+
+  
+  function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var RULES={"karsilastirma": "Sayı doğrusunda sağdaki sayı daha büyüktür; negatif sayılarda mutlak değeri büyük olan sayı daha küçüktür.", "arasinda": "İki sayı arasındaki bir rasyonel sayı küçük sayıdan büyük, büyük sayıdan küçüktür; sayılar aynı gösterime çevrilerek kontrol edilir.", "siralama": "Sayılar aynı gösterime (genellikle ondalık) çevrilir ve sayı doğrusunda soldan sağa doğru küçükten büyüğe sıralanır."};
+  function explainQ(q){
+    var t='Doğru cevap: '+(q.type==='__TF__'?escHtml(q.correctText):escHtml(q.correctText))+'. ';
+    if(q.exp){return t+q.exp;}
+    return t+(RULES[q.type]||'');
+  }
+  function balanceQuestions(qs){
+    var idx=[];
+    qs.forEach(function(q,i){ if(q.choices.length===4&&q.type!=='pcttype'){ idx.push(i); } });
+    var bag=[];
+    while(bag.length<idx.length){ bag=bag.concat(shuffle([0,1,2,3])); }
+    bag=bag.slice(0,idx.length);
+    for(var k=1;k<bag.length;k++){
+      if(bag[k]===bag[k-1]){
+        for(var m=k+1;m<bag.length;m++){
+          if(bag[m]!==bag[k-1]&&bag[m-1]!==bag[k]){ var tt=bag[k];bag[k]=bag[m];bag[m]=tt;break; }
+        }
+      }
+    }
+    idx.forEach(function(qi,k){
+      var q=qs[qi];var c=q.choices.indexOf(q.correctText);
+      var x=q.choices.splice(c,1)[0];q.choices.splice(bag[k],0,x);q.correctIndex=bag[k];
+    });
+  }
 
   function createQuestion(type){
     var q={type:type};
@@ -602,7 +669,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
   function start(){
     score=0;correct=0;current=0;answered=false;
-    questions=qTypes.map(createQuestion);
+    questions=qTypes.map(createQuestion);balanceQuestions(questions);
     document.getElementById('quizEnd').classList.add('hidden');
     document.querySelector('#oyun .q-card').style.display='block';
     render();
@@ -640,7 +707,7 @@ document.addEventListener('DOMContentLoaded',function(){
     });
     var fb=document.getElementById('quizFeedback');
     fb.className='feedback show '+(ok?'ok':'no');
-    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    fb.innerHTML=ok?'✓ Doğru! '+explainQ(q):'✗ Yanlış: '+explainQ(q);typeset(fb);
     document.getElementById('scoreNum').textContent=score;
     document.getElementById('correctNum').textContent=correct;
     if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
@@ -660,19 +727,51 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('k1check').addEventListener('click',function(){
     var v=document.getElementById('k1').value.trim(),fb=document.getElementById('kf1');
     var ok=v==='>';
-    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış: −6 sayısı sayı doğrusunda −9\'un sağında olduğundan −6 > −9\'dur.';
     fb.style.color=ok?'#059669':'#dc2626';
   });
   document.getElementById('k2check').addEventListener('click',function(){
     var v=parseNum(document.getElementById('k2').value),fb=document.getElementById('kf2');
     var ok=!isNaN(v)&&v>0.2+1e-9&&v<0.3-1e-9;
-    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış: 0,2 < sayı < 0,3 olmalıdır; örneğin 0,25 (ya da 1/4) bu aralıkta yer alır.';
     fb.style.color=ok?'#059669':'#dc2626';
   });
 
   typeset(document.getElementById('konu'));
   typeset(document.getElementById('ozet'));
 });
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+let lo,hi,L0,H0,pts;
+function add(a,b){return red(a.n*b.d+b.n*a.d,a.d*b.d);}
+function draw(){const sv=$('yg_svg');const W=600,x0=20;const val=function(q){return q.n/q.d;};const span=val(H0)-val(L0);
+ let h='<line x1="20" y1="45" x2="620" y2="45" stroke="#6b7280" stroke-width="2"/>';
+ [[L0,'#1d4ed8'],[H0,'#1d4ed8']].forEach(function(p){const x=x0+(val(p[0])-val(L0))/span*W;h+='<circle cx="'+x+'" cy="45" r="6" fill="'+p[1]+'"/><text x="'+x+'" y="72" text-anchor="middle" font-size="12">'+fq(p[0])+'</text>';});
+ pts.forEach(function(p,i){const x=x0+(val(p)-val(L0))/span*W;h+='<circle cx="'+x+'" cy="45" r="4" fill="#dc2626"/><text x="'+x+'" y="'+(i%2?32:24)+'" text-anchor="middle" font-size="10">'+(i+1)+'</text>';});
+ sv.innerHTML=h;}
+$('yg_s').addEventListener('click',function(){let a=parseQ($('yg_a').value),b=parseQ($('yg_b').value);const f=$('yg_f');
+ if(!a||!b){f.className='feedback show no';f.textContent='İki geçerli sayı yazılmadı (örnek: −1/2, 0,25, 3).';return;}
+ if(a.n*b.d===b.n*a.d){f.className='feedback show no';f.textContent='Sayılar eşit olamaz; iki farklı sayı yazılmalıdır.';return;}
+ if(a.n*b.d>b.n*a.d){const t=a;a=b;b=t;}
+ lo=a;hi=b;L0=a;H0=b;pts=[];$('yg_l').innerHTML='';$('yg_m').disabled=false;f.className='feedback show ok';f.textContent='Aralık: '+fq(lo)+' ile '+fq(hi)+' arasındaki sayılar aranıyor.';draw();});
+$('yg_m').addEventListener('click',function(){const m=add(lo,hi);const mid=red(m.n,m.d*2);pts.push(mid);
+ const li=document.createElement('li');li.textContent=fq(lo)+' ile '+fq(hi)+' arasında: '+fq(mid)+'  (≈ '+dec(mid.n/mid.d,6)+')';$('yg_l').appendChild(li);hi=mid;draw();
+ if(pts.length>=5){$('yg_f').className='feedback show ok';$('yg_f').textContent='Her adımda yeni bir rasyonel sayı bulundu. İşlem istenildiği kadar sürdürülebilir; bu yüzden iki rasyonel sayı arasında sonsuz sayıda rasyonel sayı vardır.';}});
+
+})();
 </script>
 </body>
 </html>

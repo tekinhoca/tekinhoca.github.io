@@ -109,6 +109,34 @@ mjx-container{margin:0!important}
 .mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
 @media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}.pair-table{font-size:.72rem}.pair-table input{width:44px}}
 </style>
+<style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
 </head>
 <body>
 <button class="basa-don" id="basaDon">↑ Başa Dön</button>
@@ -128,6 +156,7 @@ mjx-container{margin:0!important}
     <button class="tab-btn" data-tab="model">🔎 Oran Kontrolcüsü</button>
     <button class="tab-btn" data-tab="genelleme">🎯 Genellemeyi Sına</button>
     <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="tarif">🍲 Tarif Ölçekleyici</button>
     <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
     <button class="tab-btn" data-tab="ozet">📋 Özet</button>
   </nav>
@@ -319,6 +348,20 @@ mjx-container{margin:0!important}
 </section>
 
 <!-- ============ 6. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="tarif">
+
+<div class="card"><div class="card-title"><div class="icon">🍲</div>Tarifi Kişi Sayısına Göre Ölçekleme</div>
+<p class="body-text">Mercimek çorbası tarifi 4 kişiliktir. Kişi sayısı değişince her malzeme aynı oranda değişir. Kişi sayısını değiştirin ve tabloyu inceleyin.</p>
+<div class="nx-row"><label for="tr_p">Kişi sayısı:</label><input type="range" id="tr_p" min="2" max="12" step="2" value="6"><b id="tr_pv">6</b></div>
+<table class="nx-tab" id="tr_t"></table><div class="feedback" id="tr_f"></div></div>
+<div class="card"><div class="card-title"><div class="icon">🧐</div>Orantılı mı, Değil mi?</div>
+<div class="nx-item"><div class="st">1) Benzin litresi ile ödenen tutar (litre fiyatı sabit)</div><button class="nx-opt" data-i="0" data-a="1">Doğru orantılı</button><button class="nx-opt" data-i="0" data-a="0">Orantılı değil</button><div class="nx-note" id="tr_n0">Tutar = litre fiyatı × litre olduğundan tutar ÷ litre oranı sabittir; durum doğru orantılıdır.</div></div>
+<div class="nx-item"><div class="st">2) Bir kasabanın nüfusu ile üzerinden geçen yıl sayısı</div><button class="nx-opt" data-i="1" data-a="0">Doğru orantılı</button><button class="nx-opt" data-i="1" data-a="1">Orantılı değil</button><div class="nx-note" id="tr_n1">Nüfus yıllara göre sabit oranda değişmez; artış ya da azalış düzensizdir. Bu yüzden durum orantılı değildir.</div></div>
+<div class="nx-item"><div class="st">3) Bir kişinin yaşı ile boyu</div><button class="nx-opt" data-i="2" data-a="1">Orantılı değil</button><button class="nx-opt" data-i="2" data-a="0">Doğru orantılı</button><div class="nx-note" id="tr_n2">Boy ile yaş arasında sabit bir oran yoktur; yaş iki katına çıkınca boy iki katına çıkmaz.</div></div>
+<div class="nx-item"><div class="st">4) Aynı tarif için kişi sayısı ile gereken mercimek miktarı</div><button class="nx-opt" data-i="3" data-a="0">Orantılı değil</button><button class="nx-opt" data-i="3" data-a="1">Doğru orantılı</button><div class="nx-note" id="tr_n3">Kişi sayısı kaç kat artarsa gereken mercimek miktarı da o kadar kat artar; oran sabittir.</div></div></div>
+
+</section>
+
 <section class="tab-panel" id="oyun">
   <div class="progress-bar">
     <div class="progress-top"><span id="progLabel">ORANTILI MI, DEĞİL Mİ? · 10 SORU</span><span id="progCount">1 / 10</span></div>
@@ -547,6 +590,33 @@ document.addEventListener('DOMContentLoaded',function(){
   ];
   var drawTableCheck=makeDrawer(tableCheckPool);
 
+  
+  function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var RULES={"siniflandirma": "Doğru orantıda y ÷ x oranı sabittir, ters orantıda x × y çarpımı sabittir; hiçbiri sabit değilse durum orantısızdır.", "tablo": "Tablodaki değer çiftlerinde oranlar (y ÷ x) sabitse doğru orantı, çarpımlar (x × y) sabitse ters orantı vardır; ikisi de değilse orantısızdır."};
+  function explainQ(q){
+    var t='Doğru cevap: '+(q.type==='__TF__'?escHtml(q.correctText):escHtml(q.correctText))+'. ';
+    if(q.exp){return t+q.exp;}
+    return t+(RULES[q.type]||'');
+  }
+  function balanceQuestions(qs){
+    var idx=[];
+    qs.forEach(function(q,i){ if(q.choices.length===4&&q.type!=='pcttype'){ idx.push(i); } });
+    var bag=[];
+    while(bag.length<idx.length){ bag=bag.concat(shuffle([0,1,2,3])); }
+    bag=bag.slice(0,idx.length);
+    for(var k=1;k<bag.length;k++){
+      if(bag[k]===bag[k-1]){
+        for(var m=k+1;m<bag.length;m++){
+          if(bag[m]!==bag[k-1]&&bag[m-1]!==bag[k]){ var tt=bag[k];bag[k]=bag[m];bag[m]=tt;break; }
+        }
+      }
+    }
+    idx.forEach(function(qi,k){
+      var q=qs[qi];var c=q.choices.indexOf(q.correctText);
+      var x=q.choices.splice(c,1)[0];q.choices.splice(bag[k],0,x);q.correctIndex=bag[k];
+    });
+  }
+
   function createQuestion(type){
     var q={type:type};
     if(type==='siniflandirma'){
@@ -564,7 +634,7 @@ document.addEventListener('DOMContentLoaded',function(){
       q.correctText=labelMap2[c.type];
     }else{
       var c=drawTfQuiz();
-      q.text=c.text;
+      q.exp=c.exp;q.text=c.text;
       q.choices=['Doğru','Yanlış'];q.correctText=c.correct?'Doğru':'Yanlış';
     }
     q.correctIndex=q.choices.indexOf(q.correctText);
@@ -575,7 +645,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
   function start(){
     score=0;correct=0;current=0;answered=false;
-    questions=qTypes.map(createQuestion);
+    questions=qTypes.map(createQuestion);balanceQuestions(questions);
     document.getElementById('quizEnd').classList.add('hidden');
     document.querySelector('#oyun .q-card').style.display='block';
     render();
@@ -612,7 +682,7 @@ document.addEventListener('DOMContentLoaded',function(){
     });
     var fb=document.getElementById('quizFeedback');
     fb.className='feedback show '+(ok?'ok':'no');
-    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    fb.innerHTML=ok?'✓ Doğru! '+explainQ(q):'✗ Yanlış: '+explainQ(q);typeset(fb);
     document.getElementById('scoreNum').textContent=score;
     document.getElementById('correctNum').textContent=correct;
     if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
@@ -632,19 +702,44 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('k1check').addEventListener('click',function(){
     var v=document.getElementById('k1').value.trim().toLowerCase(),fb=document.getElementById('kf1');
     var ok=(v.indexOf('ters')>=0);
-    fb.textContent=ok?'✓ Doğru! Musluk sayısı × süre çarpımı sabit (24) olduğu için bu ters orantıdır.':'✗ Tekrar düşün: çarpım sabit kaldığında bu ne tür bir orantıdır?';
+    fb.textContent=ok?'✓ Doğru! Musluk sayısı × süre çarpımı sabit (24) olduğu için bu ters orantıdır.':'✗ Yanlış: Musluk sayısı × süre çarpımı sabit (24) olduğu için bu durum ters orantıdır.';
     fb.style.color=ok?'#059669':'#dc2626';
   });
   document.getElementById('k2check').addEventListener('click',function(){
     var v=document.getElementById('k2a').value.trim().toLowerCase(),fb=document.getElementById('kf2');
     var ok=(v.indexOf('yok')>=0 || v.indexOf('hayır')>=0 || v.indexOf('orantısız')>=0);
-    fb.textContent=ok?'✓ Doğru! Sınav notu ile hava sıcaklığı arasında herhangi bir çarpımsal ilişki yoktur; orantılı değildir.':'✗ Tekrar düşün: bu iki büyüklük arasında sabit bir oran ya da çarpım var mı?';
+    fb.textContent=ok?'✓ Doğru! Sınav notu ile hava sıcaklığı arasında herhangi bir çarpımsal ilişki yoktur; orantılı değildir.':'✗ Yanlış: Sınav notu ile hava sıcaklığı arasında sabit bir oran ya da çarpım yoktur; durum orantılı değildir.';
     fb.style.color=ok?'#059669':'#dc2626';
   });
 
   typeset(document.getElementById('konu'));
   typeset(document.getElementById('ozet'));
 });
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+const M=[['Kırmızı mercimek (su bardağı)',2],['Su (su bardağı)',12],['Soğan (adet)',1],['Havuç (adet)',1],['Tereyağı (yemek kaşığı)',2]];
+function draw(){const p=+$('tr_p').value;$('tr_pv').textContent=p;let h='<tr><th>Malzeme</th><th>4 kişilik</th><th>'+p+' kişilik</th><th>1 kişilik (birim oran)</th></tr>';
+ M.forEach(function(m){h+='<tr><td style="text-align:left">'+m[0]+'</td><td>'+m[1]+'</td><td>'+dec(m[1]*p/4,2)+'</td><td>'+dec(m[1]/4,3)+'</td></tr>';});
+ $('tr_t').innerHTML=h;const f=$('tr_f');f.className='feedback show ok';f.textContent='Kişi sayısı 4 kişiden '+p+' kişiye değişince her malzeme '+dec(p/4,2)+' katına çıktı. Her malzeme için "miktar ÷ kişi sayısı" oranı sabit kaldı; bu nedenle durum doğru orantılıdır.';}
+$('tr_p').addEventListener('input',draw);draw();
+document.querySelectorAll('#tarif .nx-opt').forEach(function(b){b.addEventListener('click',function(){const i=b.dataset.i;const sib=b.parentElement.querySelectorAll('.nx-opt');if(b.parentElement.dataset.done)return;b.parentElement.dataset.done='1';
+ sib.forEach(function(x){if(x.dataset.a==='1')x.classList.add('correct');});if(b.dataset.a!=='1')b.classList.add('wrong');
+ $('tr_n'+i).style.display='block';});});
+
+})();
 </script>
 </body>
 </html>

@@ -107,6 +107,34 @@ mjx-container{margin:0!important}
 .mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
 @media(max-width:480px){.choices,.summary-grid{grid-template-columns:1fr}}
 </style>
+<style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
 </head>
 <body>
 <button class="basa-don" id="basaDon">↑ Başa Dön</button>
@@ -128,6 +156,7 @@ mjx-container{margin:0!important}
     <button class="tab-btn" data-tab="carpmabolme">✖️➗ Çarpma-Bölme</button>
     <button class="tab-btn" data-tab="cokadimli">🧩 Çok Adımlı</button>
     <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="islemlab">🧮 İşlem ve Özellik Laboratuvarı</button>
     <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
     <button class="tab-btn" data-tab="ozet">📋 Özet</button>
   </nav>
@@ -281,6 +310,19 @@ mjx-container{margin:0!important}
 </section>
 
 <!-- ============ 8. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="islemlab">
+
+<div class="card"><div class="card-title"><div class="icon">🧮</div>Rasyonel Sayılarla Dört İşlem</div>
+<p class="body-text">İki rasyonel sayı yazın (tam sayı, kesir ya da ondalık olabilir) ve işlemi seçin. Adımlar gösterilir.</p>
+<div class="nx-row"><input class="nx-in" id="il_a" value="-2/3"><select class="nx-sel" id="il_o"><option value="+">+</option><option value="-">−</option><option value="*">×</option><option value="/">÷</option></select><input class="nx-in" id="il_b" value="3/4"><button class="nx-btn" id="il_g">Hesapla</button></div>
+<div class="feedback" id="il_f"></div><div class="body-text" id="il_s"></div></div>
+<div class="card"><div class="card-title"><div class="icon">🔄</div>İşlem Özelliklerini Sına</div>
+<p class="body-text">Üç rasyonel sayı yazın. Değişme, birleşme ve dağılma özelliklerinin iki tarafı ayrı ayrı hesaplanır. Çıkarmanın ters işaretli toplama olduğu da denenir.</p>
+<div class="nx-row"><label>a:</label><input class="nx-in" id="il_pa" value="1/2"><label>b:</label><input class="nx-in" id="il_pb" value="-3/4"><label>c:</label><input class="nx-in" id="il_pc" value="2/5"><button class="nx-btn" id="il_p">Sına</button></div>
+<div class="feedback" id="il_pf"></div><table class="nx-tab" id="il_pt" style="display:none"></table></div>
+
+</section>
+
 <section class="tab-panel" id="oyun">
   <div class="progress-bar">
     <div class="progress-top"><span id="progLabel">PROBLEM ATÖLYESİ · 10 SORU</span><span id="progCount">1 / 10</span></div>
@@ -392,7 +434,7 @@ document.addEventListener('DOMContentLoaded',function(){
       var fb=document.getElementById('pc'+idx+'_fb');
       var ok=!isNaN(v)&&Math.abs(v-data.answer)<0.01;
       fb.className='feedback show '+(ok?'ok':'no');
-      fb.textContent=ok?'✓ Doğru!':'✗ Tekrar dene ya da ipucuna bak.';
+      fb.textContent=ok?'✓ Doğru!':'✗ Yanlış: Doğru cevap '+String(data.answer).replace('.',',')+(data.unit?' '+data.unit:'')+'. Çözüm adımları için "Çözümü Göster" düğmesine bakılabilir.';
     });
     document.getElementById('pc'+idx+'_hintbtn').addEventListener('click',function(){
       var box=document.getElementById('pc'+idx+'_hint');
@@ -486,6 +528,33 @@ document.addEventListener('DOMContentLoaded',function(){
   var drawQCok=makeDrawer(quizCokAdimliPool);
 
   function fmtNum(v){ return String(v).replace('.',','); }
+  
+  function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var RULES={"toplama_cikarma": "Artış ve yükselme pozitif, azalış ve alçalma negatif tam sayıyla gösterilir; ardından toplama yapılır.", "tasarruf": "Gelir pozitif, gider negatif alınır; düzenli tasarruf gibi tekrarlanan eşit miktarlar çarpma ile toplanır.", "alisveris": "Toplam tutar birim fiyat × miktar ile, indirimli fiyat ise eski fiyattan indirim tutarının çıkarılmasıyla bulunur.", "carpma_bolme": "Aynı işaretli sayıların çarpımı ve bölümü pozitif, farklı işaretli sayıların çarpımı ve bölümü negatiftir.", "cokadimli": "Çok adımlı işlemlerde önce parantez içi, sonra çarpma ve bölme, en son toplama ve çıkarma yapılır."};
+  function explainQ(q){
+    var t='Doğru cevap: '+(q.type==='__TF__'?escHtml(q.correctText):escHtml(q.correctText))+'. ';
+    if(q.exp){return t+q.exp;}
+    return t+(RULES[q.type]||'');
+  }
+  function balanceQuestions(qs){
+    var idx=[];
+    qs.forEach(function(q,i){ if(q.choices.length===4&&q.type!=='pcttype'){ idx.push(i); } });
+    var bag=[];
+    while(bag.length<idx.length){ bag=bag.concat(shuffle([0,1,2,3])); }
+    bag=bag.slice(0,idx.length);
+    for(var k=1;k<bag.length;k++){
+      if(bag[k]===bag[k-1]){
+        for(var m=k+1;m<bag.length;m++){
+          if(bag[m]!==bag[k-1]&&bag[m-1]!==bag[k]){ var tt=bag[k];bag[k]=bag[m];bag[m]=tt;break; }
+        }
+      }
+    }
+    idx.forEach(function(qi,k){
+      var q=qs[qi];var c=q.choices.indexOf(q.correctText);
+      var x=q.choices.splice(c,1)[0];q.choices.splice(bag[k],0,x);q.correctIndex=bag[k];
+    });
+  }
+
   function createQuestion(type){
     var q={type:type},c;
     if(type==='toplama_cikarma'){ c=drawQTop(); }
@@ -503,7 +572,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
   function start(){
     score=0;correct=0;current=0;answered=false;
-    questions=qTypes.map(createQuestion);
+    questions=qTypes.map(createQuestion);balanceQuestions(questions);
     document.getElementById('quizEnd').classList.add('hidden');
     document.querySelector('#oyun .q-card').style.display='block';
     render();
@@ -540,7 +609,7 @@ document.addEventListener('DOMContentLoaded',function(){
     });
     var fb=document.getElementById('quizFeedback');
     fb.className='feedback show '+(ok?'ok':'no');
-    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    fb.innerHTML=ok?'✓ Doğru! '+explainQ(q):'✗ Yanlış: '+explainQ(q);typeset(fb);
     document.getElementById('scoreNum').textContent=score;
     document.getElementById('correctNum').textContent=correct;
     if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
@@ -560,19 +629,56 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('k1check').addEventListener('click',function(){
     var v=parseNum(document.getElementById('k1').value),fb=document.getElementById('kf1');
     var ok=!isNaN(v)&&Math.abs(v-(-5))<0.01;
-    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış: −8 + 3 = −5 olduğundan kuş deniz seviyesinin 5 m altındadır (−5 m).';
     fb.style.color=ok?'#059669':'#dc2626';
   });
   document.getElementById('k2check').addEventListener('click',function(){
     var v=parseNum(document.getElementById('k2').value),fb=document.getElementById('kf2');
     var ok=!isNaN(v)&&Math.abs(v-2100)<0.01;
-    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış: Düzenli tasarruf çarpma ile bulunur: 350 × 6 = 2100 TL.';
     fb.style.color=ok?'#059669':'#dc2626';
   });
 
   typeset(document.getElementById('strateji'));
   typeset(document.getElementById('ozet'));
 });
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+function add(a,b){return red(a.n*b.d+b.n*a.d,a.d*b.d);}
+function neg(a){return {n:-a.n,d:a.d};}
+function mul(a,b){return red(a.n*b.n,a.d*b.d);}
+function inv(a){return a.n<0?{n:-a.d,d:-a.n}:{n:a.d,d:a.n};}
+function eq(a,b){return a.n===b.n&&a.d===b.d;}
+$('il_g').addEventListener('click',function(){const a=parseQ($('il_a').value),b=parseQ($('il_b').value),o=$('il_o').value,f=$('il_f');const S=[];
+ if(!a||!b){f.className='feedback show no';f.textContent='İki geçerli sayı yazılmalıdır.';$('il_s').innerHTML='';return;}
+ let r;
+ if(o==='+'||o==='-'){const l=a.d*b.d/gcd(a.d,b.d);const an=a.n*(l/a.d),bn=b.n*(l/b.d);S.push('Paydalar eşitlenir (ortak payda '+l+'): '+an+'/'+l+' '+(o==='+'?'+':'−')+' '+(bn<0?'('+bn+')':bn)+'/'+l);
+  if(o==='-')S.push('Çıkarma, ters işaretli sayıyı toplamaktır: '+an+'/'+l+' + ('+(-bn)+')/'+l);
+  r=red(o==='+'?an+bn:an-bn,l);S.push('Paylar işlenir ve sadeleştirilir: '+fq(r));}
+ else if(o==='*'){S.push('Paylar çarpılır, paydalar çarpılır: ('+a.n+'·'+b.n+')/('+a.d+'·'+b.d+')');r=mul(a,b);S.push('Sadeleştirilmiş sonuç: '+fq(r));}
+ else{if(b.n===0){f.className='feedback show no';f.textContent='0\'a bölme tanımsızdır; ikinci sayı sıfır olamaz.';$('il_s').innerHTML='';return;}
+  S.push('Bölme, ikinci sayının çarpmaya göre tersiyle çarpmaktır: '+fq(a)+' × '+fq(inv(b)));r=mul(a,inv(b));S.push('Sonuç: '+fq(r));}
+ f.className='feedback show ok';f.textContent='Sonuç: '+fq(r)+'  (≈ '+dec(r.n/r.d,4)+')';$('il_s').innerHTML=S.map(function(t){return '<div>• '+t+'</div>';}).join('');});
+$('il_p').addEventListener('click',function(){const a=parseQ($('il_pa').value),b=parseQ($('il_pb').value),c=parseQ($('il_pc').value),f=$('il_pf'),t=$('il_pt');
+ if(!a||!b||!c){f.className='feedback show no';f.textContent='Üç geçerli sayı yazılmalıdır.';t.style.display='none';return;}
+ const rows=[['Toplamada değişme: a + b  =  b + a',add(a,b),add(b,a)],['Çarpmada değişme: a × b  =  b × a',mul(a,b),mul(b,a)],['Toplamada birleşme: (a + b) + c  =  a + (b + c)',add(add(a,b),c),add(a,add(b,c))],['Çarpmada birleşme: (a × b) × c  =  a × (b × c)',mul(mul(a,b),c),mul(a,mul(b,c))],['Dağılma: a × (b + c)  =  a × b + a × c',mul(a,add(b,c)),add(mul(a,b),mul(a,c))],['Çıkarma: a − b  =  a + (−b)',add(a,neg(b)),add(a,neg(b))],['Bölmede değişme: a ÷ b  =  b ÷ a',b.n===0?null:mul(a,inv(b)),a.n===0?null:mul(b,inv(a))]];
+ t.style.display='table';t.innerHTML='<tr><th>Özellik</th><th>Sol taraf</th><th>Sağ taraf</th><th>Sonuç</th></tr>'+rows.map(function(r){const ok=r[1]&&r[2]&&eq(r[1],r[2]);return '<tr><td style="text-align:left">'+r[0]+'</td><td>'+(r[1]?fq(r[1]):'tanımsız')+'</td><td>'+(r[2]?fq(r[2]):'tanımsız')+'</td><td>'+(ok?'✓ eşit':'✗ eşit değil')+'</td></tr>';}).join('');
+ f.className='feedback show ok';f.textContent='Toplama ve çarpma değişme ile birleşme özelliğine, çarpma toplama üzerine dağılma özelliğine sahiptir. Bölme ve çıkarmada değişme özelliği genel olarak geçerli değildir.';});
+
+})();
 </script>
 </body>
 </html>

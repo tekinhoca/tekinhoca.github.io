@@ -113,6 +113,34 @@ mjx-container{margin:0!important}
 .mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
 @media(max-width:480px){.choices,.order-grid,.summary-grid{grid-template-columns:1fr}}
 </style>
+<style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
 </head>
 <body>
 <button class="basa-don" id="basaDon">↑ Başa Dön</button>
@@ -133,6 +161,7 @@ mjx-container{margin:0!important}
     <button class="tab-btn" data-tab="mutlak">📏 Mutlak Değer</button>
     <button class="tab-btn" data-tab="sayidogrusu">📍 Sayı Doğrusu</button>
     <button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
+    <button class="tab-btn" data-tab="atolye">🌡️ Sayı Doğrusu Atölyesi</button>
     <button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
     <button class="tab-btn" data-tab="ozet">📋 Özet</button>
   </nav>
@@ -331,6 +360,24 @@ mjx-container{margin:0!important}
 </section>
 
 <!-- ============ 7. KENDİNİ DENE ============ -->
+<section class="tab-panel" id="atolye">
+
+<div class="card"><div class="card-title"><div class="icon">🌡️</div>Dikey Sayı Doğrusu: Termometre</div>
+<p class="body-text">Sayı doğrusu yatay olabileceği gibi dikey de olabilir. Termometrede sıfırın üstü pozitif, altı negatif tam sayılarla gösterilir. Kaydırıcıyı oynatın.</p>
+<div class="nx-flex"><div class="nx-therm" id="at_th"><div class="nx-zero" style="top:50%"></div><div class="nx-mark" id="at_mk" style="top:50%"></div></div>
+<div><div class="nx-row"><label for="at_sl">Sıcaklık (°C):</label><input type="range" id="at_sl" min="-10" max="10" value="3"></div>
+<div class="body-text" id="at_tx"></div></div></div></div>
+<div class="card"><div class="card-title"><div class="icon">🌉</div>Tam Sayılardan Rasyonel Sayılara Köprü</div>
+<p class="body-text">Bazı sorular tam sayılarla çözülemez. Boşluğa gelecek sayıyı yazın (kesir ya da ondalık yazabilirsiniz).</p>
+<div class="nx-row"><label>3 + ___ = 0</label><input class="nx-in" id="at_k1"><button class="nx-btn" id="at_b1">Kontrol et</button></div><div class="feedback" id="at_f1"></div>
+<div class="nx-row"><label>2 × ___ = 1</label><input class="nx-in" id="at_k2"><button class="nx-btn" id="at_b2">Kontrol et</button></div><div class="feedback" id="at_f2"></div>
+<div class="nx-note" id="at_n2" style="display:none">Gözlem: İkinci eşitliği sağlayan sayı 1/2'dir. Bu sayı tam sayı değildir; böyle sayılar rasyonel sayıdır ve sayı doğrusunda 0 ile 1 arasında yer alır.</div></div>
+<div class="card"><div class="card-title"><div class="icon">📏</div>Rasyonel Sayının Mutlak Değeri</div>
+<p class="body-text">Mutlak değer, bir sayının sayı doğrusunda 0'a olan uzaklığıdır. Tam sayı, kesir ya da ondalık sayı yazın (örneğin −3/4 ya da −0,75).</p>
+<div class="nx-row"><input class="nx-in" id="at_m" value="-3/4"><button class="nx-btn" id="at_bm">Hesapla</button></div><div class="feedback" id="at_fm"></div></div>
+
+</section>
+
 <section class="tab-panel" id="oyun">
   <div class="progress-bar">
     <div class="progress-top"><span id="progLabel">SAYI PUSULASI · 10 SORU</span><span id="progCount">1 / 10</span></div>
@@ -648,7 +695,7 @@ document.addEventListener('DOMContentLoaded',function(){
       var ok=JSON.stringify(orderPicked)===JSON.stringify(sorted);
       var fb=document.getElementById('orderFeedback');
       fb.className='feedback show '+(ok?'ok':'no');
-      fb.textContent=ok?'✓ Doğru sıraladın!':'✗ Sıralama hatalı. "Sıfırla" ile tekrar dene.';
+      fb.innerHTML=ok?'✓ Doğru sıraladın!':'✗ Yanlış: Doğru sıra (küçükten büyüğe): '+orderCurrent.slice().sort(function(a,b){return a.v-b.v;}).map(function(i){return '\\('+i.d+'\\)';}).join(' &lt; ');typeset(fb);
     }
   }
   document.getElementById('orderReset').addEventListener('click',function(){
@@ -675,6 +722,33 @@ document.addEventListener('DOMContentLoaded',function(){
   ];
   var drawQRat=makeDrawer(qRatPool);
 
+  
+  function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  var RULES={"tamsayi": "Yükseklik, sıcaklık, borç gibi durumlarda \"altı\", \"eksik\" ve \"borç\" ifadeleri negatif; \"üstü\", \"fazla\" ve \"tasarruf\" ifadeleri pozitif tam sayıyla gösterilir.", "mutlak": "Mutlak değer, bir sayının sayı doğrusunda 0'a olan uzaklığıdır; sembol seçilirken önce mutlak değerler hesaplanır.", "siralama": "Aranan sayı, verilen iki sayıdan büyük ve diğerinden küçük olmalıdır; sayı doğrusunda bu iki sayının arasında yer alır.", "rasyonel": "Her tam sayı, paydası 1 olan bir rasyonel sayıdır; pay sayının kendisi, payda 1 olur."};
+  function explainQ(q){
+    var t='Doğru cevap: '+(q.type==='__TF__'?escHtml(q.correctText):escHtml(q.correctText))+'. ';
+    if(q.exp){return t+q.exp;}
+    return t+(RULES[q.type]||'');
+  }
+  function balanceQuestions(qs){
+    var idx=[];
+    qs.forEach(function(q,i){ if(q.choices.length===4&&q.type!=='pcttype'){ idx.push(i); } });
+    var bag=[];
+    while(bag.length<idx.length){ bag=bag.concat(shuffle([0,1,2,3])); }
+    bag=bag.slice(0,idx.length);
+    for(var k=1;k<bag.length;k++){
+      if(bag[k]===bag[k-1]){
+        for(var m=k+1;m<bag.length;m++){
+          if(bag[m]!==bag[k-1]&&bag[m-1]!==bag[k]){ var tt=bag[k];bag[k]=bag[m];bag[m]=tt;break; }
+        }
+      }
+    }
+    idx.forEach(function(qi,k){
+      var q=qs[qi];var c=q.choices.indexOf(q.correctText);
+      var x=q.choices.splice(c,1)[0];q.choices.splice(bag[k],0,x);q.correctIndex=bag[k];
+    });
+  }
+
   function createQuestion(type){
     var q={type:type};
     if(type==='tamsayi'){
@@ -700,7 +774,7 @@ document.addEventListener('DOMContentLoaded',function(){
   var score=0,correct=0,current=0,answered=false,TOTAL=10,questions=[];
   function start(){
     score=0;correct=0;current=0;answered=false;
-    questions=qTypes.map(createQuestion);
+    questions=qTypes.map(createQuestion);balanceQuestions(questions);
     document.getElementById('quizEnd').classList.add('hidden');
     document.querySelector('#oyun .q-card').style.display='block';
     render();
@@ -737,7 +811,7 @@ document.addEventListener('DOMContentLoaded',function(){
     });
     var fb=document.getElementById('quizFeedback');
     fb.className='feedback show '+(ok?'ok':'no');
-    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış. Doğru cevap işaretlendi.';
+    fb.innerHTML=ok?'✓ Doğru! '+explainQ(q):'✗ Yanlış: '+explainQ(q);typeset(fb);
     document.getElementById('scoreNum').textContent=score;
     document.getElementById('correctNum').textContent=correct;
     if(current<TOTAL-1){ document.getElementById('quizNext').classList.add('show'); }
@@ -757,19 +831,43 @@ document.addEventListener('DOMContentLoaded',function(){
   document.getElementById('k1check').addEventListener('click',function(){
     var v=document.getElementById('k1').value.trim(),fb=document.getElementById('kf1');
     var ok=v==='8';
-    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış: |−8| = 8; mutlak değer, sayının 0\'a olan uzaklığıdır.';
     fb.style.color=ok?'#059669':'#dc2626';
   });
   document.getElementById('k2check').addEventListener('click',function(){
     var a=document.getElementById('k2a').value.trim(),b=document.getElementById('k2b').value.trim(),fb=document.getElementById('kf2');
     var ok=a==='-5'&&b==='1';
-    fb.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün ve yeniden dene.';
+    fb.textContent=ok?'✓ Doğru!':'✗ Yanlış: Her tam sayı paydası 1 olan rasyonel sayıdır; −5 = −5/1 (pay −5, payda 1).';
     fb.style.color=ok?'#059669':'#dc2626';
   });
 
   typeset(document.getElementById('konu'));
   typeset(document.getElementById('ozet'));
 });
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+function th(){const v=+$('at_sl').value;$('at_mk').style.top=((10-v)/20*100)+'%';
+ $('at_tx').textContent=v>0?('Sıcaklık sıfırın '+v+' derece üstünde: +'+v+' °C. Sıfıra uzaklığı |'+v+'| = '+v+'.'):v<0?('Sıcaklık sıfırın '+(-v)+' derece altında: −'+(-v)+' °C. Sıfıra uzaklığı |−'+(-v)+'| = '+(-v)+'.'):'Sıfır noktası: sıcaklık ne pozitif ne negatiftir.';}
+$('at_sl').addEventListener('input',th);th();
+$('at_b1').addEventListener('click',function(){const q=parseQ($('at_k1').value);const ok=q&&q.n===-3&&q.d===1;fbk('at_f1',ok,ok?'3 + (−3) = 0 olduğundan aranan sayı −3\'tür; bu sayı tam sayıdır.':'3 + (−3) = 0 olduğundan aranan sayı −3\'tür.');});
+$('at_b2').addEventListener('click',function(){const q=parseQ($('at_k2').value);const ok=q&&q.n===1&&q.d===2;fbk('at_f2',ok,ok?'2 × 1/2 = 1 olduğundan aranan sayı 1/2\'dir; tam sayı olmadığı için rasyonel sayı kavramına ihtiyaç duyulur.':'2 × 1/2 = 1 olduğundan aranan sayı 1/2\'dir; tam sayı değildir, rasyonel sayıdır.');$('at_n2').style.display='block';});
+$('at_bm').addEventListener('click',function(){const q=parseQ($('at_m').value);const f=$('at_fm');if(!q){f.className='feedback show no';f.textContent='Geçerli bir sayı yazılmadı. Örnek: −3/4 ya da −0,75.';return;}
+ const a={n:Math.abs(q.n),d:q.d};f.className='feedback show ok';f.textContent='|'+fq(q)+'| = '+fq(a)+'. '+fq(q)+' sayısının sayı doğrusunda 0\'a uzaklığı '+fq(a)+' birimdir; '+(q.n<0?'karşıtı '+fq(a)+' ile aynı uzaklıktadır.':'sayı sıfırdan büyük ya da sıfıra eşit olduğundan değişmez.');});
+
+})();
 </script>
 </body>
 </html>
