@@ -62,7 +62,7 @@ footer{margin-top:28px;background:#03201d;color:#dff4f0;padding:24px 18px;text-a
 <button class="tab-btn" data-tab="tab9">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab10">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab11">ÖZET</button>
-<button class="tab-btn" data-tab="tahmin">🔮 Veri Ötesi Tahmin</button><button class="tab-btn" data-tab="formlar">🧾 Soru Ölçütleri ve Öz Değerlendirme</button><button class="tab-btn" data-tab="tab12">KENDİNİ DENE</button>
+<button class="tab-btn" data-tab="tahmin">🔮 VERİ ÖTESİ TAHMİN</button><button class="tab-btn" data-tab="formlar">🧾 SORU ÖLÇÜTLERİ VE ÖZ DEĞERLENDİRME</button><button class="tab-btn" data-tab="tab12">KENDİNİ DENE</button>
 </nav>
 <main class="container">
 
@@ -253,9 +253,9 @@ footer{margin-top:28px;background:#03201d;color:#dff4f0;padding:24px 18px;text-a
 <section class="tab-panel" id="tahmin">
 
 <div class="card"><div class="card-title"><div class="icon">🔮</div>Veriye Bakarak Geleceği Tahmin Etme</div>
-<p class="body-text">Aşağıdaki kurgusal veri setlerinden birini seçin. Önce veri aralığının dışındaki bir değeri tahmin edin. Ardından eğilim doğrusunun söylediğiyle karşılaştırın ve tahminin güvenilirliğini tartışın.</p>
+<p class="body-text">Aşağıdaki kurgusal veri setlerinden birini seçin. Önce dikey eksendeki sayılardan yararlanarak veri aralığının dışındaki bir değeri tahmin edin. Karşılaştır düğmesine basınca turuncu eğilim doğrusu ve noktası (yeşil nokta sizin tahminiz) çizilir; ardından tahminin güvenilirliğini tartışın.</p>
 <div class="nx-row"><select class="nx-sel" id="tm_d"><option value="0">Mahallenin aylık su tüketimi (ay: 1-8)</option><option value="1">Bir şehrin aylık ortalama sıcaklığı (ay: 1-8)</option></select></div>
-<svg id="tm_s" viewBox="0 0 400 230" style="width:100%;max-width:400px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg>
+<svg id="tm_s" viewBox="0 0 400 245" style="width:100%;max-width:400px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg>
 <div class="nx-row"><label id="tm_l">9. ay için tahminim:</label><input class="nx-in" id="tm_g" style="width:90px"><button class="nx-btn" id="tm_b">Karşılaştır</button></div><div class="feedback" id="tm_f"></div></div>
 
 </section>
@@ -595,15 +595,21 @@ function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s
 function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
 function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
 
-const DS=[{n:'Su tüketimi (m³/hane)',y:[18,17,16.5,15,14.5,13,12.5,11],t:9,u:'m³',w:'Eğilim azalıyor; ancak tüketim negatif olamaz ve mevsim, fiyat ya da tasarruf kampanyası gibi etkenler eğilimi değiştirebilir. Bu yüzden tahmin kesin bir sonuç değil, veriye dayalı bir öngörüdür.'},
- {n:'Ortalama sıcaklık (°C)',y:[3,4,8,13,18,23,26,25],t:12,u:'°C',w:'Sıcaklıklar yılın ilk yarısında artar, sonra düşer. 12. ay için doğrusal eğilim, veri aralığının dışına çıkıldığında mevsimsel döngüyü yakalayamadığı için çok yanlış sonuç verebilir. Eğilim doğrusu her veri için uygun değildir.'}];
+const DS=[{n:'Su tüketimi (m³/hane)',y:[18,17,16.5,15,14.5,13,12.5,11],t:9,u:'m³',ax:[0,25,5],w:'Eğilim azalıyor; ancak tüketim negatif olamaz ve mevsim, fiyat ya da tasarruf kampanyası gibi etkenler eğilimi değiştirebilir. Bu yüzden tahmin kesin bir sonuç değil, veriye dayalı bir öngörüdür.'},
+ {n:'Ortalama sıcaklık (°C)',y:[3,4,8,13,18,23,26,25],t:12,u:'°C',ax:[-10,50,10],w:'Sıcaklıklar yılın ilk yarısında artar, sonra düşer. 12. ay için doğrusal eğilim, veri aralığının dışına çıkıldığında mevsimsel döngüyü yakalayamadığı için çok yanlış sonuç verebilir. Eğilim doğrusu her veri için uygun değildir.'}];
 let cur=0;
 function fit(y){const n=y.length;let sx=0,sy=0,sxy=0,sxx=0;y.forEach(function(v,i){const x=i+1;sx+=x;sy+=v;sxy+=x*v;sxx+=x*x;});const m=(n*sxy-sx*sy)/(n*sxx-sx*sx),b=(sy-m*sx)/n;return {m:m,b:b};}
-function draw(g){const d=DS[cur],L=fit(d.y),T=d.t;const all=d.y.concat([L.m*T+L.b]);if(g!==null)all.push(g);const mn=Math.min.apply(null,all)-2,mx=Math.max.apply(null,all)+2;
- const X=function(x){return 40+x*(330/(T+0.5));},Y=function(v){return 200-(v-mn)/(mx-mn)*170;};let s='<line x1="40" y1="200" x2="380" y2="200" stroke="#6b7280"/><line x1="40" y1="20" x2="40" y2="200" stroke="#6b7280"/>';
- d.y.forEach(function(v,i){s+='<circle cx="'+X(i+1)+'" cy="'+Y(v)+'" r="4" fill="#4361ee"/><text x="'+X(i+1)+'" y="216" font-size="10" text-anchor="middle">'+(i+1)+'</text>';if(i)s+='<line x1="'+X(i)+'" y1="'+Y(d.y[i-1])+'" x2="'+X(i+1)+'" y2="'+Y(v)+'" stroke="#4361ee"/>';});
- s+='<line x1="'+X(1)+'" y1="'+Y(L.m+L.b)+'" x2="'+X(T)+'" y2="'+Y(L.m*T+L.b)+'" stroke="#f59e0b" stroke-dasharray="6 4" stroke-width="2"/><circle cx="'+X(T)+'" cy="'+Y(L.m*T+L.b)+'" r="5" fill="#f59e0b"/><text x="'+X(T)+'" y="216" font-size="10" text-anchor="middle">'+T+'</text>';
- if(g!==null)s+='<circle cx="'+X(T)+'" cy="'+Y(g)+'" r="5" fill="#059669"/>';$('tm_s').innerHTML=s;}
+function niceStep(r){const raw=r/5;const p=Math.pow(10,Math.floor(Math.log10(raw)));const f=raw/p;const n=f<=1?1:f<=2?2:f<=5?5:10;return n*p;}
+function draw(g){const d=DS[cur],L=fit(d.y),T=d.t;const st=d.ax[2];let mn=d.ax[0],mx=d.ax[1];
+ if(g!==null){mn=Math.min(mn,Math.floor(g/st+1e-9)*st);mx=Math.max(mx,Math.ceil(g/st-1e-9)*st);const p=L.m*T+L.b;mn=Math.min(mn,Math.floor(p/st+1e-9)*st);mx=Math.max(mx,Math.ceil(p/st-1e-9)*st);}
+ const X=function(x){return 60+x*(315/(T+0.5));},Y=function(v){return 190-(v-mn)/(mx-mn)*160;};let s='';
+ for(let k=0;mn+k*st<=mx+1e-9;k++){const v=mn+k*st,y=Y(v);s+='<line x1="54" y1="'+y+'" x2="385" y2="'+y+'" stroke="#e5e7eb"/><line x1="50" y1="'+y+'" x2="54" y2="'+y+'" stroke="#6b7280"/><text x="47" y="'+(y+4)+'" font-size="10" text-anchor="end">'+dec(v,2)+'</text>';}
+ s+='<line x1="54" y1="190" x2="385" y2="190" stroke="#6b7280"/><line x1="54" y1="26" x2="54" y2="190" stroke="#6b7280"/>';
+ s+='<text x="12" y="108" font-size="10" text-anchor="middle" transform="rotate(-90 12 108)">'+d.n+'</text><text x="220" y="238" font-size="10" text-anchor="middle">Ay</text>';
+ d.y.forEach(function(v,i){s+='<circle cx="'+X(i+1)+'" cy="'+Y(v)+'" r="4" fill="#4361ee"/><text x="'+X(i+1)+'" y="204" font-size="10" text-anchor="middle">'+(i+1)+'</text>';if(i)s+='<line x1="'+X(i)+'" y1="'+Y(d.y[i-1])+'" x2="'+X(i+1)+'" y2="'+Y(v)+'" stroke="#4361ee"/>';});
+ s+='<text x="'+X(T)+'" y="204" font-size="10" text-anchor="middle">'+T+'</text>';if(g!==null)s+='<line x1="'+X(1)+'" y1="'+Y(L.m+L.b)+'" x2="'+X(T)+'" y2="'+Y(L.m*T+L.b)+'" stroke="#f59e0b" stroke-dasharray="6 4" stroke-width="2"/><circle cx="'+X(T)+'" cy="'+Y(L.m*T+L.b)+'" r="5" fill="#f59e0b"/>';
+ if(g!==null)s+='<circle cx="'+X(T)+'" cy="'+Y(g)+'" r="5" fill="#059669"/>';
+ $('tm_s').innerHTML=s;}
 function setup(){const d=DS[cur];$('tm_l').textContent=d.t+'. ay için tahminim ('+d.u+'):';$('tm_g').value='';const f=$('tm_f');f.className='feedback';f.textContent='';draw(null);}
 $('tm_d').addEventListener('change',function(){cur=+this.value;setup();});
 $('tm_b').addEventListener('click',function(){const d=DS[cur],q=parseQ($('tm_g').value),f=$('tm_f');if(!q){f.className='feedback show no';f.textContent='Yanlış: Önce tahmininizi sayı olarak yazmalısınız.';return;}
