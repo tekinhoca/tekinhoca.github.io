@@ -61,7 +61,9 @@ footer{margin-top:28px;background:#1c0e04;color:#f3e3d3;padding:24px 18px;text-a
 <button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab7">ÖZET</button>
-<button class="tab-btn" data-tab="simkat">🪞 Simetri ve Kâğıt Katlama</button><button class="tab-btn" data-tab="agacyeri">🌳 Parka Ağaç Dikmek</button><button class="tab-btn" data-tab="kogorev">📝 Kenarortay Verilen Üçgenler</button><button class="tab-btn" data-tab="tab8">KENDİNİ DENE</button>
+<button class="tab-btn" data-tab="simkat">YARDIMCI ELEMANLAR BİRLİKTE</button>
+<button class="tab-btn" data-tab="agacyeri">PARKA AĞAÇ DİKME</button>
+<button class="tab-btn" data-tab="tab8">KENDİNİ DENE</button>
 </nav>
 <main class="container">
 
@@ -251,20 +253,20 @@ footer{margin-top:28px;background:#1c0e04;color:#f3e3d3;padding:24px 18px;text-a
 
 <section class="tab-panel" id="simkat">
 
-<div class="card"><div class="card-title"><div class="icon">🪞</div>Hangi Üçgende Yardımcı Elemanlar Çakışır?</div>
+<div class="card"><div class="card-title"><div class="icon">🪞</div>Aynı Köşeden Çıkan Üç Yardımcı Eleman Nasıl Görünür?</div>
 <p class="body-text">A köşesini kaydırıcılarla hareket ettirin. Kenarortay, yükseklik ve açıortayın BC kenarını kestiği noktalara ve uzunluklarına bakın. Üçgeni A'dan inen doğru boyunca katladığınızda B ile C üst üste biniyorsa bu doğru üçgenin simetri doğrusudur.</p>
 <div class="nx-row"><label for="sk_x">A'nın yatay konumu:</label><input type="range" id="sk_x" min="-60" max="60" value="25"><b id="sk_xv">25</b><label for="sk_h">A'nın yüksekliği:</label><input type="range" id="sk_h" min="40" max="140" value="90"><b id="sk_hv">90</b></div>
 <div class="nx-row"><button class="nx-btn alt" id="sk_i">İkizkenar yap</button><button class="nx-btn alt" id="sk_e">Eşkenar yap</button></div>
-<svg id="sk_s" viewBox="0 0 360 200" style="width:100%;max-width:360px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg><div class="feedback" id="sk_f"></div></div>
+<svg id="sk_s" viewBox="0 0 500 200" style="width:100%;max-width:800px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg><div class="feedback" id="sk_f"></div></div>
 
 </section>
 
 <section class="tab-panel" id="agacyeri">
 
 <div class="card"><div class="card-title"><div class="icon">🌳</div>Kenarlara Uzaklıkların Toplamı</div>
-<p class="body-text">Eşkenar üçgen biçimli bir parkta bir ağaç dikilecek. Ağacın üç kenara olan uzaklıkları toplamı en az olsun isteniyor. Ağacın yerini üç kaydırıcıyla değiştirin ve toplam uzaklığı izleyin.</p>
-<div class="nx-row"><label for="ag_1">A'ya yakınlık:</label><input type="range" id="ag_1" min="1" max="10" value="3"><label for="ag_2">B'ye yakınlık:</label><input type="range" id="ag_2" min="1" max="10" value="5"><label for="ag_3">C'ye yakınlık:</label><input type="range" id="ag_3" min="1" max="10" value="7"></div>
-<svg id="ag_s" viewBox="0 0 360 260" style="width:100%;max-width:360px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg><div class="feedback" id="ag_f"></div></div>
+<p class="body-text">Bu etkinlikte, eşkenar üçgen biçimli bir parkta ağaç dikeceğimiz noktayı bulmaya çalışıyoruz;<br>Ağacın üç kenara olan uzaklıkları <b>toplamı en az olsun</b> istiyoruz.<br>Ağacın yerini üç kaydırıcıyla değiştirin ve toplam uzaklığın değişimini gözlemleyin.</p>
+<div class="nx-row"><label for="ag_1">A'ya uzaklık:</label><input type="range" id="ag_1" min="1" max="10" value="6"><label for="ag_2">B'ye uzaklık:</label><input type="range" id="ag_2" min="1" max="10" value="6"><label for="ag_3">C'ye uzaklık:</label><input type="range" id="ag_3" min="1" max="10" value="6"></div>
+<svg id="ag_s" viewBox="0 -50 360 300" style="width:100%;max-width:360px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg><div class="feedback" id="ag_f"></div></div>
 
 </section>
 
@@ -613,9 +615,9 @@ function sk(){const x=+$('sk_x').value,h=+$('sk_h').value;$('sk_xv').textContent
  g+='<text x="'+(X(A[0])+6)+'" y="'+(Y(A[1])-4)+'" font-size="12" font-weight="800">A</text><text x="'+(X(B[0])-14)+'" y="'+(Y(0)+14)+'" font-size="12" font-weight="800">B</text><text x="'+(X(C[0])+6)+'" y="'+(Y(0)+14)+'" font-size="12" font-weight="800">C</text>';
  g+='<text x="8" y="16" font-size="11" fill="#dc2626">● kenarortay</text><text x="8" y="30" font-size="11" fill="#059669">● açıortay</text><text x="8" y="44" font-size="11" fill="#b45309">● yükseklik</text>';$('sk_s').innerHTML=g;
  const iso=Math.abs(AB-AC)<0.5,eq=iso&&Math.abs(AB-BC)<1;const f=$('sk_f');f.className='feedback show ok';
- if(eq)f.textContent='Eşkenar üçgen: Her köşeden çizilen kenarortay, açıortay ve yükseklik çakışır ('+dec(m,1)+' birim). Bu üç doğru parçası aynı zamanda orta dikme ve üçgenin simetri doğrularıdır; eşkenar üçgenin 3 simetri doğrusu vardır.';
- else if(iso)f.textContent='İkizkenar üçgen (|AB| = |AC|): Farklı uzunluktaki BC kenarına ait kenarortay, açıortay ve yükseklik çakışır ('+dec(m,1)+' birim). B ile C bu doğruya göre simetrik olduğundan katlayınca üst üste biner; doğru aynı zamanda BC\'nin orta dikmesi ve üçgenin simetri doğrusudur.';
- else f.textContent='Çeşitkenar durum: Kenarortay '+dec(m,1)+', açıortay '+dec(a,1)+', yükseklik '+dec(y,1)+' birim; üçü farklı doğru parçalarıdır. Katlayınca B ile C üst üste binmez, çünkü |AB| = '+dec(AB,1)+' ve |AC| = '+dec(AC,1)+' eşit değildir. Yükseklik ≤ açıortay ≤ kenarortay sıralaması görülür.';}
+ if(eq)f.innerHTML='Eşkenar üçgen:<br>Her köşeden çizilen kenarortay, açıortay ve yükseklik çakışır ('+dec(m,1)+' birim).<br>Ayrıca bu üç doğru parçası hem [BC]ye ait orta dikme hem de üçgenin simetri doğrularıdır;<br>eşkenar üçgenin 3 simetri doğrusu vardır.';
+ else if(iso)f.innerHTML='İkizkenar üçgen (|AB| = |AC|):<br>Taban adını verdiğimiz [BC]ye çizilen kenarortay, açıortay ve yükseklik çakışır ('+dec(m,1)+' birim).<br>B ve C noktaları bu doğruya göre simetrik olduğundan katlayınca üst üste biner.<br>Bu yardımcı eleman doğru aynı zamanda [BC]nin orta dikmesi ve üçgenin simetri doğrusudur.';
+ else f.innerHTML='Çeşitkenar üçgen:<br>Kenarortay '+dec(m,1)+', açıortay '+dec(a,1)+', yükseklik '+dec(y,1)+' birim;<br>üçü de farklı doğru parçalarıdır.<br>Katlayınca B ile C üst üste binmez, çünkü |AB| = '+dec(AB,1)+' ve |AC| = '+dec(AC,1)+' eşit değildir.<br>Yükseklik ≤ Açıortay ≤ Kenarortay';}
 $('sk_x').addEventListener('input',sk);$('sk_h').addEventListener('input',sk);
 $('sk_i').addEventListener('click',function(){$('sk_x').value=0;sk();});
 $('sk_e').addEventListener('click',function(){$('sk_x').value=0;$('sk_h').value=Math.round(BC*Math.sqrt(3)/2);sk();});sk();
@@ -646,7 +648,7 @@ function ag(){const w=[+$('ag_1').value,+$('ag_2').value,+$('ag_3').value];const
  [[B,C],[A,C],[A,B]].forEach(function(s){const F=foot(s[0],s[1]);g+='<line x1="'+X(P[0])+'" y1="'+Y(P[1])+'" x2="'+X(F[0])+'" y2="'+Y(F[1])+'" stroke="#dc2626" stroke-dasharray="5 3" stroke-width="2"/>';});
  g+='<circle cx="'+X(P[0])+'" cy="'+Y(P[1])+'" r="7" fill="#16a34a" stroke="#fff" stroke-width="2"/>';$('ag_s').innerHTML=g;
  const f=$('ag_f');f.className='feedback show ok';
- f.textContent='Uzaklıklar: '+dec(d1,2)+' + '+dec(d2,2)+' + '+dec(d3,2)+' = '+dec(d1+d2+d3,2)+' birim. Üçgenin yüksekliği '+dec(Hh,2)+' birimdir. Ağaç nereye dikilirse dikilsin uzaklıkların toplamı yüksekliğe eşittir; çünkü üç küçük üçgenin alanları toplamı büyük üçgenin alanını verir. Bu yüzden toplamı en az yapan özel bir yer yoktur.';}
+ f.innerHTML='Uzaklıklar toplamı:<br>'+dec(d1,2)+' + '+dec(d2,2)+' + '+dec(d3,2)+' = '+dec(d1+d2+d3,2)+' birim<br>Bu üçgenin yüksekliği de tam olarak '+dec(Hh,2)+' birimdir.<br>Ağaç nereye dikilirse dikilsin uzaklıkların toplamı yüksekliğe eşit olacaktır.<br>Bu yüzden, uzaklıkların toplamını en az yapan özel bir yer yoktur.';}
 ['ag_1','ag_2','ag_3'].forEach(function(i){$(i).addEventListener('input',ag);});ag();
 
 })();
