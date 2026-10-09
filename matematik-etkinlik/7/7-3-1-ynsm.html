@@ -15,7 +15,35 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 .calc-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}.calc-row label{font-weight:800;color:var(--primary);font-size:.9rem}.progress-dots{display:flex;gap:6px;justify-content:center;margin-bottom:14px}.pdot{width:10px;height:10px;border-radius:50%;background:var(--border)}.pdot.done{background:var(--success)}.pdot.now{background:var(--primary)}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
-</style></head><body>
+</style><style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
+</head><body>
 <header><div class="badge">7. SINIF MATEMATİK · 3. TEMA: DÖNÜŞÜM · MAT.7.3.1</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Yansıma Dönüşümü</h1><p>Şekillerin bir doğruya göre yansıma dönüşümü altındaki görüntülerinin oluşturulmasına dair çıkarım yapabilme</p></header>
 <nav class="tab-bar">
 <button class="tab-btn active" data-tab="tab0">KEŞFET</button>
@@ -24,7 +52,7 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <button class="tab-btn" data-tab="tab3">İNTERAKTİF ARAÇ</button>
 <button class="tab-btn" data-tab="tab4">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab5">ÖZET</button>
-<button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
+<button class="tab-btn" data-tab="yansciz">✍️ Yansımasını Çiz</button><button class="tab-btn" data-tab="simetrikmi">🔎 Simetrik mi?</button><button class="tab-btn" data-tab="simsay">🧭 Simetri Doğruları ve Bayraklar</button><button class="tab-btn" data-tab="desen">🎨 Desen Atölyesi</button><button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
 </nav>
 <main class="container">
 
@@ -156,39 +184,32 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <section class="tab-panel" id="tab4">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! Yansıma dönüşümü altında şekil ile görüntüsü her zaman eştir." data-nomsg="Tekrar düşünelim: yansıma dönüşümünde kenar ve açı ölçüleri değişmez.">
+<div class="q-card" data-okmsg="Doğru! Yansıma dönüşümü altında şekil ile görüntüsü her zaman eştir." data-nomsg="Yanlış: Yansıma dönüşümünde şekil ile görüntüsü eştir; kenar uzunlukları ve açı ölçüleri değişmez.">
 <div class="q-text">1) Bir şeklin yansıma dönüşümü altındaki görüntüsü ile orijinal şekil arasındaki ilişki için hangisi doğrudur?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Görüntü daha büyüktür</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Görüntü, orijinal şekille eştir</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Görüntünün açıları değişir</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Görüntü her zaman daha küçüktür</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Görüntü daha büyüktür</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Görüntünün açıları değişir</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Görüntü, orijinal şekille eştir</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Görüntü her zaman daha küçüktür</button></div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! Bağlantı doğru parçaları simetri doğrusuna diktir." data-nomsg="Tekrar düşünelim: karşılık gelen noktaları birleştiren doğru parçası ile simetri doğrusu arasındaki açıyı hatırlayın.">
+<div class="q-card" data-okmsg="Doğru! Bağlantı doğru parçaları simetri doğrusuna diktir." data-nomsg="Yanlış: Karşılık gelen noktaları birleştiren doğru parçası simetri doğrusuna diktir; yani onu 90° açıyla keser.">
 <div class="q-text">2) Bir P noktası ile onun d doğrusuna göre görüntüsü P' noktasını birleştiren doğru parçası, d doğrusunu nasıl bir açıyla keser?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">90° (dik açı)</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">45°</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Değişkendir, sabit değildir</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">180°</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">90° (dik açı)</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">45°</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Değişkendir, sabit değildir</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">180°</button></div><div class="feedback"></div></div>
 
 <div class="tf-row" data-answered="">
 <div class="tf-statement">İki eş şeklin bir doğruya göre simetrik olması için, karşılık gelen noktaları birleştiren doğru parçalarının paralel olması yeterlidir; orta noktalarının aynı doğru üzerinde olması gerekmez.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Yanlıştır: Karşılık gelen noktaları birleştiren doğru parçaları yalnızca paralel olmakla kalmaz; simetri doğrusuna dik olmalı ve orta noktaları bu doğru üzerinde bulunmalıdır.</div>
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Yansıma dönüşümünde bir noktanın simetri doğrusu üzerindeki görüntüsü, kendisiyle aynı noktadır.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Doğrudur: Simetri doğrusu üzerindeki noktalar yansımada yer değiştirmez; görüntüleri kendileridir.</div>
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Düzgün altıgenin tam olarak 1 simetri doğrusu vardır.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Yanlıştır: Düzgün altıgenin 6 simetri doğrusu vardır (3'ü karşılıklı köşelerden, 3'ü karşılıklı kenarların orta noktalarından geçer).</div>
 
 </div>
 </section>
@@ -206,6 +227,54 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <div class="note-box"><b>MAT.7.3.1 süreç bileşenleri:</b><br>a) Görüntü oluşturmaya dair varsayımda bulunma · b) Görüntüyü oluşturma · c) Varsayımı karşılaştırmalarla doğrulama · ç) Şekil-görüntü ilişkisine dair önerme sunma.</div>
 <div class="tip-box">Bir sonraki derste bu bilgileri kullanarak <b>orta dikme</b> ve <b>açıortay</b> inşalarını öğreneceğiz (MAT.7.3.2).</div>
 </div>
+</section>
+
+<section class="tab-panel" id="yansciz">
+
+<div class="card"><div class="card-title"><div class="icon">✍️</div>Varsayım Yap, Çiz, Doğrula</div>
+<p class="body-text">Şeklin köşelerini A, B, C… sırasıyla aynaya göre yansıtın: görüntünün köşelerini ızgarada tıklayarak işaretleyin. Önce tahmin edin, sonra "Doğrula" düğmesiyle gerçek görüntü ile karşılaştırın.</p>
+<div class="nx-row"><select class="nx-sel" id="yc_s"><option value="0">Üçgen · ayna dikey · şekil aynadan ayrık</option><option value="1">Üçgen · bir kenarı aynanın üzerinde</option><option value="2">Dörtgen · ayna eğik (y = x)</option><option value="3">Üçgen · ayna yatay</option></select>
+<button class="nx-btn" id="yc_ok">Doğrula</button><button class="nx-btn alt" id="yc_un">Geri al</button><button class="nx-btn alt" id="yc_cl">Temizle</button></div>
+<svg id="yc_svg" viewBox="0 0 390 390" style="width:100%;max-width:390px;display:block;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg>
+<div class="feedback" id="yc_f"></div></div>
+
+</section>
+
+<section class="tab-panel" id="simetrikmi">
+
+<div class="card"><div class="card-title"><div class="icon">🔎</div>İki Eş Şekil Bir Doğruya Göre Simetrik mi?</div>
+<p class="body-text">Karşılıklı noktaları birleştiren doğru parçalarına ve onların orta noktalarına bakarak karar verin. Üç ayrı durum var; her biri için cevabınızı seçin.</p>
+<div id="sk_list"></div></div>
+
+</section>
+
+<section class="tab-panel" id="simsay">
+
+<div class="card"><div class="card-title"><div class="icon">🧭</div>Bir Şeklin Kaç Simetri Doğrusu Var?</div>
+<p class="body-text">Bir şekil seçin, simetri doğrularının sayısını tahmin edin ve doğrulayın.</p>
+<div class="nx-row" id="ss_chips"></div>
+<div class="nx-flex"><svg id="ss_svg" viewBox="0 0 300 300" style="width:100%;max-width:300px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg>
+<div><div class="nx-row"><label>Tahmininiz:</label><input class="nx-in" id="ss_g" type="number" min="0" max="12" style="width:70px"><button class="nx-btn" id="ss_b">Kontrol et</button></div><div class="feedback" id="ss_f"></div></div></div></div>
+<div class="card"><div class="card-title"><div class="icon">🏳️</div>Performans Görevi: Bayraklarda Simetri</div>
+<p class="body-text">Farklı ülkelerin bayraklarını araştırın, bayraklardaki simetri doğrularını belirleyin, bayrakların tarihi hakkında bilgi toplayıp kısa bir sunum hazırlayın. Aşağıdaki dört bayrak için simetri doğrusu sayısını seçin.</p>
+<div id="ss_fl"></div>
+<div class="nx-item"><div class="st">Kontrol listesi</div><div class="body-text">☐ Bayrağın simetri doğrularını cetvelle ya da kâğıt katlayarak belirledim.<br>☐ Her simetri doğrusu için karşılıklı noktaların eşit uzaklıkta olduğunu açıkladım.<br>☐ Bayrağın tarihini güvenilir kaynaklardan araştırdım.<br>☐ Sunumumda farklı kültürlere saygılı bir dil kullandım.</div></div></div>
+
+</section>
+
+<section class="tab-panel" id="desen">
+
+<div class="card"><div class="card-title"><div class="icon">🎨</div>Tekrarlı Yansımalarla Desen Oluşturma</div>
+<p class="body-text">Turuncu üçgenin yerini kaydırıcılarla değiştirin. Dikey ve yatay aynaları açıp kapatarak oluşan desenin eş şekillerden oluştuğunu gözlemleyin.</p>
+<div class="nx-row"><label for="ds_x">Yatay konum:</label><input type="range" id="ds_x" min="5" max="120" value="40"><label for="ds_y">Dikey konum:</label><input type="range" id="ds_y" min="5" max="120" value="30"></div>
+<div class="nx-row"><label><input type="checkbox" id="ds_v" checked> Dikey ayna</label><label><input type="checkbox" id="ds_h" checked> Yatay ayna</label><select class="nx-sel" id="ds_c"><option value="#f59e0b">Turuncu</option><option value="#4361ee">Mavi</option><option value="#059669">Yeşil</option></select></div>
+<svg id="ds_svg" viewBox="0 0 300 300" style="width:100%;max-width:300px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg><div class="feedback" id="ds_f"></div></div>
+<div class="card"><div class="card-title"><div class="icon">🔷</div>Bir Üçgenin Kenarına Göre Yansıması: Hangi Dörtgen Oluşur?</div>
+<p class="body-text">Üçgen türünü ve yansıma yapılacak kenarı seçin. Oluşan şeklin kenar uzunlukları hesaplanır ve dörtgenin adı belirlenir.</p>
+<div class="nx-row"><select class="nx-sel" id="ku_t"><option value="0">Eşkenar üçgen</option><option value="1">İkizkenar üçgen (A tepe noktası)</option><option value="2">Dik üçgen (A dik açı)</option><option value="3">Çeşitkenar üçgen (A açısı geniş)</option></select>
+<select class="nx-sel" id="ku_s"><option value="0">AB kenarı</option><option value="1">BC kenarı</option><option value="2">CA kenarı</option></select></div>
+<svg id="ku_svg" viewBox="0 0 340 280" style="width:100%;max-width:340px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:12px"></svg><div class="feedback" id="ku_f"></div></div>
+
 </section>
 
 <section class="tab-panel" id="tab6">
@@ -249,7 +318,7 @@ function checkChoice(btn,isCorrect){
 function checkTF(btn,chosenTrue,actualTrue){
   const row=btn.closest('.tf-row');
   if(row.dataset.answered)return;
-  row.dataset.answered='1';
+  row.dataset.answered='1';{const nb=row.nextElementSibling;if(nb&&nb.classList.contains('note-box'))nb.style.display='block';}
   const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');
   correctBtn.classList.add('correct');
   if(chosenTrue!==actualTrue)btn.classList.add('wrong');
@@ -292,23 +361,7 @@ document.getElementById('mirrorAngle').addEventListener('input',updateReflection
 updateReflection();
 
 /* Kendini Dene quiz */
-const quizData=[
- {q:"Bir ABC üçgeninin d doğrusuna göre yansıma dönüşümündeki görüntüsü A'B'C' üçgeni için hangisi doğrudur?",
-  choices:["A'B'C' üçgeni ABC'den farklı açılara sahiptir","A'B'C' üçgeni ABC ile eştir","A'B'C' üçgeni her zaman ABC'den büyüktür","A'B'C' üçgeni bir doğru parçasıdır"],correct:1,
-  expl:"Yansıma dönüşümü altında şekil ile görüntüsü her zaman eştir; kenar ve açı ölçüleri korunur."},
- {q:"Bir P noktasını görüntüsü P' noktasına birleştiren doğru parçası, simetri doğrusunu hangi açıyla keser?",
-  choices:["30°","60°","90°","120°"],correct:2,
-  expl:"Karşılık gelen noktaları birleştiren doğru parçası, simetri doğrusuna her zaman diktir (90°)."},
- {q:"İki eş şeklin bir doğruya göre simetrik olduğunu göstermek için hangi iki koşul birlikte kontrol edilir?",
-  choices:["Alanların eşitliği ve renklerin aynı olması","Karşılık gelen noktaları birleştiren doğruların paralelliği ve orta noktalarının ortak bir doğru üzerinde olması","Kenar sayılarının eşit olması ve çevrelerin eşit olması","Sadece açıların eşit olması"],correct:1,
-  expl:"Bağlantı doğru parçalarının birbirine paralel olması ve orta noktalarından tek bir doğrunun geçmesi, simetriklik için birlikte aranan iki koşuldur."},
- {q:"Bir noktanın simetri doğrusu üzerinde yer alması durumunda, bu noktanın yansıma dönüşümündeki görüntüsü neresidir?",
-  choices:["Simetri doğrusunun tam karşı ucu","Sonsuzda bir nokta","Kendisi (değişmez)","Belirlenemez"],correct:2,
-  expl:"Simetri doğrusu üzerindeki noktalar, yansıma dönüşümü altında sabit kalır; görüntüleri kendileridir."},
- {q:"Düzgün bir beşgenin kaç tane simetri doğrusu vardır?",
-  choices:["3","4","5","10"],correct:2,
-  expl:"Düzgün beşgende köşe sayısı kadar (5 tane) simetri doğrusu vardır; her biri bir köşeden karşı kenarın orta noktasına çizilir."}
-];
+const quizData=[{"q": "Bir ABC üçgeninin d doğrusuna göre yansıma dönüşümündeki görüntüsü A'B'C' üçgeni için hangisi doğrudur?", "choices": ["A'B'C' üçgeni ABC'den farklı açılara sahiptir", "A'B'C' üçgeni her zaman ABC'den büyüktür", "A'B'C' üçgeni bir doğru parçasıdır", "A'B'C' üçgeni ABC ile eştir"], "correct": 3, "expl": "Yansıma dönüşümü altında şekil ile görüntüsü her zaman eştir; kenar ve açı ölçüleri korunur."}, {"q": "Bir P noktasını görüntüsü P' noktasına birleştiren doğru parçası, simetri doğrusunu hangi açıyla keser?", "choices": ["30°", "90°", "60°", "120°"], "correct": 1, "expl": "Karşılık gelen noktaları birleştiren doğru parçası, simetri doğrusuna her zaman diktir (90°)."}, {"q": "İki eş şeklin bir doğruya göre simetrik olduğunu göstermek için hangi iki koşul birlikte kontrol edilir?", "choices": ["Karşılık gelen noktaları birleştiren doğruların paralelliği ve orta noktalarının ortak bir doğru üzerinde olması", "Alanların eşitliği ve renklerin aynı olması", "Kenar sayılarının eşit olması ve çevrelerin eşit olması", "Sadece açıların eşit olması"], "correct": 0, "expl": "Bağlantı doğru parçalarının birbirine paralel olması ve orta noktalarından tek bir doğrunun geçmesi, simetriklik için birlikte aranan iki koşuldur."}, {"q": "Bir noktanın simetri doğrusu üzerinde yer alması durumunda, bu noktanın yansıma dönüşümündeki görüntüsü neresidir?", "choices": ["Simetri doğrusunun tam karşı ucu", "Sonsuzda bir nokta", "Kendisi (değişmez)", "Belirlenemez"], "correct": 2, "expl": "Simetri doğrusu üzerindeki noktalar, yansıma dönüşümü altında sabit kalır; görüntüleri kendileridir."}, {"q": "Düzgün bir beşgenin kaç tane simetri doğrusu vardır?", "choices": ["3", "4", "10", "5"], "correct": 3, "expl": "Düzgün beşgende köşe sayısı kadar (5 tane) simetri doğrusu vardır; her biri bir köşeden karşı kenarın orta noktasına çizilir."}];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
   const wrap=document.getElementById('progressDots');wrap.innerHTML='';
@@ -320,7 +373,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Testi Yeniden Başlat</button></div>';
     renderDots();return;
   }
   qAnswered=false;
@@ -348,5 +401,197 @@ function answerQuiz(i){
 function nextQuiz(){qIndex++;renderQuiz();}
 function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+const C=30,O=15;function X(x){return O+x*C;}function Y(y){return O+(12-y)*C;}
+const SH=[{p:[[1,2],[4,2],[2,5]],m:{t:'v',c:6}},{p:[[6,1],[6,5],[3,3]],m:{t:'v',c:6}},{p:[[1,3],[1,6],[3,7],[3,4]],m:{t:'d'}},{p:[[2,8],[5,9],[3,11]],m:{t:'h',c:6}}];
+function refl(m,pt){if(m.t==='v')return [2*m.c-pt[0],pt[1]];if(m.t==='h')return [pt[0],2*m.c-pt[1]];return [pt[1],pt[0]];}
+let cur=0,mine=[],done=false;const NM='ABCD';
+function draw(){const s=SH[cur];let h='';
+ for(let i=0;i<=12;i++){h+='<line x1="'+X(i)+'" y1="'+Y(0)+'" x2="'+X(i)+'" y2="'+Y(12)+'" stroke="#e5e7eb"/><line x1="'+X(0)+'" y1="'+Y(i)+'" x2="'+X(12)+'" y2="'+Y(i)+'" stroke="#e5e7eb"/>';}
+ if(s.m.t==='v')h+='<line x1="'+X(s.m.c)+'" y1="'+Y(0)+'" x2="'+X(s.m.c)+'" y2="'+Y(12)+'" stroke="#dc2626" stroke-width="2.5"/>';
+ else if(s.m.t==='h')h+='<line x1="'+X(0)+'" y1="'+Y(s.m.c)+'" x2="'+X(12)+'" y2="'+Y(s.m.c)+'" stroke="#dc2626" stroke-width="2.5"/>';
+ else h+='<line x1="'+X(0)+'" y1="'+Y(0)+'" x2="'+X(12)+'" y2="'+Y(12)+'" stroke="#dc2626" stroke-width="2.5"/>';
+ h+='<polygon points="'+s.p.map(function(q){return X(q[0])+','+Y(q[1]);}).join(' ')+'" fill="rgba(67,97,238,.25)" stroke="#4361ee" stroke-width="2.5"/>';
+ s.p.forEach(function(q,i){h+='<text x="'+(X(q[0])+6)+'" y="'+(Y(q[1])-6)+'" font-size="13" font-weight="800" fill="#1d4ed8">'+NM[i]+'</text>';});
+ if(done){const im=s.p.map(function(q){return refl(s.m,q);});
+  s.p.forEach(function(q,i){h+='<line x1="'+X(q[0])+'" y1="'+Y(q[1])+'" x2="'+X(im[i][0])+'" y2="'+Y(im[i][1])+'" stroke="#9ca3af" stroke-dasharray="4 3"/>';});
+  h+='<polygon points="'+im.map(function(q){return X(q[0])+','+Y(q[1]);}).join(' ')+'" fill="rgba(245,158,11,.25)" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 3"/>';
+  im.forEach(function(q,i){h+='<text x="'+(X(q[0])+6)+'" y="'+(Y(q[1])+16)+'" font-size="13" font-weight="800" fill="#b45309">'+NM[i]+'\u2032</text>';});}
+ mine.forEach(function(q,i){h+='<circle cx="'+X(q[0])+'" cy="'+Y(q[1])+'" r="6" fill="#059669" stroke="#fff" stroke-width="2"/><text x="'+(X(q[0])-4)+'" y="'+(Y(q[1])-9)+'" font-size="12" font-weight="800" fill="#047857">'+NM[i]+'\u2032</text>';});
+ for(let a=0;a<=12;a++)for(let b=0;b<=12;b++)h+='<circle class="yc_pt" data-x="'+a+'" data-y="'+b+'" cx="'+X(a)+'" cy="'+Y(b)+'" r="9" fill="transparent" style="cursor:pointer"/>';
+ $('yc_svg').innerHTML=h;}
+function reset(){mine=[];done=false;const f=$('yc_f');f.className='feedback';f.textContent='';draw();}
+$('yc_s').addEventListener('change',function(){cur=+this.value;reset();});
+$('yc_svg').addEventListener('click',function(e){const t=e.target.closest('.yc_pt');if(!t||done)return;if(mine.length>=SH[cur].p.length)return;mine.push([+t.dataset.x,+t.dataset.y]);draw();});
+$('yc_un').addEventListener('click',function(){if(done)return;mine.pop();draw();});
+$('yc_cl').addEventListener('click',reset);
+$('yc_ok').addEventListener('click',function(){const s=SH[cur],f=$('yc_f');
+ if(mine.length<s.p.length){f.className='feedback show no';f.textContent='Yanlış: Önce bütün köşeler ('+s.p.length+' köşe) işaretlenmelidir.';return;}
+ done=true;const bad=[];s.p.forEach(function(q,i){const r=refl(s.m,q);if(r[0]!==mine[i][0]||r[1]!==mine[i][1])bad.push(NM[i]+'\u2032 köşesi ('+r[0]+', '+r[1]+') noktasında olmalıydı');});
+ draw();
+ const rule='Bir noktanın görüntüsü, aynaya olan uzaklığı değişmeden ve aynaya dik doğrultuda karşı tarafta bulunur; bu yüzden şekil ile görüntüsü eştir.';
+ if(!bad.length){f.className='feedback show ok';f.textContent='Doğru! '+rule+(s.m.t==='v'&&cur===1?' Aynanın üzerindeki köşelerin görüntüsü kendileridir.':'');}
+ else{f.className='feedback show no';f.textContent='Yanlış: '+bad.join('; ')+'. '+rule;}});
+draw();
+
+})();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+const CASES=[
+ {t:'1. durum',A:[[1,2],[4,3],[2,6]],B:[[7,2],[10,3],[8,6]],note:'İkinci şekil, birincinin yana kaydırılmış (ötelenmiş) hâlidir.'},
+ {t:'2. durum',A:[[1,2],[4,3],[2,6]],B:[[11,2],[8,3],[10,6]],note:'İkinci şekil birincinin aynadaki görüntüsüdür.'},
+ {t:'3. durum',A:[[1,2],[4,3],[2,6]],B:[[11,2],[8,3],[10,5]],note:'İkinci şekilde bir köşe yanlış yerdedir.'}];
+function cr(a,b){return a[0]*b[1]-a[1]*b[0];}
+function analyze(c){const d=c.A.map(function(p,i){return [c.B[i][0]-p[0],c.B[i][1]-p[1]];});
+ const par=d.every(function(v){return cr(v,d[0])===0;});
+ const mid=c.A.map(function(p,i){return [(p[0]+c.B[i][0])/2,(p[1]+c.B[i][1])/2];});
+ const col=cr([mid[1][0]-mid[0][0],mid[1][1]-mid[0][1]],[mid[2][0]-mid[0][0],mid[2][1]-mid[0][1]])===0;
+ return {par:par,col:col,mid:mid,sym:par&&col};}
+const L=$('sk_list'),S=14,PX=function(x){return 10+x*S;},PY=function(y){return 120-y*S+30;};
+CASES.forEach(function(c,k){const r=analyze(c);c.r=r;
+ let g='<svg viewBox="0 0 180 160" style="width:100%;max-width:300px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:10px">';
+ g+='<polygon points="'+c.A.map(function(p){return PX(p[0])+','+PY(p[1]);}).join(' ')+'" fill="rgba(67,97,238,.25)" stroke="#4361ee" stroke-width="2"/>';
+ g+='<polygon points="'+c.B.map(function(p){return PX(p[0])+','+PY(p[1]);}).join(' ')+'" fill="rgba(245,158,11,.25)" stroke="#f59e0b" stroke-width="2"/>';
+ c.A.forEach(function(p,i){g+='<line x1="'+PX(p[0])+'" y1="'+PY(p[1])+'" x2="'+PX(c.B[i][0])+'" y2="'+PY(c.B[i][1])+'" stroke="#6b7280" stroke-dasharray="4 3"/><circle cx="'+PX(r.mid[i][0])+'" cy="'+PY(r.mid[i][1])+'" r="3.5" fill="#059669"/>';});
+ g+='</svg>';
+ const d=document.createElement('div');d.className='nx-item';
+ d.innerHTML='<div class="st">'+c.t+': Mavi ve turuncu şekiller bir doğruya göre simetrik mi?</div>'+g+'<div class="nx-row"><button class="nx-opt" data-a="1">Evet, simetrik</button><button class="nx-opt" data-a="0">Hayır, simetrik değil</button></div><div class="nx-note"></div>';
+ const note=d.querySelector('.nx-note');
+ d.addEventListener('click',function(e){const b=e.target.closest('.nx-opt');if(!b||d.dataset.done)return;d.dataset.done='1';const ans=r.sym?'1':'0';
+  d.querySelectorAll('.nx-opt').forEach(function(x){if(x.dataset.a===ans)x.classList.add('correct');});if(b.dataset.a!==ans)b.classList.add('wrong');
+  const why='Karşılıklı noktaları birleştiren doğru parçaları '+(r.par?'birbirine paraleldir':'birbirine paralel değildir')+'; bu parçaların orta noktaları '+(r.col?'tek bir doğru üzerindedir.':'tek bir doğru üzerinde değildir.')+(r.sym?' İki koşul birlikte sağlandığı için şekiller simetriktir.':' İki koşulun ikisi birlikte sağlanmadığı için şekiller simetrik değildir.');
+  note.textContent=(b.dataset.a===ans?'Doğru! ':'Yanlış: ')+why;note.style.display='block';});
+ L.appendChild(d);});
+
+})();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+const R=100,CX=150,CY=150;
+function reg(n){const a=[];for(let i=0;i<n;i++){const t=(-90+360*i/n)*Math.PI/180;a.push([R*Math.cos(t),R*Math.sin(t)]);}return a;}
+function axesReg(n){const s=[];if(n%2===1){for(let i=0;i<n;i++)s.push((-90+360*i/n+360)%180);}else{for(let i=0;i<n/2;i++){s.push((-90+360*i/n+360)%180);s.push((-90+360*(i+0.5)/n+360)%180);}}return s;}
+const SHAPES=[
+ {n:'İkizkenar üçgen',p:[[0,-95],[-60,70],[60,70]],a:[90],e:'İkizkenar üçgenin yalnızca tepe noktasından tabana inen bir simetri doğrusu vardır.'},
+ {n:'Eşkenar üçgen',p:reg(3),a:axesReg(3),e:'Eşkenar üçgenin her köşesinden karşı kenarın orta noktasına bir simetri doğrusu geçer: 3 tane.'},
+ {n:'Eşkenar dörtgen',p:[[0,-95],[60,0],[0,95],[-60,0]],a:[90,0],e:'Karesi olmayan bir eşkenar dörtgenin simetri doğruları köşegenleridir: 2 tane.'},
+ {n:'Dikdörtgen',p:[[-95,-55],[95,-55],[95,55],[-95,55]],a:[90,0],e:'Karesi olmayan bir dikdörtgenin simetri doğruları karşılıklı kenarların orta noktalarını birleştiren doğrulardır: 2 tane.'},
+ {n:'Kare',p:reg(4).map(function(q){return [q[0]*0.8*Math.SQRT1_2*Math.SQRT2*0.9,q[1]*0.8*Math.SQRT1_2*Math.SQRT2*0.9];}),a:[90,0,45,135],e:'Karenin köşegenleri ile karşılıklı kenarların orta noktalarını birleştiren doğrular simetri doğrusudur: 4 tane.'},
+ {n:'Düzgün beşgen',p:reg(5),a:axesReg(5),e:'Düzgün beşgenin her köşesinden karşı kenarın orta noktasına bir simetri doğrusu geçer: 5 tane.'},
+ {n:'Düzgün altıgen',p:reg(6),a:axesReg(6),e:'Düzgün altıgenin 3 simetri doğrusu karşılıklı köşelerden, 3 simetri doğrusu karşılıklı kenarların orta noktalarından geçer: 6 tane.'},
+ {n:'Paralelkenar',p:[[-95,50],[-35,-50],[95,-50],[35,50]],a:[],e:'Dikdörtgen ve eşkenar dörtgen olmayan bir paralelkenarın simetri doğrusu yoktur.'}];
+let cur=0,shown=false;
+const ch=$('ss_chips');SHAPES.forEach(function(s,i){const b=document.createElement('button');b.className='nx-chip'+(i===0?' on':'');b.textContent=s.n;b.dataset.i=i;ch.appendChild(b);});
+function draw(){const s=SHAPES[cur];let h='<polygon points="'+s.p.map(function(q){return (CX+q[0])+','+(CY+q[1]);}).join(' ')+'" fill="rgba(67,97,238,.22)" stroke="#4361ee" stroke-width="3"/>';
+ if(shown)s.a.forEach(function(a){const t=a*Math.PI/180,dx=Math.cos(t)*135,dy=Math.sin(t)*135;h+='<line x1="'+(CX-dx)+'" y1="'+(CY-dy)+'" x2="'+(CX+dx)+'" y2="'+(CY+dy)+'" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4"/>';});
+ $('ss_svg').innerHTML=h;}
+ch.addEventListener('click',function(e){const b=e.target.closest('.nx-chip');if(!b)return;cur=+b.dataset.i;shown=false;ch.querySelectorAll('.nx-chip').forEach(function(c){c.classList.remove('on');});b.classList.add('on');$('ss_g').value='';const f=$('ss_f');f.className='feedback';f.textContent='';draw();});
+$('ss_b').addEventListener('click',function(){const s=SHAPES[cur],f=$('ss_f'),v=$('ss_g').value;if(v===''){f.className='feedback show no';f.textContent='Yanlış: Önce bir sayı yazılmalıdır.';return;}
+ shown=true;draw();const ok=+v===s.a.length;f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+s.e;});
+draw();
+function star(cx,cy,r){let p=[];for(let i=0;i<10;i++){const rr=i%2?r*0.382:r,t=(-90+36*i)*Math.PI/180;p.push((cx+rr*Math.cos(t))+','+(cy+rr*Math.sin(t)));}return p.join(' ');}
+const FL=[
+ {n:'Japonya',c:2,s:'<rect width="150" height="100" fill="#fff" stroke="#999"/><circle cx="75" cy="50" r="30" fill="#bc002d"/>',e:'Kırmızı daire dikdörtgenin ortasındadır; bayrak hem yatay hem dikey doğruya göre simetriktir: 2 simetri doğrusu.'},
+ {n:'İsviçre',c:4,s:'<rect width="100" height="100" fill="#d52b1e"/><rect x="42" y="20" width="16" height="60" fill="#fff"/><rect x="20" y="42" width="60" height="16" fill="#fff"/>',e:'Kare bayraktaki beyaz artı; yatay, dikey ve iki köşegen doğrusuna göre simetriktir: 4 simetri doğrusu.'},
+ {n:'Fransa',c:1,s:'<rect width="50" height="100" fill="#0055a4"/><rect x="50" width="50" height="100" fill="#fff" stroke="#999"/><rect x="100" width="50" height="100" fill="#ef4135"/>',e:'Renkler yalnızca dikey ortadaki doğruya göre karşılıklı aynıdır (mavi ile kırmızı eşit değildir). Yatay doğruya göre simetri yoktur: 1 simetri doğrusu, dikey doğru.'},
+ {n:'Türkiye',c:1,s:'<rect width="150" height="100" fill="#e30a17"/><circle cx="57" cy="50" r="25" fill="#fff"/><circle cx="64" cy="50" r="20" fill="#e30a17"/><polygon points="'+star(86,50,11)+'" fill="#fff"/>',e:'Ay ve yıldızın ortak simetri doğrusu yatay doğrudur; dikey doğruya göre simetri yoktur: 1 simetri doğrusu.'}];
+const FL_OPT=[[0,1,2,4],[1,2,3,4],[4,1,0,2],[2,0,1,3]];
+FL.forEach(function(f,i){const d=document.createElement('div');d.className='nx-item';
+ d.innerHTML='<div class="st">'+f.n+' bayrağı kaç simetri doğrusuna sahiptir?</div><svg viewBox="0 0 150 100" style="width:150px;height:100px;display:block;margin-bottom:8px">'+f.s+'</svg><div class="nxo"></div><div class="nx-note"></div>';
+ const o=d.querySelector('.nxo');const opts=FL_OPT[i].slice();opts.forEach(function(v){const b=document.createElement('button');b.className='nx-opt';b.dataset.v=v;b.textContent=v+' tane';o.appendChild(b);});
+ const nt=d.querySelector('.nx-note');
+ d.addEventListener('click',function(e){const b=e.target.closest('.nx-opt');if(!b||d.dataset.done)return;d.dataset.done='1';d.querySelectorAll('.nx-opt').forEach(function(x){if(+x.dataset.v===f.c)x.classList.add('correct');});if(+b.dataset.v!==f.c)b.classList.add('wrong');nt.textContent=(+b.dataset.v===f.c?'Doğru! ':'Yanlış: ')+f.e;nt.style.display='block';});
+ $('ss_fl').appendChild(d);});
+
+})();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+function dsDraw(){const x=+$('ds_x').value,y=+$('ds_y').value,col=$('ds_c').value;const pts=[[150+x,150-y],[150+x+55,150-y-8],[150+x+20,150-y-60]];
+ const P=pts.map(function(q){return q.join(',');}).join(' ');let h='<line x1="150" y1="0" x2="150" y2="300" stroke="#dc2626" stroke-dasharray="5 4"/><line x1="0" y1="150" x2="300" y2="150" stroke="#dc2626" stroke-dasharray="5 4"/>';
+ h+='<polygon points="'+P+'" fill="'+col+'" fill-opacity=".55" stroke="'+col+'" stroke-width="2"/>';let n=1;
+ const v=$('ds_v').checked,hh=$('ds_h').checked;
+ if(v){h+='<polygon transform="matrix(-1 0 0 1 300 0)" points="'+P+'" fill="'+col+'" fill-opacity=".55" stroke="'+col+'" stroke-width="2"/>';n++;}
+ if(hh){h+='<polygon transform="matrix(1 0 0 -1 0 300)" points="'+P+'" fill="'+col+'" fill-opacity=".55" stroke="'+col+'" stroke-width="2"/>';n++;}
+ if(v&&hh){h+='<polygon transform="matrix(-1 0 0 -1 300 300)" points="'+P+'" fill="'+col+'" fill-opacity=".55" stroke="'+col+'" stroke-width="2"/>';n++;}
+ $('ds_svg').innerHTML=h;const f=$('ds_f');f.className='feedback show ok';
+ f.textContent='Desende '+n+' üçgen var. Her üçgen, yansıma dönüşümü altındaki görüntüsü olduğu için ilk üçgenle eştir.'+(v&&hh?' Dikey aynaya göre yansıyan şeklin yatay aynaya göre görüntüsü, ilk şeklin iki ayna doğrusunun kesişim noktasına göre döndürülmüş hâlidir.':'');}
+['ds_x','ds_y'].forEach(function(i){$(i).addEventListener('input',dsDraw);});['ds_v','ds_h','ds_c'].forEach(function(i){$(i).addEventListener('change',dsDraw);});dsDraw();
+const TRI=[[[0,0],[100,0],[50,86.6]],[[50,80],[0,0],[100,0]],[[0,0],[100,0],[0,70]],[[0,0],[110,0],[-30,60]]];
+const NAMES='ABC';
+function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1]);}
+function refl(P,Q,R){const dx=Q[0]-P[0],dy=Q[1]-P[1],t=((R[0]-P[0])*dx+(R[1]-P[1])*dy)/(dx*dx+dy*dy);const F=[P[0]+t*dx,P[1]+t*dy];return [2*F[0]-R[0],2*F[1]-R[1]];}
+function ang(V,A,B){const a=[A[0]-V[0],A[1]-V[1]],b=[B[0]-V[0],B[1]-V[1]];return Math.acos((a[0]*b[0]+a[1]*b[1])/(Math.hypot(a[0],a[1])*Math.hypot(b[0],b[1])))*180/Math.PI;}
+function kuDraw(){const T=TRI[+$('ku_t').value],s=+$('ku_s').value;const idx=[[0,1,2],[1,2,0],[2,0,1]][s];const P=T[idx[0]],Q=T[idx[1]],Rr=T[idx[2]],Rp=refl(P,Q,Rr);
+ const all=T.concat([Rp]);const xs=all.map(function(q){return q[0];}),ys=all.map(function(q){return q[1];});
+ const mnx=Math.min.apply(null,xs),mxx=Math.max.apply(null,xs),mny=Math.min.apply(null,ys),mxy=Math.max.apply(null,ys);
+ const sc=Math.min(280/(mxx-mnx||1),220/(mxy-mny||1));const ox=170-sc*(mnx+mxx)/2,oy=140+sc*(mny+mxy)/2;
+ const fx=function(p){return ox+p[0]*sc;},fy=function(p){return oy-p[1]*sc;};
+ let h='<polygon points="'+T.map(function(p){return fx(p)+','+fy(p);}).join(' ')+'" fill="rgba(67,97,238,.28)" stroke="#4361ee" stroke-width="2.5"/>';
+ h+='<polygon points="'+[P,Rp,Q].map(function(p){return fx(p)+','+fy(p);}).join(' ')+'" fill="rgba(245,158,11,.28)" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6 3"/>';
+ h+='<line x1="'+fx(P)+'" y1="'+fy(P)+'" x2="'+fx(Q)+'" y2="'+fy(Q)+'" stroke="#dc2626" stroke-width="3"/>';
+ T.forEach(function(p,i){h+='<text x="'+(fx(p)+6)+'" y="'+(fy(p)-6)+'" font-size="14" font-weight="800">'+NAMES[i]+'</text>';});
+ h+='<text x="'+(fx(Rp)+6)+'" y="'+(fy(Rp)+14)+'" font-size="14" font-weight="800" fill="#b45309">'+NAMES[idx[2]]+'\u2032</text>';
+ $('ku_svg').innerHTML=h;
+ const aP=ang(P,Q,Rr),aQ=ang(Q,P,Rr);let nm,why;const f=$('ku_f');
+ if(Math.abs(aP-90)<0.01||Math.abs(aQ-90)<0.01){nm='Dörtgen oluşmaz: ikizkenar üçgen oluşur';why='Yansıtılan kenarın bir ucundaki açı 90° olduğundan, şekil ile görüntüsü o köşede 180°\'lik doğru açı oluşturur ve birleşim bir ikizkenar üçgendir.';}
+ else if(aP>90||aQ>90){nm='iç bükey deltoid (ok başı)';why='Yansıtılan kenarın uçlarından birindeki açı 90°\'den büyük olduğundan birleşimin o köşedeki açısı 180°\'den büyük olur.';}
+ else if(Math.abs(dist(P,Rr)-dist(Q,Rr))<0.01){nm='eşkenar dörtgen';why='Üçgen, yansıtılan kenara ait iki uçtan R köşesine eşit uzaklıktadır; böylece dörtgenin dört kenarı birbirine eşit olur. Eşkenar dörtgen, özel bir deltoiddir.';}
+ else{nm='deltoid (uçurtma)';why='Yansıma kenar uzunluklarını korur: |PR| = |PR\u2032| ve |QR| = |QR\u2032|. Bu nedenle komşu kenar çiftleri eşit olan bir deltoid oluşur.';}
+ const sd=[dist(P,Rr),dist(Rr,Q),dist(Q,Rp),dist(Rp,P)].map(function(v){return dec(v,1);});
+ f.className='feedback show ok';f.textContent='Oluşan şekil: '+nm+'. '+why+(nm.indexOf('Dörtgen oluşmaz')===0?'':' Kenar uzunlukları (birim): '+sd.join(', ')+'.');}
+$('ku_t').addEventListener('change',kuDraw);$('ku_s').addEventListener('change',kuDraw);kuDraw();
+
+})();
 </script>
 </body></html>

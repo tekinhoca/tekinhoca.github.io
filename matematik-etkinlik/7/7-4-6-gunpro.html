@@ -18,7 +18,35 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 .sub-card{background:#fafcfe;border:1.5px solid var(--border);border-radius:16px;padding:16px;margin:14px 0}.sub-card h4{color:var(--primary);margin-bottom:10px}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
-</style></head><body>
+</style><style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
+</head><body>
 <header><div class="badge">7. SINIF MATEMATİK · 4. TEMA: GEOMETRİK NİCELİKLER (1) · MAT.7.4.6</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Günlük Yaşamda Yüzey Alanı ve Hacim Problemleri</h1><p>Günlük yaşam durumlarında dikdörtgenler prizmaları ile modellenen cisimlerin yüzey alanı ve hacmine yönelik problem çözebilme</p></header>
 <nav class="tab-bar">
 <button class="tab-btn active" data-tab="tab0">KEŞFET</button>
@@ -27,7 +55,7 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <button class="tab-btn" data-tab="tab3">İNTERAKTİF PROBLEM ÇÖZÜCÜ</button>
 <button class="tab-btn" data-tab="tab4">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab5">ÖZET</button>
-<button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
+<button class="tab-btn" data-tab="konteyner">🚢 Konteyner Problemi</button><button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
 </nav>
 <main class="container">
 
@@ -121,34 +149,26 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <section class="tab-panel" id="tab4">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! Duvar kaplama tipik bir yüzey alanı problemidir." data-nomsg="Tekrar düşünelim: bir yüzeyi kaplamak, dış yüzeyle mi yoksa iç boşlukla mı ilgilidir?">
+<div class="q-card" data-okmsg="Doğru! Duvar kaplama tipik bir yüzey alanı problemidir." data-nomsg="Yanlış: Duvarı kaplamak dış yüzeyle ilgilidir; bu bir yüzey alanı problemidir.">
 <div class="q-text">1) Bir odanın duvarlarına kaç metrekare duvar kağıdı gerektiğini bulmak hangi kavramla ilgilidir?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Yüzey alanı</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hacim</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çevre</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Ağırlık</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hacim</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çevre</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Yüzey alanı</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Ağırlık</button></div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! Bir tankın kaç litre su aldığını bulmak, iç boşluğu doldurmakla yani hacimle ilgilidir." data-nomsg="Tekrar düşünelim: bir tankın alabileceği su miktarı iç boşlukla mı, dış yüzeyle mi ilgilidir?">
+<div class="q-card" data-okmsg="Doğru! Bir tankın kaç litre su aldığını bulmak, iç boşluğu doldurmakla yani hacimle ilgilidir." data-nomsg="Yanlış: Tankın alabileceği su miktarı iç boşlukla ilgilidir; bu bir hacim problemidir.">
 <div class="q-text">2) Bir su tankının kaç litre su alacağını bulmak hangi kavramla ilgilidir?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yüzey alanı</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Hacim</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çevre</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Kenar uzunluğu</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Hacim</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Yüzey alanı</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Çevre</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Kenar uzunluğu</button></div><div class="feedback"></div></div>
 
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Bir kutuya kaç küçük kutunun sığacağını bulmak bir hacim problemidir.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Doğrudur: Bir kutunun içine kaç küçük kutunun sığacağı iç boşlukla ilgilidir; bu bir hacim problemidir.</div>
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Bir kutuyu ambalaj kağıdıyla kaplamak için gereken kağıt miktarı bir hacim problemidir.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Yanlıştır: Ambalaj kâğıdı kutunun dış yüzeyini kaplar; bu bir yüzey alanı problemidir.</div>
 
 </div>
 </section>
@@ -163,6 +183,18 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <div class="note-box"><b>MAT.7.4.6 süreç bileşenleri:</b> Problemi anlama, cismi prizma olarak modelleme, uygun bağıntıyı (yüzey alanı/hacim) seçme, uygulama ve sonucu değerlendirme.</div>
 <div class="gen-box">4. Tema tamamlandı! Eş küplerle yapılar ve görünümlerden başlayıp, yüzey alanı, hacim, hacim ölçme birimleri ve günlük yaşam problemlerine kadar dikdörtgenler prizmasını her yönüyle inceledik.</div>
 </div>
+</section>
+
+<section class="tab-panel" id="konteyner">
+
+<div class="card"><div class="card-title"><div class="icon">🚢</div>Koliler Konteynere Kaç Tane Sığar?</div>
+<p class="body-text">İç ölçüleri 60 dm × 20 dm × 20 dm (yani 6 m × 2 m × 2 m) olan bir konteynere kolileri yerleştireceksiniz. Önce kaç koli sığacağını tahmin edin; sonra iki stratejiyi karşılaştırın: <b>hacimleri bölme</b> ve <b>sıra sıra yerleştirme</b>.</p>
+<div class="nx-row"><select class="nx-sel" id="kn_k"><option value="10,10,10">Koli: 10 × 10 × 10 dm</option><option value="8,5,5" selected>Koli: 8 × 5 × 5 dm</option><option value="12,8,6">Koli: 12 × 8 × 6 dm</option><option value="5,5,5">Koli: 5 × 5 × 5 dm</option></select></div>
+<div class="nx-row"><label for="kn_g">Tahmininiz:</label><input class="nx-in" id="kn_g" style="width:90px"><button class="nx-btn" id="kn_b">Hesapla ve karşılaştır</button></div>
+<div class="feedback" id="kn_f"></div><div class="body-text" id="kn_s"></div></div>
+<div class="card"><div class="card-title"><div class="icon">✅</div>Problem Çözme Kontrol Listesi</div>
+<p class="body-text">Çözümünüzde yaptıklarınızı işaretleyin.</p><div id="kn_c"></div><div class="feedback" id="kn_cf"></div></div>
+
 </section>
 
 <section class="tab-panel" id="tab6">
@@ -193,7 +225,7 @@ function checkChoice(btn,isCorrect){
   const fb=card.querySelector('.feedback');fb.classList.add('show',isCorrect?'ok':'no');fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
 }
 function checkTF(btn,chosenTrue,actualTrue){
-  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';
+  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';{const nb=row.nextElementSibling;if(nb&&nb.classList.contains('note-box'))nb.style.display='block';}
   const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');correctBtn.classList.add('correct');
   if(chosenTrue!==actualTrue)btn.classList.add('wrong');
 }
@@ -229,23 +261,7 @@ function updatePack(){
 updatePack();
 
 /* Kendini Dene quiz */
-const quizData=[
- {q:"Bir binanın dış cephesini boyamak için gereken boya miktarını hesaplarken hangi bağıntı kullanılır?",
-  choices:["Hacim","Yüzey alanı","Çevre","Ağırlık"],correct:1,
-  expl:"Bir yüzeyi kaplamak (boyama, kaplama) yüzey alanı problemidir."},
- {q:"Bir kargo şirketi, boyutları 60×40×30 cm olan bir kutuya, 20×20×15 cm boyutlarındaki kutulardan kaç tane sığacağını hesaplamak istiyor. Hangi bağıntı/yaklaşım kullanılmalıdır?",
-  choices:["Yüzey alanlarını karşılaştırma","Her boyutta kaç küçük kutunun sığdığını bulup çarpma (hacimsel paketleme)","Sadece toplam hacimleri bölme yeterlidir","Çevre hesaplama"],correct:1,
-  expl:"Doğru paketleme sayısı için her boyutta ayrı ayrı kaç tane sığdığı bulunup çarpılmalıdır (60÷20=3, 40÷20=2, 30÷15=2 → 3×2×2=12); sadece toplam hacimleri bölmek yanıltıcı olabilir."},
- {q:"Taban alanı 15 m² olan bir havuzun derinliği 2 m ise, havuz kaç m³ su alır?",
-  choices:["17","30","7,5","60"],correct:1,
-  expl:"Hacim = Taban Alanı × Yükseklik(derinlik) = 15×2=30 m³."},
- {q:"Üstü ve altı açık (sadece 4 yan yüzeyi olan) bir borunun dış yüzeyini boyamak için hangi yüzeyler hesaba katılır?",
-  choices:["Sadece taban ve tavan","Sadece 4 yan yüzey","Tüm 6 yüzey","Hiçbiri"],correct:1,
-  expl:"Taban ve tavan olmadığından yalnızca 4 yan yüzeyin alanı hesaba katılır."},
- {q:"Bir problemde 'kutu içine kaç litre su sığar' sorusu sorulduğunda hangi kavram kullanılır?",
-  choices:["Yüzey alanı","Çevre","Hacim","Kenar uzunluğu"],correct:2,
-  expl:"Bir kabın alabileceği sıvı miktarı, o kabın hacmiyle (kapasitesiyle) ilgilidir."}
-];
+const quizData=[{"q": "Bir binanın dış cephesini boyamak için gereken boya miktarını hesaplarken hangi bağıntı kullanılır?", "choices": ["Hacim", "Çevre", "Ağırlık", "Yüzey alanı"], "correct": 3, "expl": "Bir yüzeyi kaplamak (boyama, kaplama) yüzey alanı problemidir."}, {"q": "Bir kargo şirketi, boyutları 60×40×30 cm olan bir kutuya, 20×20×15 cm boyutlarındaki kutulardan kaç tane sığacağını hesaplamak istiyor. Hangi bağıntı/yaklaşım kullanılmalıdır?", "choices": ["Yüzey alanlarını karşılaştırma", "Sadece toplam hacimleri bölme yeterlidir", "Her boyutta kaç küçük kutunun sığdığını bulup çarpma (hacimsel paketleme)", "Çevre hesaplama"], "correct": 2, "expl": "Doğru paketleme sayısı için her boyutta ayrı ayrı kaç tane sığdığı bulunup çarpılmalıdır (60÷20=3, 40÷20=2, 30÷15=2 → 3×2×2=12); sadece toplam hacimleri bölmek yanıltıcı olabilir."}, {"q": "Taban alanı 15 m² olan bir havuzun derinliği 2 m ise, havuz kaç m³ su alır?", "choices": ["30", "17", "7,5", "60"], "correct": 0, "expl": "Hacim = Taban Alanı × Yükseklik(derinlik) = 15×2=30 m³."}, {"q": "Üstü ve altı açık (sadece 4 yan yüzeyi olan) bir borunun dış yüzeyini boyamak için hangi yüzeyler hesaba katılır?", "choices": ["Sadece taban ve tavan", "Sadece 4 yan yüzey", "Tüm 6 yüzey", "Hiçbiri"], "correct": 1, "expl": "Taban ve tavan olmadığından yalnızca 4 yan yüzeyin alanı hesaba katılır."}, {"q": "Bir problemde 'kutu içine kaç litre su sığar' sorusu sorulduğunda hangi kavram kullanılır?", "choices": ["Yüzey alanı", "Çevre", "Hacim", "Kenar uzunluğu"], "correct": 2, "expl": "Bir kabın alabileceği sıvı miktarı, o kabın hacmiyle (kapasitesiyle) ilgilidir."}];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
   const wrap=document.getElementById('progressDots');wrap.innerHTML='';
@@ -253,7 +269,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Testi Yeniden Başlat</button></div>';
     renderDots();return;
   }
   qAnswered=false;const item=quizData[qIndex];
@@ -271,5 +287,35 @@ function answerQuiz(i){
 function nextQuiz(){qIndex++;renderQuiz();}
 function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+const CD=[60,20,20];
+function perms(a){return [[a[0],a[1],a[2]],[a[0],a[2],a[1]],[a[1],a[0],a[2]],[a[1],a[2],a[0]],[a[2],a[0],a[1]],[a[2],a[1],a[0]]];}
+$('kn_b').addEventListener('click',function(){const k=$('kn_k').value.split(',').map(Number),f=$('kn_f');const g=parseQ($('kn_g').value);
+ if(!g||g.d!==1||g.n<0){f.className='feedback show no';f.textContent='Yanlış: Tahmininiz bir doğal sayı olmalıdır.';return;}
+ const Vc=CD[0]*CD[1]*CD[2],Vk=k[0]*k[1]*k[2],ub=Math.floor(Vc/Vk);let best=0,bo=null;
+ perms(k).forEach(function(p){const n=Math.floor(CD[0]/p[0])*Math.floor(CD[1]/p[1])*Math.floor(CD[2]/p[2]);if(n>best){best=n;bo=p;}});
+ const bx=[Math.floor(CD[0]/bo[0]),Math.floor(CD[1]/bo[1]),Math.floor(CD[2]/bo[2])];
+ const ok=g.n===best;f.className='feedback show '+(ok?'ok':'no');
+ f.textContent=(ok?'Doğru! ':'Yanlış: ')+'Gerçekte en fazla '+best+' koli yerleştirilebilir. Tahmininiz '+g.n+' idi.';
+ $('kn_s').innerHTML='<div>• <b>Hacimleri bölme:</b> '+Vc+' dm³ ÷ '+Vk+' dm³ = '+ub+'. Bu sayı, hiç boşluk kalmayacağı varsayımıyla bulunan üst sınırdır.</div><div>• <b>Sıra sıra yerleştirme:</b> En uygun yönde uzunluk boyunca '+bx[0]+', genişlikte '+bx[1]+', yükseklikte '+bx[2]+' koli sığar: '+bx[0]+' × '+bx[1]+' × '+bx[2]+' = '+best+'.</div><div>• <b>Karşılaştırma:</b> '+(best===ub?'İki strateji aynı sonucu verdi; kolilerin ayrıtları konteynerin ayrıtlarını tam bölüyor.':'Hacimle bulunan sayı '+(ub-best)+' fazla çıktı; çünkü kolilerin ayrıtları konteynerin ayrıtlarını tam bölmediği için kullanılamayan boşluklar kalıyor. Yerleştirme stratejisi bu boşlukları hesaba katar.')+'</div>';});
+const CK=['Problemdeki şekilleri, cisimleri ve ölçüleri belirledim.','Bileşenler arasındaki ilişkiyi (hacim, yüzey alanı, ayrıt) belirledim.','Problemi bir çizim ya da tabloyla gösterdim.','Sonuç için tahminde bulundum.','Stratejimi uyguladım.','Sonucu kontrol ettim; işe yaramayan stratejiyi değiştirdim.','Başka bir çözüm yolu düşündüm.','Stratejimin başka problemlerde de kullanılıp kullanılamayacağını sorguladım.'];
+const kc=$('kn_c');CK.forEach(function(t,i){const l=document.createElement('label');l.style.cssText='display:block;margin:6px 0;font-size:.92rem';l.innerHTML='<input type="checkbox" data-i="'+i+'"> '+t;kc.appendChild(l);});
+kc.addEventListener('change',function(){const n=kc.querySelectorAll('input:checked').length;const f=$('kn_cf');f.className='feedback show '+(n===CK.length?'ok':'no');f.textContent=n===CK.length?'Doğru! Problem çözme sürecinin bütün basamaklarını tamamladınız.':'Yanlış: '+(CK.length-n)+' basamak henüz tamamlanmadı. Tamamlanmayan basamakları gözden geçirin.';});
+
+})();
 </script>
 </body></html>

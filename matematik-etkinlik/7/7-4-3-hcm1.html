@@ -16,7 +16,35 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 .calc-result{background:linear-gradient(135deg,#eafaf3,#eaf2f8);border:1.5px solid #10b981;border-radius:14px;padding:16px;text-align:center;font-family:'Baloo 2';font-size:1.15rem;font-weight:800;color:#047857;margin-top:10px}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
-</style></head><body>
+</style><style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
+</head><body>
 <header><div class="badge">7. SINIF MATEMATİK · 4. TEMA: GEOMETRİK NİCELİKLER (1) · MAT.7.4.3</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Dikdörtgenler Prizmasının Hacmi (Eş Nesnelerle)</h1><p>Dikdörtgenler prizmasının hacmini eş nesneler aracılığıyla yorumlayabilme</p></header>
 <nav class="tab-bar">
 <button class="tab-btn active" data-tab="tab0">KEŞFET</button>
@@ -25,7 +53,7 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <button class="tab-btn" data-tab="tab3">İNTERAKTİF ARAÇ</button>
 <button class="tab-btn" data-tab="tab4">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab5">ÖZET</button>
-<button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
+<button class="tab-btn" data-tab="kapasite">⚖️ Kapasite Karşılaştır</button><button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
 </nav>
 <main class="container">
 
@@ -91,25 +119,22 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <section class="tab-panel" id="tab4">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! Taban katmanındaki küp sayısı ile katman sayısının çarpımı toplam hacmi verir." data-nomsg="Tekrar düşünelim: taban katmanı × katman sayısı işlemini yapmalısınız.">
+<div class="q-card" data-okmsg="Doğru! Taban katmanındaki küp sayısı ile katman sayısının çarpımı toplam hacmi verir." data-nomsg="Yanlış: Hacim, taban katmanındaki küp sayısı ile katman sayısının çarpımıdır.">
 <div class="q-text">1) Taban katmanında 8 birim küp olan ve 3 katmandan oluşan bir yapının hacmi kaç birim küptür?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">11</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">24</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">3</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">11</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">24</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">3</button></div><div class="feedback"></div></div>
 
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Bir yapının hacmi, onu dolduran birim küplerin toplam sayısıdır.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Doğrudur: Hacim, bir cismi boşluk bırakmadan dolduran birim küplerin sayısıdır.</div>
 <div class="tf-row" data-answered="">
-<div class="tf-statement">Her katmandaki küp sayısı farklı olabilir.</div>
+<div class="tf-statement">Dikdörtgenler prizmasında her katmandaki küp sayısı farklı olabilir.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Yanlıştır: Dikdörtgenler prizmasında her katman aynı sayıda birim küpten oluşur; hacim bu yüzden taban katmanındaki küp sayısı × katman sayısıdır.</div>
 
 </div>
 </section>
@@ -126,6 +151,17 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <div class="note-box"><b>MAT.7.4.3 süreç bileşenleri:</b> Eş nesnelerle (birim küplerle) doldurma yoluyla dikdörtgenler prizmasının hacmini yorumlama.</div>
 <div class="tip-box">Bir sonraki derste bu sayma yönteminden yola çıkarak hacim <b>bağıntısını</b> (taban alanı × yükseklik) keşfedeceğiz (MAT.7.4.4).</div>
 </div>
+</section>
+
+<section class="tab-panel" id="kapasite">
+
+<div class="card"><div class="card-title"><div class="icon">⚖️</div>Hangi Kutu Daha Fazla Küp Alır?</div>
+<p class="body-text">Önce gözle tahmin edin, sonra birim küplerle doldurarak karşılaştırın. Hacim, kutuyu boşluk bırakmadan dolduran birim küplerin sayısıdır.</p><div id="kp_list"></div></div>
+<div class="card"><div class="card-title"><div class="icon">📏</div>Birim Değişince Sayı Değişir</div>
+<p class="body-text">12 × 6 × 6 cm ölçülü bir kutu, ayrıtı seçtiğiniz küplerle doldurulsun.</p>
+<div class="nx-row"><label for="kp_e">Küpün ayrıtı:</label><select class="nx-sel" id="kp_e"><option value="1">1 cm</option><option value="2">2 cm</option><option value="3">3 cm</option><option value="6">6 cm</option></select></div>
+<div class="feedback" id="kp_f"></div><table class="nx-tab" id="kp_t"></table></div>
+
 </section>
 
 <section class="tab-panel" id="tab6">
@@ -156,7 +192,7 @@ function checkChoice(btn,isCorrect){
   const fb=card.querySelector('.feedback');fb.classList.add('show',isCorrect?'ok':'no');fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
 }
 function checkTF(btn,chosenTrue,actualTrue){
-  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';
+  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';{const nb=row.nextElementSibling;if(nb&&nb.classList.contains('note-box'))nb.style.display='block';}
   const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');correctBtn.classList.add('correct');
   if(chosenTrue!==actualTrue)btn.classList.add('wrong');
 }
@@ -198,23 +234,7 @@ function updateVol(){
 updateVol();
 
 /* Kendini Dene quiz */
-const quizData=[
- {q:"Bir dikdörtgenler prizmasının hacmini eş nesnelerle (birim küplerle) yorumlarken ne yaparız?",
-  choices:["Cismin yüzey alanını ölçeriz","Cismi boşluksuz dolduran birim küpleri sayarız","Cismin ağırlığını tartarız","Cismin çevresini ölçeriz"],correct:1,
-  expl:"Hacim, bir cismi boşluksuz ve taşmadan dolduran birim küplerin sayısı olarak yorumlanır."},
- {q:"Taban katmanında 15 birim küp olan ve 3 katmandan oluşan bir yapının hacmi kaç birim küptür?",
-  choices:["18","45","12","5"],correct:1,
-  expl:"15 × 3 = 45 birim küp."},
- {q:"Bir yapının taban katmanındaki küp sayısını bulmak için ne yapılır?",
-  choices:["Yükseklik ile çarpılır","Tabanın uzunluğu ile genişliği çarpılır","Tüm küpler tek tek sayılır, başka yol yoktur","Yüzey alanı hesaplanır"],correct:1,
-  expl:"Taban katmanındaki küp sayısı, tabanın uzunluğu ile genişliğinin çarpımı kadardır."},
- {q:"4×3 tabanlı ve 2 katmanlı bir yapının hacmi kaç birim küptür?",
-  choices:["9","24","14","7"],correct:1,
-  expl:"Taban katmanı 4×3=12, katman sayısı 2, toplam 12×2=24."},
- {q:"Hacim ölçmede kullanılan standart birim nesneye ne denir?",
-  choices:["Birim kare","Birim küp","Birim çember","Birim üçgen"],correct:1,
-  expl:"Hacim ölçmede kenarları eşit standart birim küpler kullanılır."}
-];
+const quizData=[{"q": "Bir dikdörtgenler prizmasının hacmini eş nesnelerle (birim küplerle) yorumlarken ne yaparız?", "choices": ["Cismin yüzey alanını ölçeriz", "Cismin ağırlığını tartarız", "Cismi boşluksuz dolduran birim küpleri sayarız", "Cismin çevresini ölçeriz"], "correct": 2, "expl": "Hacim, bir cismi boşluksuz ve taşmadan dolduran birim küplerin sayısı olarak yorumlanır."}, {"q": "Taban katmanında 15 birim küp olan ve 3 katmandan oluşan bir yapının hacmi kaç birim küptür?", "choices": ["45", "18", "12", "5"], "correct": 0, "expl": "15 × 3 = 45 birim küp."}, {"q": "Bir yapının taban katmanındaki küp sayısını bulmak için ne yapılır?", "choices": ["Yükseklik ile çarpılır", "Tüm küpler tek tek sayılır, başka yol yoktur", "Yüzey alanı hesaplanır", "Tabanın uzunluğu ile genişliği çarpılır"], "correct": 3, "expl": "Taban katmanındaki küp sayısı, tabanın uzunluğu ile genişliğinin çarpımı kadardır."}, {"q": "4×3 tabanlı ve 2 katmanlı bir yapının hacmi kaç birim küptür?", "choices": ["9", "24", "14", "7"], "correct": 1, "expl": "Taban katmanı 4×3=12, katman sayısı 2, toplam 12×2=24."}, {"q": "Hacim ölçmede kullanılan standart birim nesneye ne denir?", "choices": ["Birim kare", "Birim çember", "Birim küp", "Birim üçgen"], "correct": 2, "expl": "Hacim ölçmede kenarları eşit standart birim küpler kullanılır."}];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
   const wrap=document.getElementById('progressDots');wrap.innerHTML='';
@@ -222,7 +242,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Testi Yeniden Başlat</button></div>';
     renderDots();return;
   }
   qAnswered=false;const item=quizData[qIndex];
@@ -240,5 +260,37 @@ function answerQuiz(i){
 function nextQuiz(){qIndex++;renderQuiz();}
 function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+const Q=[{A:[4,3,2],B:[6,2,2],c:2},{A:[5,2,3],B:[3,3,4],c:1},{A:[2,2,9],B:[3,3,3],c:0}];
+const OP=['Kutu A daha fazla küp alır','Kutu B daha fazla küp alır','İkisi aynı sayıda küp alır'];
+function vol(d){return d[0]*d[1]*d[2];}
+Q.forEach(function(q,i){const d=document.createElement('div');d.className='nx-item';
+ d.innerHTML='<div class="st">'+(i+1)+') Kutu A: '+q.A.join(' × ')+' birim küp ayrıtlı, Kutu B: '+q.B.join(' × ')+' birim küp ayrıtlı. Hangisinin hacmi daha büyüktür?</div><div class="kpo"></div><div class="nx-note"></div>';
+ const o=d.querySelector('.kpo');OP.forEach(function(t,k){const b=document.createElement('button');b.className='nx-opt';b.dataset.k=k;b.textContent=t;o.appendChild(b);});
+ const nt=d.querySelector('.nx-note');
+ d.addEventListener('click',function(e){const b=e.target.closest('.nx-opt');if(!b||d.dataset.done)return;d.dataset.done='1';const ok=+b.dataset.k===q.c;
+  d.querySelectorAll('.nx-opt').forEach(function(x){if(+x.dataset.k===q.c)x.classList.add('correct');});if(!ok)b.classList.add('wrong');
+  nt.textContent=(ok?'Doğru! ':'Yanlış: ')+'Kutu A: ('+q.A[0]+' × '+q.A[1]+') = '+q.A[0]*q.A[1]+' küp taban katmanı, '+q.A[2]+' katman → '+vol(q.A)+' küp. Kutu B: ('+q.B[0]+' × '+q.B[1]+') = '+q.B[0]*q.B[1]+' küp taban katmanı, '+q.B[2]+' katman → '+vol(q.B)+' küp. '+(vol(q.A)===vol(q.B)?'Biçimleri farklı olsa da iki kutu aynı sayıda birim küp aldığı için hacimleri eşittir.':vol(q.A)>vol(q.B)?'A kutusu '+(vol(q.A)-vol(q.B))+' küp daha fazla alır.':'B kutusu '+(vol(q.B)-vol(q.A))+' küp daha fazla alır.');nt.style.display='block';});
+ $('kp_list').appendChild(d);});
+function upd(){const e=+$('kp_e').value;const n=[12/e,6/e,6/e];const cnt=n[0]*n[1]*n[2];
+ $('kp_t').innerHTML='<tr><th>Küp ayrıtı</th><th>Uzunlukta</th><th>Genişlikte</th><th>Yükseklikte</th><th>Küp sayısı</th><th>Bir küpün hacmi</th><th>Toplam hacim</th></tr><tr><td>'+e+' cm</td><td>'+n[0]+'</td><td>'+n[1]+'</td><td>'+n[2]+'</td><td>'+cnt+'</td><td>'+e*e*e+' cm³</td><td>'+cnt*e*e*e+' cm³</td></tr>';
+ const f=$('kp_f');f.className='feedback show ok';f.textContent='Ayrıtı '+e+' cm olan küplerle kutuya '+cnt+' küp sığar. Küp büyüdükçe küp sayısı azalır ama kutunun hacmi (432 cm³) değişmez. Bu yüzden hacim, kullanılan birimle birlikte söylenmelidir.';}
+$('kp_e').addEventListener('change',upd);upd();
+
+})();
 </script>
 </body></html>

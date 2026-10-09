@@ -16,7 +16,35 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 .calc-result{background:linear-gradient(135deg,#eafaf3,#eaf2f8);border:1.5px solid #10b981;border-radius:14px;padding:16px;text-align:center;font-family:'Baloo 2';font-size:1.15rem;font-weight:800;color:#047857;margin-top:10px}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
-</style></head><body>
+</style><style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
+</head><body>
 <header><div class="badge">7. SINIF MATEMATİK · 4. TEMA: GEOMETRİK NİCELİKLER (1) · MAT.7.4.2</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Dikdörtgenler Prizmasının Yüzey Alanı</h1><p>Dikdörtgenler prizmasının yüzey alanını yorumlayabilme</p></header>
 <nav class="tab-bar">
 <button class="tab-btn active" data-tab="tab0">KEŞFET</button>
@@ -25,7 +53,7 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <button class="tab-btn" data-tab="tab3">İNTERAKTİF HESAPLAYICI</button>
 <button class="tab-btn" data-tab="tab4">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab5">ÖZET</button>
-<button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
+<button class="tab-btn" data-tab="acinim">📦 Açınım Atölyesi</button><button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
 </nav>
 <main class="container">
 
@@ -107,34 +135,26 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <section class="tab-panel" id="tab4">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! 2×(3×2+2×5+3×5)=2×(6+10+15)=62 cm²." data-nomsg="Tekrar hesaplayalım: Yüzey Alanı = 2(ab+bc+ac) formülünü a=3,b=2,c=5 için uygulayınız.">
+<div class="q-card" data-okmsg="Doğru! 2×(3×2+2×5+3×5)=2×(6+10+15)=62 cm²." data-nomsg="Yanlış: Yüzey alanı 2(ab + bc + ac) ile bulunur: 2 × (6 + 10 + 15) = 62 cm².">
 <div class="q-text">1) a=3 cm, b=2 cm, c=5 cm olan bir dikdörtgenler prizmasının yüzey alanı kaç cm²'dir?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">30 cm²</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">62 cm²</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">31 cm²</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">124 cm²</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">30 cm²</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">31 cm²</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">62 cm²</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">124 cm²</button></div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! Küpün her yüzü karedir ve 6 eş yüzü vardır." data-nomsg="Tekrar düşünelim: küpün tüm yüzleri birbirine eş kareler midir?">
+<div class="q-card" data-okmsg="Doğru! Küpün her yüzü karedir ve 6 eş yüzü vardır." data-nomsg="Yanlış: Küpün 6 yüzü de birbirine eş karedir.">
 <div class="q-text">2) Bir küpün yüzey alanını bulmak için hangi bağıntı kullanılır (a=kenar uzunluğu)?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">a³</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">6a²</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">4a²</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2a²</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">6a²</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">a³</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">4a²</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2a²</button></div><div class="feedback"></div></div>
 
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Bir dikdörtgenler prizmasının 6 yüzeyinin tamamı birbirine eştir.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Yanlıştır: Dikdörtgenler prizmasında karşılıklı yüzler eştir; fakat bütün yüzlerin eş olması gerekmez (küp bunun özel durumudur).</div>
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Yüzey alanı hesaplanırken üç farklı yüz çiftinin alanları bulunup 2 ile çarpılır.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Doğrudur: Karşılıklı yüzler eş olduğundan ab, bc ve ac alanları ikişer kez sayılır: 2(ab + bc + ac).</div>
 
 </div>
 </section>
@@ -151,6 +171,18 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <div class="note-box"><b>MAT.7.4.2 süreç bileşenleri:</b> Dikdörtgenler prizmasının farklı yüzey açınımlarını inceleme, yüzey alanı bağıntısını oluşturma ve problemlerde kullanma.</div>
 <div class="tip-box">Bir sonraki derste dikdörtgenler prizmasının <b>hacmini</b> eş nesnelerle inceleyeceğiz (MAT.7.4.3).</div>
 </div>
+</section>
+
+<section class="tab-panel" id="acinim">
+
+<div class="card"><div class="card-title"><div class="icon">📦</div>Farklı Yüzey Açınımları, Aynı Yüzey Alanı</div>
+<p class="body-text">Kutunun ayrıtlarını girin. Aşağıdaki şekillerden hangileri bu kutunun yüzey açınımıdır? Her şekil için cevabınızı seçin; ardından altı yüzün alanlarını toplayın.</p>
+<div class="nx-row"><label>a:</label><input class="nx-in" id="ac_a" type="number" min="1" max="6" value="4" style="width:70px"><label>b:</label><input class="nx-in" id="ac_b" type="number" min="1" max="6" value="3" style="width:70px"><label>c:</label><input class="nx-in" id="ac_c" type="number" min="1" max="6" value="2" style="width:70px"><b>(cm)</b></div>
+<div class="feedback" id="ac_f"></div><div id="ac_list"></div></div>
+<div class="card"><div class="card-title"><div class="icon">🎁</div>Paket Kâğıdı Yeter mi?</div>
+<p class="body-text">Kutuyu örtüşme payı bırakmadan kaplamak için en az yüzey alanı kadar kâğıt gerekir. Elinizdeki dikdörtgen kâğıdın ölçülerini yazın.</p>
+<div class="nx-row"><label>Kâğıt eni:</label><input class="nx-in" id="ac_pw" type="number" min="1" max="99" value="20" style="width:80px"><label>boyu:</label><input class="nx-in" id="ac_ph" type="number" min="1" max="99" value="10" style="width:80px"><button class="nx-btn" id="ac_pb">Kontrol et</button></div><div class="feedback" id="ac_pf"></div></div>
+
 </section>
 
 <section class="tab-panel" id="tab6">
@@ -181,7 +213,7 @@ function checkChoice(btn,isCorrect){
   const fb=card.querySelector('.feedback');fb.classList.add('show',isCorrect?'ok':'no');fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
 }
 function checkTF(btn,chosenTrue,actualTrue){
-  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';
+  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';{const nb=row.nextElementSibling;if(nb&&nb.classList.contains('note-box'))nb.style.display='block';}
   const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');correctBtn.classList.add('correct');
   if(chosenTrue!==actualTrue)btn.classList.add('wrong');
 }
@@ -253,23 +285,7 @@ function updateCalc(){
 updateCalc();
 
 /* Kendini Dene quiz */
-const quizData=[
- {q:"Bir dikdörtgenler prizmasının yüzey alanı formülü hangisidir?",
-  choices:["a×b×c","2(ab+bc+ac)","2(a+b+c)","ab+bc+ac"],correct:1,
-  expl:"Yüzey alanı, üç farklı yüz çiftinin alanlarının toplamının 2 katıdır: 2(ab+bc+ac)."},
- {q:"a=2, b=3, c=4 birim olan bir dikdörtgenler prizmasının yüzey alanı kaç birim karedir?",
-  choices:["24","52","26","9"],correct:1,
-  expl:"2×(2×3+3×4+2×4) = 2×(6+12+8) = 2×26 = 52."},
- {q:"Bir dikdörtgenler prizmasının kaç yüzeyi vardır?",
-  choices:["4","6","8","12"],correct:1,
-  expl:"Bir dikdörtgenler prizmasının 6 yüzeyi (3 çift eş dikdörtgen) vardır."},
- {q:"Bir küpün (a=b=c) yüzey alanı formülü nedir?",
-  choices:["a³","4a²","6a²","a²"],correct:2,
-  expl:"Küpün 6 eş kare yüzü vardır, her birinin alanı a² olduğundan toplam 6a²'dir."},
- {q:"Üstü açık (kapaksız) bir kutunun yüzey alanını hesaplarken ne yapılır?",
-  choices:["Hiçbir şey değişmez, tam kapalı gibi hesaplanır","Toplam yüzey alanından bir taban alanı çıkarılır","Toplam yüzey alanına bir taban alanı eklenir","Sadece yan yüzeyler hesaba katılır"],correct:1,
-  expl:"Üst yüzey olmadığından, tam kapalı prizmanın yüzey alanından bir taban (üst) alanı çıkarılır."}
-];
+const quizData=[{"q": "Bir dikdörtgenler prizmasının yüzey alanı formülü hangisidir?", "choices": ["a×b×c", "2(a+b+c)", "ab+bc+ac", "2(ab+bc+ac)"], "correct": 3, "expl": "Yüzey alanı, üç farklı yüz çiftinin alanlarının toplamının 2 katıdır: 2(ab+bc+ac)."}, {"q": "a=2, b=3, c=4 birim olan bir dikdörtgenler prizmasının yüzey alanı kaç birim karedir?", "choices": ["24", "52", "26", "9"], "correct": 1, "expl": "2×(2×3+3×4+2×4) = 2×(6+12+8) = 2×26 = 52."}, {"q": "Bir dikdörtgenler prizmasının kaç yüzeyi vardır?", "choices": ["6", "4", "8", "12"], "correct": 0, "expl": "Bir dikdörtgenler prizmasının 6 yüzeyi (3 çift eş dikdörtgen) vardır."}, {"q": "Bir küpün (a=b=c) yüzey alanı formülü nedir?", "choices": ["a³", "4a²", "6a²", "a²"], "correct": 2, "expl": "Küpün 6 eş kare yüzü vardır, her birinin alanı a² olduğundan toplam 6a²'dir."}, {"q": "Üstü açık (kapaksız) bir kutunun yüzey alanını hesaplarken ne yapılır?", "choices": ["Hiçbir şey değişmez, tam kapalı gibi hesaplanır", "Toplam yüzey alanına bir taban alanı eklenir", "Sadece yan yüzeyler hesaba katılır", "Toplam yüzey alanından bir taban alanı çıkarılır"], "correct": 3, "expl": "Üst yüzey olmadığından, tam kapalı prizmanın yüzey alanından bir taban (üst) alanı çıkarılır."}];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
   const wrap=document.getElementById('progressDots');wrap.innerHTML='';
@@ -277,7 +293,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Testi Yeniden Başlat</button></div>';
     renderDots();return;
   }
   qAnswered=false;const item=quizData[qIndex];
@@ -295,5 +311,47 @@ function answerQuiz(i){
 function nextQuiz(){qIndex++;renderQuiz();}
 function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+function val(id){return Math.max(1,Math.min(6,Math.round(+$(id).value)||1));}
+function nets(a,b,c){
+ const row=function(yr){return [['f',0,yr,a,c,'a×c'],['r',a,yr,b,c,'b×c'],['k',a+b,yr,a,c,'a×c'],['l',2*a+b,yr,b,c,'b×c']];};
+ return [
+  {ok:true,why:'Dört yan yüz yan yana dizilmiş; alt yüz öndeki yüzün altına, üst yüz aynı yüzün üstüne bağlanmış. Katlanınca altı yüz de kapanır.',r:row(b).concat([['t',0,0,a,b,'a×b'],['d',0,b+c,a,b,'a×b']])},
+  {ok:false,why:'Alt ve üst yüz, yan yüzlerin aynı kenarına (alt kenara) bağlanmış. Katlanınca iki yüz de tabanı kaplar, üst yüz açıkta kalır; bu bir kutu açınımı değildir.',r:row(0).concat([['d',0,c,a,b,'a×b'],['t',a+b,c,a,b,'a×b']])},
+  {ok:true,why:'Alt yüz sağdaki yan yüzün altına, üst yüz soldaki yan yüzün üstüne bağlanmış. Her biri kendi kenarına uyduğu için katlanınca kutu kapanır.',r:row(a).concat([['d',a,a+c,b,a,'a×b'],['t',2*a+b,0,b,a,'a×b']])},
+  {ok:true,why:'Alt yüz öndeki yan yüzün altına, üst yüz arkadaki yan yüzün üstüne bağlanmış. Alt yüz alt kenara, üst yüz üst kenara bağlı olduğundan açınım geçerlidir.',r:row(b).concat([['d',0,b+c,a,b,'a×b'],['t',a+b,0,a,b,'a×b']])}];}
+function draw(){const a=val('ac_a'),b=val('ac_b'),c=val('ac_c');const L=$('ac_list');L.innerHTML='';const S=2*(a*b+b*c+a*c);
+ const f=$('ac_f');f.className='feedback show ok';f.textContent='Altı yüzün alanı: 2 × '+a*b+' (a×b) + 2 × '+b*c+' (b×c) + 2 × '+a*c+' (a×c) = '+S+' cm². Geçerli her açınımda yüzey alanı aynıdır.';
+ const order=[2,1,0,3];
+ order.forEach(function(k,i){const n=nets(a,b,c)[k];let mx=0,my=0;n.r.forEach(function(q){mx=Math.max(mx,q[1]+q[3]);my=Math.max(my,q[2]+q[4]);});const sc=Math.min(300/mx,150/my);
+  let g='<svg viewBox="0 0 '+(mx*sc+4)+' '+(my*sc+4)+'" style="width:100%;max-width:340px;background:#fff;border:1.5px solid var(--border,#dbe3ff);border-radius:10px">';
+  n.r.forEach(function(q){const lat=q[0]==='f'||q[0]==='r'||q[0]==='k'||q[0]==='l';g+='<rect x="'+(q[1]*sc+2)+'" y="'+(q[2]*sc+2)+'" width="'+(q[3]*sc)+'" height="'+(q[4]*sc)+'" fill="'+(lat?'rgba(67,97,238,.25)':'rgba(245,158,11,.35)')+'" stroke="#374151"/><text x="'+(q[1]*sc+q[3]*sc/2+2)+'" y="'+(q[2]*sc+q[4]*sc/2+6)+'" font-size="11" text-anchor="middle">'+(q[3]*q[4])+'</text>';});
+  g+='</svg>';
+  const d=document.createElement('div');d.className='nx-item';d.innerHTML='<div class="st">'+(i+1)+') Bu şekil, a × b × c ölçülü kutunun yüzey açınımı mıdır? (Karelerin içindeki sayılar cm² cinsinden yüz alanlarıdır.)</div>'+g+'<div class="nx-row"><button class="nx-opt" data-a="1">Evet, açınımdır</button><button class="nx-opt" data-a="0">Hayır, açınım değildir</button></div><div class="nx-note"></div>';
+  const nt=d.querySelector('.nx-note');
+  d.addEventListener('click',function(e){const bt=e.target.closest('.nx-opt');if(!bt||d.dataset.done)return;d.dataset.done='1';const ans=n.ok?'1':'0';d.querySelectorAll('.nx-opt').forEach(function(x){if(x.dataset.a===ans)x.classList.add('correct');});if(bt.dataset.a!==ans)bt.classList.add('wrong');
+   nt.textContent=(bt.dataset.a===ans?'Doğru! ':'Yanlış: ')+n.why+(n.ok?' Alanlar toplamı: '+S+' cm².':'');nt.style.display='block';});
+  L.appendChild(d);});}
+['ac_a','ac_b','ac_c'].forEach(function(i){$(i).addEventListener('change',draw);});draw();
+$('ac_pb').addEventListener('click',function(){const a=val('ac_a'),b=val('ac_b'),c=val('ac_c'),S=2*(a*b+b*c+a*c),w=+$('ac_pw').value,h=+$('ac_ph').value,f=$('ac_pf');
+ if(!(w>0&&h>0)){f.className='feedback show no';f.textContent='Yanlış: Kâğıt ölçüleri pozitif sayı olmalıdır.';return;}
+ const P=w*h;const ok=P>=S;f.className='feedback show '+(ok?'ok':'no');
+ f.textContent=(ok?'Doğru! ':'Yanlış: ')+'Kutunun yüzey alanı '+S+' cm², kâğıdın alanı '+P+' cm². '+(ok?'Alan olarak kâğıt yeterlidir; kâğıdı kesip açınım parçalarını yerleştirirken fire vermemeye de dikkat edin. En az kâğıt miktarı, yüzey alanıdır.':'Kâğıt, kutunun yüzey alanından '+(S-P)+' cm² daha küçüktür; kutuyu kaplamaya yetmez.');});
+
+})();
 </script>
 </body></html>

@@ -18,6 +18,34 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 </style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
 <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
 </head><body>
 <header><div class="badge">7. SINIF MATEMATİK · 4. TEMA: GEOMETRİK NİCELİKLER (2) · MAT.7.4.10</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Günlük Hayat Problemleri</h1><p>Daire, daire dilimi, eşkenar dörtgen ve yamuğun alanlarıyla ilgili günlük hayat problemlerini çözme</p></header>
 <nav class="tab-bar">
@@ -27,7 +55,7 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <button class="tab-btn" data-tab="tab3">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab4">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab5">ÖZET</button>
-<button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
+<button class="tab-btn" data-tab="tahminco">🎯 Tahmin Et, Çöz, Kontrol Et</button><button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
 </nav>
 <main class="container">
 
@@ -141,23 +169,13 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <section class="tab-panel" id="tab4">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! A=10²×3=300 cm²." data-nomsg="Tekrar düşünelim: A=r²×π formülünü uygulayın.">
+<div class="q-card" data-okmsg="Doğru! A=10²×3=300 cm²." data-nomsg="Yanlış: Dairenin alanı r² × π ile bulunur: 10² × 3 = 300 cm².">
 <div class="q-text">1) Çapı 20 cm olan dairesel bir masa örtüsünün alanı kaç cm²'dir (π ≈ 3)?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">60</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">100</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">300</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">1200</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">60</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">100</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">1200</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">300</button></div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! Alan=(10×16)/2=160/2=80 cm²." data-nomsg="Eşkenar dörtgenin alanını veren formülü tekrar gözden geçir.">
+<div class="q-card" data-okmsg="Doğru! Alan=(10×16)/2=160/2=80 cm²." data-nomsg="Yanlış: Eşkenar dörtgenin alanı köşegenlerin çarpımının yarısıdır: (10 × 16) ÷ 2 = 80 cm².">
 <div class="q-text">2) Köşegenleri 10 cm ve 16 cm olan eşkenar dörtgen biçimindeki bir uçurtmanın alanı kaç cm²'dir?</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">160</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">80</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">26</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">52</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">160</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">80</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">26</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">52</button></div><div class="feedback"></div></div>
 
 <p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
 <div class="field-row"><span class="body-text" style="margin:0">Paralel kenarları 80 m ve 100 m, yüksekliği 60 m olan yamuk biçimli bir tarlanın alanı (m² olarak):</span><input type="text" class="answer-input" id="fillK1" placeholder="?"><button class="submit-btn" onclick="checkFill('fillK1',5400,'fbK1')">Kontrol Et</button></div>
@@ -169,16 +187,19 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Yanlıştır: Önce şekillerin nasıl birleştiğine (birleşim mi, çıkarma mı) bakılır; sonra uygun işlem seçilir.</div>
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Bir şekilden başka bir şekil kesilip çıkarılıyorsa, kalan alan büyük alandan küçük alan çıkarılarak bulunur.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Doğrudur: Kesilip çıkarılan bölge alana dâhil değildir; bu yüzden büyük şeklin alanından küçük şeklin alanı çıkarılır.</div>
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Bir problemi çözerken önce hangi şeklin/şekillerin ve hangi ölçülerin verildiğini belirlemek yararlıdır.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Doğrudur: Verilenleri ve ölçüleri belirlemek, doğru formülü seçmenin ilk adımıdır.</div>
 
 </div>
 </section>
@@ -196,6 +217,18 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 </table>
 <div class="note-box"><b>MAT.7.4.10 süreç bileşenleri:</b> Problemdeki bileşenleri belirleme, büyüklükler arasında ilişki kurma, çözüm stratejisi belirleyip uygulama, sonucu değerlendirme.</div>
 </div>
+</section>
+
+<section class="tab-panel" id="tahminco">
+
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Günlük Hayat Problemleri</div>
+<p class="body-text">Her problemde önce sonucu tahmin edin, sonra çözüp cevabınızı yazın. (π = 3 alınız.) Çözüm gösterildiğinde alternatif bir çözüm yolu da sunulur.</p><div id="tc_list"></div></div>
+<div class="card"><div class="card-title"><div class="icon">✍️</div>Kendi Probleminizi Kurun</div>
+<p class="body-text">Bir şekil türü seçin, sayıları yazın; problem ve çözümü oluşturulsun. Sonra aynı problemi arkadaşınıza çözdürün.</p>
+<div class="nx-row"><select class="nx-sel" id="tc_t"><option value="0">Daire (havuz)</option><option value="1">Daire dilimi (cam silecek)</option><option value="2">Eşkenar dörtgen (uçurtma)</option><option value="3">Yamuk (tarla)</option></select>
+<input class="nx-in" id="tc_x" style="width:80px"><input class="nx-in" id="tc_y" style="width:80px"><input class="nx-in" id="tc_z" style="width:80px"><button class="nx-btn" id="tc_b">Problemi oluştur</button></div>
+<div class="body-text" id="tc_h"></div><div class="feedback" id="tc_f"></div></div>
+
 </section>
 
 <section class="tab-panel" id="tab6">
@@ -226,7 +259,7 @@ function checkChoice(btn,isCorrect){
   const fb=card.querySelector('.feedback');fb.classList.add('show',isCorrect?'ok':'no');fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
 }
 function checkTF(btn,chosenTrue,actualTrue){
-  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';
+  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';{const nb=row.nextElementSibling;if(nb&&nb.classList.contains('note-box'))nb.style.display='block';}
   const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');correctBtn.classList.add('correct');
   if(chosenTrue!==actualTrue)btn.classList.add('wrong');
 }
@@ -234,29 +267,10 @@ function checkFill(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);const fb=document.getElementById(fbId);const val=parseInt(inp.value.trim(),10);
   fb.classList.add('show');
   if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Soruyu daha dikkatli okuyarak tekrar deneyin.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış: Doğru cevap '+correctVal+'.';}
 }
 
-const quizData=[
- {q:"Yarıçapı 9 cm olan dairesel bir saatin kadranının alanı kaç cm²'dir (π ≈ 3)?",
-  choices:["27","81","243","324"],correct:2,
-  expl:"A=9²×3=81×3=243 cm²."},
- {q:"Yarıçapı 12 cm olan bir pizzanın, merkez açısı 60° olan bir diliminin alanı kaç cm²'dir (π ≈ 3)?",
-  choices:["36","54","72","96"],correct:2,
-  expl:"Tam alan=12²×3=432; oran=60/360=1/6; dilim alanı=432/6=72 cm²."},
- {q:"Köşegenleri 18 cm ve 24 cm uzunluğunda olan eşkenar dörtgen biçimindeki bir fayansın alanı kaç cm²'dir?",
-  choices:["108","216","432","42"],correct:1,
-  expl:"Alan=(18×24)/2=432/2=216 cm²."},
- {q:"Paralel kenarları 10 cm ve 18 cm, yüksekliği 7 cm olan yamuk biçimindeki bir peçetenin alanı kaç cm²'dir?",
-  choices:["63","84","98","196"],correct:2,
-  expl:"Alan=(10+18)×7/2=196/2=98 cm²."},
- {q:"Kenar uzunluğu 10 cm olan kare şeklindeki kartondan, yarıçapı 5 cm olan dairesel bir parça kesiliyor. Geriye kalan kartonun alanı kaç cm²'dir (π ≈ 3)?",
-  choices:["15","25","75","175"],correct:1,
-  expl:"Kare alanı=100; daire alanı=5²×3=75; kalan=100−75=25 cm²."},
- {q:"Köşegenleri 8 cm ve 6 cm olan bir eşkenar dörtgen ile yarıçapı 4 cm olan bir daire şeklindeki iki metal plakayı boyarsak boyanan bölge kaç cm² olur? (π ≈ 3)",
-  choices:["24","48","72","96"],correct:2,
-  expl:"Eşkenar dörtgen=(8×6)/2=24; daire=4²×3=48; toplam=24+48=72 cm²."}
-];
+const quizData=[{"q": "Yarıçapı 9 cm olan dairesel bir saatin kadranının alanı kaç cm²'dir (π ≈ 3)?", "choices": ["27", "243", "81", "324"], "correct": 1, "expl": "A=9²×3=81×3=243 cm²."}, {"q": "Yarıçapı 12 cm olan bir pizzanın, merkez açısı 60° olan bir diliminin alanı kaç cm²'dir (π ≈ 3)?", "choices": ["36", "54", "96", "72"], "correct": 3, "expl": "Tam alan=12²×3=432; oran=60/360=1/6; dilim alanı=432/6=72 cm²."}, {"q": "Köşegenleri 18 cm ve 24 cm uzunluğunda olan eşkenar dörtgen biçimindeki bir fayansın alanı kaç cm²'dir?", "choices": ["216", "108", "432", "42"], "correct": 0, "expl": "Alan=(18×24)/2=432/2=216 cm²."}, {"q": "Paralel kenarları 10 cm ve 18 cm, yüksekliği 7 cm olan yamuk biçimindeki bir peçetenin alanı kaç cm²'dir?", "choices": ["63", "84", "98", "196"], "correct": 2, "expl": "Alan=(10+18)×7/2=196/2=98 cm²."}, {"q": "Kenar uzunluğu 10 cm olan kare şeklindeki kartondan, yarıçapı 5 cm olan dairesel bir parça kesiliyor. Geriye kalan kartonun alanı kaç cm²'dir (π ≈ 3)?", "choices": ["15", "75", "175", "25"], "correct": 3, "expl": "Kare alanı=100; daire alanı=5²×3=75; kalan=100−75=25 cm²."}, {"q": "Köşegenleri 8 cm ve 6 cm olan bir eşkenar dörtgen ile yarıçapı 4 cm olan bir daire şeklindeki iki metal plakayı boyarsak boyanan bölge kaç cm² olur? (π ≈ 3)", "choices": ["72", "24", "48", "96"], "correct": 0, "expl": "Eşkenar dörtgen=(8×6)/2=24; daire=4²×3=48; toplam=24+48=72 cm²."}];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
   const wrap=document.getElementById('progressDots');wrap.innerHTML='';
@@ -264,7 +278,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Testi Yeniden Başlat</button></div>';
     renderDots();return;
   }
   qAnswered=false;const item=quizData[qIndex];
@@ -282,5 +296,46 @@ function answerQuiz(i){
 function nextQuiz(){qIndex++;renderQuiz();}
 function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+const P=[
+ {q:'Yarıçapı 5 m olan dairesel bir havuzun çevresine, havuza bitişik 1 m genişliğinde bir yürüme yolu yapılacaktır. Yolun alanı kaç m²\'dir?',a:33,u:'m²',s:'Dış dairenin yarıçapı 6 m, iç dairenin yarıçapı 5 m. Yolun alanı = dış dairenin alanı − iç dairenin alanı = 3 × 6² − 3 × 5² = 108 − 75 = 33 m².',alt:'Alternatif yol: Yolun alanı π × (6² − 5²) = 3 × 11 = 33 m² diye tek işlemde de bulunabilir.'},
+ {q:'Yarıçapı 2 m olan 4 kanatlı bir döner kapının kanatları arasında kalan bölmelerden birinin tabanı kaç m²\'dir? (Kanatlar birbirine diktir.)',a:3,u:'m²',s:'Dik kanatlar arasındaki merkez açı 90°\'dir. Bölme alanı = (90 ÷ 360) × 3 × 2² = 1/4 × 12 = 3 m².',alt:'Alternatif yol: Tam dairenin alanı 3 × 2² = 12 m²; 4 bölme eş olduğundan her biri 12 ÷ 4 = 3 m²\'dir.'},
+ {q:'Köşegen uzunlukları 60 cm ve 40 cm olan eşkenar dörtgen biçimli bir uçurtmanın alanı kaç cm²\'dir?',a:1200,u:'cm²',s:'Eşkenar dörtgenin alanı köşegenlerin çarpımının yarısıdır: (60 × 40) ÷ 2 = 1200 cm².',alt:'Alternatif yol: Köşegenler dört eş dik üçgen oluşturur; her birinin alanı (30 × 20) ÷ 2 = 300 cm², dördü toplam 1200 cm²\'dir.'},
+ {q:'Paralel kenarları 30 m ve 50 m, bu kenarlar arasındaki uzaklık 20 m olan yamuk biçimli bir tarlanın alanı kaç m²\'dir?',a:800,u:'m²',s:'Yamuğun alanı = (30 + 50) × 20 ÷ 2 = 800 m².',alt:'Alternatif yol: İki eş yamuk birleştirilince tabanı 80 m, yüksekliği 20 m olan paralelkenar oluşur; alanı 1600 m² olur ve yamuk bunun yarısı olan 800 m²\'dir.'}];
+const L=$('tc_list');
+P.forEach(function(p,i){const d=document.createElement('div');d.className='nx-item';d.innerHTML='<div class="st">'+(i+1)+') '+p.q+'</div><div class="nx-row"><label>Tahmin:</label><input class="nx-in tg" style="width:90px"><label>Cevap:</label><input class="nx-in ca" style="width:90px"><button class="nx-btn">Kontrol et</button></div><div class="nx-note"></div>';
+ const nt=d.querySelector('.nx-note');
+ d.querySelector('.nx-btn').addEventListener('click',function(){const g=parseQ(d.querySelector('.tg').value),c=parseQ(d.querySelector('.ca').value);
+  if(!g||!c){nt.style.display='block';nt.textContent='Yanlış: Tahmin ve cevap kutularına sayı yazılmalıdır.';return;}
+  const ok=c.n/c.d===p.a;const gv=g.n/g.d;const err=Math.round(Math.abs(gv-p.a)/p.a*100);
+  nt.style.display='block';nt.textContent=(ok?'Doğru! ':'Yanlış: ')+p.s+' '+p.alt+' Tahmininiz '+dec(gv,2)+' '+p.u+' idi; gerçek değerden yaklaşık %'+err+' farklıydı.';});
+ L.appendChild(d);});
+$('tc_b').addEventListener('click',function(){const t=+$('tc_t').value,x=parseQ($('tc_x').value),y=parseQ($('tc_y').value),z=parseQ($('tc_z').value),f=$('tc_f'),h=$('tc_h');
+ const X=x?x.n/x.d:NaN,Y=y?y.n/y.d:NaN,Z=z?z.n/z.d:NaN;
+ const need=[['Yarıçap (x)'],['Yarıçap (x), merkez açı (y)'],['Birinci köşegen (x), ikinci köşegen (y)'],['Birinci paralel kenar (x), ikinci paralel kenar (y), yükseklik (z)']][t];
+ const ok=t===0?isFinite(X)&&X>0:t===1?isFinite(X)&&isFinite(Y)&&X>0&&Y>0&&Y<=360:t===2?isFinite(X)&&isFinite(Y)&&X>0&&Y>0:isFinite(X)&&isFinite(Y)&&isFinite(Z)&&X>0&&Y>0&&Z>0;
+ if(!ok){f.className='feedback show no';f.textContent='Yanlış: Bu şekil için gerekli pozitif sayılar yazılmalıdır: '+need[0]+'. (Merkez açı 360°\'yi geçmemelidir.)';h.textContent='';return;}
+ let q,s;
+ if(t===0){q='Yarıçapı '+X+' m olan dairesel bir havuzun yüzeyinin alanı kaç m²\'dir? (π = 3)';s='A = 3 × '+X+'² = '+(3*X*X)+' m²';}
+ else if(t===1){q='Bir cam silecek '+X+' cm uzunluğundadır ve '+Y+'° lik bir açıyla süpürür. Sileceğin temizlediği alan kaç cm²\'dir? (π = 3)';s='A = ('+Y+' ÷ 360) × 3 × '+X+'² = '+dec(Y/360*3*X*X,2)+' cm²';}
+ else if(t===2){q='Köşegen uzunlukları '+X+' cm ve '+Y+' cm olan eşkenar dörtgen biçimli bir uçurtmanın alanı kaç cm²\'dir?';s='A = ('+X+' × '+Y+') ÷ 2 = '+dec(X*Y/2,2)+' cm²';}
+ else{q='Paralel kenarları '+X+' m ve '+Y+' m, yüksekliği '+Z+' m olan yamuk biçimli bir tarlanın alanı kaç m²\'dir?';s='A = ('+X+' + '+Y+') × '+Z+' ÷ 2 = '+dec((X+Y)*Z/2,2)+' m²';}
+ h.innerHTML='<b>Problem:</b> '+q;f.className='feedback show ok';f.textContent='Çözüm: '+s+'. Problemi çözerken önce şekli ve verilen ölçüleri belirleyin, bağıntıyı seçin, sonra işlemi yapıp sonucun mantıklı olup olmadığını kontrol edin.';});
+
+})();
 </script>
 </body></html>

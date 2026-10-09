@@ -21,6 +21,34 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 </style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
 <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
+<style id="yeni-sekme-css">
+.nx-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}
+.nx-row label{font-weight:700;font-size:.9rem}
+.nx-in{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.95rem;width:110px;font-family:inherit}
+.nx-sel{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 10px;font-size:.92rem;font-family:inherit;background:#fff;max-width:100%}
+.nx-btn{border:2px solid var(--primary,#4f46e5);background:var(--primary,#4f46e5);color:#fff;border-radius:10px;padding:8px 14px;font-weight:800;cursor:pointer;font-size:.88rem;font-family:inherit}
+.nx-btn.alt{background:#fff;color:var(--primary,#4f46e5)}
+.nx-chip{border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:6px 10px;font-weight:800;font-size:.82rem;background:#fff;cursor:pointer;font-family:inherit}
+.nx-chip.fin{background:rgba(5,150,105,.12);border-color:#059669}
+.nx-chip.rep{background:rgba(220,38,38,.08);border-color:#dc2626}
+.nx-chip.on{outline:3px solid var(--primary,#4f46e5)}
+.nx-tab{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+.nx-tab th,.nx-tab td{border:1px solid var(--border,#dbe3ff);padding:6px 8px;text-align:center}
+.nx-tab th{background:var(--primary-light,#f3f6ff);color:var(--text,#1f2937)}
+.nx-note{display:none;border-radius:10px;padding:11px 14px;margin:8px 0 12px;font-size:.9rem;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)}
+.nx-item{border:1.5px solid var(--border,#dbe3ff);border-radius:12px;padding:12px;margin:10px 0;background:#fff}
+.nx-item .st{font-weight:700;margin-bottom:8px}
+.nx-opt{border:2px solid var(--border,#dbe3ff);background:#fff;border-radius:10px;padding:7px 12px;font-weight:700;font-size:.86rem;cursor:pointer;margin:3px 4px 3px 0;font-family:inherit}
+.nx-opt.correct{background:rgba(5,150,105,.14);border-color:#059669}
+.nx-opt.wrong{background:rgba(220,38,38,.12);border-color:#dc2626}
+.nx-step{display:inline-block;border:2px solid var(--border,#dbe3ff);border-radius:10px;padding:7px 11px;margin:4px;background:#fff;font-weight:700;font-size:.86rem;cursor:pointer;font-family:inherit}
+.nx-step.used{opacity:.35;pointer-events:none}
+.nx-seq{min-height:42px;border:2px dashed var(--border,#dbe3ff);border-radius:10px;padding:6px;margin:8px 0}
+.nx-therm{position:relative;width:46px;height:220px;border:2px solid var(--border,#dbe3ff);border-radius:23px;background:linear-gradient(#fee2e2 0 50%,#dbeafe 50% 100%);margin:6px 18px 6px 0}
+.nx-mark{position:absolute;left:-8px;width:62px;height:4px;background:#111827}
+.nx-zero{position:absolute;left:-4px;width:54px;height:0;border-top:2px dashed #6b7280}
+.nx-flex{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+</style>
 </head><body>
 <header><div class="badge">7. SINIF MATEMATİK · 4. TEMA: GEOMETRİK NİCELİKLER (2) · MAT.7.4.8</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Daire Diliminin Alanı</h1><p>Merkez açı ile yay uzunluğu arasındaki ilişkiden yararlanarak daire dilimi alan bağıntısına ulaşma</p></header>
 <nav class="tab-bar">
@@ -30,7 +58,7 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <button class="tab-btn" data-tab="tab3">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab4">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab5">ÖZET</button>
-<button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
+<button class="tab-btn" data-tab="adilpizza">🍕 Adil Dilimleme ve Silecek</button><button class="tab-btn" data-tab="tab6">KENDİNİ DENE</button>
 </nav>
 <main class="container">
 
@@ -134,23 +162,13 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <section class="tab-panel" id="tab4">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! Tam alan 8²×3=192; dilim oranı 90/360=1/4; dilim alanı=192/4=48 cm²." data-nomsg="Tekrar düşünelim: önce tam dairenin alanını, sonra dilim oranını bulun.">
+<div class="q-card" data-okmsg="Doğru! Tam alan 8²×3=192; dilim oranı 90/360=1/4; dilim alanı=192/4=48 cm²." data-nomsg="Yanlış: Tam daire alanı 8² × 3 = 192 cm²'dir; 90/360 = 1/4 olduğundan dilim alanı 192 ÷ 4 = 48 cm²'dir.">
 <div class="q-text">1) Yarıçapı 8 cm, merkez açısı 90° olan bir daire diliminin alanı kaç cm²'dir? (π ≈ 3)</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">24</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">48</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">96</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">192</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">24</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">48</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">96</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">192</button></div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! Tam alan 10²×3=300; 150°'lik dilim oranı 150/360=5/12; dilim alanı=300×5/12=125 cm²." data-nomsg="Tekrar düşünelim: dilim oranını (açı/360) bulup tam alanla çarpın.">
+<div class="q-card" data-okmsg="Doğru! Tam alan 10²×3=300; 150°'lik dilim oranı 150/360=5/12; dilim alanı=300×5/12=125 cm²." data-nomsg="Yanlış: Tam daire alanı 10² × 3 = 300 cm²'dir; 150/360 = 5/12 olduğundan dilim alanı 300 × 5/12 = 125 cm²'dir.">
 <div class="q-text">2) Yarıçapı 10 cm, merkez açısı 150° olan bir daire diliminin alanı kaç cm²'dir? (π ≈ 3)</div>
-<div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">100</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">125</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">150</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">75</button>
-</div><div class="feedback"></div></div>
+<div class="choices"><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">100</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">150</button><button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">75</button><button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">125</button></div><div class="feedback"></div></div>
 
 <p class="body-text" style="margin-top:16px"><b>Doğru mu, yanlış mı?</b></p>
 <div class="tf-row" data-answered="">
@@ -158,16 +176,19 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Doğrudur: Dilim alanı = (merkez açı ÷ 360) × dairenin alanıdır.</div>
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Merkez açı 2 katına çıkarsa, aynı yarıçaplı daire diliminin alanı da 2 katına çıkar.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,true)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,true)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Doğrudur: Yarıçap aynı kalırken dilim alanı merkez açıyla doğru orantılıdır; açı 2 katına çıkarsa alan da 2 katına çıkar.</div>
 <div class="tf-row" data-answered="">
 <div class="tf-statement">Merkez açısı 90° olan bir dilim, dairenin yarısına eşittir.</div>
 <button class="tf-btn" data-val="true" onclick="checkTF(this,true,false)">Doğru</button>
 <button class="tf-btn" data-val="false" onclick="checkTF(this,false,false)">Yanlış</button>
 </div>
+<div class="note-box" style="display:none;background:var(--primary-light,#f3f6ff);border:1.5px solid var(--border,#dbe3ff)">Yanlıştır: 90° ÷ 360° = 1/4 olduğundan bu dilim dairenin dörtte biridir; yarısı 180°'lik dilimdir.</div>
 
 </div>
 </section>
@@ -183,6 +204,19 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 </table>
 <div class="note-box"><b>MAT.7.4.8 süreç bileşenleri:</b> Merkez açı ile yay uzunluğu ilişkisini gözden geçirme, analojik akıl yürütmeyle daire dilimi alan bağıntısına ulaşma, bağıntıyı örneklerle değerlendirme.</div>
 </div>
+</section>
+
+<section class="tab-panel" id="adilpizza">
+
+<div class="card"><div class="card-title"><div class="icon">🍕</div>Pizzayı Adil Paylaşmak</div>
+<p class="body-text">Pizzayı kaç kişi paylaşıyor? Her kişiye eşit alan düşmesi için merkez açıların eşit olması gerekir.</p>
+<div class="nx-row"><label for="ap_n">Kişi sayısı:</label><input type="range" id="ap_n" min="2" max="12" value="8"><b id="ap_nv">8</b><label for="ap_r">Yarıçap (cm):</label><input type="range" id="ap_r" min="10" max="30" value="15"><b id="ap_rv">15</b><button class="nx-btn alt" id="ap_u">Adil olmayan dilimleme</button></div>
+<svg id="ap_s" viewBox="0 0 240 240" style="width:100%;max-width:240px"></svg><div class="feedback" id="ap_f"></div></div>
+<div class="card"><div class="card-title"><div class="icon">🚗</div>Cam Silecek Ne Kadar Alan Siler?</div>
+<p class="body-text">Silecek bir daire dilimi çizer. Yarıçapı ve süpürme açısını değiştirin.</p>
+<div class="nx-row"><label for="ap_sr">Silecek boyu (cm):</label><input type="range" id="ap_sr" min="30" max="60" value="40"><b id="ap_srv">40</b><label for="ap_st">Açı (°):</label><input type="range" id="ap_st" min="30" max="180" step="10" value="90"><b id="ap_stv">90</b></div>
+<div class="feedback" id="ap_sf"></div></div>
+
 </section>
 
 <section class="tab-panel" id="tab6">
@@ -213,7 +247,7 @@ function checkChoice(btn,isCorrect){
   const fb=card.querySelector('.feedback');fb.classList.add('show',isCorrect?'ok':'no');fb.textContent=isCorrect?card.dataset.okmsg:card.dataset.nomsg;
 }
 function checkTF(btn,chosenTrue,actualTrue){
-  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';
+  const row=btn.closest('.tf-row');if(row.dataset.answered)return;row.dataset.answered='1';{const nb=row.nextElementSibling;if(nb&&nb.classList.contains('note-box'))nb.style.display='block';}
   const correctBtn=row.querySelector(actualTrue?'[data-val="true"]':'[data-val="false"]');correctBtn.classList.add('correct');
   if(chosenTrue!==actualTrue)btn.classList.add('wrong');
 }
@@ -255,26 +289,7 @@ function updateDs(){
 updateDs();
 
 /* Kendini Dene quiz */
-const quizData=[
- {q:"Yarıçapı 6 cm, merkez açısı 60° olan bir daire diliminin alanı kaç cm²'dir? (π ≈ 3)",
-  choices:["9","18","36","54"],correct:1,
-  expl:"Tam alan 6²×3=108; oran 60/360=1/6; dilim alanı=108/6=18 cm²."},
- {q:"Yarıçapı 15 cm olan bir dairenin 72°'lik diliminin alanı kaç cm²'dir? (π ≈ 3)",
-  choices:["45","90","135","675"],correct:2,
-  expl:"Tam alan 15²×3=675; oran 72/360=1/5; dilim alanı=675/5=135 cm²."},
- {q:"Yarıçapı 6 cm olan bir dairenin, alanı 27 cm² olan diliminin merkez açısı kaç derecedir? (π ≈ 3)",
-  choices:["60°","90°","120°","150°"],correct:1,
-  expl:"Tam alan 6²×3=108; oran 27/108=1/4; açı=360×1/4=90°."},
- {q:"Yarıçapı 18 cm olan dairesel bir pastanın 6 eş dilime ayrılmış hâlinde her dilimin alanı kaç cm²'dir? (π ≈ 3)",
-  choices:["81","162","243","972"],correct:1,
-  expl:"Tam alan 18²×3=972; 6 eş dilim olduğundan her dilim 972/6=162 cm²."},
- {q:"Merkez açısı 45° olan bir daire dilimi, dairenin kaçta kaçıdır?",
-  choices:["1/4","1/6","1/8","1/12"],correct:2,
-  expl:"45/360=1/8."},
- {q:"Yarıçapı 14 cm, merkez açısı 90° olan bir daire diliminin alanı kaç cm²'dir? (π ≈ 22/7)",
-  choices:["77","154","231","308"],correct:1,
-  expl:"Tam alan 14²×22/7=196×22/7=616; oran 90/360=1/4; dilim alanı=616/4=154 cm²."}
-];
+const quizData=[{"q": "Yarıçapı 6 cm, merkez açısı 60° olan bir daire diliminin alanı kaç cm²'dir? (π ≈ 3)", "choices": ["9", "36", "18", "54"], "correct": 2, "expl": "Tam alan 6²×3=108; oran 60/360=1/6; dilim alanı=108/6=18 cm²."}, {"q": "Yarıçapı 15 cm olan bir dairenin 72°'lik diliminin alanı kaç cm²'dir? (π ≈ 3)", "choices": ["135", "45", "90", "675"], "correct": 0, "expl": "Tam alan 15²×3=675; oran 72/360=1/5; dilim alanı=675/5=135 cm²."}, {"q": "Yarıçapı 6 cm olan bir dairenin, alanı 27 cm² olan diliminin merkez açısı kaç derecedir? (π ≈ 3)", "choices": ["60°", "90°", "120°", "150°"], "correct": 1, "expl": "Tam alan 6²×3=108; oran 27/108=1/4; açı=360×1/4=90°."}, {"q": "Yarıçapı 18 cm olan dairesel bir pastanın 6 eş dilime ayrılmış hâlinde her dilimin alanı kaç cm²'dir? (π ≈ 3)", "choices": ["81", "243", "972", "162"], "correct": 3, "expl": "Tam alan 18²×3=972; 6 eş dilim olduğundan her dilim 972/6=162 cm²."}, {"q": "Merkez açısı 45° olan bir daire dilimi, dairenin kaçta kaçıdır?", "choices": ["1/8", "1/4", "1/6", "1/12"], "correct": 0, "expl": "45/360=1/8."}, {"q": "Yarıçapı 14 cm, merkez açısı 90° olan bir daire diliminin alanı kaç cm²'dir? (π ≈ 22/7)", "choices": ["77", "231", "154", "308"], "correct": 2, "expl": "Tam alan 14²×22/7=196×22/7=616; oran 90/360=1/4; dilim alanı=616/4=154 cm²."}];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
   const wrap=document.getElementById('progressDots');wrap.innerHTML='';
@@ -282,7 +297,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Testi Yeniden Başlat</button></div>';
     renderDots();return;
   }
   qAnswered=false;const item=quizData[qIndex];
@@ -300,5 +315,35 @@ function answerQuiz(i){
 function nextQuiz(){qIndex++;renderQuiz();}
 function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
+</script>
+<script>
+(function(){
+
+const $=id=>document.getElementById(id);
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
+function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
+function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
+ if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
+ if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
+ return null;}
+function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
+function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
+function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+let uneven=false;
+function pizza(){const n=+$('ap_n').value,r=+$('ap_r').value;$('ap_nv').textContent=n;$('ap_rv').textContent=r;
+ let angs=[];if(!uneven){for(let i=0;i<n;i++)angs.push(360/n);}else{let w=[];for(let i=0;i<n;i++)w.push(1+((i*7)%5)*0.6);const t=w.reduce(function(a,b){return a+b;},0);angs=w.map(function(x){return 360*x/t;});}
+ let h='<circle cx="120" cy="120" r="105" fill="#fde68a" stroke="#b45309" stroke-width="3"/>',a0=-90;
+ angs.forEach(function(a,i){const a1=a0+a;const x0=120+105*Math.cos(a0*Math.PI/180),y0=120+105*Math.sin(a0*Math.PI/180);h+='<line x1="120" y1="120" x2="'+x0+'" y2="'+y0+'" stroke="#b45309" stroke-width="2"/>';a0=a1;});
+ $('ap_s').innerHTML=h;const f=$('ap_f');const A=3.14*r*r;
+ if(!uneven){f.className='feedback show ok';f.textContent='Her kişiye '+dec(360/n,1)+'° merkez açılı dilim düşer. Dilim alanı = (merkez açı ÷ 360) × πr² = '+dec(A/n,1)+' cm² (π = 3,14 alınmıştır). Yay uzunluğu = 2πr ÷ '+n+' = '+dec(2*3.14*r/n,1)+' cm. Açı eşit olduğu için alanlar da eşittir: dilim alanı merkez açıyla doğru orantılıdır.';}
+ else{const mn=Math.min.apply(null,angs),mx=Math.max.apply(null,angs);f.className='feedback show no';f.textContent='Yanlış: Bu dilimlemede merkez açılar '+dec(mn,1)+'° ile '+dec(mx,1)+'° arasında değişiyor. En küçük dilimin alanı '+dec(A*mn/360,1)+' cm², en büyüğünün alanı '+dec(A*mx/360,1)+' cm². Alan, merkez açıyla doğru orantılı olduğundan eşit olmayan açılar eşit olmayan paylar verir; dilimleme adil değildir.';}}
+$('ap_n').addEventListener('input',pizza);$('ap_r').addEventListener('input',pizza);
+$('ap_u').addEventListener('click',function(){uneven=!uneven;$('ap_u').textContent=uneven?'Adil dilimlemeye dön':'Adil olmayan dilimleme';pizza();});pizza();
+function sil(){const r=+$('ap_sr').value,t=+$('ap_st').value;$('ap_srv').textContent=r;$('ap_stv').textContent=t;const A=t/360*3.14*r*r,f=$('ap_sf');f.className='feedback show ok';
+ f.textContent='Süpürülen alan = ('+t+' ÷ 360) × 3,14 × '+r+'² = '+dec(A,1)+' cm².'+(2*t<=360?' Açı '+(2*t)+'° olursa alan '+dec(2*t/360*3.14*r*r,1)+' cm² olur: açı 2 katına çıkınca alan da 2 katına çıkar.':'');}
+$('ap_sr').addEventListener('input',sil);$('ap_st').addEventListener('input',sil);sil();
+
+})();
 </script>
 </body></html>
