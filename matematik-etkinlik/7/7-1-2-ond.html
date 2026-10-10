@@ -321,9 +321,9 @@ mjx-container{margin:0!important}
 <section class="tab-panel" id="devirli">
 
 <div class="card"><div class="card-title"><div class="icon">♾️</div>Devirli Ondalık Gösterimi Rasyonel Sayıya Çevirme</div>
-<p class="body-text">Önce devretmeyen kısmı (varsa), sonra devreden rakamları yazın. Örneğin \(0{,}2\overline{36}\) için devretmeyen kısım <b>2</b>, devreden kısım <b>36</b>'dır. Devretmeyen kısım yoksa boş bırakın.</p>
-<div class="nx-row"><label>0,</label><input class="nx-in" id="dv_p" placeholder="devretmeyen" maxlength="5"><label>devreden:</label><input class="nx-in" id="dv_r" value="3" maxlength="6"><button class="nx-btn" id="dv_b">Çevir</button></div>
-<div class="feedback" id="dv_f"></div><div id="dv_out" class="body-text"></div></div>
+<p class="body-text">Bu etkinlikte ilk kutuya varsa devretmeyen kısmı, ikinci kutuya ise devreden kısmı yazın.<br>Rasyonel sayıya çevirmek istediğiniz sayıda virgülden sonra devretmeyen rakamlar yoksa, ilk kutuyu boş bırakın.<br>Örneğin \(0{,}2\overline{36}\) için devretmeyen kısım <b>2</b>, devreden kısım <b>36</b>'dır.</p>
+<div class="nx-row"><label>0,</label><input class="nx-in" id="dv_p" placeholder="devretmeyen" maxlength="5"><label> </label><input class="nx-in" id="dv_r" placeholder="devreden" maxlength="6"><button class="nx-btn" id="dv_b">Çevir</button></div>
+<div class="feedback" id="dv_f"></div><div id="dv_out" class="body-text" style="margin-top:16px;"></div></div>
 <div class="card"><div class="card-title"><div class="icon">🔍</div>Paydalar Hakkında Keşif</div>
 <p class="body-text">1/d kesirlerinin ondalık gösterimleri sonlu mu devirli mi? Bir kesre tıklayarak ondalık açılımını görün ve önce tahmin edin. Ardından düğmeyle sonlu olanları (yeşil çerçeve) ve devirli olanları (kırmızı çerçeve) gösterin.</p>
 <div class="nx-row" id="dv_grid"></div><div class="body-text" id="dv_exp"></div>
@@ -498,7 +498,7 @@ document.addEventListener('DOMContentLoaded',function(){
     typeset(fb);
     document.getElementById('clsNext').classList.add('show');
   }
-  document.getElementById('clsNext').addEventListener('click',loadCls);
+  document.getElementById('clsNext').classList.add('show');
   loadCls();
 
   var notPool=[
@@ -535,7 +535,7 @@ document.addEventListener('DOMContentLoaded',function(){
     fb.className='feedback show '+(ok?'ok':'no');
     fb.innerHTML=ok?'✓ Doğru!':'✗ Doğru cevap: '+notCurrent.correct;
     typeset(fb);
-    document.getElementById('notNext').classList.add('show');
+    document.getElementById('clsNext').classList.add('show');
   }
   document.getElementById('notNext').addEventListener('click',loadNot);
   loadNot();
@@ -611,7 +611,6 @@ document.addEventListener('DOMContentLoaded',function(){
   var drawQNot=makeDrawer(notPool);
   var drawQOtk=makeDrawer(otkPool);
 
-  
   function escHtml(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
   var RULES={"siniflandirma": "Sadeleşmiş kesrin paydası yalnızca 2 ve/veya 5 asal çarpanlarından oluşuyorsa ondalık gösterim sonludur; başka bir asal çarpan varsa devirlidir.", "donusum": "Ondalık gösterim, payı paydaya bölerek ya da paydayı 10'un bir kuvvetine genişleterek bulunur.", "notasyon": "Devreden rakam ya da rakam grubunun üzerine çizgi çizilir.", "otk": "Ondalık kısımdaki basamak sayısı kadar paydaya sıfır eklenir; pay, virgülden sonraki rakamlardan oluşur."};
   function explainQ(q){
@@ -745,38 +744,112 @@ document.addEventListener('DOMContentLoaded',function(){
 const $=id=>document.getElementById(id);
 function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){const t=a%b;a=b;b=t;}return a||1;}
 function red(n,d){const g=gcd(n,d);return {n:n/g,d:d/g};}
-function parseQ(t){t=String(t).trim().replace(/−/g,'-').replace(/\s+/g,'').replace(',','.');let m;
- if((m=t.match(/^(-?\d+)\/(-?\d+)$/))){let n=+m[1],d=+m[2];if(d===0)return null;if(d<0){n=-n;d=-d;}return red(n,d);}
- if((m=t.match(/^(-?)(\d+)(?:\.(\d+))?$/))){const f=m[3]||'';let n=+(m[2]+f),d=Math.pow(10,f.length);if(m[1])n=-n;return red(n,d);}
- return null;}
-function fq(q){const s=q.n<0?'−':'';const n=Math.abs(q.n);return q.d===1?s+n:s+n+'/'+q.d;}
-function dec(x,k){let s=String(Math.round(x*Math.pow(10,k))/Math.pow(10,k));return s.replace('.',',').replace('-','−');}
-function fbk(id,ok,txt){const f=$(id);f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'Doğru! ':'Yanlış: ')+txt;}
+
+function setMath(el,html){el.innerHTML=html;if(typeof typeset==='function'){typeset(el);}}
 
 function expand(n,d){let ip=Math.floor(n/d),r=n%d,seen={},digs=[];while(r!==0&&seen[r]===undefined){seen[r]=digs.length;r*=10;digs.push(Math.floor(r/d));r%=d;}
  if(r===0)return {ip:ip,pre:digs.join(''),rep:''};const s=seen[r];return {ip:ip,pre:digs.slice(0,s).join(''),rep:digs.slice(s).join('')};}
 function texExp(e){return e.ip+'{,}'+e.pre+(e.rep?'\\overline{'+e.rep+'}':'');}
-function setMath(el,html){el.innerHTML=html;if(typeof typeset==='function'){typeset(el);}}
-function ival(t){return String(parseInt(t,10));}
-$('dv_b').addEventListener('click',function(){const p=$('dv_p').value.trim(),r=$('dv_r').value.trim();const f=$('dv_f');
- if(!/^\d*$/.test(p)||!/^\d+$/.test(r)){f.className='feedback show no';f.textContent='Yalnızca rakam yazılmalıdır; devreden kısım boş olamaz.';$('dv_out').innerHTML='';return;}
- const k=p.length,n=r.length;const pv=p?parseInt(p,10):0;const num=parseInt(p+r,10)-pv;const den=Math.pow(10,k)*(Math.pow(10,n)-1);const q=red(num,den);
- const dd=Math.pow(10,k+n)-Math.pow(10,k);
- const L=['\\(x=0{,}'+p+'\\overline{'+r+'}\\)',
-  '\\(10^{'+k+'}\\cdot x='+ival(p||'0')+'{,}\\overline{'+r+'}\\)',
-  '\\(10^{'+(k+n)+'}\\cdot x='+ival(p+r)+'{,}\\overline{'+r+'}\\)',
-  'Taraf tarafa çıkarılır: \\((10^{'+(k+n)+'}-10^{'+k+'})\\cdot x='+ival(p+r)+'-'+pv+'\\)',
-  '\\('+dd+'\\cdot x='+num+'\\;\\Rightarrow\\;x=\\dfrac{'+num+'}{'+dd+'}'+((q.n!==num||q.d!==dd)?'=\\dfrac{'+q.n+'}{'+q.d+'}':'')+'\\)'];
- f.className='feedback show ok';
- setMath(f,'\\(0{,}'+p+'\\overline{'+r+'}='+(q.d===1?q.n:'\\dfrac{'+q.n+'}{'+q.d+'}')+'\\)'+(q.d===1?' — Devreden rakamı 9 olan ondalık gösterim bir tam sayıya eşittir: \\(0{,}\\overline{9}=1\\).':''));
- setMath($('dv_out'),L.map(function(t){return '<div>• '+t+'</div>';}).join(''));});
-const g=$('dv_grid');for(let d=2;d<=30;d++){const b=document.createElement('button');b.className='nx-chip';b.textContent='1/'+d;b.dataset.d=d;g.appendChild(b);}
-g.addEventListener('click',function(e){const b=e.target.closest('.nx-chip');if(!b)return;g.querySelectorAll('.nx-chip').forEach(function(c){c.classList.remove('on');});b.classList.add('on');const d=+b.dataset.d;const ex=expand(1,d);
- setMath($('dv_exp'),'\\(\\dfrac{1}{'+d+'}='+texExp(ex)+'\\)'+' → '+(ex.rep?'devirli':'sonlu')+' ondalık gösterim.');});
+
+$('dv_b').addEventListener('click', function(){
+  const p = $('dv_p').value.trim();
+  const r = $('dv_r').value.trim();
+  const f = $('dv_f');
+  const out = $('dv_out');
+
+  if (!/^\d*$/.test(p) || !/^\d+$/.test(r)) {
+    f.className = 'feedback show no';
+    f.textContent = 'Yalnızca rakam yazılmalıdır; devreden kısım boş olamaz.';
+    out.innerHTML = '';
+    return;
+  }
+
+  const k = p.length;
+  const n = r.length;
+  const pv = p ? parseInt(p, 10) : 0;
+  const fullStr = p + r;
+  const fullNum = parseInt(fullStr, 10);
+  const num = fullNum - pv;
+  const den = Math.pow(10, k) * (Math.pow(10, n) - 1);
+  const q = red(num, den);
+
+  f.className = 'feedback show ok';
+  setMath(f, '\\(0\\,{' + (p ? ',' + p : '') + '\\overline{' + r + '}} = ' + (q.d === 1 ? q.n : '\\dfrac{' + q.n + '}{' + q.d + '}') + '\\)');
+  let html = '';
+
+  // 1. YÖNTEM
+  html += '<div style="background:var(--primary-light); border-left:4px solid var(--primary); padding:12px 14px; border-radius:10px;">';
+  html += '<b style="color:var(--primary);">1. YÖNTEM: 10\'un Kuvvetleriyle Genişletme</b>';
+  html += '<div style="margin-top:6px;">\\(x = 0\\,{' + (p ? ',' + p : '') + '\\overline{' + r + '}}\\) olsun.</div>';
+  
+  if (k > 0) {
+    let powK = Math.pow(10, k);
+    let shiftedBefore = pv + "," + r;
+    html += '<div style="margin-top:4px;">Virgülden sonraki devretmeyen basamak sayısı \\(' + k + '\\) olduğundan, denklemi \\(10^{' + k + '} (' + powK + ')\\) ile çarpalım:</div>';
+    html += '\\(10^{' + k + '}\\cdot x = ' + powK + '\\cdot x = ' + shiftedBefore + '\\,{' + '\\overline{' + r + '}}\\)';
+  }
+
+  let totalPow = k + n;
+  let multVal = Math.pow(10, totalPow);
+  let shiftedTotal = p + r + "," + r;
+  html += '<div style="margin-top:4px;">Virgülden sonraki toplam basamak sayısı \\(' + totalPow + '\\) olduğundan, denklemi \\(10^{' + totalPow + '} (' + multVal + ')\\) ile çarpalım:</div>';
+  html += '\\(10^{' + totalPow + '}\\cdot x = ' + multVal + '\\cdot x = ' + shiftedTotal + '\\,{' + '\\overline{' + r + '}}\\)';
+
+  html += '<div style="margin-top:4px;">Taraf tarafa çıkarma yapalım:</div>';
+  if (k > 0) {
+    let subMult = Math.pow(10, k);
+    html += '\\((' + multVal + 'x) - (' + subMult + 'x) = ' + fullNum + ' - ' + pv + '\\)';
+  } else {
+    html += '\\((' + multVal + 'x) - x = ' + fullNum + ' - 0\\)';
+  }
+
+  let diffCoef = multVal - (k > 0 ? Math.pow(10, k) : 1);
+  html += '<div style="margin-top:4px;">\\(\\Rightarrow ' + diffCoef + 'x = ' + num + ' \\Rightarrow x = \\dfrac{' + num + '}{' + diffCoef + '}' + (q.n !== num || q.d !== diffCoef ? ' = \\dfrac{' + q.n + '}{' + q.d + '}' : '') + '\\)</div>';
+  html += '</div>';
+
+  // 2. YÖNTEM
+  html += '<div style="background:#eafaf3; border-left:4px solid var(--success); padding:12px 14px; border-radius:10px; margin-top:12px;">';
+  html += '<b style="color:#059669;">2. YÖNTEM: Doğrudan Kesir Şeklinde Yazma Kuralı</b>';
+  html += '<ul style="margin-left:18px; margin-top:6px; font-size:0.9rem;">';
+  html += '<li><b>Paya yazılacaklar:</b><br>Sayının tamamı (virgülsüz ve devirsiz) \\(\\rightarrow\\) \\(' + fullNum + '\\)<br>Devretmeyen kısım \\(\\rightarrow\\) \\(' + pv + '\\)<br>Çıkarma yapılır: \\(' + fullNum + ' - ' + pv + ' = ' + num + '\\)</li>';
+  html += '<li><b>Paydaya yazılacaklar:</b><br>Virgülden sonra devreden basamak sayısı kadar \\(9\\) (' + n + ' tane)<br>Devretmeyen basamak sayısı kadar \\(0\\) (' + k + ' tane)<br>\\(\\rightarrow\\) \\(' + diffCoef + '\\)</li>';
+  html += '</ul>';
+  html += '<div style="margin-top:8px; font-weight:bold;">\\(0\\,{' + (p ? ',' + p : '') + '\\overline{' + r + '}} = \\dfrac{' + num + '}{' + diffCoef + '}' + ((q.n !== num || q.d !== diffCoef) ? ' = \\dfrac{' + q.n + '}{' + q.d + '}' : '') + '\\)</div>';
+  html += '</div>';
+
+  setMath(out, html);
+});
+
+const g=$('dv_grid');
+for(let d=2;d<=30;d++){
+  const b=document.createElement('button');
+  b.className='nx-chip';
+  b.textContent='1/'+d;
+  b.dataset.d=d;
+  g.appendChild(b);
+}
+g.addEventListener('click',function(e){
+  const b=e.target.closest('.nx-chip');
+  if(!b)return;
+  g.querySelectorAll('.nx-chip').forEach(function(c){c.classList.remove('on');});
+  b.classList.add('on');
+  const d=+b.dataset.d;
+  const ex=expand(1,d);
+  setMath($('dv_exp'),'\\(\\dfrac{1}{'+d+'}='+texExp(ex)+'\\)'+' → '+(ex.rep?'devirli':'sonlu')+' ondalık gösterim.');
+});
 let shown=false;
-$('dv_obs').addEventListener('click',function(){shown=!shown;
- g.querySelectorAll('.nx-chip').forEach(function(c){c.classList.remove('fin','rep');if(shown){const ex=expand(1,+c.dataset.d);c.classList.add(ex.rep?'rep':'fin');}});
- $('dv_note').style.display=shown?'block':'none';$('dv_obs').textContent=shown?'Renkleri ve Gözlemi Gizle':'Renkleri ve Gözlemi Göster';});
+$('dv_obs').addEventListener('click',function(){
+  shown=!shown;
+  g.querySelectorAll('.nx-chip').forEach(function(c){
+    c.classList.remove('fin','rep');
+    if(shown){
+      const ex=expand(1,+c.dataset.d);
+      c.classList.add(ex.rep?'rep':'fin');
+    }
+  });
+  $('dv_note').style.display=shown?'block':'none';
+  $('dv_obs').textContent=shown?'Renkleri ve Gözlemi Gizle':'Renkleri ve Gözlemi Göster';
+});
 
 })();
 </script>
