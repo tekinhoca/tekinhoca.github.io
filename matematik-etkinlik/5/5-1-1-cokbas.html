@@ -51,13 +51,13 @@ footer{margin-top:28px;background:#1a0033;color:#e8d5ff;padding:24px 18px;text-a
 <div class="card"><div class="card-title"><div class="icon">🛠️</div>Sayı Oluşturucu — kendi sayını yap, okunuşunu keşfet</div>
 <p class="body-text">Aşağıdaki yedi kutuya istediğin rakamları yaz. Oluşan sayı, bölükleri ve Türkçe okunuşu otomatik olarak görünecek.</p>
 <div class="builder-row">
-<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b6" value="4"><label>Milyonlar</label></div>
-<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b5" value="2"><label>Yüz binler</label></div>
-<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b4" value="0"><label>On binler</label></div>
-<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b3" value="5"><label>Binler</label></div>
-<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b2" value="0"><label>Yüzler</label></div>
-<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b1" value="1"><label>Onlar</label></div>
-<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b0" value="8"><label>Birler</label></div>
+<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b6" placeholder="?" autocomplete="off"><label>Milyonlar</label></div>
+<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b5" placeholder="?" autocomplete="off"><label>Yüz binler</label></div>
+<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b4" placeholder="?" autocomplete="off"><label>On binler</label></div>
+<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b3" placeholder="?" autocomplete="off"><label>Binler</label></div>
+<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b2" placeholder="?" autocomplete="off"><label>Yüzler</label></div>
+<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b1" placeholder="?" autocomplete="off"><label>Onlar</label></div>
+<div class="builder-cell"><input type="text" maxlength="1" inputmode="numeric" id="b0" placeholder="?" autocomplete="off"><label>Birler</label></div>
 </div>
 <div class="number-display"><div class="big-number" id="builderNumber">4 205 018</div></div>
 <div class="boluk-grid"><div class="boluk-card"><div class="digits" id="builderMilyon">4</div><div class="name">Milyonlar Bölüğü</div></div><div class="boluk-card"><div class="digits" id="builderBinler">205</div><div class="name">Binler Bölüğü</div></div><div class="boluk-card"><div class="digits" id="builderBirler">018</div><div class="name">Birler Bölüğü</div></div></div>
@@ -142,13 +142,13 @@ kullanılır.</div>
 <div class="card"><div class="card-title"><div class="icon">✍️</div>Okunuşu verilen sayıyı yaz</div>
 <p class="body-text">Aşağıda okunuşu verilen sayıyı rakamlarla yaz.</p>
 <div class="reading-box" id="ykText"></div>
-<div class="field-row"><input class="answer-input" id="ykInput" type="text" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="Rakamlarla yaz"><button class="submit-btn" id="ykBtn" onclick="checkYK()">Kontrol et</button><button class="ghost-btn" onclick="newYK()">Yeni sayı →</button></div>
+<div class="field-row"><input class="answer-input" id="ykInput" type="text" inputmode="numeric" maxlength="14" autocomplete="off" placeholder="?"><button class="submit-btn" id="ykBtn" onclick="checkYK()">Kontrol et</button><button class="ghost-btn" onclick="newYK()">Yeni sayı →</button></div>
 <div class="feedback" id="ykFb"></div></div></section>
 
 <section class="tab-panel" id="tab9"><div class="card"><div class="card-title"><div class="icon">⚖️</div>Sayıları karşılaştır</div>
 <div class="def-box"><b>Kural:</b> Basamak sayısı fazla olan doğal sayı daha büyüktür. Basamak sayıları eşitse sayılar soldan sağa, ilk farklı rakama kadar karşılaştırılır.</div>
-<div class="two-col"><div><label class="mini-label">1. sayı</label><input class="answer-input" id="kaInput" type="text" inputmode="numeric" maxlength="12" placeholder="Örn. 48205631"></div>
-<div><label class="mini-label">2. sayı</label><input class="answer-input" id="kbInput" type="text" inputmode="numeric" maxlength="12" placeholder="Örn. 48250631"></div></div>
+<div class="two-col"><div><label class="mini-label">1. sayı</label><input class="answer-input" id="kaInput" type="text" inputmode="numeric" maxlength="12" placeholder="?"></div>
+<div><label class="mini-label">2. sayı</label><input class="answer-input" id="kbInput" type="text" inputmode="numeric" maxlength="12" placeholder="?"></div></div>
 <div class="field-row"><button class="submit-btn" onclick="kars()">Karşılaştır</button></div>
 <div class="feedback" id="kaFb"></div></div>
 <div class="card"><div class="card-title"><div class="icon">🎯</div>Hangisi daha büyük?</div>
@@ -236,7 +236,9 @@ function bolukHTML(d){const gs=fmt(d).split(NB),nm=BNAME.slice(4-gs.length);retu
 /* ---- Sayi Olusturucu (SAYI DEDEKTIFI) ---- */
 function updateBuilder(){
   const ids=['b6','b5','b4','b3','b2','b1','b0'];
-  const digits=ids.map(id=>{let v=$(id).value.replace(/[^0-9]/g,'').slice(0,1);$(id).value=v;return v===''?0:parseInt(v,10);});
+  const raw=ids.map(id=>{let v=$(id).value.replace(/[^0-9]/g,'').slice(0,1);$(id).value=v;return v});
+  if(raw.every(v=>v==='')){$('builderNumber').textContent='?';$('builderMilyon').textContent='?';$('builderBinler').textContent='???';$('builderBirler').textContent='???';$('builderReading').textContent='Rakamları kutulara yaz.';return}
+  const digits=raw.map(v=>v===''?0:parseInt(v,10));
   const n=digits[0]*1000000+digits[1]*100000+digits[2]*10000+digits[3]*1000+digits[4]*100+digits[5]*10+digits[6];
   $('builderNumber').textContent=fmt(n);
   $('builderMilyon').textContent=digits[0];
@@ -244,7 +246,7 @@ function updateBuilder(){
   $('builderBirler').textContent=String(digits[4])+String(digits[5])+String(digits[6]);
   $('builderReading').textContent=readBig(n);
 }
-['b6','b5','b4','b3','b2','b1','b0'].forEach(id=>$(id).addEventListener('input',updateBuilder));
+['b6','b5','b4','b3','b2','b1','b0'].forEach(id=>{$(id).addEventListener('input',updateBuilder);$(id).addEventListener('focus',()=>$(id).select())});
 updateBuilder();
 
 /* ---- Basamak degeri ve cozumleme ---- */
