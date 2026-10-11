@@ -1,343 +1,189 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eşitliğin Korunumu ve İşlem Özellikleri | 5. Sınıf Matematik</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<script>
-window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},options:{skipHtmlTags:['script','noscript','style','textarea','pre']}};
-</script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" id="MathJax-script" async></script>
-<style>
-:root{
-  --primary:#8f1025;--primary2:#b51d35;--primary-light:#f9e8ec;
-  --accent:#d94b62;--success:#059669;--success-light:#eafaf3;
-  --danger:#dc2626;--warning:#d97706;--warning-light:#fff7e6;
-  --text:#1b1d24;--muted:#687080;--border:#e4e6eb;--bg:#f7f8fa;
-  --dark:#111217;--darkred:#4d0714;--shadow:0 4px 18px rgba(25,18,20,.07)
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}
-h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}
-.container{max-width:900px;margin:0 auto;padding:0 16px}
-header{
-  background:radial-gradient(ellipse at center,#050505 0%,#050505 34%,#35050e 66%,#710f22 100%);
-  color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;
-  box-shadow:0 8px 40px rgba(70,5,18,.35)
-}
-header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.16}
-header:before{width:230px;height:230px;background:#d94b62;left:-90px;top:-130px}
-header:after{width:260px;height:260px;background:#8f1025;right:-100px;bottom:-180px}
-.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,210,220,.3);
-border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;
-text-transform:uppercase;margin-bottom:9px;color:#ffe4e9;position:relative}
-header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}
-header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(255,190,205,.18);margin-top:6px;position:relative}
-header p{font-size:.94rem;color:rgba(255,240,244,.78);margin-top:3px;max-width:650px;margin-left:auto;margin-right:auto;position:relative}
-.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#5c0716);color:#fff;border:none;
-border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(120,10,35,.35);
-opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}
-.basa-don:hover{transform:translateY(-3px)}
-.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:880px;padding:0 12px;position:relative;z-index:10}
-.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;
-font-size:clamp(.7rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(20,20,50,.08);white-space:nowrap;transition:.2s}
-.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
-.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}
-.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}
-.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem}
-.def-box{background:var(--primary-light);border-left:4px solid var(--primary);border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.94rem}
-.def-box b{color:var(--primary)}
-.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
-.gen-box{background:var(--success-light);border-left:4px solid #10b981;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem;font-weight:700}
-.note-box{background:#f3f4f6;border-left:4px solid #6b7280;border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}
-.context-list{margin:10px 0 4px 20px}.context-list li{margin:6px 0;font-size:.92rem;padding-left:2px}
-.math-display{background:#171a21;color:#ffd6de;border-radius:14px;padding:18px;text-align:center;font-size:1.08rem;margin:14px 0;overflow-x:auto}
-.math-display mjx-container{color:#ffd6de!important}
-p.body-text{font-size:.93rem;margin:8px 0}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.info-tile{background:#fafafa;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
-.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}
-.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}
-.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.choice-btn{background:#f8f8fa;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.98rem;cursor:pointer;transition:.15s;color:var(--text)}
-.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}
-.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.choice-btn:disabled{cursor:default}
-.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}
-.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}
-.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
-.next-row{display:flex;justify-content:flex-end;margin-top:12px}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary);
-padding:8px 18px;border-radius:99px;font-weight:800;cursor:pointer;display:none}.ghost-btn.show{display:inline-block}
-.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.field-row label{font-weight:800;font-size:.85rem;color:var(--text);min-width:70px}
-.answer-input{border:2px solid #edd6dc;border-radius:12px;padding:9px 12px;width:120px;text-align:center;font-weight:900;outline:none;font-size:.95rem}
-.answer-input:focus{border-color:var(--primary)}.submit-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}
-.submit-btn:hover{filter:brightness(1.08)}.submit-btn:disabled{opacity:.5;cursor:default}
-.il-result{text-align:center;font-weight:800;font-size:.92rem;margin-top:12px;min-height:20px;color:var(--primary)}
-.action-row{display:flex;justify-content:center;gap:10px;margin-top:14px}.action-row.hidden{display:none}
-.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
-.ex-header{background:linear-gradient(90deg,var(--primary-light),#fff0f3);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}
-.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}
-.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}
-.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
-.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
-.progress-bar{background:#171a21;border-radius:18px;padding:18px 20px;color:#fff;margin-bottom:16px}
-.progress-top{display:flex;justify-content:space-between;font-size:.78rem;opacity:.8;margin-bottom:8px;font-weight:800;letter-spacing:.02em}
-.progress-track{height:8px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(90deg,#e66b80,#8f1025);border-radius:5px;transition:.4s}
-.score-row{display:flex;justify-content:space-between;align-items:center;margin-top:14px}.score-num{font-size:1.6rem;font-weight:900;color:#ffd6de}
-.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}.summary-item{background:#f8f8fa;border:1.5px solid var(--border);border-radius:14px;padding:14px}
-.summary-item b{color:var(--primary);display:block;margin-bottom:4px;font-size:.9rem}.summary-item span{font-size:.85rem;color:var(--muted)}
-.mini-task{background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px}.mini-task h4{color:var(--primary);margin-bottom:9px}
-.check-mini{margin-top:9px;background:var(--primary);color:#fff;border:none;border-radius:50px;padding:7px 16px;font-weight:800;cursor:pointer}
-.mini-feedback{font-size:.83rem;font-weight:800;margin-top:7px;min-height:18px}
-.tf-row{display:flex;gap:10px;margin:14px 0}.tf-btn{flex:1;background:#f8f8fa;border:2px solid var(--border);border-radius:12px;padding:12px;font-weight:800;font-size:.98rem;cursor:pointer}
-.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.tf-btn:disabled{cursor:default}
-.balance{display:grid;grid-template-columns:1fr 70px 1fr;gap:10px;align-items:end;margin:18px 0}
-.balance-side{min-height:110px;background:#fafafa;border:2px solid #d9dce3;border-radius:16px;padding:14px;text-align:center}
-.balance-center{height:90px;display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--primary)}
-.value{font-family:'Baloo 2';font-size:1.8rem;font-weight:900}.op-row{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
-.small-btn{background:#fff;border:1.5px solid #d9dce3;border-radius:10px;padding:7px 10px;font-weight:800;cursor:pointer}.small-btn:hover{border-color:var(--primary)}
-.rule-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.9rem}.rule-table th,.rule-table td{border:1px solid #dfe1e6;padding:9px;text-align:center}.rule-table th{background:var(--primary);color:#fff}
-.pattern-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;margin:15px 0}.pattern-term{min-width:48px;padding:9px 12px;background:var(--primary-light);border:2px solid #e8bdc6;border-radius:12px;text-align:center;font-weight:900;color:var(--primary)}
-.arrow{font-weight:900;color:var(--muted)}
-.shape-stage{display:flex;justify-content:center;gap:26px;flex-wrap:wrap;margin:16px 0}.shape-step{border:1.5px solid var(--border);border-radius:16px;padding:12px;text-align:center;background:#fff}
-.blocks{display:grid;gap:3px;justify-content:center;margin:12px auto 2px}.blocks.grid-a{grid-template-columns:repeat(5,20px)}.blocks.grid-b{grid-template-columns:repeat(3,20px)}.block{width:20px;height:20px;border-radius:4px;background:var(--primary);border:1px solid rgba(255,255,255,.45)}
-.flow{display:flex;flex-direction:column;align-items:center;gap:7px;margin:16px auto;max-width:430px}.flow-node{padding:10px 18px;border:2px solid var(--primary);background:var(--primary-light);font-weight:900;text-align:center;min-width:180px}
-.flow-node.start,.flow-node.end{border-radius:50px;background:#fff}.flow-node.action{border-radius:7px}.flow-node.decision{transform:skew(-8deg);background:#fff7ed;border-color:#d97706}.flow-arrow{color:var(--primary);font-size:1.25rem}
-.code-box{background:#171a21;color:#f4f4f5;border-radius:14px;padding:16px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.87rem;white-space:pre-wrap;line-height:1.7;overflow:auto}
-.rank-box{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.rank-item{padding:12px 8px;border:2px solid var(--border);border-radius:12px;text-align:center;font-weight:900;background:#fafafa}
-footer{margin-top:28px;background:linear-gradient(135deg,#7d0e21,#3a050e);color:#fff;padding:22px 16px;text-align:center;font-size:.82rem}
-footer .foot-title{font-family:'Baloo 2';font-size:1.05rem;font-weight:800}
-@media(max-width:620px){.two-col,.three-col,.summary-grid{grid-template-columns:1fr}.choices{grid-template-columns:1fr}.balance{grid-template-columns:1fr}.balance-center{height:35px}.rank-box{grid-template-columns:1fr 1fr}.tab-bar{gap:5px}.tab-btn{padding:8px 10px}.card{padding:16px}}
-</style>
-</head>
-<body>
-<button class="basa-don" id="basaDon">↑ Başa Dön</button>
-<header>
-  <div class="container">
-    <span class="badge">5. Sınıf Matematik · 2. Tema</span>
-    <img class="logo" src="logo.gif" alt="TekinHoca Logo" onerror="this.style.display='none'">
-    <h1>⚖️ Eşitliğin Korunumu ve İşlem Özellikleri</h1>
-    <p>MAT.5.2.1. Eşitliğin korunumuna ve işlem özelliklerine yönelik çıkarım yapabilme</p>
-  </div>
-</header>
-<div class="container">
-<nav class="tab-bar">
-<button class="tab-btn active" data-tab="konu">📖 Konu Anlatımı</button>
-<button class="tab-btn" data-tab="kesfet">⚖️ Keşfet ve Modelle</button>
-<button class="tab-btn" data-tab="ozellik">🔄 İşlem Özellikleri</button>
-<button class="tab-btn" data-tab="dagilma">🧩 Dağılmayı Gör</button>
-<button class="tab-btn" data-tab="ornekler">✏️ Örnekler</button>
-<button class="tab-btn" data-tab="calisma">📝 Çalışma</button>
-<button class="tab-btn" data-tab="oyun">🎮 Kendini Dene</button>
-<button class="tab-btn" data-tab="ozet">📋 Özet</button>
-</nav>
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>5. Sınıf Matematik — MAT.5.2.1 Eşitliğin Korunumu ve İşlem Özellikleri</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"><style>
+:root{--primary:#8f1025;--primary2:#b51d35;--primary-light:#f9e8ec;--accent:#d94b62;--success:#059669;--success-light:#eafaf3;--danger:#dc2626;--warning:#d97706;--warning-light:#fff7e6;--text:#1a1a2e;--muted:#6b7280;--border:#f0d5db;--bg:#fbf6f7;--dark:#2b0510;--shadow:0 4px 18px rgba(0,0,0,.08)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#050505 0%,#050505 34%,#35050e 66%,#710f22 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(143,16,37,.35)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#d94b62;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#b51d35;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,214,222,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#ffd6de;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(255,214,222,.18);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(255,255,255,.8);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#2b0510);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(143,16,37,.35);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.68rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(143,16,37,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#f3f6f9;border-left:4px solid #718096}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fafcfe;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#fbf6f7;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #f0d5db;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#fbf6f7);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#2b0510;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#ffd6de}
+.tf-row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap;align-items:center;background:#fafcfe;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px}.tf-statement{flex:1;min-width:220px;font-weight:700;font-size:.92rem}.tf-btn{border:2px solid var(--border);background:#fff;border-radius:10px;padding:7px 16px;font-weight:800;cursor:pointer;font-size:.86rem}.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}
+.match-row{display:flex;align-items:center;gap:10px;margin:9px 0;flex-wrap:wrap}.match-term{min-width:150px;font-weight:800;color:var(--primary);font-size:.92rem}.match-row select{flex:1;min-width:220px;border:2px solid #f0d5db;border-radius:10px;padding:7px 10px;font-weight:700;font-size:.85rem}
+footer{margin-top:28px;background:#2b0510;color:#ffd6de;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.number-display{background:var(--primary-light);border-radius:16px;padding:18px;text-align:center;margin:14px 0}.number-display .big-number{font-family:'Baloo 2';font-size:clamp(1.6rem,6vw,2.4rem);font-weight:800;color:var(--primary);letter-spacing:2px}.number-display .unit{font-weight:700;color:var(--muted);margin-top:2px}.number-display .caption{font-size:.85rem;color:var(--muted);margin-top:6px}
+.boluk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.boluk-card{background:#fff;border:2px solid var(--border);border-radius:14px;padding:14px 8px;text-align:center}.boluk-card .digits{font-family:'Baloo 2';font-size:1.5rem;font-weight:800;color:var(--accent)}.boluk-card .name{font-size:.8rem;font-weight:700;color:var(--muted);margin-top:4px}
+.builder-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:16px 0}.builder-cell{display:flex;flex-direction:column;align-items:center;gap:4px}.builder-cell input{width:52px;height:56px;text-align:center;font-family:'Baloo 2';font-size:1.4rem;font-weight:800;border:2px solid var(--border);border-radius:12px;color:var(--primary)}.builder-cell input:focus{border-color:var(--primary);outline:none}.builder-cell label{font-size:.68rem;font-weight:800;color:var(--muted);text-align:center;max-width:60px}
+.reading-box{background:#2b0510;color:#f9e8ec;border-radius:14px;padding:16px 18px;text-align:center;font-family:'Baloo 2';font-size:1.1rem;font-weight:700;margin:14px 0}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.boluk-grid{grid-template-columns:1fr 1fr 1fr}.builder-cell input{width:40px;height:46px;font-size:1.1rem}}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
 
-<section class="tab-panel active" id="konu">
-<div class="card">
-<div class="card-title"><div class="icon">⚖️</div>Eşitlik ne anlatır?</div>
-<div class="def-box"><b>Eşitlik</b>, iki sayı cümlesinin aynı değeri gösterdiğini belirtir. Eşitlik işareti (=) yalnızca “sonuç geliyor” anlamında değil, iki tarafın aynı değerde olduğunu gösteren bir ilişkidir.</div>
-<p class="body-text">Örneğin \(8+4=12\) eşitliğinde sol tarafın değeri 12, sağ tarafın değeri de 12'dir. Eşitliğin iki tarafında da aynı işlem uygulandığında bu ilişki korunabilir.</p>
-<div class="math-display">\[8+4=12 \qquad\Longrightarrow\qquad (8+4)+5=12+5\]</div>
-<div class="gen-box">Genelleme: Bir eşitliğin her iki tarafına aynı sayı eklenirse veya her iki tarafından aynı sayı çıkarılırsa eşitlik korunur. İki taraf aynı sayı ile çarpılırsa ya da 0 dışında aynı sayıya bölünürse de eşitlik korunur.</div>
-</div>
-<div class="card">
-<div class="card-title"><div class="icon">🔄</div>Toplama ve çarpma işlemlerinde özellikler</div>
-<div class="two-col">
-<div class="info-tile"><h4>Değişme özelliği</h4><p>Toplananların veya çarpanların yerleri değişse de sonuç değişmez.</p><div class="math-display">\(7+13=13+7\)<br>\(4\times6=6\times4\)</div></div>
-<div class="info-tile"><h4>Birleşme özelliği</h4><p>Üç veya daha fazla sayı toplanırken ya da çarpılırken gruplama değişse de sonuç değişmez.</p><div class="math-display">\((2+5)+8=2+(5+8)\)<br>\((2\times5)\times4=2\times(5\times4)\)</div></div>
-</div>
-</div>
-<div class="card">
-<div class="card-title"><div class="icon">🧩</div>Çarpmanın dağılma özelliği</div>
-<p class="body-text">Çarpanlardan birini iki sayının toplamı şeklinde parçalara ayırıp her parçayı diğer çarpanla çarparak sonuçları toplayabiliriz. Çıkarma ile de benzer biçimde parçalayabiliriz.</p>
-<div class="math-display">\[7\times(5+3)=7\times5+7\times3\]\[7\times(10-2)=7\times10-7\times2\]</div>
-<div class="tip-box">Bu özellik, özellikle zihinden işlem yaparken işe yarar.<br>Örneğin, 8 ile 19'u zihinden daha kolay çarpmak için şu yöntemleri kullanabiliriz:<br>\(8\times19=8\times(20-1)=(8\times20)-(8\times1)=160-8=152\)<br>\(8\times19=(10-2)\times19=(10\times19)-(2\times19)=190-38=152\)<br>\(8\times19=8\times(10+9)=(8\times10)+(8\times9)=80+72=152\)</div>
-</div>
-<div class="card">
-<div class="card-title"><div class="icon">🔎</div>Öğrenme hedefi</div>
-<p class="body-text">Bu etkinlikte amaç yalnızca işlemleri yapmak değil; sayı cümlelerini karşılaştırmak, bir varsayım oluşturmak, örneklerle denemek ve sonunda sözlü ya da sembolik bir önerme ile düşünceni doğrulamaktır.</p>
-<ul class="context-list"><li>İşlem yapmadan iki tarafın ilişkisini incele.</li><li>“Her zaman böyle mi?” sorusunu sor.</li><li>Farklı sayılarla deneme yap.</li><li>Sonucunu matematiksel bir cümleyle ifade et.</li></ul>
-</div>
-</section>
 
-<section class="tab-panel" id="kesfet">
-<div class="card">
-<div class="card-title"><div class="icon">⚖️</div>Eşitlik terazisini dene</div>
-<p class="body-text">Terazinin iki tarafında başlangıçta aynı değer vardır. Aşağıdaki düğmelerle <b>iki tarafa aynı değişikliği</b> uygula. Sonucun değişip değişmediğini gözlemle.</p>
-<div class="balance">
-<div class="balance-side"><div>Sol taraf</div><div class="value" id="balL">12</div></div>
-<div class="balance-center" id="balIcon">⚖️</div>
-<div class="balance-side"><div>Sağ taraf</div><div class="value" id="balR">12</div></div>
-</div>
-<div class="op-row">
-<button class="small-btn" onclick="balBoth(3)">+3 iki tarafa</button>
-<button class="small-btn" onclick="balBoth(-2)">−2 iki tarafa</button>
-<button class="small-btn" onclick="balBoth(4)">+4 iki tarafa</button>
-<button class="small-btn" onclick="balReset()">Sıfırla</button>
-</div>
-<div class="il-result" id="balRes">12 = 12 → eşitlik korunuyor.</div>
-</div>
-<div class="card">
-<div class="card-title"><div class="icon">🧠</div>Varsayımını oluştur</div>
-<p class="body-text">Aşağıdaki eşitlikleri hesaplamadan incele. Sence hangi değişiklik eşitliği korur?</p>
-<div class="q-card"><div class="q-text">\(18+7=25\) ise \(18+7+9=25+9\) olur mu?</div>
-<div class="tf-row"><button class="tf-btn" onclick="checkTF(this,true,'tf1')">Evet</button><button class="tf-btn" onclick="checkTF(this,false,'tf1')">Hayır</button></div><div class="feedback" id="tf1"></div></div>
-<div class="q-card"><div class="q-text">\(6\times5=30\) ise \(6\times5+4=30+2\) olur mu?</div>
-<div class="tf-row"><button class="tf-btn" onclick="checkTF(this,false,'tf2')">Evet</button><button class="tf-btn" onclick="checkTF(this,true,'tf2')">Hayır</button></div><div class="feedback" id="tf2"></div></div>
-</div>
-</section>
+:root{--primary:#8f1025;--primary2:#b51d35;--primary-light:#f9e8ec;--accent:#d94b62;--success:#059669;--success-light:#eafaf3;--danger:#dc2626;--warning:#d97706;--warning-light:#fff7e6;--text:#1a1a2e;--muted:#6b7280;--border:#f0d5db;--bg:#fbf6f7;--dark:#2b0510;--shadow:0 4px 18px rgba(0,0,0,.08)}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);line-height:1.58;padding-bottom:45px}h1,h2,h3,h4{font-family:'Baloo 2',sans-serif}.container{max-width:940px;margin:0 auto;padding:0 16px}
+header{background:radial-gradient(ellipse at center,#050505 0%,#050505 34%,#35050e 66%,#710f22 100%);color:#fff;padding:25px 20px 52px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 40px rgba(143,16,37,.35)}header:before,header:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.18}header:before{width:230px;height:230px;background:#d94b62;left:-90px;top:-130px}header:after{width:260px;height:260px;background:#b51d35;right:-100px;bottom:-180px}.badge{display:inline-block;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,214,222,.35);border-radius:50px;padding:4px 15px;font-size:.77rem;font-weight:800;letter-spacing:.7px;text-transform:uppercase;margin-bottom:9px;color:#ffd6de;position:relative}header img.logo{height:82px;object-fit:contain;display:block;margin:7px auto 0;position:relative}header h1{font-size:clamp(1.45rem,5vw,2rem);font-weight:800;color:#fff;text-shadow:0 0 24px rgba(255,214,222,.18);margin-top:6px;position:relative}header p{font-size:.94rem;color:rgba(255,255,255,.8);margin-top:3px;max-width:800px;margin-left:auto;margin-right:auto;position:relative}
+.basa-don{position:fixed;bottom:20px;right:18px;background:linear-gradient(135deg,var(--primary),#2b0510);color:#fff;border:none;border-radius:50px;padding:10px 18px;font-size:.88rem;font-weight:900;box-shadow:0 4px 18px rgba(143,16,37,.35);opacity:0;transition:.3s;z-index:999;pointer-events:none;cursor:pointer}.basa-don.gorunsun{opacity:1;pointer-events:auto}.basa-don:hover{transform:translateY(-3px)}
+.tab-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:-22px auto 22px;max-width:920px;padding:0 12px;position:relative;z-index:10}.tab-btn{background:#fff;border:1.5px solid var(--border);color:var(--muted);padding:9px 14px;border-radius:14px;font-weight:800;font-size:clamp(.68rem,2.1vw,.85rem);cursor:pointer;box-shadow:0 4px 14px rgba(143,16,37,.08);white-space:nowrap;transition:.2s}.tab-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}.tab-panel{display:none;animation:fadeIn .35s}.tab-panel.active{display:block}@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:20px;margin-bottom:18px;box-shadow:var(--shadow)}.card-title{display:flex;align-items:center;gap:10px;font-size:1.15rem;color:var(--primary);margin-bottom:14px;font-weight:800}.card-title .icon{width:34px;height:34px;border-radius:10px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}.body-text{font-size:.94rem;margin:8px 0}.def-box,.tip-box,.gen-box,.note-box{border-radius:10px;padding:13px 16px;margin:12px 0;font-size:.92rem}.def-box{background:var(--primary-light);border-left:4px solid var(--primary)}.def-box b{color:var(--primary)}.tip-box{background:var(--warning-light);border-left:4px solid #f59e0b}.gen-box{background:var(--success-light);border-left:4px solid #10b981;font-weight:700}.note-box{background:#f3f6f9;border-left:4px solid #718096}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.info-tile{background:#fafcfe;border:1.5px solid var(--border);border-radius:15px;padding:14px}.info-tile h4{color:var(--primary);margin-bottom:5px}
+.q-card{background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:18px;margin:14px 0}.q-text{font-family:'Baloo 2';font-size:clamp(1rem,3.6vw,1.2rem);color:var(--text);margin-bottom:14px;line-height:1.5}.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice-btn{background:#fbf6f7;border:2px solid var(--border);border-radius:12px;padding:12px 10px;font-weight:800;font-size:.96rem;cursor:pointer;transition:.15s;color:var(--text)}.choice-btn:hover{border-color:var(--primary)}.choice-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.choice-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}.feedback{border-radius:12px;padding:12px 14px;margin-top:13px;font-weight:800;text-align:center;display:none;line-height:1.55}.feedback.show{display:block;animation:fadeIn .3s}.feedback.ok{background:rgba(5,150,105,.1);border:1.5px solid #10b981;color:#047857}.feedback.no{background:rgba(220,38,38,.1);border:1.5px solid #ef4444;color:#b91c1c}
+.field-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:10px 0}.answer-input{border:2px solid #f0d5db;border-radius:12px;padding:9px 12px;width:190px;text-align:center;font-weight:900;outline:none;font-size:.95rem}.answer-input:focus{border-color:var(--primary)}.submit-btn,.ghost-btn{background:var(--primary);color:#fff;border:none;border-radius:99px;padding:9px 20px;font-weight:800;cursor:pointer}.ghost-btn{background:none;border:2px solid var(--primary);color:var(--primary)}.ghost-btn:hover{background:var(--primary-light)}.next-row{display:flex;justify-content:flex-end;margin-top:12px}
+.ex-card{border:1.5px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}.ex-header{background:linear-gradient(90deg,var(--primary-light),#fbf6f7);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}.ex-num{background:var(--primary);color:#fff;border-radius:8px;padding:3px 12px;font-weight:800;font-size:.82rem}.ex-q{font-family:'Baloo 2';font-weight:700;font-size:.98rem;flex:1}.ex-body{padding:16px}.ex-toggle{background:none;border:1.5px solid var(--primary);color:var(--primary);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.8rem;cursor:pointer;margin-bottom:12px}.ex-steps{display:none}.ex-steps.show{display:block}.ex-step{display:flex;gap:10px;margin:10px 0;font-size:.92rem;line-height:1.6}.ex-step .snum{background:var(--primary-light);color:var(--primary);font-weight:800;border-radius:8px;min-width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}.ex-result{background:var(--success-light);border:1.5px solid #10b981;border-radius:12px;padding:12px 14px;margin-top:12px;font-weight:800;color:#047857}
+.mini-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.9rem}.mini-table th,.mini-table td{border:1px solid var(--border);padding:8px;text-align:center}.mini-table th{background:var(--primary-light);color:var(--primary)}.score{background:#2b0510;color:#fff;border-radius:16px;padding:16px;font-weight:800}.score b{color:#ffd6de}
+.tf-row{display:flex;gap:10px;margin:10px 0;flex-wrap:wrap;align-items:center;background:#fafcfe;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px}.tf-statement{flex:1;min-width:220px;font-weight:700;font-size:.92rem}.tf-btn{border:2px solid var(--border);background:#fff;border-radius:10px;padding:7px 16px;font-weight:800;cursor:pointer;font-size:.86rem}.tf-btn.correct{background:rgba(5,150,105,.12);border-color:#10b981;color:#047857}.tf-btn.wrong{background:rgba(220,38,38,.1);border-color:#ef4444;color:#b91c1c}
+.match-row{display:flex;align-items:center;gap:10px;margin:9px 0;flex-wrap:wrap}.match-term{min-width:150px;font-weight:800;color:var(--primary);font-size:.92rem}.match-row select{flex:1;min-width:220px;border:2px solid #f0d5db;border-radius:10px;padding:7px 10px;font-weight:700;font-size:.85rem}
+footer{margin-top:28px;background:#2b0510;color:#ffd6de;padding:24px 18px;text-align:center;font-size:.82rem}footer .foot-title{font-family:'Baloo 2';font-size:1.1rem;font-weight:800;color:#fff;margin-bottom:5px}
+.op-display{background:var(--primary-light);border-radius:14px;padding:14px;text-align:center;margin:12px 0;font-family:'Baloo 2';font-weight:800;font-size:1.15rem;color:var(--primary)}
+.process-flow{display:flex;flex-direction:column;gap:10px;margin:14px 0}.process-step{display:flex;gap:12px;align-items:flex-start;background:#fafcfe;border:1.5px solid var(--border);border-radius:14px;padding:12px 14px}.process-num{background:var(--primary);color:#fff;font-family:'Baloo 2';font-weight:800;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.process-body h4{color:var(--primary);margin-bottom:3px;font-size:.98rem}.process-body p{font-size:.88rem;color:var(--muted)}
+.price-table table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.92rem}.price-table th,.price-table td{border:1px solid var(--border);padding:9px;text-align:center}.price-table th{background:var(--primary-light);color:var(--primary)}.price-table td.product{font-weight:800;color:var(--primary)}
+.problem-box{background:#fafcfe;border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;margin:12px 0}.problem-box .label{font-weight:900;color:var(--accent);font-size:.78rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+@media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}}
+@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
 
-<section class="tab-panel" id="ozellik">
-<div class="card">
-<div class="card-title"><div class="icon">🔄</div>Özelliği seç</div>
-<p class="body-text">Sayı cümlesinde hangi özelliğin kullanıldığını belirle.</p>
-<div class="q-card"><div class="q-text">\(23+17=17+23\)</div><div class="choices" id="propChoices"></div><div class="feedback" id="propFeedback"></div></div>
-<button class="ghost-btn show" id="propNew">Yeni örnek →</button>
-</div>
-<div class="card">
-<div class="card-title"><div class="icon">📦</div>Gruplamayı değiştir</div>
-<p class="body-text">Bir kolide 20 kutu, her kutuda 10 paket ve her pakette 25 bisküvi olduğunu düşün. Toplam bisküvi sayısını bulmak için önce hangi iki sayıyı çarpmamız gerekir? Gerçekten o sırada çarpmak zorunda mıyız?</p>
-<div class="math-display">\[(20\times10)\times25=200\times25=5000\]\[20\times(10\times25)=20\times250=5000\]\[(20\times25)\times10=500\times10=5000\]</div>
-<div class="gen-box">Çarpmanın birleşme özelliği, çarpanların hangi ikisinin önce gruplanacağının sonucu değiştirmediğini gösterir.</div>
-</div>
-</section>
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 3px;font-weight:800;line-height:1.1}.fr>span:first-child{border-bottom:2px solid currentColor;padding:0 5px 2px}.fr>span:last-child{padding:2px 5px 0}
+.hgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;max-width:260px;margin:12px auto}.gc{aspect-ratio:1;background:#fff;border:1.5px solid var(--border);border-radius:3px}.gc.on{background:var(--primary);border-color:var(--primary)}
+.receipt{max-width:340px;margin:12px auto;background:#fffdf5;border:2px dashed #b9a98a;border-radius:10px;padding:14px 16px;font-family:'Courier New',monospace;font-size:.88rem;color:#2b2b2b}.receipt .rt{text-align:center;font-weight:800;margin-bottom:8px}.receipt .rr{display:flex;justify-content:space-between;padding:3px 0}.receipt .rr.tot{border-top:2px solid #2b2b2b;margin-top:6px;padding-top:6px;font-weight:800}
+.nl-wrap{overflow-x:auto;margin:10px 0}.nl-wrap svg{display:block;margin:0 auto;max-width:100%}
+.frac-in{display:inline-flex;flex-direction:column;align-items:center;gap:3px}.frac-in input{width:64px;text-align:center;border:2px solid var(--border);border-radius:10px;padding:7px 4px;font-weight:800;font-size:1rem;font-family:inherit}.frac-in input:focus{border-color:var(--primary);outline:none}.frac-in .bar{width:64px;height:3px;background:var(--text);border-radius:2px}
+.cmp-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;margin:12px 0;font-size:1.3rem;font-weight:800}
+.tag{display:inline-block;background:var(--primary-light);color:var(--primary);border-radius:8px;padding:2px 10px;font-weight:800;font-size:.8rem}
 
-<section class="tab-panel" id="dagilma">
-<div class="card">
-<div class="card-title"><div class="icon">🧩</div>Dikdörtgen modeliyle dağılma</div>
-<p class="body-text">Aşağıdaki modelde 8 sütunda toplam kaç tane kare olduğunu bulmak için, 5 sütun ve 3 sütun olarak iki parçaya ayırıyoruz.</p>
-<div class="shape-stage">
-<div class="shape-step"><b>7 × 5</b><div class="blocks grid-a" id="blocksA" aria-label="7 satır ve 5 sütundan oluşan dikdörtgen model"></div></div>
-<div style="font-size:2rem;align-self:center;color:var(--primary)">+</div>
-<div class="shape-step"><b>7 × 3</b><div class="blocks grid-b" id="blocksB" aria-label="7 satır ve 3 sütundan oluşan dikdörtgen model"></div></div>
-</div>
-<div class="math-display">\[7\times8=7\times(5+3)=(7\times5)+(7\times3)=56\]</div>
-<div class="gen-box">Toplam kare sayısını farklı gruplandırmak da sonucu değiştirmeyecektir. Bu, çarpmanın toplama üzerine dağılma özelliğini modellemenin bir yoludur.</div>
-</div>
-<div class="card">
-<div class="card-title"><div class="icon">🔍</div>Varsayımı deneme</div>
-<p class="body-text">“Bir çarpanın yarısını alıp diğer çarpanı iki katına çıkarınca sonuç değişmez.” varsayımının doğru olup olmadığını örneklerle kontrol et.</p>
-<div class="math-display">\[8\times15=4\times30=120\]</div>
-<div class="tip-box">Bu tür varsayımlarda tek bir örnek yeterli değildir. Farklı sayılar seçerek genellemeyi denemek matematiksel karar verebilme açısından çok önemlidir.</div>
-</div>
-</section>
-
-<section class="tab-panel" id="ornekler">
-<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">\(35+18\) ile \(18+35\) arasındaki ilişkiyi açıklayınız.</span></div>
-<div class="ex-body"><button class="ex-toggle" data-target="s21">Çözümü Göster</button><div class="ex-steps" id="s21">
-<div class="ex-step"><div class="snum">1</div><div>Toplanan sayıların yerleri değiştirilmiştir.</div></div><div class="ex-step"><div class="snum">2</div><div>Toplam değişmeyeceği için toplamanın değişme özelliği kullanılmıştır.</div></div><div class="ex-result">✓ \(35+18=18+35\)</div></div></div></div>
-<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">\((3+7)+5\) ile \(3+(7+5)\) neden eşittir?</span></div>
-<div class="ex-body"><button class="ex-toggle" data-target="s22">Çözümü Göster</button><div class="ex-steps" id="s22">
-<div class="ex-step"><div class="snum">1</div><div>Toplananların gruplandırılması değiştirilmiştir.</div></div><div class="ex-step"><div class="snum">2</div><div>Sayıların sırası aynı kaldığı hâlde önce hangi iki sayının toplandığı değişmiştir.</div></div><div class="ex-result">✓ Sonuç değişmez: toplamanın birleşme özelliği.</div></div></div></div>
-<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">\(12\times19\) işlemini dağılma özelliğini kullanarak kolaylaştırınız.</span></div>
-<div class="ex-body"><button class="ex-toggle" data-target="s23">Çözümü Göster</button><div class="ex-steps" id="s23">
-<div class="ex-step"><div class="snum">1</div><div>\(12\)'yi \(10+2\) biçiminde parçala.</div></div><div class="ex-step"><div class="snum">2</div><div>\((10+2)\times19=10\times19+2\times19\).</div></div><div class="ex-result">✓ \(190+38=228\)</div></div></div></div>
-<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">\(2+3=7-2\) eşitliğinden yararlanarak iki tarafa 4 ekleyiniz.</span></div>
-<div class="ex-body"><button class="ex-toggle" data-target="s24">Çözümü Göster</button><div class="ex-steps" id="s24">
-<div class="ex-step"><div class="snum">1</div><div>Her iki tarafa aynı sayı, yani 4 eklenir.</div></div><div class="ex-step"><div class="snum">2</div><div>\(2+3+4=7-2+4\).</div></div><div class="ex-result">✓ Eşitlik korunur.</div></div></div></div>
-</section>
-
-<section class="tab-panel" id="calisma">
-<div class="card">
-<div class="card-title"><div class="icon">📝</div>Kısa çalışma</div>
-<div class="mini-task"><h4>1. Boşluğu doldur: \(27+14=\square+27\)</h4><input class="answer-input" id="w21"><button class="check-mini" onclick="mini('w21','mf21','14')">Kontrol</button><div class="mini-feedback" id="mf21"></div></div>
-<div class="mini-task"><h4>2. \(6\times(10+4)\) ifadesini dağılma özelliğiyle yaz.</h4><input class="answer-input" style="width:210px" id="w22" autocomplete="off"><button class="check-mini" onclick="miniNorm('w22','mf22',['6x10+6x4','6*10+6*4'])">Kontrol</button><div class="mini-feedback" id="mf22"></div></div>
-<div class="mini-task"><h4>3. “Çarpanların yerleri değişirse çarpım değişir.” Doğru mu, yanlış mı?</h4><button class="check-mini" onclick="textMini('mf23','Yanlış. Bu, çarpmanın değişme özelliğine aykırıdır.')">Cevabı göster</button><div class="mini-feedback" id="mf23"></div></div>
-</div>
-</section>
-
-<section class="tab-panel" id="oyun">
-<div class="progress-bar"><div class="progress-top"><span>EŞİTLİK VE İŞLEM ÖZELLİKLERİ · 10 SORU</span><span id="qCount">1 / 10</span></div>
-<div class="progress-track"><div class="progress-fill" id="qFill" style="width:10%"></div></div>
-<div class="score-row"><div><div style="font-size:.75rem;opacity:.75;font-weight:800">PUAN</div><div class="score-num" id="qScore">0</div></div><div style="font-size:.85rem;opacity:.85">Doğru: <b id="qCorrect">0</b></div></div></div>
-<div class="q-card"><div class="q-text" id="quizText"></div><div class="choices" id="quizChoices"></div><div class="feedback" id="quizFeedback"></div>
-<div class="next-row"><button class="ghost-btn" id="quizNext">Sonraki Soru →</button></div></div>
-<div class="action-row hidden" id="quizEnd"><button class="submit-btn" id="quizRestart">Yeniden Başla</button></div>
-</section>
-
-<section class="tab-panel" id="ozet">
-<div class="card"><div class="card-title"><div class="icon">📋</div>Hızlı Özet</div><div class="summary-grid">
-<div class="summary-item"><b>Eşitliğin korunumu</b><span>Eşitliğin iki tarafına aynı değişiklik uygulandığında eşitlik korunur.</span></div>
-<div class="summary-item"><b>Değişme</b><span>Toplananların veya çarpanların yerleri değişebilir; sonuç değişmez.</span></div>
-<div class="summary-item"><b>Birleşme</b><span>Toplama ve çarpmada gruplama değişebilir; sonuç değişmez.</span></div>
-<div class="summary-item"><b>Dağılma</b><span>Çarpanlardan biri parçalanarak ayrı ayrı çarpılıp toplanabilir veya çıkarılabilir.</span></div>
-</div></div>
-<div class="card"><div class="card-title"><div class="icon">🎯</div>Kendine Sor</div>
-<div class="mini-task"><h4>Bir eşitliğin iki tarafına aynı sayıyı eklemek neden eşitliği bozmaz?</h4><button class="check-mini" onclick="textMini('sum21','Çünkü iki tarafın değeri aynı miktarda değişir; aralarındaki eşitlik ilişkisi korunur.')">Düşünceyi göster</button><div class="mini-feedback" id="sum21"></div></div>
-<div class="mini-task"><h4>\(12\times9\) işlemini dağılma özelliğiyle iki farklı biçimde yazabilir misin?</h4><button class="check-mini" onclick="textMini('sum22','Örneğin 12×(10−1)=12×10−12×1 veya 12×(6+3)=12×6+12×3.')">Örnek cevabı göster</button><div class="mini-feedback" id="sum22"></div></div>
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;align-items:center}.chip{background:#fff;border:2px solid var(--border);border-radius:99px;padding:6px 14px;font-weight:800;font-size:.85rem;cursor:pointer;color:var(--primary)}.chip:hover{border-color:var(--primary);background:var(--primary-light)}
+.scroll-x{overflow-x:auto}.scroll-x .mini-table{min-width:520px}.mini-label{display:block;font-weight:800;font-size:.8rem;color:var(--muted);margin-bottom:4px}
+.sel-inline{border:2px solid var(--border);border-radius:10px;padding:5px 8px;font-weight:800;font-size:.9rem;margin:0 3px;background:#fff}
+.mini-in{width:76px;text-align:center;border:2px solid var(--border);border-radius:10px;padding:8px 6px;font-weight:800;font-size:1rem;font-family:inherit}.mini-in:focus{border-color:var(--primary);outline:none}
+.in-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}.in-row .sep{font-weight:800;color:var(--muted)}
+.dg-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.dg-box{border:2px solid var(--border);border-radius:14px;padding:10px;background:#fff}.dg-box h4{margin:0 0 8px;font-size:.82rem;color:var(--primary)}.dg-row{display:flex;gap:3px;margin:3px 0}.dg-bar{background:var(--primary-light);border:2px solid var(--primary);border-radius:6px;padding:4px 2px;text-align:center;font-weight:800;font-size:.75rem;color:var(--primary);min-width:0}.dg-q{background:#fff;border:2px dashed var(--accent);color:var(--accent)}
+@media(max-width:560px){.dg-wrap{grid-template-columns:1fr}}
+.choice-btn:disabled,.tf-btn:disabled{cursor:default}
+.tz-wrap{display:flex;justify-content:center;margin:14px 0}.tz-beam{display:flex;gap:34px;padding:14px 22px;border-top:6px solid var(--primary);transition:transform .35s;transform-origin:center}.tz-pan{text-align:center;min-width:90px}.tz-val{font-family:"Baloo 2";font-size:2rem;font-weight:800;color:var(--primary);background:var(--primary-light);border-radius:14px;padding:6px 14px}.cell-grid{display:flex;justify-content:center;margin:12px 0}.cg{display:grid;gap:2px}.cell{width:26px;height:26px;border-radius:4px;border:1.5px solid rgba(0,0,0,.15)}.ca{background:var(--primary)}.cb{background:var(--accent)}</style></head><body><header><div class="badge">5. SINIF MATEMATİK · 2. TEMA · MAT.5.2.1</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Eşitliğin Korunumu ve İşlem Özellikleri</h1><p>Eşitliğin korunumuna ve işlem özelliklerine yönelik çıkarım yapabilme</p></header><nav class="tab-bar"><button class="tab-btn active" data-tab="t0">KONU ANLATIMI</button><button class="tab-btn" data-tab="t1">EŞİTLİĞİN KORUNUMU</button><button class="tab-btn" data-tab="t2">DEĞİŞME VE BİRLEŞME</button><button class="tab-btn" data-tab="t3">DAĞILMA ÖZELLİĞİ</button><button class="tab-btn" data-tab="t4">DOĞRU MU YANLIŞ MI</button><button class="tab-btn" data-tab="t5">ÖNERME VE VARSAYIM</button><button class="tab-btn" data-tab="t6">ÖRNEKLER</button><button class="tab-btn" data-tab="t7">ÇALIŞMA</button><button class="tab-btn" data-tab="t8">ÖZET</button><button class="tab-btn" data-tab="t9">KENDİNİ DENE</button></nav><main class="container">
+<section class="tab-panel active" id="t0"><div class="card"><div class="card-title"><div class="icon">⚖️</div>Eşitlik ne anlatır?</div>
+<div class="def-box"><b>Eşitlik</b>, iki sayı cümlesinin aynı değeri gösterdiğini belirtir. “=” işareti yalnızca “sonuç geliyor” demek değildir; iki tarafın aynı değerde olduğunu gösterir.</div><div class="number-display"><div class="big-number">8 + 4 = 12 &nbsp;⟹&nbsp; (8 + 4) + 5 = 12 + 5</div></div><div class="gen-box">Genelleme: Bir eşitliğin her iki tarafına aynı sayı eklenirse ya da her iki tarafından aynı sayı çıkarılırsa eşitlik korunur. İki taraf, sıfır hariç aynı sayıyla çarpılırsa ya da bölünürse eşitlik yine korunur.</div>
+</div><div class="card"><div class="card-title"><div class="icon">🔄</div>Toplama ve çarpma işlemlerinde özellikler</div>
+<div class="two-col"><div class="info-tile"><h4>Değişme özelliği</h4><p>Toplananların ya da çarpanların yerleri değişse de sonuç değişmez.</p><p class="body-text">7 + 13 = 13 + 7<br>4 × 6 = 6 × 4</p></div><div class="info-tile"><h4>Birleşme özelliği</h4><p>Üç ya da daha fazla sayıda gruplama değişse de sonuç değişmez.</p><p class="body-text">(2 + 5) + 8 = 2 + (5 + 8)<br>(2 × 5) × 4 = 2 × (5 × 4)</p></div></div><div class="tip-box">Çıkarma ve bölme işlemlerinde değişme ve birleşme özellikleri yoktur. Örneğin 9 − 4 ≠ 4 − 9.</div>
+</div><div class="card"><div class="card-title"><div class="icon">🧩</div>Çarpmanın toplama ve çıkarma üzerine dağılma özelliği</div>
+<div class="def-box">Çarpanlardan biri iki sayının toplamı ya da farkı biçiminde parçalanabilir. Her parça diğer çarpanla ayrı ayrı çarpılır ve sonuçlar toplanır ya da çıkarılır.</div><div class="number-display"><div class="big-number">7 × (5 + 3) = 7 × 5 + 7 × 3</div><div class="caption">toplama üzerine dağılma</div></div><div class="number-display"><div class="big-number">7 × (10 − 2) = 7 × 10 − 7 × 2</div><div class="caption">çıkarma üzerine dağılma</div></div><p class="body-text">Bu özellik zihinden işlem yapmayı kolaylaştırır. Örneğin 8 × 19 = 8 × (20 − 1) = 160 − 8 = 152.</p>
 </div></section>
+<section class="tab-panel" id="t1"><div class="card"><div class="card-title"><div class="icon">⚖️</div>Eşitlik terazisi</div>
+<p class="body-text">Terazinin iki kefesinde başlangıçta aynı değer var. Düğmelerle <b>iki tarafa aynı işlemi</b> uygula, sonra yalnızca bir tarafı değiştirip farkı gözle.</p><div class="tz-wrap"><div class="tz-beam" id="tzBeam"><div class="tz-pan"><div class="mini-label">Sol</div><div class="tz-val" id="tzL"></div></div><div class="tz-pan"><div class="mini-label">Sağ</div><div class="tz-val" id="tzR"></div></div></div></div><div class="chip-row" style="justify-content:center"><button class="submit-btn" onclick="tz('+',3)">+3 iki tarafa</button><button class="submit-btn" onclick="tz('-',2)">−2 iki tarafa</button><button class="submit-btn" onclick="tz('x',2)">×2 iki tarafa</button><button class="submit-btn" onclick="tz('d',2)">÷2 iki tarafa</button></div><div class="chip-row" style="justify-content:center"><button class="ghost-btn" onclick="tz('L',3)">Yalnızca sol tarafa +3</button><button class="ghost-btn" onclick="tzReset()">Sıfırla</button></div><div class="feedback" id="tzFb"></div>
+</div><div class="card"><div class="card-title"><div class="icon">📋</div>Toplamları 30 olan sayı ikilileri</div>
+<p class="body-text">Birinci toplananı değiştir; ikinci toplananın nasıl değiştiğini ve toplamın ne olduğunu gözle.</p><div class="cmp-row" id="t30"></div><div class="chip-row" style="justify-content:center"><button class="chip" onclick="t30s(-5)">−5</button><button class="chip" onclick="t30s(-1)">−1</button><button class="chip" onclick="t30s(1)">+1</button><button class="chip" onclick="t30s(5)">+5</button></div><div class="tip-box">Bir toplanan artarken diğeri aynı miktarda azalırsa toplam değişmez.</div>
+</div><div class="card"><div class="card-title"><div class="icon">🧠</div>Varsayımını oluştur (hesaplamadan)</div>
+<p class="body-text">Aşağıdaki eşitliklerin iki tarafını hesaplamadan incele. Eşitlik korunur mu?</p><div class="tf-row"><span class="tf-statement">18 + 7 = 25 ise 18 + 7 + 9 = 25 + 9 olur mu?</span><button class="tf-btn" onclick="choose(this,true,'v1')">Evet</button><button class="tf-btn" onclick="choose(this,false,'v1')">Hayır</button></div><div class="feedback" id="v1"></div><div class="tf-row"><span class="tf-statement">6 × 5 = 30 ise 6 × 5 + 4 = 30 + 2 olur mu?</span><button class="tf-btn" onclick="choose(this,false,'v2')">Evet</button><button class="tf-btn" onclick="choose(this,true,'v2')">Hayır</button></div><div class="feedback" id="v2"></div><div class="tf-row"><span class="tf-statement">2 + 3 = 7 − 2 ise (2 + 3) × 4 = (7 − 2) × 4 olur mu?</span><button class="tf-btn" onclick="choose(this,true,'v3')">Evet</button><button class="tf-btn" onclick="choose(this,false,'v3')">Hayır</button></div><div class="feedback" id="v3"></div>
+</div></section>
+<section class="tab-panel" id="t2"><div class="card"><div class="card-title"><div class="icon">🔎</div>Hangi özellik?</div>
+<div class="q-card"><div class="q-text" id="ozQ"></div><div class="choices" id="ozChoices"></div><div class="feedback" id="ozFb"></div><div class="next-row"><button class="ghost-btn" onclick="newOZ()">Yeni örnek →</button></div></div>
+</div><div class="card"><div class="card-title"><div class="icon">🔀</div>Aynı sonuç, aynı özellik mi?</div>
+<p class="body-text">25 + 48 = 48 + 25 ile 25 + 48 = 45 + 28 sayı cümlelerini karşılaştır. İkisinde de eşitlik doğrudur. Peki ikisi de aynı özelliği mi gösterir?</p><div class="q-card"><div class="q-text">25 + 48 = 45 + 28 sayı cümlesi için hangisi doğrudur?</div><div class="choices"><button class="choice-btn" onclick="choose(this,true,'dg1')">Eşitlik doğrudur ama toplamanın değişme özelliği değildir</button><button class="choice-btn" onclick="choose(this,false,'dg1')">Eşitlik yanlıştır</button><button class="choice-btn" onclick="choose(this,false,'dg1')">Toplamanın değişme özelliğidir</button><button class="choice-btn" onclick="choose(this,false,'dg1')">Toplamanın birleşme özelliğidir</button></div><div class="feedback" id="dg1"></div></div>
+</div><div class="card"><div class="card-title"><div class="icon">📦</div>Çarpmada gruplamayı değiştir</div>
+<p class="body-text">Bir pakette 10 bisküvi var. 20 paket bir kutuya, 25 kutu bir koliye konuyor. Koli kaç bisküvi alır? Çarpanları farklı gruplayabilirsin.</p><div class="chip-row"><button class="chip" onclick="grp(0)">(20 × 10) × 25</button><button class="chip" onclick="grp(1)">20 × (10 × 25)</button><button class="chip" onclick="grp(2)">(20 × 25) × 10</button><button class="chip" onclick="grp(3)">(2 × 9) × 30 örneği</button></div><div class="feedback" id="grFb"></div>
+</div></section>
+<section class="tab-panel" id="t3"><div class="card"><div class="card-title"><div class="icon">🧩</div>Kareli kâğıtta dağılma (toplama)</div>
+<p class="body-text">Aşağıya çizilecek birim karelerin her satırda ve her sütunda kaçar tane olmasını istiyorsanız aşağıya yazın.<br>Kaçıncı sütundan sonra farklı bir renge boyayıp iki ayrı grup yapacaksak o sayıyı da üçüncü kutuya yazın.</p><div class="in-row" style="justify-content:center"><input class="mini-in" id="dgR" inputmode="numeric" maxlength="1" placeholder="satır"><span class="sep">×</span><input class="mini-in" id="dgC" inputmode="numeric" maxlength="2" placeholder="sütun"><span class="sep">ayır:</span><input class="mini-in" id="dgK" inputmode="numeric" maxlength="2" placeholder="?"><button class="submit-btn" onclick="dagil()">Göster</button></div><div id="dgGrid" class="cell-grid"></div><div class="feedback" id="dgFb"></div>
+</div><div class="card"><div class="card-title"><div class="icon">➖</div>Çıkarma üzerine dağılma</div>
+<p class="body-text">Bir çarpanı fark biçiminde yazarak çarpmayı kolaylaştır: r × (m − j) = r × m − r × j.</p><div class="in-row" style="justify-content:center"><input class="mini-in" id="cr" inputmode="numeric" maxlength="2" placeholder="r"><span class="sep">×</span><span class="sep">(</span><input class="mini-in" id="cm" inputmode="numeric" maxlength="3" placeholder="m"><span class="sep">−</span><input class="mini-in" id="cj" inputmode="numeric" maxlength="2" placeholder="j"><span class="sep">)</span><button class="submit-btn" onclick="cikar()">Hesapla</button></div><div class="feedback" id="ckFb"></div>
+</div><div class="card"><div class="card-title"><div class="icon">🧱</div>Birim küplerle dağılma</div>
+<div class="tip-box">Ayrıtları 20, 10 ve 25 birim olan bir prizmanın içine yerleştirilen birim küpler iki renk olarak gruplanabilir:<br>(20 × 10) × 25 = (25 × 100) + (25 × 100) = 25 × (100 + 100) = 5 000<br>Böylece birleşme ve dağılma özellikleri birlikte görülür.</div>
+</div></section>
+<section class="tab-panel" id="t4"><div class="card"><div class="card-title"><div class="icon">✅</div>Sayı cümleleri: doğru mu, yanlış mı?</div>
+<p class="body-text">Her sayı cümlesinin doğru olup olmadığına karar ver.</p><div class="tf-row"><span class="tf-statement">17 + 25 = 25 + 17</span><button class="tf-btn" onclick="choose(this,true,'s1')">Doğru</button><button class="tf-btn" onclick="choose(this,false,'s1')">Yanlış</button></div><div class="feedback" id="s1"></div><div class="tf-row"><span class="tf-statement">9 − 4 = 4 − 9</span><button class="tf-btn" onclick="choose(this,false,'s2')">Doğru</button><button class="tf-btn" onclick="choose(this,true,'s2')">Yanlış</button></div><div class="feedback" id="s2"></div><div class="tf-row"><span class="tf-statement">12 × 5 = 5 × 12</span><button class="tf-btn" onclick="choose(this,true,'s3')">Doğru</button><button class="tf-btn" onclick="choose(this,false,'s3')">Yanlış</button></div><div class="feedback" id="s3"></div><div class="tf-row"><span class="tf-statement">8 × (5 + 2) = 8 × 5 + 2</span><button class="tf-btn" onclick="choose(this,false,'s4')">Doğru</button><button class="tf-btn" onclick="choose(this,true,'s4')">Yanlış</button></div><div class="feedback" id="s4"></div><div class="tf-row"><span class="tf-statement">(4 + 6) + 9 = 4 + (6 + 9)</span><button class="tf-btn" onclick="choose(this,true,'s5')">Doğru</button><button class="tf-btn" onclick="choose(this,false,'s5')">Yanlış</button></div><div class="feedback" id="s5"></div><div class="tf-row"><span class="tf-statement">(20 ÷ 10) ÷ 2 = 20 ÷ (10 ÷ 2)</span><button class="tf-btn" onclick="choose(this,false,'s6')">Doğru</button><button class="tf-btn" onclick="choose(this,true,'s6')">Yanlış</button></div><div class="feedback" id="s6"></div><div class="tf-row"><span class="tf-statement">6 × (10 − 3) = 6 × 10 − 6 × 3</span><button class="tf-btn" onclick="choose(this,true,'s7')">Doğru</button><button class="tf-btn" onclick="choose(this,false,'s7')">Yanlış</button></div><div class="feedback" id="s7"></div><div class="tf-row"><span class="tf-statement">15 + 27 = 17 + 25</span><button class="tf-btn" onclick="choose(this,true,'s8')">Doğru</button><button class="tf-btn" onclick="choose(this,false,'s8')">Yanlış</button></div><div class="feedback" id="s8"></div>
+</div></section>
+<section class="tab-panel" id="t5"><div class="card"><div class="card-title"><div class="icon">📝</div>Önermeni kur</div>
+<div class="gen-box" style="font-weight:700">Bir eşitliğin her iki tarafına aynı sayı <select id="onA" class="sel-inline"><option value="">?</option><option value="e">eklenirse</option><option value="b">bölünürse</option><option value="y">yalnız sol tarafa eklenirse</option></select> eşitlik <select id="onB" class="sel-inline"><option value="">?</option><option value="k">korunur</option><option value="z">bozulur</option></select>.</div><div class="tip-box">Bölünen sayı sıfır olmamalıdır.</div><div class="field-row"><button class="submit-btn" id="onBtn" onclick="checkOn()">Önermeyi kontrol et</button></div><div class="feedback" id="onFb"></div>
+</div><div class="card"><div class="card-title"><div class="icon">🧪</div>Varsayımı sına: yarısı, iki katı</div>
+<div class="def-box">Varsayım: “Bir çarpma işleminde bir çarpanın yarısını alıp diğer çarpanı iki katına çıkarırsak sonuç değişmez.”</div><p class="body-text">Önce çift bir sayı, sonra ikinci çarpanı yaz.</p><div class="in-row" style="justify-content:center"><input class="mini-in" id="yA" inputmode="numeric" maxlength="3" placeholder="?"><span class="sep">×</span><input class="mini-in" id="yB" inputmode="numeric" maxlength="3" placeholder="?"><button class="submit-btn" onclick="yarim()">Sına</button></div><div class="feedback" id="yFb"></div><div class="q-card"><div class="q-text">Bu varsayım için hangisi doğrudur?</div><div class="choices"><button class="choice-btn" onclick="choose(this,true,'y1')">Yarısı alınan çarpan çift sayı olduğunda her zaman geçerlidir</button><button class="choice-btn" onclick="choose(this,false,'y1')">Her sayıda, tek sayılar için de geçerlidir</button><button class="choice-btn" onclick="choose(this,false,'y1')">Hiçbir zaman geçerli değildir</button><button class="choice-btn" onclick="choose(this,false,'y1')">Yalnızca 10 ile çarpmada geçerlidir</button></div><div class="feedback" id="y1"></div></div>
+</div><div class="card"><div class="card-title"><div class="icon">✍️</div>Kendi problemini kur</div>
+<div class="tip-box">Eşitliğin korunumunu ya da işlem özelliklerini kullanan gerçek bir problem yaz.<br>Örneğin: “Her birinde onikişer tane kalem bulunan poşetlerden 20 tanesi bir kutuya konuyor. Bu şekilde hazırlanan 25 kutuyu bir koliye koyuyoruz. Bir kolide kaç kalem vardır?”<br>Problemini arkadaşına sor ve kullandığın stratejiyi anlat.</div>
+</div></section>
+<section class="tab-panel" id="t6"><div class="card"><div class="card-title"><div class="icon">📚</div>Çözümlü örnekler</div>
+<div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 1</span><span class="ex-q">35 + 18 ile 18 + 35 arasındaki ilişkiyi açıklayınız.</span></div><div class="ex-body"><button class="ex-toggle" onclick="toggleEx(this)">Çözümü göster</button><div class="ex-steps"><div class="ex-step"><span class="snum">1</span><div>Toplananların yerleri değiştirilmiştir.</div></div><div class="ex-step"><span class="snum">2</span><div>Toplam değişmediği için toplamanın değişme özelliği kullanılmıştır.</div></div><div class="ex-result">Cevap: 35 + 18 = 18 + 35</div></div></div></div><div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 2</span><span class="ex-q">(3 + 7) + 5 ile 3 + (7 + 5) neden eşittir?</span></div><div class="ex-body"><button class="ex-toggle" onclick="toggleEx(this)">Çözümü göster</button><div class="ex-steps"><div class="ex-step"><span class="snum">1</span><div>Toplananların gruplandırılması değişmiştir.</div></div><div class="ex-step"><span class="snum">2</span><div>Sayıların sırası aynı kalır; yalnızca önce hangi iki sayının toplandığı değişir.</div></div><div class="ex-result">Cevap: Toplamanın birleşme özelliği</div></div></div></div><div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 3</span><span class="ex-q">12 × 19 işlemini dağılma özelliğiyle kolaylaştırınız.</span></div><div class="ex-body"><button class="ex-toggle" onclick="toggleEx(this)">Çözümü göster</button><div class="ex-steps"><div class="ex-step"><span class="snum">1</span><div>12 sayısını 10 + 2 biçiminde parçalarız.</div></div><div class="ex-step"><span class="snum">2</span><div>(10 + 2) × 19 = 10 × 19 + 2 × 19 = 190 + 38.</div></div><div class="ex-result">Cevap: 228</div></div></div></div><div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 4</span><span class="ex-q">2 + 3 = 7 − 2 eşitliğinin iki tarafına 4 ekleyiniz.</span></div><div class="ex-body"><button class="ex-toggle" onclick="toggleEx(this)">Çözümü göster</button><div class="ex-steps"><div class="ex-step"><span class="snum">1</span><div>Her iki tarafa aynı sayı, 4, eklenir.</div></div><div class="ex-step"><span class="snum">2</span><div>2 + 3 + 4 = 7 − 2 + 4.</div></div><div class="ex-result">Cevap: Eşitlik korunur.</div></div></div></div><div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 5</span><span class="ex-q">(2 × 9) × 30 işlemini farklı gruplayarak ifade ediniz.</span></div><div class="ex-body"><button class="ex-toggle" onclick="toggleEx(this)">Çözümü göster</button><div class="ex-steps"><div class="ex-step"><span class="snum">1</span><div>(2 × 9) × 30 = 18 × 30 = 540.</div></div><div class="ex-step"><span class="snum">2</span><div>Aynı çarpım 4 × 9 × 15 = 540, 4 × 27 × 5 = 540 ve 20 × 27 = 540 ile de bulunur.</div></div><div class="ex-result">Cevap: Çarpanların farklı gruplanması çarpımı değiştirmez.</div></div></div></div><div class="ex-card"><div class="ex-header"><span class="ex-num">Örnek 6</span><span class="ex-q">8 × 19 işlemini çıkarma üzerine dağılma özelliğiyle yapınız.</span></div><div class="ex-body"><button class="ex-toggle" onclick="toggleEx(this)">Çözümü göster</button><div class="ex-steps"><div class="ex-step"><span class="snum">1</span><div>19 sayısını 20 − 1 biçiminde yazarız.</div></div><div class="ex-step"><span class="snum">2</span><div>8 × (20 − 1) = 8 × 20 − 8 × 1 = 160 − 8.</div></div><div class="ex-result">Cevap: 152</div></div></div></div>
+</div></section>
+<section class="tab-panel" id="t7"><div class="card"><div class="card-title"><div class="icon">✏️</div>Çoktan seçmeli</div>
+<div class="q-card"><div class="q-text">Aşağıdakilerden hangisi çarpmanın toplama üzerine dağılma özelliğine örnektir?</div><div class="choices"><button class="choice-btn" onclick="choose(this,false,'c1')">4 × (5 + 2) = 4 × 5 + 2</button><button class="choice-btn" onclick="choose(this,true,'c1')">4 × (5 + 2) = 4 × 5 + 4 × 2</button><button class="choice-btn" onclick="choose(this,false,'c1')">4 + (5 × 2) = (4 + 5) × 2</button><button class="choice-btn" onclick="choose(this,false,'c1')">4 × 5 × 2 = 4 + 5 + 2</button></div><div class="feedback" id="c1"></div></div><div class="q-card"><div class="q-text">6 × (10 + 4) ifadesinin dağılma özelliğiyle yazılışı hangisidir?</div><div class="choices"><button class="choice-btn" onclick="choose(this,false,'c2')">6 × 10 + 4</button><button class="choice-btn" onclick="choose(this,false,'c2')">6 + 10 × 4</button><button class="choice-btn" onclick="choose(this,false,'c2')">(6 + 10) × 4</button><button class="choice-btn" onclick="choose(this,true,'c2')">6 × 10 + 6 × 4</button></div><div class="feedback" id="c2"></div></div><div class="q-card"><div class="q-text">15 + 5 = 20 ise 15 + 5 − 3 = ?</div><div class="choices"><button class="choice-btn" onclick="choose(this,true,'c3')">20 − 3</button><button class="choice-btn" onclick="choose(this,false,'c3')">20 + 3</button><button class="choice-btn" onclick="choose(this,false,'c3')">20 × 3</button><button class="choice-btn" onclick="choose(this,false,'c3')">20 − 5</button></div><div class="feedback" id="c3"></div></div>
+</div><div class="card"><div class="card-title"><div class="icon">✍️</div>Kısa cevaplı</div>
+<div class="q-card"><div class="q-text">27 + 14 = □ + 27 eşitliğinde □ kaçtır?</div><div class="field-row"><input class="answer-input" id="c4" type="text" autocomplete="off" placeholder="?"><button class="submit-btn" onclick="checkText('c4',['14'],'c4f')">Kontrol et</button></div><div class="feedback" id="c4f"></div></div><div class="q-card"><div class="q-text">5 × (20 + 3) = 5 × □ + 5 × 3 eşitliğinde □ kaçtır?</div><div class="field-row"><input class="answer-input" id="c5" type="text" autocomplete="off" placeholder="?"><button class="submit-btn" onclick="checkText('c5',['20'],'c5f')">Kontrol et</button></div><div class="feedback" id="c5f"></div></div><div class="q-card"><div class="q-text">12 × 19 = 12 × 20 − 12 × □ eşitliğinde □ kaçtır?</div><div class="field-row"><input class="answer-input" id="c6" type="text" autocomplete="off" placeholder="?"><button class="submit-btn" onclick="checkText('c6',['1'],'c6f')">Kontrol et</button></div><div class="feedback" id="c6f"></div></div>
+</div><div class="card"><div class="card-title"><div class="icon">✅</div>Doğru mu, yanlış mı?</div>
+<div class="tf-row"><span class="tf-statement">Çıkarma işleminde değişme özelliği vardır.</span><button class="tf-btn" onclick="choose(this,false,'c7')">Doğru</button><button class="tf-btn" onclick="choose(this,true,'c7')">Yanlış</button></div><div class="feedback" id="c7"></div><div class="tf-row"><span class="tf-statement">Çarpanların yerleri değişirse çarpım değişmez.</span><button class="tf-btn" onclick="choose(this,true,'c8')">Doğru</button><button class="tf-btn" onclick="choose(this,false,'c8')">Yanlış</button></div><div class="feedback" id="c8"></div><div class="tf-row"><span class="tf-statement">Eşitliğin iki tarafı sıfır hariç aynı sayıyla bölünürse eşitlik korunur.</span><button class="tf-btn" onclick="choose(this,true,'c9')">Doğru</button><button class="tf-btn" onclick="choose(this,false,'c9')">Yanlış</button></div><div class="feedback" id="c9"></div><div class="tf-row"><span class="tf-statement">Bölme işleminde birleşme özelliği vardır.</span><button class="tf-btn" onclick="choose(this,false,'c10')">Doğru</button><button class="tf-btn" onclick="choose(this,true,'c10')">Yanlış</button></div><div class="feedback" id="c10"></div>
+</div><div class="card"><div class="card-title"><div class="icon">🔗</div>Eşleştirme</div>
+<div class="match-row"><span class="match-term">a × (b + c) = a × b + a × c</span><select id="m1"><option value="0">Seçiniz</option><option value="1">Toplamanın değişme özelliği</option><option value="2">Çarpmanın birleşme özelliği</option><option value="3">Çarpmanın toplama üzerine dağılma özelliği</option><option value="4">Çarpmanın çıkarma üzerine dağılma özelliği</option></select></div>
+<div class="match-row"><span class="match-term">a + b = b + a</span><select id="m2"><option value="0">Seçiniz</option><option value="1">Toplamanın değişme özelliği</option><option value="2">Çarpmanın birleşme özelliği</option><option value="3">Çarpmanın toplama üzerine dağılma özelliği</option><option value="4">Çarpmanın çıkarma üzerine dağılma özelliği</option></select></div>
+<div class="match-row"><span class="match-term">a × (b − c) = a × b − a × c</span><select id="m3"><option value="0">Seçiniz</option><option value="1">Toplamanın değişme özelliği</option><option value="2">Çarpmanın birleşme özelliği</option><option value="3">Çarpmanın toplama üzerine dağılma özelliği</option><option value="4">Çarpmanın çıkarma üzerine dağılma özelliği</option></select></div>
+<div class="match-row"><span class="match-term">(a × b) × c = a × (b × c)</span><select id="m4"><option value="0">Seçiniz</option><option value="1">Toplamanın değişme özelliği</option><option value="2">Çarpmanın birleşme özelliği</option><option value="3">Çarpmanın toplama üzerine dağılma özelliği</option><option value="4">Çarpmanın çıkarma üzerine dağılma özelliği</option></select></div>
+<div class="field-row"><button class="submit-btn" id="matchBtn" onclick="checkMatch()">Kontrol et</button></div><div class="feedback" id="matchFeedback"></div>
+</div></section>
+<section class="tab-panel" id="t8"><div class="card"><div class="card-title"><div class="icon">🧠</div>Hızlı özet</div>
+<div class="three-col"><div class="info-tile"><h4>Eşitliğin korunumu</h4><p>Eşitliğin iki tarafına aynı sayı eklenir/çıkarılır ya da iki taraf sıfır hariç aynı sayıyla çarpılır/bölünürse eşitlik korunur.</p></div><div class="info-tile"><h4>Değişme</h4><p>Toplamada ve çarpmada sayıların yeri değişse de sonuç değişmez. Çıkarma ve bölmede değişme özelliği yoktur.</p></div><div class="info-tile"><h4>Birleşme</h4><p>Toplamada ve çarpmada gruplama değişse de sonuç değişmez. Çıkarma ve bölmede birleşme özelliği yoktur.</p></div><div class="info-tile"><h4>Dağılma</h4><p>Çarpma, toplama ve çıkarma üzerine dağılır: a × (b + c) = a × b + a × c ve a × (b − c) = a × b − a × c.</p></div><div class="info-tile"><h4>Varsayım ve sınama</h4><p>Bir genellemenin doğruluğu tek bir örnekle değil, birçok örnekle sınanır.</p></div><div class="info-tile"><h4>Önerme</h4><p>Bulunan sonuç sözel ya da sembolik bir önerme olarak yazılır ve katkısı gerekçelendirilir.</p></div></div>
+</div></section>
+<section class="tab-panel" id="t9"><div class="card"><div class="card-title"><div class="icon">🎯</div>Kendini Dene</div><div class="score">Soru <span id="quizNo">1</span>/10 · Puan <b id="quizScore">0</b></div><div class="q-card"><div class="q-text" id="quizQuestion"></div><div class="choices" id="quizChoices"></div><div class="feedback" id="quizFeedback"></div></div><div class="next-row"><button class="ghost-btn" id="quizNext" onclick="nextQuiz()">Sonraki Soru →</button></div></div></section>
 
-<script>
-function typeset(el){if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]);}}
-function shuffle(a){return a.slice().sort(function(){return Math.random()-.5});}
-function balBoth(n){var l=Number(document.getElementById('balL').textContent)+n,r=Number(document.getElementById('balR').textContent)+n;
-document.getElementById('balL').textContent=l;document.getElementById('balR').textContent=r;document.getElementById('balRes').textContent=l+' = '+r+' → eşitlik korunuyor.'}
-function balReset(){document.getElementById('balL').textContent=12;document.getElementById('balR').textContent=12;document.getElementById('balRes').textContent='12 = 12 → eşitlik korunuyor.'}
-function checkTF(btn,ok,id){
-var box=document.getElementById(id);
-box.className='feedback show '+(ok?'ok':'no');
-var message='';
-if(id==='tf1') message=ok?'✓ Doğru: İki tarafa da aynı değişiklik yapıldı.':'✗ Cevabın yanlış: İki tarafa da aynı değişiklik uygulanmış.';
-else if(id==='tf2') message=ok?'✓ Cevabın doğru: İki tarafa aynı değişiklik uygulanmamış.':'✗ Cevabın yanlış: İki tarafa aynı değişiklik uygulanmamış.';
-else message=ok?'✓ Doğru: İki tarafa da aynı değişiklik yapıldı.':'✗ Cevabın yanlış: İki tarafa da aynı değişiklik uygulanmış.';
-box.textContent=message;
-btn.parentElement.querySelectorAll('button').forEach(function(b){b.disabled=true})
-}
-var propPool=[
-{text:'23+17=17+23',answer:'Değişme',choices:['Değişme','Birleşme','Dağılma','Eşitliği bozma'],exp:'Toplananların yerleri değişmiştir.'},
-{text:'(4+6)+8=4+(6+8)',answer:'Birleşme',choices:['Değişme','Birleşme','Dağılma','Bölme'],exp:'Gruplama değişmiştir.'},
-{text:'5×(7+3)=5×7+5×3',answer:'Dağılma',choices:['Değişme','Birleşme','Dağılma','Eşitliği bozma'],exp:'Çarpan, toplamın terimlerine dağıtılmıştır.'},
-{text:'3×8=8×3',answer:'Değişme',choices:['Değişme','Birleşme','Dağılma','Çıkarma'],exp:'Çarpanların yerleri değişmiştir.'}
-];
-var pi=0;
-function renderProp(){var q=propPool[pi],box=document.getElementById('propChoices');box.innerHTML='';
-var f=document.getElementById('propFeedback');f.className='feedback';f.textContent='';
-document.querySelector('#ozellik .q-text').textContent=q.text;
-shuffle(q.choices).forEach(function(c){var b=document.createElement('button');b.className='choice-btn';b.textContent=c;b.onclick=function(){box.querySelectorAll('button').forEach(function(x){x.disabled=true});var ok=c===q.answer;b.classList.add(ok?'correct':'wrong');box.querySelectorAll('button').forEach(function(x){if(x.textContent===q.answer)x.classList.add('correct')});var f=document.getElementById('propFeedback');f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'✓ Doğru! ':'✗ Doğru cevap: '+q.answer+'. ')+q.exp};box.appendChild(b)})}
-document.getElementById('propNew').onclick=function(){pi=(pi+1)%propPool.length;renderProp()};renderProp();
+</main><button class="basa-don" id="basaDon">↑ Başa dön</button><footer><div class="foot-title">Tekin Hoca — 5. Sınıf Matematik</div><div>2. Tema: İşlemlerle Cebirsel Düşünme — MAT.5.2.1</div></footer><script>
+const $=id=>document.getElementById(id);
+const NB='\u00a0';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function showMsg(el,ok,html){el.className='feedback show '+(ok?'ok':'no');el.innerHTML=html}
+document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));btn.classList.add('active');$(btn.dataset.tab).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});}));
+window.addEventListener('scroll',()=>{$('basaDon').classList.toggle('gorunsun',scrollY>200)});$('basaDon').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+function toggleEx(btn){const box=btn.nextElementSibling;box.classList.toggle('show');btn.textContent=box.classList.contains('show')?'Çözümü gizle':'Çözümü göster'}
+const EXPL={"v1": "Her iki tarafa aynı sayı, 9, eklendiği için eşitlik korunur: 34 = 34.", "v2": "İki tarafa farklı sayılar (4 ve 2) eklendi: 34 ≠ 32. Eşitlik bozulur.", "v3": "İki taraf aynı sayıyla (4 ile) çarpıldığı için eşitlik korunur.", "dg1": "25 + 48 = 73 ve 45 + 28 = 73. Toplamlar eşit, ancak toplananların yerleri değiştirilmemiştir; bu yüzden değişme özelliği değildir.", "s1": "Toplamanın değişme özelliği.", "s2": "9 − 4 = 5 iken 4 − 9 doğal sayılarda tanımlı değildir. Çıkarmada değişme özelliği yoktur.", "s3": "Çarpmanın değişme özelliği: 60 = 60.", "s4": "8 × 7 = 56 iken 8 × 5 + 2 = 42’dir. Doğrusu 8 × 5 + 8 × 2 = 56.", "s5": "Toplamanın birleşme özelliği: 19 = 19.", "s6": "(20 ÷ 10) ÷ 2 = 1 iken 20 ÷ (10 ÷ 2) = 4’tür. Bölmede birleşme özelliği yoktur.", "s7": "6 × 7 = 42 ve 60 − 18 = 42.", "s8": "15 + 27 = 42 ve 17 + 25 = 42.", "c1": "4 × (5 + 2) = 28 ve 4 × 5 + 4 × 2 = 20 + 8 = 28.", "c2": "Her parça 6 ile çarpılır: 6 × 10 + 6 × 4.", "c3": "Her iki taraftan aynı sayı, 3, çıkarılır: 20 − 3.", "c4f": "Toplamanın değişme özelliği: 27 + 14 = 14 + 27.", "c5f": "23 = 20 + 3 olduğundan 5 × (20 + 3) = 5 × 20 + 5 × 3.", "c6f": "19 = 20 − 1 olduğundan 12 × 19 = 12 × 20 − 12 × 1.", "c7": "9 − 4 ≠ 4 − 9. Çıkarmada değişme özelliği yoktur.", "c8": "Çarpmanın değişme özelliği: 4 × 6 = 6 × 4.", "c9": "Sıfır hariç aynı sayıyla bölmek eşitliği korur.", "c10": "(20 ÷ 10) ÷ 2 ≠ 20 ÷ (10 ÷ 2). Bölmede birleşme özelliği yoktur.", "y1": "Örneğin 7 × 8 için 7’nin yarısı doğal sayı değildir; varsayım çift sayılar için geçerlidir."};
+function choose(btn,ok,id){const box=$(id);if(box.dataset.done==='1')return;box.dataset.done='1';const group=[...btn.parentElement.querySelectorAll('button')];const corr=group.find(b=>(b.getAttribute('onclick')||'').indexOf(",true,'"+id+"'")>-1);group.forEach(b=>b.disabled=true);btn.classList.add(ok?'correct':'wrong');if(corr)corr.classList.add('correct');const ex=EXPL[id]?'<br>'+EXPL[id]:'';showMsg(box,ok,ok?'Doğru.'+ex:'Yanlış: Doğru cevap “'+esc(corr?corr.textContent:'')+'”.'+ex)}
+function checkText(id,answers,fid){const inp=$(id),f=$(fid);if(f.dataset.done==='1')return;const norm=s=>String(s).replace(/[\s\u00a0]+/g,'').replace(/,/g,'.').toLowerCase();if(norm(inp.value)==='')return;f.dataset.done='1';const ok=answers.some(a=>norm(a)===norm(inp.value));inp.disabled=true;const btn=inp.parentElement.querySelector('button');if(btn)btn.disabled=true;const ex=EXPL[fid]?'<br>'+EXPL[fid]:'';showMsg(f,ok,ok?'Doğru.'+ex:'Yanlış: Doğru cevap '+esc(answers[0])+'.'+ex)}
+const nz=id=>{const v=$(id).value.trim();return v===''?NaN:Number(v)};
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g,NB);
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const matchKey={"m1": "3", "m2": "1", "m3": "4", "m4": "2"};
+const matchTxt={"m1": "a × (b + c) = a × b + a × c → Çarpmanın toplama üzerine dağılma özelliği", "m2": "a + b = b + a → Toplamanın değişme özelliği", "m3": "a × (b − c) = a × b − a × c → Çarpmanın çıkarma üzerine dağılma özelliği", "m4": "(a × b) × c = a × (b × c) → Çarpmanın birleşme özelliği"};
+function checkMatch(){const f=$('matchFeedback');if(f.dataset.done==='1')return;let correct=0,total=0,empty=false;for(const id in matchKey){total++;if($(id).value==='0')empty=true}if(empty){showMsg(f,false,'Önce bütün eşleştirmeleri yap.');return}f.dataset.done='1';for(const id in matchKey){if($(id).value===matchKey[id])correct++;$(id).disabled=true}$('matchBtn').disabled=true;if(correct===total)showMsg(f,true,'Doğru. Bütün eşleştirmeler doğru.');else showMsg(f,false,'Yanlış: '+correct+'/'+total+' eşleştirme doğru.<br>Doğru eşleştirmeler:<br>'+Object.values(matchTxt).join('<br>'))}
 
-function mini(id,fb,ans){var v=document.getElementById(id).value.trim();var e=document.getElementById(fb);var ok=v===ans;e.textContent=ok?'✓ Doğru!':'✗ Tekrar düşün.';e.style.color=ok?'#047857':'#b91c1c'}
-function miniNorm(id,fb,ans){var v=document.getElementById(id).value.toLowerCase().replace(/\s/g,'').replace(/×/g,'x');var e=document.getElementById(fb);var ok=ans.indexOf(v)>=0;e.textContent=ok?'✓ Doğru!':'✗ Dağılma özelliğini tekrar incele.';e.style.color=ok?'#047857':'#b91c1c'}
-function textMini(id,t){document.getElementById(id).textContent=t;document.getElementById(id).style.color='#047857'}
+const OP=['Toplamanın değişme özelliği','Toplamanın birleşme özelliği','Çarpmanın değişme özelliği','Çarpmanın birleşme özelliği'];
+/* terazi */
+let tzL=12,tzR=12;
+function tzDraw(msg){$('tzL').textContent=tzL;$('tzR').textContent=tzR;const d=Math.sign(tzL-tzR);$('tzBeam').style.transform='rotate('+(-d*6)+'deg)';const f=$('tzFb');if(msg===undefined){f.className='feedback';f.innerHTML='';return}f.className='feedback show '+(tzL===tzR?'ok':'no');f.innerHTML=msg}
+function tz(op,k){if(op==='d'&&(tzL%k||tzR%k)){tzDraw(tzL+' ve '+tzR+' sayıları '+k+' ile tam bölünmüyor. Önce çarpmayı dene.');return}
+  if(op==='x'&&(tzL*k>9999)){tzDraw('Sayılar çok büyüdü; sıfırla.');return}
+  if(op==='-'&&(tzL<k||tzR<k)){tzDraw('Sayı '+k+'’den küçük; sıfırla ya da başka işlem seç.');return}
+  const a=tzL,b=tzR;
+  if(op==='+'){tzL+=k;tzR+=k}else if(op==='-'){tzL-=k;tzR-=k}else if(op==='x'){tzL*=k;tzR*=k}else if(op==='d'){tzL/=k;tzR/=k}else if(op==='L'){tzL+=k}
+  const sym={'+':'+','-':'−','x':'×','d':'÷','L':'+'}[op];
+  tzDraw(op==='L'?'Yalnızca sol tarafa '+k+' eklendi: '+a+' + '+k+' = '+tzL+' ve sağ taraf '+tzR+'. Eşitlik <b>bozuldu</b>.':'İki tarafa da '+sym+' '+k+' uygulandı: '+a+' '+sym+' '+k+' = '+tzL+' ve '+b+' '+sym+' '+k+' = '+tzR+'. Eşitlik <b>korundu</b>.')}
+function tzReset(){tzL=12;tzR=12;tzDraw()}
+tzDraw();
+/* toplam 30 */
+let a30=15;
+function t30d(){$('t30').innerHTML='<span class="tag">'+a30+'</span> + <span class="tag">'+(30-a30)+'</span> = 30'}
+function t30s(k){a30=Math.max(0,Math.min(30,a30+k));t30d()}
+t30d();
+/* ozellik */
+let ozN=0;
+function newOZ(){const f=$('ozFb');f.className='feedback';f.innerHTML='';delete f.dataset.done;const t=ozN%4;ozN++;const a=rnd(11,49),b=rnd(11,49),c=rnd(2,9);let s;
+  if(t===0)s=a+' + '+b+' = '+b+' + '+a;else if(t===1)s='('+a+' + '+b+') + '+c+' = '+a+' + ('+b+' + '+c+')';else if(t===2)s=c+' × '+b+' = '+b+' × '+c;else s='('+c+' × '+rnd(2,9)+') × '+rnd(2,9)+' = '+c+' × ('+'…)';
+  if(t===3){const x=rnd(2,9),y=rnd(2,9);s='('+c+' × '+x+') × '+y+' = '+c+' × ('+x+' × '+y+')'}
+  $('ozQ').innerHTML='<b>'+s+'</b> sayı cümlesinde hangi özellik kullanılmıştır?';
+  const cor=OP[t],dist=OP.filter(x=>x!==cor),pos=ozN%4,opts=dist.slice();opts.splice(pos,0,cor);
+  $('ozChoices').innerHTML=opts.map(x=>'<button class="choice-btn">'+x+'</button>').join('');
+  $('ozChoices').querySelectorAll('button').forEach(bt=>bt.onclick=()=>{if(f.dataset.done==='1')return;f.dataset.done='1';const ok=bt.textContent===cor;[...$('ozChoices').querySelectorAll('button')].forEach(z=>{z.disabled=true;if(z.textContent===cor)z.classList.add('correct')});if(!ok)bt.classList.add('wrong');
+    const ex=t<2?'Toplananların '+(t===0?'yerleri':'gruplaması')+' değişmiştir; sonuç değişmez.':'Çarpanların '+(t===2?'yerleri':'gruplaması')+' değişmiştir; çarpım değişmez.';showMsg(f,ok,ok?'Doğru.<br>'+ex:'Yanlış: Doğru cevap “'+cor+'”.<br>'+ex)})}
+newOZ();
+/* gruplama */
+function grp(i){const L=[['(20 × 10) × 25 = 200 × 25 = 5 000','Önce paketler kutuya: 20 × 10 = 200 bisküvi; sonra 25 kutu.'],['20 × (10 × 25) = 20 × 250 = 5 000','Önce bir paket × 25 kutu: 250; sonra 20.'],['(20 × 25) × 10 = 500 × 10 = 5 000','Önce 20 × 25 = 500 gruplanır.'],['(2 × 9) × 30 = 18 × 30 = 540<br>2 × (9 × 30) = 2 × 270 = 540<br>(2 × 30) × 9 = 60 × 9 = 540','Çarpanların farklı gruplandırılması çarpımı değiştirmez.']][i];
+  showMsg($('grFb'),true,L[0]+'<br>'+L[1])}
+/* dagilma */
+function dagil(){const f=$('dgFb'),r=nz('dgR'),c=nz('dgC'),k=nz('dgK');if(![r,c,k].every(Number.isInteger)||r<1||r>9||c<2||c>12||k<1||k>=c){showMsg(f,false,'Satır 1–9, sütun 2–12 arasında olmalı; ayırma yeri 1 ile sütun sayısı−1 arasında olmalıdır.');$('dgGrid').innerHTML='';return}
+  let h='<div class="cg" style="grid-template-columns:repeat('+c+',26px)">';for(let i=0;i<r;i++)for(let j=0;j<c;j++)h+='<div class="cell '+(j<k?'ca':'cb')+'"></div>';h+='</div>';$('dgGrid').innerHTML=h;
+  f.className='feedback show ok';f.innerHTML=r+' × '+c+' = '+r+' × ('+k+' + '+(c-k)+') = '+r+' × '+k+' + '+r+' × '+(c-k)+' = '+(r*k)+' + '+(r*(c-k))+' = <b>'+(r*c)+'</b>'}
+function cikar(){const f=$('ckFb'),r=nz('cr'),m=nz('cm'),j=nz('cj');if(![r,m,j].every(Number.isInteger)||r<1||m<2||j<1||j>=m||m>200){showMsg(f,false,'r ≥ 1, 1 ≤ j < m ≤ 200 olmalıdır.');return}
+  f.className='feedback show ok';f.innerHTML=r+' × ('+m+' − '+j+') = '+r+' × '+m+' − '+r+' × '+j+' = '+(r*m)+' − '+(r*j)+' = <b>'+(r*(m-j))+'</b><br>Kontrol: '+r+' × '+(m-j)+' = '+(r*(m-j))}
+/* onerme */
+function checkOn(){const f=$('onFb');if(f.dataset.done==='1')return;const a=$('onA').value,b=$('onB').value;if(!a||!b){showMsg(f,false,'Önce iki seçimi de yap.');return}f.dataset.done='1';$('onA').disabled=true;$('onB').disabled=true;$('onBtn').disabled=true;
+  const ok=((a==='e'||a==='b')&&b==='k')||(a==='y'&&b==='z');showMsg(f,ok,ok?'Doğru. Örneğin 2 + 3 = 7 − 2 ise 2 + 3 + 4 = 7 − 2 + 4.':'Yanlış: İki tarafa aynı işlem uygulanırsa (ekleme ya da sıfır hariç bölme) eşitlik korunur; yalnız bir tarafa uygulanırsa bozulur.')}
+function yarim(){const f=$('yFb'),a=nz('yA'),b=nz('yB');if(!Number.isInteger(a)||!Number.isInteger(b)||a<1||b<1){showMsg(f,false,'İki çarpanı da yaz.');return}
+  if(a%2){showMsg(f,false,a+' tek sayıdır; yarısı doğal sayı olmadığı için varsayım bu örnekte uygulanamaz. Çift bir sayı dene.');return}
+  f.className='feedback show ok';f.innerHTML=a+' × '+b+' = '+(a*b)+'<br>'+(a/2)+' × '+(2*b)+' = '+(a/2*2*b)+'<br>İki sonuç eşit: varsayım bu örnekte geçerli.'}
 
-var quiz21=[
-{text:'18+7=25 ise 18+7+5=25+5 olur mu?',choices:['Evet','Hayır'],answer:'Evet',exp:'İki tarafa da 5 eklendiği için eşitlik korunur.'},
-{text:'9+4=13 ise 9+4+2=13+3 olur mu?',choices:['Evet','Hayır'],answer:'Hayır',exp:'İki tarafa aynı sayı eklenmedi.'},
-{text:'7+11=11+7 hangi özelliktir?',choices:['Değişme','Birleşme','Dağılma','Eşitliğin bozulması'],answer:'Değişme',exp:'Toplananların yerleri değişmiştir.'},
-{text:'(2+5)+6=2+(5+6) hangi özelliktir?',choices:['Değişme','Birleşme','Dağılma','Çarpma'],answer:'Birleşme',exp:'Gruplama değişmiştir.'},
-{text:'6×(4+2)=6×4+6×2 hangi özelliktir?',choices:['Değişme','Birleşme','Dağılma','Eşitliği bozma'],answer:'Dağılma',exp:'Çarpma, toplamanın terimlerine dağıtılmıştır.'},
-{text:'8×3=3×8 ifadesi neden doğrudur?',choices:['Çarpanlar yer değiştirdiği için','Çarpanlar çıkarıldığı için','Sayılar bölündüğü için','Sonuç iki katına çıktığı için'],answer:'Çarpanlar yer değiştirdiği için',exp:'Çarpmanın değişme özelliği kullanılmıştır.'},
-{text:'Eşitliğin iki tarafına aynı sayı çıkarılırsa ne olur?',choices:['Eşitlik korunur','Her zaman bozulur','Sadece toplamada bozulur','Sonuç iki katına çıkar'],answer:'Eşitlik korunur',exp:'İki taraf aynı miktarda değişir.'},
-{text:'12×(10-2) için doğru dağılma hangisidir?',choices:['12×10−12×2','12×10+12×2','12×(10)−2','10×12−2'],answer:'12×10−12×2',exp:'Çarpma, farkın her terimine dağıtılır.'},
-{text:'Çarpmanın birleşme özelliğinde ne değişir?',choices:['Gruplama','Çarpanların değeri','Çarpımın değeri','İşlemin türü'],answer:'Gruplama',exp:'Çarpanların hangi ikisinin önce gruplanacağı değişir.'},
-{text:'5×18=5×(20-2) ifadesinin sonucu kaçtır?',choices:['90','80','100','88'],answer:'90',exp:'5×18 zaten 90 eder; dağılma ile 100−10=90 bulunur.'}
-];
-var qi=0,score21=0,correct21=0;
-function renderQuiz21(){var q=quiz21[qi],box=document.getElementById('quizChoices');box.innerHTML='';document.getElementById('quizText').innerHTML=q.text;
-shuffle(q.choices).forEach(function(c){var b=document.createElement('button');b.className='choice-btn';b.textContent=c;b.onclick=function(){box.querySelectorAll('button').forEach(function(x){x.disabled=true});var ok=c===q.answer;if(ok){score21+=10;correct21++}b.classList.add(ok?'correct':'wrong');box.querySelectorAll('button').forEach(function(x){if(x.textContent===q.answer)x.classList.add('correct')});var f=document.getElementById('quizFeedback');f.className='feedback show '+(ok?'ok':'no');f.textContent=(ok?'✓ Doğru! ':'✗ Doğru cevap: '+q.answer+'. ')+q.exp;document.getElementById('qScore').textContent=score21;document.getElementById('qCorrect').textContent=correct21;document.getElementById('quizNext').classList.add('show')};box.appendChild(b)});
-document.getElementById('qCount').textContent=(qi+1)+' / 10';document.getElementById('qFill').style.width=((qi+1)*10)+'%';document.getElementById('quizFeedback').className='feedback';document.getElementById('quizNext').classList.remove('show')}
-document.getElementById('quizNext').onclick=function(){qi++;if(qi>=quiz21.length){qi=0;score21=0;correct21=0}renderQuiz21()};renderQuiz21();
-for(var i=0;i<35;i++){document.getElementById('blocksA').innerHTML+='<span class="block"></span>';}
-for(var j=0;j<21;j++){document.getElementById('blocksB').innerHTML+='<span class="block"></span>';}
-typeset(document.getElementById('konu'));typeset(document.getElementById('ornekler'));
-</script></div>
-<footer><div class="foot-title">Tekin Hoca — Matematik ve Zekâ Oyunları Kulübü</div><div>5. Sınıf Matematik · 2. Tema: İşlemlerle Cebirsel Düşünme</div></footer>
-<script>
-function typeset(el){if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]);}}
-document.querySelectorAll('.tab-btn').forEach(function(btn){btn.addEventListener('click',function(){
- document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
- document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
- btn.classList.add('active');document.getElementById(btn.dataset.tab).classList.add('active');
- window.scrollTo({top:0,behavior:'smooth'});
-});});
-document.querySelectorAll('.ex-toggle').forEach(function(btn){btn.addEventListener('click',function(){
- var t=document.getElementById(this.dataset.target),s=t.classList.toggle('show');this.textContent=s?'Çözümü Gizle':'Çözümü Göster';if(s)typeset(t);
-});});
-var bd=document.getElementById('basaDon');window.addEventListener('scroll',function(){bd.classList.toggle('gorunsun',window.scrollY>300)});
-bd.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+const quizData=[["8 + 4 = 12 eşitliğinin her iki tarafına 5 eklenirse hangi eşitlik elde edilir?", ["8 + 4 + 5 = 12", "8 + 4 = 12 + 5", "8 + 4 + 5 = 12 + 5", "8 + 4 × 5 = 12 × 5"], 2, "Eşitliğin iki tarafına aynı sayı eklenir: 17 = 17."], ["15 + 23 = 23 + 15 sayı cümlesi hangi özelliği gösterir?", ["Toplamanın değişme özelliği", "Toplamanın birleşme özelliği", "Çarpmanın değişme özelliği", "Çarpmanın dağılma özelliği"], 0, "Toplananların yerleri değişmiştir."], ["(4 × 5) × 3 = 4 × (5 × 3) sayı cümlesi hangi özelliği gösterir?", ["Çarpmanın değişme özelliği", "Toplamanın birleşme özelliği", "Çarpmanın dağılma özelliği", "Çarpmanın birleşme özelliği"], 3, "Gruplama değişmiş, sayıların sırası aynı kalmıştır."], ["7 × (5 + 3) ifadesine eşit olan hangisidir?", ["7 × 5 + 3", "7 × 5 + 7 × 3", "7 + 5 × 3", "(7 + 5) × 3"], 1, "Dağılma özelliği: 7 × 8 = 56 ve 35 + 21 = 56."], ["8 × 19 işlemini zihinden kolay yapmak için hangisi kullanılabilir?", ["8 × 20 + 8 × 1", "8 × 10 + 9", "8 × 19 + 8", "8 × 20 − 8 × 1"], 3, "19 = 20 − 1 olduğundan 8 × 19 = 160 − 8 = 152."], ["Aşağıdaki sayı cümlelerinden hangisi doğru değildir?", ["9 + 4 = 4 + 9", "9 − 4 = 4 − 9", "9 × 4 = 4 × 9", "(9 + 4) + 1 = 9 + (4 + 1)"], 1, "Çıkarmada değişme özelliği yoktur."], ["25 + 48 = 45 + 28 sayı cümlesi için hangisi doğrudur?", ["Eşitlik doğrudur ama değişme özelliği değildir", "Eşitlik yanlıştır", "Değişme özelliğidir", "Birleşme özelliğidir"], 0, "Her iki toplam da 73’tür, ancak toplananların yerleri değiştirilmemiştir."], ["5 satır ve 9 sütunlu bir dikdörtgenin sütunları 3 ve 6 olarak ayrılırsa birim kare sayısı hangi işlemle bulunur?", ["5 × 3 + 6", "5 + 3 × 6", "5 × 3 + 5 × 6", "(5 + 3) × 6"], 2, "Her parçanın birim kare sayısı bulunur ve toplanır: 15 + 30 = 45 = 5 × 9."], ["6 × (10 − 3) ifadesine eşit olan hangisidir?", ["6 × 10 − 3", "6 × 10 − 6 × 3", "6 − 10 × 3", "(6 × 10) − 3 × 3"], 1, "6 × 7 = 42 ve 60 − 18 = 42."], ["Ayrıtları 20, 10 ve 25 birim olan prizmanın içine kaç birim küp yerleştirilebilir?", ["500", "50 000", "3 500", "5 000"], 3, "(20 × 10) × 25 = 200 × 25 = 5 000."]];
+let qi=0,score=0,locked=false,finished=false;
+function renderQuiz(){locked=false;finished=false;const q=quizData[qi];$('quizNo').textContent=qi+1;$('quizScore').textContent=score;$('quizQuestion').innerHTML=q[0];$('quizChoices').innerHTML=q[1].map((x,i)=>'<button class="choice-btn" onclick="answerQuiz(this,'+i+')">'+x+'</button>').join('');$('quizFeedback').className='feedback';$('quizFeedback').innerHTML='';$('quizNext').style.display='none';$('quizNext').textContent='Sonraki Soru →'}
+function answerQuiz(btn,i){if(locked)return;locked=true;const q=quizData[qi],bs=[...$('quizChoices').querySelectorAll('button')],ok=i===q[2];bs.forEach(b=>b.disabled=true);bs[q[2]].classList.add('correct');if(!ok)btn.classList.add('wrong');if(ok)score++;showMsg($('quizFeedback'),ok,ok?'Doğru.<br>'+q[3]:'Yanlış: Doğru cevap “'+q[1][q[2]]+'”.<br>'+q[3]);$('quizScore').textContent=score;$('quizNext').style.display='inline-block';if(qi===quizData.length-1)$('quizNext').textContent='Sonucu Gör'}
+function nextQuiz(){if(finished){qi=0;score=0;renderQuiz();return}if(qi<quizData.length-1){qi++;renderQuiz()}else{finished=true;showMsg($('quizFeedback'),true,'Test tamamlandı. Puanın: '+score+'/'+quizData.length+'.');$('quizChoices').innerHTML='';$('quizQuestion').textContent='Test bitti.';$('quizNext').textContent='Testi Baştan Çöz';$('quizNext').style.display='inline-block'}}
+renderQuiz();
 
 </script></body></html>
