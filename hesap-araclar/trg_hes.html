@@ -822,7 +822,7 @@ async function buildTanCell(sCellId,cCellId,tCellId){
   await retypeset(node); node.querySelectorAll(".math-temp").forEach(n=>showMathNode(n)); await sleep(280);
 }
 
-/* Adım açıklamaları */
+/* Adım açıklamaları (Toplam 8 adım) */
 const stepDescs = [
   "<strong>1. Adım: Sinüs satırına soldan sağa doğru sırayla 0, 1, 2, 3 ve 4 yazılır.</strong>",
   "<strong>2. Adım: Her sayı, birer karekök sembolü içine alınır: √0, √1, √2, √3, √4.</strong>",
@@ -831,8 +831,7 @@ const stepDescs = [
   "<strong>5. Adım: Sinüs değerleri, ters sırayla, kosinüs satırına kopyalanır (sin 0° = cos 90°, vb.).</strong>",
   "<strong>6. Adım: Her sütundaki sinüs ve kosinüs değerleri tanjant hücresine taşınır. (tan = sin ÷ cos)</strong>",
   "<strong>7. Adım: Bölme işlemleri yapılarak tanjant değerleri bulunur.</strong>",
-  "<strong>8. Adım: Tanjant değerleri, ters sırayla, kotanjant satırına kopyalanır ve tablo tamamlanır.</strong>",
-  "<strong>Tablo temizleniyor…</strong>"
+  "<strong>8. Adım: Tanjant değerleri, ters sırayla, kotanjant satırına kopyalanır ve tablo tamamlanır.</strong>"
 ];
 
 const startBtn=document.getElementById("startBtn");
@@ -847,6 +846,7 @@ function enableControls(state){
   if(state==="idle"){ startBtn.disabled=false;nextBtn.disabled=true;resetBtn.disabled=false; }
   else if(state==="running"){ startBtn.disabled=true;nextBtn.disabled=true;resetBtn.disabled=false; }
   else if(state==="waiting"){ startBtn.disabled=true;nextBtn.disabled=false;resetBtn.disabled=false; }
+  else if(state==="finished"){ startBtn.disabled=false;startBtn.textContent="BAŞLAT";nextBtn.disabled=true;resetBtn.disabled=false; }
   else if(state==="stopped"){ startBtn.disabled=false;startBtn.textContent="BAŞLAT";nextBtn.disabled=true;resetBtn.disabled=false; }
 }
 nextBtn.addEventListener("click",()=>{ if(ctrl.nextResolve){const r=ctrl.nextResolve;ctrl.nextResolve=null;r();} });
@@ -945,37 +945,38 @@ async function runSteps(){
     }
   });
 
-  steps.push(async()=>{
-    await sleep(700);
-    document.querySelectorAll("#trigTable td").forEach(td=>td.classList.add("fade-cell-out"));
-    await sleep(600);
-    document.querySelectorAll("#trigTable td").forEach(td=>td.classList.remove("fade-cell-out"));
-    clearAll();
-  });
-
   try{
     for(let i=0;i<steps.length;i++){
       if(ctrl.cancelled)break;
       enableControls("running");
       stepDesc.innerHTML=stepDescs[i]||"";
-      stepCounter.textContent = i < 8 ? `Adım ${i+1}/8` : "";
-      startBtn.textContent = i < 8 ? `ÇALIŞIYOR (${i+1}/8)` : "ÇALIŞIYOR";
+      stepCounter.textContent = `Adım ${i+1}/8`;
+      startBtn.textContent = `ÇALIŞIYOR (${i+1}/8)`;
       await steps[i]();
       if(ctrl.cancelled)break;
-      if(i<steps.length-1){ enableControls("waiting"); await waitForNext(); }
+      if(i<steps.length-1){ 
+        enableControls("waiting"); 
+        await waitForNext(); 
+      }
     }
   } finally {
     if(ctrl.nextResolve){const r=ctrl.nextResolve;ctrl.nextResolve=null;r();}
     ctrl.running=false; ctrl.cancelled=false;
-    enableControls("stopped");
-    stepDesc.innerHTML="<strong>Tablo temizlendi. Yeniden başlamak için BAŞLAT'a basın.</strong>";
-    stepCounter.textContent="";
+    if(!ctrl.cancelled){
+      enableControls("finished");
+      stepDesc.innerHTML="<strong>Tablo başarıyla tamamlandı. Sıfırlamak için TEMİZLE butonuna basın.</strong>";
+      stepCounter.textContent="Tamamlandı (8/8)";
+    } else {
+      enableControls("stopped");
+      stepDesc.innerHTML="<strong>Tablo temizlendi. Yeniden başlamak için BAŞLAT'a basın.</strong>";
+      stepCounter.textContent="";
+    }
   }
 }
 
 startBtn.addEventListener("click",async()=>{
   if(ctrl.running)return;
-startBtn.disabled=true; startBtn.textContent="ÇALIŞIYOR";
+  startBtn.disabled=true; startBtn.textContent="ÇALIŞIYOR";
   ctrl.running=true; ctrl.cancelled=false;
   enableControls("running");
   runSteps().catch(e=>{ console.warn(e); ctrl.running=false; enableControls("stopped"); });
@@ -1046,7 +1047,6 @@ function calcTrig(){
   if(currentUnit==="deg"){
     deg=val; rad=val*Math.PI/180;
     document.getElementById("convertBadge").textContent=fmtN(rad,4)+" rad";
-    // Slider güncelle (0-360 aralığı için)
     const norm=((deg%360)+360)%360;
     document.getElementById("angleSlider").value=norm;
     document.getElementById("sliderValDisp").textContent=fmtN(norm,2)+"°";
@@ -1084,7 +1084,6 @@ function resetTrig(){
   drawCircle(null);
 }
 
-/* Birim çember — canvas y ekseni düzeltildi (artık yukarı = pozitif) */
 function drawCircle(data){
   const canvas=document.getElementById("unitCircle");
   const ctx=canvas.getContext("2d");
@@ -1094,19 +1093,16 @@ function drawCircle(data){
   ctx.clearRect(0,0,W,H);
   ctx.fillStyle="#eee9df"; ctx.fillRect(0,0,W,H);
 
-  // Eksenler
   ctx.strokeStyle="#d8d0c0"; ctx.lineWidth=1;
   ctx.beginPath();ctx.moveTo(8,cy);ctx.lineTo(W-8,cy);ctx.stroke();
   ctx.beginPath();ctx.moveTo(cx,8);ctx.lineTo(cx,H-8);ctx.stroke();
 
-  // Eksen etiketleri
   ctx.font="600 10px DM Sans,sans-serif"; ctx.fillStyle="#6b6456";
   ctx.textAlign="center";
   ctx.fillText("1",cx+R+16,cy+4); ctx.fillText("−1",cx-R-18,cy+4);
   ctx.fillText("1",cx+6,cy-R-6); ctx.fillText("−1",cx+6,cy+R+12);
   ctx.fillText("x",W-9,cy-5); ctx.fillText("y",cx+7,11);
 
-  // Çember
   ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);
   ctx.strokeStyle="#2d6a4f"; ctx.lineWidth=2; ctx.stroke();
 
@@ -1117,17 +1113,13 @@ function drawCircle(data){
   }
 
   const {rad,deg,sinV,cosV}=data;
-  // Canvas y ekseni ters olduğundan sin pozitif → yukarı: py = cy - sinV*R
   const px=cx+cosV*R;
-  const py=cy-sinV*R;  // DÜZELTME: eksi işareti
+  const py=cy-sinV*R;
 
-  // Açı yayı (canvas koordinat sisteminde: pozitif açı saat yönü,
-  //           bizim sistemde pozitif açı saat yönü tersi → -rad ile başla)
   ctx.beginPath();
   ctx.arc(cx,cy,R*0.2,0,-rad,rad<0);
   ctx.strokeStyle="#e9c46a"; ctx.lineWidth=2; ctx.stroke();
 
-  // Projeksiyonlar
   ctx.setLineDash([4,3]);
   ctx.strokeStyle="#457b9d"; ctx.lineWidth=1.5;
   ctx.beginPath();ctx.moveTo(px,cy);ctx.lineTo(px,py);ctx.stroke();
@@ -1135,19 +1127,15 @@ function drawCircle(data){
   ctx.beginPath();ctx.moveTo(cx,py);ctx.lineTo(px,py);ctx.stroke();
   ctx.setLineDash([]);
 
-  // Yarıçap
   ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(px,py);
   ctx.strokeStyle="#e76f51"; ctx.lineWidth=2; ctx.stroke();
 
-  // cos doğrusu
   ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(px,cy);
   ctx.strokeStyle="#457b9d"; ctx.lineWidth=2.5; ctx.stroke();
 
-  // sin doğrusu
   ctx.beginPath();ctx.moveTo(px,cy);ctx.lineTo(px,py);
   ctx.strokeStyle="#2d6a4f"; ctx.lineWidth=2.5; ctx.stroke();
 
-  // Etiketler
   ctx.font="bold 9px DM Sans,sans-serif";
   ctx.fillStyle="#457b9d"; ctx.textAlign="center";
   ctx.fillText("cos α",(cx+px)/2,cy+13);
@@ -1155,12 +1143,10 @@ function drawCircle(data){
   ctx.textAlign=cosV>=0?"left":"right";
   ctx.fillText("sin α",px+(cosV>=0?5:-5),(cy+py)/2+4);
 
-  // Nokta
   ctx.beginPath();ctx.arc(px,py,6,0,2*Math.PI);
   ctx.fillStyle="#e76f51";ctx.fill();
   ctx.strokeStyle="#fdfcf9";ctx.lineWidth=2;ctx.stroke();
 
-  // Koordinat etiketi
   const fs=v=>Math.abs(v)<1e-9?"0":parseFloat(v.toFixed(3)).toString().replace(".",",");
   const lbl=`(${fs(cosV)}, ${fs(sinV)})`;
   ctx.font="bold 9px DM Sans,sans-serif"; ctx.fillStyle="#1a1a1a";
