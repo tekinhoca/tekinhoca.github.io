@@ -4,28 +4,39 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Labirent</title>
+<title>MABİRENT</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
+:root{--ui-font:'Inter','Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif}
+sup{font-size:.62em;line-height:0;vertical-align:baseline;position:relative;top:-.62em;margin-left:.06em;font-weight:inherit}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:radial-gradient(ellipse at 50% 0%,#202c4a 0%,#11182b 52%,#0a1020 100%);font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
+html,body{overscroll-behavior:none}
+body{touch-action:none}
+button,.topic-option{touch-action:manipulation}
+html,body{width:100%;height:100%;min-height:0;background:radial-gradient(ellipse at 50% 0%,#202c4a 0%,#11182b 52%,#0a1020 100%);font-family:var(--ui-font);font-variant-numeric:lining-nums;display:flex;align-items:center;justify-content:center;padding:6px;overflow:hidden;overscroll-behavior:none;touch-action:pan-x pan-y;scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-.wrap{width:100%;max-width:440px;display:flex;flex-direction:column;gap:10px;margin:auto}
-.top-bar{display:flex;align-items:center;justify-content:space-between;gap:6px}
-.game-title{font-size:20px;font-weight:700;color:#ffd66b;letter-spacing:.06em;text-shadow:0 0 14px rgba(255,190,75,.22)}
-.infobar{display:flex;gap:4px}
-.ibox{background:linear-gradient(145deg,rgba(38,57,91,.82),rgba(18,27,49,.92));border-radius:8px;padding:6px 0;text-align:center;border:1px solid rgba(104,194,255,.3);width:44px;flex-shrink:0;box-shadow:inset 0 1px rgba(255,255,255,.05)}
-.ibox .l{font-size:8px;color:rgba(190,218,255,.65);margin-bottom:1px;text-transform:uppercase;letter-spacing:.07em}
-.ibox .v{font-size:14px;font-weight:700;color:#8ef5e6;font-family:'Courier New',Courier,monospace;letter-spacing:.05em}
-button.a{background:linear-gradient(135deg,rgba(47,105,157,.3),rgba(94,65,154,.22));border:1px solid rgba(106,198,255,.42);border-radius:7px;padding:6px 12px;font-size:11px;cursor:pointer;color:#d9edff;font-family:Georgia,serif;transition:background .2s,transform .2s,box-shadow .2s;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.15)}
+.wrap{width:100%;max-width:440px;height:100%;max-height:100%;display:flex;flex-direction:column;gap:7px;margin:auto;min-height:0;overflow:hidden}
+.top-bar{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:stretch;gap:5px;flex-shrink:0}
+.game-title{display:none}
+.infobar{display:contents}
+.ibox,.action-tile{background:linear-gradient(145deg,rgba(38,57,91,.82),rgba(18,27,49,.92));border-radius:8px;padding:5px 2px;text-align:center;border:1px solid rgba(104,194,255,.3);min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:inset 0 1px rgba(255,255,255,.05)}
+.ibox .l{font-family:Georgia,serif;font-size:clamp(8px,2.1vw,10px);line-height:1.1;color:rgba(190,218,255,.75);text-transform:uppercase;letter-spacing:.035em}
+.ibox .v{font-size:clamp(12px,3.4vw,15px);line-height:1.15;font-weight:700;color:#8ef5e6;font-family:'Courier New',Courier,monospace;letter-spacing:0}
+.action-tile{appearance:none;cursor:pointer;color:#d9edff;font-family:Georgia,serif;background:linear-gradient(135deg,rgba(47,105,157,.3),rgba(94,65,154,.22));border-color:rgba(106,198,255,.42);-webkit-tap-highlight-color:transparent}
+.action-icon{font-size:clamp(23px,6vw,30px);line-height:1;font-weight:700}
+.action-label{display:none;font-size:12px;line-height:1.1;white-space:nowrap}
+button.a{background:linear-gradient(135deg,rgba(47,105,157,.3),rgba(94,65,154,.22));border:1px solid rgba(106,198,255,.42);border-radius:7px;padding:6px 12px;font-size:11px;cursor:pointer;color:#d9edff;font-family:var(--ui-font);transition:background .2s,transform .2s,box-shadow .2s;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.15)}
 button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,76,179,.4));transform:translateY(-1px);box-shadow:0 5px 15px rgba(0,0,0,.25)}
 
 /* IZGARA */
-.grid-wrap{position:relative;width:100%}
+.grid-wrap{position:relative;width:100%;display:flex;justify-content:center;align-items:center;flex:1 1 auto;min-height:0}
 #grid{
   display:grid;
   grid-template-columns:repeat(11,1fr);
   grid-template-rows:repeat(13,1fr);
-  width:100%;
+  width:min(100%, calc((100dvh - 145px) * 11 / 13));
+  height:auto;
+  max-height:100%;
   aspect-ratio:11/13;
   background:linear-gradient(145deg,#14283b,#17213a 55%,#211d3c);
   border:3px solid #57d9d0;
@@ -77,8 +88,8 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 .feedback-overlay.hidden{display:none}
 .feedback-box{width:min(100%,330px);padding:22px 20px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;background:linear-gradient(155deg,#2a172b,#111426 78%);border:1px solid rgba(255,91,112,.88);border-radius:13px;box-shadow:0 0 12px rgba(255,50,83,.42),0 0 32px rgba(255,45,83,.24),0 18px 48px rgba(0,0,0,.56);animation:feedbackIn .22s ease-out}
 .feedback-title{font-size:clamp(20px,5vw,25px);font-weight:700;letter-spacing:.04em;color:#ff8194;text-shadow:0 0 13px rgba(255,55,90,.65)}
-.feedback-body{font:600 15px/1.65 Georgia,serif;color:#f7eaf0}
-.feedback-lives{font:700 16px/1.4 'Courier New',monospace;color:#ffb0bd}
+.feedback-body{font:600 15px/1.65 var(--ui-font);color:#f7eaf0}
+.feedback-lives{font:700 16px/1.4 var(--ui-font);font-variant-numeric:tabular-nums;color:#ffb0bd}
 .feedback-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:5px}
 .feedback-actions[hidden]{display:none}
 @keyframes feedbackIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
@@ -86,13 +97,13 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 /* SORU OVERLAY */
  .q-overlay{display:none;position:absolute;inset:0;background:radial-gradient(ellipse at 50% 20%,rgba(38,70,112,.97),rgba(10,15,32,.98));border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50;padding:16px}
 .q-overlay.active{display:flex}
-.q-text{font-size:clamp(18px,5vw,26px);font-weight:700;color:#fff0a8;text-shadow:0 0 18px rgba(255,215,105,.2);font-family:Georgia,serif;text-align:center}
-.q-countdown{font:700 clamp(28px,7vw,42px)/1 "Courier New",monospace;color:#8ef5e6;text-shadow:0 0 18px rgba(72,225,214,.4);font-variant-numeric:tabular-nums}
+.q-text{font-size:clamp(18px,5vw,26px);font-weight:700;color:#fff0a8;text-shadow:0 0 18px rgba(255,215,105,.2);font-family:var(--ui-font);text-align:center}
+.q-countdown{font:700 clamp(28px,7vw,42px)/1 var(--ui-font);color:#8ef5e6;text-shadow:0 0 18px rgba(72,225,214,.4);font-variant-numeric:tabular-nums}
 .q-countdown.urgent{color:#ff879d;text-shadow:0 0 18px rgba(255,76,116,.5);animation:countUrgent .5s ease-in-out infinite alternate}
 .q-hint{font-size:12px;color:rgba(224,238,255,.72);text-align:center}
 @keyframes countUrgent{to{transform:scale(1.08);filter:brightness(1.25)}}
 .q-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:300px}
- .q-btn{background:linear-gradient(145deg,#253b5d,#29254f);border:2px solid rgba(106,213,225,0.52);color:#f1f7ff;padding:12px 8px;border-radius:7px;cursor:pointer;font-size:clamp(14px,4vw,20px);font-weight:700;font-family:Georgia,serif;transition:background .15s,border-color .15s}
+ .q-btn{background:linear-gradient(145deg,#253b5d,#29254f);border:2px solid rgba(106,213,225,0.52);color:#f1f7ff;padding:12px 8px;border-radius:7px;cursor:pointer;font-size:clamp(14px,4vw,20px);font-weight:700;font-family:var(--ui-font);transition:background .15s,border-color .15s}
 .q-btn:hover{background:linear-gradient(145deg,#2ac9bf,#6d91ff);color:#071626;border-color:#b6fff7;transform:translateY(-1px)}
 .q-btn.wrong-flash{animation:wrongfl .35s ease}
 @keyframes wrongfl{0%,100%{background:#241e14}50%{background:rgba(180,40,20,0.45);border-color:#eb5757}}
@@ -100,7 +111,7 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 /* WIN OVERLAY */
 .win-overlay{display:none;position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(20,69,83,.96),rgba(10,15,32,.97));border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50}
 .win-overlay.show{display:flex}
-.win-title{font-size:clamp(22px,4vw,30px);font-weight:700;color:#8effd4;text-shadow:0 0 20px rgba(69,255,194,.3);font-family:Georgia,serif}
+.win-title{font-size:clamp(22px,4vw,30px);font-weight:700;color:#8effd4;text-shadow:0 0 20px rgba(69,255,194,.3);font-family:var(--ui-font)}
 .win-body{font-size:12px;color:rgba(247,242,232,0.55);text-align:center;line-height:1.7}
 .win-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 
@@ -108,25 +119,36 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 .br-btns{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
 
 /* KONTROLLER */
-.controls{display:grid;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(2,54px);gap:6px;margin:0 auto}
- .ctrl-btn{background:linear-gradient(145deg,rgba(42,78,119,.72),rgba(44,41,87,.8));border:1.5px solid rgba(109,215,224,.48);color:#b4fff4;border-radius:9px;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;transition:background .15s;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation}
+.controls{display:grid;grid-template-columns:repeat(3,60px);grid-template-rows:repeat(2,50px);gap:6px;margin:0 auto;flex-shrink:0}
+ .ctrl-btn{touch-action:none;background:linear-gradient(145deg,rgba(42,78,119,.72),rgba(44,41,87,.8));border:1.5px solid rgba(109,215,224,.48);color:#b4fff4;border-radius:9px;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;transition:background .15s;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation}
 .ctrl-btn:active{background:rgba(60,210,198,.35);transform:scale(.9)}
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .modal-overlay.hidden{display:none}
-.modal-box{background:linear-gradient(155deg,#17223c,#0d1427 75%);border:1px solid rgba(87,217,208,.55);border-radius:12px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;box-shadow:0 18px 55px rgba(0,0,0,.5),0 0 28px rgba(51,190,203,.12);animation:modalIn .3s ease}
+.modal-box{background:linear-gradient(155deg,#17223c,#0d1427 75%);border:1px solid rgba(87,217,208,.55);border-radius:12px;padding:22px 20px 18px;max-width:420px;width:100%;max-height:calc(100dvh - 32px);overflow:hidden;display:flex;flex-direction:column;gap:12px;box-shadow:0 18px 55px rgba(0,0,0,.5),0 0 28px rgba(51,190,203,.12);animation:modalIn .3s ease}
 @keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 .modal-title{font-size:22px;font-weight:700;color:#8ef5e6;text-align:center;letter-spacing:.08em;text-shadow:0 0 16px rgba(72,225,214,.2)}
 .modal-rules{font-size:11.5px;color:rgba(230,240,255,0.84);line-height:1.75;border-top:1px solid rgba(87,217,208,.22);border-bottom:1px solid rgba(87,217,208,.22);padding:10px 4px;list-style:none}
 .modal-rules li{margin-bottom:3px;padding-left:4px}
 .modal-rules li::before{content:"◈ ";color:#62ded4}
 .modal-btns{display:flex;gap:10px;justify-content:center}
-.modal-close{background:rgba(26,39,65,.72);border:1px solid rgba(135,177,225,.35);border-radius:6px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(224,238,255,.76);font-family:Georgia,serif;transition:background .2s}
+.modal-close{background:rgba(26,39,65,.72);border:1px solid rgba(135,177,225,.35);border-radius:6px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(224,238,255,.76);font-family:var(--ui-font);transition:background .2s}
 .modal-close:hover{background:rgba(43,66,103,.95)}
-.modal-start{background:linear-gradient(135deg,rgba(32,151,155,.25),rgba(80,104,191,.28));border:1px solid rgba(98,222,212,.65);border-radius:6px;padding:6px 22px;font-size:12px;cursor:pointer;color:#8ef5e6;font-weight:600;font-family:Georgia,serif;transition:background .2s}
+.modal-start{background:linear-gradient(135deg,rgba(32,151,155,.25),rgba(80,104,191,.28));border:1px solid rgba(98,222,212,.65);border-radius:6px;padding:6px 22px;font-size:12px;cursor:pointer;color:#8ef5e6;font-weight:600;font-family:var(--ui-font);transition:background .2s}
 .modal-start:hover{background:linear-gradient(135deg,rgba(32,177,177,.42),rgba(103,121,219,.4))}
 .modal-logo{display:flex;justify-content:center;padding-top:4px}
+.modal-logo img{transition:opacity .3s;cursor:pointer}
+.modal-logo img.logo-highlight{opacity:.65 !important}
+@media (hover:hover) and (pointer:fine){.modal-logo img:hover{opacity:.65 !important}}
+.topic-select-title{font-size:13px;font-weight:700;color:#8ef5e6;letter-spacing:.03em;margin-top:1px}
+.topic-select-note{font-size:10.5px;line-height:1.45;color:rgba(224,238,255,.66);margin-top:-8px}
+.topic-select-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.topic-option{display:flex;align-items:center;gap:7px;min-height:36px;padding:7px 8px;border:1px solid rgba(106,198,255,.24);border-radius:7px;background:rgba(24,39,67,.7);color:#e5efff;font-size:11px;line-height:1.3;cursor:pointer;transition:border-color .15s,background .15s}
+.topic-option:has(input:checked){border-color:rgba(98,222,212,.7);background:rgba(32,112,123,.22);color:#b8fff2}
+.topic-option input{accent-color:#62ded4;flex-shrink:0;width:14px;height:14px;margin:0}
+.topic-error{display:none;font-size:11px;color:#ff9b9b;text-align:center;margin-top:-5px}
+.topic-error.visible{display:block}
 
 /* MASAÜSTÜ: daha geniş ve okunaklı açılış/kurallar modali */
 @media (min-width: 768px) {
@@ -135,10 +157,10 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
     background:linear-gradient(155deg,#17223c,#0d1427 75%);
     width: min(92vw, 760px);
     max-width: 760px;
-    max-height: 90vh;
+    max-height: calc(100dvh - 48px);
     padding: 26px 32px 22px;
     gap: 16px;
-    overflow: auto;
+    overflow: hidden;
   }
   .modal-title { font-size: clamp(25px, 2.2vw, 32px); }
   .modal-rules {
@@ -148,6 +170,10 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
   }
   .modal-rules li { margin-bottom: 7px; padding-left: 7px; }
   .modal-btns { gap: 14px; }
+  .topic-select-title { font-size: 16px; }
+  .topic-select-note { font-size: 13px; }
+  .topic-option { min-height: 44px; padding: 9px 11px; font-size: 14px; }
+  .topic-option input { width: 16px; height: 16px; }
   .modal-close, .modal-start { font-size: 14px; padding: 9px 24px; }
   .modal-logo { padding-top: 2px; }
 }
@@ -158,17 +184,16 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
   html { height: 100%; overflow: hidden; }
   html, body { height: 100vh; min-height: 0; padding: 8px 14px; overflow: hidden; }
   body { align-items: center; }
-  .wrap { max-width: 650px; max-height: 100%; gap: 8px; }
-  .top-bar { gap: 14px; }
-  .game-title { font-size: 27px; }
-  .infobar { gap: 9px; }
-  .ibox { width: 76px; padding: 8px 0; }
-  .ibox .l { font-size: 10px; }
-  .ibox .v { font-size: 17px; }
+  .wrap { max-width: 820px; max-height: 100%; gap: 8px; }
+  .top-bar { gap: 9px; }
+  .ibox,.action-tile { min-height: 62px; padding: 7px 3px; gap: 5px; }
+  .ibox .l { font-size: 13px; }
+  .ibox .v { font-size: 19px; }
+  .action-icon { font-size: 23px; }
+  .action-label { display:block; font-size:12px; }
   button.a { font-size: 13px; padding: 8px 15px; }
-  .grid-wrap { display: flex; justify-content: center; flex: 0 1 auto; min-height: 0; }
-  #grid { width: auto; height: min(calc(100vh - 255px), 650px); max-width: 100%; aspect-ratio: 11 / 13; border-width: 4px; border-radius: 13px; flex: 0 1 auto; }
-  .msg { font-size: 13px; min-height: 18px; }
+  .grid-wrap { display: flex; justify-content: center; flex: 1 1 auto; min-height: 0; }
+  #grid { width: auto; height: min(calc(100dvh - 175px), 760px); max-width: 100%; aspect-ratio: 11 / 13; border-width: 4px; border-radius: 13px; flex: 0 1 auto; }
   .controls { grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(2, 42px); gap: 5px; flex-shrink: 0; }
   .ctrl-btn { font-size: 17px; border-radius: 10px; }
   .br-btns { gap: 10px; flex-shrink: 0; }
@@ -184,12 +209,14 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 
 @media (min-width: 768px) and (max-height: 760px) {
   .wrap { gap: 5px; }
-  #grid { height: min(calc(100vh - 225px), 535px); }
+  #grid { height: min(calc(100dvh - 165px), 590px); }
   .controls { grid-template-columns: repeat(3, 36px); grid-template-rows: repeat(2, 36px); gap: 4px; }
   .ctrl-btn { font-size: 15px; }
   .msg { min-height: 14px; }
   button.a { padding-top: 6px; padding-bottom: 6px; }
 }
+
+@media (max-height: 650px) and (max-width: 767px) { .wrap{gap:4px}.ibox,.action-tile{min-height:42px;padding:3px 1px}.controls{grid-template-columns:repeat(3,48px);grid-template-rows:repeat(2,40px);gap:4px}.ctrl-btn{font-size:17px} }
 
 @media (prefers-reduced-motion: reduce) {
   .cell.passage, .door-el, .target-el, .player img { animation: none !important; }
@@ -202,50 +229,61 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
-    <div class="modal-title">LABİRENT</div>
+    <div class="modal-title">MABİRENT</div>
     <ul class="modal-rules">
-      <li>Sol üstteki karakteri, klavyendeki veya ekrandaki <b style="color:#8ef5e6">yön tuşlarıyla</b> hareket ettirebilirsin.</li>
-      <li>Amaç, kırmızı kapılardan geçerek sağ alt köşedeki <b style="color:#8ef5e6">yeşil hedefe</b> ulaşmak.</li>
-      <li>Labirentte <b style="color:#8ef5e6">6 kapı</b> var. Kapılardan geçmek için, ekrana gelen soruları cevaplamalısın.</li>
-      <li>15 saniye içinde cevap veremezsen ya da yanlış cevap verirsen, <b style="color:#ff9b9b">1 can kaybedersin</b>.</li>
-      <li>TOPLAM 3 CANIN VAR!</li>
-      <li>İşlem sırasına dikkat et!</li>
+      <li>Sol üst köşedeki karakteri, klavyendeki veya ekrandaki yön tuşlarıyla hareket ettirebilirsin.</li>
+      <li>Amaç, kırmızı kapılardan geçerek sağ alt köşedeki yeşil hedefe ulaşmak.</li>
+      <li>Labirentte 6 kapı var. Kapılardan geçmek için, ekrana gelen soruları cevaplamalısın.</li>
+      <li>15 saniye içinde cevap veremezsen ya da yanlış cevap verirsen, 1 can kaybedersin.</li>
+      <li><b style="color:#ff9b9b">TOPLAM 3 CANIN VAR! DİKKATLİ OL!</b></li>
     </ul>
     <div class="modal-btns">
       <button class="modal-close" onclick="closeModal()">Kapat</button>
-      <button class="modal-start" onclick="startFromModal()">Başla</button>
+      <button class="modal-start" onclick="continueToTopics()">Konuları Seç</button>
     </div>
-    <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
-           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
-           onmouseover="this.style.opacity='0.65'" onmouseout="this.style.opacity='0.38'">
-    </div>
+    <div class="modal-logo"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo" style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s;cursor:pointer" onclick="if(window.matchMedia('(hover: none)').matches)this.classList.toggle('logo-highlight')"></div>
   </div>
 </div>
 
+<div class="modal-overlay hidden" id="topicModalOverlay">
+  <div class="modal-box">
+    <div class="modal-title">SORU KONULARI</div>
+    <div class="topic-select-title">Bir veya daha fazla konu seç</div>
+    <div class="topic-select-note">Seçtiğin konular altı kapıya dengeli biçimde dağıtılır.</div>
+    <div class="topic-select-grid" id="topicSelectGrid">
+      <label class="topic-option"><input type="checkbox" class="topic-check" value="natural" onchange="clearTopicError()"><span>Doğal Sayılar</span></label>
+      <label class="topic-option"><input type="checkbox" class="topic-check" value="powers" onchange="clearTopicError()"><span>Üslü Sayılar</span></label>
+      <label class="topic-option"><input type="checkbox" class="topic-check" value="roots" onchange="clearTopicError()"><span>Kareköklü Sayılar</span></label>
+      <label class="topic-option"><input type="checkbox" class="topic-check" value="factors" onchange="clearTopicError()"><span>Çarpanlar ve Katlar</span></label>
+      <label class="topic-option"><input type="checkbox" class="topic-check" value="primes" onchange="clearTopicError()"><span>Asal Sayılar</span></label>
+      <label class="topic-option"><input type="checkbox" class="topic-check" value="integers" onchange="clearTopicError()"><span>Tam Sayılar</span></label>
+    </div>
+    <div class="topic-error" id="topicError" role="alert">En az bir konu seçmelisin.</div>
+    <div class="modal-btns">
+      <button class="modal-close" onclick="backToRules()">Geri</button>
+      <button class="modal-start" onclick="startFromModal()">Oyuna Başla</button>
+    </div>
+    <div class="modal-logo"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo" style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s;cursor:pointer" onclick="if(window.matchMedia('(hover: none)').matches)this.classList.toggle('logo-highlight')"></div>
+  </div>
+</div>
 <div class="feedback-overlay hidden" id="feedbackOverlay" role="alertdialog" aria-modal="true" aria-labelledby="feedbackTitle">
   <div class="feedback-box">
     <div class="feedback-title" id="feedbackTitle">YANLIŞ CEVAP!</div>
     <div class="feedback-body" id="feedbackBody">1 can kaybettin.</div>
     <div class="feedback-lives" id="feedbackLives">Kalan can: 2</div>
     <div class="feedback-actions" id="feedbackActions" hidden>
-      <button class="a" onclick="restartCurrent()">&#8593; Başa Dön</button>
-      <button class="a" onclick="newGame()">&#8635; Yeni Oyun</button>
+      <button class="a" onclick="newGame()">&#8635; Yeni Labirent</button>
     </div>
   </div>
 </div>
 
 <div class="wrap">
   <div class="top-bar">
-    <div class="game-title">Labirent</div>
-    <div style="display:flex;align-items:center;gap:6px">
-      <div class="infobar">
-        <div class="ibox"><div class="l">Kapı</div><div class="v" id="qCount">0/6</div></div>
-        <div class="ibox"><div class="l">Can</div><div class="v" id="lives">3</div></div>
-        <div class="ibox"><div class="l">Süre</div><div class="v" id="timer">00:00</div></div>
-      </div>
-      <button class="a" onclick="openModal()">&#9432; Kurallar</button>
-    </div>
+    <div class="ibox"><div class="l">Kapı</div><div class="v" id="qCount">0/6</div></div>
+    <div class="ibox"><div class="l">Can</div><div class="v" id="lives">3</div></div>
+    <div class="ibox"><div class="l">Süre</div><div class="v" id="timer">00:00</div></div>
+    <button class="action-tile" type="button" onclick="openModal()" aria-label="Kurallar" title="Kurallar"><span class="action-icon" aria-hidden="true">ⓘ</span><span class="action-label">KURALLAR</span></button>
+    <button class="action-tile" type="button" onclick="newGame()" aria-label="Yeniden" title="Yeniden"><span class="action-icon" aria-hidden="true">⟳</span><span class="action-label">YENİDEN</span></button>
   </div>
 
   <div class="grid-wrap">
@@ -261,13 +299,10 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
       <div class="win-body" id="winBody"></div>
       <div class="win-btns">
         <button class="a" onclick="newGame()">&#8635; Yeni Labirent</button>
-        <button class="a" onclick="restartCurrent()">&#8593; Başa Dön</button>
       </div>
     </div>
 
   </div>
-
-  <div class="msg" id="msg">Yeşil hedefe ulaş!</div>
 
   <div class="controls">
     <div></div>
@@ -278,10 +313,6 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
     <button class="ctrl-btn" onclick="move(1,0)">▶</button>
   </div>
 
-  <div class="br-btns">
-    <button class="a" onclick="newGame()">&#8635; Yeni Labirent</button>
-    <button class="a" onclick="restartCurrent()">&#8593; Başa Dön</button>
-  </div>
 </div>
 
 <script>
@@ -387,92 +418,292 @@ function placeDoors(g,count){
   return chosen.map(d=>({x:d.point[0],y:d.point[1]}));
 }
 
-// ── SORU HAVUZU ──
-const ALL_Q=[
-  {q:"12 + 8 \u00f7 4",        a:14, wrong:5},
-  {q:"20 \u2212 2 \u00d7 5",  a:10, wrong:90},
-  {q:"3 \u00d7 (4 + 6)",       a:30, wrong:18},
-  {q:"40 \u00f7 (10 \u2212 2)",a:5,  wrong:2},
-  {q:"(15 \u2212 3) \u00f7 4", a:3,  wrong:4},
-  {q:"6 + 4 \u00d7 3",         a:18, wrong:30},
-  {q:"24 \u00f7 4 + 5",        a:11, wrong:8},
-  {q:"(8 + 2) \u00d7 4",       a:40, wrong:10},
-  {q:"15 \u2212 3 \u00d7 4",  a:3,  wrong:48},
-  {q:"(9 + 3) \u00f7 4",       a:3,  wrong:6},
-  {q:"5 \u00d7 6 \u2212 8",   a:22, wrong:10},
-  {q:"18 \u00f7 (3 + 3)",      a:3,  wrong:9},
-  {q:"7 \u00d7 3 + 4",         a:25, wrong:49},
-  {q:"50 \u2212 4 \u00d7 8",  a:18, wrong:368},
-  {q:"(7+3)\u00d7(6\u22124)", a:20, wrong:14},
-  {q:"36 \u00f7 (4 + 2)",      a:6,  wrong:11},
-  {q:"4\u00d7(5\u22122)+3",   a:15, wrong:11},
-  {q:"8+12\u00f74\u22121",    a:10, wrong:4},
-  {q:"3\u00d74 + 2\u00d75",   a:22, wrong:34},
-  {q:"2\u00b3 + 5 \u00d7 2",  a:18, wrong:26},
-  {q:"2 \u00d7 5\u00b2 \u2212 10", a:40, wrong:90},
-  {q:"100 \u00f7 5\u00b2 \u00d7 2", a:8, wrong:4},
-  {q:"3\u00b2 + 4\u00b2",     a:25, wrong:49},
-  {q:"2\u2074 \u2212 4 \u00d7 3", a:4, wrong:36},
-  {q:"(2+3)\u00b2",            a:25, wrong:11},
-  {q:"3 \u00d7 2\u00b2 + 5",  a:17, wrong:29},
-  {q:"2\u00b3 \u00d7 3 \u2212 4", a:20, wrong:28},
-  {q:"(6\u22122)\u00b2 \u00f7 4", a:4, wrong:8},
-  {q:"5\u00b2 \u2212 3\u00b2", a:16, wrong:4},
-  {q:"2\u00b2 \u00d7 (3+5)",  a:32, wrong:20},
-  {q:"2\u00d73\u00d74\u00f76", a:4, wrong:24},
-  {q:"48\u00f74\u00f73",      a:4,  wrong:36},
-  {q:"5\u00d74\u00f72+3",     a:13, wrong:17},
-  {q:"60\u00f7(3\u00d74)",    a:5,  wrong:80},
-  {q:"((3+2)\u00d74)\u00f75", a:4,  wrong:5},
-  {q:"(2\u00d7(5+3))\u22126", a:10, wrong:14},
-  {q:"3\u00d7(2+(8\u00f74))", a:12, wrong:18},
-  {q:"14\u22122\u00d7(3+1)",  a:6,  wrong:48},
-  {q:"9 + 6 \u00f7 3",         a:11, wrong:5},
-  {q:"(9 + 6) \u00f7 3",       a:5,  wrong:11},
-  {q:"4 + 3 \u00d7 5",         a:19, wrong:35},
-  {q:"(4 + 3) \u00d7 5",       a:35, wrong:19},
-  {q:"16 \u00f7 4 + 2",        a:6,  wrong:4},
-  {q:"27 \u00f7 (3 + 6)",      a:3,  wrong:6},
-  {q:"2 \u00d7 3\u00b2 \u2212 1", a:17, wrong:35},
-  {q:"(2 \u00d7 3)\u00b2 \u2212 1", a:35, wrong:17},
-  {q:"30 \u2212 6 \u00d7 4",  a:6,  wrong:96},
-  {q:"(30 \u2212 6) \u00d7 4", a:96, wrong:6},
-  {q:"5 + 4\u00b2 \u00f7 2",  a:13, wrong:20},
+// ── KONU TANIMLARI VE SORU ÜRETİMİ ──
+const TOPICS=[
+  {id:'natural',label:'Doğal Sayılar'},
+  {id:'powers',label:'Üslü Sayılar'},
+  {id:'roots',label:'Kareköklü Sayılar'},
+  {id:'factors',label:'Çarpanlar ve Katlar'},
+  {id:'primes',label:'Asal Sayılar'},
+  {id:'integers',label:'Tam Sayılar'}
 ];
+let selectedTopicIds=[];
+let recentQuestionKeys=[];
+const SUPERSCRIPT={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
+function toSuperscript(n){return String(n).split('').map(ch=>SUPERSCRIPT[ch]||ch).join('');}
+const SUP_REV={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','⁻':'−'};
+function mathHtml(text){
+  const esc=String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return esc.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+/g,m=>'<sup>'+[...m].map(c=>SUP_REV[c]).join('')+'</sup>');
+}
+function randInt(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
+function shuffled(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function fmtNum(n){return n<0?`(${n})`:String(n);}
+function isIntegerValue(n){return Number.isFinite(n)&&Number.isSafeInteger(n);}
+function validAnswer(topicId,n){
+  if(!isIntegerValue(n)||Math.abs(n)>99) return false;
+  if(topicId==='integers') return true;
+  return n>=0;
+}
 
-function makeDecoys(a,wrong,n){
-  const used=new Set([a,wrong]);const d=[];
-  let t=0;
-  while(d.length<n&&t<120){
-    t++;
-    const delta=Math.floor(Math.random()*16)-7;
-    const c=a+delta+(delta===0?1:0);
-    if(!used.has(c)&&c>0){used.add(c);d.push(c);}
+const POWER_ATOMS=[];
+// Tüm tabanların birinci kuvvetleri ve sıfır dışındaki tabanların sıfırıncı kuvvetleri.
+for(let n=0;n<=20;n++) POWER_ATOMS.push({text:`${n}¹`,value:n,special:true});
+for(let n=1;n<=20;n++) POWER_ATOMS.push({text:`${n}⁰`,value:1,special:true});
+// 1'in doğal sayı kuvvetleri; 2, 3, 4 ve 5 için belirlenen üs sınırları.
+for(let e=1;e<=10;e++) POWER_ATOMS.push({text:`1${toSuperscript(e)}`,value:1,special:true});
+for(let e=1;e<=6;e++) POWER_ATOMS.push({text:`2${toSuperscript(e)}`,value:2**e,special:true});
+for(let e=1;e<=5;e++) POWER_ATOMS.push({text:`3${toSuperscript(e)}`,value:3**e,special:true});
+for(const base of [4,5]) for(let e=1;e<=4;e++) POWER_ATOMS.push({text:`${base}${toSuperscript(e)}`,value:base**e,special:true});
+// En fazla 20'ye kadar tabanların ikinci kuvvetleri; sonuç sınırı ayrıca uygulanır.
+for(let n=0;n<=20;n++) POWER_ATOMS.push({text:`${n}²`,value:n*n,special:true});
+// Sıfır olmayan parantezli ifadelerin sıfırıncı kuvvetleri.
+for(let i=0;i<18;i++){
+  const a=randInt(1,12),b=randInt(1,12),op=Math.random()<.5?'+':'−';
+  if(op==='−'&&a===b) continue;
+  const value=op==='+'?a+b:a-b;
+  if(value!==0) POWER_ATOMS.push({text:`(${a} ${op} ${b})⁰`,value:1,special:true});
+}
+const ROOT_ATOMS=[];
+for(let n=0;n<=20;n++) ROOT_ATOMS.push({text:`√${n*n}`,value:n,special:true});
+
+// Değer ile görünen metin aynı rastgele sayıdan oluşturulmalı.
+function getAtom(topicId){
+  if(topicId==='powers'&&Math.random()<.57) return POWER_ATOMS[randInt(0,POWER_ATOMS.length-1)];
+  if(topicId==='roots'&&Math.random()<.57) return ROOT_ATOMS[randInt(0,ROOT_ATOMS.length-1)];
+  const value=topicId==='integers'?randInt(-12,12):randInt(0,25);
+  return {text:fmtNum(value),value,special:false};
+}
+const EXPRESSION_TEMPLATES=[
+  {paren:false,render:(a,b,c)=>`${a} + ${b} × ${c}`,calc:(a,b,c)=>a+b*c,wrong:(a,b,c)=>(a+b)*c},
+  {paren:false,render:(a,b,c)=>`${a} − ${b} × ${c}`,calc:(a,b,c)=>a-b*c,wrong:(a,b,c)=>(a-b)*c},
+  {paren:false,render:(a,b,c)=>`${a} × ${b} + ${c}`,calc:(a,b,c)=>a*b+c,wrong:(a,b,c)=>a*(b+c)},
+  {paren:false,render:(a,b,c)=>`${a} × ${b} − ${c}`,calc:(a,b,c)=>a*b-c,wrong:(a,b,c)=>a*(b-c)},
+  {paren:false,render:(a,b,c)=>`${a} + ${b} ÷ ${c}`,calc:(a,b,c)=>c!==0?a+b/c:NaN,wrong:(a,b,c)=>c!==0?(a+b)/c:NaN},
+  {paren:false,render:(a,b,c)=>`${a} − ${b} ÷ ${c}`,calc:(a,b,c)=>c!==0?a-b/c:NaN,wrong:(a,b,c)=>c!==0?(a-b)/c:NaN},
+  {paren:false,render:(a,b,c)=>`${a} ÷ ${b} + ${c}`,calc:(a,b,c)=>b!==0?a/b+c:NaN,wrong:(a,b,c)=>b!==0?a/(b+c):NaN},
+  {paren:false,render:(a,b,c)=>`${a} ÷ ${b} − ${c}`,calc:(a,b,c)=>b!==0?a/b-c:NaN,wrong:(a,b,c)=>b!==0?a/(b-c):NaN},
+  {paren:true,render:(a,b,c)=>`(${a} + ${b}) × ${c}`,calc:(a,b,c)=>(a+b)*c,wrong:(a,b,c)=>a+b*c},
+  {paren:true,render:(a,b,c)=>`(${a} − ${b}) × ${c}`,calc:(a,b,c)=>(a-b)*c,wrong:(a,b,c)=>a-b*c},
+  {paren:true,render:(a,b,c)=>`${a} × (${b} + ${c})`,calc:(a,b,c)=>a*(b+c),wrong:(a,b,c)=>a*b+c},
+  {paren:true,render:(a,b,c)=>`${a} × (${b} − ${c})`,calc:(a,b,c)=>a*(b-c),wrong:(a,b,c)=>a*b-c},
+  {paren:true,render:(a,b,c)=>`(${a} + ${b}) ÷ ${c}`,calc:(a,b,c)=>c!==0?(a+b)/c:NaN,wrong:(a,b,c)=>c!==0?a+b/c:NaN},
+  {paren:true,render:(a,b,c)=>`(${a} − ${b}) ÷ ${c}`,calc:(a,b,c)=>c!==0?(a-b)/c:NaN,wrong:(a,b,c)=>c!==0?a-b/c:NaN},
+  {paren:true,render:(a,b,c)=>`${a} ÷ (${b} + ${c})`,calc:(a,b,c)=>(b+c)!==0?a/(b+c):NaN,wrong:(a,b,c)=>b!==0?a/b+c:NaN},
+  {paren:true,render:(a,b,c)=>`${a} ÷ (${b} − ${c})`,calc:(a,b,c)=>(b-c)!==0?a/(b-c):NaN,wrong:(a,b,c)=>b!==c&&b!==0?a/b-c:NaN}
+];
+function expressionSteps(kind,a,b,c){
+  switch(kind){
+    case 0:case 1:return [b*c,a+(kind===0?1:-1)*b*c];
+    case 2:case 3:return [a*b,a*b+(kind===2?c:-c)];
+    case 4:case 5:{const d=b/c;return [d,a+(kind===4?d:-d)];}
+    case 6:case 7:{const d=a/b;return [d,d+(kind===6?c:-c)];}
+    case 8:return [a+b,(a+b)*c];
+    case 9:return [a-b,(a-b)*c];
+    case 10:return [b+c,a*(b+c)];
+    case 11:return [b-c,a*(b-c)];
+    case 12:return [a+b,(a+b)/c];
+    case 13:return [a-b,(a-b)/c];
+    case 14:return [b+c,a/(b+c)];
+    case 15:return [b-c,a/(b-c)];
+    default:return [];
   }
-  let k=1;while(d.length<n){const c=a+d.length*k;if(!used.has(c)){used.add(c);d.push(c);}k++;}
+}
+function multiplicationFactorsAllowed(topicId,atoms,kind){
+  if(![0,1,2,3,8,9,10,11].includes(kind)) return true;
+  const [a,b,c]=atoms;
+  const singleDigit=atom=>Math.abs(atom.value)<=9;
+  const pairAllowed=(left,right)=>{
+    if(topicId==='powers'||topicId==='roots'){
+      if(left.special&&right.special) return false;
+      if(left.special) return singleDigit(right);
+      if(right.special) return singleDigit(left);
+    }
+    return singleDigit(left)&&singleDigit(right);
+  };
+  if(kind===0||kind===1) return pairAllowed(b,c);
+  if(kind===2||kind===3) return pairAllowed(a,b);
+  if(kind===8||kind===9) return !c.special&&singleDigit(c);
+  if(kind===10||kind===11) return !a.special&&singleDigit(a);
+  return true;
+}
+function ignoredParenthesesSteps(kind,a,b,c){
+  switch(kind){
+    case 0:return [a+b,(a+b)*c];
+    case 1:return [a-b,(a-b)*c];
+    case 2:return [b+c,a*(b+c)];
+    case 3:return [b-c,a*(b-c)];
+    case 4:return [a+b,(a+b)/c];
+    case 5:return [a-b,(a-b)/c];
+    case 6:return [b+c,a/(b+c)];
+    case 7:return [b-c,a/(b-c)];
+    case 8:return [b*c,a+b*c];
+    case 9:return [b*c,a-b*c];
+    case 10:return [a*b,a*b+c];
+    case 11:return [a*b,a*b-c];
+    case 12:return [a+b,b/c,a+b/c];
+    case 13:return [a-b,b/c,a-b/c];
+    case 14:return [a/b,a/b+c];
+    case 15:return [a/b,a/b-c];
+    default:return [];
+  }
+}
+function validIntermediateResults(topicId,values){
+  return values.every(v=>isIntegerValue(v)&&Math.abs(v)<=99&&(topicId==='integers'||v>=0));
+}
+function generateArithmeticQuestion(topicId){
+  const topic=TOPICS.find(t=>t.id===topicId);
+  for(let attempt=0;attempt<1200;attempt++){
+    const atoms=[getAtom(topicId),getAtom(topicId),getAtom(topicId)];
+    if(topicId==='powers'&&!atoms.some(x=>x.special)) continue;
+    if(topicId==='roots'&&!atoms.some(x=>x.special)) continue;
+    if(atoms.some(x=>!validAnswer(topicId,x.value))) continue;
+    const kind=randInt(0,EXPRESSION_TEMPLATES.length-1);
+    const template=EXPRESSION_TEMPLATES[kind];
+    if(!multiplicationFactorsAllowed(topicId,atoms,kind)) continue;
+    const [a,b,c]=atoms.map(x=>x.value);
+    if(!validIntermediateResults(topicId,expressionSteps(kind,a,b,c))) continue;
+    const answer=template.calc(a,b,c);
+    if(!validAnswer(topicId,answer)||!isIntegerValue(answer)) continue;
+    let wrong=template.wrong(a,b,c);
+    if(!validIntermediateResults(topicId,ignoredParenthesesSteps(kind,a,b,c))) wrong=null;
+    if(!validAnswer(topicId,wrong)||!isIntegerValue(wrong)||wrong===answer) wrong=null;
+    if(wrong===null){
+      const alternatives=topicId==='integers'?[answer+1,answer-1,-answer,0,answer+2,answer-2]:[answer+1,answer-1,answer*2,answer-2,answer+3];
+      wrong=alternatives.find(n=>validAnswer(topicId,n)&&n!==answer);
+    }
+    if(wrong===undefined||wrong===null||wrong===answer) continue;
+    return {q:template.render(...atoms.map(x=>x.text)),a:answer,wrong,topic:topic.label,topicId};
+  }
+  const fallbacks={
+    natural:{q:'(4 + 3) × 5',a:35,wrong:19},
+    integers:{q:'(−4 + 10) × 3',a:18,wrong:26},
+    powers:{q:'2² + 3 × 4',a:16,wrong:20},
+    roots:{q:'(√144 + 3) × 2',a:30,wrong:18}
+  };
+  const fallback=fallbacks[topicId];
+  return {...fallback,topic:topic.label,topicId};
+}
+
+function pickDistinct(pool,count,excludeSet=new Set()){
+  return shuffled(pool.filter(n=>!excludeSet.has(n))).slice(0,count);
+}
+function generateFactorQuestion(){
+  for(let attempt=0;attempt<200;attempt++){
+    const kind=randInt(0,3),n=randInt(6,48),askNegative=Math.random()<.5;
+    let pool=[],correct,wrong;
+    if(kind===0||kind===1){
+      const divisors=[];for(let i=1;i<=n;i++) if(n%i===0) divisors.push(i);
+      const nonDivisors=[];for(let i=2;i<=Math.min(60,n+15);i++) if(n%i!==0) nonDivisors.push(i);
+      if(!divisors.length||!nonDivisors.length||(askNegative&&divisors.length<3)) continue;
+      if(!askNegative){correct=divisors[randInt(0,divisors.length-1)];wrong=nonDivisors[randInt(0,nonDivisors.length-1)];pool=[correct,wrong,...pickDistinct(nonDivisors,2,new Set([correct,wrong]))];
+        return {q:`Hangisi ${n} sayısının bölenlerinden biridir?`,a:correct,wrong,options:pool,topic:'Çarpanlar ve Katlar',topicId:'factors'};}
+      correct=nonDivisors[randInt(0,nonDivisors.length-1)];wrong=divisors[randInt(0,divisors.length-1)];pool=[correct,wrong,...pickDistinct(divisors,2,new Set([correct,wrong]))];
+      return {q:`Hangisi ${n} sayısının bölenlerinden biri değildir?`,a:correct,wrong,options:pool,topic:'Çarpanlar ve Katlar',topicId:'factors'};
+    }
+    const base=randInt(2,12),multiples=[];for(let i=1;i<=12;i++) multiples.push(base*i);
+    const nonMultiples=[];for(let i=1;i<=Math.max(60,base*12);i++) if(i%base!==0) nonMultiples.push(i);
+    if(!askNegative){correct=multiples[randInt(0,multiples.length-1)];wrong=nonMultiples[randInt(0,nonMultiples.length-1)];pool=[correct,wrong,...pickDistinct(nonMultiples,2,new Set([correct,wrong]))];
+      return {q:`Hangisi ${base} sayısının katlarından biridir?`,a:correct,wrong,options:pool,topic:'Çarpanlar ve Katlar',topicId:'factors'};}
+    correct=nonMultiples[randInt(0,nonMultiples.length-1)];wrong=multiples[randInt(0,multiples.length-1)];pool=[correct,wrong,...pickDistinct(multiples,2,new Set([correct,wrong]))];
+    return {q:`Hangisi ${base} sayısının katlarından biri değildir?`,a:correct,wrong,options:pool,topic:'Çarpanlar ve Katlar',topicId:'factors'};
+  }
+  return {q:'Hangisi 12 sayısının bölenlerinden biridir?',a:3,wrong:5,options:[3,5,7,11],topic:'Çarpanlar ve Katlar',topicId:'factors'};
+}
+function isPrime(n){if(n<2)return false;for(let i=2;i*i<=n;i++)if(n%i===0)return false;return true;}
+function generatePrimeQuestion(){
+  const askPrime=Math.random()<.5;
+  const primes=[];for(let n=2;n<=97;n++)if(isPrime(n))primes.push(n);
+  const nonPrimes=[];for(let n=1;n<=100;n++)if(!isPrime(n))nonPrimes.push(n);
+  if(askPrime){
+    const correct=primes[randInt(0,primes.length-1)];
+    const options=[correct,...pickDistinct(nonPrimes,3,new Set([correct]))];
+    return {q:'Hangisi bir asal sayıdır?',a:correct,wrong:options[1],options,topic:'Asal Sayılar',topicId:'primes'};
+  }
+  const correct=nonPrimes[randInt(0,nonPrimes.length-1)];
+  const options=[correct,...pickDistinct(primes,3,new Set([correct]))];
+  return {q:'Hangisi asal değildir?',a:correct,wrong:options[1],options,topic:'Asal Sayılar',topicId:'primes'};
+}
+function generateQuestion(topicId){
+  if(topicId==='factors') return generateFactorQuestion();
+  if(topicId==='primes') return generatePrimeQuestion();
+  return generateArithmeticQuestion(topicId);
+}
+function makeDecoys(a,wrong,n,allowNegative=false){
+  const min=allowNegative?-99:0,max=99;
+  const used=new Set([a,wrong]),d=[];let tries=0;
+  while(d.length<n&&tries<500){
+    tries++;
+    const c=a+(randInt(-12,12)||1);
+    if(c>=min&&c<=max&&!used.has(c)){used.add(c);d.push(c);}
+  }
+  for(let offset=1;d.length<n&&offset<=199;offset++){
+    for(const c of [a+offset,a-offset]){
+      if(c>=min&&c<=max&&!used.has(c)){used.add(c);d.push(c);if(d.length===n)break;}
+    }
+  }
   return d;
 }
-
 function buildOptions(q){
-  const decoys=makeDecoys(q.a,q.wrong,2);
-  const opts=[...new Set([q.a,q.wrong,...decoys])].slice(0,4);
-  while(opts.length<4) opts.push(opts[opts.length-1]+opts.length);
-  return opts.sort(()=>Math.random()-.5);
+  if(Array.isArray(q.options)) return shuffled(q.options);
+  const decoys=makeDecoys(q.a,q.wrong,2,q.topicId==='integers');
+  return shuffled([q.a,q.wrong,...decoys]).slice(0,4);
 }
-
-let recentQuestionKeys=[];
-function pickQuestions(n){
-  // Son oyunlarda kullanılan soruları mümkün olduğunca dışarıda tut.
-  const fresh=ALL_Q.filter(q=>!recentQuestionKeys.includes(q.q));
-  const source=fresh.length>=n?fresh:[...fresh,...ALL_Q.filter(q=>recentQuestionKeys.includes(q.q))];
-  for(let i=source.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[source[i],source[j]]=[source[j],source[i]];}
-  const chosen=source.slice(0,n);
-  recentQuestionKeys=[...recentQuestionKeys,...chosen.map(q=>q.q)].slice(-18);
+function questionKey(q){
+  // İşlem sorularında çeldirici değişikliği aynı ifadeyi yeni soru yapmaz;
+  // seçenekli kavram sorularında ise seçenek kümesi sorunun bir parçasıdır.
+  const options=Array.isArray(q.options)?[...q.options].sort((a,b)=>a-b).join(','):'';
+  return `${q.topicId}|${q.q}|${q.a}|${options}`;
+}
+function isValidGeneratedQuestion(q){
+  if(!q||typeof q.q!=='string'||!Number.isSafeInteger(q.a)) return false;
+  if(['natural','integers','powers','roots'].includes(q.topicId)){
+    if(!validAnswer(q.topicId,q.a)) return false;
+    if(!Array.isArray(q.options)&&(!validAnswer(q.topicId,q.wrong)||q.wrong===q.a)) return false;
+  }
+  if(Array.isArray(q.options)){
+    if(q.options.length!==4||new Set(q.options).size!==4||!q.options.includes(q.a)) return false;
+    if(!q.options.every(Number.isSafeInteger)) return false;
+  }
+  return true;
+}
+function pickQuestions(n,topicIds=selectedTopicIds){
+  const ids=topicIds.length?shuffled(topicIds):['natural'];
+  const assignments=[];
+  for(let i=0;i<n;i++) assignments.push(ids[i%ids.length]);
+  const chosen=[];const used=new Set();
+  for(const topicId of shuffled(assignments)){
+    let q=null;
+    for(let attempt=0;attempt<150;attempt++){
+      const candidate=generateQuestion(topicId);
+      const key=questionKey(candidate);
+      if(used.has(key)||recentQuestionKeys.includes(key)) continue;
+      if(!isValidGeneratedQuestion(candidate)) continue;
+      q=candidate;used.add(key);recentQuestionKeys.push(key);break;
+    }
+    if(!q){
+      // Tekrarsız soru bulunamazsa bile geçersiz soru havuza alınmaz.
+      for(let attempt=0;attempt<1200&&!q;attempt++){
+        const candidate=generateQuestion(topicId);
+        if(isValidGeneratedQuestion(candidate)) q=candidate;
+      }
+      if(!q) throw new Error(`Geçerli soru üretilemedi: ${topicId}`);
+      const key=questionKey(q);used.add(key);recentQuestionKeys.push(key);
+    }
+    chosen.push(q);
+  }
+  recentQuestionKeys=recentQuestionKeys.slice(-150);
   return chosen;
 }
+function syncTopicChecks(){
+  document.querySelectorAll('.topic-check').forEach(input=>{input.checked=selectedTopicIds.includes(input.value);});
+}
+function clearTopicError(){document.getElementById('topicError').classList.remove('visible');}
+function readSelectedTopics(){return [...document.querySelectorAll('.topic-check:checked')].map(input=>input.value);}
 
 // ── OYUN DURUMU ──
 let mazeGrid,playerX,playerY,solvedDoors,totalDoors;
+let setupCompleted=false;
 let startTime,timerInterval,questionTimerInterval,questionDeadline=0,gameActive=false;
 let currentDoor=null,doorMap={},questionPool=[],lives=STARTING_LIVES,openedDoors=0;
 let savedMaze=null,savedDoorMap={},savedPool=[];
@@ -490,14 +721,14 @@ function newGame(){
   totalDoors=doors.length; solvedDoors=0; openedDoors=0; lives=STARTING_LIVES;
   document.getElementById('qCount').textContent=`0/${totalDoors}`;
   document.getElementById('lives').textContent=String(lives);
-  questionPool=pickQuestions(totalDoors);
+  questionPool=pickQuestions(totalDoors,selectedTopicIds);
   doorMap={};
   doors.forEach((d,i)=>{doorMap[`${d.x},${d.y}`]=i%questionPool.length;});
   savedMaze=mazeGrid.map(r=>[...r]);
   savedDoorMap={...doorMap};savedPool=[...questionPool];
   playerX=0;playerY=0;gameActive=false;
   document.getElementById('timer').textContent='00:00';
-  setMsg('Yeşil hedefe ulaş!');
+  setMsg('');
   renderGrid();renderPlayer();startFogPreview();
 }
 
@@ -514,7 +745,7 @@ function restartCurrent(){
   document.getElementById('lives').textContent=String(lives);
   playerX=0;playerY=0;gameActive=false;
   document.getElementById('timer').textContent='00:00';
-  setMsg('Yeşil hedefe ulaş!');
+  setMsg('');
   renderGrid();renderPlayer();startFogPreview();
 }
 
@@ -538,7 +769,7 @@ function renderGrid(){
       cell.className='cell';cell.id=`c-${col}-${row}`;
       const v=mazeGrid[col][row];
       if(v===1)      cell.classList.add('wall');
-      else if(v===2) cell.innerHTML='<div class="door-el"></div>';
+      else if(v===2){cell.classList.add('wall');cell.innerHTML='<div class="door-el"></div>';}
       else if(col===GCOLS-1&&row===GROWS-1) cell.innerHTML='<div class="target-el"></div>';
       else           cell.classList.add('passage');
       grid.appendChild(cell);
@@ -611,6 +842,7 @@ function updateFog(){
 }
 
 function move(dx,dy){
+  if(!setupCompleted) return;
   if(feedbackActive||document.getElementById('qOverlay').classList.contains('active')) return;
   if(document.getElementById('winOverlay').classList.contains('show')) return;
   const nx=playerX+dx,ny=playerY+dy;
@@ -623,14 +855,20 @@ function move(dx,dy){
   if(nx===GCOLS-1&&ny===GROWS-1) win();
 }
 
+function normalizeQuestionPrompt(text){
+  const expression=String(text||'').replace(/(?:\s*=\s*\?)+\s*$/,'').trim();
+  return expression+'';
+}
+
 function askQuestion(x,y){
   currentDoor={x,y};
   const q=questionPool[doorMap[`${x},${y}`]??0];
-  document.getElementById('qTxt').textContent=q.q+' = ?';
+  document.getElementById('qTxt').innerHTML=mathHtml(normalizeQuestionPrompt(q.q));
+  document.getElementById('qHint').textContent=(q.topic?`${q.topic} · `:'')+'Süre dolmadan doğru cevabı seç!';
   const container=document.getElementById('qOpts');container.innerHTML='';
   buildOptions(q).forEach(opt=>{
     const btn=document.createElement('button');
-    btn.className='q-btn';btn.textContent=opt;
+    btn.className='q-btn';btn.innerHTML=mathHtml(opt);
     btn.onclick=()=>checkAnswer(opt,q.a,btn);
     container.appendChild(btn);
   });
@@ -657,7 +895,7 @@ function openDoorAndAdvance(door){
   openedDoors++;
   document.getElementById('qCount').textContent=`${openedDoors}/${totalDoors}`;
   const cell=document.getElementById(`c-${door.x}-${door.y}`);
-  if(cell){cell.innerHTML='';cell.classList.remove('fog-occluded');cell.classList.add('passage');}
+  if(cell){cell.innerHTML='';cell.classList.remove('wall','fog-occluded');cell.classList.add('passage');}
   playerX=door.x;playerY=door.y;renderPlayer();
   if(playerX===GCOLS-1&&playerY===GROWS-1) win();
 }
@@ -708,7 +946,7 @@ function checkAnswer(val,correct,btnEl){
     document.getElementById('qOverlay').classList.remove('active');
     mazeGrid[door.x][door.y]=0;
     const cell=document.getElementById(`c-${door.x}-${door.y}`);
-    if(cell){cell.innerHTML='';cell.classList.add('passage');}
+    if(cell){cell.innerHTML='';cell.classList.remove('wall','fog-occluded');cell.classList.add('passage');}
     playerX=door.x;playerY=door.y;renderPlayer();
     solvedDoors++;
     openedDoors++;
@@ -729,10 +967,18 @@ function win(){
   setMsg('');
 }
 
-function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
-function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
-function startFromModal(){closeModal();newGame();}
-function setMsg(t){document.getElementById('msg').textContent=t;}
+function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');document.getElementById('topicModalOverlay').classList.add('hidden');}
+function openModal(){syncTopicChecks();clearTopicError();document.getElementById('topicModalOverlay').classList.add('hidden');document.getElementById('modalOverlay').classList.remove('hidden');}
+function continueToTopics(){syncTopicChecks();clearTopicError();document.getElementById('modalOverlay').classList.add('hidden');document.getElementById('topicModalOverlay').classList.remove('hidden');}
+function backToRules(){document.getElementById('topicModalOverlay').classList.add('hidden');document.getElementById('modalOverlay').classList.remove('hidden');}
+function startFromModal(){
+  const chosen=readSelectedTopics();
+  if(!chosen.length){document.getElementById('topicError').classList.add('visible');return;}
+  selectedTopicIds=chosen;
+  setupCompleted=true;
+  closeModal();newGame();
+}
+function setMsg(t){const el=document.getElementById('msg');if(el)el.textContent=t;}
 
 document.addEventListener('keydown',e=>{
   if(e.key==='ArrowUp')   {e.preventDefault();move(0,-1);}
