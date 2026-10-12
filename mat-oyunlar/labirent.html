@@ -12,9 +12,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 .wrap{width:100%;max-width:440px;display:flex;flex-direction:column;gap:10px;margin:auto}
 .top-bar{display:flex;align-items:center;justify-content:space-between;gap:6px}
 .game-title{font-size:20px;font-weight:700;color:#ffd66b;letter-spacing:.06em;text-shadow:0 0 14px rgba(255,190,75,.22)}
-.infobar{display:flex;gap:6px}
-.ibox{background:linear-gradient(145deg,rgba(38,57,91,.82),rgba(18,27,49,.92));border-radius:8px;padding:6px 0;text-align:center;border:1px solid rgba(104,194,255,.3);width:60px;flex-shrink:0;box-shadow:inset 0 1px rgba(255,255,255,.05)}
-.ibox .l{font-size:9px;color:rgba(190,218,255,.65);margin-bottom:1px;text-transform:uppercase;letter-spacing:.07em}
+.infobar{display:flex;gap:4px}
+.ibox{background:linear-gradient(145deg,rgba(38,57,91,.82),rgba(18,27,49,.92));border-radius:8px;padding:6px 0;text-align:center;border:1px solid rgba(104,194,255,.3);width:44px;flex-shrink:0;box-shadow:inset 0 1px rgba(255,255,255,.05)}
+.ibox .l{font-size:8px;color:rgba(190,218,255,.65);margin-bottom:1px;text-transform:uppercase;letter-spacing:.07em}
 .ibox .v{font-size:14px;font-weight:700;color:#8ef5e6;font-family:'Courier New',Courier,monospace;letter-spacing:.05em}
 button.a{background:linear-gradient(135deg,rgba(47,105,157,.3),rgba(94,65,154,.22));border:1px solid rgba(106,198,255,.42);border-radius:7px;padding:6px 12px;font-size:11px;cursor:pointer;color:#d9edff;font-family:Georgia,serif;transition:background .2s,transform .2s,box-shadow .2s;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.15)}
 button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,76,179,.4));transform:translateY(-1px);box-shadow:0 5px 15px rgba(0,0,0,.25)}
@@ -34,8 +34,8 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
   overflow:hidden;
 }
 .cell{display:flex;align-items:center;justify-content:center;position:relative}
-.cell.passage{background:linear-gradient(145deg,rgba(26,51,70,.96),rgba(23,31,58,.98));box-shadow:inset 0 0 1px rgba(139,225,255,.13);animation:passageGlow 5s ease-in-out infinite alternate}
-.cell.wall{background:linear-gradient(145deg,#34425e,#222b48 60%,#30294f);box-shadow:inset 0 0 0 1px rgba(143,184,255,.1),inset 0 0 7px rgba(0,0,0,.35)}
+.cell.passage{background:linear-gradient(145deg,#72e9df 0%,#39bfc8 52%,#3389b8 100%);box-shadow:inset 0 0 0 1px rgba(235,255,255,.34),inset 0 0 9px rgba(5,54,86,.2);animation:passageGlow 5s ease-in-out infinite alternate}
+.cell.wall{background:linear-gradient(145deg,#27304d,#151c32 60%,#282044);box-shadow:inset 0 0 0 1px rgba(143,184,255,.13),inset 0 0 8px rgba(0,0,0,.48)}
 .player{
   position:absolute;width:76%;height:76%;
   background:transparent;
@@ -57,15 +57,40 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
   animation:gpulse 1.6s ease-in-out infinite;
 }
 @keyframes gpulse{0%,100%{transform:scale(.82);opacity:.8;filter:hue-rotate(0deg)}50%{transform:scale(1);opacity:1;filter:hue-rotate(18deg)}}
-@keyframes passageGlow{from{filter:brightness(.96)}to{filter:brightness(1.08)}}
+@keyframes passageGlow{from{filter:brightness(.97)}to{filter:brightness(1.04)}}
 @keyframes doorPulse{0%,100%{filter:brightness(.94)}50%{filter:brightness(1.18)}}
 .player img{animation:playerBob 1.25s ease-in-out infinite}
 @keyframes playerBob{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2%) scale(1.025)}}
+
+/* HAREKETLİ IŞIK VE DUVAR GÖLGELERİ */
+#grid{position:relative}
+#fogOverlay{position:absolute;inset:3px;z-index:2;pointer-events:none;--fog-x:50%;--fog-y:50%;--fog-radius:120px;background:radial-gradient(circle var(--fog-radius) at var(--fog-x) var(--fog-y),rgba(3,7,17,0) 0%,rgba(3,7,17,.035) 61%,rgba(3,7,17,.58) 84%,rgba(3,7,17,.98) 100%);visibility:hidden;opacity:0;transition:opacity 1s ease,visibility 0s linear 1s}
+#grid.fog-active #fogOverlay{visibility:visible;opacity:1;transition:opacity 1s ease,visibility 0s}
+.cell.fog-occluded::after{content:"";position:absolute;inset:0;background:rgba(4,7,17,.97);z-index:3;pointer-events:none;opacity:0;transition:opacity 1s ease}
+.cell.fog-occluded::after{opacity:1}
+.door-el,.target-el{position:relative;z-index:4}
+.player{z-index:5}
+.cell.fog-occluded .door-el,.cell.fog-occluded .target-el,.cell.fog-occluded .player{position:relative;z-index:5}
+
+/* CAN KAYBI BİLDİRİMİ */
+.feedback-overlay{position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(2,5,14,.42);backdrop-filter:blur(2px)}
+.feedback-overlay.hidden{display:none}
+.feedback-box{width:min(100%,330px);padding:22px 20px 18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;background:linear-gradient(155deg,#2a172b,#111426 78%);border:1px solid rgba(255,91,112,.88);border-radius:13px;box-shadow:0 0 12px rgba(255,50,83,.42),0 0 32px rgba(255,45,83,.24),0 18px 48px rgba(0,0,0,.56);animation:feedbackIn .22s ease-out}
+.feedback-title{font-size:clamp(20px,5vw,25px);font-weight:700;letter-spacing:.04em;color:#ff8194;text-shadow:0 0 13px rgba(255,55,90,.65)}
+.feedback-body{font:600 15px/1.65 Georgia,serif;color:#f7eaf0}
+.feedback-lives{font:700 16px/1.4 'Courier New',monospace;color:#ffb0bd}
+.feedback-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:5px}
+.feedback-actions[hidden]{display:none}
+@keyframes feedbackIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 
 /* SORU OVERLAY */
  .q-overlay{display:none;position:absolute;inset:0;background:radial-gradient(ellipse at 50% 20%,rgba(38,70,112,.97),rgba(10,15,32,.98));border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50;padding:16px}
 .q-overlay.active{display:flex}
 .q-text{font-size:clamp(18px,5vw,26px);font-weight:700;color:#fff0a8;text-shadow:0 0 18px rgba(255,215,105,.2);font-family:Georgia,serif;text-align:center}
+.q-countdown{font:700 clamp(28px,7vw,42px)/1 "Courier New",monospace;color:#8ef5e6;text-shadow:0 0 18px rgba(72,225,214,.4);font-variant-numeric:tabular-nums}
+.q-countdown.urgent{color:#ff879d;text-shadow:0 0 18px rgba(255,76,116,.5);animation:countUrgent .5s ease-in-out infinite alternate}
+.q-hint{font-size:12px;color:rgba(224,238,255,.72);text-align:center}
+@keyframes countUrgent{to{transform:scale(1.08);filter:brightness(1.25)}}
 .q-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:300px}
  .q-btn{background:linear-gradient(145deg,#253b5d,#29254f);border:2px solid rgba(106,213,225,0.52);color:#f1f7ff;padding:12px 8px;border-radius:7px;cursor:pointer;font-size:clamp(14px,4vw,20px);font-weight:700;font-family:Georgia,serif;transition:background .15s,border-color .15s}
 .q-btn:hover{background:linear-gradient(145deg,#2ac9bf,#6d91ff);color:#071626;border-color:#b6fff7;transform:translateY(-1px)}
@@ -83,30 +108,31 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 .br-btns{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
 
 /* KONTROLLER */
-.controls{display:grid;grid-template-columns:repeat(3,36px);grid-template-rows:repeat(2,36px);gap:5px;margin:0 auto}
- .ctrl-btn{background:linear-gradient(145deg,rgba(42,78,119,.72),rgba(44,41,87,.8));border:1.5px solid rgba(109,215,224,.48);color:#b4fff4;border-radius:7px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s;-webkit-tap-highlight-color:transparent;user-select:none}
+.controls{display:grid;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(2,54px);gap:6px;margin:0 auto}
+ .ctrl-btn{background:linear-gradient(145deg,rgba(42,78,119,.72),rgba(44,41,87,.8));border:1.5px solid rgba(109,215,224,.48);color:#b4fff4;border-radius:9px;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;transition:background .15s;-webkit-tap-highlight-color:transparent;user-select:none;touch-action:manipulation}
 .ctrl-btn:active{background:rgba(60,210,198,.35);transform:scale(.9)}
 
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
 .modal-overlay.hidden{display:none}
-.modal-box{background:#0d0b08;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease}
+.modal-box{background:linear-gradient(155deg,#17223c,#0d1427 75%);border:1px solid rgba(87,217,208,.55);border-radius:12px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;box-shadow:0 18px 55px rgba(0,0,0,.5),0 0 28px rgba(51,190,203,.12);animation:modalIn .3s ease}
 @keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-.modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em}
-.modal-rules{font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);padding:10px 4px;list-style:none}
+.modal-title{font-size:22px;font-weight:700;color:#8ef5e6;text-align:center;letter-spacing:.08em;text-shadow:0 0 16px rgba(72,225,214,.2)}
+.modal-rules{font-size:11.5px;color:rgba(230,240,255,0.84);line-height:1.75;border-top:1px solid rgba(87,217,208,.22);border-bottom:1px solid rgba(87,217,208,.22);padding:10px 4px;list-style:none}
 .modal-rules li{margin-bottom:3px;padding-left:4px}
-.modal-rules li::before{content:"◈ ";color:#c8960c}
+.modal-rules li::before{content:"◈ ";color:#62ded4}
 .modal-btns{display:flex;gap:10px;justify-content:center}
-.modal-close{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s}
-.modal-close:hover{background:rgba(40,30,10,0.9)}
-.modal-start{background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s}
-.modal-start:hover{background:rgba(60,40,5,0.9)}
+.modal-close{background:rgba(26,39,65,.72);border:1px solid rgba(135,177,225,.35);border-radius:6px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(224,238,255,.76);font-family:Georgia,serif;transition:background .2s}
+.modal-close:hover{background:rgba(43,66,103,.95)}
+.modal-start{background:linear-gradient(135deg,rgba(32,151,155,.25),rgba(80,104,191,.28));border:1px solid rgba(98,222,212,.65);border-radius:6px;padding:6px 22px;font-size:12px;cursor:pointer;color:#8ef5e6;font-weight:600;font-family:Georgia,serif;transition:background .2s}
+.modal-start:hover{background:linear-gradient(135deg,rgba(32,177,177,.42),rgba(103,121,219,.4))}
 .modal-logo{display:flex;justify-content:center;padding-top:4px}
 
 /* MASAÜSTÜ: daha geniş ve okunaklı açılış/kurallar modali */
 @media (min-width: 768px) {
   .modal-overlay { padding: 24px; }
   .modal-box {
+    background:linear-gradient(155deg,#17223c,#0d1427 75%);
     width: min(92vw, 760px);
     max-width: 760px;
     max-height: 90vh;
@@ -129,8 +155,10 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 
 /* LABİRENT MASAÜSTÜ GÖRÜNÜMÜ */
 @media (min-width: 768px) {
-  html, body { padding: 18px; }
-  .wrap { max-width: 650px; gap: 13px; }
+  html { height: 100%; overflow: hidden; }
+  html, body { height: 100vh; min-height: 0; padding: 8px 14px; overflow: hidden; }
+  body { align-items: center; }
+  .wrap { max-width: 650px; max-height: 100%; gap: 8px; }
   .top-bar { gap: 14px; }
   .game-title { font-size: 27px; }
   .infobar { gap: 9px; }
@@ -138,20 +166,34 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
   .ibox .l { font-size: 10px; }
   .ibox .v { font-size: 17px; }
   button.a { font-size: 13px; padding: 8px 15px; }
-  #grid { border-width: 4px; border-radius: 13px; }
+  .grid-wrap { display: flex; justify-content: center; flex: 0 1 auto; min-height: 0; }
+  #grid { width: auto; height: min(calc(100vh - 255px), 650px); max-width: 100%; aspect-ratio: 11 / 13; border-width: 4px; border-radius: 13px; flex: 0 1 auto; }
   .msg { font-size: 13px; min-height: 18px; }
-  .controls { grid-template-columns: repeat(3, 44px); grid-template-rows: repeat(2, 44px); gap: 6px; }
+  .controls { grid-template-columns: repeat(3, 42px); grid-template-rows: repeat(2, 42px); gap: 5px; flex-shrink: 0; }
   .ctrl-btn { font-size: 17px; border-radius: 10px; }
-  .br-btns { gap: 10px; }
+  .br-btns { gap: 10px; flex-shrink: 0; }
   .q-overlay { gap: 18px; padding: 26px; }
   .q-text { font-size: clamp(24px, 3vw, 34px); }
+  .q-countdown { font-size: 44px; }
+  .q-hint { font-size: 14px; }
   .q-opts { max-width: 380px; gap: 12px; }
   .q-btn { font-size: 20px; padding: 15px 12px; }
   .win-title { font-size: 30px; }
   .win-body { font-size: 15px; }
 }
+
+@media (min-width: 768px) and (max-height: 760px) {
+  .wrap { gap: 5px; }
+  #grid { height: min(calc(100vh - 225px), 535px); }
+  .controls { grid-template-columns: repeat(3, 36px); grid-template-rows: repeat(2, 36px); gap: 4px; }
+  .ctrl-btn { font-size: 15px; }
+  .msg { min-height: 14px; }
+  button.a { padding-top: 6px; padding-bottom: 6px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .cell.passage, .door-el, .target-el, .player img { animation: none !important; }
+  #fogOverlay,.cell.fog-occluded::after { transition-duration: .01ms !important; }
 }
 
 </style>
@@ -162,11 +204,12 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
   <div class="modal-box">
     <div class="modal-title">LABİRENT</div>
     <ul class="modal-rules">
-      <li>Karakteri <b style="color:#c8960c">yön tuşlarıyla</b> veya <b style="color:#c8960c">ekrandaki butonlarla</b> hareket ettir.</li>
-      <li>Karşına çıkacak <b style="color:#c8960c">kırmızı kapıdan</b> geçmek için sorulacak soruyu doğru cevapla.</li>
-      <li>İşlem sırası: <b style="color:#c8960c">( )</b> → Üslü ifade → <b style="color:#c8960c">× ÷</b> → + −</li>
-      <li>Yanlış cevap kapıyı açamaz; doğruyu bulana kadar dene.</li>
-      <li>En kısa sürede <b style="color:#c8960c">yeşil hedefe</b> ulaş!</li>
+      <li>Sol üstteki karakteri, klavyendeki veya ekrandaki <b style="color:#8ef5e6">yön tuşlarıyla</b> hareket ettirebilirsin.</li>
+      <li>Amaç, kırmızı kapılardan geçerek sağ alt köşedeki <b style="color:#8ef5e6">yeşil hedefe</b> ulaşmak.</li>
+      <li>Labirentte <b style="color:#8ef5e6">6 kapı</b> var. Kapılardan geçmek için, ekrana gelen soruları cevaplamalısın.</li>
+      <li>15 saniye içinde cevap veremezsen ya da yanlış cevap verirsen, <b style="color:#ff9b9b">1 can kaybedersin</b>.</li>
+      <li>TOPLAM 3 CANIN VAR!</li>
+      <li>İşlem sırasına dikkat et!</li>
     </ul>
     <div class="modal-btns">
       <button class="modal-close" onclick="closeModal()">Kapat</button>
@@ -180,12 +223,25 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
   </div>
 </div>
 
+<div class="feedback-overlay hidden" id="feedbackOverlay" role="alertdialog" aria-modal="true" aria-labelledby="feedbackTitle">
+  <div class="feedback-box">
+    <div class="feedback-title" id="feedbackTitle">YANLIŞ CEVAP!</div>
+    <div class="feedback-body" id="feedbackBody">1 can kaybettin.</div>
+    <div class="feedback-lives" id="feedbackLives">Kalan can: 2</div>
+    <div class="feedback-actions" id="feedbackActions" hidden>
+      <button class="a" onclick="restartCurrent()">&#8593; Başa Dön</button>
+      <button class="a" onclick="newGame()">&#8635; Yeni Oyun</button>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
   <div class="top-bar">
     <div class="game-title">Labirent</div>
     <div style="display:flex;align-items:center;gap:6px">
       <div class="infobar">
         <div class="ibox"><div class="l">Kapı</div><div class="v" id="qCount">0/6</div></div>
+        <div class="ibox"><div class="l">Can</div><div class="v" id="lives">3</div></div>
         <div class="ibox"><div class="l">Süre</div><div class="v" id="timer">00:00</div></div>
       </div>
       <button class="a" onclick="openModal()">&#9432; Kurallar</button>
@@ -196,6 +252,8 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
     <div id="grid"></div>
     <div class="q-overlay" id="qOverlay">
       <div class="q-text" id="qTxt"></div>
+      <div class="q-countdown" id="qCountdown" aria-live="polite">15</div>
+      <div class="q-hint" id="qHint">Süre dolmadan doğru cevabı seç!</div>
       <div class="q-opts" id="qOpts"></div>
     </div>
     <div class="win-overlay" id="winOverlay">
@@ -206,6 +264,7 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
         <button class="a" onclick="restartCurrent()">&#8593; Başa Dön</button>
       </div>
     </div>
+
   </div>
 
   <div class="msg" id="msg">Yeşil hedefe ulaş!</div>
@@ -229,7 +288,8 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 // ── LABİRENT ÜRETİCİ ──
 // Görsel ızgara: 11 sütun × 13 satır
 // 6 sütun odası × 7 satır odası, aralarında duvar hücreleri
-const GCOLS=11, GROWS=13, RCOLS=6, RROWS=7, DOOR_COUNT=6, MIN_PATH=20;
+const GCOLS=11, GROWS=13, RCOLS=6, RROWS=7, DOOR_COUNT=6, MIN_PATH=31;
+const QUESTION_SECONDS=15, STARTING_LIVES=3;
 
 function rg(r){ return r*2; }
 
@@ -242,8 +302,8 @@ function generateMaze(){
   while(stack.length){
     const [rx,ry]=stack[stack.length-1];
     const nb=dirs.map(([dx,dy])=>[rx+dx,ry+dy])
-      .filter(([nx,ny])=>nx>=0&&nx<RCOLS&&ny>=0&&ny<RROWS&&!visited[nx][ny])
-      .sort(()=>Math.random()-.5);
+      .filter(([nx,ny])=>nx>=0&&nx<RCOLS&&ny>=0&&ny<RROWS&&!visited[nx][ny]);
+    for(let i=nb.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[nb[i],nb[j]]=[nb[j],nb[i]];}
     if(!nb.length){stack.pop();continue;}
     const [nx,ny]=nb[0];
     visited[nx][ny]=true;
@@ -255,21 +315,23 @@ function generateMaze(){
 }
 
 function generateValidMaze(){
-  for(let i=0;i<30;i++){
+  // Kısa labirenti yedek olarak kabul etme: bütün koşullar sağlanana kadar yeni aday üret.
+  for(let attempt=0;attempt<5000;attempt++){
     const g=generateMaze();
     const p=bfsPath(g,0,0,GCOLS-1,GROWS-1);
-    if(p&&p.length>=MIN_PATH) return g;
+    if(p && p.length>=MIN_PATH && chooseDoorCandidates(p,DOOR_COUNT)) return g;
   }
-  return generateMaze();
+  // Çok düşük olasılıklı beklenmedik durumda, kullanıcıya geçersiz labirent göstermek yerine hata ver.
+  throw new Error('Uygun uzunlukta labirent üretilemedi.');
 }
 
 function bfsPath(g,sx,sy,ex,ey){
   const vis=Array.from({length:GCOLS},()=>new Array(GROWS).fill(false));
   const prv=Array.from({length:GCOLS},()=>new Array(GROWS).fill(null));
-  const q=[[sx,sy]]; vis[sx][sy]=true;
+  const q=[[sx,sy]]; let head=0; vis[sx][sy]=true;
   const D=[[0,-1],[0,1],[-1,0],[1,0]];
-  while(q.length){
-    const [cx,cy]=q.shift();
+  while(head<q.length){
+    const [cx,cy]=q[head++];
     if(cx===ex&&cy===ey){
       const path=[]; let cur=[ex,ey];
       while(cur){path.unshift(cur);cur=prv[cur[0]][cur[1]];}
@@ -285,20 +347,44 @@ function bfsPath(g,sx,sy,ex,ey){
   return null;
 }
 
+function getDoorCandidates(path){
+  return path.map((point,index)=>({point,index}))
+    .filter(({point,index})=>index>1&&index<path.length-2&&point[0]>0&&point[1]>0&&point[0]<GCOLS-1&&point[1]<GROWS-1);
+}
+
+function chooseDoorCandidates(path,count){
+  const candidates=getDoorCandidates(path);
+  if(candidates.length<count) return null;
+  const targets=Array.from({length:count},(_,i)=>path.length*(i+1)/(count+1));
+  const dp=Array.from({length:count},()=>new Array(candidates.length).fill(Infinity));
+  const prev=Array.from({length:count},()=>new Array(candidates.length).fill(-1));
+  for(let j=0;j<candidates.length;j++){
+    dp[0][j]=(candidates[j].index-targets[0])**2;
+  }
+  for(let k=1;k<count;k++){
+    for(let j=0;j<candidates.length;j++){
+      for(let h=0;h<j;h++){
+        if(candidates[j].index-candidates[h].index<3) continue;
+        const cost=dp[k-1][h]+(candidates[j].index-targets[k])**2;
+        if(cost<dp[k][j]){dp[k][j]=cost;prev[k][j]=h;}
+      }
+    }
+  }
+  let last=-1,best=Infinity;
+  for(let j=0;j<candidates.length;j++) if(dp[count-1][j]<best){best=dp[count-1][j];last=j;}
+  if(last<0||!Number.isFinite(best)) return null;
+  const chosen=new Array(count);let j=last;
+  for(let k=count-1;k>=0;k--){chosen[k]=candidates[j];j=prev[k][j];}
+  return chosen;
+}
+
 function placeDoors(g,count){
   const path=bfsPath(g,0,0,GCOLS-1,GROWS-1);
-  if(!path||path.length<4) return [];
-  const mid=path.slice(Math.floor(path.length*.12),Math.floor(path.length*.88))
-    .filter(([x,y])=>x>0&&y>0&&x<GCOLS-1&&y<GROWS-1);
-  for(let i=mid.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[mid[i],mid[j]]=[mid[j],mid[i]];}
-  const doors=[],chosen=[];
-  for(const [x,y] of mid){
-    if(chosen.every(([cx,cy])=>Math.abs(cx-x)+Math.abs(cy-y)>=3)){
-      doors.push({x,y});chosen.push([x,y]);g[x][y]=2;
-    }
-    if(doors.length>=count) break;
-  }
-  return doors;
+  if(!path||path.length<MIN_PATH) throw new Error('Kapı yerleştirmek için ana rota yeterince uzun değil.');
+  const chosen=chooseDoorCandidates(path,count);
+  if(!chosen||chosen.length!==count) throw new Error('Kapılar yeterli aralıkla yerleştirilemedi.');
+  chosen.forEach(d=>g[d.point[0]][d.point[1]]=2);
+  return chosen.map(d=>({x:d.point[0],y:d.point[1]}));
 }
 
 // ── SORU HAVUZU ──
@@ -346,7 +432,7 @@ const ALL_Q=[
   {q:"4 + 3 \u00d7 5",         a:19, wrong:35},
   {q:"(4 + 3) \u00d7 5",       a:35, wrong:19},
   {q:"16 \u00f7 4 + 2",        a:6,  wrong:4},
-  {q:"16 \u00f7 (4 + 2)",      a:8,  wrong:6},
+  {q:"27 \u00f7 (3 + 6)",      a:3,  wrong:6},
   {q:"2 \u00d7 3\u00b2 \u2212 1", a:17, wrong:35},
   {q:"(2 \u00d7 3)\u00b2 \u2212 1", a:35, wrong:17},
   {q:"30 \u2212 6 \u00d7 4",  a:6,  wrong:96},
@@ -374,27 +460,37 @@ function buildOptions(q){
   return opts.sort(()=>Math.random()-.5);
 }
 
+let recentQuestionKeys=[];
 function pickQuestions(n){
-  const arr=[...ALL_Q];
-  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
-  return arr.slice(0,n);
+  // Son oyunlarda kullanılan soruları mümkün olduğunca dışarıda tut.
+  const fresh=ALL_Q.filter(q=>!recentQuestionKeys.includes(q.q));
+  const source=fresh.length>=n?fresh:[...fresh,...ALL_Q.filter(q=>recentQuestionKeys.includes(q.q))];
+  for(let i=source.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[source[i],source[j]]=[source[j],source[i]];}
+  const chosen=source.slice(0,n);
+  recentQuestionKeys=[...recentQuestionKeys,...chosen.map(q=>q.q)].slice(-18);
+  return chosen;
 }
 
 // ── OYUN DURUMU ──
 let mazeGrid,playerX,playerY,solvedDoors,totalDoors;
-let startTime,timerInterval,gameActive=false;
-let currentDoor=null,doorMap={},questionPool=[];
+let startTime,timerInterval,questionTimerInterval,questionDeadline=0,gameActive=false;
+let currentDoor=null,doorMap={},questionPool=[],lives=STARTING_LIVES,openedDoors=0;
 let savedMaze=null,savedDoorMap={},savedPool=[];
+let fogActive=false,fogPreviewTimer=null,feedbackTimer=null,feedbackActive=false;
 
 function newGame(){
   clearInterval(timerInterval);
+  clearInterval(questionTimerInterval);
+  clearTimeout(fogPreviewTimer);clearTimeout(feedbackTimer);
+  feedbackActive=false;currentDoor=null;document.getElementById('feedbackOverlay').classList.add('hidden');
   document.getElementById('winOverlay').classList.remove('show');
   document.getElementById('qOverlay').classList.remove('active');
   mazeGrid=generateValidMaze();
   const doors=placeDoors(mazeGrid,DOOR_COUNT);
-  totalDoors=doors.length; solvedDoors=0;
+  totalDoors=doors.length; solvedDoors=0; openedDoors=0; lives=STARTING_LIVES;
   document.getElementById('qCount').textContent=`0/${totalDoors}`;
-  questionPool=pickQuestions(Math.max(totalDoors+4,12));
+  document.getElementById('lives').textContent=String(lives);
+  questionPool=pickQuestions(totalDoors);
   doorMap={};
   doors.forEach((d,i)=>{doorMap[`${d.x},${d.y}`]=i%questionPool.length;});
   savedMaze=mazeGrid.map(r=>[...r]);
@@ -402,21 +498,24 @@ function newGame(){
   playerX=0;playerY=0;gameActive=false;
   document.getElementById('timer').textContent='00:00';
   setMsg('Yeşil hedefe ulaş!');
-  renderGrid();renderPlayer();
+  renderGrid();renderPlayer();startFogPreview();
 }
 
 function restartCurrent(){
-  clearInterval(timerInterval);
+  clearInterval(timerInterval);clearInterval(questionTimerInterval);
+  clearTimeout(fogPreviewTimer);clearTimeout(feedbackTimer);
+  feedbackActive=false;currentDoor=null;document.getElementById('feedbackOverlay').classList.add('hidden');
   document.getElementById('winOverlay').classList.remove('show');
   document.getElementById('qOverlay').classList.remove('active');
   mazeGrid=savedMaze.map(r=>[...r]);
   doorMap={...savedDoorMap};questionPool=[...savedPool];
-  totalDoors=Object.keys(doorMap).length;solvedDoors=0;
+  totalDoors=Object.keys(doorMap).length;solvedDoors=0;openedDoors=0;lives=STARTING_LIVES;
   document.getElementById('qCount').textContent=`0/${totalDoors}`;
+  document.getElementById('lives').textContent=String(lives);
   playerX=0;playerY=0;gameActive=false;
   document.getElementById('timer').textContent='00:00';
   setMsg('Yeşil hedefe ulaş!');
-  renderGrid();renderPlayer();
+  renderGrid();renderPlayer();startFogPreview();
 }
 
 function startTimer(){
@@ -431,7 +530,8 @@ function startTimer(){
 
 function renderGrid(){
   const grid=document.getElementById('grid');
-  grid.querySelectorAll('.cell').forEach(c=>c.remove());
+  grid.querySelectorAll('.cell,#fogOverlay').forEach(c=>c.remove());
+  grid.classList.remove('fog-active');
   for(let row=0;row<GROWS;row++){
     for(let col=0;col<GCOLS;col++){
       const cell=document.createElement('div');
@@ -444,6 +544,8 @@ function renderGrid(){
       grid.appendChild(cell);
     }
   }
+  const fog=document.createElement('div');fog.id='fogOverlay';fog.setAttribute('aria-hidden','true');grid.appendChild(fog);
+  updateFog();
 }
 
 function renderPlayer(){
@@ -454,10 +556,62 @@ function renderPlayer(){
     p.innerHTML='<img src="../img/th-ikon.png" alt="">';
     cell.appendChild(p);
   }
+  updateFog();
+}
+
+function startFogPreview(){
+  fogActive=false;
+  document.getElementById('grid').classList.remove('fog-active');
+  document.querySelectorAll('.cell.fog-occluded').forEach(c=>c.classList.remove('fog-occluded'));
+  clearTimeout(fogPreviewTimer);
+  // Izgarayı 2 saniye tamamen göster; ardından karanlığı ve karakterin ışığını 1 saniyede yumuşakça getir.
+  fogPreviewTimer=setTimeout(()=>{fogActive=true;updateFog();},2000);
+}
+
+function hasLineOfSight(x0,y0,x1,y1){
+  // Bresenham: hedef hücre duvar olsa bile kendisi görülebilir; ara duvar görüşü keser.
+  let x=x0,y=y0;const dx=Math.abs(x1-x0),dy=Math.abs(y1-y0);
+  const sx=x0<x1?1:-1,sy=y0<y1?1:-1;let err=dx-dy;
+  while(!(x===x1&&y===y1)){
+    const e2=2*err;
+    if(e2>-dy){err-=dy;x+=sx;}
+    if(e2<dx){err+=dx;y+=sy;}
+    if(x===x1&&y===y1) return true;
+    if(mazeGrid[x]&&mazeGrid[x][y]===1) return false;
+  }
+  return true;
+}
+
+function updateFog(){
+  const grid=document.getElementById('grid');
+  if(!grid) return;
+  grid.querySelectorAll('.cell.fog-occluded').forEach(c=>c.classList.remove('fog-occluded'));
+  if(!fogActive){grid.classList.remove('fog-active');return;}
+  const overlay=document.getElementById('fogOverlay');
+  const playerCell=document.getElementById(`c-${playerX}-${playerY}`);
+  if(!overlay||!playerCell) return;
+  const overlayRect=overlay.getBoundingClientRect(),cellRect=playerCell.getBoundingClientRect();
+  const cellSize=Math.min(cellRect.width,cellRect.height);
+  overlay.style.setProperty('--fog-x',`${cellRect.left+cellRect.width/2-overlayRect.left}px`);
+  overlay.style.setProperty('--fog-y',`${cellRect.top+cellRect.height/2-overlayRect.top}px`);
+  overlay.style.setProperty('--fog-radius',`${cellSize*2.75}px`);
+  grid.classList.add('fog-active');
+  const radius=2.75;
+  for(let x=0;x<GCOLS;x++){
+    for(let y=0;y<GROWS;y++){
+      if(x===playerX&&y===playerY) continue;
+      const distance=Math.hypot(x-playerX,y-playerY);
+      if(distance>radius||!hasLineOfSight(playerX,playerY,x,y)){
+        const cell=document.getElementById(`c-${x}-${y}`);
+        // Kapılar ve hedef, uzaklık ve duvar gölgelerinden bağımsız seçilebilir kalır.
+        if(cell&&mazeGrid[x][y]!==2&&!(x===GCOLS-1&&y===GROWS-1)) cell.classList.add('fog-occluded');
+      }
+    }
+  }
 }
 
 function move(dx,dy){
-  if(document.getElementById('qOverlay').classList.contains('active')) return;
+  if(feedbackActive||document.getElementById('qOverlay').classList.contains('active')) return;
   if(document.getElementById('winOverlay').classList.contains('show')) return;
   const nx=playerX+dx,ny=playerY+dy;
   if(nx<0||nx>=GCOLS||ny<0||ny>=GROWS) return;
@@ -481,23 +635,88 @@ function askQuestion(x,y){
     container.appendChild(btn);
   });
   document.getElementById('qOverlay').classList.add('active');
+  startQuestionCountdown();
+}
+
+function startQuestionCountdown(){
+  clearInterval(questionTimerInterval);
+  questionDeadline=Date.now()+QUESTION_SECONDS*1000;
+  const el=document.getElementById('qCountdown');
+  el.classList.remove('urgent');el.textContent=String(QUESTION_SECONDS);
+  questionTimerInterval=setInterval(()=>{
+    const remaining=Math.max(0,Math.ceil((questionDeadline-Date.now())/1000));
+    el.textContent=String(remaining);
+    el.classList.toggle('urgent',remaining<=5);
+    if(remaining<=0){clearInterval(questionTimerInterval);questionTimedOut();}
+  },100);
+}
+
+function openDoorAndAdvance(door){
+  if(!door) return;
+  mazeGrid[door.x][door.y]=0;
+  openedDoors++;
+  document.getElementById('qCount').textContent=`${openedDoors}/${totalDoors}`;
+  const cell=document.getElementById(`c-${door.x}-${door.y}`);
+  if(cell){cell.innerHTML='';cell.classList.remove('fog-occluded');cell.classList.add('passage');}
+  playerX=door.x;playerY=door.y;renderPlayer();
+  if(playerX===GCOLS-1&&playerY===GROWS-1) win();
+}
+
+function showLifeFeedback(kind){
+  if(!currentDoor||feedbackActive) return;
+  clearInterval(questionTimerInterval);
+  const door={...currentDoor};currentDoor=null;
+  document.getElementById('qOverlay').classList.remove('active');
+  lives=Math.max(0,lives-1);
+  document.getElementById('lives').textContent=String(lives);
+  const overlay=document.getElementById('feedbackOverlay');
+  document.getElementById('feedbackTitle').textContent=kind==='timeout'?'SÜRE DOLDU!':'YANLIŞ CEVAP!';
+  document.getElementById('feedbackBody').textContent='1 can kaybettin.';
+  document.getElementById('feedbackLives').textContent=`Kalan can: ${lives}`;
+  const actions=document.getElementById('feedbackActions');
+  feedbackActive=true;
+  if(lives<=0){
+    clearInterval(timerInterval);gameActive=false;
+    document.getElementById('feedbackBody').textContent='1 can kaybettin. Canların tükendi; oyun sona erdi.';
+    actions.hidden=false;
+    setMsg('Canların bitti.');
+  }else{
+    actions.hidden=true;
+    setMsg(kind==='timeout'?'Süre doldu; 1 can kaybettin.':'Yanlış cevap; 1 can kaybettin.');
+  }
+  overlay.classList.remove('hidden');
+  if(lives>0){
+    clearTimeout(feedbackTimer);
+    feedbackTimer=setTimeout(()=>{
+      overlay.classList.add('hidden');feedbackActive=false;
+      openDoorAndAdvance(door);
+      if(lives>0&&gameActive===false&&!(document.getElementById('winOverlay').classList.contains('show'))) startTimer();
+    },1350);
+  }
+}
+
+function questionTimedOut(){
+  if(!document.getElementById('qOverlay').classList.contains('active')) return;
+  showLifeFeedback('timeout');
 }
 
 function checkAnswer(val,correct,btnEl){
+  if(!document.getElementById('qOverlay').classList.contains('active')||feedbackActive) return;
   if(val===correct){
+    clearInterval(questionTimerInterval);
+    const door=currentDoor;currentDoor=null;
     document.getElementById('qOverlay').classList.remove('active');
-    mazeGrid[currentDoor.x][currentDoor.y]=0;
-    const cell=document.getElementById(`c-${currentDoor.x}-${currentDoor.y}`);
+    mazeGrid[door.x][door.y]=0;
+    const cell=document.getElementById(`c-${door.x}-${door.y}`);
     if(cell){cell.innerHTML='';cell.classList.add('passage');}
-    playerX=currentDoor.x;playerY=currentDoor.y;renderPlayer();
+    playerX=door.x;playerY=door.y;renderPlayer();
     solvedDoors++;
-    document.getElementById('qCount').textContent=`${solvedDoors}/${totalDoors}`;
-    setMsg('\u2713 Kap\u0131 a\u00e7\u0131ld\u0131!');
+    openedDoors++;
+    document.getElementById('qCount').textContent=`${openedDoors}/${totalDoors}`;
+    setMsg('✓ Kapı açıldı!');
     if(playerX===GCOLS-1&&playerY===GROWS-1) win();
   } else {
-    btnEl.classList.add('wrong-flash');
-    setTimeout(()=>btnEl.classList.remove('wrong-flash'),350);
-    setMsg('\u2717 Yanl\u0131\u015f! Tekrar dene.');
+    showLifeFeedback('wrong');
   }
 }
 
@@ -505,7 +724,7 @@ function win(){
   clearInterval(timerInterval);gameActive=false;
   const t=document.getElementById('timer').textContent;
   document.getElementById('winBody').innerHTML=
-    `${solvedDoors} kap\u0131 &nbsp;\u00b7&nbsp; S\u00fcre: <b style="color:#FFD97A">${t}</b>`;
+    `${solvedDoors} do\u011fru cevap &nbsp;\u00b7&nbsp; ${openedDoors}/${totalDoors} kap\u0131 &nbsp;\u00b7&nbsp; S\u00fcre: <b style="color:#FFD97A">${t}</b>`;
   document.getElementById('winOverlay').classList.add('show');
   setMsg('');
 }
@@ -524,10 +743,6 @@ document.addEventListener('keydown',e=>{
 
 newGame();
 </script>
-<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
-  <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
-       style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
-       onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
-</div>
+
 </body>
 </html>
