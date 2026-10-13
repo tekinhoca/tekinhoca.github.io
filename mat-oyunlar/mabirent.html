@@ -97,8 +97,9 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 /* SORU OVERLAY */
  .q-overlay{display:none;position:absolute;inset:0;background:radial-gradient(ellipse at 50% 20%,rgba(38,70,112,.97),rgba(10,15,32,.98));border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50;padding:16px}
 .q-overlay.active{display:flex}
-.q-text{font-size:clamp(18px,5vw,26px);font-weight:700;color:#fff0a8;text-shadow:0 0 18px rgba(255,215,105,.2);font-family:var(--ui-font);text-align:center}
-.q-countdown{font:700 clamp(28px,7vw,42px)/1 var(--ui-font);color:#8ef5e6;text-shadow:0 0 18px rgba(72,225,214,.4);font-variant-numeric:tabular-nums}
+.q-text{font-size:clamp(18px,5vw,26px);font-weight:700;color:#fff0a8;text-shadow:0 0 18px rgba(255,215,105,.2);font-family:var(--ui-font);text-align:center;display:flex;align-items:center;justify-content:center;min-height:2.5em;line-height:1.25}
+.q-countdown{font:700 clamp(28px,7vw,42px)/1 var(--ui-font);color:#8ef5e6;text-shadow:0 0 18px rgba(72,225,214,.4);font-variant-numeric:tabular-nums;display:flex;align-items:center;justify-content:center;gap:.3em}
+.q-clock{width:.82em;height:.82em;flex-shrink:0;filter:drop-shadow(0 0 8px currentColor)}
 .q-countdown.urgent{color:#ff879d;text-shadow:0 0 18px rgba(255,76,116,.5);animation:countUrgent .5s ease-in-out infinite alternate}
 .q-hint{font-size:12px;color:rgba(224,238,255,.72);text-align:center}
 @keyframes countUrgent{to{transform:scale(1.08);filter:brightness(1.25)}}
@@ -113,6 +114,9 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 .win-overlay.show{display:flex}
 .win-title{font-size:clamp(22px,4vw,30px);font-weight:700;color:#8effd4;text-shadow:0 0 20px rgba(69,255,194,.3);font-family:var(--ui-font)}
 .win-body{font-size:12px;color:rgba(247,242,232,0.55);text-align:center;line-height:1.7}
+.win-score{display:flex;flex-direction:column;align-items:center;line-height:1;color:#ffd97a;text-shadow:0 0 22px rgba(255,200,90,.35);font-family:var(--ui-font);font-variant-numeric:tabular-nums}
+.win-score b{font-size:clamp(40px,11vw,56px);font-weight:700}
+.win-score span{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,229,160,.8);margin-top:8px;font-weight:600}
 .win-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 
  .msg{font-size:11px;color:rgba(194,222,255,0.72);text-align:center;min-height:14px}
@@ -135,6 +139,7 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 .modal-btns{display:flex;gap:10px;justify-content:center}
 .modal-close{background:rgba(26,39,65,.72);border:1px solid rgba(135,177,225,.35);border-radius:6px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(224,238,255,.76);font-family:var(--ui-font);transition:background .2s}
 .modal-close:hover{background:rgba(43,66,103,.95)}
+.modal-close[hidden]{display:none}
 .modal-start{background:linear-gradient(135deg,rgba(32,151,155,.25),rgba(80,104,191,.28));border:1px solid rgba(98,222,212,.65);border-radius:6px;padding:6px 22px;font-size:12px;cursor:pointer;color:#8ef5e6;font-weight:600;font-family:var(--ui-font);transition:background .2s}
 .modal-start:hover{background:linear-gradient(135deg,rgba(32,177,177,.42),rgba(103,121,219,.4))}
 .modal-logo{display:flex;justify-content:center;padding-top:4px}
@@ -204,6 +209,7 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
   .q-opts { max-width: 380px; gap: 12px; }
   .q-btn { font-size: 20px; padding: 15px 12px; }
   .win-title { font-size: 30px; }
+  .win-score b { font-size: 60px; }
   .win-body { font-size: 15px; }
 }
 
@@ -234,11 +240,11 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
       <li>Sol üst köşedeki karakteri, klavyendeki veya ekrandaki yön tuşlarıyla hareket ettirebilirsin.</li>
       <li>Amaç, kırmızı kapılardan geçerek sağ alt köşedeki yeşil hedefe ulaşmak.</li>
       <li>Labirentte 6 kapı var. Kapılardan geçmek için, ekrana gelen soruları cevaplamalısın.</li>
-      <li>15 saniye içinde cevap veremezsen ya da yanlış cevap verirsen, 1 can kaybedersin.</li>
+      <li>Seçtiğin süre içinde cevap veremezsen ya da yanlış cevap verirsen, 1 can kaybedersin.</li>
       <li><b style="color:#ff9b9b">TOPLAM 3 CANIN VAR! DİKKATLİ OL!</b></li>
     </ul>
     <div class="modal-btns">
-      <button class="modal-close" onclick="closeModal()">Kapat</button>
+      <button class="modal-close" id="rulesCloseBtn" onclick="closeModal()" hidden>Kapat</button>
       <button class="modal-start" onclick="continueToTopics()">Konuları Seç</button>
     </div>
     <div class="modal-logo"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo" style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s;cursor:pointer" onclick="if(window.matchMedia('(hover: none)').matches)this.classList.toggle('logo-highlight')"></div>
@@ -257,6 +263,11 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
       <label class="topic-option"><input type="checkbox" class="topic-check" value="factors" onchange="clearTopicError()"><span>Çarpanlar ve Katlar</span></label>
       <label class="topic-option"><input type="checkbox" class="topic-check" value="primes" onchange="clearTopicError()"><span>Asal Sayılar</span></label>
       <label class="topic-option"><input type="checkbox" class="topic-check" value="integers" onchange="clearTopicError()"><span>Tam Sayılar</span></label>
+    </div>
+    <div class="topic-select-title">Her soru için süre seç</div>
+    <div class="topic-select-grid" id="timeSelectGrid">
+      <label class="topic-option"><input type="radio" name="qtime" class="time-radio" value="15" onchange="clearTopicError()"><span>15 saniye</span></label>
+      <label class="topic-option"><input type="radio" name="qtime" class="time-radio" value="30" onchange="clearTopicError()"><span>30 saniye</span></label>
     </div>
     <div class="topic-error" id="topicError" role="alert">En az bir konu seçmelisin.</div>
     <div class="modal-btns">
@@ -282,20 +293,21 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
     <div class="ibox"><div class="l">Kapı</div><div class="v" id="qCount">0/6</div></div>
     <div class="ibox"><div class="l">Can</div><div class="v" id="lives">3</div></div>
     <div class="ibox"><div class="l">Süre</div><div class="v" id="timer">00:00</div></div>
-    <button class="action-tile" type="button" onclick="openModal()" aria-label="Kurallar" title="Kurallar"><span class="action-icon" aria-hidden="true">ⓘ</span><span class="action-label">KURALLAR</span></button>
-    <button class="action-tile" type="button" onclick="newGame()" aria-label="Yeniden" title="Yeniden"><span class="action-icon" aria-hidden="true">⟳</span><span class="action-label">YENİDEN</span></button>
+    <button class="action-tile" type="button" onclick="continueToTopics()" aria-label="Kurallar" title="Kurallar"><span class="action-icon" aria-hidden="true">ⓘ</span><span class="action-label">KONU SEÇ</span></button>
+    <button class="action-tile" type="button" onclick="newGame()" aria-label="Yeniden" title="Yeniden"><span class="action-icon" aria-hidden="true">⟳</span><span class="action-label">BAŞTAN</span></button>
   </div>
 
   <div class="grid-wrap">
     <div id="grid"></div>
     <div class="q-overlay" id="qOverlay">
       <div class="q-text" id="qTxt"></div>
-      <div class="q-countdown" id="qCountdown" aria-live="polite">15</div>
-      <div class="q-hint" id="qHint">Süre dolmadan doğru cevabı seç!</div>
       <div class="q-opts" id="qOpts"></div>
+      <div class="q-hint" id="qHint"></div>
+      <div class="q-countdown" id="qCountdown" aria-live="polite"><svg class="q-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13.5" r="7.5"/><path d="M12 9.5v4.2l2.6 1.6"/><path d="M4.2 4.6 2 7M19.8 4.6 22 7"/></svg><span id="qCountNum">15</span></div>
     </div>
     <div class="win-overlay" id="winOverlay">
       <div class="win-title">Tebrikler!</div>
+      <div class="win-score"><b id="winScore">0</b><span>puan</span></div>
       <div class="win-body" id="winBody"></div>
       <div class="win-btns">
         <button class="a" onclick="newGame()">&#8635; Yeni Labirent</button>
@@ -320,7 +332,11 @@ button.a:hover{background:linear-gradient(135deg,rgba(47,125,177,.48),rgba(112,7
 // Görsel ızgara: 11 sütun × 13 satır
 // 6 sütun odası × 7 satır odası, aralarında duvar hücreleri
 const GCOLS=11, GROWS=13, RCOLS=6, RROWS=7, DOOR_COUNT=6, MIN_PATH=31;
-const QUESTION_SECONDS=15, STARTING_LIVES=3;
+const STARTING_LIVES=3;
+let questionSeconds=15;
+const SPEED_FACTOR={15:30,30:15}, TIME_BONUS={15:3000,30:1500}, CORRECT_POINTS=100;
+// Konu katsayıları (kolaydan zora). GEÇİCİ DEĞERLER: ölçüme göre buradan değiştirilebilir.
+const TOPIC_COEF={factors:1.00, primes:1.05, natural:1.20, integers:1.25, powers:1.40, roots:1.45};
 
 function rg(r){ return r*2; }
 
@@ -428,6 +444,7 @@ const TOPICS=[
   {id:'integers',label:'Tam Sayılar'}
 ];
 let selectedTopicIds=[];
+let selectedSeconds=null;
 let recentQuestionKeys=[];
 const SUPERSCRIPT={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
 function toSuperscript(n){return String(n).split('').map(ch=>SUPERSCRIPT[ch]||ch).join('');}
@@ -446,34 +463,59 @@ function validAnswer(topicId,n){
   return n>=0;
 }
 
-const POWER_ATOMS=[];
-// Tüm tabanların birinci kuvvetleri ve sıfır dışındaki tabanların sıfırıncı kuvvetleri.
-for(let n=0;n<=20;n++) POWER_ATOMS.push({text:`${n}¹`,value:n,special:true});
-for(let n=1;n<=20;n++) POWER_ATOMS.push({text:`${n}⁰`,value:1,special:true});
-// 1'in doğal sayı kuvvetleri; 2, 3, 4 ve 5 için belirlenen üs sınırları.
-for(let e=1;e<=10;e++) POWER_ATOMS.push({text:`1${toSuperscript(e)}`,value:1,special:true});
-for(let e=1;e<=6;e++) POWER_ATOMS.push({text:`2${toSuperscript(e)}`,value:2**e,special:true});
-for(let e=1;e<=5;e++) POWER_ATOMS.push({text:`3${toSuperscript(e)}`,value:3**e,special:true});
-for(const base of [4,5]) for(let e=1;e<=4;e++) POWER_ATOMS.push({text:`${base}${toSuperscript(e)}`,value:base**e,special:true});
-// En fazla 20'ye kadar tabanların ikinci kuvvetleri; sonuç sınırı ayrıca uygulanır.
-for(let n=0;n<=20;n++) POWER_ATOMS.push({text:`${n}²`,value:n*n,special:true});
-// Sıfır olmayan parantezli ifadelerin sıfırıncı kuvvetleri.
-for(let i=0;i<18;i++){
-  const a=randInt(1,12),b=randInt(1,12),op=Math.random()<.5?'+':'−';
-  if(op==='−'&&a===b) continue;
-  const value=op==='+'?a+b:a-b;
-  if(value!==0) POWER_ATOMS.push({text:`(${a} ${op} ${b})⁰`,value:1,special:true});
+// ── Atom (işlenen) üretimi ──
+// Kural: 0 ve 1 ile dört işlem yapılmaz. Tek istisna, değeri 1 olan sıfırıncı kuvvetlerdir (unity).
+function pick(arr){return arr[randInt(0,arr.length-1)];}
+// Üslü ifade tabloları: [taban, üs]. Üs ≥ 2. 2 için en çok 6, 3 için 4, 4 için 3, 5 için 4; 6–20 için yalnızca karesi.
+const SMALL_POWERS=[];
+for(let e=2;e<=6;e++) SMALL_POWERS.push([2,e]);
+for(let e=2;e<=4;e++) SMALL_POWERS.push([3,e]);
+for(let e=2;e<=3;e++) SMALL_POWERS.push([4,e]);
+for(let e=2;e<=4;e++) SMALL_POWERS.push([5,e]);
+const BIG_SQUARES=[];
+for(let n=6;n<=20;n++) BIG_SQUARES.push([n,2]);
+// Bir değeri (x ± y) olarak yazar; x ve y en az 2, en çok 25.
+function splitValue(v){
+  const op=(v>=4&&Math.random()<.5)?'+':'−';
+  if(op==='+'){const x=randInt(2,v-2);return {x,y:v-x,op};}
+  const y=randInt(2,Math.max(2,25-v));
+  return {x:v+y,y,op};
 }
-const ROOT_ATOMS=[];
-for(let n=0;n<=20;n++) ROOT_ATOMS.push({text:`√${n*n}`,value:n,special:true});
-
-// Değer ile görünen metin aynı rastgele sayıdan oluşturulmalı.
-function getAtom(topicId){
-  if(topicId==='powers'&&Math.random()<.57) return POWER_ATOMS[randInt(0,POWER_ATOMS.length-1)];
-  if(topicId==='roots'&&Math.random()<.57) return ROOT_ATOMS[randInt(0,ROOT_ATOMS.length-1)];
-  const value=topicId==='integers'?randInt(-12,12):randInt(0,25);
+function parenPower(base,e){const sp=splitValue(base);return `(${sp.x} ${sp.op} ${sp.y})${toSuperscript(e)}`;}
+const TRIVIAL_POWER_RATE=.045;   // üslü atomlarda 0. ve 1. kuvvetlerin payı
+const PAREN_POWER_RATE=.4;     // gerçek kuvvetlerde parantezli taban payı
+function makePowerAtom(trivialAllowed){
+  if(trivialAllowed&&Math.random()<TRIVIAL_POWER_RATE){
+    const r=Math.random(), n=randInt(2,20), v=randInt(2,20);
+    if(r<.3) return {text:`${n}⁰`,value:1,special:true,trivial:true,unity:true};
+    if(r<.6) return {text:`${n}¹`,value:n,special:true,trivial:true};
+    if(r<.8) return {text:parenPower(v,0),value:1,special:true,trivial:true,unity:true};
+    return {text:parenPower(v,1),value:v,special:true,trivial:true};
+  }
+  const [base,e]=Math.random()<.65?pick(SMALL_POWERS):pick(BIG_SQUARES);
+  const text=Math.random()<PAREN_POWER_RATE?parenPower(base,e):`${base}${toSuperscript(e)}`;
+  return {text,value:base**e,special:true};
+}
+function makeRootAtom(){const n=randInt(2,20);return {text:`√${n*n}`,value:n,special:true};}
+function makePlainAtom(topicId){
+  const value=topicId==='integers'?(Math.random()<.5?-1:1)*randInt(2,12):randInt(2,25);
   return {text:fmtNum(value),value,special:false};
 }
+// Üslü ve kareköklü konularda en az bir özel atom bulunur; bir soruda en çok bir "önemsiz" kuvvet.
+function makeAtoms(topicId){
+  const special=topicId==='powers'||topicId==='roots';
+  const forced=special?randInt(0,2):-1;
+  let trivialUsed=false;
+  const atoms=[];
+  for(let i=0;i<3;i++){
+    if(special&&(i===forced||Math.random()<.4)){
+      if(topicId==='powers'){const at=makePowerAtom(!trivialUsed);if(at.trivial)trivialUsed=true;atoms.push(at);}
+      else atoms.push(makeRootAtom());
+    } else atoms.push(makePlainAtom(topicId));
+  }
+  return atoms;
+}
+
 const EXPRESSION_TEMPLATES=[
   {paren:false,render:(a,b,c)=>`${a} + ${b} × ${c}`,calc:(a,b,c)=>a+b*c,wrong:(a,b,c)=>(a+b)*c},
   {paren:false,render:(a,b,c)=>`${a} − ${b} × ${c}`,calc:(a,b,c)=>a-b*c,wrong:(a,b,c)=>(a-b)*c},
@@ -551,29 +593,45 @@ function ignoredParenthesesSteps(kind,a,b,c){
 function validIntermediateResults(topicId,values){
   return values.every(v=>isIntegerValue(v)&&Math.abs(v)<=99&&(topicId==='integers'||v>=0));
 }
-function generateArithmeticQuestion(topicId){
-  const topic=TOPICS.find(t=>t.id===topicId);
-  for(let attempt=0;attempt<1200;attempt++){
-    const atoms=[getAtom(topicId),getAtom(topicId),getAtom(topicId)];
-    if(topicId==='powers'&&!atoms.some(x=>x.special)) continue;
-    if(topicId==='roots'&&!atoms.some(x=>x.special)) continue;
-    if(atoms.some(x=>!validAnswer(topicId,x.value))) continue;
-    const kind=randInt(0,EXPRESSION_TEMPLATES.length-1);
-    const template=EXPRESSION_TEMPLATES[kind];
+// Belirli bir işlem kalıbı için soru kurar. strict: parantezli kalıplarda "parantezi yok say" çeldiricisi zorunlu.
+function tryKind(topicId,kind,attempts,strict){
+  const template=EXPRESSION_TEMPLATES[kind];
+  for(let attempt=0;attempt<attempts;attempt++){
+    const atoms=makeAtoms(topicId);
+    // Parantez içinde parantezli kuvvet (iç içe parantez) kurulmaz; okunurluk için.
+    if(template.paren&&topicId==='powers'){
+      const inside=(kind===8||kind===9||kind===12||kind===13)?[0,1]:[1,2];
+      if(inside.some(i=>atoms[i].text.startsWith('('))) continue;
+    }
     if(!multiplicationFactorsAllowed(topicId,atoms,kind)) continue;
     const [a,b,c]=atoms.map(x=>x.value);
-    if(!validIntermediateResults(topicId,expressionSteps(kind,a,b,c))) continue;
+    const steps=expressionSteps(kind,a,b,c);
+    if(!validIntermediateResults(topicId,steps)) continue;
+    // Ara sonuçlar (son sonuç hariç) da 0, 1 ya da −1 olmamalı: bunlarla işlem yapılmaz.
+    if(!steps.slice(0,-1).every(v=>Math.abs(v)>=2)) continue;
     const answer=template.calc(a,b,c);
-    if(!validAnswer(topicId,answer)||!isIntegerValue(answer)) continue;
+    if(!validAnswer(topicId,answer)) continue;
     let wrong=template.wrong(a,b,c);
     if(!validIntermediateResults(topicId,ignoredParenthesesSteps(kind,a,b,c))) wrong=null;
-    if(!validAnswer(topicId,wrong)||!isIntegerValue(wrong)||wrong===answer) wrong=null;
+    if(!validAnswer(topicId,wrong)||wrong===answer) wrong=null;
     if(wrong===null){
-      const alternatives=topicId==='integers'?[answer+1,answer-1,-answer,0,answer+2,answer-2]:[answer+1,answer-1,answer*2,answer-2,answer+3];
+      if(strict&&template.paren) continue;
+      const alternatives=topicId==='integers'?[answer+1,answer-1,-answer,answer+2,answer-2]:[answer+1,answer-1,answer*2,answer-2,answer+3];
       wrong=alternatives.find(n=>validAnswer(topicId,n)&&n!==answer);
     }
     if(wrong===undefined||wrong===null||wrong===answer) continue;
-    return {q:template.render(...atoms.map(x=>x.text)),a:answer,wrong,topic:topic.label,topicId};
+    return {q:template.render(...atoms.map(x=>x.text)),a:answer,wrong};
+  }
+  return null;
+}
+function generateArithmeticQuestion(topicId){
+  const topic=TOPICS.find(t=>t.id===topicId);
+  // 16 kalıp eşit olasılıkla seçilir (8'i parantezli: dört parantezli biçimin her biri yaklaşık %12,5).
+  // Seçilen kalıp kurulamazsa sıradaki kalıba geçilir.
+  const kinds=shuffled(EXPRESSION_TEMPLATES.map((_,i)=>i));
+  for(const kind of kinds){
+    const r=tryKind(topicId,kind,4000,true)||tryKind(topicId,kind,4000,false);
+    if(r) return {...r,topic:topic.label,topicId};
   }
   const fallbacks={
     natural:{q:'(4 + 3) × 5',a:35,wrong:19},
@@ -581,8 +639,7 @@ function generateArithmeticQuestion(topicId){
     powers:{q:'2² + 3 × 4',a:16,wrong:20},
     roots:{q:'(√144 + 3) × 2',a:30,wrong:18}
   };
-  const fallback=fallbacks[topicId];
-  return {...fallback,topic:topic.label,topicId};
+  return {...fallbacks[topicId],topic:topic.label,topicId};
 }
 
 function pickDistinct(pool,count,excludeSet=new Set()){
@@ -697,13 +754,16 @@ function pickQuestions(n,topicIds=selectedTopicIds){
 }
 function syncTopicChecks(){
   document.querySelectorAll('.topic-check').forEach(input=>{input.checked=selectedTopicIds.includes(input.value);});
+  document.querySelectorAll('.time-radio').forEach(r=>{r.checked=(String(selectedSeconds)===r.value);});
 }
 function clearTopicError(){document.getElementById('topicError').classList.remove('visible');}
+function readSelectedSeconds(){const r=document.querySelector('.time-radio:checked');return r?Number(r.value):null;}
 function readSelectedTopics(){return [...document.querySelectorAll('.topic-check:checked')].map(input=>input.value);}
 
 // ── OYUN DURUMU ──
 let mazeGrid,playerX,playerY,solvedDoors,totalDoors;
 let setupCompleted=false;
+let answerPoints=0;
 let startTime,timerInterval,questionTimerInterval,questionDeadline=0,gameActive=false;
 let currentDoor=null,doorMap={},questionPool=[],lives=STARTING_LIVES,openedDoors=0;
 let savedMaze=null,savedDoorMap={},savedPool=[];
@@ -718,7 +778,7 @@ function newGame(){
   document.getElementById('qOverlay').classList.remove('active');
   mazeGrid=generateValidMaze();
   const doors=placeDoors(mazeGrid,DOOR_COUNT);
-  totalDoors=doors.length; solvedDoors=0; openedDoors=0; lives=STARTING_LIVES;
+  totalDoors=doors.length; solvedDoors=0; openedDoors=0; lives=STARTING_LIVES; answerPoints=0;
   document.getElementById('qCount').textContent=`0/${totalDoors}`;
   document.getElementById('lives').textContent=String(lives);
   questionPool=pickQuestions(totalDoors,selectedTopicIds);
@@ -740,7 +800,7 @@ function restartCurrent(){
   document.getElementById('qOverlay').classList.remove('active');
   mazeGrid=savedMaze.map(r=>[...r]);
   doorMap={...savedDoorMap};questionPool=[...savedPool];
-  totalDoors=Object.keys(doorMap).length;solvedDoors=0;openedDoors=0;lives=STARTING_LIVES;
+  totalDoors=Object.keys(doorMap).length;solvedDoors=0;openedDoors=0;lives=STARTING_LIVES;answerPoints=0;
   document.getElementById('qCount').textContent=`0/${totalDoors}`;
   document.getElementById('lives').textContent=String(lives);
   playerX=0;playerY=0;gameActive=false;
@@ -863,13 +923,13 @@ function normalizeQuestionPrompt(text){
 function askQuestion(x,y){
   currentDoor={x,y};
   const q=questionPool[doorMap[`${x},${y}`]??0];
-  document.getElementById('qTxt').innerHTML=mathHtml(normalizeQuestionPrompt(q.q));
-  document.getElementById('qHint').textContent=(q.topic?`${q.topic} · `:'')+'Süre dolmadan doğru cevabı seç!';
+  document.getElementById('qTxt').innerHTML='<span>'+mathHtml(normalizeQuestionPrompt(q.q))+'</span>';
+  document.getElementById('qHint').textContent=q.topic||'';
   const container=document.getElementById('qOpts');container.innerHTML='';
   buildOptions(q).forEach(opt=>{
     const btn=document.createElement('button');
     btn.className='q-btn';btn.innerHTML=mathHtml(opt);
-    btn.onclick=()=>checkAnswer(opt,q.a,btn);
+    btn.onclick=()=>checkAnswer(opt,q.a,btn,q.topicId);
     container.appendChild(btn);
   });
   document.getElementById('qOverlay').classList.add('active');
@@ -878,12 +938,12 @@ function askQuestion(x,y){
 
 function startQuestionCountdown(){
   clearInterval(questionTimerInterval);
-  questionDeadline=Date.now()+QUESTION_SECONDS*1000;
-  const el=document.getElementById('qCountdown');
-  el.classList.remove('urgent');el.textContent=String(QUESTION_SECONDS);
+  questionDeadline=Date.now()+questionSeconds*1000;
+  const el=document.getElementById('qCountdown'),num=document.getElementById('qCountNum');
+  el.classList.remove('urgent');num.textContent=String(questionSeconds);
   questionTimerInterval=setInterval(()=>{
     const remaining=Math.max(0,Math.ceil((questionDeadline-Date.now())/1000));
-    el.textContent=String(remaining);
+    num.textContent=String(remaining);
     el.classList.toggle('urgent',remaining<=5);
     if(remaining<=0){clearInterval(questionTimerInterval);questionTimedOut();}
   },100);
@@ -915,7 +975,7 @@ function showLifeFeedback(kind){
   feedbackActive=true;
   if(lives<=0){
     clearInterval(timerInterval);gameActive=false;
-    document.getElementById('feedbackBody').textContent='1 can kaybettin. Canların tükendi; oyun sona erdi.';
+    document.getElementById('feedbackBody').textContent='1 can kaybettin. Canların tükendi; oyun sona erdi. Puan yalnızca labirenti tamamlayınca hesaplanır.';
     actions.hidden=false;
     setMsg('Canların bitti.');
   }else{
@@ -938,9 +998,10 @@ function questionTimedOut(){
   showLifeFeedback('timeout');
 }
 
-function checkAnswer(val,correct,btnEl){
+function checkAnswer(val,correct,btnEl,topicId){
   if(!document.getElementById('qOverlay').classList.contains('active')||feedbackActive) return;
   if(val===correct){
+    answerPoints+=(Math.max(0,(questionDeadline-Date.now())/1000)*SPEED_FACTOR[questionSeconds]+CORRECT_POINTS)*(TOPIC_COEF[topicId]||1);
     clearInterval(questionTimerInterval);
     const door=currentDoor;currentDoor=null;
     document.getElementById('qOverlay').classList.remove('active');
@@ -961,6 +1022,8 @@ function checkAnswer(val,correct,btnEl){
 function win(){
   clearInterval(timerInterval);gameActive=false;
   const t=document.getElementById('timer').textContent;
+  const total=Math.round(answerPoints)+TIME_BONUS[questionSeconds];
+  document.getElementById('winScore').textContent=String(total).replace(/\B(?=(\d{3})+(?!\d))/g,'.');
   document.getElementById('winBody').innerHTML=
     `${solvedDoors} do\u011fru cevap &nbsp;\u00b7&nbsp; ${openedDoors}/${totalDoors} kap\u0131 &nbsp;\u00b7&nbsp; S\u00fcre: <b style="color:#FFD97A">${t}</b>`;
   document.getElementById('winOverlay').classList.add('show');
@@ -968,13 +1031,18 @@ function win(){
 }
 
 function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');document.getElementById('topicModalOverlay').classList.add('hidden');}
-function openModal(){syncTopicChecks();clearTopicError();document.getElementById('topicModalOverlay').classList.add('hidden');document.getElementById('modalOverlay').classList.remove('hidden');}
+function updateRulesButtons(){document.getElementById('rulesCloseBtn').hidden=!setupCompleted;}
+function openModal(){updateRulesButtons();syncTopicChecks();clearTopicError();document.getElementById('topicModalOverlay').classList.add('hidden');document.getElementById('modalOverlay').classList.remove('hidden');}
 function continueToTopics(){syncTopicChecks();clearTopicError();document.getElementById('modalOverlay').classList.add('hidden');document.getElementById('topicModalOverlay').classList.remove('hidden');}
 function backToRules(){document.getElementById('topicModalOverlay').classList.add('hidden');document.getElementById('modalOverlay').classList.remove('hidden');}
 function startFromModal(){
-  const chosen=readSelectedTopics();
-  if(!chosen.length){document.getElementById('topicError').classList.add('visible');return;}
-  selectedTopicIds=chosen;
+  const chosen=readSelectedTopics(),sec=readSelectedSeconds();
+  if(!chosen.length||!sec){
+    const err=document.getElementById('topicError');
+    err.textContent=(!chosen.length&&!sec)?'En az bir konu ve bir süre seçmelisin.':(!chosen.length?'En az bir konu seçmelisin.':'Bir süre seçmelisin.');
+    err.classList.add('visible');return;
+  }
+  selectedTopicIds=chosen;selectedSeconds=sec;questionSeconds=sec;
   setupCompleted=true;
   closeModal();newGame();
 }
