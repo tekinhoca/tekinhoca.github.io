@@ -19,6 +19,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 .chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
 <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
@@ -279,16 +280,16 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <section class="tab-panel" id="tab7">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! \(98 = 49\times2\) olduğundan \(\sqrt{98} = \sqrt{49}\times\sqrt{2} = 7\sqrt{2}\)." data-nomsg="Tekrar düşünelim: 98'i, biri tam kare olan iki çarpanın çarpımı şeklinde yazmayı deneyin.">
+<div class="q-card" data-okmsg="Doğru! \(98 = 49\times2\) olduğundan \(\sqrt{98} = \sqrt{49}\times\sqrt{2} = 7\sqrt{2}\)." data-nomsg="Yanlış. Doğru cevap: \(7\sqrt{2}\). \(98 = 49\times2\) olduğundan \(\sqrt{98} = \sqrt{49}\times\sqrt{2} = 7\sqrt{2}\).">
 <div class="q-text">1) \(\sqrt{98}\) ifadesinin a√b biçimindeki sadeleştirilmiş hâli hangisidir?</div>
 <div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(7\sqrt{2}\)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(49\sqrt{2}\)</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(7\sqrt{2}\)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(2\sqrt{7}\)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(14\sqrt{2}\)</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! \(45\times5=225\) ve \(\sqrt{225}=15\)." data-nomsg="Tekrar düşünelim: önce √45×√5=√(45×5) işlemini yapıp sonucun karekökünü alın.">
+<div class="q-card" data-okmsg="Doğru! \(45\times5=225\) ve \(\sqrt{225}=15\)." data-nomsg="Yanlış. Doğru cevap: 15. \(45\times5=225\) ve \(\sqrt{225}=15\).">
 <div class="q-text">2) \(\sqrt{45}\times\sqrt{5}\) işleminin sonucu kaçtır?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">15</button>
@@ -397,20 +398,28 @@ function checkTF(btn,chosenTrue,actualTrue){
 function checkFill(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);
   const fb=document.getElementById(fbId);
+  if(inp.dataset.done)return;
+  if(inp.value.trim()===''){fb.classList.add('show');fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Önce cevabınızı yazın.';return;}
+  inp.dataset.done='1';inp.disabled=true;
+  document.querySelectorAll('button[onclick*="\''+inputId+'\'"]').forEach(b=>b.disabled=true);
   const val=parseInt(inp.value.trim(),10);
   fb.classList.add('show');
-  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+String(correctVal).replace('.',',')+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+String(correctVal).replace('.',',')+'.';}
 }
 function checkFillDecimal(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);
   const fb=document.getElementById(fbId);
+  if(inp.dataset.done)return;
+  if(inp.value.trim()===''){fb.classList.add('show');fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Önce cevabınızı yazın.';return;}
+  inp.dataset.done='1';inp.disabled=true;
+  document.querySelectorAll('button[onclick*="\''+inputId+'\'"]').forEach(b=>b.disabled=true);
   const raw=inp.value.trim().replace(',', '.');
   const val=parseFloat(raw);
   fb.classList.add('show');
   const correctStr=String(correctVal).replace('.',',');
   if(!isNaN(val) && Math.abs(val-correctVal)<1e-9){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctStr+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctStr+' olmalıydı, tekrar deneyin.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+correctStr+'.';}
 }
 
 /* ---- Kare ızgara aracı (tab0) ---- */
@@ -557,27 +566,13 @@ updateSum();
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
- {q:"\\(\\sqrt{180}\\) ifadesinin a√b biçimindeki sadeleştirilmiş hâli hangisidir?",
-  choices:["\\(6\\sqrt{5}\\)","\\(36\\sqrt{5}\\)","\\(5\\sqrt{6}\\)","\\(9\\sqrt{20}\\)"],correct:0,
-  expl:"180 = 36×5, 36 bir tam kare olduğundan \\(\\sqrt{180} = \\sqrt{36}\\times\\sqrt{5} = 6\\sqrt{5}\\)."},
- {q:"\\(\\sqrt{12}\\times\\sqrt{3}\\) işleminin sonucu kaçtır?",
-  choices:["6","36","15","9"],correct:0,
-  expl:"\\(\\sqrt{12}\\times\\sqrt{3} = \\sqrt{12\\times3} = \\sqrt{36} = 6\\)."},
- {q:"\\(2\\sqrt{3} + 5\\sqrt{3}\\) toplamının sonucu nedir?",
-  choices:["\\(7\\sqrt{3}\\)","\\(10\\sqrt{3}\\)","\\(7\\sqrt{6}\\)","\\(3\\sqrt{3}\\)"],correct:0,
-  expl:"Benzer kareköklü ifadelerde yalnızca katsayılar toplanır: 2+5=7, sonuç \\(7\\sqrt{3}\\)."},
- {q:"\\(\\sqrt{0,36}\\) değeri kaçtır?",
-  choices:["0,6","3,6","0,18","6"],correct:0,
-  expl:"\\(0,36 = \\dfrac{36}{100}\\) olduğundan \\(\\sqrt{0,36} = \\dfrac{6}{10} = 0,6\\)."},
- {q:"\\(\\sqrt{50}\\) sayısı hangi iki doğal sayı arasındadır?",
-  choices:["7 ile 8 arasında","6 ile 7 arasında","8 ile 9 arasında","5 ile 6 arasında"],correct:0,
-  expl:"49 = 7² &lt; 50 &lt; 64 = 8² olduğundan \\(\\sqrt{50}\\), 7 ile 8 arasındadır."},
- {q:"Aşağıdakilerden hangisi bir irrasyonel sayıdır?",
-  choices:["\\(\\sqrt{7}\\)","\\(\\sqrt{16}\\)","0,75","\\(\\dfrac{22}{7}\\)"],correct:0,
-  expl:"\\(\\sqrt{16} = 4\\) ve 0,75 ile \\(\\dfrac{22}{7}\\) birer rasyonel sayıdır; 7 bir tam kare olmadığından \\(\\sqrt{7}\\) irrasyoneldir."},
- {q:"\\(\\dfrac{1}{\\sqrt{2}}\\) ifadesinin rasyonelleştirilmiş hâli hangisidir?",
-  choices:["\\(\\dfrac{\\sqrt{2}}{2}\\)","\\(\\dfrac{1}{2}\\)","\\(\\sqrt{2}\\)","\\(2\\sqrt{2}\\)"],correct:0,
-  expl:"Pay ve payda √2 ile çarpılırsa payda 2 olur: \\(\\dfrac{1}{\\sqrt{2}} = \\dfrac{\\sqrt{2}}{2}\\)."}
+{"q": "\\(\\sqrt{180}\\) ifadesinin a√b biçimindeki sadeleştirilmiş hâli hangisidir?", "choices": ["\\(36\\sqrt{5}\\)", "\\(5\\sqrt{6}\\)", "\\(9\\sqrt{20}\\)", "\\(6\\sqrt{5}\\)"], "correct": 3, "expl": "180 = 36×5, 36 bir tam kare olduğundan \\(\\sqrt{180} = \\sqrt{36}\\times\\sqrt{5} = 6\\sqrt{5}\\)."},
+{"q": "\\(\\sqrt{12}\\times\\sqrt{3}\\) işleminin sonucu kaçtır?", "choices": ["36", "15", "6", "9"], "correct": 2, "expl": "\\(\\sqrt{12}\\times\\sqrt{3} = \\sqrt{12\\times3} = \\sqrt{36} = 6\\)."},
+{"q": "\\(2\\sqrt{3} + 5\\sqrt{3}\\) toplamının sonucu nedir?", "choices": ["\\(7\\sqrt{3}\\)", "\\(10\\sqrt{3}\\)", "\\(7\\sqrt{6}\\)", "\\(3\\sqrt{3}\\)"], "correct": 0, "expl": "Benzer kareköklü ifadelerde yalnızca katsayılar toplanır: 2+5=7, sonuç \\(7\\sqrt{3}\\)."},
+{"q": "\\(\\sqrt{0,36}\\) değeri kaçtır?", "choices": ["3,6", "0,18", "6", "0,6"], "correct": 3, "expl": "\\(0,36 = \\dfrac{36}{100}\\) olduğundan \\(\\sqrt{0,36} = \\dfrac{6}{10} = 0,6\\)."},
+{"q": "\\(\\sqrt{50}\\) sayısı hangi iki doğal sayı arasındadır?", "choices": ["6 ile 7 arasında", "8 ile 9 arasında", "7 ile 8 arasında", "5 ile 6 arasında"], "correct": 2, "expl": "49 = 7² &lt; 50 &lt; 64 = 8² olduğundan \\(\\sqrt{50}\\), 7 ile 8 arasındadır."},
+{"q": "Aşağıdakilerden hangisi bir irrasyonel sayıdır?", "choices": ["\\(\\sqrt{7}\\)", "\\(\\sqrt{16}\\)", "0,75", "\\(\\dfrac{22}{7}\\)"], "correct": 0, "expl": "\\(\\sqrt{16} = 4\\) ve 0,75 ile \\(\\dfrac{22}{7}\\) birer rasyonel sayıdır; 7 bir tam kare olmadığından \\(\\sqrt{7}\\) irrasyoneldir."},
+{"q": "\\(\\dfrac{1}{\\sqrt{2}}\\) ifadesinin rasyonelleştirilmiş hâli hangisidir?", "choices": ["\\(\\dfrac{1}{2}\\)", "\\(\\dfrac{\\sqrt{2}}{2}\\)", "\\(\\sqrt{2}\\)", "\\(2\\sqrt{2}\\)"], "correct": 1, "expl": "Pay ve payda √2 ile çarpılırsa payda 2 olur: \\(\\dfrac{1}{\\sqrt{2}} = \\dfrac{\\sqrt{2}}{2}\\)."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -590,7 +585,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Test tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div>';
     renderDots();return;
   }
   qAnswered=false;
@@ -613,12 +608,11 @@ function answerQuiz(i){
   });
   const fb=document.getElementById('quizFeedback');
   fb.classList.add('show',isCorrect?'ok':'no');
-  fb.innerHTML=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  fb.innerHTML=(isCorrect?'Doğru! ':'Yanlış. Doğru cevap: '+item.choices[item.correct].replace(/[.\s]+$/,'')+'. ')+item.expl;
   typesetMJ(fb);
   document.getElementById('quizNext').style.display='inline-block';
 }
 function nextQuiz(){qIndex++;renderQuiz();}
-function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
 </script>
 </body></html>

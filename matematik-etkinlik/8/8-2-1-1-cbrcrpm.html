@@ -19,6 +19,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 .chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </style></head><body>
 <header><div class="badge">8. SINIF MATEMATİK · M.8.2.1</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Cebirsel İfadeler ve Çarpımı</h1><p>M.8.2.1.1. Terim, katsayı, değişken; cebirsel ifadeleri farklı biçimlerde yazma<br>M.8.2.1.2. Tek terim ve iki terimli ifadelerin çarpımı, alan modeliyle gösterim</p></header>
 <nav class="tab-bar">
@@ -228,30 +229,30 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <section class="tab-panel" id="tab7">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! 6x − 9 ifadesinin ortak çarpanı 3'tür: 3(2x−3) = 6x−9." data-nomsg="Tekrar düşünelim: 6 ve 9'un ortak çarpanını (EBOB'unu) bulup parantez dışına alın.">
+<div class="q-card" data-okmsg="Doğru! 6x − 9 ifadesinin ortak çarpanı 3'tür: 3(2x−3) = 6x−9." data-nomsg="Yanlış. Doğru cevap: 3(2x − 3). 6x − 9 ifadesinin ortak çarpanı 3'tür: 3(2x−3) = 6x−9.">
 <div class="q-text">1) "6x − 9" ifadesinin ortak çarpanla farklı yazımı hangisidir?</div>
 <div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">3(2x − 3)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2(3x − 9)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">6(x − 9)</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">3(2x − 3)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">9(x − 6)</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! x∙2x=2x², x∙(−7)=−7x, sonuç 2x²−7x." data-nomsg="Tekrar düşünelim: x'i parantez içindeki her terimle ayrı ayrı çarpın.">
+<div class="q-card" data-okmsg="Doğru! x∙2x=2x², x∙(−7)=−7x, sonuç 2x²−7x." data-nomsg="Yanlış. Doğru cevap: 2x² − 7x. x∙2x=2x², x∙(−7)=−7x, sonuç 2x²−7x.">
 <div class="q-text">2) x(2x − 7) çarpımının sonucu hangisidir?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2x − 7x²</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">2x² − 7x</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2x² + 7x</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">9x</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">2x² − 7x</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! x∙x=x², x∙8=8x, −3∙x=−3x, −3∙8=−24; 8x−3x=5x, sonuç x²+5x−24." data-nomsg="Tekrar düşünelim: her terimi diğer parantezdeki her terimle çarpıp benzer terimleri toplayın.">
+<div class="q-card" data-okmsg="Doğru! x∙x=x², x∙8=8x, −3∙x=−3x, −3∙8=−24; 8x−3x=5x, sonuç x²+5x−24." data-nomsg="Yanlış. Doğru cevap: x² + 5x − 24. x∙x=x², x∙8=8x, −3∙x=−3x, −3∙8=−24; 8x−3x=5x, sonuç x²+5x−24.">
 <div class="q-text">3) (x − 3)(x + 8) çarpımının sonucu hangisidir?</div>
 <div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">x² + 5x − 24</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">x² − 5x − 24</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">x² + 11x − 24</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">x² + 5x − 24</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">x² + 5x + 24</button>
 </div><div class="feedback"></div></div>
 
@@ -352,10 +353,14 @@ function checkTF(btn,chosenTrue,actualTrue){
 function checkFill(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);
   const fb=document.getElementById(fbId);
+  if(inp.dataset.done)return;
+  if(inp.value.trim()===''){fb.classList.add('show');fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Önce cevabınızı yazın.';return;}
+  inp.dataset.done='1';inp.disabled=true;
+  document.querySelectorAll('button[onclick*="\''+inputId+'\'"]').forEach(b=>b.disabled=true);
   const val=parseInt(inp.value.trim(),10);
   fb.classList.add('show');
-  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+String(correctVal).replace('.',',')+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+String(correctVal).replace('.',',')+'.';}
 }
 
 /* ---- Ortak polinom biçimlendirme yardımcı fonksiyonu ---- */
@@ -480,30 +485,14 @@ updateAM();
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
- {q:"\"-7y\" ifadesinin katsayısı kaçtır?",
-  choices:["7","-7","y","-7y"],correct:1,
-  expl:"Bir terimin katsayısı, o terimde çarpan durumundaki sayıdır; -7y'nin katsayısı -7'dir."},
- {q:"\"x + 9\" ifadesinde sabit terimin katsayı değeri kaçtır?",
-  choices:["x","1","0","9"],correct:3,
-  expl:"Sabit terimin kendisi aynı zamanda bir katsayıdır; sabit terimin katsayısı 9'dur."},
- {q:"\"4a + 4b\" ifadesi ortak çarpan parantezine alınırsa hangisi elde edilir?",
-  choices:["a(4 + b)","4(a − b)","4(a + b)","4a(1 + b)"],correct:2,
-  expl:"4, hem 4a'nın hem de 4b'nin ortak çarpanıdır: 4a+4b = 4(a + b)"},
- {q:"2x(x + 6) çarpımının sonucu hangisidir?",
-  choices:["2x² + 12x","2x² + 6x","x² + 12x","2x + 12"],correct:0,
-  expl:"2x∙x=2x² ve 2x∙6=12x olduğundan sonuç 2x²+12x'tir."},
- {q:"(x + 3)(x − 9) çarpımının sonucu hangisidir?",
-  choices:["x² − 12x − 27","x² + 6x − 27","x² − 6x + 27","x² − 6x − 27"],correct:3,
-  expl:"x∙x=x², x∙(−9)=−9x, 3∙x=3x, 3∙(−9)=−27; −9x+3x=−6x, sonuç x²−6x−27"},
- {q:"(x − 4)(x − 4) çarpımının sabit terimi kaçtır?",
-  choices:["16","-16","8","-8"],correct:0,
-  expl:"(x−4)(x−4)=x²−4x−4x+16=x²−8x+16; sabit terim 16'dır."},
- {q:"Kenarları (x + 5) cm ve (x + 3) cm olan bir dikdörtgenin alanı x cinsinden bir ifadeyle yazıldığında, x² teriminin katsayısı ile sabit terimin toplamı kaçtır?",
-  choices:["23","16","8","15"],correct:1,
-  expl:"(x+5)(x+3)=x²+8x+15; x²'nin katsayısı 1, sabit terim 15'tir; toplam 1+15=16"},
- {q:"\"3x(2x − 5)\" ifadesinin açılımında x teriminin katsayısı kaçtır?",
-  choices:["-5","6","-15","15"],correct:2,
-  expl:"3x(2x−5)=6x²−15x; x teriminin katsayısı −15'tir."}
+{"q": "\"-7y\" ifadesinin katsayısı kaçtır?", "choices": ["-7", "7", "y", "-7y"], "correct": 0, "expl": "Bir terimin katsayısı, o terimde çarpan durumundaki sayıdır; -7y'nin katsayısı -7'dir."},
+{"q": "\"x + 9\" ifadesinde sabit terimin katsayı değeri kaçtır?", "choices": ["x", "1", "9", "0"], "correct": 2, "expl": "Sabit terimin kendisi aynı zamanda bir katsayıdır; sabit terimin katsayısı 9'dur."},
+{"q": "\"4a + 4b\" ifadesi ortak çarpan parantezine alınırsa hangisi elde edilir?", "choices": ["a(4 + b)", "4(a − b)", "4a(1 + b)", "4(a + b)"], "correct": 3, "expl": "4, hem 4a'nın hem de 4b'nin ortak çarpanıdır: 4a+4b = 4(a + b)"},
+{"q": "2x(x + 6) çarpımının sonucu hangisidir?", "choices": ["2x² + 6x", "2x² + 12x", "x² + 12x", "2x + 12"], "correct": 1, "expl": "2x∙x=2x² ve 2x∙6=12x olduğundan sonuç 2x²+12x'tir."},
+{"q": "(x + 3)(x − 9) çarpımının sonucu hangisidir?", "choices": ["x² − 6x − 27", "x² − 12x − 27", "x² + 6x − 27", "x² − 6x + 27"], "correct": 0, "expl": "x∙x=x², x∙(−9)=−9x, 3∙x=3x, 3∙(−9)=−27; −9x+3x=−6x, sonuç x²−6x−27"},
+{"q": "(x − 4)(x − 4) çarpımının sabit terimi kaçtır?", "choices": ["-16", "8", "-8", "16"], "correct": 3, "expl": "(x−4)(x−4)=x²−4x−4x+16=x²−8x+16; sabit terim 16'dır."},
+{"q": "Kenarları (x + 5) cm ve (x + 3) cm olan bir dikdörtgenin alanı x cinsinden bir ifadeyle yazıldığında, x² teriminin katsayısı ile sabit terimin toplamı kaçtır?", "choices": ["23", "16", "8", "15"], "correct": 1, "expl": "(x+5)(x+3)=x²+8x+15; x²'nin katsayısı 1, sabit terim 15'tir; toplam 1+15=16"},
+{"q": "\"3x(2x − 5)\" ifadesinin açılımında x teriminin katsayısı kaçtır?", "choices": ["-5", "6", "-15", "15"], "correct": 2, "expl": "3x(2x−5)=6x²−15x; x teriminin katsayısı −15'tir."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -516,7 +505,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Test tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div>';
     renderDots();return;
   }
   qAnswered=false;
@@ -538,11 +527,10 @@ function answerQuiz(i){
   });
   const fb=document.getElementById('quizFeedback');
   fb.classList.add('show',isCorrect?'ok':'no');
-  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. Doğru cevap: '+item.choices[item.correct].replace(/[.\s]+$/,'')+'. ')+item.expl;
   document.getElementById('quizNext').style.display='inline-block';
 }
 function nextQuiz(){qIndex++;renderQuiz();}
-function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
 </script>
 </body></html>

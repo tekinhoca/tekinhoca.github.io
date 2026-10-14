@@ -18,6 +18,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 .chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </style></head><body>
 <header><div class="badge">8. SINIF MATEMATİK · M.8.2.2.5</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Gerçek Hayat Durumlarını Denklem, Tablo ve Grafikle İfade Etme</h1><p>Doğrusal ilişki içeren gerçek hayat durumlarına ait denklem, tablo ve grafik oluşturma; grafiği yorumlama</p></header>
 <nav class="tab-bar">
@@ -176,31 +177,31 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <section class="tab-panel" id="tab6">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! Denklem, y=40x+65; x=6 için y=240+65=305 TL." data-nomsg="Tekrar düşünelim: önce denklemi kurup x=6'yı yerine koyun.">
+<div class="q-card" data-okmsg="Doğru! Denklem, y=40x+65; x=6 için y=240+65=305 TL." data-nomsg="Yanlış. Doğru cevap: 305 TL. Denklem, y=40x+65; x=6 için y=240+65=305 TL.">
 <div class="q-text">1) 2026 Eylül ayı güncel fiyat tarifesine göre Ankara'da taksimetre açılış ücreti 65 TL ve km başına alınan ücret ise 40 TL'dir. Ankara'da taksi ile 6 km'lik yolculuk kaç lira tutar?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">240 TL</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">305 TL</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">105 TL</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">305 TL</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">430 TL</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! y=300-15x; y=0 için x=20 dakika." data-nomsg="Tekrar düşünelim: y=0 alıp denklemi çözün.">
+<div class="q-card" data-okmsg="Doğru! y=300-15x; y=0 için x=20 dakika." data-nomsg="Yanlış. Doğru cevap: 20 dakika. y=300-15x; y=0 için x=20 dakika.">
 <div class="q-text">2) Bir su deposu 300 litre su içermektedir ve dakikada 15 litre boşalmaktadır. Depo kaç dakikada tamamen boşalır?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">15 dakika</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">25 dakika</button>
 <button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">20 dakika</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">25 dakika</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">30 dakika</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! Ücret sabit olduğundan (x'ten etkilenmediğinden) grafiği x eksenine paraleldir." data-nomsg="Tekrar düşünelim: y=45 biçimindeki bir denklemin grafiği nasıl bir doğrudur?">
+<div class="q-card" data-okmsg="Doğru! Ücret sabit olduğundan (x'ten etkilenmediğinden) grafiği x eksenine paraleldir." data-nomsg="Yanlış. Doğru cevap: x eksenine paraleldir. Ücret sabit olduğundan (x'ten etkilenmediğinden) grafiği x eksenine paraleldir.">
 <div class="q-text">3) y = 45 biçiminde sabit aylık ücret alan bir üyeliğin grafiği nasıl bir doğrudur?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Orijinden geçer</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y eksenine paraleldir</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">x eksenine paraleldir</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Belirlenemez</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">x eksenine paraleldir</button>
 </div><div class="feedback"></div></div>
 
 <p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
@@ -293,10 +294,14 @@ function checkTF(btn,chosenTrue,actualTrue){
 function checkFill(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);
   const fb=document.getElementById(fbId);
+  if(inp.dataset.done)return;
+  if(inp.value.trim()===''){fb.classList.add('show');fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Önce cevabınızı yazın.';return;}
+  inp.dataset.done='1';inp.disabled=true;
+  document.querySelectorAll('button[onclick*="\''+inputId+'\'"]').forEach(b=>b.disabled=true);
   const val=parseInt(inp.value.trim(),10);
   fb.classList.add('show');
-  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+String(correctVal).replace('.',',')+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+String(correctVal).replace('.',',')+'.';}
 }
 
 /* ---- SVG yardımcı fonksiyonlar ---- */
@@ -385,30 +390,14 @@ s4FQ.draw(document.getElementById('s4Grid'));
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
- {q:"Bir oto yıkama sabit 25 TL, her ek hizmet için 10 TL almaktadır. 2 ek hizmet alan bir aracın ücreti kaç TL'dir?",
-  choices:["35 TL","45 TL","50 TL","55 TL"],correct:1,
-  expl:"y=10x+25; x=2 için y=20+25=45 TL."},
- {q:"Bir su deposu 400 litre su içermektedir ve dakikada 40 litre boşalmaktadır. Depo kaç dakikada tamamen boşalır?",
-  choices:["8 dakika","10 dakika","12 dakika","16 dakika"],correct:1,
-  expl:"y=400-40x; y=0 için x=10 dakika."},
- {q:"Kullanım süresinden bağımsız olarak aylık sabit 80 TL alan bir üyeliğin grafiği nasıl bir doğrudur?",
-  choices:["Orijinden geçer","y eksenine paraleldir","x eksenine paraleldir","Belirlenemez"],correct:2,
-  expl:"Ücret sabit (x'ten etkilenmiyor) olduğundan grafiği x eksenine paraleldir."},
- {q:"Bir yazılımcının proje başına geliri 500 TL'dir (sabit geliri yoktur). 6 proje tamamlarsa kaç TL kazanır?",
-  choices:["2500 TL","3000 TL","3500 TL","500 TL"],correct:1,
-  expl:"y=500x; x=6 için y=3000 TL."},
- {q:"Dikildiğinde boyu 8 cm olan bir bitki haftada 2 cm uzamaktadır. Bitkinin boyu kaçıncı haftada 24 cm olur?",
-  choices:["6. hafta","7. hafta","8. hafta","9. hafta"],correct:2,
-  expl:"y=2x+8; 24=2x+8 → x=8."},
- {q:"Bir doğru y eksenini (0, 30) noktasında kesiyor ve orijinden geçmiyor. Bu, gerçek hayat bağlamında genellikle neyi ifade eder?",
-  choices:["Değerin hiç değişmediğini","Sabit bir başlangıç değeri/ücreti olduğunu","Bağımsız değişkenin negatif olduğunu","Hiçbir anlamı olmadığını"],correct:1,
-  expl:"y ekseni kesim noktası, genellikle senaryodaki sabit/başlangıç değerini ifade eder."},
- {q:"Bir su deposundaki azalan su miktarı (0, 60) ve (4, 20) noktalarından geçen bir doğruyla gösterilmektedir. Depo kaçıncı dakikada tamamen boşalır?",
-  choices:["5. dakika","6. dakika","7. dakika","8. dakika"],correct:1,
-  expl:"Eğim=(20-60)/4=-10; y=-10x+60. y=0 için x=6."},
- {q:"Aşağıdaki senaryolardan hangisinin grafiği orijinden geçer?",
-  choices:["Sabit aylık 50 TL alan bir üyelik","Açılış ücreti 10 TL olan bir taksi","Kilogram başına 8 TL olan (sabit ücreti olmayan) bir kargo","200 litre ile başlayan bir su deposu"],correct:2,
-  expl:"Sabit terimi olmayan (yalnızca birim başına ücretlendirilen) tek senaryo kargo senaryosudur; bu nedenle grafiği orijinden geçer."}
+{"q": "Bir oto yıkama sabit 25 TL, her ek hizmet için 10 TL almaktadır. 2 ek hizmet alan bir aracın ücreti kaç TL'dir?", "choices": ["35 TL", "50 TL", "45 TL", "55 TL"], "correct": 2, "expl": "y=10x+25; x=2 için y=20+25=45 TL."},
+{"q": "Bir su deposu 400 litre su içermektedir ve dakikada 40 litre boşalmaktadır. Depo kaç dakikada tamamen boşalır?", "choices": ["10 dakika", "8 dakika", "12 dakika", "16 dakika"], "correct": 0, "expl": "y=400-40x; y=0 için x=10 dakika."},
+{"q": "Kullanım süresinden bağımsız olarak aylık sabit 80 TL alan bir üyeliğin grafiği nasıl bir doğrudur?", "choices": ["Orijinden geçer", "x eksenine paraleldir", "y eksenine paraleldir", "Belirlenemez"], "correct": 1, "expl": "Ücret sabit (x'ten etkilenmiyor) olduğundan grafiği x eksenine paraleldir."},
+{"q": "Bir yazılımcının proje başına geliri 500 TL'dir (sabit geliri yoktur). 6 proje tamamlarsa kaç TL kazanır?", "choices": ["3000 TL", "2500 TL", "3500 TL", "500 TL"], "correct": 0, "expl": "y=500x; x=6 için y=3000 TL."},
+{"q": "Dikildiğinde boyu 8 cm olan bir bitki haftada 2 cm uzamaktadır. Bitkinin boyu kaçıncı haftada 24 cm olur?", "choices": ["6. hafta", "7. hafta", "9. hafta", "8. hafta"], "correct": 3, "expl": "y=2x+8; 24=2x+8 → x=8."},
+{"q": "Bir doğru y eksenini (0, 30) noktasında kesiyor ve orijinden geçmiyor. Bu, gerçek hayat bağlamında genellikle neyi ifade eder?", "choices": ["Değerin hiç değişmediğini", "Bağımsız değişkenin negatif olduğunu", "Sabit bir başlangıç değeri/ücreti olduğunu", "Hiçbir anlamı olmadığını"], "correct": 2, "expl": "y ekseni kesim noktası, genellikle senaryodaki sabit/başlangıç değerini ifade eder."},
+{"q": "Bir su deposundaki azalan su miktarı (0, 60) ve (4, 20) noktalarından geçen bir doğruyla gösterilmektedir. Depo kaçıncı dakikada tamamen boşalır?", "choices": ["5. dakika", "7. dakika", "8. dakika", "6. dakika"], "correct": 3, "expl": "Eğim=(20-60)/4=-10; y=-10x+60. y=0 için x=6."},
+{"q": "Aşağıdaki senaryolardan hangisinin grafiği orijinden geçer?", "choices": ["Sabit aylık 50 TL alan bir üyelik", "Kilogram başına 8 TL olan (sabit ücreti olmayan) bir kargo", "Açılış ücreti 10 TL olan bir taksi", "200 litre ile başlayan bir su deposu"], "correct": 1, "expl": "Sabit terimi olmayan (yalnızca birim başına ücretlendirilen) tek senaryo kargo senaryosudur; bu nedenle grafiği orijinden geçer."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -421,7 +410,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Test tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div>';
     renderDots();return;
   }
   qAnswered=false;
@@ -443,11 +432,10 @@ function answerQuiz(i){
   });
   const fb=document.getElementById('quizFeedback');
   fb.classList.add('show',isCorrect?'ok':'no');
-  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. Doğru cevap: '+item.choices[item.correct].replace(/[.\s]+$/,'')+'. ')+item.expl;
   document.getElementById('quizNext').style.display='inline-block';
 }
 function nextQuiz(){qIndex++;renderQuiz();}
-function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
 </script>
 </body></html>

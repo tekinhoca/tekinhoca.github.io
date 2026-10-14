@@ -18,6 +18,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 .chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
 <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
@@ -283,7 +284,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <section class="tab-panel" id="tab6">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! 4x-5=11 → 4x=16 → x=4." data-nomsg="Tekrar düşünelim: önce her iki tarafa 5 ekleyin, sonra 4'e bölün.">
+<div class="q-card" data-okmsg="Doğru! 4x-5=11 → 4x=16 → x=4." data-nomsg="Yanlış. Doğru cevap: 4. 4x-5=11 → 4x=16 → x=4.">
 <div class="q-text">1) 4x − 5 = 11 denkleminin çözümü kaçtır?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">3</button>
@@ -292,21 +293,21 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">16</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! (1/2)x+4=9 → (1/2)x=5 → x=10." data-nomsg="Tekrar düşünelim: önce her iki taraftan 4 çıkarın, sonra 2 ile çarpın.">
+<div class="q-card" data-okmsg="Doğru! (1/2)x+4=9 → (1/2)x=5 → x=10." data-nomsg="Yanlış. Doğru cevap: 10. (1/2)x+4=9 → (1/2)x=5 → x=10.">
 <div class="q-text">2) \(\dfrac{1}{2}x + 4 = 9\) denkleminin çözümü kaçtır?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">5</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">13</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">10</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">18</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">10</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! x koordinatı negatif, y koordinatı pozitif olduğundan B noktası II. bölgededir." data-nomsg="Tekrar düşünelim: x ve y koordinatlarının işaretlerine bakıp bölge tablosunu kullanın.">
+<div class="q-card" data-okmsg="Doğru! x koordinatı negatif, y koordinatı pozitif olduğundan B noktası II. bölgededir." data-nomsg="Yanlış. Doğru cevap: II. Bölge. x koordinatı negatif, y koordinatı pozitif olduğundan B noktası II. bölgededir.">
 <div class="q-text">3) B(−4, 5) noktası hangi bölgededir?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">I. Bölge</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">II. Bölge</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">III. Bölge</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">II. Bölge</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">IV. Bölge</button>
 </div><div class="feedback"></div></div>
 
@@ -408,10 +409,14 @@ function checkTF(btn,chosenTrue,actualTrue){
 function checkFill(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);
   const fb=document.getElementById(fbId);
+  if(inp.dataset.done)return;
+  if(inp.value.trim()===''){fb.classList.add('show');fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Önce cevabınızı yazın.';return;}
+  inp.dataset.done='1';inp.disabled=true;
+  document.querySelectorAll('button[onclick*="\''+inputId+'\'"]').forEach(b=>b.disabled=true);
   const val=parseInt(inp.value.trim(),10);
   fb.classList.add('show');
-  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+String(correctVal).replace('.',',')+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+String(correctVal).replace('.',',')+'.';}
 }
 function gcdNum(a,b){return b===0?a:gcdNum(b,a%b);}
 function fracTex(num,den){
@@ -543,33 +548,15 @@ updateP2();
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
- {q:"6x − 4 = 20 denkleminin çözümü kaçtır?",
-  choices:["3","4","5","6"],correct:1,
-  expl:"6x=24 olduğundan x=4."},
- {q:"\\(\\dfrac{3}{4}x = 9\\) denkleminin çözümü kaçtır?",
-  choices:["9","12","6","15"],correct:1,
-  expl:"x=9×(4/3)=12."},
- {q:"2(x + 5) = 3x − 1 denkleminin çözümü kaçtır?",
-  choices:["9","10","11","12"],correct:2,
-  expl:"2x+10=3x−1 → 11=x."},
- {q:"\\(\\dfrac{x-2}{3} = 4\\) denkleminin çözümü kaçtır?",
-  choices:["10","12","14","16"],correct:2,
-  expl:"x−2=12 olduğundan x=14."},
- {q:"C(3, −2) noktası hangi bölgededir?",
-  choices:["I. Bölge","II. Bölge","III. Bölge","IV. Bölge"],correct:3,
-  expl:"x pozitif, y negatif olduğundan C noktası IV. bölgededir."},
- {q:"Bir noktanın koordinatları (2a+1, a−4) olarak veriliyor. Bu nokta x ekseni üzerinde olduğuna göre a kaçtır?",
-  choices:["3","4","5","−4"],correct:1,
-  expl:"x ekseni üzerindeki noktalarda y=0 olduğundan a−4=0, a=4."},
- {q:"\\(\\dfrac{x+3}{4} - \\dfrac{x-1}{2} = 1\\) denkleminin çözümü kaçtır?",
-  choices:["-1","0","1","2"],correct:2,
-  expl:"Her iki taraf 4 ile çarpılırsa: (x+3)−2(x−1)=4 → −x+5=4 → x=1."},
- {q:"III. bölgedeki bir noktanın koordinatları için aşağıdakilerden hangisi doğru olabilir?",
-  choices:["(3, 5)","(−3, 5)","(3, −5)","(−3, −5)"],correct:3,
-  expl:"III. bölgede hem x hem y negatiftir; bu nedenle (−3, −5) uygun bir örnektir."},
- {q:"Hangi doğal sayının üçte biri ile aynı sayının yarısının farkı 25 eder?",
-  choices:["100","120","150","75"],correct:2,
-  expl:"Sayı x olsun: \\(\\dfrac{x}{2}-\\dfrac{x}{3}=25\\). Paydalar eşitlenirse \\(\\dfrac{3x-2x}{6}=25 \\Rightarrow \\dfrac{x}{6}=25 \\Rightarrow x=150\\)."}
+{"q": "6x − 4 = 20 denkleminin çözümü kaçtır?", "choices": ["4", "3", "5", "6"], "correct": 0, "expl": "6x=24 olduğundan x=4."},
+{"q": "\\(\\dfrac{3}{4}x = 9\\) denkleminin çözümü kaçtır?", "choices": ["9", "6", "15", "12"], "correct": 3, "expl": "x=9×(4/3)=12."},
+{"q": "2(x + 5) = 3x − 1 denkleminin çözümü kaçtır?", "choices": ["11", "9", "10", "12"], "correct": 0, "expl": "2x+10=3x−1 → 11=x."},
+{"q": "\\(\\dfrac{x-2}{3} = 4\\) denkleminin çözümü kaçtır?", "choices": ["10", "14", "12", "16"], "correct": 1, "expl": "x−2=12 olduğundan x=14."},
+{"q": "C(3, −2) noktası hangi bölgededir?", "choices": ["I. Bölge", "II. Bölge", "III. Bölge", "IV. Bölge"], "correct": 3, "expl": "x pozitif, y negatif olduğundan C noktası IV. bölgededir."},
+{"q": "Bir noktanın koordinatları (2a+1, a−4) olarak veriliyor. Bu nokta x ekseni üzerinde olduğuna göre a kaçtır?", "choices": ["3", "5", "4", "−4"], "correct": 2, "expl": "x ekseni üzerindeki noktalarda y=0 olduğundan a−4=0, a=4."},
+{"q": "\\(\\dfrac{x+3}{4} - \\dfrac{x-1}{2} = 1\\) denkleminin çözümü kaçtır?", "choices": ["1", "-1", "0", "2"], "correct": 0, "expl": "Her iki taraf 4 ile çarpılırsa: (x+3)−2(x−1)=4 → −x+5=4 → x=1."},
+{"q": "III. bölgedeki bir noktanın koordinatları için aşağıdakilerden hangisi doğru olabilir?", "choices": ["(3, 5)", "(−3, 5)", "(−3, −5)", "(3, −5)"], "correct": 2, "expl": "III. bölgede hem x hem y negatiftir; bu nedenle (−3, −5) uygun bir örnektir."},
+{"q": "Hangi doğal sayının üçte biri ile aynı sayının yarısının farkı 25 eder?", "choices": ["100", "150", "120", "75"], "correct": 1, "expl": "Sayı x olsun: \\(\\dfrac{x}{2}-\\dfrac{x}{3}=25\\). Paydalar eşitlenirse \\(\\dfrac{3x-2x}{6}=25 \\Rightarrow \\dfrac{x}{6}=25 \\Rightarrow x=150\\)."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -582,7 +569,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Test tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div>';
     renderDots();return;
   }
   qAnswered=false;
@@ -605,12 +592,11 @@ function answerQuiz(i){
   });
   const fb=document.getElementById('quizFeedback');
   fb.classList.add('show',isCorrect?'ok':'no');
-  fb.innerHTML=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  fb.innerHTML=(isCorrect?'Doğru! ':'Yanlış. Doğru cevap: '+item.choices[item.correct].replace(/[.\s]+$/,'')+'. ')+item.expl;
   typesetMJ(fb);
   document.getElementById('quizNext').style.display='inline-block';
 }
 function nextQuiz(){qIndex++;renderQuiz();}
-function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
 </script>
 </body></html>

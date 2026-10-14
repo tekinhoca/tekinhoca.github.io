@@ -19,6 +19,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 .chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
 <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
@@ -181,22 +182,22 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <section class="tab-panel" id="tab5">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! (-2)³ = (-2)×(-2)×(-2) = -8." data-nomsg="Tekrar düşünelim: negatif tabanın tek kuvvetleri negatif sonuç verir.">
+<div class="q-card" data-okmsg="Doğru! (-2)³ = (-2)×(-2)×(-2) = -8." data-nomsg="Yanlış. Doğru cevap: −8. (-2)³ = (-2)×(-2)×(-2) = -8.">
 <div class="q-text">1) (−2)³ değeri kaçtır?</div>
 <div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">−8</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">−6</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">−8</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">6</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! aᵐ ÷ aⁿ = aᵐ⁻ⁿ kuralınca 5-8=-3, yani \(a^{-3}=\dfrac{1}{a^{3}}\)." data-nomsg="Tekrar düşünelim: bölme kuralında üsler çıkarılır: 5-8.">
+<div class="q-card" data-okmsg="Doğru! aᵐ ÷ aⁿ = aᵐ⁻ⁿ kuralınca 5-8=-3, yani \(a^{-3}=\dfrac{1}{a^{3}}\)." data-nomsg="Yanlış. Doğru cevap: \(a^{-3}\) (yani \(\dfrac{1}{a^{3}}\)). aᵐ ÷ aⁿ = aᵐ⁻ⁿ kuralınca 5-8=-3, yani \(a^{-3}=\dfrac{1}{a^{3}}\).">
 <div class="q-text">2) a ≠ 0 olmak üzere, a⁵ ÷ a⁸ ifadesinin sadeleştirilmiş hâli hangisidir?</div>
 <div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(a^{-3}\) (yani \(\dfrac{1}{a^{3}}\))</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">a³</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">a⁻¹³</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">a¹³</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(a^{-3}\) (yani \(\dfrac{1}{a^{3}}\))</button>
 </div><div class="feedback"></div></div>
 
 <p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
@@ -292,20 +293,28 @@ function checkTF(btn,chosenTrue,actualTrue){
 function checkFill(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);
   const fb=document.getElementById(fbId);
+  if(inp.dataset.done)return;
+  if(inp.value.trim()===''){fb.classList.add('show');fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Önce cevabınızı yazın.';return;}
+  inp.dataset.done='1';inp.disabled=true;
+  document.querySelectorAll('button[onclick*="\''+inputId+'\'"]').forEach(b=>b.disabled=true);
   const val=parseInt(inp.value.trim(),10);
   fb.classList.add('show');
-  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+String(correctVal).replace('.',',')+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+String(correctVal).replace('.',',')+'.';}
 }
 function checkFillDecimal(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);
   const fb=document.getElementById(fbId);
+  if(inp.dataset.done)return;
+  if(inp.value.trim()===''){fb.classList.add('show');fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Önce cevabınızı yazın.';return;}
+  inp.dataset.done='1';inp.disabled=true;
+  document.querySelectorAll('button[onclick*="\''+inputId+'\'"]').forEach(b=>b.disabled=true);
   const raw=inp.value.trim().replace(',', '.');
   const val=parseFloat(raw);
   fb.classList.add('show');
   const correctStr=String(correctVal).replace('.',',');
   if(!isNaN(val) && Math.abs(val-correctVal)<1e-9){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctStr+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctStr+' olmalıydı, tekrar deneyin.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+correctStr+'.';}
 }
 function typesetMJ(el){
   if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]).catch(()=>{});}
@@ -373,24 +382,12 @@ showSci(0,document.querySelector('#tab3 .chip-btn'));
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
- {q:"2⁻⁴ ifadesinin değeri nedir?",
-  choices:["\\(\\dfrac{1}{16}\\)","-8","16","\\(-\\dfrac{1}{16}\\)"],correct:0,
-  expl:"\\(2^{-4} = \\dfrac{1}{2^{4}} = \\dfrac{1}{16}\\)."},
- {q:"5³ × 5² işleminin üslü ifade olarak sonucu nedir?",
-  choices:["5⁵","5⁶","10⁵","25⁵"],correct:0,
-  expl:"Tabanlar aynı olduğundan üsler toplanır: 3+2=5, sonuç 5⁵."},
- {q:"(3²)³ ifadesi üslü ifade olarak hangisine eşittir?",
-  choices:["3⁶","3⁵","3⁹","6³"],correct:0,
-  expl:"Kuvvetin kuvveti alınırken üsler çarpılır: 2×3=6, sonuç 3⁶."},
- {q:"512×10⁴ ifadesi aşağıdakilerden hangisine eşittir?",
-  choices:["5,12×10⁶","51,2×10³","5120×10³","512×10⁵"],correct:0,
-  expl:"512×10⁴ = 5.120.000 sayısını ifade eder; bu sayı 5,12×10⁶ olarak da yazılabilir."},
- {q:"0,00043 sayısının bilimsel gösterimi hangisidir?",
-  choices:["4,3×10⁻⁴","43×10⁻⁵","4,3×10⁴","0,43×10⁻³"],correct:0,
-  expl:"Virgül 4 basamak sağa kaydırılarak 4,3 elde edilir; sayı 1'den küçük olduğundan üs negatiftir: 4,3×10⁻⁴."},
- {q:"3,4×10⁶ ile 2,9×10⁷ sayılarından hangisi daha büyüktür?",
-  choices:["2,9×10⁷","3,4×10⁶","Eşittir","Karşılaştırılamaz"],correct:0,
-  expl:"Bilimsel gösterimde önce üsler karşılaştırılır; 7 &gt; 6 olduğundan 2,9×10⁷ daha büyüktür."}
+{"q": "2⁻⁴ ifadesinin değeri nedir?", "choices": ["\\(\\dfrac{1}{16}\\)", "-8", "16", "\\(-\\dfrac{1}{16}\\)"], "correct": 0, "expl": "\\(2^{-4} = \\dfrac{1}{2^{4}} = \\dfrac{1}{16}\\)."},
+{"q": "5³ × 5² işleminin üslü ifade olarak sonucu nedir?", "choices": ["5⁶", "5⁵", "10⁵", "25⁵"], "correct": 1, "expl": "Tabanlar aynı olduğundan üsler toplanır: 3+2=5, sonuç 5⁵."},
+{"q": "(3²)³ ifadesi üslü ifade olarak hangisine eşittir?", "choices": ["3⁵", "3⁹", "6³", "3⁶"], "correct": 3, "expl": "Kuvvetin kuvveti alınırken üsler çarpılır: 2×3=6, sonuç 3⁶."},
+{"q": "512×10⁴ ifadesi aşağıdakilerden hangisine eşittir?", "choices": ["51,2×10³", "5,12×10⁶", "5120×10³", "512×10⁵"], "correct": 1, "expl": "512×10⁴ = 5.120.000 sayısını ifade eder; bu sayı 5,12×10⁶ olarak da yazılabilir."},
+{"q": "0,00043 sayısının bilimsel gösterimi hangisidir?", "choices": ["4,3×10⁻⁴", "43×10⁻⁵", "4,3×10⁴", "0,43×10⁻³"], "correct": 0, "expl": "Virgül 4 basamak sağa kaydırılarak 4,3 elde edilir; sayı 1'den küçük olduğundan üs negatiftir: 4,3×10⁻⁴."},
+{"q": "3,4×10⁶ ile 2,9×10⁷ sayılarından hangisi daha büyüktür?", "choices": ["3,4×10⁶", "Eşittir", "2,9×10⁷", "Karşılaştırılamaz"], "correct": 2, "expl": "Bilimsel gösterimde önce üsler karşılaştırılır; 7 &gt; 6 olduğundan 2,9×10⁷ daha büyüktür."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -403,7 +400,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Test tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div>';
     renderDots();return;
   }
   qAnswered=false;
@@ -426,12 +423,11 @@ function answerQuiz(i){
   });
   const fb=document.getElementById('quizFeedback');
   fb.classList.add('show',isCorrect?'ok':'no');
-  fb.innerHTML=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  fb.innerHTML=(isCorrect?'Doğru! ':'Yanlış. Doğru cevap: '+item.choices[item.correct].replace(/[.\s]+$/,'')+'. ')+item.expl;
   typesetMJ(fb);
   document.getElementById('quizNext').style.display='inline-block';
 }
 function nextQuiz(){qIndex++;renderQuiz();}
-function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
 </script>
 </body></html>

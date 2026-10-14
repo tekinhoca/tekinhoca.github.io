@@ -18,6 +18,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 .chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
 <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
@@ -275,7 +276,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <section class="tab-panel" id="tab6">
 <div class="card"><div class="card-title"><div class="icon">📝</div>Çalışma Soruları</div>
 
-<div class="q-card" data-okmsg="Doğru! y=0 için 2x-4=0 → x=2, nokta (2,0)." data-nomsg="Tekrar düşünelim: x ekseni kesim noktası için denklemde y yerine 0 yazıp x'i bulun.">
+<div class="q-card" data-okmsg="Doğru! y=0 için 2x-4=0 → x=2, nokta (2,0)." data-nomsg="Yanlış. Doğru cevap: (2, 0). y=0 için 2x-4=0 → x=2, nokta (2,0).">
 <div class="q-text">1) y = 2x − 4 doğrusunun x eksenini kestiği nokta hangisidir?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">(0, −4)</button>
@@ -284,7 +285,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">(4, 0)</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! y=c biçimindeki denklemler x eksenine paraleldir." data-nomsg="Tekrar düşünelim: y=c biçimindeki bir doğru hangi eksene paraleldir?">
+<div class="q-card" data-okmsg="Doğru! y=c biçimindeki denklemler x eksenine paraleldir." data-nomsg="Yanlış. Doğru cevap: x eksenine. y=c biçimindeki denklemler x eksenine paraleldir.">
 <div class="q-text">2) y = −7 doğrusu hangi eksene paraleldir?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y eksenine</button>
@@ -293,13 +294,13 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Her ikisine</button>
 </div><div class="feedback"></div></div>
 
-<div class="q-card" data-okmsg="Doğru! y=kx biçimindeki (sabit terimi olmayan) her doğru orijinden geçer." data-nomsg="Tekrar düşünelim: bu denklemde sabit terim var mı?">
+<div class="q-card" data-okmsg="Doğru! y=kx biçimindeki (sabit terimi olmayan) her doğru orijinden geçer." data-nomsg="Yanlış. Doğru cevap: (0, 0). y=kx biçimindeki (sabit terimi olmayan) her doğru orijinden geçer.">
 <div class="q-text">3) y = 5x doğrusu hangi noktadan geçer?</div>
 <div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">(0, 0)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">(5, 0)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">(0, 5)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">(1, 1)</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">(0, 0)</button>
 </div><div class="feedback"></div></div>
 
 <p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
@@ -399,10 +400,14 @@ function checkTF(btn,chosenTrue,actualTrue){
 function checkFill(inputId,correctVal,fbId){
   const inp=document.getElementById(inputId);
   const fb=document.getElementById(fbId);
+  if(inp.dataset.done)return;
+  if(inp.value.trim()===''){fb.classList.add('show');fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Önce cevabınızı yazın.';return;}
+  inp.dataset.done='1';inp.disabled=true;
+  document.querySelectorAll('button[onclick*="\''+inputId+'\'"]').forEach(b=>b.disabled=true);
   const val=parseInt(inp.value.trim(),10);
   fb.classList.add('show');
-  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+correctVal+'.';}
-  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap '+correctVal+' olmalıydı, tekrar deneyin.';}
+  if(val===correctVal){fb.classList.remove('no');fb.classList.add('ok');fb.textContent='Doğru! Cevap: '+String(correctVal).replace('.',',')+'.';}
+  else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+String(correctVal).replace('.',',')+'.';}
 }
 
 /* ---- Koordinat düzlemi çizim yardımcıları (sabit, ölçülü ızgara) ---- */
@@ -542,30 +547,14 @@ updateP4();
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
- {q:"y = 4x − 8 doğrusunun x eksenini kestiği nokta hangisidir?",
-  choices:["(0, −8)","(2, 0)","(−2, 0)","(8, 0)"],correct:1,
-  expl:"y=0 için 4x-8=0 → x=2, nokta (2,0)."},
- {q:"y = −3x + 6 doğrusunun y eksenini kestiği nokta hangisidir?",
-  choices:["(0, 6)","(2, 0)","(0, −3)","(6, 0)"],correct:0,
-  expl:"x=0 için y=6, nokta (0,6)."},
- {q:"y = 9 doğrusu hangi eksene paraleldir?",
-  choices:["y eksenine","Hiçbirine","x eksenine","Her ikisine"],correct:2,
-  expl:"y=c biçimindeki denklemler x eksenine paraleldir."},
- {q:"x = −5 doğrusu hangi eksene paraleldir?",
-  choices:["x eksenine","y eksenine","Hiçbirine","Her ikisine"],correct:1,
-  expl:"x=c biçimindeki denklemler y eksenine paraleldir."},
- {q:"y = 7x doğrusu hangi noktadan geçer?",
-  choices:["(7, 0)","(0, 7)","(1, 1)","(0, 0)"],correct:3,
-  expl:"Sabit terimi olmayan (n=0) her doğru orijinden (0,0) geçer."},
- {q:"Bir doğru (0, 2) ve (3, 11) noktalarından geçiyorsa denklemi hangisidir?",
-  choices:["y = 2x + 3","y = 3x + 2","y = 9x + 2","y = 3x + 11"],correct:1,
-  expl:"(0,2) sabit terimi verir: n=2. x 3 artarken y 9 artar, katsayı 9÷3=3: y=3x+2."},
- {q:"y = 2x − 10 doğrusunun x ekseni kesim noktasının apsisi ile y ekseni kesim noktasının ordinatının toplamı kaçtır?",
-  choices:["−5","5","15","−15"],correct:0,
-  expl:"x ekseni kesimi: y=0→x=5. y ekseni kesimi: x=0→y=−10. Toplam: 5+(−10)=−5."},
- {q:"Aşağıdaki denklemlerden hangisinin grafiği orijinden geçer?",
-  choices:["y = 2x + 1","y = x − 4","y = 5x","y = −3"],correct:2,
-  expl:"Sabit terimi olmayan tek denklem y=5x'tir; bu nedenle orijinden geçer."}
+{"q": "y = 4x − 8 doğrusunun x eksenini kestiği nokta hangisidir?", "choices": ["(2, 0)", "(0, −8)", "(−2, 0)", "(8, 0)"], "correct": 0, "expl": "y=0 için 4x-8=0 → x=2, nokta (2,0)."},
+{"q": "y = −3x + 6 doğrusunun y eksenini kestiği nokta hangisidir?", "choices": ["(2, 0)", "(0, 6)", "(0, −3)", "(6, 0)"], "correct": 1, "expl": "x=0 için y=6, nokta (0,6)."},
+{"q": "y = 9 doğrusu hangi eksene paraleldir?", "choices": ["x eksenine", "y eksenine", "Hiçbirine", "Her ikisine"], "correct": 0, "expl": "y=c biçimindeki denklemler x eksenine paraleldir."},
+{"q": "x = −5 doğrusu hangi eksene paraleldir?", "choices": ["x eksenine", "Hiçbirine", "y eksenine", "Her ikisine"], "correct": 2, "expl": "x=c biçimindeki denklemler y eksenine paraleldir."},
+{"q": "y = 7x doğrusu hangi noktadan geçer?", "choices": ["(7, 0)", "(0, 0)", "(0, 7)", "(1, 1)"], "correct": 1, "expl": "Sabit terimi olmayan (n=0) her doğru orijinden (0,0) geçer."},
+{"q": "Bir doğru (0, 2) ve (3, 11) noktalarından geçiyorsa denklemi hangisidir?", "choices": ["y = 2x + 3", "y = 9x + 2", "y = 3x + 11", "y = 3x + 2"], "correct": 3, "expl": "(0,2) sabit terimi verir: n=2. x 3 artarken y 9 artar, katsayı 9÷3=3: y=3x+2."},
+{"q": "y = 2x − 10 doğrusunun x ekseni kesim noktasının apsisi ile y ekseni kesim noktasının ordinatının toplamı kaçtır?", "choices": ["5", "15", "−5", "−15"], "correct": 2, "expl": "x ekseni kesimi: y=0→x=5. y ekseni kesimi: x=0→y=−10. Toplam: 5+(−10)=−5."},
+{"q": "Aşağıdaki denklemlerden hangisinin grafiği orijinden geçer?", "choices": ["y = 2x + 1", "y = x − 4", "y = −3", "y = 5x"], "correct": 3, "expl": "Sabit terimi olmayan tek denklem y=5x'tir; bu nedenle orijinden geçer."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -578,7 +567,7 @@ function renderDots(){
 }
 function renderQuiz(){
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div><div class="next-row"><button class="submit-btn" onclick="restartQuiz()">Tekrar Dene</button></div>';
+    document.getElementById('quizArea').innerHTML='<div class="score">Test tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div>';
     renderDots();return;
   }
   qAnswered=false;
@@ -600,11 +589,10 @@ function answerQuiz(i){
   });
   const fb=document.getElementById('quizFeedback');
   fb.classList.add('show',isCorrect?'ok':'no');
-  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. ')+item.expl;
+  fb.textContent=(isCorrect?'Doğru! ':'Yanlış. Doğru cevap: '+item.choices[item.correct].replace(/[.\s]+$/,'')+'. ')+item.expl;
   document.getElementById('quizNext').style.display='inline-block';
 }
 function nextQuiz(){qIndex++;renderQuiz();}
-function restartQuiz(){qIndex=0;qScore=0;renderQuiz();}
 renderQuiz();
 </script>
 </body></html>
