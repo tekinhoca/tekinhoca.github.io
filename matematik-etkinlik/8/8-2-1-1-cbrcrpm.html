@@ -17,6 +17,27 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 .chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;min-height:34px}
 .result-strip{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:150px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;text-align:center}.result-pill .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.25rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:1.8em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;word-break:break-word}
 .chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+/* YÜRÜYÜŞ VE ETİKET DÜZENLEMELERİ */
+.avatar{
+  width:48px;height:48px;background:#fff;border:2.5px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:1.5rem;position:absolute;
+  box-shadow:0 4px 10px rgba(0,0,0,0.12);z-index:20;
+  transition: left 1.2s cubic-bezier(0.25, 1, 0.5, 1), top 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.avatar.left-avatar .lbl { position:absolute; bottom:-6px; left:-6px; right:auto; background:var(--primary); color:#fff; font-size:0.75rem; font-weight:900; border-radius:6px; padding:1px 5px; }
+.avatar.right-avatar .lbl { position:absolute; bottom:-6px; right:-6px; left:auto; background:var(--primary); color:#fff; font-size:0.75rem; font-weight:900; border-radius:6px; padding:1px 5px; }
+
+.avatar.walking { animation: walkBounce 0.3s infinite alternate ease-in-out; }
+@keyframes walkBounce { 0% { transform: translateY(0px); } 100% { transform: translateY(-5px); } }
+
+#shakeIcon {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(0);
+  font-size: 2.2rem; z-index: 50; opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease;
+  pointer-events: none;
+}
+#shakeIcon.active { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
 button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
@@ -24,6 +45,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <header><div class="badge">8. SINIF MATEMATİK · M.8.2.1</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Cebirsel İfadeler ve Çarpımı</h1><p>M.8.2.1.1. Terim, katsayı, değişken; cebirsel ifadeleri farklı biçimlerde yazma<br>M.8.2.1.2. Tek terim ve iki terimli ifadelerin çarpımı, alan modeliyle gösterim</p></header>
 <nav class="tab-bar">
 <button class="tab-btn active" data-tab="tab0">GİRİŞ</button>
+<button class="tab-btn" data-tab="tabTokalas">🤝 TOKALAŞMA ETKİNLİĞİ</button>
 <button class="tab-btn" data-tab="tab1">TERİM-KATSAYI-DEĞİŞKEN</button>
 <button class="tab-btn" data-tab="tab2">FARKLI BİÇİMLER</button>
 <button class="tab-btn" data-tab="tab3">TEK TERİMLE ÇARPMA</button>
@@ -43,6 +65,72 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="chip-row"><span class="badge-mini">x + 5</span><span class="badge-mini">3x</span><span class="badge-mini">x²</span><span class="badge-mini">-6y²</span><span class="badge-mini">a².b</span><span class="badge-mini">2a + 2b</span></div>
 <div class="tip-box">Bu hafta işlenecek kazanımlarda katsayılar her zaman <b>tam sayılardan</b> seçilecektir; kesirli veya ondalıklı katsayılarla işlem yapılmayacaktır.</div>
 </div>
+</section>
+
+<!-- TOKALAŞMA ETKİNLİĞİ SEKMESİ -->
+<section class="tab-panel" id="tabTokalas">
+  <div class="card">
+    <div class="card-title"><div class="icon">🤝</div>Tokalaşma Etkinliği ile Çarpma İfadesi</div>
+    <div class="def-box">
+      <b>Etkinlik Amacı:</b> Bir grubun diğer grupla karşılaşmasında herkesin birbiriyle birer kez tokalaşması, cebirsel ifadelerdeki <b>dağılma özelliğini</b> somutlaştırır.
+    </div>
+
+    <!-- Mod Seçimi ve Kontroller -->
+    <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap; justify-content:center;">
+      <button class="ghost-btn" id="btnMode1" onclick="setScenario(1)">1. Senaryo: 1 Kişi × 2 Kişi [a(b+c)]</button>
+      <button class="ghost-btn" id="btnMode2" onclick="setScenario(2)" style="background:var(--primary); color:#fff;">2. Senaryo: 2 Kişi × 2 Kişi [(a+b)(c+d)]</button>
+    </div>
+
+    <div style="display:flex; gap:10px; margin-bottom:15px; justify-content:center; align-items:center; background:#f0e6e6; padding:10px; border-radius:12px; flex-wrap:wrap;">
+      <button class="submit-btn" id="btnAutoPlay" onclick="toggleAutoPlay()">▶ Otomatik Oynat (Pasif İzle)</button>
+      <button class="ghost-btn" id="btnNextStep" onclick="nextStep()">⏭ Sonraki Adım (Aktif)</button>
+      <button class="ghost-btn" onclick="resetAnimation()">🔄 Sıfırla</button>
+    </div>
+
+    <!-- Animasyon Sahnesi -->
+    <div id="stage" style="position:relative; width:100%; height:280px; background:linear-gradient(to bottom, #fdfbfb, #ebedee); border:2px solid var(--border); border-radius:16px; overflow:hidden; margin:15px 0;">
+      
+      <!-- Sol Grup Alanı -->
+      <div style="position:absolute; left:20px; top:20px; bottom:20px; width:120px; background:rgba(200,30,30,0.08); border:2px dashed var(--primary); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:space-around; padding:10px;">
+        <span style="font-weight:800; font-size:0.75rem; color:var(--primary);">SOL GRUP</span>
+      </div>
+
+      <!-- Tokalaşma Sahnesi (Ortası) -->
+      <div id="shakeZone" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:150px; height:150px; border-radius:50%; border:2px dotted var(--muted); display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.6);">
+        <span id="shakeText" style="font-size:0.78rem; color:var(--muted); font-weight:700;">Tokalaşma Alanı</span>
+        <div id="shakeIcon">🤝</div>
+      </div>
+
+      <!-- Sağ Grup Alanı -->
+      <div style="position:absolute; right:20px; top:20px; bottom:20px; width:120px; background:rgba(5,150,105,0.08); border:2px dashed var(--success); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:space-around; padding:10px;">
+        <span style="font-weight:800; font-size:0.75rem; color:var(--success);">SAĞ GRUP</span>
+      </div>
+
+      <!-- Karakterler ve Etiket Sınıfları -->
+      <div id="charA" class="avatar left-avatar" style="left: 56px; top: 60px;">🧑‍🦱 <span class="lbl">a</span></div>
+      <div id="charB" class="avatar left-avatar" style="left: 56px; top: 170px;">👩‍🦰 <span class="lbl">b</span></div>
+      <div id="charC" class="avatar right-avatar" style="left: 770px; top: 60px;">👱‍♂️ <span class="lbl">c</span></div>
+      <div id="charD" class="avatar right-avatar" style="left: 770px; top: 170px;">👧 <span class="lbl">d</span></div>
+
+    </div>
+
+    <!-- Canlı Cebirsel İfade Göstergesi -->
+    <div class="result-strip">
+      <div class="result-pill">
+        <div class="lbl">Modellenen İşlem</div>
+        <div class="val" id="animFormula">(a + b) · (c + d)</div>
+      </div>
+      <div class="result-pill">
+        <div class="lbl">Açılım (Tokalaşmalar Toplamı)</div>
+        <div class="val" id="animResult" style="color:var(--success);">?</div>
+      </div>
+    </div>
+
+    <!-- Adım Bilgi Notu -->
+    <div id="stepComment" class="note-box" style="text-align:center; font-weight:700;">
+      Animasyonu başlatmak için "Otomatik Oynat" veya "Sonraki Adım" butonuna basınız.
+    </div>
+  </div>
 </section>
 
 <section class="tab-panel" id="tab1">
@@ -85,8 +173,8 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="slider-wrap"><div class="slider-label"><span>a</span><span id="denkAOut">4</span></div><input type="range" id="denkA" min="1" max="20" step="1" value="4"></div>
 <div class="slider-wrap"><div class="slider-label"><span>b</span><span id="denkBOut">6</span></div><input type="range" id="denkB" min="1" max="20" step="1" value="6"></div>
 <div class="result-strip">
-<div class="result-pill"><div class="lbl" id="denkLbl1">2 · 4 + 2 · 6</div><div class="val" id="denkVal1">—</div></div>
-<div class="result-pill"><div class="lbl" id="denkLbl2">2 · (4+6)</div><div class="val" id="denkVal2">—</div></div>
+<div class="result-pill"><div class="lbl" id="denkLbl1">2 × 4 + 2 × 6</div><div class="val" id="denkVal1">—</div></div>
+<div class="result-pill"><div class="lbl" id="denkLbl2">2 × (4+6)</div><div class="val" id="denkVal2">—</div></div>
 </div>
 <div class="gen-box">a ve b hangi değeri alırsa alsın, "2a + 2b" ile "2(a + b)" ifadeleri her zaman birbirine eşit sonuç verir;<br>2·a + 2·b = 2·(a + b)</div>
 </div>
@@ -151,7 +239,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <section class="tab-panel" id="tab5">
 <div class="card"><div class="card-title"><div class="icon">📐</div>Alan Modeliyle Çarpma</div>
 <div class="def-box">İki terimli cebirsel ifadelerin çarpımı, bir <b>dikdörtgenin alanı</b> olarak da modellenebilir:<br>Dikdörtgenin kısa ve uzun kenarları çarpanları, oluşan dört küçük dikdörtgensel bölgenin alanları ise cevaptaki terimleri temsil eder.</div>
-<p class="body-text">Aşağıdaki kaydırıcıda (x + a)(x + b) çarpımındaki a ve b değerlerini belirleyin; alan modelinin nasıl oluştuğunu görün. (x'in kendisi bilinmeyen bir uzunluk olduğu için modelde sabit bir uzunlukla temsil edilmiştir.)</p>
+<p class="body-text">Aşağıdaki kaydırıcıda (x + a)(x + b) çarpımındaki a dan b değerlerini belirleyin; alan modelinin nasıl oluştuğunu görün. (x'in kendisi bilinmeyen bir uzunluk olduğu için modelde sabit bir uzunlukla temsil edilmiştir.)</p>
 <div class="slider-wrap"><div class="slider-label"><span>a</span><span id="amAOut">3</span></div><input type="range" id="amA" min="1" max="6" step="1" value="3"></div>
 <div class="slider-wrap"><div class="slider-label"><span>b</span><span id="amBOut">2</span></div><input type="range" id="amB" min="1" max="6" step="1" value="2"></div>
 <div class="svg-wrap"><svg viewBox="0 0 340 300" xmlns="http://www.w3.org/2000/svg" id="amSvg" role="img" aria-label="(x+a)(x+b) çarpımını gösteren alan modeli"><g id="amGroup"></g></svg></div>
@@ -363,6 +451,185 @@ function checkFill(inputId,correctVal,fbId){
   else{fb.classList.remove('ok');fb.classList.add('no');fb.textContent='Yanlış. Doğru cevap: '+String(correctVal).replace('.',',')+'.';}
 }
 
+/* ---- KUSURSUZ MERKEZİ HİZALANMIŞ AKIŞ MANTIĞI (65px Aralık) ---- */
+let currentScenario = 2;
+let animStep = 0;
+let autoInterval = null;
+let isAnimating = false;
+
+// Orijinal Ev Pozisyonları
+const homePos = {
+  charA: { left: 56, top: 60 },
+  charB: { left: 56, top: 170 },
+  charC: { left: 770, top: 60 },
+  charD: { left: 770, top: 170 }
+};
+
+// Emojinin etrafında geniş ve net bir boşluk bırakacak şekilde genişletilmiş merkez koordinatları
+function getCenterCoords() {
+  const stageWidth = document.getElementById('stage').clientWidth;
+  const centerX = stageWidth / 2;
+  return {
+    leftChar: { left: (centerX - 65), top: 116 },
+    rightChar: { left: (centerX + 17), top: 116 }
+  };
+}
+
+function setScenario(type) {
+  if (isAnimating) return;
+  currentScenario = type;
+  resetAnimation();
+  const btn1 = document.getElementById('btnMode1');
+  const btn2 = document.getElementById('btnMode2');
+  if(type === 1) {
+    document.getElementById('charB').style.display = 'none';
+    document.getElementById('animFormula').textContent = 'a · (c + d)';
+    btn1.style.background = 'var(--primary)'; btn1.style.color = '#fff';
+    btn2.style.background = 'none'; btn2.style.color = 'var(--primary)';
+  } else {
+    document.getElementById('charB').style.display = 'flex';
+    document.getElementById('animFormula').textContent = '(a + b) · (c + d)';
+    btn2.style.background = 'var(--primary)'; btn2.style.color = '#fff';
+    btn1.style.background = 'none'; btn1.style.color = 'var(--primary)';
+  }
+}
+
+function resetAnimation() {
+  clearInterval(autoInterval);
+  autoInterval = null;
+  isAnimating = false;
+  const autoBtn = document.getElementById('btnAutoPlay');
+  if(autoBtn) autoBtn.textContent = '▶ Otomatik Oynat (Pasif İzle)';
+  document.getElementById('btnNextStep').disabled = false;
+  
+  animStep = 0;
+  document.getElementById('animResult').innerHTML = '?';
+  document.getElementById('stepComment').textContent = 'Hazır. Başlamak için butonları kullanabilirsiniz.';
+  
+  const shakeIcon = document.getElementById('shakeIcon');
+  if(shakeIcon) shakeIcon.classList.remove('active');
+
+  moveHome('charA');
+  moveHome('charB');
+  moveHome('charC');
+  moveHome('charD');
+}
+
+function moveHome(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('walking');
+  const hp = homePos[id];
+  el.style.left = hp.left + 'px';
+  el.style.top = hp.top + 'px';
+}
+
+function moveToCenter(id, side) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('walking');
+  const cp = getCenterCoords();
+  const target = (side === 'left') ? cp.leftChar : cp.rightChar;
+  el.style.left = target.left + 'px';
+  el.style.top = target.top + 'px';
+}
+
+function executeStep(step, onComplete) {
+  isAnimating = true;
+  document.getElementById('btnNextStep').disabled = true;
+  const comment = document.getElementById('stepComment');
+  const res = document.getElementById('animResult');
+  const shakeIcon = document.getElementById('shakeIcon');
+
+  const stepsData = {
+    1: {
+      1: { left: 'charA', right: 'charC', returnsRight: 'charC', returnsLeft: false, text: '🤝 <b>1. Tokalaşma:</b> "a" ve "c" merkeze geldi ve tokalaştı → <b>ac</b> ("c" yerine döndü, "a" merkezde bekliyor)', expr: '<span style="color:var(--primary); font-weight:900;">ac</span>' },
+      2: { left: 'charA', right: 'charD', returnsRight: 'charD', returnsLeft: true,  text: '🤝 <b>2. Tokalaşma:</b> "d" merkeze geldi, "a" ile tokalaştı → <b>ad</b> (Her ikisi de evlerine döndü)', expr: 'ac + <span style="color:var(--primary); font-weight:900;">ad</span>' }
+    },
+    2: {
+      1: { left: 'charA', right: 'charC', returnsRight: 'charC', returnsLeft: false, text: '🤝 <b>1. Tokalaşma:</b> "a" ve "c" merkeze geldi ve tokalaştı → <b>ac</b> ("c" yerine döndü, "a" merkezde bekliyor)', expr: 'ac' },
+      2: { left: 'charA', right: 'charD', returnsRight: 'charD', returnsLeft: true,  text: '🤝 <b>2. Tokalaşma:</b> "d" merkeze geldi, "a" ile tokalaştı → <b>ad</b> (Her ikisi de evlerine döndü)', expr: 'ac + ad' },
+      3: { left: 'charB', right: 'charC', returnsRight: 'charC', returnsLeft: false, text: '🤝 <b>3. Tokalaşma:</b> Şimdi sıra "b"de! "b" ve "c" merkeze gelip tokalaştı → <b>bc</b> ("c" döndü, "b" bekliyor)', expr: 'ac + ad + bc' },
+      4: { left: 'charB', right: 'charD', returnsRight: 'charD', returnsLeft: true,  text: '🤝 <b>4. Tokalaşma:</b> "d" merkeze geldi, "b" ile tokalaştı → <b>bd</b> (Her ikisi de evlerine döndü)', expr: 'ac + ad + bc + bd' }
+    }
+  };
+
+  const cur = stepsData[currentScenario][step];
+
+  moveToCenter(cur.left, 'left');
+  moveToCenter(cur.right, 'right');
+
+  setTimeout(() => {
+    document.getElementById(cur.left).classList.remove('walking');
+    document.getElementById(cur.right).classList.remove('walking');
+    shakeIcon.classList.add('active');
+    comment.innerHTML = cur.text;
+    res.innerHTML = cur.expr;
+
+    setTimeout(() => {
+      shakeIcon.classList.remove('active');
+      moveHome(cur.returnsRight);
+
+      if (cur.returnsLeft) {
+        moveHome(cur.left);
+      }
+
+      setTimeout(() => {
+        isAnimating = false;
+        document.getElementById('btnNextStep').disabled = false;
+        if (onComplete) onComplete();
+      }, 1200);
+
+    }, 1000);
+
+  }, 1200);
+}
+
+function nextStep() {
+  if (isAnimating) return;
+  const maxSteps = (currentScenario === 1 ? 2 : 4);
+  if (animStep >= maxSteps) {
+    resetAnimation();
+    return;
+  }
+  animStep++;
+  executeStep(animStep, () => {
+    if (animStep === maxSteps) {
+      setTimeout(() => {
+        document.getElementById('stepComment').innerHTML = '🎉 <b>Tebrikler!</b> Tüm tokalaşmalar ve dağılma adımları başarıyla tamamlandı!';
+      }, 300);
+    }
+  });
+}
+
+function toggleAutoPlay() {
+  const btn = document.getElementById('btnAutoPlay');
+  if (autoInterval) {
+    clearInterval(autoInterval);
+    autoInterval = null;
+    btn.textContent = '▶ Otomatik Oynat (Pasif İzle)';
+  } else {
+    btn.textContent = '⏸ Duraklat';
+    if (animStep >= (currentScenario === 1 ? 2 : 4)) {
+      resetAnimation();
+    }
+    
+    function autoLoop() {
+      const maxSteps = (currentScenario === 1 ? 2 : 4);
+      if (animStep < maxSteps) {
+        nextStep();
+      } else {
+        clearInterval(autoInterval);
+        autoInterval = null;
+        btn.textContent = '▶ Otomatik Oynat (Pasif İzle)';
+      }
+    }
+    
+    autoLoop();
+    autoInterval = setInterval(autoLoop, 5000);
+  }
+}
+
 /* ---- Ortak polinom biçimlendirme yardımcı fonksiyonu ---- */
 function buildPoly(terms){
   const parts=[];
@@ -496,7 +763,8 @@ const quizData=[
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
-  const wrap=document.getElementById('progressDots');wrap.innerHTML='';
+  const wrap=document.getElementById('progressDots');if(!wrap)return;
+  wrap.innerHTML='';
   quizData.forEach((_,i)=>{
     const d=document.createElement('div');
     d.className='pdot'+(i<qIndex?' done':i===qIndex?' now':'');
@@ -504,8 +772,10 @@ function renderDots(){
   });
 }
 function renderQuiz(){
+  const area=document.getElementById('quizArea');
+  if(!area)return;
   if(qIndex>=quizData.length){
-    document.getElementById('quizArea').innerHTML='<div class="score">Test tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div>';
+    area.innerHTML='<div class="score">Test tamamlandı! Skorunuz: <b>'+qScore+' / '+quizData.length+'</b></div>';
     renderDots();return;
   }
   qAnswered=false;
@@ -513,7 +783,7 @@ function renderQuiz(){
   let html='<div class="q-card"><div class="q-text">'+(qIndex+1)+'. '+item.q+'</div><div class="choices">';
   item.choices.forEach((c,i)=>{html+='<button class="choice-btn" onclick="answerQuiz('+i+')">'+c+'</button>';});
   html+='</div><div class="feedback" id="quizFeedback"></div><div class="next-row"><button class="submit-btn" id="quizNext" style="display:none" onclick="nextQuiz()">Sonraki →</button></div></div>';
-  document.getElementById('quizArea').innerHTML=html;
+  area.innerHTML=html;
   renderDots();
 }
 function answerQuiz(i){
