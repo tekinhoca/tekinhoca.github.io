@@ -56,18 +56,19 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <section class="tab-panel" id="tab1">
 <div class="card"><div class="card-title"><div class="icon">🎯</div>Tam Kare Olmayan Sayılarda Tahmin</div>
 <div class="def-box"><b>Tam kare olmayan bir sayının karekökü</b> iki ardışık doğal sayı arasındadır. Bu iki sayıyı bulmak için, verilen sayıya en yakın küçük ve büyük tam kareler belirlenir.</div>
-<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">\(\sqrt{31}\) sayısı hangi iki doğal sayı arasındadır?</div></div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Uygulama</div><div class="ex-q">\(\sqrt{32}\) sayısı hangi iki doğal sayı arasındadır?</div></div>
 <div class="ex-body">
 <button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
 <div class="ex-steps">
-<div class="ex-step"><div class="snum">1</div><div>31'e en yakın tam kare sayılar 25 ve 36'dır. Buna göre:</div></div>
-<div class="ex-step"><div class="snum">2</div><div>25 &lt; 31 &lt; 36 → \(\sqrt{25}\) &lt; \(\sqrt{31}\) &lt; \(\sqrt{36}\) → 5 &lt; \(\sqrt{31}\) &lt; 6</div></div>
-<div class="ex-step"><div class="snum">3</div><div>31, 25'e 6 birim, 36'ya ise 5 birim uzaklıktadır; 36'ya daha yakın olduğundan \(\sqrt{31}\) de 6'ya daha yakındır.</div></div>
-<div class="ex-result">Sonuç: \(\sqrt{31}\) sayısı 5 ile 6 arasındadır ve 6'ya daha yakındır.</div>
+<div class="ex-step"><div class="snum">1</div><div>32'ye en yakın tam kare sayılar 25 ve 36'dır. Buna göre:</div></div>
+<div class="ex-step"><div class="snum">2</div><div>25 &lt; 32 &lt; 36 → \(\sqrt{25}\) &lt; \(\sqrt{32}\) &lt; \(\sqrt{36}\) → 5 &lt; \(\sqrt{32}\) &lt; 6</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Ayrıca 32 sayısı 25'e 7 birim, 36'ya ise 4 birim uzaklıktadır;</div></div>
+<div class="ex-step"><div class="snum">4</div><div>32 sayısı 36'ya daha yakın olduğuna göre \(\sqrt{32}\) sayısı da \(\sqrt{36}\)'ya yani 6'ya daha yakındır.</div></div>
+<div class="ex-result">Sonuç: \(\sqrt{32}\) sayısı 5 ile 6 arasındadır ve 6'ya daha yakındır.</div>
 </div>
 </div></div>
 <p class="body-text">Aşağıdaki araçta kaydırıcıyla bir sayı seçin; bu sayının karekökünün hangi iki doğal sayı arasında olduğunu görün.</p>
-<div class="slider-wrap"><div class="slider-label"><span>Sayı</span><span id="guessNOut">31</span></div><input type="range" id="guessN" min="2" max="99" step="1" value="31"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Sayı</span><span id="guessNOut">31</span></div><input type="range" id="guessN" min="2" max="99" step="1" value="32"></div>
 <div class="note-box" id="guessOut" style="font-weight:700"></div>
 </div>
 </section>
@@ -79,7 +80,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="ex-body">
 <button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
 <div class="ex-steps">
-<div class="ex-step"><div class="snum">1</div><div>18 sayısı, biri tam kare olan iki çarpanın çarpımı şeklinde yazılır: 18 = 9 × 2</div></div>
+<div class="ex-step"><div class="snum">1</div><div>18 sayısı, <b>bir tanesi tam kare olan</b> iki sayının çarpımı şeklinde yazılır: 18 = 9 × 2</div></div>
 <div class="ex-step"><div class="snum">2</div><div>\(\sqrt{18} = \sqrt{9\times2} = \sqrt{9}\times\sqrt{2} = 3\sqrt{2}\)</div></div>
 <div class="ex-result">Sonuç: \(\sqrt{18} = 3\sqrt{2}\)</div>
 </div>
@@ -185,7 +186,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="ex-steps">
 <div class="ex-step"><div class="snum">1</div><div>0,64 sayısında virgülden sonra çift sayıda (2) basamak vardır; baştaki sıfır ve virgül olmasaydı 64 olurdu.</div></div>
 <div class="ex-step"><div class="snum">2</div><div><b>64 sayısı tam kare olduğuna göre 0,64 sayısı da tam karedir.</b></div></div>
-<div class="ex-step"><div class="snum">3</div><div>Tam kare olan ondalık gösterimin karekökü, virgülden sonraki her iki basamak için bir basamak olacak şekilde ondalıklı yazılır.</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Tam kare olan ondalık gösterimin karekökü, virgülden sonraki basamak sayısı yarıya düşecek şekilde ondalıklı yazılır.</div></div>
 <div class="ex-step"><div class="snum">4</div><div>\(\sqrt{64} = 8\) olduğuna göre, \(\sqrt{0,64} = 0,8\) yazılabilir.</div></div>
 <div class="ex-result">Sonuç: \(\sqrt{0,64} = 0,8\)</div>
 </div>
@@ -463,10 +464,10 @@ function updateGuess(){
     const b=a+1;
     const distA=m-a*a, distB=b*b-m;
     let closeTxt;
-    if(distA<distB)closeTxt='Bu nedenle \\(\\sqrt{'+m+'}\\) değeri, '+a+' sayısına daha yakındır.';
-    else if(distB<distA)closeTxt='Bu nedenle \\(\\sqrt{'+m+'}\\) değeri, '+b+' sayısına daha yakındır.';
+    if(distA<distB)closeTxt='<br>Bu nedenle \\(\\sqrt{'+m+'}\\) değeri, '+a+' sayısına daha yakındır.';
+    else if(distB<distA)closeTxt='<br>Bu nedenle \\(\\sqrt{'+m+'}\\) değeri, '+b+' sayısına daha yakındır.';
     else closeTxt='\\(\\sqrt{'+m+'}\\) değeri, '+a+' sayısına ve '+b+' sayısına eşit uzaklıktadır.';
-    tex='\\(\\sqrt{'+m+'}\\) sayısı, \\('+a+'^2='+(a*a)+'\\) ile \\('+b+'^2='+(b*b)+'\\) arasında olduğundan, '+a+' ile '+b+' arasındadır. '+m+' sayısı ile '+(a*a)+' arasındaki fark '+distA+' birim, '+m+' sayısı ile '+(b*b)+' arasındaki fark '+distB+' birimdir. '+closeTxt;
+    tex='\\(\\sqrt{'+m+'}\\) sayısı, \\('+a+'^2='+(a*a)+'\\) ile \\('+b+'^2='+(b*b)+'\\) arasında olduğundan, '+a+' ile '+b+' arasındadır. <br>'+m+' sayısı ile '+(a*a)+' arasındaki fark '+distA+' birim, '+m+' sayısı ile '+(b*b)+' arasındaki fark '+distB+' birimdir. '+closeTxt;
   }
   const el=document.getElementById('guessOut');
   el.innerHTML=tex;
