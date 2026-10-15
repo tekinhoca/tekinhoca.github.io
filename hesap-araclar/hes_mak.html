@@ -125,9 +125,12 @@ header .titles p{font-size:0.85rem;color:var(--text-dim);margin-top:3px;}
 .ekran input{width:100%;background:transparent;border:none;outline:none;font-family:'Lora',serif;
   font-size:1.3rem;color:var(--text);text-align:right;}
 .klasik-sonuc-satiri{min-height:28px;text-align:right;font-family:'Lora',serif;font-size:1rem;color:var(--text-dim);
-  margin-top:4px;word-break:break-word;}
+  margin-top:4px;word-break:break-word;line-height:1.55;}
 .klasik-sonuc-satiri.basarili{color:var(--accent);font-weight:700;font-size:1.15rem;}
 .klasik-sonuc-satiri.hata{color:#c0392b;font-size:0.85rem;font-weight:600;}
+.klasik-sonuc-satiri .sonuc-satir{display:block;}
+.klasik-sonuc-satiri .devirli-gosterim{font-size:0.98em;}
+.klasik-sonuc-satiri .devir{ text-decoration:overline; text-decoration-thickness:1.5px; text-decoration-color:currentColor;}
 
 .izgara{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .tus{border:1px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text);
@@ -525,13 +528,89 @@ footer p{font-size:0.78rem;color:var(--text-dim);font-family:'DM Sans',sans-seri
     ifadeKutusu.focus();
   });
 
+  // Basit sayısal bölmelerde kesri tam sayı aritmetiğiyle inceleyerek
+  // devirli ondalıkların periyodunu kayan nokta hatası olmadan bulur.
+  function klasikOndalikKesri(sayiMetni) {
+    const temiz = sayiMetni.replace(',', '.');
+    const eslesme = temiz.match(/^([+-]?)(?:(\d+)(?:\.(\d*))?|\.(\d+))$/);
+    if (!eslesme) return null;
+    const isaret = eslesme[1] === '-' ? -1n : 1n;
+    const tam = eslesme[2] || '0';
+    const kesir = eslesme[3] !== undefined ? eslesme[3] : (eslesme[4] || '');
+    const pay = isaret * BigInt((tam + kesir) || '0');
+    const payda = 10n ** BigInt(kesir.length);
+    return { pay, payda };
+  }
+
+  function klasikEbob(a, b) {
+    a = a < 0n ? -a : a; b = b < 0n ? -b : b;
+    while (b !== 0n) { const kalan = a % b; a = b; b = kalan; }
+    return a || 1n;
+  }
+
+  function klasikDevirliBolme(ifade) {
+    // Yalnızca doğrudan sayı/sayı bölmesi için kesin devir gösterimi yapılır.
+    const m = ifade.match(/^\s*([+-]?(?:\d+(?:[.,]\d*)?|[.,]\d+))\s*(?:÷|\/)\s*([+-]?(?:\d+(?:[.,]\d*)?|[.,]\d+))\s*$/);
+    if (!m) return null;
+    const a = klasikOndalikKesri(m[1]);
+    const b = klasikOndalikKesri(m[2]);
+    if (!a || !b || b.pay === 0n) return null;
+
+    let pay = a.pay * b.payda;
+    let payda = a.payda * b.pay;
+    if (payda < 0n) { pay = -pay; payda = -payda; }
+    const ebob = klasikEbob(pay, payda);
+    pay /= ebob; payda /= ebob;
+    const negatif = pay < 0n;
+    if (negatif) pay = -pay;
+    const tamKisim = pay / payda;
+    let kalan = pay % payda;
+    const baslangic = kalan;
+    const kalanIndeksleri = new Map();
+    const basamaklar = [];
+    let devirBaslangici = -1;
+    // Bir periyot çok uzunsa arayüzde devasa bir üst çizgi oluşturmamak için sınır.
+    while (kalan !== 0n && basamaklar.length < 2000) {
+      if (kalanIndeksleri.has(kalan.toString())) {
+        devirBaslangici = kalanIndeksleri.get(kalan.toString());
+        break;
+      }
+      kalanIndeksleri.set(kalan.toString(), basamaklar.length);
+      kalan *= 10n;
+      basamaklar.push(String(kalan / payda));
+      kalan %= payda;
+    }
+    if (kalan === 0n || devirBaslangici < 0) return null;
+
+    const onEk = basamaklar.slice(0, devirBaslangici).join('');
+    const devir = basamaklar.slice(devirBaslangici).join('');
+    const isaret = negatif ? '-' : '';
+    const tamMetin = tamKisim.toString();
+    let kisaDevir;
+    if (devir.length === 1) kisaDevir = devir.repeat(3);
+    else if (devir.length === 2) kisaDevir = devir.repeat(2);
+    else kisaDevir = devir + devir[0];
+    const ikinciSatir = isaret + tamMetin + ',' + onEk + kisaDevir + '...';
+    const ucuncuSatir = isaret + tamMetin + ',' + onEk + '<span class=\"devir\">' + devir + '</span>';
+    return { ikinciSatir, ucuncuSatir };
+  }
+
   function klasikHesaplaVeGoster() {
     const ifade = ifadeKutusu.value.trim();
     if (ifade === '') return;
     try {
       const sonuc = IfadeMotoru.hesapla(ifade);
-      const yuvarlak = Math.round(sonuc * 10000) / 10000;
-      klasikSonucSatiri.textContent = '= ' + String(yuvarlak).replace('.', ',');
+      if (!Number.isFinite(sonuc)) throw new Error('Sonuç sonlu bir sayı olmalıdır.');
+
+      const devirli = klasikDevirliBolme(ifade);
+      if (devirli) {
+        klasikSonucSatiri.innerHTML = '<span class=\"sonuc-satir\">= ' + devirli.ikinciSatir + '</span>' +
+          '<span class=\"sonuc-satir devirli-gosterim\">= ' + devirli.ucuncuSatir + '</span>';
+      } else {
+        // En fazla 12 ondalık basamak göster; sondaki gereksiz sıfırları kaldır.
+        const duzgun = Number(sonuc.toFixed(12)).toString().replace('.', ',');
+        klasikSonucSatiri.textContent = '= ' + duzgun;
+      }
       klasikSonucSatiri.className = 'klasik-sonuc-satiri basarili';
     } catch (e) {
       klasikSonucSatiri.textContent = e.message;
