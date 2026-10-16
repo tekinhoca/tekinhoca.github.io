@@ -553,12 +553,11 @@ function updateSum(){
   document.getElementById('sumAOut').textContent=a;
   document.getElementById('sumBOut').textContent=b;
   const result=sumOp==='+'?a+b:a-b;
-  let resultTex;
-  if(result===0)resultTex='0';
-  else if(result>0)resultTex=result+'\\sqrt{5}';
-  else resultTex='-'+Math.abs(result)+'\\sqrt{5}';
+  function ct(c){if(c===0)return '0';if(c===1)return '\\sqrt{5}';if(c===-1)return '-\\sqrt{5}';return c+'\\sqrt{5}';}
+  function cp(c){return c<0?'('+ct(c)+')':ct(c);}
+  const resultTex=ct(result);
   const el=document.getElementById('sumResult');
-  el.innerHTML='\\('+a+'\\sqrt{5} '+sumOp+' '+b+'\\sqrt{5} = '+resultTex+'\\)';
+  el.innerHTML='\\('+ct(a)+' '+sumOp+' '+cp(b)+' = '+resultTex+'\\)';
   typesetMJ(el);
 }
 document.getElementById('sumA').addEventListener('input',updateSum);

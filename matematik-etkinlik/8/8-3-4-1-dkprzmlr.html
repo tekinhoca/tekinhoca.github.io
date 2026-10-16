@@ -70,7 +70,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 <div class="card"><div class="card-title"><div class="icon">✂️</div>Prizmayı İnşa Etme</div>
 <p class="body-text">Dikdörtgenler prizmasının ölçülerini kaydırıcılarla seçin. Kareli zemindeki açınımı kareli kâğıda çizip kesin ve katlayarak modelinizi yapabilirsiniz.</p>
 <div id="pr3"></div>
-<div class="note-box">Kağıt modelde ayrıtlar boyunca katlama payı bırakıp yapışkanla birleştirin. Yapıştırma sonunda 6 yüzün tamamı ayrıt boyunca birbirine tam oturmalıdır.</div></div>
+<div class="note-box">Kâğıt modelde ayrıtlar boyunca katlama payı bırakıp yapışkanla birleştirin. Yapıştırma sonunda 6 yüzün tamamı ayrıt boyunca birbirine tam oturmalıdır.</div></div>
 </section>
 <section class="tab-panel" id="tab5">
 <div class="card"><div class="card-title"><div class="icon">🔓</div>Prizmanın Açınımı</div>
@@ -402,7 +402,7 @@ mkElem('pr0',false);mkElem('pr1',true);
   box.innerHTML=chipRow('pr4k',KIND4,k)+slider('pr4t','Açınım (kapalı → açık)',0,100,1,0)+slider('pr4h','Yükseklik',1.5,4,0.5,2.5)+slider('pr4y','Prizmayı döndürün',0,350,10,30)+'<div class="chip-row"><button class="chip-btn" id="pr4a">▶ Kendiliğinden aç / kapat</button></div>'+svgBox('pr4G','0 0 600 360','Prizmanın açınımı')+'<div class="body-text" id="pr4T" style="margin:6px 0"></div>';
   function draw(){
     const P=polyOf(k),h=+gid('pr4h').value,yaw=+gid('pr4y').value,t=+gid('pr4t').value/100,n=P.length;
-    gid('pr4tOut').textContent='%'+Math.round(t*100);gid('pr4hOut').textContent=h;gid('pr4yOut').textContent=yaw+'°';
+    gid('pr4tOut').textContent='%'+Math.round(t*100);gid('pr4hOut').textContent=String(h).replace('.',',');gid('pr4yOut').textContent=yaw+'°';
     const fr=fit(P,h,yaw,[0,.25,.5,.75,1],PIT,600,360,46);
     draw3D(gid('pr4G'),unfoldFaces(P,h,t),proj(yaw,PIT(t)),fr,{labels:true});
     gid('pr4T').innerHTML=(t>=.995?'<b>'+KN[k]+'</b> açınımı: 2 taban ('+n+'-gen) + '+n+' dikdörtgen yan yüz = <b>'+(n+2)+' yüz</b>.':'Kaydırıcıyı sağa çekerek yüzeylerin ayrıtları etrafında dönüp düzleme serildiğini izleyin.');

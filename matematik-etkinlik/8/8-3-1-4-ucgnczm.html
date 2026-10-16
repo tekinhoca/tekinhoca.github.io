@@ -103,6 +103,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="ex-steps">
 <div class="ex-step"><div class="snum">1</div><div>7 cm uzunluğunda bir AB doğru parçası çizilir.</div></div>
 <div class="ex-step"><div class="snum">2</div><div>Açıölçerle A noktasından 60°'lik bir açı ölçülerek ikinci bir ışın çizilir.</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Bu ışın üzerinde A noktasından 5 cm uzaklıktaki nokta işaretlenir ve C adı verilir.</div></div>
 <div class="ex-result">Sonuç: Cetvelle [BC] çizilerek üçgen tamamlanır.</div>
 </div>
 </div></div>
@@ -136,10 +137,10 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Adımları Göster / Gizle</button>
 <div class="ex-steps">
 <div class="ex-step"><div class="snum">1</div><div>Bu üçgenin çizilebilmesi için, AC kenarının iki ucundaki A ve C açılarının ölçülerinin bilinmesi gerekiyor.</div></div>
-<div class="ex-step"><div class="snum">1</div><div>Verilen iki açıdan yararlanarak A açısının ölçüsünü 35° olarak hesaplanır.</div></div>
-<div class="ex-step"><div class="snum">1</div><div>Cetvelle 14 cm uzunluğunda [AC] çizilir.</div></div>
-<div class="ex-step"><div class="snum">2</div><div>Açıölçerle 35° işaretlenerek A noktasından başlayan bir ışın çizilir.</div></div>
-<div class="ex-step"><div class="snum">3</div><div>Açıölçerle 60° işaretlenerek C noktasından başlayan bir ışın çizilir; ışınların kesiştiği nokta B'dir.</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Verilen iki açıdan yararlanarak A açısının ölçüsünü 35° olarak hesaplanır.</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Cetvelle 14 cm uzunluğunda [AC] çizilir.</div></div>
+<div class="ex-step"><div class="snum">4</div><div>Açıölçerle 35° işaretlenerek A noktasından başlayan bir ışın çizilir.</div></div>
+<div class="ex-step"><div class="snum">5</div><div>Açıölçerle 60° işaretlenerek C noktasından başlayan bir ışın çizilir; ışınların kesiştiği nokta B'dir.</div></div>
 <div class="ex-result">Sonuç: Bu şekilde üçgen çizimi tamamlanmış olur.</div>
 </div>
 </div></div>
@@ -179,7 +180,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div><div class="feedback"></div></div>
 
 <div class="q-card" data-okmsg="Doğru! İki kenar ve aralarındaki açı, üçgeni tek türlü belirler." data-nomsg="Yanlış. Doğru cevap: Yalnızca 1 (tek türlü). İki kenar ve aralarındaki açı, üçgeni tek türlü belirler.">
-<div class="q-text">[AB] = 6 cm, [AC] = 6 cm, m(A) = 90° olan üçgen kaç farklı (eş olmayan) şekilde çizilebilir?</div>
+<div class="q-text">|AB| = 6 cm, |AC| = 6 cm, m(A) = 90° olan üçgen kaç farklı (eş olmayan) şekilde çizilebilir?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Sonsuz sayıda</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2</button>
@@ -196,10 +197,10 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Bilgi yetersiz</button>
 </div><div class="feedback"></div></div>
 
-<div class="field-row"><span class="body-text" style="margin:0">[BC] = 10 cm, m(B) = 50°, m(C) = 60° olan bir üçgende m(A) kaç derecedir?</span><input type="text" class="answer-input" id="fillJ1" placeholder="?"><button class="submit-btn" onclick="checkFill('fillJ1',70,'fbJ1')">Kontrol Et</button></div>
+<div class="field-row"><span class="body-text" style="margin:0">|BC| = 10 cm, m(B) = 50°, m(C) = 60° olan bir üçgende m(A) kaç derecedir?</span><input type="text" class="answer-input" id="fillJ1" placeholder="?"><button class="submit-btn" onclick="checkFill('fillJ1',70,'fbJ1')">Kontrol Et</button></div>
 <div class="feedback" id="fbJ1"></div>
 
-<div class="field-row"><span class="body-text" style="margin:0">[AB] = 9 cm, [AC] = 12 cm, m(A) = 40° olan üçgende [BC] tek bir değer mi alır? (Tek değer alıyorsa 1, birden fazla değer alabiliyorsa 0 yazınız)</span><input type="text" class="answer-input" id="fillJ2" placeholder="?"><button class="submit-btn" onclick="checkFill('fillJ2',1,'fbJ2')">Kontrol Et</button></div>
+<div class="field-row"><span class="body-text" style="margin:0">|AB| = 9 cm, |AC| = 12 cm, m(A) = 40° olan üçgende [BC] tek bir değer mi alır? (Tek değer alıyorsa 1, birden fazla değer alabiliyorsa 0 yazınız)</span><input type="text" class="answer-input" id="fillJ2" placeholder="?"><button class="submit-btn" onclick="checkFill('fillJ2',1,'fbJ2')">Kontrol Et</button></div>
 <div class="feedback" id="fbJ2"></div>
 
 </div>
@@ -345,8 +346,8 @@ kakRender();
 /* ---- Tab7: kendini dene ---- */
 const quizData=[
 {"q": "Bir üçgeni tek türlü çizmek için hangi eleman grubu yeterlidir?", "choices": ["Yalnızca üç açı", "Yalnızca bir kenar", "Üç kenar uzunluğu", "Yalnızca bir açı"], "correct": 2, "expl": "Üç kenar uzunluğu (KKK), bir üçgeni tek türlü belirlemek için yeterlidir."},
-{"q": "[AB]=5 cm, [AC]=8 cm, m(A)=70° olan üçgende üçüncü kenar [BC] için ne söylenebilir?", "choices": ["Birden fazla değer alabilir", "Hesaplanamaz", "Her zaman 13 cm'dir", "Tek bir değere sahiptir"], "correct": 3, "expl": "İki kenar ve aralarındaki açı belirlendiğinde üçüncü kenar da kesin olarak (tek bir değerle) belirlenir."},
-{"q": "m(B)=55°, m(C)=80° olan ve [BC]=9 cm olan bir üçgende m(A) kaç derecedir?", "choices": ["45°", "135°", "55°", "80°"], "correct": 0, "expl": "m(A) = 180° − 55° − 80° = 45°."},
+{"q": "|AB|=5 cm, |AC|=8 cm, m(A)=70° olan üçgende üçüncü kenar [BC] için ne söylenebilir?", "choices": ["Birden fazla değer alabilir", "Hesaplanamaz", "Her zaman 13 cm'dir", "Tek bir değere sahiptir"], "correct": 3, "expl": "İki kenar ve aralarındaki açı belirlendiğinde üçüncü kenar da kesin olarak (tek bir değerle) belirlenir."},
+{"q": "m(B)=55°, m(C)=80° olan ve |BC|=9 cm olan bir üçgende m(A) kaç derecedir?", "choices": ["45°", "135°", "55°", "80°"], "correct": 0, "expl": "m(A) = 180° − 55° − 80° = 45°."},
 {"q": "m(B)=95°, m(C)=90° olacak şekilde bir üçgen çizilebilir mi?", "choices": ["Evet", "Hayır", "Yalnızca dar açılı olursa", "Bilgi yetersiz"], "correct": 1, "expl": "95° + 90° = 185° > 180° olduğundan üçüncü açıya yer kalmaz, üçgen çizilemez."},
 {"q": "Kenar uzunlukları 4 cm, 4 cm, 9 cm olan üçlü ile üçgen çizilebilir mi?", "choices": ["Evet", "Yalnızca ikizkenar olursa", "Bilgi yetersiz", "Hayır"], "correct": 3, "expl": "4 + 4 = 8, üçüncü kenar olan 9'dan küçük olduğundan üçgen eşitsizliği sağlanmaz."},
 {"q": "Üç açısı 60°, 60°, 60° olan (fakat kenar uzunlukları verilmeyen) kaç farklı boyutta üçgen çizilebilir?", "choices": ["Sonsuz sayıda", "Yalnızca 1", "3", "0"], "correct": 0, "expl": "Yalnızca açılar verildiğinde şekil sabitlenir ama boyut sabitlenmez; sonsuz sayıda (birbirine benzer) farklı boyutta eşkenar üçgen çizilebilir."}

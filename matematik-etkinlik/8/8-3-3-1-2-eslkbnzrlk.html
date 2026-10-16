@@ -47,7 +47,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="info-tile"><h4>Eş Çokgenler (≅)</h4><p class="body-text" style="font-size:.85rem;margin:0">Karşılıklı kenar uzunlukları <b>ve</b> açı ölçüleri birebir <b>eşittir</b>. Şekil ve boyut tamamen aynıdır.</p></div>
 <div class="info-tile"><h4>Benzer Çokgenler (~)</h4><p class="body-text" style="font-size:.85rem;margin:0">Karşılıklı açı ölçüleri eşittir, kenar uzunlukları <b>orantılıdır</b> (eşit olması gerekmez). Şekil aynıdır, boyut farklı olabilir.</p></div>
 </div>
-<div class="def-box"><b>Benzerlik oranı (k):</b> Benzer iki çokgende uzundan kısaya doğru sıralandıklarında, karşılıklı kenarların uzunluklarının oranıdır: \( k=\dfrac{a'}{a}=\dfrac{b'}{b}=\dfrac{c'}{c}=\dots \)</div>
+<div class="def-box"><b>Benzerlik oranı (k):</b> Benzer iki çokgende karşılıklı (karşılık gelen) kenarların uzunluklarının oranıdır: \( k=\dfrac{a'}{a}=\dfrac{b'}{b}=\dfrac{c'}{c}=\dots \)</div>
 <div class="gen-box">Eş olan iki çokgen kesinlikle aynı zamanda benzerdir. (k=1)<br><b>Benzer olan iki çokgenin mutlaka eş olması gerekmez. (k≠1 olabilir)</b></div>
 <div class="note-box">Bu konuda özel olarak KKK, AKA gibi üçgenlere özgü eşlik/benzerlik kuralları işlenmeyecek; genel olarak, çokgenlerde kenar-açı ilişkisi üzerinden ilerlenecek.</div>
 </div>
@@ -107,10 +107,10 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </section>
 
 <section class="tab-panel" id="tab5">
-<div class="card"><div class="card-title"><div class="icon">📐</div>Kareli Kağıtta Benzer Çokgenler</div>
-<p class="body-text">Kareli kağıt üzerindeki turuncu çokgen orijinal şeklimiz olsun. Mavi çokgen, onun <b>eşidir</b> (yalnızca yeri değişmiştir). Kaydırıcıyla değiştirdiğiniz benzerlik oranına göre çizilen yeşil çokgen ise ona <b>benzerdir</b> (kareleri sayarak boyut değişimini takip edebilirsiniz).</p>
+<div class="card"><div class="card-title"><div class="icon">📐</div>Kareli Kâğıtta Benzer Çokgenler</div>
+<p class="body-text">Kareli kâğıt üzerindeki turuncu çokgen orijinal şeklimiz olsun. Mavi çokgen, onun <b>eşidir</b> (yalnızca yeri değişmiştir). Kaydırıcıyla değiştirdiğiniz benzerlik oranına göre çizilen yeşil çokgen ise ona <b>benzerdir</b> (kareleri sayarak boyut değişimini takip edebilirsiniz).</p>
 <div class="slider-wrap"><div class="slider-label"><span>Benzer kopyanın benzerlik oranı (k)</span><span id="pgKOut">1.0</span></div><input type="range" id="pgK" min="0.5" max="3" step="0.5" value="3.0"></div>
-<div class="svg-wrap"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kareli kağıtta eş ve benzer çokgen modeli"><g id="pgGrid"></g></svg></div>
+<div class="svg-wrap"><svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kareli kâğıtta eş ve benzer çokgen modeli"><g id="pgGrid"></g></svg></div>
 <div class="result-strip">
 <div class="result-pill"><div class="lbl">Orijinal Çokgenin Tabanı</div><div class="val" id="pgOrigSide">3 birim</div></div>
 <div class="result-pill"><div class="lbl">Benzer Çokgenin Tabanı</div><div class="val" id="pgSimSide">—</div></div>
@@ -213,7 +213,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div>
 </div></div>
 
-<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 5</div><div class="ex-q">Kareli kağıt üzerinde kenarları 2 birim olan bir kareye, benzerlik oranı k=3 olan bir kare çizmek isteseniz, yeni karenin kenar uzunluğu kaç birim olur?</div></div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 5</div><div class="ex-q">Kareli kâğıt üzerinde kenarları 2 birim olan bir kareye, benzerlik oranı k=3 olan bir kare çizmek isteseniz, yeni karenin kenar uzunluğu kaç birim olur?</div></div>
 <div class="ex-body">
 <button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
 <div class="ex-steps">
@@ -326,6 +326,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <footer><div class="foot-title">Tekin Hoca — 8. Sınıf Matematik</div><div>M.8.3.3.1 – M.8.3.3.2 Eşlik ve Benzerlik</div></footer>
 
 <script>
+const trc=s=>String(s).replace('.',',');
 document.querySelectorAll('.tab-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{
     document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -412,8 +413,8 @@ function updateCG(){
   addTextEl(g,A2.x-16,A2.y+6,"A'",'#059669',14);
   addTextEl(g,B2.x+16,B2.y+6,"B'",'#059669',14);
   addTextEl(g,C2.x,C2.y-12,"C'",'#059669',14);
-  const ab=dist(CG_BASE.A,CG_BASE.B).toFixed(1), bc=dist(CG_BASE.B,CG_BASE.C).toFixed(1), ac=dist(CG_BASE.A,CG_BASE.C).toFixed(1);
-  const ab2=dist(A2,B2).toFixed(1), bc2=dist(B2,C2).toFixed(1), ac2=dist(A2,C2).toFixed(1);
+  const ab=trc(dist(CG_BASE.A,CG_BASE.B).toFixed(1)), bc=trc(dist(CG_BASE.B,CG_BASE.C).toFixed(1)), ac=trc(dist(CG_BASE.A,CG_BASE.C).toFixed(1));
+  const ab2=trc(dist(A2,B2).toFixed(1)), bc2=trc(dist(B2,C2).toFixed(1)), ac2=trc(dist(A2,C2).toFixed(1));
   document.getElementById('cgTable').innerHTML='<table style="width:100%;border-collapse:collapse"><tr><th>Kenar</th><th>ABC</th><th>A\'B\'C\'</th></tr>'+
     '<tr><td>AB / A\'B\'</td><td>'+ab+'</td><td>'+ab2+'</td></tr>'+
     '<tr><td>BC / B\'C\'</td><td>'+bc+'</td><td>'+bc2+'</td></tr>'+
@@ -426,7 +427,7 @@ updateCG();
 const SM_BASE={A:{x:130,y:323},B:{x:230,y:323},C:{x:170,y:213}};
 function updateSM(){
   const k=parseFloat(document.getElementById('smK').value);
-  document.getElementById('smKOut').textContent=k.toFixed(1);
+  document.getElementById('smKOut').textContent=trc(k.toFixed(1));
   const A=SM_BASE.A;
   const B2=vadd(A,vscale(vsub(SM_BASE.B,A),k));
   const C2=vadd(A,vscale(vsub(SM_BASE.C,A),k));
@@ -442,10 +443,10 @@ function updateSM(){
   const a=dist(SM_BASE.B,SM_BASE.C), b=dist(SM_BASE.A,SM_BASE.C), c=dist(SM_BASE.A,SM_BASE.B);
   const a2=dist(B2,C2), b2=dist(A,C2), c2=dist(A,B2);
   document.getElementById('smTable').innerHTML='<table style="width:100%;border-collapse:collapse"><tr><th>ABC<br>kenarları</th><th>A\'B\'C\'<br>kenarları</th><th>Kenarları<br>karşılaştırma</th><th>Oran</th></tr>'+
-    '<tr><td>|BC| = '+a.toFixed(1)+'</td><td>| B\'C\'| = '+a2.toFixed(1)+'</td><td>BC / B\'C\'</td><td>'+(a2/a).toFixed(1)+'</td></tr>'+
-    '<tr><td>|AC| = '+b.toFixed(1)+'</td><td>|A\'C\'| = '+b2.toFixed(1)+'</td><td>AC / A\'C\'</td><td>'+(b2/b).toFixed(1)+'</td></tr>'+
-    '<tr><td>|AB| = '+c.toFixed(1)+'</td><td>|A\'B\'| = '+c2.toFixed(1)+'</td><td>AB / A\'B\'</td><td>'+(c2/c).toFixed(1)+'</td></tr></table>';
-  document.getElementById('smExplain').innerHTML='Büyütme/küçültme işlemi sonrasında karşılıklı kenarlar arasındaki oran k='+k.toFixed(1)+';<br>A köşesi ortak, iki kenar çakışık kaldığı için büyütme/küçültme işlemi, açıları hiç değiştirmedi.<br>Bu, iki üçgenin <b>benzer</b> olduğunu gösterir.';
+    '<tr><td>|BC| = '+trc(a.toFixed(1))+'</td><td>| B\'C\'| = '+trc(a2.toFixed(1))+'</td><td>BC / B\'C\'</td><td>'+trc((a2/a).toFixed(1))+'</td></tr>'+
+    '<tr><td>|AC| = '+trc(b.toFixed(1))+'</td><td>|A\'C\'| = '+trc(b2.toFixed(1))+'</td><td>AC / A\'C\'</td><td>'+trc((b2/b).toFixed(1))+'</td></tr>'+
+    '<tr><td>|AB| = '+trc(c.toFixed(1))+'</td><td>|A\'B\'| = '+trc(c2.toFixed(1))+'</td><td>AB / A\'B\'</td><td>'+trc((c2/c).toFixed(1))+'</td></tr></table>';
+  document.getElementById('smExplain').innerHTML='Büyütme/küçültme işlemi sonrasında karşılıklı kenarlar arasındaki oran k='+trc(k.toFixed(1))+';<br>A köşesi ortak, iki kenar çakışık kaldığı için büyütme/küçültme işlemi, açıları hiç değiştirmedi.<br>Bu, iki üçgenin <b>benzer</b> olduğunu gösterir.';
 }
 document.getElementById('smK').addEventListener('input',updateSM);
 updateSM();
@@ -470,7 +471,7 @@ function refreshCB(){
   const s=CB_SCEN.find(x=>x.key===cbKey);
   const ratios=s.t1.map((v,i)=>s.t2[i]/v);
   let html='<table style="width:100%;border-collapse:collapse"><tr><th>1. Üçgen</th><th>2. Üçgen</th><th>Oran</th></tr>';
-  s.t1.forEach((v,i)=>{html+='<tr><td>'+v+'</td><td>'+s.t2[i]+'</td><td>'+(Math.round(ratios[i]*100)/100)+'</td></tr>';});
+  s.t1.forEach((v,i)=>{html+='<tr><td>'+v+'</td><td>'+s.t2[i]+'</td><td>'+trc(Math.round(ratios[i]*100)/100)+'</td></tr>';});
   html+='</table>';
   document.getElementById('cbTable').innerHTML=html;
   const allEqual=ratios.every(r=>Math.abs(r-ratios[0])<0.001);
@@ -481,10 +482,10 @@ function refreshCB(){
     explain.innerHTML='Karşılık gelen tüm kenarlar birebir eşit olduğundan (oran=1) üçgenler <b>eştir</b>.';
   } else if(allEqual){
     badge.textContent='Yalnızca Benzer (Eş Değil)';badge.style.color='#7a0e0e';badge.style.background='var(--primary-light)';
-    explain.innerHTML='Karşılık gelen kenarların oranı her zaman '+(Math.round(ratios[0]*100)/100)+' olduğundan üçgenler <b>benzerdir</b>, ama kenarlar birebir eşit olmadığından <b>eş değillerdir</b>.';
+    explain.innerHTML='Karşılık gelen kenarların oranı her zaman '+trc(Math.round(ratios[0]*100)/100)+' olduğundan üçgenler <b>benzerdir</b>, ama kenarlar birebir eşit olmadığından <b>eş değillerdir</b>.';
   } else {
     badge.textContent='Ne Eş Ne Benzer ✗';badge.style.color='#b91c1c';badge.style.background='rgba(220,38,38,.1)';
-    explain.innerHTML='Kenar oranları birbirinden farklı çıktığından ('+ratios.map(r=>Math.round(r*100)/100).join(', ')+') bu iki üçgen <b>ne eş ne de benzerdir</b>.';
+    explain.innerHTML='Kenar oranları birbirinden farklı çıktığından ('+ratios.map(r=>trc(Math.round(r*100)/100)).join(', ')+') bu iki üçgen <b>ne eş ne de benzerdir</b>.';
   }
 }
 refreshCB();
@@ -507,23 +508,23 @@ function updateRT(){
   const k=ax/a;
   const bx=b*k, cx=c*k;
   const formulaBox=document.getElementById('rtKFormula');
-  formulaBox.innerHTML='\\( k=\\dfrac{a^{\\prime}}{a}=\\dfrac{'+ax+'}{'+a+'}='+(Math.round(k*100)/100)+' \\)';
+  formulaBox.innerHTML='\\( k=\\dfrac{a^{\\prime}}{a}=\\dfrac{'+ax+'}{'+a+'}='+String(Math.round(k*100)/100).replace('.','{,}')+' \\)';
   typesetDynamicMath(formulaBox);
   document.getElementById('rtTable').innerHTML='<table style="width:100%;border-collapse:collapse"><tr><th>1. Üçgen</th><th>Kenar<br>Uzunlukları</th><th>Kenar<br>Uzunlukları</th><th>2. Üçgen</th></tr>'+
     '<tr><td> a →</td><td>'+a+'</td><td>'+ax+'</td><td>← a\'\</td></tr>'+
-    '<tr><td>b →</td><td>'+b+'</td><td>'+(Math.round(bx*100)/100)+'</td><td>← b\'\</td></tr>'+
-    '<tr><td>c →</td><td>'+c+'</td><td>'+(Math.round(cx*100)/100)+'</td><td>← c\'\</td></tr></table>';
+    '<tr><td>b →</td><td>'+b+'</td><td>'+trc(Math.round(bx*100)/100)+'</td><td>← b\'\</td></tr>'+
+    '<tr><td>c →</td><td>'+c+'</td><td>'+trc(Math.round(cx*100)/100)+'</td><td>← c\'\</td></tr></table>';
 }
 ['rtA','rtB','rtC','rtAx'].forEach(id=>document.getElementById(id).addEventListener('input',updateRT));
 updateRT();
-/* ---- Tab5: kareli kağıtla eş ve benzer çokgen ---- */
+/* ---- Tab5: kareli kâğıtla eş ve benzer çokgen ---- */
 const PG_SHAPE=[{x:0,y:0},{x:3,y:0},{x:3,y:1},{x:1,y:1},{x:1,y:3},{x:0,y:3}];
 const PG_SCALE=36, PG_ORIGIN={x:60,y:320};
 function pgTx(p,scaleK,offset){return {x:PG_ORIGIN.x+offset.x+p.x*PG_SCALE*scaleK, y:PG_ORIGIN.y-offset.y-p.y*PG_SCALE*scaleK};}
 function updatePG(){
   const k=parseFloat(document.getElementById('pgK').value);
-  document.getElementById('pgKOut').textContent=k.toFixed(1);
-  document.getElementById('pgSimSide').textContent=(3*k).toFixed(1)+' birim';
+  document.getElementById('pgKOut').textContent=trc(k.toFixed(1));
+  document.getElementById('pgSimSide').textContent=trc((3*k).toFixed(1))+' birim';
   clearGroup('pgGrid');
   const g=document.getElementById('pgGrid');
   drawGridBg('pgGrid',PG_SCALE,640,380,PG_ORIGIN.x,PG_ORIGIN.y);
@@ -541,7 +542,7 @@ function updatePG(){
 // Yeşil (Benzer Kopya): Turuncu ile arasında 2 kare boşluk (x: 5*PG_SCALE, y: -1*PG_SCALE)
   const benzerKopya=PG_SHAPE.map(p=>pgTx(p,k,{x:5*PG_SCALE,y:-1*PG_SCALE}));
   addPolygon(g,benzerKopya,'rgba(5,150,105,.22)','#059669',2.5);
-  addTextEl(g,benzerKopya[0].x+30*k,benzerKopya[Math.min(4,benzerKopya.length-1)].y+16,'Benzer Kopya (k='+k.toFixed(1)+')','#059669',13);
+  addTextEl(g,benzerKopya[0].x+30*k,benzerKopya[Math.min(4,benzerKopya.length-1)].y+16,'Benzer Kopya (k='+trc(k.toFixed(1))+')','#059669',13);
 }
 document.getElementById('pgK').addEventListener('input',updatePG);
 updatePG();/* ---- Tab10: benzerlik oranı ile çevre ve alan ---- */
@@ -554,18 +555,18 @@ function updatePA(){
   k=Math.round(k*10)/10;
   input.value=k.toFixed(1);
   slider.value=k;
-  document.getElementById('paKOut').textContent=k.toFixed(1);
+  document.getElementById('paKOut').textContent=trc(k.toFixed(1));
 
   const side=6*k;
   const perimeter=24*k;
   const area=36*k*k;
   const areaRatio=k*k;
 
-  document.getElementById('paSimBoxSide').textContent='Kenar = '+side.toFixed(1)+' cm';
-  document.getElementById('paSimBoxPerim').textContent='Çevre = '+perimeter.toFixed(1)+' cm';
-  document.getElementById('paSimBoxArea').textContent='Alan = '+area.toFixed(2)+' cm²';
-  document.getElementById('paPerRatioVal').textContent=k.toFixed(1);
-  document.getElementById('paAreaRatioVal').textContent=areaRatio.toFixed(2);
+  document.getElementById('paSimBoxSide').textContent='Kenar = '+trc(side.toFixed(1))+' cm';
+  document.getElementById('paSimBoxPerim').textContent='Çevre = '+trc(perimeter.toFixed(1))+' cm';
+  document.getElementById('paSimBoxArea').textContent='Alan = '+trc(area.toFixed(2))+' cm²';
+  document.getElementById('paPerRatioVal').textContent=trc(k.toFixed(1));
+  document.getElementById('paAreaRatioVal').textContent=trc(areaRatio.toFixed(2));
   typesetDynamicMath(document.getElementById('tab10'));
 
   const g=document.getElementById('paSimVisual');
@@ -573,8 +574,8 @@ function updatePA(){
   const x=340-size/2;
   const y=110-size/2;
   g.innerHTML='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+size.toFixed(1)+'" height="'+size.toFixed(1)+'" fill="rgba(5,150,105,.22)" stroke="#059669" stroke-width="2.5"></rect>'+
-    '<text x="340" y="'+(y+size+28).toFixed(1)+'" text-anchor="middle" font-size="14" font-weight="800" fill="#059669">Benzer kare (k='+k.toFixed(1)+')</text>'+
-    '<text x="340" y="'+(y+size+48).toFixed(1)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#221515">'+side.toFixed(1)+' cm</text>';
+    '<text x="340" y="'+(y+size+28).toFixed(1)+'" text-anchor="middle" font-size="14" font-weight="800" fill="#059669">Benzer kare (k='+trc(k.toFixed(1))+')</text>'+
+    '<text x="340" y="'+(y+size+48).toFixed(1)+'" text-anchor="middle" font-size="13" font-weight="700" fill="#221515">'+trc(side.toFixed(1))+' cm</text>';
 }
 document.getElementById('paK').addEventListener('input',()=>{
   document.getElementById('paKInput').value=document.getElementById('paK').value;
@@ -591,7 +592,7 @@ const quizData=[
 {"q": "Benzerlik oranı k=1 olan iki çokgen için ne söylenebilir?", "choices": ["Yalnızca benzerdirler", "Açıları farklıdır", "Aynı zamanda eştirler", "Karşılaştırılamazlar"], "correct": 2, "expl": "k=1 olduğunda kenarlar da birebir eşit olur, bu da çokgenlerin eş olduğu anlamına gelir."},
 {"q": "Bir üçgenin kenarları (5,6,7) iken benzerlik oranı k=4 olan benzerinin en kısa kenarı kaçtır?", "choices": ["9", "24", "5", "20"], "correct": 3, "expl": "En kısa kenar 5 idi; 5×4=20 olur."},
 {"q": "Benzer iki çokgende karşılık gelen açı ölçüleri için ne söylenebilir?", "choices": ["Her zaman eşittir", "Her zaman farklıdır", "Benzerlik oranıyla çarpılır", "Toplamları 180° olur"], "correct": 0, "expl": "Benzer çokgenlerde karşılık gelen açı ölçüleri her zaman eşittir; yalnızca kenarlar orantılı değişir."},
-{"q": "Kenarları (4,5,9) ve (8,10,18) olan iki üçgen için ne söylenebilir? (İpucu: tüm oranları kontrol edin.)", "choices": ["Eştirler", "Ne eş ne benzerdirler", "Belirlenemez", "Benzerdirler"], "correct": 3, "expl": "8/4=2, 10/5=2, 18/9=2 — üç oran da eşit çıktığından üçgenler benzerdir (kenarlar birebir eşit olmadığından eş değildirler)."},
+{"q": "Kenarları (4,5,6) ve (8,10,12) olan iki üçgen için ne söylenebilir? (İpucu: tüm oranları kontrol edin.)", "choices": ["Eştirler", "Ne eş ne benzerdirler", "Belirlenemez", "Benzerdirler"], "correct": 3, "expl": "8/4=2, 10/5=2, 12/6=2 — üç oran da eşit çıktığından üçgenler benzerdir (kenarlar birebir eşit olmadığından eş değildirler)."},
 {"q": "Bir kareye benzer, benzerlik oranı k=0,5 olan başka bir kare çizilirse yeni karenin kenarı orijinaline göre nasıl olur?", "choices": ["İki katına çıkar", "Değişmez", "Yarısına iner", "Karesi alınır"], "correct": 2, "expl": "k=0,5 olduğunda her kenar orijinal uzunluğun yarısına iner."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;

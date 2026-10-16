@@ -357,8 +357,8 @@ function updateSlope(){
   document.getElementById('slpALabel').setAttribute('x',slpAx-16);document.getElementById('slpALabel').setAttribute('y',slpAy+16);
   document.getElementById('slpBLabel').setAttribute('x',bx+(dx>=0?10:-20));document.getElementById('slpBLabel').setAttribute('y',by+(dy<0?-8:18));
   const rise=(slpAy-by)/20, run=(bx-slpAx)/20;
-  const riseTxt=(Math.round(rise*100)/100).toString();
-  const runTxt=(Math.round(run*100)/100).toString();
+  const riseTxt=(Math.round(rise*100)/100).toString().replace('.',',');
+  const runTxt=(Math.round(run*100)/100).toString().replace('.',',');
   document.getElementById('slpRiseVal').textContent=riseTxt+' birim';
   document.getElementById('slpRunVal').textContent=runTxt+' birim';
   const badge=document.getElementById('slpTypeBadge');
@@ -368,7 +368,7 @@ function updateSlope(){
     badge.className='type-badge type-undef';
   } else {
     const m=rise/run;
-    const mTxt=(Math.round(m*100)/100).toString();
+    const mTxt=(Math.round(m*100)/100).toString().replace('.',',');
     document.getElementById('slpSlopeVal').textContent='m = '+mTxt;
     if(Math.abs(m)<0.04){badge.textContent='Yatay doğru — eğim sıfır';badge.className='type-badge type-zero';}
     else if(m>0){badge.textContent='Artan doğru — eğim pozitif';badge.className='type-badge type-pos';}
@@ -411,7 +411,7 @@ function updateTwoPoint(){
   const rdx=x2-x1, rdy=y2-y1;
   document.getElementById('tpDxVal').textContent=rdx;
   document.getElementById('tpDyVal').textContent=rdy;
-  document.getElementById('tpSlopeVal').textContent= rdx===0 ? 'Tanımsız' : 'm = '+(Math.round((rdy/rdx)*100)/100);
+  document.getElementById('tpSlopeVal').textContent= rdx===0 ? 'Tanımsız' : 'm = '+(Math.round((rdy/rdx)*100)/100).toString().replace('.',',');
 }
 ['tpX1','tpY1','tpX2','tpY2'].forEach(id=>document.getElementById(id).addEventListener('input',updateTwoPoint));
 updateTwoPoint();
@@ -437,7 +437,7 @@ function updateRamp(){
   const g=gcd(h,w);
   document.getElementById('rampRatioVal').textContent=(h/g)+' : '+(w/g);
   const dec=h/w;
-  document.getElementById('rampDecVal').textContent=(Math.round(dec*1000)/1000).toString();
+  document.getElementById('rampDecVal').textContent=(Math.round(dec*1000)/1000).toString().replace('.',',');
   const safeEl=document.getElementById('rampSafeVal');
   if(dec<=1/12+0.0001){safeEl.textContent='Uygun (≤ 1:12)';safeEl.style.color='#047857';}
   else{safeEl.textContent='Çok dik (> 1:12)';safeEl.style.color='#b91c1c';}
@@ -451,7 +451,7 @@ const quizData=[
 {"q": "A(2, 5) ve B(4, 9) noktalarından geçen doğrunun eğimi kaçtır?", "choices": ["1", "2", "4", "1/2"], "correct": 1, "expl": "m = (9−5)/(4−2) = 4/2 = 2."},
 {"q": "Eğimi 0 olan bir doğru için ne söylenebilir?", "choices": ["Doğru yataydır", "Doğru dikeydir", "Doğru artandır", "Eğim tanımsızdır"], "correct": 0, "expl": "Eğim 0 ise dikey uzunluk (Δy) 0'dır; bu doğru yataydır."},
 {"q": "C(3, −2) ve D(3, 6) noktalarından geçen doğrunun eğimi için ne söylenebilir?", "choices": ["m = 0", "m = 8", "m = −8", "Tanımsızdır"], "correct": 3, "expl": "x koordinatları eşit olduğundan yatay uzunluk 0'dır; eğim tanımsızdır (dikey doğru)."},
-{"q": "Bir yolun eğimi −1/5 ise bu ne anlama gelir?", "choices": ["Yol yataydır", "Yol soldan sağa yükselir", "Yol soldan sağa alçalır", "Yol dikeydir"], "correct": 2, "expl": "Negatif eğim, soldan sağa gidildikçe doğrunun (yolun) alçaldığını gösterir."},
+{"q": "Eğimi −1/5 olan bir doğru için ne söylenebilir?", "choices": ["Doğru yataydır", "Doğru soldan sağa yükselir", "Doğru soldan sağa alçalır", "Doğru dikeydir"], "correct": 2, "expl": "Negatif eğim, soldan sağa gidildikçe doğrunun (yolun) alçaldığını gösterir."},
 {"q": "Bir çatının yüksekliği 3 m, yatay uzunluğu 9 m ise çatının eğim oranı (sadeleştirilmiş) nedir?", "choices": ["1/3", "3/9", "1/9", "3"], "correct": 0, "expl": "3/9 kesri sadeleştirilirse 1/3 elde edilir; günlük hayat modelinde yalnızca bu oran önemlidir."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;

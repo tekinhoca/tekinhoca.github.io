@@ -280,7 +280,7 @@ const D2R=Math.PI/180;
 const gid=i=>document.getElementById(i);
 function el(g,t,a,txt){const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!==undefined)e.textContent=txt;g.appendChild(e);return e;}
 const fl=n=>(Math.round(n*100)/100).toString().replace('.',',');
-const sq=n=>{const r=Math.sqrt(n);return Number.isInteger(r)?String(r):'√'+n+' ≈ '+fl(r);};
+const sq=n=>{const r=Math.sqrt(n);return Number.isInteger(r)?String(r):'√'+String(n).replace('.',',')+' ≈ '+fl(r);};
 function mkPoly(kind,a,b){
   let p;
   if(kind==='tri')p=[[0,0],[a,0],[0,b]];
@@ -418,7 +418,7 @@ mkPyr('pp0',false);mkPyr('pp1',true);
     const fs=Math.max(10,Math.min(14,sc*.6));
     [[0,0,'Taban',a+' × '+a],[0,hf+s*0.35,'Y1','']].forEach(r=>el(g,'text',{x:X(r[0]),y:Y(r[1])+4,'text-anchor':'middle','font-size':fs,'font-weight':800,fill:'#3b0a0a',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},r[2]+(r[3]?' ('+r[3]+')':'')));
     el(g,'text',{x:X(0)+8,y:Y(hf+s/2),'font-size':fs,'font-weight':800,fill:'#c81e1e',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},'s = '+s);
-    gid('pp3T').innerHTML=TB+'<tr><th>Yüz</th><th>Ölçüler</th><th>Adet</th></tr><tr><td>Taban</td><td>kenarı '+a+' cm olan kare</td><td>1</td></tr><tr><td>Yan yüz</td><td>ikizkenar üçgen: taban '+a+' cm, yükseklik '+s+' cm, eşit kenarlar (yan ayrıt) √'+(s*s+a*a/4)+' ≈ '+fl(e)+' cm</td><td>4</td></tr><tr><td>Piramidin yüksekliği</td><td>h = √('+s+'² − '+a/2+'²) = '+(Number.isInteger(h)?h:'√'+(s*s-a*a/4)+' ≈ '+fl(h))+' cm</td><td>—</td></tr></table><div class="body-text" style="margin:8px 0 0">Her kare 1 cm × 1 cm. Üçgenlerin yüksekliğini (kırmızı kesikli çizgi) taban kenarının orta noktasından başlatarak çizin.</div>';
+    gid('pp3T').innerHTML=TB+'<tr><th>Yüz</th><th>Ölçüler</th><th>Adet</th></tr><tr><td>Taban</td><td>kenarı '+a+' cm olan kare</td><td>1</td></tr><tr><td>Yan yüz</td><td>ikizkenar üçgen: taban '+a+' cm, yükseklik '+s+' cm, eşit kenarlar (yan ayrıt) √'+String(s*s+a*a/4).replace('.',',')+' ≈ '+fl(e)+' cm</td><td>4</td></tr><tr><td>Piramidin yüksekliği</td><td>h = √('+s+'² − '+String(a/2).replace('.',',')+'²) = '+(Number.isInteger(h)?h:'√'+String(s*s-a*a/4).replace('.',',')+' ≈ '+fl(h))+' cm</td><td>—</td></tr></table><div class="body-text" style="margin:8px 0 0">Her kare 1 cm × 1 cm. Üçgenlerin yüksekliğini (kırmızı kesikli çizgi) taban kenarının orta noktasından başlatarak çizin.</div>';
   }
   box.addEventListener('input',draw);draw();
 })();
@@ -436,8 +436,8 @@ mkPyr('pp0',false);mkPyr('pp1',true);
     const ln=(p,q,c,w,d)=>el(g,'line',{x1:p.x,y1:p.y,x2:q.x,y2:q.y,stroke:c,'stroke-width':w,'stroke-linecap':'round','stroke-dasharray':d||'none'});
     ln(T,O,'#c81e1e',3,'7 5');ln(O,M,'#6b7280',3);ln(T,M,'#d97706',4.5);ln(T,V0,'#2563eb',3);
     [T,O,M].forEach(p=>el(g,'circle',{cx:p.x,cy:p.y,r:4.5,fill:'#7a0e0e',stroke:'#fff','stroke-width':1.5}));
-    const s2=h*h+a*a/4,e2=s2+a*a/4,fm2=n=>Number.isInteger(Math.sqrt(n))?String(Math.sqrt(n)):'√'+n+' ≈ '+fl(Math.sqrt(n));
-    gid('pp5T').innerHTML='<div class="body-text" style="margin:6px 0"><b style="color:#c81e1e">h</b> (yükseklik, kesikli), <b style="color:#6b7280">a/2</b> (taban merkezinden kenar ortasına), <b style="color:#d97706">s</b> (yan yüz yüksekliği), <b style="color:#2563eb">e</b> (yan ayrıt).</div>'+TB+'<tr><th>Doğru parçası</th><th>Pisagor bağıntısı</th><th>Uzunluk</th></tr><tr><td>Yan yüz yüksekliği (s)</td><td>s² = h² + (a/2)² = '+h+'² + '+a/2+'² = '+s2+'</td><td>'+fm2(s2)+' cm</td></tr><tr><td>Yan ayrıt (e)</td><td>e² = s² + (a/2)² = '+s2+' + '+a*a/4+' = '+e2+'</td><td>'+fm2(e2)+' cm</td></tr></table>';
+    const s2=h*h+a*a/4,e2=s2+a*a/4,fm2=n=>Number.isInteger(Math.sqrt(n))?String(Math.sqrt(n)):'√'+String(n).replace('.',',')+' ≈ '+fl(Math.sqrt(n));
+    gid('pp5T').innerHTML='<div class="body-text" style="margin:6px 0"><b style="color:#c81e1e">h</b> (yükseklik, kesikli), <b style="color:#6b7280">a/2</b> (taban merkezinden kenar ortasına), <b style="color:#d97706">s</b> (yan yüz yüksekliği), <b style="color:#2563eb">e</b> (yan ayrıt).</div>'+TB+'<tr><th>Doğru parçası</th><th>Pisagor bağıntısı</th><th>Uzunluk</th></tr><tr><td>Yan yüz yüksekliği (s)</td><td>s² = h² + (a/2)² = '+h+'² + '+String(a/2).replace('.',',')+'² = '+String(s2).replace('.',',')+'</td><td>'+fm2(s2)+' cm</td></tr><tr><td>Yan ayrıt (e)</td><td>e² = s² + (a/2)² = '+String(s2).replace('.',',')+' + '+String(a*a/4).replace('.',',')+' = '+String(e2).replace('.',',')+'</td><td>'+fm2(e2)+' cm</td></tr></table>';
   }
   box.addEventListener('input',draw);draw();
 })();

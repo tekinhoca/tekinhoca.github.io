@@ -49,7 +49,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <tr><td>≥</td><td>büyük veya eşittir</td><td>Sınır değeri <b>de kapsar</b> ("en az")</td></tr>
 <tr><td>≤</td><td>küçük veya eşittir</td><td>Sınır değeri <b>de kapsar</b> ("en çok")</td></tr>
 </table></div>
-<div class="tip-box">Bu etkinlikte üç kazanımı birlikte işleyeceğiz:<br><b>(1)</b> günlük hayat durumlarını eşitsizlik cümlesine dönüştürme,<br><b>(2)</b> eşitsizlikleri sayı doğrusunda gösterme,<br><b>(3)</b> eşitsizlikleri çözme.<br>Özellikle her iki tarafın negatif bir sayı ile çarpılıp bölünmesi durumlarında işaretin yö değiştirmesi kuralına dikkat edeceğiz.</div>
+<div class="tip-box">Bu etkinlikte üç kazanımı birlikte işleyeceğiz:<br><b>(1)</b> günlük hayat durumlarını eşitsizlik cümlesine dönüştürme,<br><b>(2)</b> eşitsizlikleri sayı doğrusunda gösterme,<br><b>(3)</b> eşitsizlikleri çözme.<br>Özellikle her iki tarafın negatif bir sayı ile çarpılıp bölünmesi durumlarında işaretin yön değiştirmesi kuralına dikkat edeceğiz.</div>
 </div>
 </section>
 
@@ -189,7 +189,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="ex-step"><div class="snum">1</div><div>Defne'nin yaşına <b>x</b> dersek şu eşitsizliği yazabiliriz: 2x + 5 &gt; 3x - 2</div></div>
 <div class="ex-step"><div class="snum">2</div><div>Bilinenleri sol tarafa, bilinmeyenleri sağ tarafa alırsak: 5 + 2 &gt; 3x - 2x</div></div>
 <div class="ex-step"><div class="snum">3</div><div>İşlemleri yaparsak: 7 &gt; x</div></div>
-<div class="ex-step"><div class="snum">3</div><div>x, 7'den küçük tüm sayılar olabilir.</div></div>
+<div class="ex-step"><div class="snum">4</div><div>x, 7'den küçük tüm sayılar olabilir.</div></div>
 <div class="ex-result">Sonuç: En fazla 6 yaşında olabilir.</div>
 </div>
 </div></div>
@@ -386,8 +386,9 @@ function buildSentence(ctx,rel,val){
   }
   if(rel.key==='ge')return ctx.subject+' en az '+val+' '+ctx.unit+' olmalıdır.';
   if(rel.key==='le')return ctx.subject+' en çok '+val+' '+ctx.unit+' olmalıdır.';
-  if(rel.key==='gt')return ctx.subject+', '+val+' '+ctx.unit+"'dan fazla olmalıdır.";
-  return ctx.subject+', '+val+' '+ctx.unit+"'dan az olmalıdır.";
+  function abl(){if(ctx.unit==='TL')return val+" TL'den";if(ctx.unit==='km/sa')return val+' km/sa değerinden';return val+' '+ctx.unit+"'dan";}
+  if(rel.key==='gt')return ctx.subject+', '+abl()+' fazla olmalıdır.';
+  return ctx.subject+', '+abl()+' az olmalıdır.';
 }
 function updateT1(){
   const val=parseInt(document.getElementById('t1Val').value,10);

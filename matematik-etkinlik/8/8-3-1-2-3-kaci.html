@@ -98,9 +98,9 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
 <div class="ex-steps">
 <div class="ex-step"><div class="snum">1</div><div>Üçüncü kenarın uzunluğu, verilen iki kenarın uzunluklarının <b>toplamı ile farkının arasında bir sayı</b> olmalı;</div></div>
-<div class="ex-step"><div class="snum">1</div><div>Üçgen eşitsizliğini uygulayalım:</div></div>
-<div class="ex-step"><div class="snum">2</div><div>\( |9-7| < x < 9+7 \)</div></div>
-<div class="ex-step"><div class="snum">3</div><div>\( 2 < x < 16 \) elde edilir. (Ç = {3, 4, 5, ..., 13, 14, 15})</div></div>
+<div class="ex-step"><div class="snum">2</div><div>Üçgen eşitsizliğini uygulayalım:</div></div>
+<div class="ex-step"><div class="snum">3</div><div>\( |9-7| < x < 9+7 \)</div></div>
+<div class="ex-step"><div class="snum">4</div><div>\( 2 < x < 16 \) elde edilir. (Ç = {3, 4, 5, ..., 13, 14, 15})</div></div>
 <div class="ex-result">Sonuç: x, 2 ile 16 arasındaki tam sayı değerlerini alabilir; en küçük değer 3 cm, en büyük değer 15 cm'dir.</div>
 </div>
 </div></div>
@@ -120,9 +120,9 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
 <div class="ex-steps">
 <div class="ex-step"><div class="snum">1</div><div>50° &lt; 60° &lt; 70° olduğuna göre,</div></div>
-<div class="ex-step"><div class="snum">1</div><div>B açısı &lt; C açısı &lt; A açısı yazabiliriz.</div></div>
-<div class="ex-step"><div class="snum">2</div><div>Bir üçgende en kısa kenar, en küçük açının karşısındadır; en uzun kenar, en büyük açının karşısındadır.</div></div>
-<div class="ex-result">Sonuç: [AC] &lt; [AB] &lt; [BC]</div>
+<div class="ex-step"><div class="snum">2</div><div>B açısı &lt; C açısı &lt; A açısı yazabiliriz.</div></div>
+<div class="ex-step"><div class="snum">3</div><div>Bir üçgende en kısa kenar, en küçük açının karşısındadır; en uzun kenar, en büyük açının karşısındadır.</div></div>
+<div class="ex-result">Sonuç: |AC| &lt; |AB| &lt; |BC|</div>
 </div>
 </div></div>
 
@@ -136,7 +136,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="ex-step"><div class="snum">2</div><div>1 no'lu üçgende açılara bakılırsa, |AB| &lt; |BC| &lt; <b>|AC|</b> yazılabilir.</div></div>
 <div class="ex-step"><div class="snum">3</div><div>2 no'lu üçgende açılara bakılırsa, <b>|AC|</b> &lt; |DC| &lt; |AD| yazılabilir.</div></div>
 <div class="ex-step"><div class="snum">4</div><div>Elde ettiğimiz iki eşitsizlikte kenar uzunluklarının sırası ortaya çıkmış oldu.</div></div>
-<div class="ex-result">Sonuç: [AB] &lt; [BC] &lt; [AC] &lt; [DC] &lt; [AD]</div>
+<div class="ex-result">Sonuç: |AB| &lt; |BC| &lt; |AC| &lt; |DC| &lt; |AD|</div>
 </div>
 </div></div>
 
@@ -402,7 +402,7 @@ function refreshKA(){
   let html='<table style="width:100%;border-collapse:collapse"><tr><th>Kenar</th><th>Uzunluk (birim)</th><th>Karşı Köşe</th><th>Açı Ölçüsü</th></tr>';
   rows.forEach((r,i)=>{
     const style=i===0?'background:var(--success-light);font-weight:800':(i===2?'background:#fdf2f2':'');
-    html+='<tr style="'+style+'"><td>'+r.side+'</td><td>'+r.len+'</td><td>'+r.opp+'</td><td>'+Math.round(r.ang)+'°</td></tr>';
+    html+='<tr style="'+style+'"><td>'+r.side+'</td><td>'+String(r.len).replace('.',',')+'</td><td>'+r.opp+'</td><td>'+Math.round(r.ang)+'°</td></tr>';
   });
   html+='</table>';
   document.getElementById('kaTable').innerHTML=html;
@@ -416,7 +416,7 @@ const quizData=[
 {"q": "Kenar uzunlukları 2 cm, 3 cm ve 6 cm olan bir üçgen çizilebilir mi?", "choices": ["Evet", "Hayır", "Yalnızca dik üçgen olursa", "Bilgi yetersiz"], "correct": 1, "expl": "2 + 3 = 5, üçüncü kenar olan 6'dan küçük olduğu için bu üç uzunlukla üçgen çizilemez."},
 {"q": "Bir üçgenin iki kenarı 4 cm ve 10 cm'dir. Üçüncü kenar hangi aralıkta olmalıdır?", "choices": ["4 cm ile 10 cm arası", "0 cm ile 14 cm arası", "6 cm ile 14 cm arası (hariç)", "6 cm ile 14 cm arası (dahil)"], "correct": 2, "expl": "|10-4| < x < 10+4 olduğundan 6 < x < 14 elde edilir."},
 {"q": "Bir üçgende en kısa kenarın karşısında hangi açı bulunur?", "choices": ["En küçük açı", "En büyük açı", "Dik açı", "180°'lik açı"], "correct": 0, "expl": "Kısa kenarın karşısında her zaman küçük açı bulunur."},
-{"q": "Bir üçgende [AB]=9 cm, [BC]=6 cm, [AC]=5 cm ise en küçük açı hangi köşededir?", "choices": ["A köşesinde", "C köşesinde", "Hesaplanamaz", "B köşesinde"], "correct": 3, "expl": "En kısa kenar [AC]=5 cm'dir; bu kenarın karşısındaki köşe B'dir. Bu nedenle en küçük açı B köşesindedir."},
+{"q": "Bir üçgende |AB|=9 cm, |BC|=6 cm, |AC|=5 cm ise en küçük açı hangi köşededir?", "choices": ["A köşesinde", "C köşesinde", "Hesaplanamaz", "B köşesinde"], "correct": 3, "expl": "En kısa kenar |AC|=5 cm'dir; bu kenarın karşısındaki köşe B'dir. Bu nedenle en küçük açı B köşesindedir."},
 {"q": "İkizkenar bir üçgende iki kenar eşitse, bu kenarların karşısındaki açılar için ne söylenebilir?", "choices": ["Farklıdır", "Birbirine eşittir", "Biri diğerinin iki katıdır", "Hesaplanamaz"], "correct": 1, "expl": "Eş uzunluktaki kenarların karşısında her zaman eş açılar bulunur."},
 {"q": "Kenarları 3 cm ve 3 cm olan bir üçgenin üçüncü kenarının alabileceği en büyük tam sayı değeri kaç cm'dir?", "choices": ["6", "3", "7", "5"], "correct": 3, "expl": "|3-3| < x < 3+3 olduğundan 0 < x < 6; x, tam sayı olarak en fazla 5 olabilir (6 dahil değildir)."}
 ];

@@ -39,17 +39,17 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 
 <section class="tab-panel active" id="tab0">
 <div class="card"><div class="card-title"><div class="icon">🔺</div>Üçgenin Yardımcı Elemanlarına Giriş</div>
-<p class="body-text">Bir üçgenin her köşesinden çizilebilen ve üçgenin iç yapısını anlamamıza yardımcı olan üç önemli doğru parçası vardır: <b>kenarortay</b>, <b>açıortay</b> ve <b>yükseklik</b>. Bunlara <b>Üçgenin Yardımcı Elemanları</b> denir.<br>Her üçgenin 3 köşesi olduğundan, her üçgende 3 kenarortay, 3 açıortay ve 3 yükseklik bulunur.<br>Çeşitkenar bir üçgende yardımcı elemanlar arasında en uzunu <b>kenarortay</b>, en kısası ise <b>yükseklik</b>tir.</p>
+<p class="body-text">Bir üçgenin her köşesinden çizilebilen ve üçgenin iç yapısını anlamamıza yardımcı olan üç önemli doğru parçası vardır: <b>kenarortay</b>, <b>açıortay</b> ve <b>yükseklik</b>. Bunlara <b>Üçgenin Yardımcı Elemanları</b> denir.<br>Her üçgenin 3 köşesi olduğundan, her üçgende 3 kenarortay, 3 açıortay ve 3 yükseklik bulunur.<br>Aynı köşeden çizilen yardımcı elemanlar karşılaştırıldığında en uzun olan <b>kenarortay</b>, en kısa olan ise <b>yükseklik</b>tir (açıortay bu ikisinin arasındadır). İkizkenar ve eşkenar üçgenlerin bazı elemanlarında bu uzunluklar eşit olabilir.</p>
 <div class="three-col">
 <div class="info-tile"><h4>Kenarortay</h4><p class="body-text" style="font-size:.85rem;margin:0">Bir köşeyi, karşısındaki kenarın <b>orta noktasına</b> birleştiren doğru parçasıdır.</p></div>
 <div class="info-tile"><h4>Açıortay</h4><p class="body-text" style="font-size:.85rem;margin:0">Bir köşedeki açıyı <b>iki eş açıya</b> bölen ve karşı kenarı kesen doğru parçasıdır.</p></div>
 <div class="info-tile"><h4>Yükseklik</h4><p class="body-text" style="font-size:.85rem;margin:0">Bir köşeden, karşısındaki kenara <b>dik</b> olarak çizilen doğru parçasıdır.</p></div>
 </div>
-<div class="tip-box">Bu üç elemanı, kağıt katlayarak ve keserek de elde edebilirsiniz:<br>- Bir kenarın orta noktasını belirleyip kenarı bu noktadan ikiye katlamak kenarortayı,<br>- Bir köşedeki açıyı ikiye katlamak açıortayı,<br>- Bir köşeyi karşı kenara dik gelecek şekilde katlamak ise yüksekliği verir.</div>
+<div class="tip-box">Bu üç elemanı, kâğıt katlayarak ve keserek de elde edebilirsiniz:<br>- Bir kenarın iki ucunu üst üste getirip katlayarak orta noktasını bulmak, sonra karşı köşe ile bu orta noktadan geçen doğru boyunca katlamak kenarortayı,<br>- Bir köşedeki açıyı ikiye katlamak açıortayı,<br>- Köşeden geçen bir doğru boyunca, karşı kenar kendi üzerine çakışacak biçimde katlamak ise yüksekliği verir.</div>
 <div class="three-col">
-<div class="tip-box"><h4>Kenarortay</h4><img src="img/kenarortay.webp" alt="Kağıt katlayarak kenarortay oluşturma" style="max-width:65%;height:auto"></div>
-<div class="tip-box"><h4>Açıortay</h4><img src="img/acorty.webp" alt="Kağıt katlayarak açıortay oluşturma" style="max-width:70%;height:auto"></div>
-<div class="tip-box"><h4>Yükseklik</h4><img src="img/yukseklik.webp" alt="Kağıt katlayarak yükseklik oluşturma" style="max-width:65%;height:auto"></div>
+<div class="tip-box"><h4>Kenarortay</h4><img src="img/kenarortay.webp" alt="Kâğıt katlayarak kenarortay oluşturma" style="max-width:65%;height:auto"></div>
+<div class="tip-box"><h4>Açıortay</h4><img src="img/acorty.webp" alt="Kâğıt katlayarak açıortay oluşturma" style="max-width:70%;height:auto"></div>
+<div class="tip-box"><h4>Yükseklik</h4><img src="img/yukseklik.webp" alt="Kâğıt katlayarak yükseklik oluşturma" style="max-width:65%;height:auto"></div>
 </div>
 
 <div class="note-box">Sıradaki üç sekmede bu yardımcı elemanları, üçgenin şeklini kaydırıcılarla değiştirerek ve istediğiniz köşeyi seçerek canlı olarak inceleyebilirsiniz.</div>
@@ -290,7 +290,7 @@ function lineIntersect(P1,d1,P2,d2){
   return {x:P1.x+t*d1.x, y:P1.y+t*d1.y};
 }
 const UNIT=20;
-function toUnits(px){return Math.round((px/UNIT)*10)/10;}
+function toUnits(px){return String(Math.round((px/UNIT)*10)/10).replace('.',',');}
 
 function trianglePoints(Ax,Ay){return {A:{x:Ax,y:Ay}, B:{x:100,y:300}, C:{x:500,y:300}};}
 function pickVOP(pts,vKey){
