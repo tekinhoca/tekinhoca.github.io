@@ -26,7 +26,12 @@ body{position:fixed;inset:0;width:100%;display:flex;align-items:center;justify-c
 .modal-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .modal-btns.col{flex-direction:column}
 button.modal-start{background:rgba(200,150,12,0.2);border:1px solid rgba(200,150,12,0.6);border-radius:6px;padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;color:#f0d9a0;font-family:'Nunito',sans-serif;transition:background .2s}
-button.modal-start:hover{background:rgba(200,150,12,0.35)}
+button.modal-start:hover:not(:disabled){background:rgba(200,150,12,0.35)}
+button.modal-start:disabled{opacity:.32;cursor:default}
+.modal-difficulty-btns{display:flex;gap:8px;width:100%}
+.modal-difficulty-btns .modal-start{flex:1 1 0;min-width:0;padding:10px 4px;white-space:normal;line-height:1.15}
+button.modal-start.difficulty-selected{background:rgba(200,150,12,0.42);border-color:#f0c040;color:#fff0bd;box-shadow:0 0 0 1px rgba(240,192,64,.25),0 0 12px rgba(240,192,64,.12)}
+.modal-section-title{font-family:'Baloo 2',cursive;font-size:19px;font-weight:800;color:#f0c040;text-align:center;letter-spacing:.03em;text-shadow:0 0 14px rgba(240,192,64,.3)}
 button.modal-close{background:transparent;border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;color:rgba(247,242,232,0.5);font-family:'Nunito',sans-serif}
 button.modal-close:hover{background:rgba(255,255,255,0.06)}
 .modal-logo{text-align:center;margin-top:2px}
@@ -189,17 +194,22 @@ body.layout-mobile.orientation-landscape .bottom-actions .a{padding:7px 4px;font
 </head>
 <body>
 
-<!-- ── HEDEF SAYI SEÇİM MODALI ── -->
+<!-- ── ZORLUK VE HEDEF SAYI SEÇİM MODALI ── -->
 <div class="modal-overlay" id="diffModal">
   <div class="modal-box">
-    <div class="modal-title">Hedefiniz Hangi Sayının Katları Olsun İstersiniz?</div>
-    <div class="modal-sub">Bilgisayara karşı oynayacaksınız</div>
+    <div class="modal-section-title">PC'NİN SEVİYESİNİ SEÇİN</div>
+    <div class="modal-difficulty-btns">
+      <button type="button" class="modal-start" id="randomDifficultyBtn" aria-pressed="false" onclick="chooseDifficulty('random')">RASTGELE</button>
+      <button type="button" class="modal-start" id="hardDifficultyBtn" aria-pressed="false" onclick="chooseDifficulty('hard')">PUAN<br>AVCISI</button>
+      <button type="button" class="modal-start" id="expertDifficultyBtn" aria-pressed="false" onclick="chooseDifficulty('expert')">HAMLE<br>USTASI</button>
+    </div>
+    <div class="modal-section-title">HEDEF SAYIYI SEÇİN</div>
     <div class="modal-btns col">
-      <button class="modal-start" onclick="startGame(2)">2'nin Katları</button>
-      <button class="modal-start" onclick="startGame(3)">3'ün Katları</button>
-      <button class="modal-start" onclick="startGame(4)">4'ün Katları</button>
-      <button class="modal-start" onclick="startGame(5)">5'in Katları</button>
-      <button class="modal-start" onclick="startGame(6)">6'nın Katları</button>
+      <button class="modal-start target-choice" onclick="startGame(2)" disabled>2'nin Katları</button>
+      <button class="modal-start target-choice" onclick="startGame(3)" disabled>3'ün Katları</button>
+      <button class="modal-start target-choice" onclick="startGame(4)" disabled>4'ün Katları</button>
+      <button class="modal-start target-choice" onclick="startGame(5)" disabled>5'in Katları</button>
+      <button class="modal-start target-choice" onclick="startGame(6)" disabled>6'nın Katları</button>
     </div>
     <div class="modal-logo"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div>
   </div>
@@ -833,7 +843,13 @@ async function computerTurn(){
   const moves = findValidMoves(board, computerRack, isFirstMove);
   let chosen=null;
   if(moves.length>0){
-    chosen = moves[Math.floor(Math.random()*moves.length)];
+    if(difficulty==='hard' || difficulty==='expert'){
+      const bestScore=Math.max(...moves.map(move=>move.score));
+      const bestMoves=moves.filter(move=>move.score===bestScore);
+      chosen=bestMoves[Math.floor(Math.random()*bestMoves.length)];
+    } else {
+      chosen = moves[Math.floor(Math.random()*moves.length)];
+    }
   }
   lastComputerPlacement=[];
   if(chosen){
@@ -891,9 +907,29 @@ function updateRulesText(){
     Art arda birer kez pas geçilirse ya da bir oyuncu tüm taşlarını bitirirse oyun sona erer. Elde kalan her taş için <b>5 puan</b> kaybedilir. Yüksek puanlu oyuncu kazanır.
   `;
 }
+function chooseDifficulty(level){
+  if(!['random','hard','expert'].includes(level)) return;
+  difficulty=level;
+  const buttons={random:'randomDifficultyBtn',hard:'hardDifficultyBtn',expert:'expertDifficultyBtn'};
+  Object.entries(buttons).forEach(([key,id])=>{
+    const btn=document.getElementById(id);
+    btn.classList.toggle('difficulty-selected',level===key);
+    btn.setAttribute('aria-pressed',String(level===key));
+  });
+  document.querySelectorAll('#diffModal .target-choice').forEach(btn=>{btn.disabled=false;});
+}
+function resetDifficultySelection(){
+  difficulty=null;
+  ['randomDifficultyBtn','hardDifficultyBtn','expertDifficultyBtn'].forEach(id=>{
+    const btn=document.getElementById(id);
+    btn.classList.remove('difficulty-selected');
+    btn.setAttribute('aria-pressed','false');
+  });
+  document.querySelectorAll('#diffModal .target-choice').forEach(btn=>{btn.disabled=true;});
+}
 function startGame(n){
+  if(!['random','hard','expert'].includes(difficulty)) return;
   targetMultiple = n;
-  difficulty='easy';
   decideLayout();
   bag=createBag();
   board=emptyBoard();
@@ -912,6 +948,7 @@ function startGame(n){
 }
 function resetGame(){
   ['resultsModal','rulesModal','invalidModal'].forEach(id=>closeModal(id));
+  resetDifficultySelection();
   showModal('diffModal');
 }
 
@@ -950,9 +987,10 @@ if(screen && screen.orientation && screen.orientation.addEventListener){
   });
 }
 showModal('diffModal');
+resetDifficultySelection();
 decideLayout();
 board=emptyBoard(); playerRack=[]; computerRack=[]; playerScore=0; computerScore=0;
-staged=[]; selectedRackIndex=null; isFirstMove=true; passStreak=0; gameOver=true; turn='player'; difficulty='easy'; lastComputerPlacement=[]; bag=[];
+staged=[]; selectedRackIndex=null; isFirstMove=true; passStreak=0; gameOver=true; turn='player'; difficulty=null; lastComputerPlacement=[]; bag=[];
 updateRulesText();
 fitBoard(); fitSidebar(); renderAll();
 // Tahtanın oturduğu kutunun (.board-wrap) GERÇEK boyutunu doğrudan izliyoruz.
