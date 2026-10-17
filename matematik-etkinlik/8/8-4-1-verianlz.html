@@ -38,6 +38,8 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab2">ÇİZGİ GRAFİĞİ</button>
 <button class="tab-btn" data-tab="tab3">DAİRE GRAFİĞİ</button>
 <button class="tab-btn" data-tab="tab4">DÖNÜŞÜM & KARŞILAŞTIRMA</button>
+<button class="tab-btn" data-tab="tabCoklu">ÇOKLU ÇİZGİ GRAFİĞİ</button>
+<button class="tab-btn" data-tab="tabDonustur">VERİYİ DÖNÜŞTÜR</button>
 <button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab7">ÖZET</button>
@@ -126,6 +128,68 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div>
 </section>
 
+<section class="tab-panel" id="tabCoklu">
+<div class="card"><div class="card-title"><div class="icon">📈</div>Çoklu Çizgi Grafiği (En Fazla Üç Veri Grubu)</div>
+<p class="body-text">Bir çizgi grafiğinde aynı eksenlerde <b>en fazla üç veri grubu</b> gösterilebilir. Her grup farklı renkte bir çizgiyle çizilir ve bir <b>gösterge (açıklama)</b> ile tanıtılır. Üç okulun 6 haftalık kitap okuma kampanyasındaki verilerini inceleyelim. Aşağıdaki düğmelerle çizgileri tek tek açıp kapatabilirsiniz.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="chip-btn active" id="clC0" onclick="clTog(0)">Okul A</button><button class="chip-btn active" id="clC1" onclick="clTog(1)">Okul B</button><button class="chip-btn active" id="clC2" onclick="clTog(2)">Okul C</button><button class="chip-btn" onclick="clAll()">Tümünü Göster</button></div>
+<div class="svg-wrap" style="max-width:480px"><svg id="clSvg" viewBox="0 0 360 235" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Üç okulun haftalık okuduğu kitap sayısı"></svg></div>
+<table class="mini-table"><tr><th>Hafta</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+<tr><td>Okul A</td><td>10</td><td>14</td><td>18</td><td>22</td><td>26</td><td>30</td></tr>
+<tr><td>Okul B</td><td>20</td><td>18</td><td>24</td><td>21</td><td>28</td><td>26</td></tr>
+<tr><td>Okul C</td><td>12</td><td>12</td><td>16</td><td>20</td><td>20</td><td>32</td></tr></table>
+<div class="tip-box">Grafiği yorumlarken şunlara bakın: Hangi çizgi <b>yükseliyor</b>, <b>alçalıyor</b> ya da <b>yatay</b> kalıyor? Çizgiler hangi noktada <b>kesişiyor</b> (değerler eşit)? Hangi noktada en yüksek ya da en düşük değer var?</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Grafiği Yorumlayın</div>
+<div class="q-card" data-okmsg="Doğru! Okul A: 10, 14, 18, 22, 26, 30 — her hafta arttı. B&#x27;de 2. ve 4. haftalarda azalma, C&#x27;de 1. ve 2. haftalarda aynı değer (12, 12) ve 4.–5. haftalarda aynı değer (20, 20) vardır." data-nomsg="Yanlış. Doğru cevap: Okul A. Okul A: 10, 14, 18, 22, 26, 30 — her hafta arttı. B&#x27;de 2. ve 4. haftalarda azalma, C&#x27;de 1. ve 2. haftalarda aynı değer (12, 12) ve 4.–5. haftalarda aynı değer (20, 20) vardır.">
+<div class="q-text">Hangi okulun okuduğu kitap sayısı 6 haftanın tamamında <b>her hafta</b> arttı?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Okul A</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Okul B</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Okul C</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hiçbiri</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! 4. haftada A okulu 22, B okulu 21, C okulu 20 kitap okumuştur; en fazlası Okul A&#x27;dadır (22)." data-nomsg="Yanlış. Doğru cevap: Okul A, 22. 4. haftada A okulu 22, B okulu 21, C okulu 20 kitap okumuştur; en fazlası Okul A&#x27;dadır (22).">
+<div class="q-text">4. haftada en çok kitap okuyan okul hangisidir ve kaç kitap okumuştur?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Okul B, 21</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Okul C, 20</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Okul A, 20</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Okul A, 22</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! Toplamlar: A = 10+14+18+22+26+30 = 120, B = 20+18+24+21+28+26 = 137, C = 12+12+16+20+20+32 = 112. En az olan Okul C&#x27;dir." data-nomsg="Yanlış. Doğru cevap: Okul C (112). Toplamlar: A = 10+14+18+22+26+30 = 120, B = 20+18+24+21+28+26 = 137, C = 12+12+16+20+20+32 = 112. En az olan Okul C&#x27;dir.">
+<div class="q-text">6 haftada okunan toplam kitap sayısı <b>en az</b> olan okul hangisidir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Okul A (120)</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Okul C (112)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Okul B (137)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Okul A ve C aynı</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! Okul C 5. haftada 20, 6. haftada 32 kitap okumuştur: 32 − 20 = 12." data-nomsg="Yanlış. Doğru cevap: 12. Okul C 5. haftada 20, 6. haftada 32 kitap okumuştur: 32 − 20 = 12.">
+<div class="q-text">Okul C'nin 5. haftadan 6. haftaya okuduğu kitap sayısındaki artış kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">10</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">12</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">20</button>
+</div><div class="feedback"></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tabDonustur">
+<div class="card"><div class="card-title"><div class="icon">🔄</div>Veriyi Dönüştür: Sütun, Daire ve Çizgi Grafiği</div>
+<p class="body-text">Aynı veri farklı grafiklerle gösterilebilir. Ancak <b>her grafik her veri için uygun değildir</b>. Bir veri seçin, sonra grafik türünü değiştirerek verinin nasıl göründüğünü ve hangi grafiğin uygun olduğunu inceleyin.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button class="chip-btn active" id="vdD0" onclick="vdSet(0,-1)">Ulaşım Şekli</button><button class="chip-btn" id="vdD1" onclick="vdSet(1,-1)">Aylık Sıcaklık</button><button class="chip-btn" id="vdD2" onclick="vdSet(2,-1)">Sevilen Ders</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0"><button class="chip-btn active" id="vdT0" onclick="vdSet(-1,0)">SÜTUN GRAFİĞİ</button><button class="chip-btn" id="vdT1" onclick="vdSet(-1,1)">DAİRE GRAFİĞİ</button><button class="chip-btn" id="vdT2" onclick="vdSet(-1,2)">ÇİZGİ GRAFİĞİ</button></div>
+<div class="note-box" id="vdTitle" style="font-weight:800"></div>
+<div class="svg-wrap" style="max-width:480px"><svg id="vdSvg" viewBox="0 0 360 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Seçilen veri ve grafik türü"></svg></div>
+<div class="note-box" id="vdInfo"></div>
+<div id="vdTbl"></div>
+</div>
+</section>
+
 <section class="tab-panel" id="tab5">
 <div class="card"><div class="card-title"><div class="icon">✏️</div>Çözümlü Örnekler</div>
 
@@ -166,8 +230,8 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="q-text">1) Bir kırtasiyede bir günde 18 mavi, 12 siyah ve birkaç tane de kırmızı kalem satılmıştır. Bu satışları temsil etmek üzere çizilen daire grafikte mavileri temsil eden daire dilimini merkez açısı 180° olduğuna göre kaç tane kırmızı kalem satılmıştır?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">3</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">5</button>
 <button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">6</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">5</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">30</button>
 </div><div class="feedback"></div></div>
 
@@ -175,37 +239,56 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="q-text">2) Bir sınıfta 30 öğrencinin 12'si bilim kulübünü seçmiştir. Bu kulübü gösteren daire diliminin merkez açısı kaç derecedir?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">120°</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">144°</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">96°</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">72°</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">144°</button>
 </div><div class="feedback"></div></div>
 
 <div class="q-card" data-okmsg="Doğru! 90°'lik dilim, dairenin dörtte birini temsil eder. 48'in dörtte biri 12'dir." data-nomsg="Yanlış. Doğru cevap: 12. 90°'lik dilim, dairenin dörtte birini temsil eder. 48'in dörtte biri 12'dir.">
 <div class="q-text">3) 48 öğrencinin katıldığı bir ankette bir seçeneğin daire grafiğindeki merkez açısı 90°'dir. Bu seçeneği kaç öğrenci tercih etmiştir?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">12</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">16</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">24</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">12</button>
 </div><div class="feedback"></div></div>
 
 <div class="q-card" data-okmsg="Doğru! 72°/360° = 1/5 olduğundan 50'nin 1/5'i 10'dur." data-nomsg="Yanlış. Doğru cevap: 10. 72°/360° = 1/5 olduğundan 50'nin 1/5'i 10'dur.">
 <div class="q-text">4) Bir daire grafiğinde 72°'lik dilim, toplam 50 kişiden kaç tanesini temsil eder?</div>
 <div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">10</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">5</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">12</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">10</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">15</button>
 </div><div class="feedback"></div></div>
 
 <div class="q-card" data-okmsg="Doğru! Haftalara bağlı değişim incelendiği için çizgi grafiği uygundur." data-nomsg="Yanlış. Doğru cevap: Çizgi grafiği. Haftalara bağlı değişim incelendiği için çizgi grafiği uygundur.">
 <div class="q-text">5) Bir spor salonunun dört haftadaki günlük ortalama ziyaretçi sayıları 80, 95, 90 ve 110'dur. Haftalar arasındaki değişimi göstermek için hangi grafik daha uygundur?</div>
 <div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Çizgi grafiği</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Daire grafiği</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Sütun grafiği</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Sadece tablo</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Çizgi grafiği</button>
 </div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! 8C&#x27;nin ortalaması 70&#x27;ten 68&#x27;e düşmüştür; 8A (62 → 70) ve 8B (58 → 66) yükselmiştir." data-nomsg="Yanlış. Doğru cevap: 8C. 8C&#x27;nin ortalaması 70&#x27;ten 68&#x27;e düşmüştür; 8A (62 → 70) ve 8B (58 → 66) yükselmiştir.">
+<div class="q-text"><svg viewBox="0 0 360 235" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Deneme sınavı ortalamaları" style="max-width:420px;width:100%;height:auto;display:block;margin:8px auto"><text x="180.0" y="12" font-size="11" font-weight="800" text-anchor="middle" fill="#221515">Deneme sınavı ortalamaları</text><line x1="40" y1="190.0" x2="350" y2="190.0" stroke="#f0dede"/><text x="36" y="193.0" font-size="9" text-anchor="end" fill="#8a6f6f">0</text><line x1="40" y1="147.5" x2="350" y2="147.5" stroke="#f0dede"/><text x="36" y="150.5" font-size="9" text-anchor="end" fill="#8a6f6f">20</text><line x1="40" y1="105.0" x2="350" y2="105.0" stroke="#f0dede"/><text x="36" y="108.0" font-size="9" text-anchor="end" fill="#8a6f6f">40</text><line x1="40" y1="62.5" x2="350" y2="62.5" stroke="#f0dede"/><text x="36" y="65.5" font-size="9" text-anchor="end" fill="#8a6f6f">60</text><line x1="40" y1="20.0" x2="350" y2="20.0" stroke="#f0dede"/><text x="36" y="23.0" font-size="9" text-anchor="end" fill="#8a6f6f">80</text><line x1="40" y1="190" x2="350" y2="190" stroke="#8a6f6f" stroke-width="1.5"/><line x1="40" y1="20" x2="40" y2="190" stroke="#8a6f6f" stroke-width="1.5"/><rect x="64.0" y="58.2" width="24.0" height="131.8" fill="#7a0e0e"/><text x="76.0" y="55.2" font-size="8.5" text-anchor="middle" fill="#221515" font-weight="700">62</text><rect x="90.0" y="41.2" width="24.0" height="148.8" fill="#2563eb"/><text x="102.0" y="38.2" font-size="8.5" text-anchor="middle" fill="#221515" font-weight="700">70</text><text x="90.0" y="204" font-size="10" text-anchor="middle" fill="#221515">8A</text><rect x="164.0" y="66.8" width="24.0" height="123.2" fill="#7a0e0e"/><text x="176.0" y="63.8" font-size="8.5" text-anchor="middle" fill="#221515" font-weight="700">58</text><rect x="190.0" y="49.8" width="24.0" height="140.2" fill="#2563eb"/><text x="202.0" y="46.8" font-size="8.5" text-anchor="middle" fill="#221515" font-weight="700">66</text><text x="190.0" y="204" font-size="10" text-anchor="middle" fill="#221515">8B</text><rect x="264.0" y="41.2" width="24.0" height="148.8" fill="#7a0e0e"/><text x="276.0" y="38.2" font-size="8.5" text-anchor="middle" fill="#221515" font-weight="700">70</text><rect x="290.0" y="45.5" width="24.0" height="144.5" fill="#2563eb"/><text x="302.0" y="42.5" font-size="8.5" text-anchor="middle" fill="#221515" font-weight="700">68</text><text x="290.0" y="204" font-size="10" text-anchor="middle" fill="#221515">8C</text><rect x="50" y="217" width="10" height="10" fill="#7a0e0e"/><text x="64" y="226" font-size="10" fill="#221515">1. sınav</text><rect x="130" y="217" width="10" height="10" fill="#2563eb"/><text x="144" y="226" font-size="10" fill="#221515">2. sınav</text></svg>Yukarıdaki sütun grafiğine göre hangi şubenin ortalaması 2. sınavda 1. sınava göre <b>düşmüştür</b>?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8A</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8B</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">8C</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hiçbiri</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! Mavi çizgi (Ayşe) kırmızı çizginin (Ali) üstünde olduğu haftalar 2. (31 &gt; 28) ve 4. (27 &gt; 25) haftalardır." data-nomsg="Yanlış. Doğru cevap: 2. ve 4. haftalarda. Mavi çizgi (Ayşe) kırmızı çizginin (Ali) üstünde olduğu haftalar 2. (31 &gt; 28) ve 4. (27 &gt; 25) haftalardır.">
+<div class="q-text"><svg viewBox="0 0 360 235" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Haftalık koşu süreleri (dakika)" style="max-width:420px;width:100%;height:auto;display:block;margin:8px auto"><text x="180.0" y="12" font-size="11" font-weight="800" text-anchor="middle" fill="#221515">Haftalık koşu süreleri (dakika)</text><line x1="40" y1="190.0" x2="350" y2="190.0" stroke="#f0dede"/><text x="36" y="193.0" font-size="9" text-anchor="end" fill="#8a6f6f">0</text><line x1="40" y1="161.7" x2="350" y2="161.7" stroke="#f0dede"/><text x="36" y="164.7" font-size="9" text-anchor="end" fill="#8a6f6f">6</text><line x1="40" y1="133.3" x2="350" y2="133.3" stroke="#f0dede"/><text x="36" y="136.3" font-size="9" text-anchor="end" fill="#8a6f6f">12</text><line x1="40" y1="105.0" x2="350" y2="105.0" stroke="#f0dede"/><text x="36" y="108.0" font-size="9" text-anchor="end" fill="#8a6f6f">18</text><line x1="40" y1="76.7" x2="350" y2="76.7" stroke="#f0dede"/><text x="36" y="79.7" font-size="9" text-anchor="end" fill="#8a6f6f">24</text><line x1="40" y1="48.3" x2="350" y2="48.3" stroke="#f0dede"/><text x="36" y="51.3" font-size="9" text-anchor="end" fill="#8a6f6f">30</text><line x1="40" y1="20.0" x2="350" y2="20.0" stroke="#f0dede"/><text x="36" y="23.0" font-size="9" text-anchor="end" fill="#8a6f6f">36</text><line x1="40" y1="190" x2="350" y2="190" stroke="#8a6f6f" stroke-width="1.5"/><line x1="40" y1="20" x2="40" y2="190" stroke="#8a6f6f" stroke-width="1.5"/><text x="50.0" y="204" font-size="10" text-anchor="middle" fill="#221515">1. hf</text><text x="122.5" y="204" font-size="10" text-anchor="middle" fill="#221515">2. hf</text><text x="195.0" y="204" font-size="10" text-anchor="middle" fill="#221515">3. hf</text><text x="267.5" y="204" font-size="10" text-anchor="middle" fill="#221515">4. hf</text><text x="340.0" y="204" font-size="10" text-anchor="middle" fill="#221515">5. hf</text><polyline points="50.0,48.3 122.5,57.8 195.0,62.5 267.5,71.9 340.0,76.7" fill="none" stroke="#7a0e0e" stroke-width="2.4"/><circle cx="50.0" cy="48.3" r="3.2" fill="#7a0e0e"/><circle cx="122.5" cy="57.8" r="3.2" fill="#7a0e0e"/><circle cx="195.0" cy="62.5" r="3.2" fill="#7a0e0e"/><circle cx="267.5" cy="71.9" r="3.2" fill="#7a0e0e"/><circle cx="340.0" cy="76.7" r="3.2" fill="#7a0e0e"/><polyline points="50.0,53.1 122.5,43.6 195.0,67.2 267.5,62.5 340.0,81.4" fill="none" stroke="#2563eb" stroke-width="2.4"/><circle cx="50.0" cy="53.1" r="3.2" fill="#2563eb"/><circle cx="122.5" cy="43.6" r="3.2" fill="#2563eb"/><circle cx="195.0" cy="67.2" r="3.2" fill="#2563eb"/><circle cx="267.5" cy="62.5" r="3.2" fill="#2563eb"/><circle cx="340.0" cy="81.4" r="3.2" fill="#2563eb"/><rect x="50" y="217" width="10" height="10" fill="#7a0e0e"/><text x="64" y="226" font-size="10" fill="#221515">Ali</text><rect x="95" y="217" width="10" height="10" fill="#2563eb"/><text x="109" y="226" font-size="10" fill="#221515">Ayşe</text></svg>Yukarıdaki çizgi grafiğine göre Ayşe'nin koşu süresi hangi haftalarda Ali'nin süresinden <b>fazladır</b>?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">1. ve 3. haftalarda</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2. ve 5. haftalarda</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Hiçbir haftada</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">2. ve 4. haftalarda</button>
+</div><div class="feedback"></div></div>
+
 
 <p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
 <div class="field-row"><span class="body-text" style="margin:0">Bir bütünün %25'ini gösteren daire diliminin merkez açısı:</span><input type="text" class="answer-input" id="fillA" placeholder="?"><button class="submit-btn" onclick="checkFill('fillA',90,'fbA')">Kontrol Et</button></div><div id="fbA" class="feedback"></div>
@@ -367,14 +450,17 @@ document.getElementById('pieA').addEventListener('input',updatePie);document.get
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
-{"q": "Bir sınıftaki 40 öğrencinin 14'ü servisle, 16'sı yürüyerek, 10'u bisikletle okula gelmektedir. Servisle gelenleri gösteren daire diliminin merkez açısı kaç derecedir?", "choices": ["144°", "90°", "126°", "108°"], "correct": 2, "expl": "14/40 × 360° = 126°"},
-{"q": "Bir daire grafiğinde mavi dilimin merkez açısı 72°'dir. Grafik toplam 45 kişiyi temsil ettiğine göre mavi dilim kaç kişiyi temsil eder?", "choices": ["9", "8", "10", "12"], "correct": 0, "expl": "72°/360° = 1/5 olduğundan 45'in 1/5'i 9'dur."},
-{"q": "Aşağıdaki verilerden hangisi çizgi grafiğiyle gösterilmeye daha uygundur?", "choices": ["Bir sınıftaki öğrencilerin göz renkleri", "Bir mağazanın aylara göre satış sayıları", "Bir grubun ulaşım türleri", "Bir kulüpteki öğrenci sayılarının kulüplere göre dağılımı"], "correct": 1, "expl": "Aylara göre satış sayıları zaman sırasına bağlı olduğundan değişimi çizgi grafiğiyle göstermek uygundur."},
-{"q": "Bir bütünün %35'ini gösteren daire diliminin merkez açısı kaç derecedir?", "choices": ["108°", "135°", "144°", "126°"], "correct": 3, "expl": "%35 × 360° = 126°"},
-{"q": "Bir sınıfta 15 öğrenci roman, 10 öğrenci bilimsel kitap ve 5 öğrenci şiir kitabı tercih ediyor. Çizilecek daire grafiğinde roman türünü tercih edenleri temsil eden daire diliminin merkez açısı kaç derece olmalıdır?", "choices": ["180°", "150°", "120°", "90°"], "correct": 0, "expl": "Toplam 30 öğrenci var. Roman sevenlerin oranı 15/30 = 1/2 olduğundan merkez açısı 360°'nin yarısı yani 180°'dir."},
-{"q": "Toplam 50 dairenin bulunduğu bir siteyi temsil eden daire grafiğinde merkez açısı 144° olan bir dilim, dairelerden kaç tanesini temsil eder?", "choices": ["15", "20", "18", "25"], "correct": 1, "expl": "144°/360° = 2/5 ve 50 × 2/5 = 20 daire"},
-{"q": "Aynı veri grubunu sütun ve daire grafiğiyle göstermek arasındaki temel fark aşağıdakilerden hangisidir?", "choices": ["Daire grafiği zaman değişimini, sütun grafiği yalnızca yüzdeleri gösterir.", "İki grafik aynı bilgiyi hiçbir fark olmadan gösterir.", "Sütun grafiğinde toplam yüzde 360, daire grafiğinde 100'dür.", "Sütun grafiği kategorileri karşılaştırmayı, daire grafiği bütündeki oranları daha belirgin göstermeyi sağlar."], "correct": 3, "expl": "Sütun grafiğinde kategorilerin değerleri doğrudan karşılaştırılır; daire grafiğinde her parçanın bütündeki oranı öne çıkar."},
-{"q": "Bir sınıfta anket yapılıyor ve öğrencilerin gitmeyi en fazla istedikleri üç şehir adı belirleniyor. Anket sonucunda, 14 kişinin İstanbul'a gitmek istediği ve 9 kişinin Ankara'ya gitmek istediği belirleniyor. Elde edilen sonuçları göstermek için çizilen daire grafikte İstanbul'a gitmek isteyenleri temsil eden daire diliminin merkez açısı 180° olduğuna göre, İzmir'e gitmek isteyen kaç kişi vardır?", "choices": ["3", "7", "5", "9"], "correct": 2, "expl": "Daire diliminin merkez açısı 180° olduğuna göre sınıfın yarısı İstanbul'a gitmek istiyor demektir; Sınıfın yarısı 14 öğrenci → Sınıfın tamamı: 28 öğrenci → 28 - (14 + 9) = 5 öğrenci"}
+{"q": "Bir sınıftaki 40 öğrencinin 14'ü servisle, 16'sı yürüyerek, 10'u bisikletle okula gelmektedir. Servisle gelenleri gösteren daire diliminin merkez açısı kaç derecedir?", "choices": ["126°", "144°", "90°", "108°"], "correct": 0, "expl": "14/40 × 360° = 126°"},
+{"q": "Bir daire grafiğinde mavi dilimin merkez açısı 72°'dir. Grafik toplam 45 kişiyi temsil ettiğine göre mavi dilim kaç kişiyi temsil eder?", "choices": ["8", "9", "10", "12"], "correct": 1, "expl": "72°/360° = 1/5 olduğundan 45'in 1/5'i 9'dur."},
+{"q": "Aşağıdaki verilerden hangisi çizgi grafiğiyle gösterilmeye daha uygundur?", "choices": ["Bir sınıftaki öğrencilerin göz renkleri", "Bir grubun ulaşım türleri", "Bir kulüpteki öğrenci sayılarının kulüplere göre dağılımı", "Bir mağazanın aylara göre satış sayıları"], "correct": 3, "expl": "Aylara göre satış sayıları zaman sırasına bağlı olduğundan değişimi çizgi grafiğiyle göstermek uygundur."},
+{"q": "Bir bütünün %35'ini gösteren daire diliminin merkez açısı kaç derecedir?", "choices": ["126°", "108°", "135°", "144°"], "correct": 0, "expl": "%35 × 360° = 126°"},
+{"q": "Bir sınıfta 15 öğrenci roman, 10 öğrenci bilimsel kitap ve 5 öğrenci şiir kitabı tercih ediyor. Çizilecek daire grafiğinde roman türünü tercih edenleri temsil eden daire diliminin merkez açısı kaç derece olmalıdır?", "choices": ["150°", "120°", "180°", "90°"], "correct": 2, "expl": "Toplam 30 öğrenci var. Roman sevenlerin oranı 15/30 = 1/2 olduğundan merkez açısı 360°'nin yarısı yani 180°'dir."},
+{"q": "Toplam 50 dairenin bulunduğu bir siteyi temsil eden daire grafiğinde merkez açısı 144° olan bir dilim, dairelerden kaç tanesini temsil eder?", "choices": ["15", "18", "25", "20"], "correct": 3, "expl": "144°/360° = 2/5 ve 50 × 2/5 = 20 daire"},
+{"q": "Aynı veri grubunu sütun ve daire grafiğiyle göstermek arasındaki temel fark aşağıdakilerden hangisidir?", "choices": ["Daire grafiği zaman değişimini, sütun grafiği yalnızca yüzdeleri gösterir.", "Sütun grafiği kategorileri karşılaştırmayı, daire grafiği bütündeki oranları daha belirgin göstermeyi sağlar.", "İki grafik aynı bilgiyi hiçbir fark olmadan gösterir.", "Sütun grafiğinde toplam yüzde 360, daire grafiğinde 100'dür."], "correct": 1, "expl": "Sütun grafiğinde kategorilerin değerleri doğrudan karşılaştırılır; daire grafiğinde her parçanın bütündeki oranı öne çıkar."},
+{"q": "Bir sınıfta anket yapılıyor ve öğrencilerin gitmeyi en fazla istedikleri üç şehir adı belirleniyor. Anket sonucunda, 14 kişinin İstanbul'a gitmek istediği ve 9 kişinin Ankara'ya gitmek istediği belirleniyor. Elde edilen sonuçları göstermek için çizilen daire grafikte İstanbul'a gitmek isteyenleri temsil eden daire diliminin merkez açısı 180° olduğuna göre, İzmir'e gitmek isteyen kaç kişi vardır?", "choices": ["3", "7", "5", "9"], "correct": 2, "expl": "Daire diliminin merkez açısı 180° olduğuna göre sınıfın yarısı İstanbul'a gitmek istiyor demektir; Sınıfın yarısı 14 öğrenci → Sınıfın tamamı: 28 öğrenci → 28 - (14 + 9) = 5 öğrenci"},
+{"q": "<svg viewBox=\"0 0 360 235\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Okunan yayın türüne göre öğrenci sayısı\" style=\"max-width:420px;width:100%;height:auto;display:block;margin:8px auto\"><text x=\"180.0\" y=\"12\" font-size=\"11\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#221515\">Okunan yayın türüne göre öğrenci sayısı</text><line x1=\"40\" y1=\"190.0\" x2=\"350\" y2=\"190.0\" stroke=\"#f0dede\"/><text x=\"36\" y=\"193.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">0</text><line x1=\"40\" y1=\"147.5\" x2=\"350\" y2=\"147.5\" stroke=\"#f0dede\"/><text x=\"36\" y=\"150.5\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">4</text><line x1=\"40\" y1=\"105.0\" x2=\"350\" y2=\"105.0\" stroke=\"#f0dede\"/><text x=\"36\" y=\"108.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">8</text><line x1=\"40\" y1=\"62.5\" x2=\"350\" y2=\"62.5\" stroke=\"#f0dede\"/><text x=\"36\" y=\"65.5\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">12</text><line x1=\"40\" y1=\"20.0\" x2=\"350\" y2=\"20.0\" stroke=\"#f0dede\"/><text x=\"36\" y=\"23.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">16</text><line x1=\"40\" y1=\"190\" x2=\"350\" y2=\"190\" stroke=\"#8a6f6f\" stroke-width=\"1.5\"/><line x1=\"40\" y1=\"20\" x2=\"40\" y2=\"190\" stroke=\"#8a6f6f\" stroke-width=\"1.5\"/><rect x=\"51.0\" y=\"62.5\" width=\"24.0\" height=\"127.5\" fill=\"#7a0e0e\"/><text x=\"63.0\" y=\"59.5\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">12</text><rect x=\"77.0\" y=\"105.0\" width=\"24.0\" height=\"85.0\" fill=\"#2563eb\"/><text x=\"89.0\" y=\"102.0\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">8</text><rect x=\"103.0\" y=\"136.9\" width=\"24.0\" height=\"53.1\" fill=\"#059669\"/><text x=\"115.0\" y=\"133.9\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">5</text><text x=\"90.0\" y=\"204\" font-size=\"10\" text-anchor=\"middle\" fill=\"#221515\">5. sınıf</text><rect x=\"151.0\" y=\"30.6\" width=\"24.0\" height=\"159.4\" fill=\"#7a0e0e\"/><text x=\"163.0\" y=\"27.6\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">15</text><rect x=\"177.0\" y=\"126.2\" width=\"24.0\" height=\"63.8\" fill=\"#2563eb\"/><text x=\"189.0\" y=\"123.2\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">6</text><rect x=\"203.0\" y=\"94.4\" width=\"24.0\" height=\"95.6\" fill=\"#059669\"/><text x=\"215.0\" y=\"91.4\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">9</text><text x=\"190.0\" y=\"204\" font-size=\"10\" text-anchor=\"middle\" fill=\"#221515\">6. sınıf</text><rect x=\"251.0\" y=\"94.4\" width=\"24.0\" height=\"95.6\" fill=\"#7a0e0e\"/><text x=\"263.0\" y=\"91.4\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">9</text><rect x=\"277.0\" y=\"83.8\" width=\"24.0\" height=\"106.2\" fill=\"#2563eb\"/><text x=\"289.0\" y=\"80.8\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">10</text><rect x=\"303.0\" y=\"73.1\" width=\"24.0\" height=\"116.9\" fill=\"#059669\"/><text x=\"315.0\" y=\"70.1\" font-size=\"8.5\" text-anchor=\"middle\" fill=\"#221515\" font-weight=\"700\">11</text><text x=\"290.0\" y=\"204\" font-size=\"10\" text-anchor=\"middle\" fill=\"#221515\">7. sınıf</text><rect x=\"50\" y=\"217\" width=\"10\" height=\"10\" fill=\"#7a0e0e\"/><text x=\"64\" y=\"226\" font-size=\"10\" fill=\"#221515\">Kitap</text><rect x=\"109\" y=\"217\" width=\"10\" height=\"10\" fill=\"#2563eb\"/><text x=\"123\" y=\"226\" font-size=\"10\" fill=\"#221515\">Dergi</text><rect x=\"168\" y=\"217\" width=\"10\" height=\"10\" fill=\"#059669\"/><text x=\"182\" y=\"226\" font-size=\"10\" fill=\"#221515\">Gazete</text></svg>Grafiğe göre gazete okuyan öğrenci sayısının <b>en fazla</b> olduğu sınıfta dergi okuyan kaç öğrenci vardır?", "choices": ["10", "6", "8", "11"], "correct": 0, "expl": "Gazete okuyan öğrenci sayısı en fazla 7. sınıftadır (11 öğrenci). Aynı sınıfta dergi okuyan öğrenci sayısı 10'dur."},
+{"q": "<svg viewBox=\"0 0 360 235\" xmlns=\"http://www.w3.org/2000/svg\" role=\"img\" aria-label=\"Günlük ekmek satışı (yüz adet)\" style=\"max-width:420px;width:100%;height:auto;display:block;margin:8px auto\"><text x=\"180.0\" y=\"12\" font-size=\"11\" font-weight=\"800\" text-anchor=\"middle\" fill=\"#221515\">Günlük ekmek satışı (yüz adet)</text><line x1=\"40\" y1=\"190.0\" x2=\"350\" y2=\"190.0\" stroke=\"#f0dede\"/><text x=\"36\" y=\"193.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">0</text><line x1=\"40\" y1=\"147.5\" x2=\"350\" y2=\"147.5\" stroke=\"#f0dede\"/><text x=\"36\" y=\"150.5\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">4</text><line x1=\"40\" y1=\"105.0\" x2=\"350\" y2=\"105.0\" stroke=\"#f0dede\"/><text x=\"36\" y=\"108.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">8</text><line x1=\"40\" y1=\"62.5\" x2=\"350\" y2=\"62.5\" stroke=\"#f0dede\"/><text x=\"36\" y=\"65.5\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">12</text><line x1=\"40\" y1=\"20.0\" x2=\"350\" y2=\"20.0\" stroke=\"#f0dede\"/><text x=\"36\" y=\"23.0\" font-size=\"9\" text-anchor=\"end\" fill=\"#8a6f6f\">16</text><line x1=\"40\" y1=\"190\" x2=\"350\" y2=\"190\" stroke=\"#8a6f6f\" stroke-width=\"1.5\"/><line x1=\"40\" y1=\"20\" x2=\"40\" y2=\"190\" stroke=\"#8a6f6f\" stroke-width=\"1.5\"/><text x=\"50.0\" y=\"204\" font-size=\"10\" text-anchor=\"middle\" fill=\"#221515\">Pzt</text><text x=\"122.5\" y=\"204\" font-size=\"10\" text-anchor=\"middle\" fill=\"#221515\">Sal</text><text x=\"195.0\" y=\"204\" font-size=\"10\" text-anchor=\"middle\" fill=\"#221515\">Çar</text><text x=\"267.5\" y=\"204\" font-size=\"10\" text-anchor=\"middle\" fill=\"#221515\">Per</text><text x=\"340.0\" y=\"204\" font-size=\"10\" text-anchor=\"middle\" fill=\"#221515\">Cum</text><polyline points=\"50.0,105.0 122.5,83.8 195.0,62.5 267.5,94.4 340.0,41.2\" fill=\"none\" stroke=\"#7a0e0e\" stroke-width=\"2.4\"/><circle cx=\"50.0\" cy=\"105.0\" r=\"3.2\" fill=\"#7a0e0e\"/><circle cx=\"122.5\" cy=\"83.8\" r=\"3.2\" fill=\"#7a0e0e\"/><circle cx=\"195.0\" cy=\"62.5\" r=\"3.2\" fill=\"#7a0e0e\"/><circle cx=\"267.5\" cy=\"94.4\" r=\"3.2\" fill=\"#7a0e0e\"/><circle cx=\"340.0\" cy=\"41.2\" r=\"3.2\" fill=\"#7a0e0e\"/><polyline points=\"50.0,126.2 122.5,94.4 195.0,73.1 267.5,62.5 340.0,83.8\" fill=\"none\" stroke=\"#2563eb\" stroke-width=\"2.4\"/><circle cx=\"50.0\" cy=\"126.2\" r=\"3.2\" fill=\"#2563eb\"/><circle cx=\"122.5\" cy=\"94.4\" r=\"3.2\" fill=\"#2563eb\"/><circle cx=\"195.0\" cy=\"73.1\" r=\"3.2\" fill=\"#2563eb\"/><circle cx=\"267.5\" cy=\"62.5\" r=\"3.2\" fill=\"#2563eb\"/><circle cx=\"340.0\" cy=\"83.8\" r=\"3.2\" fill=\"#2563eb\"/><polyline points=\"50.0,83.8 122.5,105.0 195.0,94.4 267.5,51.9 340.0,62.5\" fill=\"none\" stroke=\"#059669\" stroke-width=\"2.4\"/><circle cx=\"50.0\" cy=\"83.8\" r=\"3.2\" fill=\"#059669\"/><circle cx=\"122.5\" cy=\"105.0\" r=\"3.2\" fill=\"#059669\"/><circle cx=\"195.0\" cy=\"94.4\" r=\"3.2\" fill=\"#059669\"/><circle cx=\"267.5\" cy=\"51.9\" r=\"3.2\" fill=\"#059669\"/><circle cx=\"340.0\" cy=\"62.5\" r=\"3.2\" fill=\"#059669\"/><rect x=\"50\" y=\"217\" width=\"10\" height=\"10\" fill=\"#7a0e0e\"/><text x=\"64\" y=\"226\" font-size=\"10\" fill=\"#221515\">Market A</text><rect x=\"130\" y=\"217\" width=\"10\" height=\"10\" fill=\"#2563eb\"/><text x=\"144\" y=\"226\" font-size=\"10\" fill=\"#221515\">Market B</text><rect x=\"210\" y=\"217\" width=\"10\" height=\"10\" fill=\"#059669\"/><text x=\"224\" y=\"226\" font-size=\"10\" fill=\"#221515\">Market C</text></svg>Grafiğe göre Market A'nın satışı, <b>hem B hem de C marketinin</b> satışından fazla olan kaç gün vardır?", "choices": ["2", "4", "5", "3"], "correct": 3, "expl": "Salı (10 > 9 ve 10 > 8), Çarşamba (12 > 11 ve 12 > 9) ve Cuma (14 > 10 ve 14 > 12) günlerinde A en yüksektir: 3 gün."},
+{"q": "Bir sütun grafiğinde üç kategorinin değerleri 6, 9 ve 15'tir. Bu veriler daire grafiğiyle gösterilirse en büyük dilimin merkez açısı kaç derece olur?", "choices": ["150", "180", "200", "216"], "correct": 1, "expl": "Toplam 6 + 9 + 15 = 30'dur. En büyük değer 15'tir: 15/30 = 1/2 olduğundan merkez açı 360° × 1/2 = 180°'dir."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -414,5 +500,75 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* ÇOKLU ÇİZGİ GRAFİĞİ */
+
+(function(){
+var D=[[10,14,18,22,26,30],[20,18,24,21,28,26],[12,12,16,20,20,32]],N=['Okul A','Okul B','Okul C'],CO=['#7a0e0e','#2563eb','#059669'],on=[true,true,true];
+function Y(v){return 190-170*v/36;}
+function draw(){var dx=(360-70)/5,h='';
+ for(var v=0;v<=36;v+=6){h+='<line x1="40" y1="'+Y(v)+'" x2="350" y2="'+Y(v)+'" stroke="#f0dede"/><text x="36" y="'+(Y(v)+3)+'" font-size="9" text-anchor="end" fill="#8a6f6f">'+v+'</text>';}
+ h+='<line x1="40" y1="190" x2="350" y2="190" stroke="#8a6f6f" stroke-width="1.5"/><line x1="40" y1="20" x2="40" y2="190" stroke="#8a6f6f" stroke-width="1.5"/>';
+ for(var i=0;i<6;i++){h+='<text x="'+(50+dx*i)+'" y="204" font-size="10" text-anchor="middle" fill="#221515">'+(i+1)+'. hf</text>';}
+ for(var j=0;j<3;j++){if(!on[j])continue;var pts=D[j].map(function(v,i){return (50+dx*i)+','+Y(v);}).join(' ');
+  h+='<polyline points="'+pts+'" fill="none" stroke="'+CO[j]+'" stroke-width="2.4"/>';
+  D[j].forEach(function(v,i){h+='<circle cx="'+(50+dx*i)+'" cy="'+Y(v)+'" r="3.4" fill="'+CO[j]+'"/>';});}
+ var lx=50;for(var k=0;k<3;k++){h+='<rect x="'+lx+'" y="217" width="10" height="10" fill="'+CO[k]+'" opacity="'+(on[k]?1:.25)+'"/><text x="'+(lx+14)+'" y="226" font-size="10" fill="#221515">'+N[k]+'</text>';lx+=24+7*N[k].length;}
+ document.getElementById('clSvg').innerHTML=h;
+ for(var m=0;m<3;m++){document.getElementById('clC'+m).classList.toggle('active',on[m]);}}
+window.clTog=function(j){on[j]=!on[j];draw();};
+window.clAll=function(){on=[true,true,true];draw();};
+draw();})();
+
+
+/* VERİYİ DÖNÜŞTÜR */
+
+(function(){
+var DS=[
+ {t:'Bir sınıftaki 30 öğrencinin okula ulaşım şekli',c:['Yürüyerek','Servis','Bisiklet','Özel araç'],v:[12,9,3,6],part:true,time:false,unit:'öğrenci'},
+ {t:'Bir kentin aylık ortalama sıcaklığı (°C)',c:['Oca','Mar','May','Tem','Eyl','Kas'],v:[3,9,17,26,21,9],part:false,time:true,unit:'°C'},
+ {t:'Bir sınıftaki 40 öğrencinin en sevdiği ders',c:['Matematik','Fen','Türkçe','Beden E.'],v:[14,10,8,8],part:true,time:false,unit:'öğrenci'}];
+var CO=['#7a0e0e','#2563eb','#059669','#d97706','#7c3aed','#0891b2'];
+var ds=0,ty=0;
+function ymaxOf(v){var m=Math.max.apply(null,v);return Math.ceil(m/5)*5||5;}
+function sum(a){return a.reduce(function(x,y){return x+y;},0);}
+function msg(lines){var h='<rect x="20" y="20" width="320" height="200" rx="14" fill="#fff7e6" stroke="#d97706" stroke-width="2"/>';lines.forEach(function(l,i){h+='<text x="180" y="'+(95+i*22)+'" font-size="13" font-weight="800" text-anchor="middle" fill="#b45309">'+l+'</text>';});return h;}
+function draw(){
+ var d=DS[ds],n=d.v.length,ym=ymaxOf(d.v),h='';
+ document.getElementById('vdTitle').textContent=d.t;
+ var info='';
+ if(ty===0){
+  var gw=300/n,bw=Math.min(40,gw-14);
+  for(var v=0;v<=ym;v+=ym/5){var y=190-160*v/ym;h+='<line x1="40" y1="'+y+'" x2="350" y2="'+y+'" stroke="#f0dede"/><text x="36" y="'+(y+3)+'" font-size="9" text-anchor="end" fill="#8a6f6f">'+v+'</text>';}
+  h+='<line x1="40" y1="190" x2="350" y2="190" stroke="#8a6f6f" stroke-width="1.5"/><line x1="40" y1="30" x2="40" y2="190" stroke="#8a6f6f" stroke-width="1.5"/>';
+  d.v.forEach(function(v,i){var x=45+gw*i+(gw-bw)/2,y=190-160*v/ym;h+='<rect x="'+x+'" y="'+y+'" width="'+bw+'" height="'+(190-y)+'" fill="'+CO[i]+'"/><text x="'+(x+bw/2)+'" y="'+(y-4)+'" font-size="10" font-weight="800" text-anchor="middle" fill="#221515">'+v+'</text><text x="'+(x+bw/2)+'" y="206" font-size="9.5" text-anchor="middle" fill="#221515">'+d.c[i]+'</text>';});
+  info='<b>Sütun grafiği:</b> Değerleri birbiriyle <b>karşılaştırmak</b> kolaydır; hem kategorik hem zamana bağlı veriler için kullanılabilir. Bu veri için <b>uygundur</b>.';
+ } else if(ty===1){
+  if(!d.part){h=msg(['Bu veri için daire grafiği','uygun değildir.','Sıcaklıklar bir bütünün','parçaları değildir.']);
+   info='<b>Daire grafiği</b>, bir bütünün parçalarının <b>oranlarını</b> gösterir. Aylık sıcaklıklar bir bütünün parçaları olmadığı ve toplamlarının bir anlamı bulunmadığı için bu veri daire grafiğiyle gösterilmez.';}
+  else{var tot=sum(d.v),a0=0;
+   d.v.forEach(function(v,i){var a=v/tot*360,p1={x:120+95*Math.cos((a0-90)*Math.PI/180),y:125+95*Math.sin((a0-90)*Math.PI/180)},p2={x:120+95*Math.cos((a0+a-90)*Math.PI/180),y:125+95*Math.sin((a0+a-90)*Math.PI/180)};
+    h+='<path d="M120 125 L'+p1.x.toFixed(1)+' '+p1.y.toFixed(1)+' A95 95 0 '+(a>180?1:0)+' 1 '+p2.x.toFixed(1)+' '+p2.y.toFixed(1)+' Z" fill="'+CO[i]+'" stroke="#fff" stroke-width="2"/>';
+    var mid=(a0+a/2-90)*Math.PI/180;h+='<text x="'+(120+62*Math.cos(mid)).toFixed(1)+'" y="'+(125+62*Math.sin(mid)+4).toFixed(1)+'" font-size="11" font-weight="800" text-anchor="middle" fill="#fff">%'+Math.round(v/tot*100)+'</text>';
+    h+='<rect x="238" y="'+(60+i*26)+'" width="12" height="12" fill="'+CO[i]+'"/><text x="256" y="'+(70+i*26)+'" font-size="11" fill="#221515">'+d.c[i]+'</text>';a0+=a;});
+   info='<b>Daire grafiği:</b> Bir bütünün parçalarının <b>oranlarını</b> gösterir; her dilimin merkez açısı, o verinin bütün içindeki payıyla orantılıdır. Bu veri için <b>uygundur</b>.';}
+ } else {
+  if(!d.time){h=msg(['Bu veri için çizgi grafiği','uygun değildir.','Kategoriler arasında zamana','bağlı bir değişim yoktur.']);
+   info='<b>Çizgi grafiği</b>, bir değerin <b>zamanla değişimini</b> göstermek için kullanılır. Ulaşım şekilleri ya da dersler arasında bir sıra veya zaman ilişkisi olmadığı için noktaları çizgiyle birleştirmek anlamlı değildir.';}
+  else{var dx=290/(n-1);for(var v2=0;v2<=ym;v2+=ym/5){var y2=190-160*v2/ym;h+='<line x1="40" y1="'+y2+'" x2="350" y2="'+y2+'" stroke="#f0dede"/><text x="36" y="'+(y2+3)+'" font-size="9" text-anchor="end" fill="#8a6f6f">'+v2+'</text>';}
+   h+='<line x1="40" y1="190" x2="350" y2="190" stroke="#8a6f6f" stroke-width="1.5"/><line x1="40" y1="30" x2="40" y2="190" stroke="#8a6f6f" stroke-width="1.5"/>';
+   var pts=d.v.map(function(v,i){return (55+dx*i-10)+','+(190-160*v/ym);}).join(' ');
+   h+='<polyline points="'+pts+'" fill="none" stroke="#7a0e0e" stroke-width="2.6"/>';
+   d.v.forEach(function(v,i){var x=55+dx*i-10,y=190-160*v/ym;h+='<circle cx="'+x+'" cy="'+y+'" r="4" fill="#7a0e0e"/><text x="'+x+'" y="'+(y-8)+'" font-size="10" font-weight="800" text-anchor="middle" fill="#221515">'+v+'</text><text x="'+x+'" y="206" font-size="9.5" text-anchor="middle" fill="#221515">'+d.c[i]+'</text>';});
+   info='<b>Çizgi grafiği:</b> Zamana bağlı verilerde <b>artış, azalış ve eğilimi</b> göstermek için en uygun grafiktir. Bu veri için <b>uygundur</b>.';}}
+ document.getElementById('vdSvg').innerHTML=h;
+ document.getElementById('vdInfo').innerHTML=info;
+ var tb='<table class="mini-table"><tr><th>Kategori</th><th>Değer</th>'+(d.part?'<th>Oran</th><th>Merkez açı</th>':'')+'</tr>',tot2=sum(d.v);
+ d.v.forEach(function(v,i){tb+='<tr><td>'+d.c[i]+'</td><td>'+v+'</td>'+(d.part?'<td>'+v+'/'+tot2+' = %'+Math.round(v/tot2*100)+'</td><td>'+Math.round(v/tot2*360)+'°</td>':'')+'</tr>';});
+ document.getElementById('vdTbl').innerHTML=tb+'</table>';
+ for(var i=0;i<3;i++){document.getElementById('vdD'+i).classList.toggle('active',i===ds);document.getElementById('vdT'+i).classList.toggle('active',i===ty);}}
+window.vdSet=function(a,b){if(a>=0)ds=a;if(b>=0)ty=b;draw();};
+draw();})();
+
 </script>
 </body></html>

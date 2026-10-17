@@ -20,6 +20,9 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
 button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
+.gs-correct{background:rgba(5,150,105,.14)!important;border-color:#10b981!important;color:#047857!important}
+.gs-wrong{background:rgba(220,38,38,.12)!important;border-color:#ef4444!important;color:#b91c1c!important}
+
 </style>
 <script>window.MathJax={tex:{inlineMath:[['\\(','\\)']]},svg:{fontCache:'global'}};</script>
 <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js"></script>
@@ -32,6 +35,8 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab3">ÇARPMA-BÖLME</button>
 <button class="tab-btn" data-tab="tab4">TOPLAMA-ÇIKARMA</button>
 <button class="tab-btn" data-tab="tab5">ONDALIK & GERÇEK SAYILAR</button>
+<button class="tab-btn" data-tab="tabKokIci">KÖK İÇİNE ALMA</button>
+<button class="tab-btn" data-tab="tabGercek">GERÇEK SAYILAR</button>
 <button class="tab-btn" data-tab="tab6">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab7">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab8">ÖZET</button>
@@ -210,6 +215,47 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div>
 </section>
 
+<section class="tab-panel" id="tabKokIci">
+<div class="card"><div class="card-title"><div class="icon">📥</div>Katsayıyı Kök İçine Alma</div>
+<p class="body-text">Kök dışındaki katsayı, <b>karesi alınarak</b> kök içine yazılabilir:</p>
+<div class="gen-box">\( a\sqrt{b}=\sqrt{a^{2}\cdot b} \) &nbsp; (a ≥ 0, b ≥ 0)</div>
+<ul class="step-list"><li>Katsayının <b>karesini</b> alın (a yerine a²).</li><li>Bu sayıyı kökün içindeki sayıyla <b>çarpın</b>.</li><li>Sonucu <b>tek bir kök</b> altında yazın.</li></ul>
+<p class="body-text"><b>Deneyin:</b> katsayıyı ve kök içindeki sayıyı seçin.</p>
+<div class="two-col">
+<div class="slider-wrap"><div class="slider-label"><span>Katsayı (a)</span><span id="kiAOut">3</span></div><input type="range" id="kiA" min="1" max="9" step="1" value="3"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Kök içindeki sayı (b)</span><span id="kiBOut">2</span></div><input type="range" id="kiB" min="0" max="6" step="1" value="0"></div>
+</div>
+<div class="result-strip"><div class="result-pill" style="flex:2"><div class="lbl">Katsayıyı kök içine alma</div><div class="val" id="kiRes" style="font-size:1rem">—</div></div></div>
+<div class="result-strip"><div class="result-pill" style="flex:2"><div class="lbl">Kök dışına çıkarma (tersi)</div><div class="val" id="kiRev" style="font-size:1rem">—</div></div><div class="result-pill"><div class="lbl">Sayısal kontrol</div><div class="val" id="kiNum" style="font-size:.95rem">—</div></div></div>
+<div class="tip-box">Kök dışına çıkarma işlemi bunun tersidir: kök içindeki sayıyı <b>tam kare bir çarpan</b> ile diğer çarpanın çarpımı olarak yazın; tam kare çarpanın karekökünü kök dışına alın. Örneğin √75 = √(25 · 3) = 5√3.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">✍️</div>Siz Yapın</div>
+<p class="body-text">Üç işlemi yapın. Her işlem için yalnızca bir cevap hakkınız vardır; cevap verince doğru sonuç ve çözüm görünür.</p>
+<div class="field-row"><span class="body-text" style="margin:0">\( 5\sqrt{3}=\sqrt{\ ?\ } \)</span><input type="text" class="answer-input" id="kiF1" style="width:90px"><button class="submit-btn" id="kiB1" onclick="kiChk(1)">Kontrol Et</button></div><div class="feedback" id="kiFb1"></div>
+<div class="field-row"><span class="body-text" style="margin:0">\( 2\sqrt{7}=\sqrt{\ ?\ } \)</span><input type="text" class="answer-input" id="kiF2" style="width:90px"><button class="submit-btn" id="kiB2" onclick="kiChk(2)">Kontrol Et</button></div><div class="feedback" id="kiFb2"></div>
+<div class="field-row"><span class="body-text" style="margin:0">\( \sqrt{72}=\ ?\ \sqrt{2} \)</span><input type="text" class="answer-input" id="kiF3" style="width:90px"><button class="submit-btn" id="kiB3" onclick="kiChk(3)">Kontrol Et</button></div><div class="feedback" id="kiFb3"></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tabGercek">
+<div class="card"><div class="card-title"><div class="icon">🌐</div>Gerçek Sayılar: ℕ ⊂ ℤ ⊂ ℚ ve İrrasyonel Sayılar</div>
+<p class="body-text">Bütün <b>rasyonel</b> sayılarla bütün <b>irrasyonel</b> sayıların birleşimi <b>gerçek sayılar kümesini</b> (ℝ) oluşturur. Rasyonel sayılar iki tam sayının oranı (a/b, b ≠ 0) olarak yazılabilir; irrasyonel sayılar yazılamaz. Rasyonel sayıların ondalık gösterimi ya <b>biter</b> ya da <b>devreder</b>; irrasyonel sayıların ondalık gösterimi ne biter ne devreder.</p>
+<div class="svg-wrap" style="max-width:460px"><svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sayı kümeleri şeması">
+<ellipse cx="200" cy="130" rx="195" ry="122" fill="#fdf1f1" stroke="#7a0e0e" stroke-width="2.4"/><text x="200" y="32" font-size="13" font-weight="800" text-anchor="middle" fill="#7a0e0e">Gerçek Sayılar (ℝ)</text>
+<ellipse cx="150" cy="150" rx="135" ry="95" fill="#eaf2ff" stroke="#2563eb" stroke-width="2.2"/><text x="150" y="82" font-size="12" font-weight="800" text-anchor="middle" fill="#1d4ed8">Rasyonel Sayılar (ℚ)</text>
+<ellipse cx="135" cy="165" rx="95" ry="62" fill="#eafaf3" stroke="#059669" stroke-width="2.2"/><text x="135" y="126" font-size="12" font-weight="800" text-anchor="middle" fill="#047857">Tam Sayılar (ℤ)</text>
+<ellipse cx="120" cy="180" rx="50" ry="28" fill="#fff7e6" stroke="#d97706" stroke-width="2.2"/><text x="120" y="177" font-size="12" font-weight="800" text-anchor="middle" fill="#b45309">Doğal (ℕ)</text><text x="120" y="192" font-size="10" text-anchor="middle" fill="#b45309">0, 1, 2, 3 …</text>
+<text x="135" y="216" font-size="10" text-anchor="middle" fill="#047857">−3, −2, −1 …</text>
+<text x="258" y="158" font-size="10.5" text-anchor="middle" fill="#1d4ed8">3/5</text><text x="258" y="172" font-size="10.5" text-anchor="middle" fill="#1d4ed8">0,25</text><text x="258" y="186" font-size="10.5" text-anchor="middle" fill="#1d4ed8">1,333…</text>
+<text x="340" y="122" font-size="12" font-weight="800" text-anchor="middle" fill="#7a0e0e">İrrasyonel</text><text x="340" y="140" font-size="11" text-anchor="middle" fill="#7a0e0e">√2, √10, π …</text></svg></div>
+<div class="tip-box">Önemli: Her doğal sayı bir tam sayı, her tam sayı bir rasyonel sayıdır. Örneğin 7 = 7/1. Karekökü tam sayı çıkan sayılar (√49 = 7, √0,16 = 0,4) rasyoneldir; tam kare olmayanların karekökü ise irrasyoneldir. Her rasyonel sayı ile her irrasyonel sayı da bir gerçek sayıdır.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🗂️</div>Sayıları Sınıflayın</div>
+<p class="body-text">Her sayı için <b>en dar kümeyi</b> seçin. Her sayıda yalnızca bir cevap hakkınız vardır.</p>
+<div id="gsList"></div><div class="feedback" id="gsFin"></div>
+</div>
+</section>
+
 <section class="tab-panel" id="tab6">
 <div class="card"><div class="card-title"><div class="icon">✏️</div>Çözümlü örnekler</div>
 
@@ -284,8 +330,8 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="q-card" data-okmsg="Doğru! \(98 = 49\times2\) olduğundan \(\sqrt{98} = \sqrt{49}\times\sqrt{2} = 7\sqrt{2}\)." data-nomsg="Yanlış. Doğru cevap: \(7\sqrt{2}\). \(98 = 49\times2\) olduğundan \(\sqrt{98} = \sqrt{49}\times\sqrt{2} = 7\sqrt{2}\).">
 <div class="q-text">1) \(\sqrt{98}\) ifadesinin a√b biçimindeki sadeleştirilmiş hâli hangisidir?</div>
 <div class="choices">
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(49\sqrt{2}\)</button>
 <button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(7\sqrt{2}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(49\sqrt{2}\)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(2\sqrt{7}\)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(14\sqrt{2}\)</button>
 </div><div class="feedback"></div></div>
@@ -293,11 +339,39 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="q-card" data-okmsg="Doğru! \(45\times5=225\) ve \(\sqrt{225}=15\)." data-nomsg="Yanlış. Doğru cevap: 15. \(45\times5=225\) ve \(\sqrt{225}=15\).">
 <div class="q-text">2) \(\sqrt{45}\times\sqrt{5}\) işleminin sonucu kaçtır?</div>
 <div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">15</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(9\sqrt{5}\)</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">225</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">15</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">50</button>
 </div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! a√b = √(a²·b) olduğundan 3√5 = √(3² · 5) = √(9 · 5) = √45." data-nomsg="Yanlış. Doğru cevap: \(\sqrt{45}\). a√b = √(a²·b) olduğundan 3√5 = √(3² · 5) = √(9 · 5) = √45.">
+<div class="q-text">\(3\sqrt{5}\) ifadesinde katsayı kök içine alınırsa hangisi elde edilir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(\sqrt{45}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(\sqrt{15}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(\sqrt{75}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(\sqrt{30}\)</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! √0,25 = 0,5 ve √1,44 = 1,2 rasyoneldir; 22/7 iki tam sayının oranıdır. √0,2 = √(2/10) olduğundan kesrin payı ve paydası birlikte tam kare olmadığından irrasyonel sayıdır." data-nomsg="Yanlış. Doğru cevap: \(\sqrt{0{,}2}\). √0,25 = 0,5 ve √1,44 = 1,2 rasyoneldir; 22/7 iki tam sayının oranıdır. √0,2 = √(2/10) olduğundan kesrin payı ve paydası birlikte tam kare olmadığından irrasyonel sayıdır.">
+<div class="q-text">Aşağıdakilerden hangisi <b>irrasyonel</b> sayıdır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(\sqrt{0{,}25}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(\sqrt{1{,}44}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(\dfrac{22}{7}\)</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(\sqrt{0{,}2}\)</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! √20 = √(4 · 5) = 2√5 olduğundan 3√5 − 2√5 = (3 − 2)√5 = √5." data-nomsg="Yanlış. Doğru cevap: \(\sqrt{5}\). √20 = √(4 · 5) = 2√5 olduğundan 3√5 − 2√5 = (3 − 2)√5 = √5.">
+<div class="q-text">\(3\sqrt{5}-\sqrt{20}\) işleminin sonucu kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(5\sqrt{5}\)</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">\(\sqrt{5}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(\sqrt{15}\)</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">\(2\sqrt{5}\)</button>
+</div><div class="feedback"></div></div>
+
 
 <p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
 <div class="field-row"><span class="body-text" style="margin:0">\(\sqrt{1,21}\) değeri (virgülle yazınız):</span><input type="text" class="answer-input" id="fillDec2" placeholder="?"><button class="submit-btn" onclick="checkFillDecimal('fillDec2',1.1,'fbDec2')">Kontrol Et</button></div>
@@ -566,13 +640,18 @@ updateSum();
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
-{"q": "\\(\\sqrt{180}\\) ifadesinin a√b biçimindeki sadeleştirilmiş hâli hangisidir?", "choices": ["\\(36\\sqrt{5}\\)", "\\(5\\sqrt{6}\\)", "\\(9\\sqrt{20}\\)", "\\(6\\sqrt{5}\\)"], "correct": 3, "expl": "180 = 36×5, 36 bir tam kare olduğundan \\(\\sqrt{180} = \\sqrt{36}\\times\\sqrt{5} = 6\\sqrt{5}\\)."},
-{"q": "\\(\\sqrt{12}\\times\\sqrt{3}\\) işleminin sonucu kaçtır?", "choices": ["36", "15", "6", "9"], "correct": 2, "expl": "\\(\\sqrt{12}\\times\\sqrt{3} = \\sqrt{12\\times3} = \\sqrt{36} = 6\\)."},
-{"q": "\\(2\\sqrt{3} + 5\\sqrt{3}\\) toplamının sonucu nedir?", "choices": ["\\(7\\sqrt{3}\\)", "\\(10\\sqrt{3}\\)", "\\(7\\sqrt{6}\\)", "\\(3\\sqrt{3}\\)"], "correct": 0, "expl": "Benzer kareköklü ifadelerde yalnızca katsayılar toplanır: 2+5=7, sonuç \\(7\\sqrt{3}\\)."},
-{"q": "\\(\\sqrt{0,36}\\) değeri kaçtır?", "choices": ["3,6", "0,18", "6", "0,6"], "correct": 3, "expl": "\\(0,36 = \\dfrac{36}{100}\\) olduğundan \\(\\sqrt{0,36} = \\dfrac{6}{10} = 0,6\\)."},
-{"q": "\\(\\sqrt{50}\\) sayısı hangi iki doğal sayı arasındadır?", "choices": ["6 ile 7 arasında", "8 ile 9 arasında", "7 ile 8 arasında", "5 ile 6 arasında"], "correct": 2, "expl": "49 = 7² &lt; 50 &lt; 64 = 8² olduğundan \\(\\sqrt{50}\\), 7 ile 8 arasındadır."},
-{"q": "Aşağıdakilerden hangisi bir irrasyonel sayıdır?", "choices": ["\\(\\sqrt{7}\\)", "\\(\\sqrt{16}\\)", "0,75", "\\(\\dfrac{22}{7}\\)"], "correct": 0, "expl": "\\(\\sqrt{16} = 4\\) ve 0,75 ile \\(\\dfrac{22}{7}\\) birer rasyonel sayıdır; 7 bir tam kare olmadığından \\(\\sqrt{7}\\) irrasyoneldir."},
-{"q": "\\(\\dfrac{1}{\\sqrt{2}}\\) ifadesinin rasyonelleştirilmiş hâli hangisidir?", "choices": ["\\(\\dfrac{1}{2}\\)", "\\(\\dfrac{\\sqrt{2}}{2}\\)", "\\(\\sqrt{2}\\)", "\\(2\\sqrt{2}\\)"], "correct": 1, "expl": "Pay ve payda √2 ile çarpılırsa payda 2 olur: \\(\\dfrac{1}{\\sqrt{2}} = \\dfrac{\\sqrt{2}}{2}\\)."}
+{"q": "\\(\\sqrt{180}\\) ifadesinin a√b biçimindeki sadeleştirilmiş hâli hangisidir?", "choices": ["\\(6\\sqrt{5}\\)", "\\(36\\sqrt{5}\\)", "\\(5\\sqrt{6}\\)", "\\(9\\sqrt{20}\\)"], "correct": 0, "expl": "180 = 36×5, 36 bir tam kare olduğundan \\(\\sqrt{180} = \\sqrt{36}\\times\\sqrt{5} = 6\\sqrt{5}\\)."},
+{"q": "\\(\\sqrt{12}\\times\\sqrt{3}\\) işleminin sonucu kaçtır?", "choices": ["36", "15", "9", "6"], "correct": 3, "expl": "\\(\\sqrt{12}\\times\\sqrt{3} = \\sqrt{12\\times3} = \\sqrt{36} = 6\\)."},
+{"q": "\\(2\\sqrt{3} + 5\\sqrt{3}\\) toplamının sonucu nedir?", "choices": ["\\(10\\sqrt{3}\\)", "\\(7\\sqrt{3}\\)", "\\(7\\sqrt{6}\\)", "\\(3\\sqrt{3}\\)"], "correct": 1, "expl": "Benzer kareköklü ifadelerde yalnızca katsayılar toplanır: 2+5=7, sonuç \\(7\\sqrt{3}\\)."},
+{"q": "\\(\\sqrt{0,36}\\) değeri kaçtır?", "choices": ["3,6", "0,18", "0,6", "6"], "correct": 2, "expl": "\\(0,36 = \\dfrac{36}{100}\\) olduğundan \\(\\sqrt{0,36} = \\dfrac{6}{10} = 0,6\\)."},
+{"q": "\\(\\sqrt{50}\\) sayısı hangi iki doğal sayı arasındadır?", "choices": ["7 ile 8 arasında", "6 ile 7 arasında", "8 ile 9 arasında", "5 ile 6 arasında"], "correct": 0, "expl": "49 = 7² &lt; 50 &lt; 64 = 8² olduğundan \\(\\sqrt{50}\\), 7 ile 8 arasındadır."},
+{"q": "Aşağıdakilerden hangisi bir irrasyonel sayıdır?", "choices": ["\\(\\sqrt{16}\\)", "0,75", "\\(\\sqrt{7}\\)", "\\(\\dfrac{22}{7}\\)"], "correct": 2, "expl": "\\(\\sqrt{16} = 4\\) ve 0,75 ile \\(\\dfrac{22}{7}\\) birer rasyonel sayıdır; 7 bir tam kare olmadığından \\(\\sqrt{7}\\) irrasyoneldir."},
+{"q": "\\(\\dfrac{1}{\\sqrt{2}}\\) ifadesinin rasyonelleştirilmiş hâli hangisidir?", "choices": ["\\(\\dfrac{1}{2}\\)", "\\(\\sqrt{2}\\)", "\\(2\\sqrt{2}\\)", "\\(\\dfrac{\\sqrt{2}}{2}\\)"], "correct": 3, "expl": "Pay ve payda √2 ile çarpılırsa payda 2 olur: \\(\\dfrac{1}{\\sqrt{2}} = \\dfrac{\\sqrt{2}}{2}\\)."},
+{"q": "\\(\\sqrt{98}\\) sayısı \\(a\\sqrt{2}\\) biçiminde yazılırsa \\(a\\) kaç olur?", "choices": ["14", "7", "49", "9"], "correct": 1, "expl": "98 = 49 · 2 olduğundan √98 = √49 · √2 = 7√2. Yani a = 7."},
+{"q": "\\(4\\sqrt{3}\\) sayısı kök içine alınırsa aşağıdakilerden hangisi elde edilir?", "choices": ["\\(\\sqrt{48}\\)", "\\(\\sqrt{12}\\)", "\\(\\sqrt{24}\\)", "\\(\\sqrt{64}\\)"], "correct": 0, "expl": "4√3 = √(4² · 3) = √(16 · 3) = √48."},
+{"q": "\\(\\sqrt{6{,}4}\\) sayısı için aşağıdakilerden hangisi doğrudur?", "choices": ["Rasyonel sayıdır; çünkü ondalık gösterimi vardır.", "İrrasyonel sayıdır; çünkü 6,4 kesir olarak yazılınca payı ve paydası birlikte tam kare olmaz.", "Tam sayıdır.", "\\(\\sqrt{6{,}4}=0{,}8\\)'dir."], "correct": 1, "expl": "6,4 = 64/10 = 32/5 kesridir; 32 ve 5 tam kare olmadığından √6,4 iki tam sayının oranı olarak yazılamaz: irrasyonel sayıdır."},
+{"q": "\\(\\sqrt{20}\\) sayısı hangi iki ardışık doğal sayı arasındadır ve hangisine daha yakındır?", "choices": ["4 ile 5 arasında, 5'e daha yakın", "3 ile 4 arasında, 4'e daha yakın", "5 ile 6 arasında, 5'e daha yakın", "4 ile 5 arasında, 4'e daha yakın"], "correct": 3, "expl": "16 < 20 < 25 olduğundan 4 < √20 < 5. 20 sayısı 16'ya (fark 4), 25'e (fark 5) göre 16'ya daha yakındır; √20 sayısı 4'e daha yakındır (yaklaşık 4,47)."},
+{"q": "\\(\\sqrt{18}\\) ile çarpıldığında sonucu doğal sayı yapan çarpan aşağıdakilerden hangisidir?", "choices": ["\\(\\sqrt{3}\\)", "2", "\\(\\sqrt{2}\\)", "3"], "correct": 2, "expl": "√18 = 3√2 olduğundan √2 ile çarpılırsa 3√2 · √2 = 3 · 2 = 6 doğal sayısı bulunur."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -614,5 +693,48 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* KÖK İÇİNE ALMA */
+
+(function(){
+var BS=[2,3,5,6,7,10,11];
+function fm(x){return String(Math.round(x*1000)/1000).replace('.',',');}
+function tsm(el){if(window.MathJax&&MathJax.typesetPromise){MathJax.typesetPromise([el]).catch(function(){});}}
+function upd(){
+ var a=parseInt(document.getElementById('kiA').value,10),b=BS[parseInt(document.getElementById('kiB').value,10)];
+ document.getElementById('kiAOut').textContent=a;document.getElementById('kiBOut').textContent=b;
+ var N=a*a*b,r=document.getElementById('kiRes');
+ r.innerHTML='\\('+a+'\\sqrt{'+b+'}=\\sqrt{'+a+'^{2}\\cdot '+b+'}=\\sqrt{'+(a*a)+'\\cdot '+b+'}=\\sqrt{'+N+'}\\)';
+ var v=document.getElementById('kiRev');
+ v.innerHTML='\\(\\sqrt{'+N+'}=\\sqrt{'+(a*a)+'\\cdot '+b+'}='+a+'\\sqrt{'+b+'}\\)';
+ document.getElementById('kiNum').textContent=fm(a*Math.sqrt(b))+' ≈ '+fm(Math.sqrt(N));
+ tsm(r);tsm(v);}
+document.getElementById('kiA').addEventListener('input',upd);document.getElementById('kiB').addEventListener('input',upd);upd();
+var ANS={1:[75,'5² · 3 = 25 · 3 = 75 olduğundan 5√3 = √75.'],2:[28,'2² · 7 = 4 · 7 = 28 olduğundan 2√7 = √28.'],3:[6,'72 = 36 · 2 olduğundan √72 = √36 · √2 = 6√2.']};
+window.kiChk=function(i){var inp=document.getElementById('kiF'+i),fb=document.getElementById('kiFb'+i);
+ if(inp.value.trim()===''){fb.className='feedback show no';fb.textContent='Önce cevabınızı yazın.';return;}
+ var ok=Number(inp.value.trim().replace(',','.'))===ANS[i][0];
+ fb.className='feedback show '+(ok?'ok':'no');fb.textContent=(ok?'Doğru! ':'Yanlış. Doğru cevap: '+ANS[i][0]+'. ')+ANS[i][1];
+ inp.disabled=true;document.getElementById('kiB'+i).disabled=true;};
+})();
+
+
+/* GERÇEK SAYILAR */
+
+(function(){
+var CAT=['Doğal sayı','Tam sayı (doğal sayı değil)','Rasyonel sayı (tam sayı değil)','İrrasyonel sayı'];
+var IT=[['3/5',2,'3/5 iki tam sayının oranıdır ve tam sayı değildir: rasyonel sayıdır.'],['√10',3,'10 tam kare olmadığından √10 irrasyonel sayıdır (ondalık gösterimi ne biter ne devreder).'],['7',0,'7 bir doğal sayıdır (aynı zamanda tam ve rasyoneldir; en dar küme doğal sayılardır).'],['−√9',1,'√9 = 3 olduğundan −√9 = −3 bir tam sayıdır; doğal sayı değildir.'],['π',3,'π, tam sayıların oranı olarak yazılamaz: irrasyonel sayıdır.'],['√0,16',2,'√0,16 = 0,4 = 2/5 olduğundan rasyonel sayıdır (tam sayı değildir).'],['−4',1,'−4 bir tam sayıdır; doğal sayı değildir.'],['√49',0,'√49 = 7 olduğundan doğal sayıdır.']];
+var done=0,score=0;
+function build(){var h='<table class="mini-table"><tr><th>Sayı</th><th colspan="4">En dar küme</th></tr>';
+ IT.forEach(function(it,i){h+='<tr id="gsR'+i+'"><td style="font-weight:800;font-size:1.05rem">'+it[0]+'</td>';CAT.forEach(function(c,k){h+='<td><button class="chip-btn" style="font-size:.74rem;padding:6px 9px" onclick="gsPick('+i+','+k+')">'+c+'</button></td>';});h+='</tr><tr id="gsE'+i+'" style="display:none"><td colspan="5" id="gsX'+i+'" style="text-align:left;font-size:.88rem"></td></tr>';});
+ document.getElementById('gsList').innerHTML=h+'</table>';}
+window.gsPick=function(i,k){var row=document.getElementById('gsR'+i);if(row.dataset.done)return;row.dataset.done='1';
+ var ok=(k===IT[i][1]);if(ok)score++;done++;
+ var bs=row.querySelectorAll('button');bs.forEach(function(b,j){b.disabled=true;b.classList.remove('active');if(j===IT[i][1])b.classList.add('gs-correct');if(j===k&&!ok)b.classList.add('gs-wrong');});
+ var x=document.getElementById('gsX'+i);document.getElementById('gsE'+i).style.display='table-row';
+ x.style.color=ok?'#047857':'#b91c1c';x.textContent=(ok?'Doğru! ':'Yanlış. Doğru cevap: '+CAT[IT[i][1]]+'. ')+IT[i][2];
+ if(done===IT.length){var fb=document.getElementById('gsFin');fb.className='feedback show '+(score>=6?'ok':'no');fb.textContent='Etkinlik tamamlandı. Doğru sayınız: '+score+' / '+IT.length+'.';}};
+build();})();
+
 </script>
 </body></html>

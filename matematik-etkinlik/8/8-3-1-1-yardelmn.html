@@ -30,6 +30,8 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab2">AÇIORTAY</button>
 <button class="tab-btn" data-tab="tab3">YÜKSEKLİK</button>
 <button class="tab-btn" data-tab="tab4">ÖZEL ÜÇGENLER</button>
+<button class="tab-btn" data-tab="tabKatlama">KATLAMA İLE İNŞA</button>
+<button class="tab-btn" data-tab="tabPergel">PERGEL-CETVEL İNŞASI</button>
 <button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab7">ÖZET</button>
@@ -117,6 +119,26 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="result-pill"><div class="lbl">|AM|</div><div class="val" id="dtAM">—</div></div>
 <div class="result-pill"><div class="lbl">|BM|</div><div class="val" id="dtBM">—</div></div>
 </div>
+</div>
+</section>
+
+<section class="tab-panel" id="tabKatlama">
+<div class="card"><div class="card-title"><div class="icon">🧻</div>Katlama ile İnşa</div>
+<p class="body-text">Bir kâğıt üçgen hazırlayın ve aşağıdaki adımları kendi kâğıdınızda uygulayın. Şekilde kıvrım izleri kesikli çizgiyle, bulunan eleman düz çizgiyle gösterilir.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="chip-btn active" id="kiCk" onclick="kiSel('k')">KENARORTAY</button><button class="chip-btn" id="kiCa" onclick="kiSel('a')">AÇIORTAY</button><button class="chip-btn" id="kiCy" onclick="kiSel('y')">YÜKSEKLİK</button></div>
+<div class="svg-wrap" style="max-width:420px"><svg id="kiSvg" viewBox="0 0 360 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Katlama ile İnşa"></svg></div>
+<div class="note-box" id="kiTxt" style="min-height:3.2em"></div>
+<div class="field-row" style="justify-content:center"><button class="ghost-btn" id="kiPrev" onclick="kiPrev()">ÖNCEKİ</button><span class="body-text" id="kiCnt" style="margin:0;font-weight:800;color:var(--primary)"></span><button class="submit-btn" id="kiNext" onclick="kiNext()">SONRAKİ</button></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tabPergel">
+<div class="card"><div class="card-title"><div class="icon">📐</div>Pergel ve Cetvel ile İnşa</div>
+<p class="body-text">Aşağıdaki adımları kendi defterinizde pergel ve cetvelle uygulayın. Yaylar turuncu, yardımcı doğrular kesikli, bulunan eleman düz çizgiyle gösterilir.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="chip-btn active" id="pcCk" onclick="pcSel('k')">KENARORTAY</button><button class="chip-btn" id="pcCa" onclick="pcSel('a')">AÇIORTAY</button><button class="chip-btn" id="pcCy" onclick="pcSel('y')">YÜKSEKLİK</button></div>
+<div class="svg-wrap" style="max-width:420px"><svg id="pcSvg" viewBox="0 0 360 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pergel ve Cetvel ile İnşa"></svg></div>
+<div class="note-box" id="pcTxt" style="min-height:3.2em"></div>
+<div class="field-row" style="justify-content:center"><button class="ghost-btn" id="pcPrev" onclick="pcPrev()">ÖNCEKİ</button><span class="body-text" id="pcCnt" style="margin:0;font-weight:800;color:var(--primary)"></span><button class="submit-btn" id="pcNext" onclick="pcNext()">SONRAKİ</button></div>
 </div>
 </section>
 
@@ -490,5 +512,79 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* KATLAMA İLE İNŞA */
+
+(function(){
+var A={x:130,y:40},B={x:40,y:250},C={x:320,y:250};
+function d(p,q){return Math.hypot(q.x-p.x,q.y-p.y);}
+function ang(c,p){return Math.atan2(-(p.y-c.y),p.x-c.x)*180/Math.PI;}
+function pt(c,r,t){t=t*Math.PI/180;return {x:c.x+r*Math.cos(t),y:c.y-r*Math.sin(t)};}
+function arc(c,r,a1,a2,col,dash){var p1=pt(c,r,a1),p2=pt(c,r,a2),big=Math.abs(a2-a1)>180?1:0,sw=a2>a1?0:1;return '<path d="M'+p1.x.toFixed(1)+' '+p1.y.toFixed(1)+' A'+r+' '+r+' 0 '+big+' '+sw+' '+p2.x.toFixed(1)+' '+p2.y.toFixed(1)+'" fill="none" stroke="'+(col||'#d97706')+'" stroke-width="2.2"'+(dash?' stroke-dasharray="5 4"':'')+'/>';}
+function L(p,q,col,w,dash){return '<line x1="'+p.x.toFixed(1)+'" y1="'+p.y.toFixed(1)+'" x2="'+q.x.toFixed(1)+'" y2="'+q.y.toFixed(1)+'" stroke="'+col+'" stroke-width="'+(w||2)+'"'+(dash?' stroke-dasharray="6 4"':'')+' stroke-linecap="round"/>';}
+function T(p,s,col,dx,dy){return '<text x="'+(p.x+(dx||0)).toFixed(1)+'" y="'+(p.y+(dy||0)).toFixed(1)+'" font-size="14" font-weight="800" fill="'+(col||'#221515')+'">'+s+'</text>';}
+function dot(p,col){return '<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="4" fill="'+(col||'#221515')+'"/>';}
+function tick(p,q,n){var m={x:(p.x+q.x)/2,y:(p.y+q.y)/2},a=Math.atan2(q.y-p.y,q.x-p.x)+Math.PI/2,s='';for(var i=0;i<n;i++){var o=(i-(n-1)/2)*6;var cx=m.x+o*Math.cos(a-Math.PI/2),cy=m.y+o*Math.sin(a-Math.PI/2);s+='<line x1="'+(cx+6*Math.cos(a)).toFixed(1)+'" y1="'+(cy+6*Math.sin(a)).toFixed(1)+'" x2="'+(cx-6*Math.cos(a)).toFixed(1)+'" y2="'+(cy-6*Math.sin(a)).toFixed(1)+'" stroke="#7a0e0e" stroke-width="2.2"/>';}return s;}
+function inter(c1,r1,c2,r2,up){var D=d(c1,c2),a=(r1*r1-r2*r2+D*D)/(2*D),h=Math.sqrt(Math.max(0,r1*r1-a*a)),ux=(c2.x-c1.x)/D,uy=(c2.y-c1.y)/D,mx=c1.x+a*ux,my=c1.y+a*uy;var p1={x:mx+h*uy,y:my-h*ux},p2={x:mx-h*uy,y:my+h*ux};return up?(p1.y<p2.y?p1:p2):(p1.y<p2.y?p2:p1);}
+function base(){return '<polygon points="'+A.x+','+A.y+' '+B.x+','+B.y+' '+C.x+','+C.y+'" fill="#fdf1f1" stroke="#7a0e0e" stroke-width="2.6" stroke-linejoin="round"/>'+T(A,'A','#221515',-4,-10)+T(B,'B','#221515',-18,6)+T(C,'C','#221515',8,6);}
+var M={x:(B.x+C.x)/2,y:250};
+var AB=d(A,B),AC=d(A,C),BC=d(B,C);var bd=BC*AB/(AB+AC);var D={x:B.x+bd,y:250};var H={x:A.x,y:250};
+function rightAngle(p,u,v,s){var a={x:p.x+u.x*s,y:p.y+u.y*s},b={x:p.x+v.x*s,y:p.y+v.y*s},c={x:a.x+v.x*s,y:a.y+v.y*s};return '<polyline points="'+a.x+','+a.y+' '+c.x+','+c.y+' '+b.x+','+b.y+'" fill="none" stroke="#059669" stroke-width="2"/>';}
+function mk(prefix,defs,labelFn){
+ var cur='k',step=0;
+ var C0={k:'#7a0e0e',a:'#7a0e0e',y:'#7a0e0e'};
+ function render(){var list=defs[cur],s=list[step];
+  document.getElementById(prefix+'Svg').innerHTML=base()+s.d();
+  document.getElementById(prefix+'Txt').innerHTML='<b>Adım '+(step+1)+':</b> '+s.t;
+  document.getElementById(prefix+'Cnt').textContent=(step+1)+' / '+list.length;
+  document.getElementById(prefix+'Prev').disabled=(step===0);document.getElementById(prefix+'Next').disabled=(step===list.length-1);
+  ['k','a','y'].forEach(function(k){document.getElementById(prefix+'C'+k).classList.toggle('active',k===cur);});}
+ window[prefix+'Sel']=function(k){cur=k;step=0;render();};
+ window[prefix+'Prev']=function(){if(step>0){step--;render();}};
+ window[prefix+'Next']=function(){if(step<defs[cur].length-1){step++;render();}};
+ render();}
+/* ---- KATLAMA ---- */
+var ARR='<defs><marker id="kiAr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#d97706"/></marker></defs>';
+var ki={
+ k:[
+  {t:'BC kenarının B ve C uçlarını <b>üst üste getirecek</b> biçimde kâğıdı katlayın.',d:function(){return ARR+'<path d="M52 268 Q180 318 308 268" fill="none" stroke="#d97706" stroke-width="2.4" marker-end="url(#kiAr)"/>'+L({x:180,y:140},{x:180,y:300},'#7a0e0e',2.2,true);}},
+  {t:'Kâğıdı açın. Kıvrım izinin BC kenarını kestiği noktaya <b>M</b> deyin: M, BC\'nin orta noktasıdır (|BM| = |MC|).',d:function(){return L({x:180,y:140},{x:180,y:300},'#c9a5a5',1.6,true)+dot(M)+T(M,'M','#221515',6,22)+tick(B,M,1)+tick(M,C,1);}},
+  {t:'Şimdi <b>A köşesi</b> ile <b>M noktasından</b> geçen doğru boyunca kâğıdı katlayın.',d:function(){return dot(M)+T(M,'M','#221515',6,22)+L(A,M,'#7a0e0e',2.4,true);}},
+  {t:'Kâğıdı açın: <b>[AM]</b>, A köşesinden çizilen <b>kenarortaydır</b>. Cetvelle |BM| = |MC| olduğunu doğrulayın.',d:function(){return L(A,M,'#7a0e0e',3.4)+dot(M)+T(M,'M','#221515',6,22)+tick(B,M,1)+tick(M,C,1);}}],
+ a:[
+  {t:'A köşesinden geçen bir doğru boyunca, <b>[AB] kenarı [AC] kenarının üzerine oturacak</b> biçimde kâğıdı katlayın.',d:function(){return L(A,D,'#7a0e0e',2.4,true)+L(A,C,'#d97706',3.4);}},
+  {t:'[AB] kenarı [AC] kenarıyla tam çakışır: kıvrım izi A açısını <b>iki eş açıya</b> böler.',d:function(){var a1=ang(A,B),a2=ang(A,D),a3=ang(A,C);return L(A,D,'#7a0e0e',2.4,true)+arc(A,38,Math.min(a1,a2),Math.max(a1,a2),'#059669')+arc(A,46,Math.min(a2,a3),Math.max(a2,a3),'#059669');}},
+  {t:'Kâğıdı açın. Katlama izinin BC kenarını kestiği noktaya <b>D</b> deyin. <b>[AD]</b>, A açısının <b>açıortayıdır</b>.',d:function(){return L(A,D,'#7a0e0e',3.4)+dot(D)+T(D,'D','#221515',4,22);}},
+  {t:'Açıölçerle m(∠BAD) = m(∠DAC) olduğunu doğrulayın.',d:function(){var a1=ang(A,B),a2=ang(A,D),a3=ang(A,C);var mid1=pt(A,62,(a1+a2)/2),mid2=pt(A,62,(a2+a3)/2);return L(A,D,'#7a0e0e',3.4)+arc(A,38,Math.min(a1,a2),Math.max(a1,a2),'#059669')+arc(A,46,Math.min(a2,a3),Math.max(a2,a3),'#059669')+T(mid1,'α','#047857',-4,0)+T(mid2,'α','#047857',-4,0)+dot(D)+T(D,'D','#221515',4,22);}}],
+ y:[
+  {t:'A köşesinden geçen ve <b>BC kenarını kendi üzerine çakıştıran</b> bir katlama yapın (B ve C aynı doğru üzerinde kalmalı).',d:function(){return L(A,H,'#7a0e0e',2.4,true)+ARR+'<path d="M70 266 Q130 306 190 266" fill="none" stroke="#d97706" stroke-width="2.4" marker-end="url(#kiAr)"/>';}},
+  {t:'Kâğıdı açın. Katlama izinin BC kenarını kestiği noktaya <b>H</b> deyin.',d:function(){return L(A,H,'#7a0e0e',2.4,true)+dot(H)+T(H,'H','#221515',-4,22);}},
+  {t:'Gönye ile ∠AHB = 90° olduğunu doğrulayın: <b>[AH]</b>, A köşesinden BC kenarına inen <b>yüksekliktir</b>.',d:function(){return L(A,H,'#7a0e0e',3.4)+rightAngle(H,{x:-1,y:0},{x:0,y:-1},14)+dot(H)+T(H,'H','#221515',-4,22);}}]};
+mk('ki',ki);
+/* ---- PERGEL-CETVEL ---- */
+var rK=160,P1=inter(B,rK,C,rK,true),Q1=inter(B,rK,C,rK,false);
+var pa=60,Pa={x:A.x+pa*(B.x-A.x)/AB,y:A.y+pa*(B.y-A.y)/AB},Ra={x:A.x+pa*(C.x-A.x)/AC,y:A.y+pa*(C.y-A.y)/AC};
+var rS=55,S1=inter(Pa,rS,Ra,rS,false);
+var rY=240,Py={x:A.x-Math.sqrt(rY*rY-210*210),y:250},Ry={x:A.x+Math.sqrt(rY*rY-210*210),y:250};
+var rT=125,T1=inter(Py,rT,Ry,rT,true),T2=inter(Py,rT,Ry,rT,false);
+var aAB=ang(A,B),aAC=ang(A,C);
+var pc={
+ k:[
+  {t:'Pergeli |BC|\'nin yarısından büyük bir açıklığa ayarlayın ve <b>B merkezli</b> bir yay çizin (yayın BC\'nin altında ve üstünde kalan kısımlarını çizin).',d:function(){return arc(B,rK,-40,40);}},
+  {t:'Pergelin açıklığını <b>değiştirmeden C merkezli</b> yay çizin. Yaylar <b>P</b> ve <b>Q</b> noktalarında kesişir.',d:function(){return arc(B,rK,-40,40)+arc(C,rK,140,220)+dot(P1)+dot(Q1)+T(P1,'P','#221515',6,-4)+T(Q1,'Q','#221515',6,16);}},
+  {t:'P ve Q noktalarını cetvelle birleştirin. Bu doğru BC\'yi <b>M</b> noktasında keser: M, BC\'nin orta noktasıdır.',d:function(){return arc(B,rK,-40,40)+arc(C,rK,140,220)+L(P1,Q1,'#7a0e0e',2.2,true)+dot(P1)+dot(Q1)+dot(M)+T(P1,'P','#221515',6,-4)+T(Q1,'Q','#221515',6,16)+T(M,'M','#221515',6,-8);}},
+  {t:'A ile M\'yi birleştirin: <b>[AM]</b>, A köşesinden çizilen <b>kenarortaydır</b>.',d:function(){return L(P1,Q1,'#c9a5a5',1.6,true)+L(A,M,'#7a0e0e',3.4)+dot(M)+T(M,'M','#221515',6,-8);}}],
+ a:[
+  {t:'Pergelin ucunu <b>A köşesine</b> koyup bir yay çizin; yay [AB] ve [AC] kenarlarını <b>P</b> ve <b>R</b> noktalarında kessin.',d:function(){return arc(A,pa,Math.min(aAB,aAC)-8,Math.max(aAB,aAC)+8)+dot(Pa)+dot(Ra)+T(Pa,'P','#221515',-16,4)+T(Ra,'R','#221515',6,10);}},
+  {t:'Pergelin açıklığını P ile R arasındaki uzaklığın yarısından büyük tutarak <b>P merkezli</b> bir yay çizin.',d:function(){return arc(A,pa,Math.min(aAB,aAC)-8,Math.max(aAB,aAC)+8)+dot(Pa)+dot(Ra)+T(Pa,'P','#221515',-16,4)+T(Ra,'R','#221515',6,10)+arc(Pa,rS,ang(Pa,S1)-35,ang(Pa,S1)+35);}},
+  {t:'Aynı açıklıkla <b>R merkezli</b> yay çizin. İki yay <b>S</b> noktasında kesişir.',d:function(){return arc(A,pa,Math.min(aAB,aAC)-8,Math.max(aAB,aAC)+8)+dot(Pa)+dot(Ra)+T(Pa,'P','#221515',-16,4)+T(Ra,'R','#221515',6,10)+arc(Pa,rS,ang(Pa,S1)-35,ang(Pa,S1)+35)+arc(Ra,rS,ang(Ra,S1)-35,ang(Ra,S1)+35)+dot(S1)+T(S1,'S','#221515',6,16);}},
+  {t:'A köşesinden S noktasından geçen bir <b>ışın</b> çizin. Işın BC\'yi <b>D</b> noktasında keser: <b>[AD]</b> açıortaydır.',d:function(){return L(A,D,'#7a0e0e',3.4)+dot(S1)+T(S1,'S','#221515',6,16)+dot(D)+T(D,'D','#221515',4,22)+arc(A,38,Math.min(aAB,ang(A,D)),Math.max(aAB,ang(A,D)),'#059669')+arc(A,46,Math.min(aAC,ang(A,D)),Math.max(aAC,ang(A,D)),'#059669');}}],
+ y:[
+  {t:'BC doğrusunu uzatın. Pergelin ucunu <b>A köşesine</b> koyup BC doğrusunu iki noktada kesen bir yay çizin: kesim noktaları <b>P</b> ve <b>R</b>.',d:function(){return L({x:5,y:250},{x:355,y:250},'#c9a5a5',1.6,true)+arc(A,rY,-100,-80)+arc(A,rY,-122,-110)+arc(A,rY,-70,-58)+dot(Py)+dot(Ry)+T(Py,'P','#221515',-4,-8)+T(Ry,'R','#221515',4,-8);}},
+  {t:'P ve R merkezli, <b>eşit açıklıkla</b> (|PR|\'nin yarısından büyük) iki yay çizin. Yaylar <b>T</b> noktasında kesişir.',d:function(){return L({x:5,y:250},{x:355,y:250},'#c9a5a5',1.6,true)+dot(Py)+dot(Ry)+T(Py,'P','#221515',-4,-8)+T(Ry,'R','#221515',4,-8)+arc(Py,rT,ang(Py,T1)-22,ang(Py,T1)+22)+arc(Ry,rT,ang(Ry,T1)-22,ang(Ry,T1)+22)+arc(Py,rT,ang(Py,T2)-22,ang(Py,T2)+22)+arc(Ry,rT,ang(Ry,T2)-22,ang(Ry,T2)+22)+dot(T1)+T(T1,'T','#221515',6,-6);}},
+  {t:'A ile T\'yi birleştiren doğru BC\'yi <b>H</b> noktasında keser. <b>[AH]</b> yüksekliktir; gönye ile ∠AHB = 90° olduğunu doğrulayın.',d:function(){return L({x:5,y:250},{x:355,y:250},'#c9a5a5',1.6,true)+L(A,{x:A.x,y:300},'#7a0e0e',3.4)+rightAngle(H,{x:-1,y:0},{x:0,y:-1},14)+dot(H)+T(H,'H','#221515',8,20)+dot(T1)+T(T1,'T','#221515',6,-6);}}]};
+mk('pc',pc);
+})();
+
 </script>
 </body></html>

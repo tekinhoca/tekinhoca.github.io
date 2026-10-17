@@ -28,6 +28,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab1">EĞİM NEDİR?</button>
 <button class="tab-btn" data-tab="tab2">EĞİMİN İŞARETİ</button>
 <button class="tab-btn" data-tab="tab3">İKİ NOKTADAN EĞİM</button>
+<button class="tab-btn" data-tab="tabEgDn">DENKLEM VE EĞİM</button>
 <button class="tab-btn" data-tab="tab4">GÜNLÜK HAYAT MODELLERİ</button>
 <button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
@@ -138,6 +139,34 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div>
 </section>
 
+<section class="tab-panel" id="tabEgDn">
+<div class="card"><div class="card-title"><div class="icon">📈</div>Denklem ve Eğim: y = mx + n</div>
+<p class="body-text">Bir doğrusal ilişkiyi <b>y = mx + n</b> biçiminde yazdığımızda denklemin katsayıları doğrunun grafiği hakkında bilgi verir.</p>
+<div class="gen-box">y = mx + n &nbsp;⇒&nbsp; <b>m</b>: doğrunun eğimi (x'in katsayısı) &nbsp;·&nbsp; <b>n</b>: doğrunun y eksenini kestiği noktanın ordinatı, yani (0, n)</div>
+<div class="tip-box">Denklem bu biçimde verilmemişse önce y yalnız bırakılır. Örneğin 2x + y = 6 ⇒ y = −2x + 6 olduğundan m = −2, n = 6'dır. 3y = 6x − 9 ⇒ y = 2x − 3 olduğundan m = 2, n = −3'tür.</div>
+<p class="body-text"><b>Kaydırıcılarla deneyin:</b> m ve n değerlerini değiştirerek denklemin grafiğini ve eğim üçgenini inceleyin.</p>
+<div class="two-col">
+<div class="slider-wrap"><div class="slider-label"><span>Eğim (m)</span><span id="egMOut">2</span></div><input type="range" id="egM" min="-4" max="4" step="0.5" value="2"></div>
+<div class="slider-wrap"><div class="slider-label"><span>y ekseni kesim ordinatı (n)</span><span id="egNOut">−3</span></div><input type="range" id="egN" min="-6" max="6" step="1" value="-3"></div>
+</div>
+<div class="svg-wrap" style="max-width:380px"><svg id="egSvg" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="y = mx + n doğrusunun grafiği"></svg></div>
+<div class="result-strip">
+<div class="result-pill"><div class="lbl">Denklem</div><div class="val" id="egEq" style="font-size:1rem">—</div></div>
+<div class="result-pill"><div class="lbl">Eğim (m)</div><div class="val" id="egSl" style="font-size:1rem">—</div></div>
+<div class="result-pill"><div class="lbl">y eksenini kestiği nokta</div><div class="val" id="egIn" style="font-size:1rem">—</div></div>
+</div>
+<div class="note-box" id="egNote"></div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🎯</div>Grafikten Denkleme</div>
+<p class="body-text">Grafiği ve işaretli iki noktayı inceleyin; doğrunun denklemindeki <b>m</b> ve <b>n</b> değerlerini yazın. Her grafik için yalnızca bir cevap hakkınız vardır.</p>
+<div class="progress-dots" id="egDots"></div>
+<div class="svg-wrap" style="max-width:380px"><svg id="egExSvg" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Denklemi bulunacak doğrunun grafiği"></svg></div>
+<div class="field-row"><span class="body-text" style="margin:0">Eğim (m):</span><input type="text" class="answer-input" id="egExM" placeholder="m" style="width:110px"><span class="body-text" style="margin:0">n:</span><input type="text" class="answer-input" id="egExN" placeholder="n" style="width:110px"><button class="submit-btn" id="egExBtn" onclick="egExCheck()">Kontrol Et</button></div>
+<div class="feedback" id="egExFb"></div>
+<div class="next-row"><button class="ghost-btn" id="egExNext" onclick="egExNext()" disabled>Sonraki Grafik</button></div>
+</div>
+</section>
+
 <section class="tab-panel" id="tab4">
 <div class="card"><div class="card-title"><div class="icon">🛑</div>Günlük Hayattan Eğim Modelleri</div>
 <div class="note-box">Günlük hayatla ilişkili modellemelerde eğim, dikey uzunluğun yatay uzunluğa oranı olarak ele alınır; bu bölümde <b>işaret üzerinde durulmaz</b>, yalnızca oran ve büyüklük incelenir.</div>
@@ -212,8 +241,8 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="q-card" data-okmsg="Doğru! m = (7−3)/(5−1) = 4/4 = 1'dir." data-nomsg="Yanlış. Doğru cevap: 1. m = (7−3)/(5−1) = 4/4 = 1'dir.">
 <div class="q-text">A(1, 3) ve B(5, 7) noktalarından geçen doğrunun eğimi kaçtır?</div>
 <div class="choices">
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">1</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">4</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">1</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">−1</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">1/4</button>
 </div><div class="feedback"></div></div>
@@ -223,18 +252,37 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Doğru yataydır</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Doğru dikeydir</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Doğru soldan sağa alçalır</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Doğru soldan sağa yükselir</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Doğru soldan sağa alçalır</button>
 </div><div class="feedback"></div></div>
 
 <div class="q-card" data-okmsg="Doğru! Yatay uzunluk (Δx) sıfır olduğunda eğim tanımsızdır; bu doğru dikeydir." data-nomsg="Yanlış. Doğru cevap: Eğim tanımsızdır. Yatay uzunluk (Δx) sıfır olduğunda eğim tanımsızdır; bu doğru dikeydir.">
 <div class="q-text">A(4, 2) ve B(4, 9) noktalarından geçen doğrunun eğimi için ne söylenebilir?</div>
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Eğim sıfırdır</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Eğim tanımsızdır</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Eğim 7'dir</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">Eğim tanımsızdır</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">Eğim −7'dir</button>
 </div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! n = 3 (doğru y eksenini (0, 3)&#x27;te keser) ve m = 2 olduğundan denklem y = 2x + 3&#x27;tür." data-nomsg="Yanlış. Doğru cevap: y = 2x + 3. n = 3 (doğru y eksenini (0, 3)&#x27;te keser) ve m = 2 olduğundan denklem y = 2x + 3&#x27;tür.">
+<div class="q-text">Grafiği (0, 3) noktasından geçen ve x 1 artarken y 2 artan doğrunun denklemi hangisidir?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 3x + 2</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = 2x − 3</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">y = −2x + 3</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">y = 2x + 3</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! Denklemin iki tarafı 3&#x27;e bölünürse y = 2x − 3 bulunur; x&#x27;in katsayısı 2 olduğundan m = 2&#x27;dir." data-nomsg="Yanlış. Doğru cevap: 2. Denklemin iki tarafı 3&#x27;e bölünürse y = 2x − 3 bulunur; x&#x27;in katsayısı 2 olduğundan m = 2&#x27;dir.">
+<div class="q-text">3y = 6x − 9 doğrusunun eğimi kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">2</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">6</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">3</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">−3</button>
+</div><div class="feedback"></div></div>
+
 
 <div class="field-row"><span class="body-text" style="margin:0">Bir çatının yüksekliği 4 m, yatay uzunluğu 8 m ise çatının eğim oranı (sadeleştirilmiş, x/y biçiminde payı):</span><input type="text" class="answer-input" id="fillE1" placeholder="pay"><button class="submit-btn" onclick="checkFill('fillE1',1,'fbE1')">Kontrol Et</button></div>
 <div class="feedback" id="fbE1"></div>
@@ -448,11 +496,14 @@ updateRamp();
 /* ---- tab8: kendini dene ---- */
 const quizData=[
 {"q": "Eğim, bir doğru üzerindeki hangi iki büyüklüğün oranıdır?", "choices": ["Yatay uzunluğun dikey uzunluğa oranı", "İki noktanın x koordinatlarının oranı", "Doğrunun uzunluğunun açısına oranı", "Dikey uzunluğun yatay uzunluğa oranı"], "correct": 3, "expl": "Eğim, dikey uzunluğun (Δy) yatay uzunluğa (Δx) oranı olarak tanımlanır."},
-{"q": "A(2, 5) ve B(4, 9) noktalarından geçen doğrunun eğimi kaçtır?", "choices": ["1", "2", "4", "1/2"], "correct": 1, "expl": "m = (9−5)/(4−2) = 4/2 = 2."},
+{"q": "A(2, 5) ve B(4, 9) noktalarından geçen doğrunun eğimi kaçtır?", "choices": ["1", "4", "2", "1/2"], "correct": 2, "expl": "m = (9−5)/(4−2) = 4/2 = 2."},
 {"q": "Eğimi 0 olan bir doğru için ne söylenebilir?", "choices": ["Doğru yataydır", "Doğru dikeydir", "Doğru artandır", "Eğim tanımsızdır"], "correct": 0, "expl": "Eğim 0 ise dikey uzunluk (Δy) 0'dır; bu doğru yataydır."},
-{"q": "C(3, −2) ve D(3, 6) noktalarından geçen doğrunun eğimi için ne söylenebilir?", "choices": ["m = 0", "m = 8", "m = −8", "Tanımsızdır"], "correct": 3, "expl": "x koordinatları eşit olduğundan yatay uzunluk 0'dır; eğim tanımsızdır (dikey doğru)."},
-{"q": "Eğimi −1/5 olan bir doğru için ne söylenebilir?", "choices": ["Doğru yataydır", "Doğru soldan sağa yükselir", "Doğru soldan sağa alçalır", "Doğru dikeydir"], "correct": 2, "expl": "Negatif eğim, soldan sağa gidildikçe doğrunun (yolun) alçaldığını gösterir."},
-{"q": "Bir çatının yüksekliği 3 m, yatay uzunluğu 9 m ise çatının eğim oranı (sadeleştirilmiş) nedir?", "choices": ["1/3", "3/9", "1/9", "3"], "correct": 0, "expl": "3/9 kesri sadeleştirilirse 1/3 elde edilir; günlük hayat modelinde yalnızca bu oran önemlidir."}
+{"q": "C(3, −2) ve D(3, 6) noktalarından geçen doğrunun eğimi için ne söylenebilir?", "choices": ["m = 0", "m = 8", "Tanımsızdır", "m = −8"], "correct": 2, "expl": "x koordinatları eşit olduğundan yatay uzunluk 0'dır; eğim tanımsızdır (dikey doğru)."},
+{"q": "Eğimi −1/5 olan bir doğru için ne söylenebilir?", "choices": ["Doğru yataydır", "Doğru soldan sağa alçalır", "Doğru soldan sağa yükselir", "Doğru dikeydir"], "correct": 1, "expl": "Negatif eğim, soldan sağa gidildikçe doğrunun (yolun) alçaldığını gösterir."},
+{"q": "Bir çatının yüksekliği 3 m, yatay uzunluğu 9 m ise çatının eğim oranı (sadeleştirilmiş) nedir?", "choices": ["3/9", "1/9", "3", "1/3"], "correct": 3, "expl": "3/9 kesri sadeleştirilirse 1/3 elde edilir; günlük hayat modelinde yalnızca bu oran önemlidir."},
+{"q": "y = −3x + 7 doğrusunun eğimi ve y eksenini kestiği nokta aşağıdakilerden hangisidir?", "choices": ["m = 7, (0, −3)", "m = −3, (0, 7)", "m = 3, (0, 7)", "m = −3, (7, 0)"], "correct": 1, "expl": "y = mx + n biçiminde x'in katsayısı eğimi, sabit terim ise y eksenini kestiği noktanın ordinatını verir: m = −3 ve (0, 7)."},
+{"q": "2x + y = 8 doğrusunun eğimi kaçtır?", "choices": ["2", "8", "−2", "4"], "correct": 2, "expl": "y yalnız bırakılırsa y = −2x + 8 bulunur. x'in katsayısı −2 olduğundan eğim −2'dir."},
+{"q": "Eğimi 4 olan ve y eksenini (0, −1) noktasında kesen doğrunun denklemi hangisidir?", "choices": ["y = 4x − 1", "y = 4x + 1", "y = −4x − 1", "y = −x + 4"], "correct": 0, "expl": "m = 4 ve n = −1 olduğundan denklem y = 4x − 1'dir."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -492,5 +543,66 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* DENKLEM VE EĞİM */
+
+(function(){
+function fm(v){return String(Math.round(v*100)/100).replace('.',',').replace('-','−');}
+function eq(m,n){if(m===0)return 'y = '+fm(n);var t='y = '+(m===1?'x':(m===-1?'−x':fm(m)+'x'));if(n>0)t+=' + '+fm(n);else if(n<0)t+=' − '+fm(-n);return t;}
+var S=20,O=170;function X(x){return O+S*x;}function Y(y){return O-S*y;}
+function plane(id){var h='<defs><clipPath id="'+id+'"><rect x="10" y="10" width="320" height="320"/></clipPath></defs>';
+ for(var i=-8;i<=8;i++){h+='<line x1="'+X(i)+'" y1="10" x2="'+X(i)+'" y2="330" stroke="#f3e4e4" stroke-width="1"/><line x1="10" y1="'+Y(i)+'" x2="330" y2="'+Y(i)+'" stroke="#f3e4e4" stroke-width="1"/>';}
+ h+='<line x1="10" y1="170" x2="332" y2="170" stroke="#8a6f6f" stroke-width="1.6"/><line x1="170" y1="332" x2="170" y2="8" stroke="#8a6f6f" stroke-width="1.6"/><text x="334" y="174" font-size="11" fill="#8a6f6f">x</text><text x="184" y="14" font-size="11" fill="#8a6f6f">y</text>';
+ [-6,-4,-2,2,4,6,8].forEach(function(v){var t=(v<0?'−':'')+Math.abs(v);h+='<text x="'+(X(v)-4)+'" y="184" font-size="9" fill="#8a6f6f">'+t+'</text><text x="174" y="'+(Y(v)+3)+'" font-size="9" fill="#8a6f6f">'+t+'</text>';});
+ return h;}
+function ln(m,n,id){return '<g clip-path="url(#'+id+')"><line x1="'+X(-8)+'" y1="'+Y(-8*m+n)+'" x2="'+X(8)+'" y2="'+Y(8*m+n)+'" stroke="#7a0e0e" stroke-width="3"/></g>';}
+function inb(v){return v>=-8&&v<=8;}
+function draw(){
+ var m=parseFloat(document.getElementById('egM').value),n=parseInt(document.getElementById('egN').value,10);
+ document.getElementById('egMOut').textContent=fm(m);document.getElementById('egNOut').textContent=fm(n);
+ var h=plane('egClip')+ln(m,n,'egClip');
+ h+='<circle cx="'+X(0)+'" cy="'+Y(n)+'" r="5.5" fill="#221515"/><text x="'+(X(0)-8)+'" y="'+(Y(n)-7)+'" text-anchor="end" font-size="11" font-weight="800" fill="#221515">(0, '+fm(n)+')</text>';
+ var r=(Math.abs(m*2)%2===1)?2:1;
+ if(m!==0&&inb(r)&&inb(n+m*r)){
+  h+='<line x1="'+X(0)+'" y1="'+Y(n)+'" x2="'+X(r)+'" y2="'+Y(n)+'" stroke="#d97706" stroke-width="2.5" stroke-dasharray="5 4"/>';
+  h+='<line x1="'+X(r)+'" y1="'+Y(n)+'" x2="'+X(r)+'" y2="'+Y(n+m*r)+'" stroke="#059669" stroke-width="2.5" stroke-dasharray="5 4"/>';
+  h+='<text x="'+(X(r/2)-14)+'" y="'+(Y(n)+(m>0?15:-6))+'" font-size="10" font-weight="800" fill="#b45309">yatay: '+r+'</text>';
+  h+='<text x="'+(X(r)+5)+'" y="'+(Y(n+m*r/2)+3)+'" font-size="10" font-weight="800" fill="#047857">dikey: '+fm(m*r)+'</text>';}
+ document.getElementById('egSvg').innerHTML=h;
+ document.getElementById('egEq').textContent=eq(m,n);
+ document.getElementById('egSl').textContent=fm(m);
+ document.getElementById('egIn').textContent='(0, '+fm(n)+')';
+ var nt;
+ if(m===0)nt='m = 0 olduğundan doğru yataydır: x değişse de y hep '+fm(n)+' olur.';
+ else nt='x 1 birim arttığında y, '+fm(Math.abs(m))+' birim '+(m>0?'artar':'azalır')+'. Yani eğim, x\'in katsayısı olan m = '+fm(m)+' değeridir.';
+ document.getElementById('egNote').textContent=nt;}
+document.getElementById('egM').addEventListener('input',draw);document.getElementById('egN').addEventListener('input',draw);draw();
+var P=[[2,-3],[-1,4],[3,0],[-2,5],[1,-2],[-3,2]],idx=0,score=0,done=[];
+function dots(){var h='';for(var i=0;i<P.length;i++){h+='<div class="pdot'+(done[i]===1?' done':(i===idx?' now':''))+'"></div>';}document.getElementById('egDots').innerHTML=h;}
+function exRender(){var m=P[idx][0],n=P[idx][1],y2=n+2*m;
+ var h=plane('egExClip')+ln(m,n,'egExClip');
+ h+='<circle cx="'+X(0)+'" cy="'+Y(n)+'" r="5.5" fill="#221515"/><text x="'+(X(0)-8)+'" y="'+(Y(n)-7)+'" text-anchor="end" font-size="11" font-weight="800" fill="#221515">A(0, '+fm(n)+')</text>';
+ h+='<circle cx="'+X(2)+'" cy="'+Y(y2)+'" r="5.5" fill="#221515"/><text x="'+(X(2)+8)+'" y="'+(Y(y2)+(m>=0?14:-7))+'" font-size="11" font-weight="800" fill="#221515">B(2, '+fm(y2)+')</text>';
+ document.getElementById('egExSvg').innerHTML=h;
+ var a=document.getElementById('egExM'),b=document.getElementById('egExN');a.value='';b.value='';a.disabled=false;b.disabled=false;
+ document.getElementById('egExBtn').disabled=false;document.getElementById('egExNext').disabled=true;
+ var fb=document.getElementById('egExFb');fb.className='feedback';fb.textContent='';dots();}
+function num(t){t=String(t).trim().replace('−','-').replace(',','.');return t===''?NaN:Number(t);}
+window.egExCheck=function(){
+ var a=document.getElementById('egExM'),b=document.getElementById('egExN'),fb=document.getElementById('egExFb');
+ if(a.value.trim()===''||b.value.trim()===''){fb.className='feedback show no';fb.textContent='Önce m ve n için birer değer yazın.';return;}
+ var m=P[idx][0],n=P[idx][1],y2=n+2*m,ok=(num(a.value)===m&&num(b.value)===n);
+ var sol='A(0, '+fm(n)+') noktası n = '+fm(n)+' değerini verir. m = ('+fm(y2)+' − ('+fm(n)+')) ÷ (2 − 0) = '+fm(m)+'. Denklem: '+eq(m,n)+'.';
+ fb.className='feedback show '+(ok?'ok':'no');
+ fb.textContent=ok?('Doğru! '+sol):('Yanlış. Doğru cevap: m = '+fm(m)+', n = '+fm(n)+'. '+sol);
+ a.disabled=true;b.disabled=true;document.getElementById('egExBtn').disabled=true;
+ done[idx]=ok?1:0;if(ok)score++;
+ var nx=document.getElementById('egExNext');nx.disabled=false;nx.textContent=(idx===P.length-1)?'Sonucu Gör':'Sonraki Grafik';dots();};
+window.egExNext=function(){
+ if(idx===P.length-1){var fb=document.getElementById('egExFb');fb.className='feedback show '+(score>=4?'ok':'no');fb.textContent='Etkinlik tamamlandı. Doğru sayınız: '+score+' / '+P.length+'.';document.getElementById('egExNext').disabled=true;return;}
+ idx++;exRender();};
+exRender();
+})();
+
 </script>
 </body></html>

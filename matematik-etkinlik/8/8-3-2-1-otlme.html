@@ -30,6 +30,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab2">ÇOKGENİ ÖTELEME</button>
 <button class="tab-btn" data-tab="tab3">KOORDİNAT DÜZLEMİ</button>
 <button class="tab-btn" data-tab="tab4">ŞEKİL VE GÖRÜNTÜ</button>
+<button class="tab-btn" data-tab="tabSurukle">SÜRÜKLE VE ÖTELE</button>
 <button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab7">ÖZET</button>
@@ -68,6 +69,17 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div id="ot4"></div>
 <p class="body-text"><b>Öteleme işlemi sonucunda kenar uzunlukları da değişmez, açı ölçüleri de değişmez.</b></p></div>
 </section>
+<section class="tab-panel" id="tabSurukle">
+<div class="card"><div class="card-title"><div class="icon">🖱️</div>Üçgeni Ötele</div>
+<p class="body-text">Her görevde verilen <b>öteleme</b> bilgisine göre ABC üçgeninin görüntüsünü bulacaksınız. <b>A noktasının yeni yerini (A′)</b> ızgarada tıklayın; üçgenin tamamı o hareketle kayacak ve sonucu göreceksiniz. Her görevde yalnızca bir cevap hakkınız vardır.</p>
+<div class="progress-dots" id="soDots"></div>
+<div class="note-box" id="soTask" style="font-weight:800"></div>
+<div class="svg-wrap" style="max-width:400px"><svg id="soSvg" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Koordinat ızgarasında ABC üçgeni"></svg></div>
+<div class="feedback" id="soFb"></div>
+<div class="next-row"><button class="ghost-btn" id="soNext" onclick="soNext()" disabled>Sonraki Görev</button></div>
+</div>
+</section>
+
 <section class="tab-panel" id="tab5">
 <div class="card"><div class="card-title"><div class="icon">📚</div>Çözümlü Örnekler</div>
 
@@ -337,6 +349,43 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* SÜRÜKLE VE ÖTELE */
+(function(){
+
+function grid(S,R,id,clickFn){var O=170,h='',a=O-S*R,b=O+S*R;
+ for(var i=-R;i<=R;i++){h+='<line x1="'+(O+S*i)+'" y1="'+a+'" x2="'+(O+S*i)+'" y2="'+b+'" stroke="#f3e4e4"/><line x1="'+a+'" y1="'+(O-S*i)+'" x2="'+b+'" y2="'+(O-S*i)+'" stroke="#f3e4e4"/>';}
+ h+='<line x1="'+(a-4)+'" y1="170" x2="'+(b+8)+'" y2="170" stroke="#8a6f6f" stroke-width="1.6"/><line x1="170" y1="'+(b+8)+'" x2="170" y2="'+(a-8)+'" stroke="#8a6f6f" stroke-width="1.6"/><text x="'+(b+10)+'" y="174" font-size="11" fill="#8a6f6f">x</text><text x="176" y="'+(a-6)+'" font-size="11" fill="#8a6f6f">y</text>';
+ for(var v=-R;v<=R;v++){if(v===0)continue;var t=(v<0?'−':'')+Math.abs(v);if(Math.abs(v)%(R>6?2:1)===0){h+='<text x="'+(O+S*v-4)+'" y="184" font-size="9" fill="#8a6f6f">'+t+'</text><text x="174" y="'+(O-S*v+3)+'" font-size="9" fill="#8a6f6f">'+t+'</text>';}}
+ return h;}
+function hit(S,R,fn){var O=170,h='';for(var x=-R;x<=R;x++)for(var y=-R;y<=R;y++){h+='<circle cx="'+(O+S*x)+'" cy="'+(O-S*y)+'" r="'+(S*0.42)+'" fill="transparent" style="cursor:pointer" onclick="'+fn+'('+x+','+y+')"/>';}return h;}
+function fm(v){return String(v).replace('-','−');}
+
+(function(){
+var T=[{A:[-4,-3],B:[-1,-3],C:[-3,0],v:[5,4]},{A:[2,3],B:[5,3],C:[4,5],v:[-6,-5]},{A:[-5,2],B:[-2,2],C:[-4,5],v:[6,-6]},{A:[1,-4],B:[4,-4],C:[2,-1],v:[-3,6]},{A:[-3,5],B:[0,5],C:[-2,3],v:[0,-5]}];
+var i=0,score=0,res=[],locked=false,S=24;
+function P(x){return 170+S*x;}function Q(y){return 170-S*y;}
+function dir(v){var p=[];if(v[0]>0)p.push(v[0]+' birim sağa');if(v[0]<0)p.push((-v[0])+' birim sola');if(v[1]>0)p.push(v[1]+' birim yukarı');if(v[1]<0)p.push((-v[1])+' birim aşağı');return p.join(', ');}
+function tri(t,col,fill,names,dash){var pts=['A','B','C'].map(function(k){return P(t[k][0])+','+Q(t[k][1]);}).join(' ');var h='<polygon points="'+pts+'" fill="'+fill+'" stroke="'+col+'" stroke-width="2.4"'+(dash?' stroke-dasharray="6 4"':'')+' stroke-linejoin="round"/>';
+ if(names!==null)['A','B','C'].forEach(function(k){h+='<text x="'+(P(t[k][0])+7)+'" y="'+(Q(t[k][1])-7)+'" font-size="12" font-weight="800" fill="'+col+'">'+k+names+'</text>';});return h;}
+function dots(){var h='';for(var k=0;k<T.length;k++)h+='<div class="pdot'+(res[k]===1?' done':(k===i?' now':''))+'"></div>';document.getElementById('soDots').innerHTML=h;}
+function render(){var t=T[i];locked=false;document.getElementById('soTask').textContent='Görev '+(i+1)+': ABC üçgeni '+dir(t.v)+' ötelenecek. A′ noktasının yeni yerini tıklayın.';
+ document.getElementById('soSvg').innerHTML=grid(S,6,'so')+tri(t,'#7a0e0e','#fdf1f1','',false)+hit(S,6,'soClick');
+ var fb=document.getElementById('soFb');fb.className='feedback';fb.textContent='';document.getElementById('soNext').disabled=true;document.getElementById('soNext').textContent=(i===T.length-1)?'Sonucu Gör':'Sonraki Görev';dots();}
+window.soClick=function(x,y){if(locked)return;var t=T[i];locked=true;var ok=(x===t.A[0]+t.v[0]&&y===t.A[1]+t.v[1]);
+ var im={A:[t.A[0]+t.v[0],t.A[1]+t.v[1]],B:[t.B[0]+t.v[0],t.B[1]+t.v[1]],C:[t.C[0]+t.v[0],t.C[1]+t.v[1]]};
+ var h=grid(S,6,'so')+tri(t,'#7a0e0e','#fdf1f1','',false)+tri(im,'#059669','rgba(5,150,105,.14)',"′",true);
+ if(!ok)h+='<circle cx="'+P(x)+'" cy="'+Q(y)+'" r="6" fill="#dc2626"/>';
+ document.getElementById('soSvg').innerHTML=h;
+ var d="A′("+fm(im.A[0])+", "+fm(im.A[1])+"), B′("+fm(im.B[0])+", "+fm(im.B[1])+"), C′("+fm(im.C[0])+", "+fm(im.C[1])+")";
+ var how="Her noktanın apsisine "+fm(t.v[0])+", ordinatına "+fm(t.v[1])+" eklenir.";
+ var fb=document.getElementById('soFb');fb.className='feedback show '+(ok?'ok':'no');
+ fb.textContent=ok?('Doğru! '+how+' '+d+'.'):('Yanlış. Doğru cevap: A′('+fm(im.A[0])+', '+fm(im.A[1])+'). '+how+' '+d+'. Siz ('+fm(x)+', '+fm(y)+') noktasını işaretlediniz (kırmızı).');
+ res[i]=ok?1:0;if(ok)score++;document.getElementById('soNext').disabled=false;dots();};
+window.soNext=function(){if(i===T.length-1){var fb=document.getElementById('soFb');fb.className='feedback show '+(score>=4?'ok':'no');fb.textContent='Etkinlik tamamlandı. Doğru sayınız: '+score+' / '+T.length+'.';document.getElementById('soNext').disabled=true;return;}i++;render();};
+render();})();
+})();
+
 </script>
 </body>
 </html>

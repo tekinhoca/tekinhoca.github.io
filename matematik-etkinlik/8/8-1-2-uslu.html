@@ -30,6 +30,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab1">TEMEL KURALLAR</button>
 <button class="tab-btn" data-tab="tab2">10'UN KUVVETLERİ</button>
 <button class="tab-btn" data-tab="tab3">BİLİMSEL GÖSTERİM</button>
+<button class="tab-btn" data-tab="tabIsaret">İŞARET VE PARANTEZ</button>
 <button class="tab-btn" data-tab="tab4">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab5">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab6">ÖZET</button>
@@ -130,6 +131,24 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div></div>
 <div class="gen-box">Bilimsel gösterimde yazılmış iki sayı karşılaştırılırken önce <b>üsler</b> karşılaştırılır: üssü büyük olan sayı daha büyüktür. Üsler eşitse <b>katsayılar (a)</b> karşılaştırılır.</div>
 <p class="body-text"><strong>Örnek:</strong> 3,2×10⁸ ile 4,5×10⁷ sayılarından hangisi büyüktür?<br>Her iki sayı da bilimsel gösterim şeklinde yazıldığına göre, sadece üslere bakmak yeterlidir;<br>Üsler farklı olduğundan (8 &gt; 7), üssü büyük olan <b>3,2×10⁸</b> daha büyüktür — katsayılar karşılaştırılmaz.</p>
+</div>
+</section>
+
+<section class="tab-panel" id="tabIsaret">
+<div class="card"><div class="card-title"><div class="icon">➖</div>İşaret ve Parantez: (−b)ⁿ, −bⁿ ve bⁿ</div>
+<p class="body-text">Üslü ifadelerde <b>parantez</b> çok önemlidir. <b>(−2)⁴</b> ifadesinde taban <b>−2</b>'dir ve 4 kez kendisiyle çarpılır; <b>−2⁴</b> ifadesinde ise taban <b>2</b>'dir, işlem sonucunun başına eksi işareti gelir. Tabanı ve üssü seçerek üç ifadeyi karşılaştırın.</p>
+<div class="two-col"><div class="slider-wrap"><div class="slider-label"><span>Taban (b)</span><span id="ipBOut">2</span></div><input type="range" id="ipB" min="1" max="6" step="1" value="2"></div>
+<div class="slider-wrap"><div class="slider-label"><span>Üs (n)</span><span id="ipNOut">4</span></div><input type="range" id="ipN" min="-3" max="6" step="1" value="4"></div></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl" id="ipL1">(−2)⁴</div><div class="val" id="ipV1" style="font-size:1.05rem">—</div></div><div class="result-pill"><div class="lbl" id="ipL2">−2⁴</div><div class="val" id="ipV2" style="font-size:1.05rem">—</div></div><div class="result-pill"><div class="lbl" id="ipL3">2⁴</div><div class="val" id="ipV3" style="font-size:1.05rem">—</div></div></div>
+<div class="note-box" id="ipNote"></div>
+<div class="tip-box"><b>Kural:</b> Negatif tabanın <b>çift</b> kuvveti pozitif, <b>tek</b> kuvveti negatiftir. Negatif üs için taban ters çevrilir: a⁻ⁿ = 1/aⁿ. Parantez yoksa üs yalnızca kendisinden hemen önceki sayıyı etkiler: −2⁴ = −(2⁴) = −16.</div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">✍️</div>Siz Yapın</div>
+<p class="body-text">Dört ifadenin değerini bulun (kesir gerekiyorsa a/b biçiminde yazın). Her ifade için yalnızca bir cevap hakkınız vardır.</p>
+<div class="field-row"><span class="body-text" style="margin:0">(−3)² = </span><input type="text" class="answer-input" id="ipF1" style="width:90px"><button class="submit-btn" id="ipK1" onclick="ipChk(1)">Kontrol Et</button></div><div class="feedback" id="ipFb1"></div>
+<div class="field-row"><span class="body-text" style="margin:0">−3² = </span><input type="text" class="answer-input" id="ipF2" style="width:90px"><button class="submit-btn" id="ipK2" onclick="ipChk(2)">Kontrol Et</button></div><div class="feedback" id="ipFb2"></div>
+<div class="field-row"><span class="body-text" style="margin:0">(−2)³ = </span><input type="text" class="answer-input" id="ipF3" style="width:90px"><button class="submit-btn" id="ipK3" onclick="ipChk(3)">Kontrol Et</button></div><div class="feedback" id="ipFb3"></div>
+<div class="field-row"><span class="body-text" style="margin:0">(−2)⁻² = </span><input type="text" class="answer-input" id="ipF4" style="width:90px"><button class="submit-btn" id="ipK4" onclick="ipChk(4)">Kontrol Et</button></div><div class="feedback" id="ipFb4"></div>
 </div>
 </section>
 
@@ -382,12 +401,16 @@ showSci(0,document.querySelector('#tab3 .chip-btn'));
 
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
-{"q": "2⁻⁴ ifadesinin değeri nedir?", "choices": ["\\(\\dfrac{1}{16}\\)", "-8", "16", "\\(-\\dfrac{1}{16}\\)"], "correct": 0, "expl": "\\(2^{-4} = \\dfrac{1}{2^{4}} = \\dfrac{1}{16}\\)."},
+{"q": "2⁻⁴ ifadesinin değeri nedir?", "choices": ["-8", "16", "\\(\\dfrac{1}{16}\\)", "\\(-\\dfrac{1}{16}\\)"], "correct": 2, "expl": "\\(2^{-4} = \\dfrac{1}{2^{4}} = \\dfrac{1}{16}\\)."},
 {"q": "5³ × 5² işleminin üslü ifade olarak sonucu nedir?", "choices": ["5⁶", "5⁵", "10⁵", "25⁵"], "correct": 1, "expl": "Tabanlar aynı olduğundan üsler toplanır: 3+2=5, sonuç 5⁵."},
 {"q": "(3²)³ ifadesi üslü ifade olarak hangisine eşittir?", "choices": ["3⁵", "3⁹", "6³", "3⁶"], "correct": 3, "expl": "Kuvvetin kuvveti alınırken üsler çarpılır: 2×3=6, sonuç 3⁶."},
 {"q": "512×10⁴ ifadesi aşağıdakilerden hangisine eşittir?", "choices": ["51,2×10³", "5,12×10⁶", "5120×10²", "512×10⁵"], "correct": 1, "expl": "512×10⁴ = 5.120.000 sayısını ifade eder; bu sayı 5,12×10⁶ olarak da yazılabilir."},
 {"q": "0,00043 sayısının bilimsel gösterimi hangisidir?", "choices": ["4,3×10⁻⁴", "43×10⁻⁵", "4,3×10⁴", "0,43×10⁻³"], "correct": 0, "expl": "Virgül 4 basamak sağa kaydırılarak 4,3 elde edilir; sayı 1'den küçük olduğundan üs negatiftir: 4,3×10⁻⁴."},
-{"q": "3,4×10⁶ ile 2,9×10⁷ sayılarından hangisi daha büyüktür?", "choices": ["3,4×10⁶", "Eşittir", "2,9×10⁷", "Karşılaştırılamaz"], "correct": 2, "expl": "Bilimsel gösterimde önce üsler karşılaştırılır; 7 &gt; 6 olduğundan 2,9×10⁷ daha büyüktür."}
+{"q": "3,4×10⁶ ile 2,9×10⁷ sayılarından hangisi daha büyüktür?", "choices": ["3,4×10⁶", "Eşittir", "2,9×10⁷", "Karşılaştırılamaz"], "correct": 2, "expl": "Bilimsel gösterimde önce üsler karşılaştırılır; 7 &gt; 6 olduğundan 2,9×10⁷ daha büyüktür."},
+{"q": "82,53 sayısı 10'un tam sayı kuvvetleri kullanılarak çözümlenirse aşağıdakilerden hangisi elde edilir?", "choices": ["8·10¹ + 2·10⁰ + 5·10⁻¹ + 3·10⁻²", "8·10² + 2·10¹ + 5·10⁰ + 3·10⁻¹", "8·10¹ + 2·10⁰ + 5·10¹ + 3·10²", "8·10⁰ + 2·10⁻¹ + 5·10⁻² + 3·10⁻³"], "correct": 0, "expl": "Onlar basamağındaki 8 → 8·10¹; birler 2 → 2·10⁰; ondalıklar 5 → 5·10⁻¹; yüzdelikler 3 → 3·10⁻². Doğru çözümleme 8·10¹ + 2·10⁰ + 5·10⁻¹ + 3·10⁻²'dir."},
+{"q": "3×10⁻⁵ ve 2×10⁻⁴ sayıları karşılaştırıldığında aşağıdakilerden hangisi doğrudur?", "choices": ["3×10⁻⁵ > 2×10⁻⁴", "3×10⁻⁵ < 2×10⁻⁴", "3×10⁻⁵ = 2×10⁻⁴", "Karşılaştırılamaz"], "correct": 1, "expl": "3×10⁻⁵ = 0,00003 ve 2×10⁻⁴ = 0,0002 olduğundan 3×10⁻⁵ < 2×10⁻⁴'tür. (Bilimsel gösterimde üsleri −5 ve −4 olan sayılardan üssü büyük olan daha büyüktür.)"},
+{"q": "−2⁴ + (−2)⁴ işleminin sonucu kaçtır?", "choices": ["0", "32", "−32", "16"], "correct": 0, "expl": "−2⁴ = −(2⁴) = −16 ve (−2)⁴ = 16 olduğundan toplam −16 + 16 = 0'dır."},
+{"q": "(−2)⁻³ ifadesinin değeri kaçtır?", "choices": ["−8", "1/8", "8", "−1/8"], "correct": 3, "expl": "(−2)⁻³ = 1/(−2)³ = 1/(−8) = −1/8."}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -429,5 +452,32 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* İŞARET VE PARANTEZ */
+
+(function(){
+var SUP={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
+function sup(n){return String(n).split('').map(function(c){return SUP[c];}).join('');}
+function val(b,n){var p=Math.pow(Math.abs(b),Math.abs(n)),neg=(b<0&&Math.abs(n)%2===1);
+ if(n>=0)return (neg?'−':'')+p;return (neg?'−':'')+'1/'+p;}
+function upd(){var b=parseInt(document.getElementById('ipB').value,10),n=parseInt(document.getElementById('ipN').value,10);
+ document.getElementById('ipBOut').textContent=b;document.getElementById('ipNOut').textContent=n;
+ var s=sup(n);document.getElementById('ipL1').textContent='(−'+b+')'+s;document.getElementById('ipL2').textContent='−'+b+s;document.getElementById('ipL3').textContent=b+s;
+ var v3=val(b,n),v1=val(-b,n),v2=(v3.charAt(0)==='−'?v3:'−'+v3);
+ document.getElementById('ipV1').textContent=v1;document.getElementById('ipV2').textContent=v2;document.getElementById('ipV3').textContent=v3;
+ var nt;if(n===0)nt='Üs 0 olduğundan (−'+b+')⁰ = '+b+'⁰ = 1; ancak −'+b+'⁰ = −1 olur (parantez yoksa eksi işareti sonuçta kalır).';
+ else if(Math.abs(n)%2===0)nt='Üs ('+n+') çift olduğundan (−'+b+')'+s+' pozitiftir; −'+b+s+' ise her zaman negatiftir. Bu iki ifade birbirine eşit değildir.';
+ else nt='Üs ('+n+') tek olduğundan (−'+b+')'+s+' negatiftir ve −'+b+s+' ile aynı değeri verir.';
+ document.getElementById('ipNote').textContent=nt;}
+document.getElementById('ipB').addEventListener('input',upd);document.getElementById('ipN').addEventListener('input',upd);upd();
+var ANS={1:[9,'9','(−3)² = (−3)·(−3) = 9.'],2:[-9,'−9','−3² = −(3²) = −9; parantez olmadığından taban 3\'tür.'],3:[-8,'−8','(−2)³ = (−2)·(−2)·(−2) = −8; tek kuvvet olduğundan sonuç negatiftir.'],4:[0.25,'1/4','(−2)⁻² = 1/(−2)² = 1/4; çift kuvvet olduğundan sonuç pozitiftir.']};
+function parse(t){t=t.trim().replace('−','-').replace(',','.');if(t.indexOf('/')>0){var p=t.split('/');return Number(p[0])/Number(p[1]);}return Number(t);}
+window.ipChk=function(i){var inp=document.getElementById('ipF'+i),fb=document.getElementById('ipFb'+i);
+ if(inp.value.trim()===''){fb.className='feedback show no';fb.textContent='Önce cevabınızı yazın.';return;}
+ var ok=Math.abs(parse(inp.value)-ANS[i][0])<1e-9;
+ fb.className='feedback show '+(ok?'ok':'no');fb.textContent=(ok?'Doğru! ':'Yanlış. Doğru cevap: '+ANS[i][1]+'. ')+ANS[i][2];
+ inp.disabled=true;document.getElementById('ipK'+i).disabled=true;};
+})();
+
 </script>
 </body></html>

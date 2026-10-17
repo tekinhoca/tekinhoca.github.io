@@ -33,6 +33,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab3">EŞİT ŞANSLI OLAYLAR</button>
 <button class="tab-btn" data-tab="tab4">0 İLE 1 ARASI</button>
 <button class="tab-btn" data-tab="tab5">OLASILIK HESAPLAMA</button>
+<button class="tab-btn" data-tab="tabZarPara">ZAR-PARA DENEYİ</button>
 <button class="tab-btn" data-tab="tab6">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab7">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab8">ÖZET</button>
@@ -175,6 +176,18 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="chip-btn" id="pbTargetS" onclick="setTarget('s')">Sarı</button>
 </div>
 <div class="result-strip"><div class="result-pill"><div class="lbl">Olasılık</div><div class="val" id="pbResult">—</div></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tabZarPara">
+<div class="card"><div class="card-title"><div class="icon">🎲</div>Zar ve Para Deneyi</div>
+<p class="body-text">Bir deneyi çok kez tekrarladığımızda her çıktının <b>gerçekleşme oranı</b> (deneysel olasılık), eş şansa sahip çıktılarda <b>1/n</b> değerine (kuramsal olasılık) yaklaşma eğilimi gösterir. Deneyi seçin ve atış sayısını artırarak gözlemleyin.</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="chip-btn active" id="zpC0" onclick="zpSel(0)">PARA (n = 2)</button><button class="chip-btn" id="zpC1" onclick="zpSel(1)">ZAR (n = 6)</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0"><button class="submit-btn" onclick="zpRun(1)">1 Atış</button><button class="submit-btn" onclick="zpRun(10)">10 Atış</button><button class="submit-btn" onclick="zpRun(100)">100 Atış</button><button class="submit-btn" onclick="zpRun(1000)">1000 Atış</button><button class="ghost-btn" onclick="zpReset()">Sıfırla</button></div>
+<div class="svg-wrap" style="max-width:480px"><svg id="zpSvg" viewBox="0 0 360 230" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Çıktıların gerçekleşme sayıları"></svg></div>
+<div class="note-box" id="zpInfo"></div>
+<div id="zpTbl"></div>
+<div class="tip-box">Atış sayısı küçükken oranlar kuramsal değerden oldukça farklı çıkabilir; atış sayısı arttıkça farklar genellikle küçülür. Buna rağmen her atış diğerlerinden bağımsızdır; önceki atışlar bir sonrakinin sonucunu etkilemez.</div>
 </div>
 </section>
 
@@ -578,5 +591,30 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* ZAR-PARA DENEYİ */
+
+(function(){
+var MODE=0,cnt=[0,0],tot=0;var NAMES=[['Yazı','Tura'],['1','2','3','4','5','6']];
+function n(){return NAMES[MODE].length;}
+function fm(x){return String(Math.round(x*1000)/1000).replace('.',',');}
+function reset(){cnt=[];for(var i=0;i<n();i++)cnt.push(0);tot=0;}
+function draw(){var N=n(),h='',mx=Math.max(1,Math.max.apply(null,cnt)),exp=tot/N,top=Math.max(mx,exp)||1,gw=300/N,bw=Math.min(40,gw-10);
+ h+='<line x1="40" y1="190" x2="350" y2="190" stroke="#8a6f6f" stroke-width="1.5"/><line x1="40" y1="25" x2="40" y2="190" stroke="#8a6f6f" stroke-width="1.5"/>';
+ h+='<text x="36" y="195" font-size="9" text-anchor="end" fill="#8a6f6f">0</text><text x="36" y="30" font-size="9" text-anchor="end" fill="#8a6f6f">'+Math.ceil(top)+'</text>';
+ cnt.forEach(function(c,i){var hh=160*c/Math.ceil(top),x=45+gw*i+(gw-bw)/2;h+='<rect x="'+x+'" y="'+(190-hh)+'" width="'+bw+'" height="'+hh+'" fill="#7a0e0e"/><text x="'+(x+bw/2)+'" y="'+(190-hh-4)+'" font-size="10" font-weight="800" text-anchor="middle" fill="#221515">'+c+'</text><text x="'+(x+bw/2)+'" y="207" font-size="11" text-anchor="middle" fill="#221515">'+NAMES[MODE][i]+'</text>';});
+ if(tot>0){var ey=190-160*exp/Math.ceil(top);h+='<line x1="40" y1="'+ey+'" x2="350" y2="'+ey+'" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 4"/><text x="342" y="'+(ey-4)+'" font-size="9.5" text-anchor="end" fill="#1d4ed8" font-weight="800">beklenen sayı</text>';}
+ document.getElementById('zpSvg').innerHTML=h;
+ var info=tot===0?'Henüz atış yapılmadı.':('Toplam atış: <b>'+tot+'</b>. Kuramsal olasılık her çıktı için 1/'+N+' = '+fm(1/N)+'.');
+ document.getElementById('zpInfo').innerHTML=info;
+ var t='<table class="mini-table"><tr><th>Çıktı</th><th>Sayı</th><th>Deneysel olasılık</th><th>Kuramsal olasılık</th></tr>';
+ cnt.forEach(function(c,i){t+='<tr><td>'+NAMES[MODE][i]+'</td><td>'+c+'</td><td>'+(tot?c+'/'+tot+' ≈ '+fm(c/tot):'—')+'</td><td>1/'+N+' ≈ '+fm(1/N)+'</td></tr>';});
+ document.getElementById('zpTbl').innerHTML=t+'</table>';
+ document.getElementById('zpC0').classList.toggle('active',MODE===0);document.getElementById('zpC1').classList.toggle('active',MODE===1);}
+window.zpSel=function(m){MODE=m;reset();draw();};
+window.zpRun=function(k){for(var j=0;j<k;j++){cnt[Math.floor(Math.random()*n())]++;tot++;}draw();};
+window.zpReset=function(){reset();draw();};
+reset();draw();})();
+
 </script>
 </body></html>

@@ -30,6 +30,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab2">RASYONEL DENKLEMLER</button>
 <button class="tab-btn" data-tab="tab3">KOORDİNAT SİSTEMİ</button>
 <button class="tab-btn" data-tab="tab4">SIRALI İKİLİLER</button>
+<button class="tab-btn" data-tab="tabNokta">NOKTA YERLEŞTİR</button>
 <button class="tab-btn" data-tab="tab5">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab6">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab7">ÖZET</button>
@@ -128,6 +129,18 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="slider-wrap"><div class="slider-label"><span>y</span><span id="p2YOut">-1</span></div><input type="range" id="p2Y" min="-6" max="6" step="1" value="-1"></div>
 <div class="svg-wrap" style="max-width:380px"><svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" id="p2Svg" role="img" aria-label="Kullanıcının seçtiği yeni noktayı gösteren koordinat düzlemi"><g id="p2Grid"></g><g id="p2PointGroup"></g></svg></div>
 <div class="result-strip"><div class="result-pill"><div class="lbl">Ev noktası</div><div class="val" id="p2Pair">—</div></div></div>
+</div>
+</section>
+
+<section class="tab-panel" id="tabNokta">
+<div class="card"><div class="card-title"><div class="icon">📍</div>Noktayı Yerleştir ve Koordinatları Oku</div>
+<p class="body-text">Sekiz görev var. Bazılarında verilen sıralı ikilinin yerini ızgarada <b>tıklayarak</b> işaretleyeceksiniz; bazılarında ise işaretli noktanın <b>koordinatlarını</b> yazacaksınız. Her görevde yalnızca bir cevap hakkınız vardır.</p>
+<div class="progress-dots" id="npDots"></div>
+<div class="note-box" id="npTask" style="font-weight:800;font-size:1.02rem"></div>
+<div class="svg-wrap" style="max-width:400px"><svg id="npSvg" viewBox="0 0 340 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Koordinat ızgarası"></svg></div>
+<div class="field-row" id="npRead" style="display:none"><span class="body-text" style="margin:0">P(</span><input type="text" class="answer-input" id="npX" style="width:70px" placeholder="x"><span class="body-text" style="margin:0">,</span><input type="text" class="answer-input" id="npY" style="width:70px" placeholder="y"><span class="body-text" style="margin:0">)</span><button class="submit-btn" id="npBtn" onclick="npRead()">Kontrol Et</button></div>
+<div class="feedback" id="npFb"></div>
+<div class="next-row"><button class="ghost-btn" id="npNext" onclick="npNext()" disabled>Sonraki Görev</button></div>
 </div>
 </section>
 
@@ -247,18 +260,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div>
 </div></div>
 
-<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 10</div><div class="ex-q">\(\dfrac{x+1}{2} = \dfrac{x-1}{3} + 2\) denklemini çözünüz.</div></div>
-<div class="ex-body">
-<button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
-<div class="ex-steps">
-<div class="ex-step"><div class="snum">1</div><div>Tüm paydaları 6'da eşitleyip paydaları sileriz: 3(x+1) = 2(x−1) + 12</div></div>
-<div class="ex-step"><div class="snum">2</div><div>Parantezleri dağıtırız: 3x + 3 = 2x − 2 + 12 → 3x + 3 = 2x + 10</div></div>
-<div class="ex-step"><div class="snum">3</div><div>Bilinmeyenleri bir tarafta toplarız: 3x − 2x = 10 − 3</div></div>
-<div class="ex-result">Sonuç: x = 7</div>
-</div>
-</div></div>
-
-<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 11</div><div class="ex-q">A(4, −5) noktası hangi bölgededir?</div></div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 10</div><div class="ex-q">A(4, −5) noktası hangi bölgededir?</div></div>
 <div class="ex-body">
 <button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
 <div class="ex-steps">
@@ -268,7 +270,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div>
 </div></div>
 
-<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 12</div><div class="ex-q">Bir noktanın koordinatları (a − 3, 2a + 1) olarak veriliyor. Bu nokta y ekseni üzerinde olduğuna göre a kaçtır?</div></div>
+<div class="ex-card"><div class="ex-header"><div class="ex-num">Örnek 11</div><div class="ex-q">Bir noktanın koordinatları (a − 3, 2a + 1) olarak veriliyor. Bu nokta y ekseni üzerinde olduğuna göre a kaçtır?</div></div>
 <div class="ex-body">
 <button class="ex-toggle" onclick="this.nextElementSibling.classList.toggle('show')">Çözümü Göster / Gizle</button>
 <div class="ex-steps">
@@ -598,5 +600,49 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* NOKTA YERLEŞTİR */
+(function(){
+
+function grid(S,R,id,clickFn){var O=170,h='',a=O-S*R,b=O+S*R;
+ for(var i=-R;i<=R;i++){h+='<line x1="'+(O+S*i)+'" y1="'+a+'" x2="'+(O+S*i)+'" y2="'+b+'" stroke="#f3e4e4"/><line x1="'+a+'" y1="'+(O-S*i)+'" x2="'+b+'" y2="'+(O-S*i)+'" stroke="#f3e4e4"/>';}
+ h+='<line x1="'+(a-4)+'" y1="170" x2="'+(b+8)+'" y2="170" stroke="#8a6f6f" stroke-width="1.6"/><line x1="170" y1="'+(b+8)+'" x2="170" y2="'+(a-8)+'" stroke="#8a6f6f" stroke-width="1.6"/><text x="'+(b+10)+'" y="174" font-size="11" fill="#8a6f6f">x</text><text x="176" y="'+(a-6)+'" font-size="11" fill="#8a6f6f">y</text>';
+ for(var v=-R;v<=R;v++){if(v===0)continue;var t=(v<0?'−':'')+Math.abs(v);if(Math.abs(v)%(R>6?2:1)===0){h+='<text x="'+(O+S*v-4)+'" y="184" font-size="9" fill="#8a6f6f">'+t+'</text><text x="174" y="'+(O-S*v+3)+'" font-size="9" fill="#8a6f6f">'+t+'</text>';}}
+ return h;}
+function hit(S,R,fn){var O=170,h='';for(var x=-R;x<=R;x++)for(var y=-R;y<=R;y++){h+='<circle cx="'+(O+S*x)+'" cy="'+(O-S*y)+'" r="'+(S*0.42)+'" fill="transparent" style="cursor:pointer" onclick="'+fn+'('+x+','+y+')"/>';}return h;}
+function fm(v){return String(v).replace('-','−');}
+
+(function(){
+var T=[['place','A',3,-2],['read','P',-2,3],['place','B',-4,5],['place','C',0,-4],['read','P',5,-1],['place','D',-5,0],['read','P',0,3],['place','E',-3,-3]];
+var i=0,score=0,res=[],locked=false;
+function where(x,y){var ax=Math.abs(x),ay=Math.abs(y);
+ if(x===0&&y!==0)return 'y ekseni üzerinde, orijinin '+ay+' birim '+(y>0?'yukarısında':'aşağısında');
+ if(y===0&&x!==0)return 'x ekseni üzerinde, orijinin '+ax+' birim '+(x>0?'sağında':'solunda');
+ return 'orijinin '+ax+' birim '+(x>0?'sağında':'solunda')+', '+ay+' birim '+(y>0?'yukarısında':'aşağısında');}
+function dots(){var h='';for(var k=0;k<T.length;k++)h+='<div class="pdot'+(res[k]===1?' done':(k===i?' now':''))+'"></div>';document.getElementById('npDots').innerHTML=h;}
+function pointSvg(x,y,col,lab){return '<circle cx="'+(170+24*x)+'" cy="'+(170-24*y)+'" r="6.5" fill="'+col+'"/>'+(lab?'<text x="'+(170+24*x+9)+'" y="'+(170-24*y-8)+'" font-size="12" font-weight="800" fill="'+col+'">'+lab+'</text>':'');}
+function render(){var t=T[i];locked=false;var h=grid(24,6,'np');
+ if(t[0]==='read')h+=pointSvg(t[2],t[3],'#7a0e0e','P');
+ document.getElementById('npSvg').innerHTML=h+hit(24,6,'npClick');
+ document.getElementById('npTask').textContent=(t[0]==='place')?('Görev '+(i+1)+': '+t[1]+'('+fm(t[2])+', '+fm(t[3])+') noktasını ızgarada tıklayarak işaretleyin.'):('Görev '+(i+1)+': İşaretli P noktasının koordinatlarını yazın.');
+ document.getElementById('npRead').style.display=(t[0]==='read')?'flex':'none';
+ var X=document.getElementById('npX'),Y=document.getElementById('npY');X.value='';Y.value='';X.disabled=false;Y.disabled=false;document.getElementById('npBtn').disabled=false;
+ var fb=document.getElementById('npFb');fb.className='feedback';fb.textContent='';document.getElementById('npNext').disabled=true;document.getElementById('npNext').textContent=(i===T.length-1)?'Sonucu Gör':'Sonraki Görev';dots();}
+function finish(ok,msg){res[i]=ok?1:0;if(ok)score++;var fb=document.getElementById('npFb');fb.className='feedback show '+(ok?'ok':'no');fb.textContent=msg;document.getElementById('npNext').disabled=false;locked=true;dots();}
+window.npClick=function(x,y){var t=T[i];if(t[0]!=='place'||locked)return;var ok=(x===t[2]&&y===t[3]);
+ var h=grid(24,6,'np')+pointSvg(t[2],t[3],'#059669',t[1]);if(!ok)h+=pointSvg(x,y,'#dc2626','');
+ document.getElementById('npSvg').innerHTML=h;
+ var d=t[1]+'('+fm(t[2])+', '+fm(t[3])+') noktası '+where(t[2],t[3])+' bulunur.';
+ finish(ok,ok?('Doğru! '+d):('Yanlış. Doğru cevap: '+d+' Siz ('+fm(x)+', '+fm(y)+') noktasını işaretlediniz (kırmızı).'));};
+function num(s){s=String(s).trim().replace('−','-').replace(',','.');return s===''?NaN:Number(s);}
+window.npRead=function(){var t=T[i];if(t[0]!=='read'||locked)return;var X=document.getElementById('npX'),Y=document.getElementById('npY'),fb=document.getElementById('npFb');
+ if(X.value.trim()===''||Y.value.trim()===''){fb.className='feedback show no';fb.textContent='Önce x ve y için birer değer yazın.';return;}
+ var ok=(num(X.value)===t[2]&&num(Y.value)===t[3]);X.disabled=true;Y.disabled=true;document.getElementById('npBtn').disabled=true;
+ var d='P('+fm(t[2])+', '+fm(t[3])+'): apsis (x) '+fm(t[2])+', ordinat (y) '+fm(t[3])+'. Nokta '+where(t[2],t[3])+' bulunur.';
+ finish(ok,ok?('Doğru! '+d):('Yanlış. Doğru cevap: '+d));};
+window.npNext=function(){if(i===T.length-1){var fb=document.getElementById('npFb');fb.className='feedback show '+(score>=6?'ok':'no');fb.textContent='Etkinlik tamamlandı. Doğru sayınız: '+score+' / '+T.length+'.';document.getElementById('npNext').disabled=true;return;}i++;render();};
+render();})();
+})();
+
 </script>
 </body></html>

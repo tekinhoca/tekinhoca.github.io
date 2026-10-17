@@ -26,6 +26,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <button class="tab-btn" data-tab="tab1">ASAL ÇARPANLAR</button>
 <button class="tab-btn" data-tab="tab2">EBOB - EKOK</button>
 <button class="tab-btn" data-tab="tab3">ARALARINDA ASAL</button>
+<button class="tab-btn" data-tab="tabCarpan">ÇARPANLAR</button>
 <button class="tab-btn" data-tab="tab4">ÖRNEKLER</button>
 <button class="tab-btn" data-tab="tab5">ÇALIŞMA</button>
 <button class="tab-btn" data-tab="tab6">ÖZET</button>
@@ -150,6 +151,24 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </div>
 </section>
 
+<section class="tab-panel" id="tabCarpan">
+<div class="card"><div class="card-title"><div class="icon">🔢</div>Çarpanlar ve Asal Çarpanlara Ayırma</div>
+<p class="body-text">Bir pozitif tam sayıyı kalansız bölen pozitif tam sayılara o sayının <b>çarpanları</b> denir. Çarpanı yalnızca 1 ve kendisi olan (iki çarpanlı) sayılar <b>asal</b>, ikiden fazla çarpanı olan sayılar <b>bileşik</b> sayıdır. Her bileşik sayı, asal çarpanlarının <b>üslü ifadelerin çarpımı</b> biçiminde yazılabilir.</p>
+<div class="slider-wrap"><div class="slider-label"><span>Sayı (n)</span><span id="cpNOut">72</span></div><input type="range" id="cpN" min="2" max="100" step="1" value="72"></div>
+<div class="result-strip"><div class="result-pill" style="flex:3"><div class="lbl">Pozitif tam sayı çarpanları</div><div class="val" id="cpDiv" style="font-size:.98rem;font-weight:700">—</div></div></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl">Çarpan sayısı</div><div class="val" id="cpCnt" style="font-size:1rem">—</div></div><div class="result-pill"><div class="lbl">Tür</div><div class="val" id="cpKind" style="font-size:1rem">—</div></div></div>
+<div class="result-strip"><div class="result-pill" style="flex:2"><div class="lbl">Çarpan çiftleri</div><div class="val" id="cpPairs" style="font-size:.92rem;font-weight:700">—</div></div><div class="result-pill" style="flex:2"><div class="lbl">Asal çarpanlarına ayrılmış hâli</div><div class="val" id="cpFac" style="font-size:1rem">—</div></div></div>
+</div>
+<div class="card"><div class="card-title"><div class="icon">🤝</div>Ortak Bölenler, EBOB, EKOK ve Aralarında Asal</div>
+<p class="body-text">İki sayıyı seçin; ortak bölenlerini, EBOB ve EKOK değerlerini görün. EBOB'u <b>1</b> olan iki sayıya <b>aralarında asal</b> denir.</p>
+<div class="two-col"><div class="slider-wrap"><div class="slider-label"><span>1. sayı</span><span id="cpAOut">12</span></div><input type="range" id="cpA" min="2" max="60" step="1" value="12"></div>
+<div class="slider-wrap"><div class="slider-label"><span>2. sayı</span><span id="cpBOut">18</span></div><input type="range" id="cpB" min="2" max="60" step="1" value="18"></div></div>
+<div class="result-strip"><div class="result-pill" style="flex:3"><div class="lbl">Ortak bölenler</div><div class="val" id="cpCom" style="font-size:.98rem;font-weight:700">—</div></div></div>
+<div class="result-strip"><div class="result-pill"><div class="lbl">EBOB</div><div class="val" id="cpG" style="font-size:1.05rem">—</div></div><div class="result-pill"><div class="lbl">EKOK</div><div class="val" id="cpL" style="font-size:1.05rem">—</div></div><div class="result-pill"><div class="lbl">Aralarında asal mı?</div><div class="val" id="cpCo" style="font-size:1rem">—</div></div></div>
+<div class="tip-box">Aralarında asal olan sayıların kendilerinin asal olması gerekmez: örneğin 8 ve 15 asal değildir ama ortak bölenleri yalnızca 1 olduğundan aralarında asaldır.</div>
+</div>
+</section>
+
 <section class="tab-panel" id="tab4">
 <div class="card"><div class="card-title"><div class="icon">✏️</div>Çözümlü örnekler</div>
 
@@ -214,8 +233,8 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">6</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">72</button>
-<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">4</button>
 <button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">12</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">4</button>
 </div><div class="feedback"></div></div>
 
 <div class="q-card" data-okmsg="Doğru! 18=2×3², 24=2³×3 olduğundan tüm çarpanların en büyük üsleri 2³×3² = 72." data-nomsg="Yanlış. Doğru cevap: 72. 18=2×3², 24=2³×3 olduğundan tüm çarpanların en büyük üsleri 2³×3² = 72.">
@@ -223,9 +242,37 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="choices">
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">36</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">6</button>
-<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">72</button>
 <button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">432</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">72</button>
 </div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! 36&#x27;nın çarpanları: 1, 2, 3, 4, 6, 9, 12, 18, 36. Toplam 9 çarpan vardır." data-nomsg="Yanlış. Doğru cevap: 9. 36&#x27;nın çarpanları: 1, 2, 3, 4, 6, 9, 12, 18, 36. Toplam 9 çarpan vardır.">
+<div class="q-text">36 sayısının pozitif tam sayı çarpanlarının sayısı kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">9</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">8</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">10</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">12</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! 90 = 2 · 45 = 2 · 3 · 15 = 2 · 3 · 3 · 5 = 2 · 3² · 5. Diğer seçeneklerde ya çarpım 90 etmez ya da asal olmayan çarpan (15, 10) bulunur." data-nomsg="Yanlış. Doğru cevap: 2 · 3² · 5. 90 = 2 · 45 = 2 · 3 · 15 = 2 · 3 · 3 · 5 = 2 · 3² · 5. Diğer seçeneklerde ya çarpım 90 etmez ya da asal olmayan çarpan (15, 10) bulunur.">
+<div class="q-text">Aşağıdakilerden hangisi 90 sayısının asal çarpanlarına ayrılmış, üslü ifadelerin çarpımı biçimindeki yazılışıdır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2² · 3 · 5</button>
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">2 · 3² · 5</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">2 · 3 · 15</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">3² · 10</button>
+</div><div class="feedback"></div></div>
+
+<div class="q-card" data-okmsg="Doğru! 12 = 2² · 3 ve 18 = 2 · 3² olduğundan EKOK = 2² · 3² = 36&#x27;dır." data-nomsg="Yanlış. Doğru cevap: 36. 12 = 2² · 3 ve 18 = 2 · 3² olduğundan EKOK = 2² · 3² = 36&#x27;dır.">
+<div class="q-text">12 ve 18 sayılarının EKOK'u kaçtır?</div>
+<div class="choices">
+<button class="choice-btn" data-correct="1" onclick="checkChoice(this,true)">36</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">6</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">24</button>
+<button class="choice-btn" data-correct="0" onclick="checkChoice(this,false)">72</button>
+</div><div class="feedback"></div></div>
+
 
 <p class="body-text" style="margin-top:16px"><b>Boşluğu doldurun:</b></p>
 <div class="field-row"><span class="body-text" style="margin:0">72 ve 90 sayılarının EBOB'u:</span><input type="text" class="answer-input" id="fillEbob" placeholder="?"><button class="submit-btn" onclick="checkFill('fillEbob',18,'fbEbob')">Kontrol Et</button></div>
@@ -389,11 +436,11 @@ updateEE();
 /* ---- Kendini Dene quiz ---- */
 const quizData=[
 {"q": "60 sayısının asal çarpanlara ayrılmış hâli aşağıdakilerden hangisidir?", "choices": ["2 × 3² × 5", "2² × 3 × 5", "2³ × 3 × 5", "2² × 15"], "correct": 1, "expl": "60 = 4 × 15 = 4 × 3 × 5 = 2² × 3 × 5. NOT: '2² × 15' ifadesinde 15 asal olmadığı için bu seçenek doğru kabul edilemez."},
-{"q": "EBOB(18, 24) kaçtır?", "choices": ["6", "12", "3", "36"], "correct": 0, "expl": "18 = 2 × 3² ve 24 = 2³ × 3. Ortak çarpanlar en küçük üsleriyle: 2 × 3 = 6"},
-{"q": "EKOK(18, 24) kaçtır?", "choices": ["36", "144", "432", "72"], "correct": 3, "expl": "18 = 2 × 3² ve 24 = 2³ × 3. Tüm çarpanlar en büyük üsleriyle: 2³ × 3² = 72"},
-{"q": "Aşağıdaki sayı çiftlerinden hangisi aralarında asaldır?", "choices": ["14 ve 21", "12 ve 18", "9 ve 16", "20 ve 50"], "correct": 2, "expl": "9 = 3² ve 16 = 2⁴ olduğundan ortak asal çarpanları yoktur; EBOB(9,16) = 1"},
+{"q": "EBOB(18, 24) kaçtır?", "choices": ["12", "3", "36", "6"], "correct": 3, "expl": "18 = 2 × 3² ve 24 = 2³ × 3. Ortak çarpanlar en küçük üsleriyle: 2 × 3 = 6"},
+{"q": "EKOK(18, 24) kaçtır?", "choices": ["36", "144", "72", "432"], "correct": 2, "expl": "18 = 2 × 3² ve 24 = 2³ × 3. Tüm çarpanlar en büyük üsleriyle: 2³ × 3² = 72"},
+{"q": "Aşağıdaki sayı çiftlerinden hangisi aralarında asaldır?", "choices": ["14 ve 21", "12 ve 18", "20 ve 50", "9 ve 16"], "correct": 3, "expl": "9 = 3² ve 16 = 2⁴ olduğundan ortak asal çarpanları yoktur; EBOB(9,16) = 1"},
 {"q": "Bir kırtasiyeci 24 kalem ve 36 silgiyi, hiçbiri artmayacak ve birbirine karışmayacak şekilde eşit sayıda en az kaç pakete ayırabilir?", "choices": ["5", "6", "12", "4"], "correct": 0, "expl": "EBOB(24,36) = 12 → 24 ÷ 12 = 2 paket (kalem) ve 36 ÷ 12 = 3 paket (silgi) → 2 + 3 = 5 paket"},
-{"q": "8 ve 12'nin katları ilk kez hangi sayıda çakışır?", "choices": ["48", "24", "16", "96"], "correct": 1, "expl": "8 = 2³ ve 12 = 2² × 3 olduğundan EKOK(8,12) = 2³ × 3 = 24"}
+{"q": "8 ve 12'nin katları ilk kez hangi sayıda çakışır?", "choices": ["48", "16", "24", "96"], "correct": 2, "expl": "8 = 2³ ve 12 = 2² × 3 olduğundan EKOK(8,12) = 2³ × 3 = 24"}
 ];
 let qIndex=0,qScore=0,qAnswered=false;
 function renderDots(){
@@ -433,5 +480,26 @@ function answerQuiz(i){
 }
 function nextQuiz(){qIndex++;renderQuiz();}
 renderQuiz();
+
+/* ÇARPANLAR */
+
+(function(){
+var SUP={'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+function sup(n){return String(n).split('').map(function(c){return SUP[c];}).join('');}
+function divs(n){var r=[];for(var i=1;i<=n;i++)if(n%i===0)r.push(i);return r;}
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function fac(n){var r=[],p=2;while(n>1){var c=0;while(n%p===0){n/=p;c++;}if(c)r.push([p,c]);p++;}return r;}
+function upd(){var n=parseInt(document.getElementById('cpN').value,10);document.getElementById('cpNOut').textContent=n;
+ var d=divs(n);document.getElementById('cpDiv').textContent=d.join(', ');document.getElementById('cpCnt').textContent=d.length;
+ document.getElementById('cpKind').textContent=(d.length===2)?'Asal sayı':'Bileşik sayı';
+ var pairs=[];for(var i=0;i<d.length&&d[i]*d[i]<=n;i++)pairs.push(d[i]+' × '+(n/d[i]));document.getElementById('cpPairs').textContent=pairs.join('   ·   ');
+ var f=fac(n);document.getElementById('cpFac').textContent=(d.length===2)?(n+' asal sayıdır'):(n+' = '+f.map(function(x){return x[1]>1?x[0]+sup(x[1]):String(x[0]);}).join(' · '));}
+function upd2(){var a=parseInt(document.getElementById('cpA').value,10),b=parseInt(document.getElementById('cpB').value,10);
+ document.getElementById('cpAOut').textContent=a;document.getElementById('cpBOut').textContent=b;
+ var g=gcd(a,b),l=a*b/g,da=divs(a),com=da.filter(function(x){return b%x===0;});
+ document.getElementById('cpCom').textContent=com.join(', ');document.getElementById('cpG').textContent=g;document.getElementById('cpL').textContent=l;
+ var e=document.getElementById('cpCo');e.textContent=(g===1)?'Evet (EBOB = 1)':'Hayır (EBOB = '+g+')';}
+['cpN'].forEach(function(i){document.getElementById(i).addEventListener('input',upd);});['cpA','cpB'].forEach(function(i){document.getElementById(i).addEventListener('input',upd2);});upd();upd2();})();
+
 </script>
 </body></html>
