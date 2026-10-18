@@ -316,19 +316,23 @@ const KIND4=[['tri','Üçgen'],['rect','Dikdörtgen'],['pent','Beşgen'],['hex',
 
 /* ---- Dik dairesel silindir ---- */
 function drawCyl(g,faces,pr,fr,o){
-  g.innerHTML='';
+  g.innerHTML='';o=o||{};
   const S=p=>{const q=pr(p);return{x:fr.ox+fr.sc*(q.x-fr.cx),y:fr.oy-fr.sc*(q.y-fr.cy),d:q.d};};
   faces.map(f=>{const q=f.pts.map(S);return{f,q,d:q.reduce((s,p)=>s+p.d,0)/q.length};}).sort((a,b)=>b.d-a.d).forEach(({f,q})=>{
-    const fill=o&&o.fill?o.fill(f):(f.k==='s'?'rgba(5,150,105,.36)':'rgba(122,14,14,.30)');
-    el(g,'polygon',{points:q.map(p=>p.x+','+p.y).join(' '),fill:fill,stroke:f.fine?'rgba(5,150,105,.45)':'#4b1d1d','stroke-width':f.fine?.8:2,'stroke-linejoin':'round'});
+    const fill=o.fill?o.fill(f):(f.k==='s'?'rgba(5,150,105,.36)':'rgba(122,14,14,.30)');
+    const stroke=o.skeleton?'none':(f.fine?'rgba(5,150,105,.45)':'#4b1d1d');
+    const sw=o.skeleton?0:(f.fine?.8:2);
+    el(g,'polygon',{points:q.map(p=>p.x+','+p.y).join(' '),fill:fill,stroke:stroke,'stroke-width':sw,'stroke-linejoin':'round'});
   });
-  const st=faces.filter(f=>f.fine);
-  if(st.length){
-    const bot=[],top=[];st.forEach(f=>{bot.push(S(f.pts[0]));top.push(S(f.pts[3]));});
-    const lq=st[st.length-1].pts,b2=S(lq[1]),t2=S(lq[2]);bot.push(b2);top.push(t2);
-    [bot,top,[bot[0],top[0]],[bot[bot.length-1],top[top.length-1]]].forEach(pl=>el(g,'polyline',{points:pl.map(p=>p.x+','+p.y).join(' '),fill:'none',stroke:'#4b1d1d','stroke-width':2,'stroke-linejoin':'round'}));
+  if(!o.skeleton){
+    const st=faces.filter(f=>f.fine);
+    if(st.length){
+      const bot=[],top=[];st.forEach(f=>{bot.push(S(f.pts[0]));top.push(S(f.pts[3]));});
+      const lq=st[st.length-1].pts,b2=S(lq[1]),t2=S(lq[2]);bot.push(b2);top.push(t2);
+      [bot,top,[bot[0],top[0]],[bot[bot.length-1],top[top.length-1]]].forEach(pl=>el(g,'polyline',{points:pl.map(p=>p.x+','+p.y).join(' '),fill:'none',stroke:'#4b1d1d','stroke-width':2,'stroke-linejoin':'round'}));
+    }
   }
-  if(o&&o.labels)faces.forEach(f=>{if(!f.nm)return;const q=f.pts.map(S);el(g,'text',{x:q.reduce((s,p)=>s+p.x,0)/q.length,y:q.reduce((s,p)=>s+p.y,0)/q.length+4,'text-anchor':'middle','font-size':12,'font-weight':800,fill:'#3b0a0a',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},f.nm);});
+  if(o.labels)faces.forEach(f=>{if(!f.nm)return;const q=f.pts.map(S);el(g,'text',{x:q.reduce((s,p)=>s+p.x,0)/q.length,y:q.reduce((s,p)=>s+p.y,0)/q.length+4,'text-anchor':'middle','font-size':12,'font-weight':800,fill:'#3b0a0a',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},f.nm);});
   return S;
 }
 const PITC=t=>t<0.6?28:28+52*(t-0.6)/0.4;
@@ -354,21 +358,96 @@ function fitG(gf,yaw,ts,pf,W,H,mx){
 const CSTY=(f,st,hl)=>f.k==='s'?(hl==='yan'?st:'rgba(5,150,105,.30)'):(hl==='taban'?st:'rgba(122,14,14,.28)');
 /* Silindir nedir / elemanlar */
 function mkCyl(id,hlOn){
-  const box=gid(id);let hl='taban';
+  const box=gid(id);let hl='',step=0,timer=null;
   box.innerHTML=(hlOn?chipRow(id+'h',[['taban','Taban'],['yan','Yan yüz'],['yar','Yarıçap (r)'],['yuk','Yükseklik (h)']],hl):'')+slider(id+'r','Taban yarıçapı r (cm)',1,3,0.5,2)+slider(id+'e','Yükseklik h (cm)',1,5,0.5,3)+slider(id+'y','Silindiri döndürün',0,350,10,30)+svgBox(id+'G','0 0 600 360','Dik dairesel silindir')+(hlOn?'<div class="mini-table" id="'+id+'T"></div>':'');
+  function stopAnim(){if(timer!==null){clearInterval(timer);timer=null;}step=0;}
+  function startAnim(){
+    stopAnim();
+    if(!hlOn||!hl)return;
+    timer=setInterval(()=>{step++;draw();},hl==='yan'?45:850);
+  }
   function draw(){
     const r=+gid(id+'r').value,h=+gid(id+'e').value,yaw=+gid(id+'y').value;
     gid(id+'rOut').textContent=fl(r);gid(id+'eOut').textContent=fl(h);gid(id+'yOut').textContent=yaw+'°';
-    const pr=proj(yaw,25),fr={sc:36,cx:0,cy:pr([0,0,h/2]).y,ox:300,oy:180},g=gid(id+'G'),st='rgba(217,119,6,.6)';
-    const S=drawCyl(g,cylFaces(r,h,0),pr,fr,{fill:f=>hlOn?CSTY(f,st,hl):(f.k==='s'?'rgba(5,150,105,.30)':'rgba(122,14,14,.28)')});
+    const pr=proj(yaw,25),fr={sc:36,cx:0,cy:pr([0,0,h/2]).y,ox:300,oy:180},g=gid(id+'G');
+    const blink=step%2===0;
+    const faces=cylFaces(r,h,0);
+    const S=drawCyl(g,faces,pr,fr,{
+      skeleton:!!hlOn,
+      fill:f=>{
+        if(!hlOn)return f.k==='s'?'rgba(5,150,105,.30)':'rgba(122,14,14,.28)';
+        if(!hl)return 'none';
+        if(hl==='taban'){
+          if(f.k==='t'&&blink)return 'rgba(249,115,22,.88)';
+          if(f.k==='b'&&!blink)return 'rgba(249,115,22,.88)';
+        }
+        return 'none';
+      }
+    });
+    // İskelet: üst/alt elips + iki siluet dikey ana doğru
+    if(hlOn){
+      const M=64,bot=[],top=[];
+      for(let j=0;j<=M;j++){
+        const a=2*Math.PI*j/M;
+        bot.push(S([r*Math.sin(a),-r*Math.cos(a),0]));
+        top.push(S([r*Math.sin(a),-r*Math.cos(a),h]));
+      }
+      el(g,'polyline',{points:bot.map(p=>p.x+','+p.y).join(' '),fill:'none',stroke:'#53616d','stroke-width':1.4,'stroke-linejoin':'round'});
+      el(g,'polyline',{points:top.map(p=>p.x+','+p.y).join(' '),fill:'none',stroke:'#53616d','stroke-width':1.4,'stroke-linejoin':'round'});
+      // siluet: ekranda en sol / en sağ dikey üreteç
+      let iL=0,iR=0,minX=bot[0].x,maxX=bot[0].x;
+      for(let i=1;i<bot.length;i++){
+        if(bot[i].x<minX){minX=bot[i].x;iL=i;}
+        if(bot[i].x>maxX){maxX=bot[i].x;iR=i;}
+      }
+      el(g,'line',{x1:bot[iL].x,y1:bot[iL].y,x2:top[iL].x,y2:top[iL].y,stroke:'#53616d','stroke-width':1.7,'stroke-linecap':'round'});
+      el(g,'line',{x1:bot[iR].x,y1:bot[iR].y,x2:top[iR].x,y2:top[iR].y,stroke:'#53616d','stroke-width':1.7,'stroke-linecap':'round'});
+    }
     if(!hlOn)return;
-    const C=S([0,0,h]),R=S([r,0,h]),B=S([0,0,0]);
-    if(hl==='yar'){el(g,'line',{x1:C.x,y1:C.y,x2:R.x,y2:R.y,stroke:'#c81e1e','stroke-width':3.5});el(g,'text',{x:(C.x+R.x)/2,y:(C.y+R.y)/2-8,'text-anchor':'middle','font-size':16,'font-weight':800,fill:'#c81e1e',stroke:'#fff','stroke-width':4,'paint-order':'stroke'},'r');}
-    if(hl==='yuk'){el(g,'line',{x1:B.x,y1:B.y,x2:C.x,y2:C.y,stroke:'#c81e1e','stroke-width':3.5,'stroke-dasharray':'7 5'});el(g,'text',{x:B.x+12,y:(B.y+C.y)/2,'font-size':16,'font-weight':800,fill:'#c81e1e',stroke:'#fff','stroke-width':4,'paint-order':'stroke'},'h');}
-    [C,B].forEach(p=>el(g,'circle',{cx:p.x,cy:p.y,r:3.5,fill:'#7a0e0e'}));
+    const C=S([0,0,h]),B=S([0,0,0]),Rtop=S([r,0,h]);
+    // Yan yüz: dikey mavi üreteç + iz
+    if(hl==='yan'){
+      const Ntrail=28,span=0.55;
+      const theta0=(step*0.07)%(2*Math.PI);
+      for(let k=Ntrail;k>=1;k--){
+        const t1=theta0-span*k/Ntrail,t2=theta0-span*(k-1)/Ntrail;
+        const b1=S([r*Math.sin(t1),-r*Math.cos(t1),0]);
+        const b2=S([r*Math.sin(t2),-r*Math.cos(t2),0]);
+        const tA=S([r*Math.sin(t1),-r*Math.cos(t1),h]);
+        const tB=S([r*Math.sin(t2),-r*Math.cos(t2),h]);
+        const alpha=0.08+0.55*(1-k/Ntrail);
+        el(g,'polygon',{points:[b1,b2,tB,tA].map(p=>p.x+','+p.y).join(' '),fill:'rgba(37,99,235,'+alpha.toFixed(3)+')',stroke:'none'});
+      }
+      const bb=S([r*Math.sin(theta0),-r*Math.cos(theta0),0]);
+      const tt=S([r*Math.sin(theta0),-r*Math.cos(theta0),h]);
+      el(g,'line',{x1:bb.x,y1:bb.y,x2:tt.x,y2:tt.y,stroke:'#2563eb','stroke-width':4,'stroke-linecap':'round'});
+      el(g,'circle',{cx:bb.x,cy:bb.y,r:3,fill:'#2563eb'});
+      el(g,'circle',{cx:tt.x,cy:tt.y,r:3,fill:'#2563eb'});
+    }
+    if(hl==='yar'&&blink){
+      el(g,'line',{x1:C.x,y1:C.y,x2:Rtop.x,y2:Rtop.y,stroke:'#dc2626','stroke-width':5,'stroke-linecap':'round'});
+      el(g,'circle',{cx:C.x,cy:C.y,r:3.5,fill:'#dc2626'});
+      el(g,'circle',{cx:Rtop.x,cy:Rtop.y,r:3.5,fill:'#dc2626'});
+    }
+    if(hl==='yuk'){
+      if(blink){
+        // eksen yüksekliği
+        el(g,'line',{x1:B.x,y1:B.y,x2:C.x,y2:C.y,stroke:'#dc2626','stroke-width':5,'stroke-linecap':'round'});
+        el(g,'circle',{cx:B.x,cy:B.y,r:3.5,fill:'#dc2626'});
+        el(g,'circle',{cx:C.x,cy:C.y,r:3.5,fill:'#dc2626'});
+      }else{
+        // yan yüzde dik yükseklik (görünür bir üreteç)
+        const sb=S([r,0,0]),st=S([r,0,h]);
+        el(g,'line',{x1:sb.x,y1:sb.y,x2:st.x,y2:st.y,stroke:'#dc2626','stroke-width':5,'stroke-linecap':'round'});
+        el(g,'circle',{cx:sb.x,cy:sb.y,r:3.5,fill:'#dc2626'});
+        el(g,'circle',{cx:st.x,cy:st.y,r:3.5,fill:'#dc2626'});
+      }
+    }
     gid(id+'T').innerHTML=TB+'<tr><th>Eleman</th><th>Açıklama</th></tr><tr><td>Taban</td><td>Birbirine eş ve paralel 2 daire</td></tr><tr><td>Yan yüz</td><td>İki tabanı birleştiren eğri yüzey</td></tr><tr><td>Yarıçap (r)</td><td>Taban dairesinin yarıçapı: r = '+fl(r)+' cm</td></tr><tr><td>Yükseklik (h)</td><td>İki taban arasındaki uzaklık: h = '+fl(h)+' cm. Dik silindirde tabanların merkezlerini birleştiren doğru parçası (eksen) tabanlara diktir.</td></tr></table>';
   }
-  if(hlOn)onChips(id+'h',v=>{hl=v;draw();});box.addEventListener('input',draw);draw();
+  if(hlOn)onChips(id+'h',v=>{hl=v;startAnim();draw();});
+  box.addEventListener('input',draw);
+  draw();
 }
 mkCyl('sl0',false);mkCyl('sl1',true);
 
