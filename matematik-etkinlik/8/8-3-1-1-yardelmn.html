@@ -63,7 +63,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="tip-box">Bir köşeden, karşı kenarın orta noktasına çizilen doğru parçasına <b>kenarortay</b> denir. Her üçgende üç tane kenarortay vardır. Kenarortaylar mutlaka üçgenin iç bölgesindeki bir noktadan geçerler. Bu noktaya üçgenin <b>ağırlık merkezi</b> adı verilir. Ağırlık merkezi, kenarortayı 1:2 oranında iki parçaya ayırır.</div>
 <p class="body-text">Aşağıdaki üçgenin A noktasını kaydırıcılarla hareket ettirin, hangi köşeden kenarortay çizileceğini seçin.</p>
 <div class="chip-row" id="t1VChips"></div>
-<div class="slider-wrap"><div class="slider-label"><span>A noktasının yatay konumu</span><span id="t1AxOut"></span></div><input type="range" id="t1Ax" min="140" max="460" step="10" value="300"></div>
+<div class="slider-wrap"><div class="slider-label"><span>A noktasının yatay konumu</span><span id="t1AxOut"></span></div><input type="range" id="t1Ax" min="60" max="560" step="10" value="300"></div>
 <div class="slider-wrap"><div class="slider-label"><span>A noktasının yüksekliği</span><span id="t1AyOut"></span></div><input type="range" id="t1Ay" min="40" max="220" step="10" value="90"></div>
 <div class="svg-wrap"><svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kenarortay modeli"><g id="t1Grid"></g></svg></div>
 <div class="def-box" id="t1Info" style="text-align:center"></div>
@@ -75,7 +75,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="tip-box">Bir köşedeki açıyı iki eş parçaya bölen ve karşı kenarı kesen doğru parçasına <b>açıortay</b> denir. Her üçgende üç tane açıortay vardır. Açıortaylar mutlaka üçgenin iç bölgesindeki bir noktadan geçerler.</div>
 <p class="body-text">Aşağıdaki üçgenin şeklini kaydırıcılarla değiştirip köşe seçerek açıortayın karşı kenarı nerede kestiğini gözlemleyin.</p>
 <div class="chip-row" id="t2VChips"></div>
-<div class="slider-wrap"><div class="slider-label"><span>A noktasının yatay konumu</span><span id="t2AxOut"></span></div><input type="range" id="t2Ax" min="140" max="460" step="10" value="300"></div>
+<div class="slider-wrap"><div class="slider-label"><span>A noktasının yatay konumu</span><span id="t2AxOut"></span></div><input type="range" id="t2Ax" min="60" max="560" step="10" value="300"></div>
 <div class="slider-wrap"><div class="slider-label"><span>A noktasının yüksekliği</span><span id="t2AyOut"></span></div><input type="range" id="t2Ay" min="40" max="220" step="10" value="90"></div>
 <div class="svg-wrap"><svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Açıortay modeli"><g id="t2Grid"></g></svg></div>
 <div class="def-box" id="t2Info" style="text-align:center"></div>
@@ -89,7 +89,7 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 <div class="chip-row" id="t3VChips"></div>
 <div class="slider-wrap"><div class="slider-label"><span>A noktasının yatay konumu</span><span id="t3AxOut"></span></div><input type="range" id="t3Ax" min="40" max="560" step="10" value="300"></div>
 <div class="slider-wrap"><div class="slider-label"><span>A noktasının yüksekliği</span><span id="t3AyOut"></span></div><input type="range" id="t3Ay" min="40" max="220" step="10" value="90"></div>
-<div class="svg-wrap"><svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Yükseklik modeli"><g id="t3Grid"></g></svg></div>
+<div class="svg-wrap"><svg viewBox="0 0 600 530" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Yükseklik modeli"><g id="t3Grid"></g></svg></div>
 <div class="def-box" id="t3Info" style="text-align:center"></div>
 </div>
 </section>
@@ -547,13 +547,13 @@ function mk(prefix,defs,labelFn){
 var ARR='<defs><marker id="kiAr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#d97706"/></marker></defs>';
 var ki={
  k:[
-  {t:'BC kenarının B ve C uçlarını <b>üst üste getirecek</b> biçimde kâğıdı katlayın.',d:function(){return ARR+'<path d="M52 268 Q180 318 308 268" fill="none" stroke="#d97706" stroke-width="2.4" marker-end="url(#kiAr)"/>'+L({x:180,y:140},{x:180,y:300},'#7a0e0e',2.2,true);}},
+  {t:'BC kenarının B ve C uçlarını <b>üst üste getirecek</b> biçimde kâğıdı katlayın ve katladığınız yeri belirginleştirin.',d:function(){return ARR+'<path d="M52 268 Q180 318 308 268" fill="none" stroke="#d97706" stroke-width="2.4" marker-end="url(#kiAr)"/>'+L({x:180,y:140},{x:180,y:300},'#7a0e0e',2.2,true);}},
   {t:'Kâğıdı açın. Kıvrım izinin BC kenarını kestiği noktaya <b>M</b> deyin: M, BC\'nin orta noktasıdır (|BM| = |MC|).',d:function(){return L({x:180,y:140},{x:180,y:300},'#c9a5a5',1.6,true)+dot(M)+T(M,'M','#221515',6,22)+tick(B,M,1)+tick(M,C,1);}},
   {t:'Şimdi <b>A köşesi</b> ile <b>M noktasından</b> geçen doğru boyunca kâğıdı katlayın.',d:function(){return dot(M)+T(M,'M','#221515',6,22)+L(A,M,'#7a0e0e',2.4,true);}},
   {t:'Kâğıdı açın: <b>[AM]</b>, A köşesinden çizilen <b>kenarortaydır</b>. Cetvelle |BM| = |MC| olduğunu doğrulayın.',d:function(){return L(A,M,'#7a0e0e',3.4)+dot(M)+T(M,'M','#221515',6,22)+tick(B,M,1)+tick(M,C,1);}}],
  a:[
-  {t:'A köşesinden geçen bir doğru boyunca, <b>[AB] kenarı [AC] kenarının üzerine oturacak</b> biçimde kâğıdı katlayın.',d:function(){return L(A,D,'#7a0e0e',2.4,true)+L(A,C,'#d97706',3.4);}},
-  {t:'[AB] kenarı [AC] kenarıyla tam çakışır: kıvrım izi A açısını <b>iki eş açıya</b> böler.',d:function(){var a1=ang(A,B),a2=ang(A,D),a3=ang(A,C);return L(A,D,'#7a0e0e',2.4,true)+arc(A,38,Math.min(a1,a2),Math.max(a1,a2),'#059669')+arc(A,46,Math.min(a2,a3),Math.max(a2,a3),'#059669');}},
+  {t:'<b>[AB] kenarı [AC] kenarının üzerine oturacak</b> biçimde kâğıdı katlayın ve A köşesinden geçen katlama çizgisini belirginleştirin.',d:function(){return L(A,D,'#7a0e0e',2.4,true)+L(A,C,'#d97706',3.4);}},
+  {t:'[AB] kenarı [AC] kenarıyla tam çakıştığında kıvrım izi A açısını <b>iki eş açıya</b> böler.',d:function(){var a1=ang(A,B),a2=ang(A,D),a3=ang(A,C);return L(A,D,'#7a0e0e',2.4,true)+arc(A,38,Math.min(a1,a2),Math.max(a1,a2),'#059669')+arc(A,46,Math.min(a2,a3),Math.max(a2,a3),'#059669');}},
   {t:'Kâğıdı açın. Katlama izinin BC kenarını kestiği noktaya <b>D</b> deyin. <b>[AD]</b>, A açısının <b>açıortayıdır</b>.',d:function(){return L(A,D,'#7a0e0e',3.4)+dot(D)+T(D,'D','#221515',4,22);}},
   {t:'Açıölçerle m(∠BAD) = m(∠DAC) olduğunu doğrulayın.',d:function(){var a1=ang(A,B),a2=ang(A,D),a3=ang(A,C);var mid1=pt(A,62,(a1+a2)/2),mid2=pt(A,62,(a2+a3)/2);return L(A,D,'#7a0e0e',3.4)+arc(A,38,Math.min(a1,a2),Math.max(a1,a2),'#059669')+arc(A,46,Math.min(a2,a3),Math.max(a2,a3),'#059669')+T(mid1,'α','#047857',-4,0)+T(mid2,'α','#047857',-4,0)+dot(D)+T(D,'D','#221515',4,22);}}],
  y:[
