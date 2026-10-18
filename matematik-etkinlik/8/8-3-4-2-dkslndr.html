@@ -472,7 +472,7 @@ mkCyl('sl0',false);mkCyl('sl1',true);
   function draw(){
     const r=+gid('sl2r').value,h=+gid('sl2h').value,g=gid('sl2G');g.innerHTML='';
     gid('sl2rOut').textContent=r+' cm';gid('sl2hOut').textContent=h+' cm';
-    const L=2*Math.PI*r,W=L,H=4*r+h,sc=Math.min(560/W,330/H,45),X=x=>300+sc*x,Y=y=>180-sc*(y+h/2);
+    const L=2*3.14*r,W=L,H=4*r+h,sc=Math.min(560/W,330/H,45),X=x=>300+sc*x,Y=y=>180-sc*(y+h/2);
     const gx=Math.floor(W/2);for(let i=-gx-1;i<=gx+1;i++)el(g,'line',{x1:X(i),y1:Y(-h-2*r),x2:X(i),y2:Y(2*r),stroke:'#efe1e1','stroke-width':1});
     for(let j=Math.ceil(-h-2*r);j<=Math.floor(2*r);j++)el(g,'line',{x1:X(-W/2),y1:Y(j),x2:X(W/2),y2:Y(j),stroke:'#efe1e1','stroke-width':1});
     el(g,'circle',{cx:X(0),cy:Y(r),r:sc*r,fill:'rgba(122,14,14,.24)',stroke:'#4b1d1d','stroke-width':3});
