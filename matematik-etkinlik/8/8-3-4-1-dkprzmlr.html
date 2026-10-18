@@ -377,7 +377,7 @@ function draw3D(g,faces,pr,fr,o){
   o=o||{};g.innerHTML='';
   const S=p=>{const q=pr(p);return{x:fr.ox+fr.sc*(q.x-fr.cx),y:fr.oy-fr.sc*(q.y-fr.cy),d:q.d};};
   faces.map(f=>{const q=f.pts.map(S);return{f,q,d:q.reduce((s,p)=>s+p.d,0)/q.length};}).sort((a,b)=>b.d-a.d).forEach(({f,q})=>{
-    el(g,'polygon',{points:q.map(p=>p.x+','+p.y).join(' '),fill:o.fill?o.fill(f):(f.k==='s'?'rgba(5,150,105,.36)':'rgba(122,14,14,.30)'),stroke:'#4b1d1d','stroke-width':1.6,'stroke-linejoin':'round'});
+    el(g,'polygon',{points:q.map(p=>p.x+','+p.y).join(' '),fill:o.fill?o.fill(f):(f.k==='s'?'rgba(5,150,105,.36)':'rgba(122,14,14,.30)'),stroke:o.stroke||'#4b1d1d','stroke-width':o.strokeWidth||1.6,'stroke-linejoin':'round'});
     if(o.labels)el(g,'text',{x:q.reduce((s,p)=>s+p.x,0)/q.length,y:q.reduce((s,p)=>s+p.y,0)/q.length+4,'text-anchor':'middle','font-size':12,'font-weight':800,fill:'#3b0a0a',stroke:'#fff','stroke-width':3,'paint-order':'stroke'},f.nm);
   });
   return S;
@@ -391,21 +391,45 @@ const KIND4=[['tri','Üçgen'],['rect','Dikdörtgen'],['pent','Beşgen'],['hex',
 
 /* --- Elemanlar / Prizma nedir --- */
 function mkElem(id,hlOn){
-  const box=gid(id);let k='rect',hl='taban';
+  const box=gid(id);let k='rect',hl='',step=0,timer=null;
   box.innerHTML=chipRow(id+'k',KIND4,k)+(hlOn?chipRow(id+'h',[['taban','Taban'],['yan','Yan yüz'],['ayrit','Ayrıt'],['kose','Köşe'],['yuk','Yükseklik']],hl):'')+slider(id+'y','Prizmayı döndürün',0,350,10,30)+svgBox(id+'G','0 0 600 360','Dik prizma')+(hlOn?'<div class="mini-table" id="'+id+'T"></div>':'');
+  function stopAnim(){if(timer!==null){clearInterval(timer);timer=null;}step=0;}
+  function startAnim(){stopAnim();if(!hlOn||!hl)return;timer=setInterval(()=>{step++;draw();},850);}
   function draw(){
     const P=polyOf(k),h=3,n=P.length,yaw=+gid(id+'y').value;gid(id+'yOut').textContent=yaw+'°';
     const pr=proj(yaw,25),fr=fit(P,h,yaw,[0],()=>25,600,360,62),g=gid(id+'G');
-    const on=hlOn,st='rgba(217,119,6,.6)';
-    const S=draw3D(g,unfoldFaces(P,h,0),pr,fr,{fill:f=>!on?(f.k==='s'?'rgba(5,150,105,.36)':'rgba(122,14,14,.30)'):f.k==='s'?(hl==='yan'?st:'rgba(5,150,105,.10)'):(hl==='taban'?st:'rgba(122,14,14,.10)')});
-    if(!on)return;
+    const active=step%(hl==='taban'?2:hl==='yan'?n:hl==='ayrit'?3*n:hl==='kose'?2*n:n);
+    const S=draw3D(g,unfoldFaces(P,h,0),pr,fr,{
+      fill:f=>{
+        if(!hlOn)return f.k==='s'?'rgba(5,150,105,.36)':'rgba(122,14,14,.30)';
+        if(!hl)return 'none';
+        if(hl==='taban')return ((active===0&&f.nm==='Üst taban')||(active===1&&f.nm==='Alt taban'))?'rgba(249,115,22,.88)':'none';
+        if(hl==='yan'&&f.k==='s'&&Number(f.nm.slice(1))===active+1)return 'rgba(125,211,252,.78)';
+        return 'none';
+      },stroke:hlOn?'#53616d':'#4b1d1d',strokeWidth:hlOn?1.15:1.6
+    });
+    if(!hlOn)return;
     const V=(i,z)=>S([P[i][0],P[i][1],z]);
-    if(hl==='ayrit')for(let i=0;i<n;i++){const j=(i+1)%n;[[V(i,0),V(j,0)],[V(i,h),V(j,h)],[V(i,0),V(i,h)]].forEach(([a,b])=>el(g,'line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#d97706','stroke-width':4.5,'stroke-linecap':'round'}));}
-    if(hl==='kose')for(let i=0;i<n;i++)[0,h].forEach(z=>{const v=V(i,z);el(g,'circle',{cx:v.x,cy:v.y,r:6.5,fill:'#7a0e0e',stroke:'#fff','stroke-width':2});});
-    if(hl==='yuk'){const a=V(0,0),b=V(0,h);el(g,'line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#c81e1e','stroke-width':3.5,'stroke-dasharray':'7 5'});el(g,'text',{x:a.x+12,y:(a.y+b.y)/2,'font-size':16,'font-weight':800,fill:'#c81e1e',stroke:'#fff','stroke-width':4,'paint-order':'stroke'},'h');}
+    if(hl==='ayrit'){
+      // Öğretici sıralama: önce üst taban ayrıtları, sonra alt taban,
+      // son olarak yan yüzlerin dikey ayrıtları.
+      const edges=[];
+      for(let i=0;i<n;i++){const j=(i+1)%n;edges.push([V(i,h),V(j,h)]);}
+      for(let i=0;i<n;i++){const j=(i+1)%n;edges.push([V(i,0),V(j,0)]);}
+      for(let i=0;i<n;i++)edges.push([V(i,0),V(i,h)]);
+      const [a,b]=edges[active];el(g,'line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#16a34a','stroke-width':5,'stroke-linecap':'round'});
+    }
+    if(hl==='kose'){
+      const i=active%n,z=active<n?0:h,v=V(i,z);el(g,'circle',{cx:v.x,cy:v.y,r:7,fill:'#000',stroke:'#fff','stroke-width':1.5});
+    }
+    if(hl==='yuk'){
+      const a=V(active,0),b=V(active,h);el(g,'line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#dc2626','stroke-width':5,'stroke-linecap':'round'});
+    }
     gid(id+'T').innerHTML=TB+'<tr><th>Eleman</th><th>Sayısı</th></tr><tr><td>Taban</td><td>2 (eş ve paralel '+n+'-gen)</td></tr><tr><td>Yan yüz</td><td>'+n+' (dikdörtgen)</td></tr><tr><td>Ayrıt</td><td>'+3*n+' ('+2*n+' taban ayrıtı + '+n+' yanal ayrıt)</td></tr><tr><td>Köşe</td><td>'+2*n+'</td></tr><tr><td>Yükseklik</td><td>İki taban arasındaki uzaklık; dik prizmada yanal ayrıtın uzunluğuna eşittir</td></tr></table>';
   }
-  onChips(id+'k',v=>{k=v;draw();});if(hlOn)onChips(id+'h',v=>{hl=v;draw();});gid(id+'y').addEventListener('input',draw);draw();
+  onChips(id+'k',v=>{k=v;draw();});
+  if(hlOn)onChips(id+'h',v=>{hl=v;startAnim();draw();});
+  gid(id+'y').addEventListener('input',draw);draw();
 }
 mkElem('pr0',false);mkElem('pr1',true);
 
