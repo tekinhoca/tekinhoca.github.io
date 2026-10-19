@@ -15,8 +15,20 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 .builder-row{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center;margin:14px 0}
 .grid-builder{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:220px;flex:0 0 auto}.gb-cell{background:#fafcfe;border:2px solid var(--border);border-radius:10px;padding:6px 3px;text-align:center}.gb-cell .h-val{font-family:'Baloo 2';font-weight:800;font-size:1.05rem;color:var(--primary);margin:4px 0}.gb-btns{display:flex;justify-content:center;gap:5px}.gb-btn{width:24px;height:24px;border-radius:7px;border:2px solid var(--primary);background:#fff;color:var(--primary);font-weight:900;cursor:pointer;font-size:.85rem;line-height:1}.gb-btn:hover{background:var(--primary-light)}
 .builder-iso-wrap{flex:0 0 auto;margin:0!important}
-@media(min-width:701px){.grid-builder{display:none}.builder-iso-wrap{max-width:560px;width:100%;cursor:pointer}.builder-iso-wrap svg{width:min(100%,540px)}.builder-iso-wrap .iso-hit{cursor:pointer}.builder-iso-wrap .iso-hit:hover{fill:#dbeafe!important;fill-opacity:.75}.builder-iso-wrap .iso-cube-top{cursor:pointer}.builder-iso-wrap .iso-cube-top:hover{fill:#93c5fd!important}}
-@media(max-width:700px){.desktop-builder-help{display:none}}
+@media(min-width:701px){body:not(.tahta-modu) .grid-builder{display:none}body:not(.tahta-modu) .builder-iso-wrap{max-width:560px;width:100%;cursor:pointer}body:not(.tahta-modu) .builder-iso-wrap svg{width:min(100%,540px)}.builder-iso-wrap .iso-hit{cursor:pointer}.builder-iso-wrap .iso-hit:hover{fill:#dbeafe!important;fill-opacity:.75}.builder-iso-wrap .iso-cube-top{cursor:pointer}.builder-iso-wrap .iso-cube-top:hover{fill:#93c5fd!important}}
+@media(max-width:700px){.desktop-builder-help{display:none}.tahta-btn{display:none}}
+#tab3 .card-title{flex-wrap:wrap}
+.tahta-btn{margin-left:auto;background:var(--warning);color:#fff;border:none;border-radius:99px;padding:11px 22px;font-family:inherit;font-weight:900;font-size:1rem;cursor:pointer;box-shadow:0 4px 14px rgba(217,119,6,.35);touch-action:manipulation}
+.tahta-btn:hover{filter:brightness(1.07)}
+body.tahta-modu .tahta-btn{background:var(--primary)}
+body.tahta-modu .desktop-builder-help{display:none}
+body.tahta-modu .builder-row{gap:20px;align-items:center}
+body.tahta-modu .grid-builder{width:min(100%,430px);gap:12px}
+body.tahta-modu .gb-cell{padding:12px 6px;border-radius:16px}
+body.tahta-modu .gb-cell .h-val{font-size:2.2rem;margin:6px 0 10px}
+body.tahta-modu .gb-btns{gap:12px}
+body.tahta-modu .gb-btn{width:52px;height:52px;border-radius:14px;font-size:1.8rem;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+body.tahta-modu .gb-btn:active{background:var(--primary);color:#fff}
 .view-box{background:#fafcfe;border:1.5px solid var(--border);border-radius:14px;padding:12px;text-align:center}.view-box h4{color:var(--primary);margin-bottom:8px;font-size:.85rem}
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}}
 @media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
@@ -130,7 +142,7 @@ footer{margin-top:28px;background:#0a1b2a;color:#dbe8f1;padding:24px 18px;text-a
 </section>
 
 <section class="tab-panel" id="tab3">
-<div class="card"><div class="card-title"><div class="icon">🎛️</div>Yapı Oluşturucu</div>
+<div class="card"><div class="card-title"><div class="icon">🎛️</div>Yapı Oluşturucu<button type="button" id="tahtaModBtn" class="tahta-btn" aria-pressed="false" onclick="toggleTahtaModu()">AKILLI TAHTA İÇİN TIKLAYINIZ</button></div>
 <p class="body-text">PC’de izometrik zemindeki hücrelere tıklayarak küp ekleyin; bir sütunun en üstündeki küpe tıklayarak onu kaldırın. Mobil cihazlarda + / − düğmelerini kullanın. Her sütun en fazla 3 küp yüksekliğinde olabilir. Oluşturduğunuz yapının 6 farklı yönden görünümünü ve toplam küp sayısını izleyin.</p>
 <div class="desktop-builder-help note-box">PC: Boş zemine tıklayarak ilk küpü ekleyin. Küp eklemek için sütunun üstündeki boş hücreye, küp kaldırmak için en üstteki küpe tıklayın.</div>
 <div class="builder-row">
@@ -353,6 +365,7 @@ renderSixViews('ex1',ex1Heights);
 
 /* İnteraktif yapı oluşturucu */
 let gridH=[[0,0,0],[0,0,0],[0,0,0]];
+let tahtaModu=false;
 function renderGridBuilder(){
   let html='';
   for(let row=0;row<3;row++)for(let col=0;col<3;col++){
@@ -420,12 +433,20 @@ function changeH(row,col,delta){
 }
 function updateBuilder(){
   hideCubeGhost();
-  if(window.matchMedia('(min-width: 701px)').matches)renderInteractiveIso();
+  if(window.matchMedia('(min-width: 701px)').matches&&!tahtaModu)renderInteractiveIso();
   else renderIso('builderIso',gridH);
   renderSixViews('view',gridH);
 }
 renderGridBuilder();updateBuilder();
 window.addEventListener('resize',()=>updateBuilder());
+function toggleTahtaModu(){
+  tahtaModu=!tahtaModu;
+  document.body.classList.toggle('tahta-modu',tahtaModu);
+  const b=document.getElementById('tahtaModBtn');
+  b.textContent=tahtaModu?'BİLGİSAYAR GÖRÜNÜMÜNE DÖN':'AKILLI TAHTA İÇİN TIKLAYINIZ';
+  b.setAttribute('aria-pressed',tahtaModu?'true':'false');
+  updateBuilder();
+}
 
 /* Kendini Dene quiz */
 const quizData=[{"q": "Bir yapıya tam tepeden bakıldığında elde edilen görünüme ne ad verilir?", "choices": ["Önden görünüm", "Yandan görünüm", "Üstten görünüm", "Arkadan görünüm"], "correct": 2, "expl": "Tam tepeden (kuşbakışı) bakıldığında elde edilen görünüm üstten görünümdür."}, {"q": "Bir yapının üstten görünümündeki her dolu kare bize neyi gösterir?", "choices": ["O konumda en az 1 birim küp bulunduğunu", "O konumda tam olarak 1 birim küp bulunduğunu", "O konumun boş olduğunu", "Yapının rengini"], "correct": 0, "expl": "Üstten görünümdeki dolu bir kare, o konumda en az bir birim küp bulunduğu anlamına gelir; kaç tane üst üste olduğunu göstermez."}, {"q": "Önden görünümü tek sütunda 3 birim yüksekliğinde olan bir yapı için ne söylenebilir?", "choices": ["Yapıda toplam 3 birim küp vardır", "Yapıda en az bir sütunda 3 birim küp üst üste dizilmiştir", "Yapının üstten görünümü de 3 karedir", "Yapı mutlaka küp şeklindedir"], "correct": 1, "expl": "Önden görünümdeki en yüksek sütun, o doğrultuda en az o kadar birim küp üst üste dizildiğini gösterir."}, {"q": "Aynı önden ve soldan görünüme sahip iki farklı yapı için aşağıdakilerden hangisi doğrudur?", "choices": ["Bu iki yapı birebir aynı olmalıdır", "Toplam küp sayıları her zaman farklıdır", "Böyle bir durum imkansızdır", "Üstten görünümleri farklı olabilir, dolayısıyla yapılar farklı olabilir"], "correct": 3, "expl": "Önden ve soldan görünüm aynı olsa bile üstten görünüm (taban izdüşümü) farklı olursa yapılar farklı olabilir."}, {"q": "Soldan görünüm ile sağdan görünüm arasındaki ilişki nedir?", "choices": ["Birbirinin yatay ters çevrilmiş hâlidir (aynası)", "Her zaman birebir aynıdırlar", "Aralarında hiçbir ilişki yoktur", "Sağdan görünüm her zaman daha büyüktür"], "correct": 0, "expl": "Soldan ve sağdan tam karşı yönlerden bakışlar olduğundan, görünümleri birbirinin yatay ters çevrilmiş hâlidir."}, {"q": "Bir yapının görünümlerini incelemenin gerçek hayattaki bir kullanım alanı hangisidir?", "choices": ["Bir şarkının notalarını yazmak", "Bir metnin dilbilgisini kontrol etmek", "Bir binanın mimari çizimlerini hazırlamak", "Bir yemeğin tarifini yazmak"], "correct": 2, "expl": "Mimarlar ve mühendisler, üç boyutlu yapıları farklı yönlerden görünümlerle iki boyutlu teknik çizimlere aktarır."}];
