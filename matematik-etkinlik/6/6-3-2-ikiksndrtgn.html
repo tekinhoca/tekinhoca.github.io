@@ -190,9 +190,9 @@ const U_D3A=(U_TOPLEN-U_SLANT)/2;
 const U_S3A_TARGET=U_D3A/(190/100);
 function U_geomS3A(s){const D=(190/100)*s;return {TL:{x:U_PARA.TL.x+D,y:120},TR:{x:U_PARA.TR.x-D,y:120},BL:{x:U_PARA.BL.x+D,y:380},BR:{x:U_PARA.BR.x-D,y:380}};}
 const U_RHOMBUS=U_geomS3A(U_S3A_TARGET);
-function U_geomS3B(s){const ang=(98.75-0.0875*s)*Math.PI/180;const TL=U_PARA.TL,TR=U_PARA.TR;return {TL,TR,BL:{x:TL.x+U_SLANT*Math.cos(ang),y:TL.y+U_SLANT*Math.sin(ang)},BR:{x:TR.x+U_SLANT*Math.cos(ang),y:TR.y+U_SLANT*Math.sin(ang)}};}
+function U_geomS3B(s){const ang=(98.75-0.0875*s)*Math.PI/180;const TL=U_PARA.TL,TR=U_PARA.TR;const dy=380-TL.y,dx=dy/Math.tan(ang);return {TL,TR,BL:{x:TL.x+dx,y:380},BR:{x:TR.x+dx,y:380}};}
 const U_RECT=U_geomS3B(100);
-function U_geomS4A(s){const ang=(98.75-0.0875*s)*Math.PI/180;const TL=U_RHOMBUS.TL,TR=U_RHOMBUS.TR;return {TL,TR,BL:{x:TL.x+U_SLANT*Math.cos(ang),y:TL.y+U_SLANT*Math.sin(ang)},BR:{x:TR.x+U_SLANT*Math.cos(ang),y:TR.y+U_SLANT*Math.sin(ang)}};}
+function U_geomS4A(s){const ang=(98.75-0.0875*s)*Math.PI/180;const TL=U_RHOMBUS.TL,TR=U_RHOMBUS.TR;const dy=380-TL.y,dx=dy/Math.tan(ang);return {TL,TR,BL:{x:TL.x+dx,y:380},BR:{x:TR.x+dx,y:380}};}
 const U_S4B_MAXD=140, U_S4B_TARGET=50;
 function U_geomS4B(s){const D=(U_S4B_MAXD/100)*s;return {TL:{x:U_RECT.TL.x+D,y:120},TR:{x:U_RECT.TR.x-D,y:120},BL:{x:U_RECT.BL.x+D,y:380},BR:{x:U_RECT.BR.x-D,y:380}};}
 function U_achieved(stage,s){
