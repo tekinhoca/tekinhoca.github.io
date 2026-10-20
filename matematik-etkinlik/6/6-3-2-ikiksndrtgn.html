@@ -183,7 +183,7 @@ const U_SLANT=Math.hypot(150-110,380-120);
 function U_norm(v){const m=Math.hypot(v.x,v.y);return {x:v.x/m,y:v.y/m};}
 function U_extend(p,dir,d){return {x:p.x+dir.x*d,y:p.y+dir.y*d};}
 function U_geomS1(s){return {TL:{x:150,y:120},TR:{x:550,y:220-2*s},BL:{x:110,y:380},BR:{x:590,y:380}};}
-function U_geomS2(s){const ang=(81.25+0.35*s)*Math.PI/180;const TR={x:550,y:120};return {TL:{x:150,y:120},TR,BL:{x:110,y:380},BR:{x:TR.x+U_SLANT*Math.cos(ang),y:TR.y+U_SLANT*Math.sin(ang)}};}
+function U_geomS2(s){const ang=(81.25+0.35*s)*Math.PI/180;const TR={x:550,y:120};const bottomY=380;const BR={x:TR.x+(bottomY-TR.y)/Math.tan(ang),y:bottomY};return {TL:{x:150,y:120},TR,BL:{x:110,y:380},BR};}
 const U_PARA=U_geomS2(50);
 const U_TOPLEN=U_PARA.TR.x-U_PARA.TL.x;
 const U_D3A=(U_TOPLEN-U_SLANT)/2;
