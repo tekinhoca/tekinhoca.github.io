@@ -129,16 +129,48 @@
     transform: translateY(-1px);
   }
 
+  /* Kademe renkleri: ana seçim bej, sınıf seçimi adaçayı, tema/ünite seçimi mavi-gri */
+  .grade-row .selection-button {
+    background: #e2e8d9;
+    border-color: #b4c1a5;
+    color: #526449;
+  }
+  .grade-row .selection-button:hover {
+    background: #d7e0cc;
+    border-color: #879b75;
+  }
+  .theme-row .selection-button {
+    background: #e2e7ed;
+    border-color: #b4c0ce;
+    color: #4d6078;
+  }
+  .theme-row .selection-button:hover {
+    background: #d5dee8;
+    border-color: #879bb2;
+  }
+
+  /* Seçili durum: ana bölüm rust, sınıf koyu adaçayı, tema/ünite koyu mavi */
   .selection-button.selected {
     background: var(--rust);
     color: var(--cream);
     border-color: var(--gold);
     box-shadow: 0 4px 12px var(--shadow);
   }
-
   .selection-button.selected:hover {
     background: var(--rust);
     color: var(--cream);
+  }
+  .grade-row .selection-button.selected,
+  .grade-row .selection-button.selected:hover {
+    background: #718663;
+    border-color: #526449;
+    color: #fffdf7;
+  }
+  .theme-row .selection-button.selected,
+  .theme-row .selection-button.selected:hover {
+    background: #7188a4;
+    border-color: #4d6078;
+    color: #ffffff;
   }
 
   .grade-row .selection-button {
@@ -323,10 +355,43 @@
   [data-theme="dark"] .selection-button:hover {
     background: rgba(186,117,23,0.20);
   }
-  [data-theme="dark"] .selection-button.selected {
-    background: var(--gold);
-    color: var(--ink);
-    border-color: var(--gold);
+  /* Gece modunda kademeler birbirinden ayrılır; altın renk seçili durumu belirtir. */
+  [data-theme="dark"] .grade-row .selection-button {
+    background: #263027;
+    border-color: #4b624c;
+    color: #c1d4b7;
+  }
+  [data-theme="dark"] .grade-row .selection-button:hover {
+    background: #303d31;
+    border-color: #78916f;
+  }
+  [data-theme="dark"] .theme-row .selection-button {
+    background: #222a35;
+    border-color: #46586f;
+    color: #c1cee0;
+  }
+  [data-theme="dark"] .theme-row .selection-button:hover {
+    background: #2c3745;
+    border-color: #7187a2;
+  }
+  /* Koyu modda seçili renkler de her kademenin kendi paletini izler. */
+  [data-theme="dark"] .selection-button.selected,
+  [data-theme="dark"] .selection-button.selected:hover {
+    background: #7d321b;
+    color: #fff2dc;
+    border-color: #c8960c;
+  }
+  [data-theme="dark"] .grade-row .selection-button.selected,
+  [data-theme="dark"] .grade-row .selection-button.selected:hover {
+    background: #53694d;
+    color: #f2f7eb;
+    border-color: #8ca77e;
+  }
+  [data-theme="dark"] .theme-row .selection-button.selected,
+  [data-theme="dark"] .theme-row .selection-button.selected:hover {
+    background: #4c627d;
+    color: #f0f5fc;
+    border-color: #8da8c7;
   }
   [data-theme="dark"] .selection-content-inner {
     background: rgba(122,92,30,0.08);
@@ -1744,7 +1809,7 @@
 <div class="flex-kapsayici">
   <div class="sutun"><div class="intro-box soft-box" id="games-info"><p><b>Oyunlar</b> bölümündeki matematik oyunlarını, yapay zekâ araçlarını kullanarak ortaokul öğrencileri için hazırladım.<br>
 <b>Oyunlarım genel olarak mobil ekran uyumludur fakat en iyi görüntü deneyimini PC/tablet ekranında yaşayabilirsiniz</b></p></div></div>
-  <div class="sutun"><div class="intro-box soft-box" id="activities-info"><p><b>Etkinlikler</b> bölümünde sınıfı ve temayı seçerek, hazırladığım matematik dersi etkinliklerini inceleyebilirsiniz.<br><b>Bazı tema ve etkinlik dosyaları ile ilgili hazırlama/düzenleme çalışmalarım devam ediyor.</b></p></div></div>
+  <div class="sutun"><div class="intro-box soft-box" id="activities-info"><p><b>Etkinlikler</b> bölümünde sınıfı ve temayı seçerek, hazırladığım matematik dersi etkinliklerini inceleyebilirsiniz.<br><b>Bazı tema ve etkinlik dosyaları ile ilgili düzenleme/geliştirme çalışmalarım devam ediyor.</b></p></div></div>
 
 
 </div></main>
