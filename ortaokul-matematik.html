@@ -197,6 +197,15 @@
     padding: 20px;
   }
 
+  /* ── TEMA/ÜNİTE SEÇİLDİĞİNDE ETKİNLİK KUTUSUNDA TEK SEFERLİK IŞILTI ── */
+  .selection-content-inner { --theme-glow: #7188a4; }
+  [data-theme="dark"] .selection-content-inner { --theme-glow: #8da8c7; }
+  @keyframes themeBoxGlow {
+    0%, 100% { box-shadow: 0 0 0 0 transparent; }
+    30% { box-shadow: 0 0 4px 1px var(--theme-glow), 0 0 26px 4px var(--theme-glow); }
+  }
+  .selection-content-inner.glow-pulse { animation: themeBoxGlow 1.2s ease-out 1; }
+
   .selection-message {
     text-align: center;
     padding: 24px 16px;
@@ -1929,9 +1938,47 @@
         content.hidden = !selected;
       });
 
+      glowThemeBox(grade, theme);
+
       if (shouldScroll) scrollToGradeRowOrElement(
         document.querySelector('.theme-button[data-grade="' + grade + '"][data-theme="' + theme + '"]')
       );
+    }
+
+    // Seçilen tema/ünitenin etkinlik kutusunu, kaydırma bittikten sonra bir kez ışıldatır.
+    // 8. sınıf "2025 - 2026" arşiv bloğu (grade 3, theme 6) efekt dışındadır.
+    let cancelPendingGlow = null;
+    function glowThemeBox(grade, theme) {
+      if (cancelPendingGlow) cancelPendingGlow();
+      document.querySelectorAll('.theme-content .selection-content-inner')
+        .forEach(box => box.classList.remove('glow-pulse'));
+      if (String(grade) === '3' && String(theme) === '6') return;
+
+      const box = document.querySelector(
+        '.theme-content[data-grade="' + grade + '"][data-theme="' + theme + '"] .selection-content-inner'
+      );
+      if (!box) return;
+
+      let done = false;
+      let timer = null;
+      function run() {
+        if (done) return;
+        done = true;
+        clearTimeout(timer);
+        window.removeEventListener('scrollend', run);
+        void box.offsetWidth;
+        box.classList.add('glow-pulse');
+      }
+      cancelPendingGlow = function () {
+        done = true;
+        clearTimeout(timer);
+        window.removeEventListener('scrollend', run);
+      };
+      window.addEventListener('scrollend', run, { once: true });
+      timer = setTimeout(run, 700);
+      box.addEventListener('animationend', function () {
+        box.classList.remove('glow-pulse');
+      }, { once: true });
     }
 
     function scrollToElement(element) {
