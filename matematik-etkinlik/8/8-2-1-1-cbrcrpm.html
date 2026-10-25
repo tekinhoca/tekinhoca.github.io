@@ -18,6 +18,7 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 .result-strip{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0}.result-pill{flex:1;min-width:150px;background:var(--primary-light);border:1.5px solid var(--border);border-radius:14px;padding:12px 14px;text-align:center}.result-pill .lbl{font-size:.76rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}.result-pill .val{font-family:'Baloo 2';font-size:1.25rem;font-weight:800;color:var(--primary);margin-top:4px;min-height:1.8em;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;word-break:break-word}
 .chip-btn{background:#fdfafa;border:1.5px solid var(--border);border-radius:99px;padding:8px 15px;font-weight:800;font-size:.82rem;cursor:pointer;color:var(--text)}.chip-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 
+.mobile-label-break{display:none}
 /* YÜRÜYÜŞ VE ETİKET DÜZENLEMELERİ */
 .avatar{
   width:48px;height:48px;background:#fff;border:2.5px solid var(--border);border-radius:50%;
@@ -33,13 +34,23 @@ footer{margin-top:28px;background:#170707;color:#f1dbdb;padding:24px 18px;text-a
 
 #shakeIcon {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(0);
-  font-size: 2.2rem; z-index: 50; opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease;
+  font-size: 3.2rem; line-height: 1; z-index: 50; opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease;
   pointer-events: none;
 }
-#shakeIcon.active { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+#shakeIcon.active { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
 
 @media(max-width:700px){.two-col,.three-col,.four-col{grid-template-columns:1fr 1fr}.choices{grid-template-columns:1fr}.card{padding:16px}header{padding-bottom:48px}.tab-btn{padding:8px 11px}.svg-wrap{padding:5px}.result-strip{flex-direction:column}}
-@media(max-width:460px){.two-col,.three-col,.four-col{grid-template-columns:1fr}}
+@media(max-width:460px){
+.two-col,.three-col,.four-col{grid-template-columns:1fr}
+#stage{height:280px}
+#stage .group-zone{width:64px!important;box-sizing:border-box;padding:5px 2px!important}
+#stage .left-zone{left:8px!important;right:auto!important}
+#stage .right-zone{right:8px!important;left:auto!important}
+#stage .group-label{font-size:.62rem!important;line-height:1.05;text-align:center}
+#stage .mobile-label-break{display:block}
+#shakeZone{display:none!important}
+#shakeIcon{z-index:50}
+}
 button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
 </style></head><body>
 <header><div class="badge">8. SINIF MATEMATİK · M.8.2.1</div><img class="logo" src="logo.gif" alt="Tekin Hoca logosu"><h1>Cebirsel İfadeler ve Çarpımı</h1><p>M.8.2.1.1. Terim, katsayı, değişken; cebirsel ifadeleri farklı biçimlerde yazma<br>M.8.2.1.2. Tek terim ve iki terimli ifadelerin çarpımı, alan modeliyle gösterim</p></header>
@@ -91,24 +102,24 @@ button:disabled,input:disabled{opacity:.7;cursor:not-allowed}
     <div id="stage" style="position:relative; width:100%; height:280px; background:linear-gradient(to bottom, #fdfbfb, #ebedee); border:2px solid var(--border); border-radius:16px; overflow:hidden; margin:15px 0;">
       
       <!-- Sol Grup Alanı -->
-      <div style="position:absolute; left:20px; top:20px; bottom:20px; width:120px; background:rgba(200,30,30,0.08); border:2px dashed var(--primary); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:space-around; padding:10px;">
-        <span style="font-weight:800; font-size:0.75rem; color:var(--primary);">SOL GRUP</span>
+      <div class="group-zone left-zone" style="position:absolute; left:20px; top:20px; bottom:20px; width:120px; background:rgba(200,30,30,0.08); border:2px dashed var(--primary); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:space-around; padding:10px;">
+        <span class="group-label" style="font-weight:800; font-size:0.75rem; color:var(--primary);">SOL<br class="mobile-label-break"> GRUP</span>
       </div>
 
       <!-- Tokalaşma Sahnesi (Ortası) -->
       <div id="shakeZone" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:150px; height:150px; border-radius:50%; border:2px dotted var(--muted); display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.6);">
         <span id="shakeText" style="font-size:0.78rem; color:var(--muted); font-weight:700;">Tokalaşma Alanı</span>
-        <div id="shakeIcon">🤝</div>
       </div>
+      <div id="shakeIcon" aria-label="Tokalaşma simgesi">🤝</div>
 
       <!-- Sağ Grup Alanı -->
-      <div style="position:absolute; right:20px; top:20px; bottom:20px; width:120px; background:rgba(5,150,105,0.08); border:2px dashed var(--success); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:space-around; padding:10px;">
-        <span style="font-weight:800; font-size:0.75rem; color:var(--success);">SAĞ GRUP</span>
+      <div class="group-zone right-zone" style="position:absolute; right:20px; top:20px; bottom:20px; width:120px; background:rgba(5,150,105,0.08); border:2px dashed var(--success); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:space-around; padding:10px;">
+        <span class="group-label" style="font-weight:800; font-size:0.75rem; color:var(--success);">SAĞ<br class="mobile-label-break"> GRUP</span>
       </div>
 
       <!-- Karakterler ve Etiket Sınıfları -->
       <div id="charA" class="avatar left-avatar" style="left: 56px; top: 60px;">🧑‍🦱 <span class="lbl">a</span></div>
-      <div id="charB" class="avatar left-avatar" style="left: 56px; top: 170px;">👩‍🦰 <span class="lbl">b</span></div>
+      <div id="charB" class="avatar left-avatar" style="left: 56px; top: 170px;">👧🏻 <span class="lbl">b</span></div>
       <div id="charC" class="avatar right-avatar" style="left: 770px; top: 60px;">👱‍♂️ <span class="lbl">c</span></div>
       <div id="charD" class="avatar right-avatar" style="left: 770px; top: 170px;">👧 <span class="lbl">d</span></div>
 
@@ -412,6 +423,10 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
     document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(btn.dataset.tab).classList.add('active');
+    // Sekme görünür olduktan sonra sahne genişliğini ölçüp başlangıç konumlarını düzelt.
+    if (btn.dataset.tab === 'tabTokalas') {
+      requestAnimationFrame(() => requestAnimationFrame(positionHomeCharacters));
+    }
     window.scrollTo({top:0,behavior:'smooth'});
   });
 });
@@ -457,21 +472,30 @@ let animStep = 0;
 let autoInterval = null;
 let isAnimating = false;
 
-// Orijinal Ev Pozisyonları
-const homePos = {
-  charA: { left: 56, top: 60 },
-  charB: { left: 56, top: 170 },
-  charC: { left: 770, top: 60 },
-  charD: { left: 770, top: 170 }
-};
+function getHomePosition(id) {
+  const stage = document.getElementById('stage');
+  const avatar = document.getElementById(id);
+  const isLeftGroup = id === 'charA' || id === 'charB';
+  const zone = stage.querySelector(isLeftGroup ? '.left-zone' : '.right-zone');
+
+  // Koordinatları aynı referans sisteminde hesapla. offsetLeft, sağa
+  // sabitlenmiş öğelerde bazı ekran düzenlerinde doğru sol koordinatı vermeyebilir.
+  const stageRect = stage.getBoundingClientRect();
+  const zoneRect = zone.getBoundingClientRect();
+  const avatarWidth = avatar.offsetWidth || 48;
+  const zoneLeft = zoneRect.left - stageRect.left;
+  const left = zoneLeft + (zoneRect.width - avatarWidth) / 2;
+
+  return { left, top: id === 'charA' || id === 'charC' ? 60 : 170 };
+}
 
 // Emojinin etrafında geniş ve net bir boşluk bırakacak şekilde genişletilmiş merkez koordinatları
 function getCenterCoords() {
   const stageWidth = document.getElementById('stage').clientWidth;
   const centerX = stageWidth / 2;
   return {
-    leftChar: { left: (centerX - 65), top: 116 },
-    rightChar: { left: (centerX + 17), top: 116 }
+    leftChar: { left: (centerX - 75), top: 116 },
+    rightChar: { left: (centerX + 27), top: 116 }
   };
 }
 
@@ -519,10 +543,19 @@ function moveHome(id) {
   const el = document.getElementById(id);
   if (!el) return;
   el.classList.remove('walking');
-  const hp = homePos[id];
+  const hp = getHomePosition(id);
   el.style.left = hp.left + 'px';
   el.style.top = hp.top + 'px';
 }
+
+
+
+function positionHomeCharacters() {
+  if (isAnimating) return;
+  ['charA','charB','charC','charD'].forEach(moveHome);
+}
+window.addEventListener('resize', positionHomeCharacters);
+positionHomeCharacters();
 
 function moveToCenter(id, side) {
   const el = document.getElementById(id);
