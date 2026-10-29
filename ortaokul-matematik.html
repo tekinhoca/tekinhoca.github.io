@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="tr">
 <head>
 <meta charset="utf-8"/>
@@ -37,7 +36,7 @@
 <script>(function(){var t=localStorage.getItem('th-theme');if(t)document.documentElement.setAttribute('data-theme',t);})();</script>
 <link href="favicon.ico" rel="icon" type="image/x-icon"/>
 <style>
-  main { max-width: 960px; margin: 0 auto; }
+  main { max-width: 960px; margin: 0 auto; box-sizing: border-box; }
 
   .breadcrumb {
     font-size: 0.78rem;
@@ -59,9 +58,16 @@
 
   .intro-box {
     text-align: center;
-    margin: 28px 0 0;
+    margin: 0;
     animation: fadeUp 0.35s ease both;
-    padding: 20px 24px;
+    padding: 16px 18px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .intro-box p {
     font-size: 0.9rem;
@@ -89,13 +95,13 @@
 
   /* Dört kademeli seçim sistemi */
   .selection-panel {
-    margin-bottom: 28px;
+    margin-bottom: 25px;
   }
 
   .selection-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
     margin-bottom: 10px;
   }
 
@@ -129,11 +135,12 @@
     transform: translateY(-1px);
   }
 
-  /* Kademe renkleri: ana seçim bej, sınıf seçimi adaçayı, tema/ünite seçimi mavi-gri */
   .grade-row .selection-button {
     background: #e2e8d9;
     border-color: #b4c1a5;
     color: #526449;
+    flex: 1 1 180px;
+    text-transform: uppercase;
   }
   .grade-row .selection-button:hover {
     background: #d7e0cc;
@@ -143,13 +150,16 @@
     background: #e2e7ed;
     border-color: #b4c0ce;
     color: #4d6078;
+    flex: 1 1 210px;
+    min-height: 58px;
+    font-size: 0.91rem;
+    font-weight: 600;
   }
   .theme-row .selection-button:hover {
     background: #d5dee8;
     border-color: #879bb2;
   }
 
-  /* Seçili durum: ana bölüm rust, sınıf koyu adaçayı, tema/ünite koyu mavi */
   .selection-button.selected {
     background: var(--rust);
     color: var(--cream);
@@ -173,18 +183,6 @@
     color: #ffffff;
   }
 
-  .grade-row .selection-button {
-    flex: 1 1 180px;
-    text-transform: uppercase;
-  }
-
-  .theme-row .selection-button {
-    flex: 1 1 210px;
-    min-height: 58px;
-    font-size: 0.91rem;
-    font-weight: 600;
-  }
-
   .selection-content {
     margin-top: 18px;
     animation: fadeUp 0.25s ease both;
@@ -197,7 +195,6 @@
     padding: 20px;
   }
 
-  /* ── TEMA/ÜNİTE SEÇİLDİĞİNDE ETKİNLİK KUTUSUNDA TEK SEFERLİK IŞILTI ── */
   .selection-content-inner { --theme-glow: #7188a4; }
   [data-theme="dark"] .selection-content-inner { --theme-glow: #8da8c7; }
   @keyframes themeBoxGlow {
@@ -206,15 +203,6 @@
   }
   .selection-content-inner.glow-pulse { animation: themeBoxGlow 1.2s ease-out 1; }
 
-  .selection-message {
-    text-align: center;
-    padding: 24px 16px;
-    color: var(--muted);
-    font-family: 'Source Serif 4', serif;
-    font-size: 0.95rem;
-  }
-
-  /* Oyunlar */
   .game-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -253,7 +241,6 @@
     line-height: 1.25;
   }
 
-  /* 4. kademe etkinlik kartları */
   .theme-card-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -289,7 +276,6 @@
     line-height: 1.35;
   }
 
-  /* Eski 2025-2026 arşiv içeriği */
   .archive-wrap {
     margin-top: 16px;
   }
@@ -364,7 +350,6 @@
   [data-theme="dark"] .selection-button:hover {
     background: rgba(186,117,23,0.20);
   }
-  /* Gece modunda kademeler birbirinden ayrılır; altın renk seçili durumu belirtir. */
   [data-theme="dark"] .grade-row .selection-button {
     background: #263027;
     border-color: #4b624c;
@@ -383,7 +368,6 @@
     background: #2c3745;
     border-color: #7187a2;
   }
-  /* Koyu modda seçili renkler de her kademenin kendi paletini izler. */
   [data-theme="dark"] .selection-button.selected,
   [data-theme="dark"] .selection-button.selected:hover {
     background: #7d321b;
@@ -419,6 +403,20 @@
     color: var(--gold);
   }
 
+  /* Alt Bilgi Kutuları İçin Flex Düzenlemeleri */
+  .flex-kapsayici {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+  }
+  .sutun {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+  }
+
   @media(max-width:700px){
     .game-grid { grid-template-columns: repeat(2, 1fr); }
     .selection-row { gap: 8px; }
@@ -439,6 +437,12 @@
     .col-btn { width:auto; padding-left:4px; }
     .go-btn { font-size:0.65rem; padding:7px 9px; letter-spacing:0.08em; }
     .act-name { font-size:0.92rem; }
+  }
+
+  @media(max-width:600px){
+    .flex-kapsayici {
+      flex-direction: column;
+    }
   }
 
   @media(max-width:420px){
@@ -560,9 +564,6 @@
 </a>
 </div></div></div>
 <div class="selection-content" hidden="" id="activities-content">
-<!-- =========================================================
-     SINIF SEÇİMİ
-     ========================================================= -->
 
 <div aria-label="Sınıf seçimi" class="selection-row grade-row" role="tablist">
   <button aria-selected="false" class="selection-button grade-button" data-grade="0" type="button">5. Sınıf</button>
@@ -580,253 +581,171 @@
 <button aria-selected="false" class="selection-button theme-button" data-grade="0" data-theme="6" type="button">7 - Veriden Olasılığa</button>
 </div>
 
-<!-- ---------------------------------------------------------
-     5. SINIF — 1. Tema: Geometrik Şekiller
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="0" data-theme="0" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-3-1-tmlgeociz.html" target="_blank">
         <div class="theme-card">
           <span>Temel Geometrik Çizimler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-3-2-czmdnym.html" target="_blank">
         <div class="theme-card">
           <span>Geometrik Çizimlere Dayalı Deneyimler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-3-3-aciolc.html" target="_blank">
         <div class="theme-card">
           <span>Açı Ölçme</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-3-4-dgrlraclr.html" target="_blank">
         <div class="theme-card">
           <span>Düzlemde Doğruların Durumu</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 5 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-3-5-ckgnlr.html" target="_blank">
         <div class="theme-card">
           <span>Çokgenler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 6 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-3-6-ckgnozllk.html" target="_blank">
         <div class="theme-card">
           <span>Düzgün Çokgenler ve Üçgenler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 7 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-3-7-ucgnestszlg.html" target="_blank">
         <div class="theme-card">
           <span>Çemberden Üçgene</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     5. SINIF — 2. Tema: Sayılar ve Nicelikler (1)
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="0" data-theme="1" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-1-1-cokbas.html" target="_blank">
         <div class="theme-card">
           <span>Çok Basamaklı Sayılar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-1-2-dglpro.html" target="_blank">
         <div class="theme-card">
           <span>Gerçek Yaşam Problemleri</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     5. SINIF — 3. Tema: Geometrik Nicelikler
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="0" data-theme="2" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-4-1-dkcvr.html" target="_blank">
         <div class="theme-card">
           <span>Dikdörtgenin Çevre Uzunluğu</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-4-2-dkaln.html" target="_blank">
         <div class="theme-card">
           <span>Dikdörtgenin Alanı</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-4-3-alncvre.html" target="_blank">
         <div class="theme-card">
           <span>Çevre ve Alan İlişkisi</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-4-4-alncvreprob.html" target="_blank">
         <div class="theme-card">
           <span>Çevre ve Alan Problemleri</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     5. SINIF — 4. Tema: Sayılar ve Nicelikler (2)
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="0" data-theme="3" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-1-3.1-keslab.html" target="_blank">
         <div class="theme-card">
           <span>Kesir Laboratuvarı</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-1-3-ksrlr.html" target="_blank">
         <div class="theme-card">
           <span>Kesirlerin Farklı Gösterimleri</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-1-4-keskar.html" target="_blank">
         <div class="theme-card">
           <span>Kesirleri Karşılaştırma</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     5. SINIF — 5. Tema: İstatistiksel Araştırma Süreci
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="0" data-theme="4" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-5-1-istar.html" target="_blank">
         <div class="theme-card">
           <span>Kategorik Veriyle İstatistik Araştırma</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-5-2-isttar.html" target="_blank">
         <div class="theme-card">
           <span>Başkalarının Sonuçlarını Tartışma</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     5. SINIF — 6. Tema: İşlemlerle Cebirsel Düşünme
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="0" data-theme="5" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-2-1-estlk.html" target="_blank">
         <div class="theme-card">
           <span>Eşitliğin Korunumu ve İşlemler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-2-2-islmonclg.html" target="_blank">
         <div class="theme-card">
           <span>İşlem Önceliği</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-2-3-sysklrnt.html" target="_blank">
         <div class="theme-card">
           <span>Sayı ve Şekil Örüntüleri</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-2-4-tmlalg.html" target="_blank">
         <div class="theme-card">
           <span>Aritmetik İşlemlerde Algoritma</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     5. SINIF — 7. Tema: Veriden Olasılığa
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="0" data-theme="6" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-6-1-olslkspktrm.html" target="_blank">
         <div class="theme-card">
           <span>Olasılık Spektrumu</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/5/5-6-2-azcokolslk.html" target="_blank">
         <div class="theme-card">
           <span>Az Olasılıklı - Çok Olasılıklı</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
@@ -840,253 +759,171 @@
 <button aria-selected="false" class="selection-button theme-button" data-grade="1" data-theme="5" type="button">6 - İşlemlerle Cebirsel Düşünme ve Değişimler</button>
 <button aria-selected="false" class="selection-button theme-button" data-grade="1" data-theme="6" type="button">7 - Geometrik Nicelikler</button></div>
 
-<!-- ---------------------------------------------------------
-     6. SINIF — 1. Tema: Sayılar ve Nicelikler (1)
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="1" data-theme="0" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-1-1-carkat.html" target="_blank">
         <div class="theme-card">
           <span>Çarpanlar Katlar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-1-2-bol.html" target="_blank">
         <div class="theme-card">
           <span>Bölünebilme</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-1-3-aslsay.html" target="_blank">
         <div class="theme-card">
           <span>Asal Sayılar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-1-4-ortbol.html" target="_blank">
         <div class="theme-card">
           <span>Ortak Katlar/Bölenler</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     6. SINIF — 2. Tema: Veriden Olasılığa
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="1" data-theme="1" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-6-1-vrdnolslk.html" target="_blank">
         <div class="theme-card">
           <span>Veriden Olasılığa</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     6. SINIF — 3. Tema: Sayılar ve Nicelikler (2)
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="1" data-theme="2" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-1-5-basdeg.html" target="_blank">
         <div class="theme-card">
           <span>Basamak Değeri</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-1-6-kesbol.html" target="_blank">
         <div class="theme-card">
           <span>Kesirler ve Bölme</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-1-7-dort.html" target="_blank">
         <div class="theme-card">
           <span>Dört İşlem</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-1-8-uznlk.html" target="_blank">
         <div class="theme-card">
           <span>Uzunluk Ölçme</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     6. SINIF — 4. Tema: İstatistiksel Araştırma Süreci
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="1" data-theme="3" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-5-1-istar.html" target="_blank">
         <div class="theme-card">
           <span>İstatistiksel Araştırma Süreci</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-5-2-isttar.html" target="_blank">
         <div class="theme-card">
           <span>Başkalarının İstatistiksel Sonuçlarını Tartışma</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     6. SINIF — 5. Tema: Geometrik Şekiller
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="1" data-theme="4" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-3-1-prllksn.html" target="_blank">
         <div class="theme-card">
           <span>Paralel Doğrular ve Bir Kesenin Oluşturduğu Açılar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-3-2-ikiksndrtgn.html" target="_blank">
         <div class="theme-card">
           <span>İki Kesenle Oluşan Dörtgenler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-3-3-ksgndrtgn.html" target="_blank">
         <div class="theme-card">
           <span>Köşegenleri Birbirini Ortalayan Dörtgenler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-3-4-geoprob.html" target="_blank">
         <div class="theme-card">
           <span>Problemler</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     6. SINIF — 6. Tema: İşlemlerle Cebirsel Düşünme ve Değişimler
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="1" data-theme="5" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-2-1-cbrsl.html" target="_blank">
         <div class="theme-card">
           <span>Bilinmeyen Niceliklerden Cebirsel İfadelere</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-2-2-orntlr.html" target="_blank">
         <div class="theme-card">
           <span>Sayı ve Şekil Örüntülerini Yorumlama</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-2-3-algrtm.html" target="_blank">
         <div class="theme-card">
           <span>Cebirsel İfadeler İçeren Algoritmalar</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     6. SINIF — 7. Tema: Geometrik Nicelikler
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="1" data-theme="6" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-4-1-uznlkaln.html" target="_blank">
         <div class="theme-card">
           <span>Uzunluk ve Alan Ölçüleri</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-4-2-prllknrucgn.html" target="_blank">
         <div class="theme-card">
           <span>Dikdörtgen, Paralelkenar ve Üçgenin Alanı</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-4-3-alanpro.html" target="_blank">
         <div class="theme-card">
           <span>Modellenen Alan Problemleri</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-4-4-cmbrcp.html" target="_blank">
         <div class="theme-card">
           <span>Çemberin Uzunluğu ve Çapı Arasındaki İlişki</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 5 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-4-5-cmbrcvr.html" target="_blank">
         <div class="theme-card">
           <span>Çemberin Uzunluğunu Hesaplama</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 6 -->
       <a class="theme-card-link" href="matematik-etkinlik/6/6-4-6-mrkzyy.html" target="_blank">
         <div class="theme-card">
           <span>Merkez Açı ve Gördüğü Yay</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
@@ -1103,298 +940,200 @@
 <button aria-selected="false" class="selection-button theme-button" data-grade="2" data-theme="8" type="button">9 - Geometrik Nicelikler (2)</button>
 </div>
 
-<!-- ---------------------------------------------------------
-     7. SINIF — 1. Tema: Sayılar ve Nicelikler (1)
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="0" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-1-1-say.html" target="_blank">
         <div class="theme-card">
           <span>Tam Sayılar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-1-2-ond.html" target="_blank">
         <div class="theme-card">
           <span>Ondalık Gösterim</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-1-3-srlm.html" target="_blank">
         <div class="theme-card">
           <span>Rasyonel Sayıları Sıralama</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-1-4-prb.html" target="_blank">
         <div class="theme-card">
           <span>Problemler</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     7. SINIF — 2. Tema: Geometrik Nicelikler (1)
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="1" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-1-eskplr.html" target="_blank">
         <div class="theme-card">
           <span>Eş Küplerle Oluşturulan Yapılar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-2-yzyaln.html" target="_blank">
         <div class="theme-card">
           <span>Dikdörtgen Prizmanın Yüzey Alanı</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-3-hcm1.html" target="_blank">
         <div class="theme-card">
           <span>Birim Küplerle Hacim</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-4-hcm2.html" target="_blank">
         <div class="theme-card">
           <span>Dikdörtgen Prizmanın Hacmi</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 5 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-5-hcmbrm.html" target="_blank">
         <div class="theme-card">
           <span>Hacim Ölçme Birimleri</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 6 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-6-gunpro.html" target="_blank">
         <div class="theme-card">
           <span>Günlük Yaşamdan Problemler</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     7. SINIF — 3. Tema: İstatistiksel Araştırma Süreci
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="2" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-6-1-istarsrc.html" target="_blank">
         <div class="theme-card">
           <span>İstatistiksel Araştırma Süreci</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-6-2-istsnctar.html" target="_blank">
         <div class="theme-card">
           <span>İstatistiksel Sonuçları Tartışma</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     7. SINIF — 4. Tema: Dönüşüm
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="3" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-3-1-ynsm.html" target="_blank">
         <div class="theme-card">
           <span>Yansıma Dönüşümü</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-3-2-ortdik.html" target="_blank">
         <div class="theme-card">
           <span>Orta Dikme ve Açıortay İnşası</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     7. SINIF — 5. Tema: Geometrik Şekiller
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="4" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-5-1-2-yardelm.html" target="_blank">
         <div class="theme-card">
           <span>Kenarortay, Açıortay, Yükseklik</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     7. SINIF — 6. Tema: Sayılar ve Nicelikler (2)
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="5" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-1-5-oran.html" target="_blank">
         <div class="theme-card">
           <span>Oran İlişkileri</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-1-6-ornt.html" target="_blank">
         <div class="theme-card">
           <span>Orantılı mı Değil mi?</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-1-7-dgrornt.html" target="_blank">
         <div class="theme-card">
           <span>Doğru Orantı Problemleri</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     7. SINIF — 7. Tema: Veriden Olasılığa
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="6" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-7-1-2-3-vrdnolslk.html" target="_blank">
         <div class="theme-card">
           <span>Veriden Olasılığa</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     7. SINIF — 8. Tema: İşlemlerle Cebirsel Düşünme ve Değişimler
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="7" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-2-1-cbrislmlr.html" target="_blank">
         <div class="theme-card">
           <span>Cebirsel İfadelerle İşlemler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-2-2-dnkestszlk.html" target="_blank">
         <div class="theme-card">
           <span>Denklem ve Eşitsizliklerle Problemler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-2-3-cbrspt.html" target="_blank">
         <div class="theme-card">
           <span>Sayılar ve Özellikleriyle Cebirsel İspat</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-2-4-cbralg.html" target="_blank">
         <div class="theme-card">
           <span>Cebirsel İşlemler ve Algoritma</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     7. SINIF — 9. Tema: Geometrik Nicelikler (2)
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="2" data-theme="8" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-7-dalan.html" target="_blank">
         <div class="theme-card">
           <span>Dairenin Alanı</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-8-ddalan.html" target="_blank">
         <div class="theme-card">
           <span>Daire Diliminin Alanı</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-9-esknrymk.html" target="_blank">
         <div class="theme-card">
           <span>Eşkenar Dörtgen ve Yamuğun Alanı</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/7/7-4-10-hayprb.html" target="_blank">
         <div class="theme-card">
           <span>Problemler</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
@@ -1409,268 +1148,184 @@
 <button aria-selected="false" class="selection-button theme-button" data-grade="3" data-theme="6" type="button">2025 - 2026 8. SINIF ETKİNLİKLERİ</button>
 </div>
 
-<!-- ---------------------------------------------------------
-     8. SINIF — 1. Ünite
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="3" data-theme="0" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-1-1-carpkat.html" target="_blank">
         <div class="theme-card">
           <span>1- Çarpanlar ve Katlar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-1-2-uslu.html" target="_blank">
         <div class="theme-card">
           <span>2- Üslü İfadeler</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-<!-- ---------------------------------------------------------
-     8. SINIF — 2. Ünite
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="3" data-theme="1" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-1-3-krkk.html" target="_blank">
         <div class="theme-card">
           <span>1- Kareköklü İfadeler</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-4-1-verianlz.html" target="_blank">
         <div class="theme-card">
           <span>2- Veri Analizi</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     8. SINIF — 3. Ünite
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="3" data-theme="2" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-5-1-olslk.html" target="_blank">
         <div class="theme-card">
           <span>1- Olasılık</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-1-1-cbrcrpm.html" target="_blank">
         <div class="theme-card">
           <span>2- Cebirsel İfadelerle Çarpma İşlemi</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-1-3-ozdslk.html" target="_blank">
         <div class="theme-card">
           <span>3- Özdeşlikler ve Modelleme</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-1-4-crpayrm.html" target="_blank">
         <div class="theme-card">
           <span>4- Çarpanlara Ayırma - Sadeleştirme</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     8. SINIF — 4. Ünite
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="3" data-theme="3" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-2-1-dnkkrdnt.html" target="_blank">
         <div class="theme-card">
           <span>1- Denklem Çözme - Koordinatlar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-2-3-dgrsldnklm.html" target="_blank">
         <div class="theme-card">
           <span>2- Doğrusal İlişkiler - Tablo</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-2-4-dgrgrfk.html" target="_blank">
         <div class="theme-card">
           <span>3- Doğrusal İlişkiler - Grafik</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-2-5-grfkhyt.html" target="_blank">
         <div class="theme-card">
           <span>4- Denklem - Tablo - Grafik</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 5 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-2-6-egim.html" target="_blank">
         <div class="theme-card">
           <span>5- Doğrunun Eğimi</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 6 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-2-3-estszlk.html" target="_blank">
         <div class="theme-card">
           <span>6- Eşitsizlikler</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     8. SINIF — 5. Ünite
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="3" data-theme="4" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-1-1-yardelmn.html" target="_blank">
         <div class="theme-card">
           <span>1- Üçgende Yardımcı Elemanlar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-1-2-3-kaci.html" target="_blank">
         <div class="theme-card">
           <span>2- Üçgende Kenar-Açı İlişkisi</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-1-4-ucgnczm.html" target="_blank">
         <div class="theme-card">
           <span>3- Üçgen Çizimi</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-1-5-pisagor.html" target="_blank">
         <div class="theme-card">
           <span>4- Pisagor Bağıntısı</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 5 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-3-1-2-eslkbnzrlk.html" target="_blank">
         <div class="theme-card">
           <span>5- Eşlik ve Benzerlik</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
 
-
-<!-- ---------------------------------------------------------
-     8. SINIF — 6. Ünite
-     --------------------------------------------------------- -->
-
 <div class="selection-content theme-content" data-grade="3" data-theme="5" hidden="">
   <div class="selection-content-inner">
     <div class="theme-card-grid">
-      <!-- ETKİNLİK 1 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-2-1-otlme.html" target="_blank">
         <div class="theme-card">
           <span>1- Öteleme</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 2 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-2-2-ynsma.html" target="_blank">
         <div class="theme-card">
           <span>2- Yansıma</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 3 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-2-3-otlmynsm.html" target="_blank">
         <div class="theme-card">
           <span>3- Öteleme ve Yansıma</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 4 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-4-1-dkprzmlr.html" target="_blank">
         <div class="theme-card">
           <span>4- Dik Prizmalar</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 5 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-4-2-dkslndr.html" target="_blank">
         <div class="theme-card">
           <span>5- Dik Silindir</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 6 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-4-3-dkslndra.html" target="_blank">
         <div class="theme-card">
           <span>6- Dik Silindir Alan</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 7 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-4-4-dkslndrh.html" target="_blank">
         <div class="theme-card">
           <span>7- Dik Silindir Hacim</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 8 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-4-5-dkprmt.html" target="_blank">
         <div class="theme-card">
           <span>8- Dik Piramit</span>
         </div>
       </a>
-
-      <!-- ETKİNLİK 9 -->
       <a class="theme-card-link" href="matematik-etkinlik/8/8-3-4-6-dkkn.html" target="_blank">
         <div class="theme-card">
           <span>9- Dik Koni</span>
         </div>
       </a>
-
     </div>
   </div>
 </div>
@@ -1748,18 +1403,12 @@
 <tr>
 <td class="col-icon">
 <svg height="64" viewbox="0 0 80 80" width="64">
-<!-- Büyük üçgen -->
 <polygon fill="#E6F1FB" points="8,64 52,64 52,16" stroke="#185FA5" stroke-width="1.6"></polygon>
-<!-- Küçük benzer üçgen (sağ üstte) -->
 <polygon fill="#FAEEDA" points="58,64 74,64 74,46" stroke="#BA7517" stroke-width="1.4"></polygon>
-<!-- Eşitlik işaretleri — karşılıklı kenarlar -->
 <line stroke="#185FA5" stroke-width="1.8" x1="28" x2="32" y1="68" y2="68"></line>
 <line stroke="#BA7517" stroke-width="1.8" x1="64" x2="66" y1="68" y2="68"></line>
-<!-- ~ benzerlik sembolü -->
 <text fill="#185FA5" font-family="Georgia,serif" font-size="13" font-weight="800" text-anchor="middle" x="40" y="38">~</text>
-<!-- Dik açı işareti büyük -->
 <rect fill="none" height="8" stroke="#185FA5" stroke-width="1.2" width="8" x="44" y="56"></rect>
-<!-- Dik açı işareti küçük -->
 <rect fill="none" height="5" stroke="#BA7517" stroke-width="1" width="5" x="66" y="56"></rect>
 </svg>
 </td>
@@ -1769,20 +1418,15 @@
 <tr>
 <td class="col-icon">
 <svg height="64" viewbox="0 0 80 80" width="64">
-<!-- Orijinal şekil (L benzeri) -->
 <polygon fill="#E6F1FB" points="6,58 18,58 18,46 14,46 14,28 6,28" stroke="#185FA5" stroke-width="1.5"></polygon>
-<!-- Öteleme oku -->
 <line marker-end="url(#arr)" stroke="#BA7517" stroke-dasharray="3,2" stroke-width="1.4" x1="20" x2="36" y1="43" y2="43"></line>
 <defs>
 <marker id="arr" markerheight="4" markerwidth="4" orient="auto" refx="5" refy="3" viewbox="0 0 6 6">
 <path d="M0 1L5 3L0 5" fill="none" stroke="#BA7517" stroke-width="1.2"></path>
 </marker>
 </defs>
-<!-- Ötelenmiş görüntü -->
 <polygon fill="#E6F1FB" points="38,58 50,58 50,46 46,46 46,28 38,28" stroke="#185FA5" stroke-dasharray="4,2" stroke-width="1.5"></polygon>
-<!-- Simetri doğrusu -->
 <line stroke="#D85A30" stroke-dasharray="5,3" stroke-width="1.6" x1="62" x2="62" y1="18" y2="68"></line>
-<!-- Yansıma görüntüsü -->
 <polygon fill="#FAEEDA" points="74,58 62,58 62,46 66,46 66,28 74,28" stroke="#BA7517" stroke-dasharray="4,2" stroke-width="1.4"></polygon>
 </svg>
 </td>
@@ -1792,13 +1436,11 @@
 <tr>
 <td class="col-icon">
 <svg height="64" viewbox="0 0 80 80" width="64">
-<!-- Silindir -->
 <ellipse cx="20" cy="22" fill="#E6F1FB" rx="12" ry="5" stroke="#185FA5" stroke-width="1.4"></ellipse>
 <rect fill="#D4E6F8" height="22" stroke="none" width="24" x="8" y="22"></rect>
 <ellipse cx="20" cy="44" fill="#C8DBF5" rx="12" ry="5" stroke="#185FA5" stroke-width="1.4"></ellipse>
 <line stroke="#185FA5" stroke-width="1.4" x1="8" x2="8" y1="22" y2="44"></line>
 <line stroke="#185FA5" stroke-width="1.4" x1="32" x2="32" y1="22" y2="44"></line>
-<!-- Kare tabanlı piramit -->
 <polygon fill="#FAEEDA" points="58,62 74,62 74,48 58,48" stroke="#BA7517" stroke-width="1.4"></polygon>
 <line stroke="#BA7517" stroke-width="1.4" x1="58" x2="58" y1="48" y2="62"></line>
 <polygon fill="#F5DFB8" points="58,48 74,48 66,30" stroke="#BA7517" stroke-width="1.4"></polygon>
@@ -1813,22 +1455,10 @@
 <div class="full-row-card">8. Sınıflar İçin Ortaokul Geneli 10 Soruluk Quiz</div>
 </a></div></div></div></div></div>
 
-<style>
-  .flex-kapsayici {
-    display: flex;
-    gap: 10px; /* Sütunlar arası boşluk */
-  }
-  .sutun {
-    flex: 1; /* İki sütunun da eşit genişlikte olmasını sağlar */
-  }
-</style>
-
 <div class="flex-kapsayici">
   <div class="sutun"><div class="intro-box soft-box" id="games-info"><p><b>Oyunlar</b> bölümündeki matematik oyunlarını, yapay zekâ araçlarını kullanarak ortaokul öğrencileri için hazırladım.<br>
-<b>Oyunlarım genel olarak mobil ekran uyumludur fakat en iyi görüntü deneyimini PC/tablet ekranında yaşayabilirsiniz</b></p></div></div>
-  <div class="sutun"><div class="intro-box soft-box" id="activities-info"><p><b>Etkinlikler</b> bölümünde sınıfı ve temayı seçerek, hazırladığım matematik dersi etkinliklerini inceleyebilirsiniz.<br><b>Etkinlik sayfaları ile ilgili bazı ekleme/düzenleme/geliştirme çalışmalarım devam ediyor.</b></p></div></div>
-
-
+<b>Oyunlarım genel olarak mobil ekran uyumludur fakat en iyi görüntü deneyimini PC/tablet ekranında yaşayabilirsiniz.</b></p></div></div>
+  <div class="sutun"><div class="intro-box soft-box" id="activities-info"><p><b>Etkinlikler</b> bölümünde önce sınıfı, sonra temayı seçerek matematik dersi etkinliklerimi inceleyebilirsiniz.<br><b>Etkinlik sayfaları ile ilgili ekleme/düzenleme/geliştirme çalışmalarım devam ediyor.</b></p></div></div>
 </div></main>
 <footer>
 <img alt="Tekin Hoca Logo" class="footer-logo" src="img/THlogo.webp"/>
@@ -1953,8 +1583,6 @@
       );
     }
 
-    // Seçilen tema/ünitenin etkinlik kutusunu, kaydırma bittikten sonra bir kez ışıldatır.
-    // 8. sınıf "2025 - 2026" arşiv bloğu (grade 3, theme 6) efekt dışındadır.
     let cancelPendingGlow = null;
     function glowThemeBox(grade, theme) {
       if (cancelPendingGlow) cancelPendingGlow();
@@ -2027,7 +1655,6 @@
       });
     });
 
-    // Başlangıçta her şey kapalıdır; kullanıcı seçim yaparak ilerler.
     gamesContent.hidden = true;
     activitiesContent.hidden = true;
     themeRows.forEach(row => row.hidden = true);
