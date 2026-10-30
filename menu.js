@@ -231,17 +231,26 @@ const MENU_ITEMS = [
   }
 
   // ── Komşu sayfaların görsellerini önceden indir ──
+  // Görsel öğesi bir kez oluşturulur, decode() ile önceden çözülür ve sürükleme
+  // başladığında aynı öğe önizlemeye yerleştirilir (ilk gösterimdeki takılmayı azaltır).
   var preloaded = {};
-  function preload() {
-    if (navigator.connection && navigator.connection.saveData) return;
-    [nextItem, prevItem].forEach(function (it) {
-      var u = imgUrl(it);
-      if (preloaded[u]) return;
+  function getImg(it) {
+    var u = imgUrl(it);
+    if (!preloaded[u]) {
       var im = new Image();
       im.decoding = "async";
+      im.alt = "";
+      im.draggable = false;
       im.src = u;
+      if (im.decode) im.decode().catch(function () {});
       preloaded[u] = im;
-    });
+    }
+    return preloaded[u];
+  }
+  function preload() {
+    if (navigator.connection && navigator.connection.saveData) return;
+    getImg(nextItem);
+    getImg(prevItem);
   }
   if (window.MutationObserver) {
     new MutationObserver(preload).observe(html, { attributes: true, attributeFilter: ["data-theme"] });
@@ -267,29 +276,33 @@ const MENU_ITEMS = [
     d.setAttribute("aria-hidden", "true");
     d.style.cssText = "position:fixed;top:0;left:0;width:" + W + "px;height:" + H + "px;overflow:hidden;" +
       "z-index:-1;pointer-events:none;transform-origin:0 0;will-change:transform;visibility:hidden;" +
-      "background:var(--aged,#ece4cc);box-shadow:0 0 28px rgba(0,0,0,.35);border-radius:16px;";
+      "background:var(--aged,#ece4cc);box-shadow:0 0 28px rgba(0,0,0,.35);";
     d.style.transform = restTransform(dir);
     var lab = document.createElement("div");
     lab.textContent = it.label;
     lab.style.cssText = "position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;" +
       "justify-content:center;padding:24px;text-align:center;" +
       "font:600 1.6rem/1.3 'Source Serif 4',Georgia,serif;color:var(--ink,#12100e);";
-    var im = new Image();
-    im.alt = "";
-    im.draggable = false;
-    im.decoding = "async";
+    var base = getImg(it);
+    var im = base.parentNode ? base.cloneNode(false) : base;   // aynı öğe başka önizlemedeyse kopyasını kullan
     im.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;";
     im.onerror = function () { im.style.display = "none"; };
-    im.src = imgUrl(it);
+    if (im.complete && im.src && !im.naturalWidth) im.style.display = "none";
     d.appendChild(lab);
     d.appendChild(im);
     html.appendChild(d);
     return d;
   }
 
+  // Önizleme yalnızca ilgili yönde ve ilk gerektiğinde oluşturulur
+  function ensurePeek(dir) {
+    if (!peeks[dir]) peeks[dir] = makePeek(dir === "next" ? nextItem : prevItem, dir);
+    return peeks[dir];
+  }
+
   function setAnim(ms) {
     var kt = ms > 0 ? "translate " + ms + "ms " + EASE : "none";
-    var pt = ms > 0 ? "transform " + ms + "ms " + EASE + ", border-radius " + ms + "ms " + EASE : "none";
+    var pt = ms > 0 ? "transform " + ms + "ms " + EASE : "none";
     kids.forEach(function (el) { el.style.transition = kt; });
     ["next", "prev"].forEach(function (k) { if (peeks[k]) peeks[k].style.transition = pt; });
   }
@@ -305,8 +318,6 @@ const MENU_ITEMS = [
     kids.forEach(function (el) { el.style.willChange = "translate"; });
     savedOverflowX = html.style.overflowX;
     html.style.overflowX = "hidden";
-    peeks.next = makePeek(nextItem, "next");
-    peeks.prev = makePeek(prevItem, "prev");
     setAnim(0);
   }
 
@@ -318,7 +329,11 @@ const MENU_ITEMS = [
       el.style.willChange = "";
     });
     ["next", "prev"].forEach(function (k) {
-      if (peeks[k] && peeks[k].parentNode) peeks[k].parentNode.removeChild(peeks[k]);
+      if (peeks[k]) {
+        var pim = peeks[k].lastChild;
+        if (pim && pim.tagName === "IMG") peeks[k].removeChild(pim);
+        if (peeks[k].parentNode) peeks[k].parentNode.removeChild(peeks[k]);
+      }
       peeks[k] = null;
     });
     html.style.overflowX = savedOverflowX;
@@ -335,14 +350,14 @@ const MENU_ITEMS = [
     var s = MIN_SCALE + (1 - MIN_SCALE) * p;
     var tx = dx + "px 0";
     kids.forEach(function (el) { el.style.translate = tx; });
-    var k = dx < 0 ? peeks.next : (dx > 0 ? peeks.prev : null);
+    var dir = dx < 0 ? "next" : (dx > 0 ? "prev" : null);
+    var k = dir ? ensurePeek(dir) : null;
     if (peeks.next) peeks.next.style.visibility = dx < 0 ? "visible" : "hidden";
     if (peeks.prev) peeks.prev.style.visibility = dx > 0 ? "visible" : "hidden";
     if (!k) return;
     var x = dx < 0 ? (W - ad) : (dx - s * W);
     var y = H * (1 - s) / 2;
     k.style.transform = "translate3d(" + x + "px," + y + "px,0) scale(" + s + ")";
-    k.style.borderRadius = (16 * (1 - p)) + "px";
   }
 
   function schedule(dx) {
@@ -357,12 +372,13 @@ const MENU_ITEMS = [
     var it = dir === "next" ? nextItem : prevItem;
     try { sessionStorage.setItem("sw-arrive", JSON.stringify({ slug: it.slug, t: Date.now() })); } catch (e) {}
     try { localStorage.setItem("sw-nudge", "1"); } catch (e) {}
-    var k = peeks[dir];
+    var k = ensurePeek(dir);
+    void html.offsetWidth;
     setAnim(animMs);
     kids.forEach(function (el) { el.style.translate = (dir === "next" ? -W : W) + "px 0"; });
     if (peeks.next) peeks.next.style.visibility = dir === "next" ? "visible" : "hidden";
     if (peeks.prev) peeks.prev.style.visibility = dir === "prev" ? "visible" : "hidden";
-    if (k) { k.style.transform = "translate3d(0,0,0) scale(1)"; k.style.borderRadius = "0px"; }
+    if (k) k.style.transform = "translate3d(0,0,0) scale(1)";
     setTimeout(function () { location.replace(hrefOf(it)); }, animMs + 20);
     // Gezinme herhangi bir nedenle gerçekleşmezse sayfayı eski haline getir
     setTimeout(cleanup, 5000);
@@ -375,7 +391,7 @@ const MENU_ITEMS = [
     setAnim(animMs);
     kids.forEach(function (el) { el.style.translate = "0px 0"; });
     var k = peeks[dir];
-    if (k) { k.style.transform = restTransform(dir); k.style.borderRadius = "16px"; }
+    if (k) k.style.transform = restTransform(dir);
     setTimeout(cleanup, animMs + 30);
   }
 
@@ -476,6 +492,7 @@ const MENU_ITEMS = [
       try { localStorage.setItem("sw-nudge", "1"); } catch (e) {}
       busy = true;
       prepare();
+      ensurePeek("next");
       void html.offsetWidth;
       setAnim(320);
       apply(-Math.round(W * 0.12));
