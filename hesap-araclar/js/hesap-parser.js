@@ -312,6 +312,100 @@
     return islemSayisi > 0 ? sonuc(deger) : null;
   }
 
+
+  /* ---------- TERS İŞLEM ZİNCİRİ ---------- */
+  // Bilinmeyen başlangıç sayısına uygulanan ardışık işlemleri,
+  // eşitlikte verilen sonuçtan geriye doğru çözer.
+  function tersZincirHesapla(metin, sayilar) {
+    const kalanBaslangic = metin.trim();
+    const islemler = [];
+    let kalan = kalanBaslangic;
+
+    const ek = '(?:n[ıi]n|n[uü]n|inin|ının|unun|ünün)';
+    const sayi = '\\{SAYI(\\d+)\\}';
+
+    function tuket(desen, tur, deger) {
+      const m = kalan.match(desen);
+      if (!m) return false;
+      islemler.push({ tur, deger: typeof deger === 'function' ? deger(m) : deger });
+      kalan = kalan.slice(m[0].length).trim();
+      return true;
+    }
+
+    // İlk ve ara işlemler iyelik/genitif biçimde yazılır:
+    // "20 fazlasının", "5 katının", "yarısının", "beşte birinin".
+    while (true) {
+      if (tuket(new RegExp('^' + sayi + '\\s+fazlası' + ek + '(?:\\s+|$)', 'i'),
+        'topla', m => sayiAl(sayilar, Number(m[1])))) continue;
+      if (tuket(new RegExp('^' + sayi + '\\s+eksiği' + ek + '(?:\\s+|$)', 'i'),
+        'cikar', m => sayiAl(sayilar, Number(m[1])))) continue;
+      if (tuket(new RegExp('^' + sayi + '\\s+katı' + ek + '(?:\\s+|$)', 'i'),
+        'carp', m => sayiAl(sayilar, Number(m[1])))) continue;
+      if (tuket(new RegExp('^yarısı' + ek + '(?:\\s+|$)', 'i'), 'bol', 2)) continue;
+      if (tuket(new RegExp('^çeyreği' + ek + '(?:\\s+|$)', 'i'), 'bol', 4)) continue;
+
+      const kesirGenitif = new RegExp('^(' + KESIR_PAYDA_DESENI + ')\\s+(' +
+        KESIR_PAY_DESENI_ZINCIR + ')' + ek + '(?:\\s+|$)', 'i');
+      const km = kalan.match(kesirGenitif);
+      if (km) {
+        const payda = KESIR_PAYDA[km[1].toLowerCase()];
+        const pay = KESIR_PAY_YAZI[km[2].toLowerCase()];
+        islemler.push({ tur: 'kesir', pay, payda });
+        kalan = kalan.slice(km[0].length).trim();
+        continue;
+      }
+      break;
+    }
+
+    // Son işlem, iyelik eki almadan söylenir: "5 katı", "yarısı",
+    // "üçte biri". Bu işlemden sonra eşitlikteki sonuç gelir.
+    let m;
+    if ((m = kalan.match(new RegExp('^' + sayi + '\\s+fazlası\\s+', 'i')))) {
+      islemler.push({ tur: 'topla', deger: sayiAl(sayilar, Number(m[1])) });
+      kalan = kalan.slice(m[0].length).trim();
+    } else if ((m = kalan.match(new RegExp('^' + sayi + '\\s+eksiği\\s+', 'i')))) {
+      islemler.push({ tur: 'cikar', deger: sayiAl(sayilar, Number(m[1])) });
+      kalan = kalan.slice(m[0].length).trim();
+    } else if ((m = kalan.match(new RegExp('^' + sayi + '\\s+katı\\s+', 'i')))) {
+      islemler.push({ tur: 'carp', deger: sayiAl(sayilar, Number(m[1])) });
+      kalan = kalan.slice(m[0].length).trim();
+    } else if ((m = kalan.match(/^yarısı\s+/i))) {
+      islemler.push({ tur: 'bol', deger: 2 });
+      kalan = kalan.slice(m[0].length).trim();
+    } else if ((m = kalan.match(/^çeyreği\s+/i))) {
+      islemler.push({ tur: 'bol', deger: 4 });
+      kalan = kalan.slice(m[0].length).trim();
+    } else {
+      const kesirSon = new RegExp('^(' + KESIR_PAYDA_DESENI + ')\\s+(' +
+        KESIR_PAY_DESENI_ZINCIR + ')\\s+', 'i');
+      m = kalan.match(kesirSon);
+      if (m) {
+        islemler.push({
+          tur: 'kesir',
+          payda: KESIR_PAYDA[m[1].toLowerCase()],
+          pay: KESIR_PAY_YAZI[m[2].toLowerCase()]
+        });
+        kalan = kalan.slice(m[0].length).trim();
+      }
+    }
+
+    const hedef = kalan.match(/^\{SAYI(\d+)\}$/i);
+    if (!hedef || islemler.length === 0) return null;
+
+    let sonuc = sayiAl(sayilar, Number(hedef[1]));
+    for (let i = islemler.length - 1; i >= 0; i--) {
+      const op = islemler[i];
+      switch (op.tur) {
+        case 'topla': sonuc = HM.cikar(sonuc, op.deger); break;
+        case 'cikar': sonuc = HM.topla(sonuc, op.deger); break;
+        case 'carp': sonuc = tersCarpma(sonuc, op.deger); break;
+        case 'bol': sonuc = HM.carp(sonuc, op.deger); break;
+        case 'kesir': sonuc = tersKesir(sonuc, op.pay, op.payda); break;
+      }
+    }
+    return { tur: 'zincir', kalipId: 'ters-zincir', sonuc: sayiFormatla(sonuc) };
+  }
+
   const KALIPLAR = [
 
     /* =========================================================
@@ -768,6 +862,21 @@
     const normallesme = TRN.metniNormallestir(girdiMetni);
     const metin = sonEkleriTemizle(normallesme.normalizedText);
     const sayilar = normallesme.sayilar;
+
+    // Bilinmeyen başlangıç sayısını içeren ters işlem zincirleri.
+    try {
+      const tersZincir = tersZincirHesapla(metin, sayilar);
+      if (tersZincir) {
+        return {
+          basarili: true,
+          tur: tersZincir.tur,
+          kalipId: tersZincir.kalipId,
+          sonuc: tersZincir.sonuc
+        };
+      }
+    } catch (e) {
+      return { basarili: false, tur: 'zincir', mesaj: e.message };
+    }
 
     // İleri yönlü zincirleri, eski tek-kalıp kurallarından önce çöz.
     // Böylece geniş bir yüzde regex'i zincirin bir bölümünü yanlış yorumlayamaz.
