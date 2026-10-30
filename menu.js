@@ -116,3 +116,376 @@ const MENU_ITEMS = [
 
   document.body.appendChild(toggle);
 })();
+
+
+// ══════════════════════════════════════════════════════════════
+// SAYFALAR ARASI KAYDIRMA (yalnızca dokunmatik cihazlar)
+// ──────────────────────────────────────────────────────────────
+// • Sayfa sırası MENU_ITEMS'tan okunur. Menü sırasını değiştirirsen
+//   kaydırma sırası da kendiliğinden değişir; bu bölüme dokunman gerekmez.
+// • Son sayfadan sonra ilk sayfa (Ana Sayfa), Ana Sayfa'dan geriye son sayfa gelir.
+// • Önizleme görselleri: onizleme/<sayfa-adı>-light.webp ve -dark.webp
+//   (örn. onizleme/matematik-tarihi-dark.webp, Ana Sayfa için index-light.webp).
+//   Görsel yoksa yerine sayfanın menüdeki adını taşıyan düz bir panel gösterilir.
+// • Sürgü, giriş kutusu, canvas ve yatay kaydırılan alanlarda başlayan
+//   hareketler sayfa geçişini tetiklemez. Bir alanı da hariç tutmak için
+//   o öğeye data-no-swipe niteliği verebilirsin.
+// ══════════════════════════════════════════════════════════════
+(function () {
+  "use strict";
+
+  // İframe içinde, dokunmatik olmayan cihazda veya translate özelliğini
+  // desteklemeyen eski tarayıcıda çalışmaz (menü etkilenmez).
+  if (window.self !== window.top) return;
+  if (!("ontouchstart" in window) && !(navigator.maxTouchPoints > 0)) return;
+  if (typeof MENU_ITEMS === "undefined" || MENU_ITEMS.length < 2) return;
+  var html = document.documentElement;
+  if (!("translate" in html.style)) return;
+
+  // ── Ayarlar (gerçek telefonda denenerek değiştirilebilir) ──
+  var DEAD_EDGE    = 20;    // ekran kenarında bu kadar pikselde başlayan dokunuş yok sayılır (tarayıcı geri/ileri hareketi)
+  var INTENT_PX    = 10;    // yönün belirlenmesi için gereken ilk hareket
+  var DIR_RATIO    = 1.5;   // yatay hareket, dikeyin en az bu katı olmalı
+  var THRESHOLD    = 0.35;  // ekran genişliğinin bu oranı kadar sürüklenirse geçiş tamamlanır
+  var FLICK_SPEED  = 0.45;  // piksel/ms — bundan hızlı bırakılırsa mesafe eşiği aranmaz
+  var FLICK_MIN_PX = 50;    // hızlı hareketin en az bu kadar sürmesi gerekir
+  var MIN_SCALE    = 0.7;   // önizlemenin başlangıç boyutu (yükseklik oranı)
+  var ANIM_MS      = 240;   // geçiş animasyonu süresi
+  var EASE         = "cubic-bezier(.2,.8,.2,1)";
+
+  var reduceMotion = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var animMs = reduceMotion ? 0 : ANIM_MS;
+
+  // ── Sayfa zinciri ──
+  function slugOf(href) {
+    var path;
+    try { path = new URL(href, location.href).pathname; } catch (e) { path = String(href); }
+    var name = path.split("/").pop().replace(/\.html?$/i, "");
+    return name || "index";
+  }
+  var items = MENU_ITEMS.map(function (it) {
+    return { label: it.label, href: it.href, slug: slugOf(it.href) };
+  });
+  var n = items.length;
+  var current = slugOf(location.href);
+  var cur = -1;
+  for (var i = 0; i < n; i++) { if (items[i].slug === current) { cur = i; break; } }
+  if (cur < 0) return;
+  var nextItem = items[(cur + 1) % n];
+  var prevItem = items[(cur - 1 + n) % n];
+
+  function theme() { return html.getAttribute("data-theme") === "dark" ? "dark" : "light"; }
+  function imgUrl(it) { return "onizleme/" + it.slug + "-" + theme() + ".webp"; }
+  function hrefOf(it) {
+    // Ana Sayfa bağlantısı mutlak adrestir; yerelde/başka adreste denerken o siteye
+    // götürmemesi için, adres sitenin kendi adresiyle aynı değilse index.html kullanılır.
+    if (it.slug === "index") {
+      try {
+        if (new URL(it.href, location.href).hostname === location.hostname) return it.href;
+      } catch (e) {}
+      return "index.html";
+    }
+    return it.href;
+  }
+  function afterLoad(fn) {
+    if (document.readyState === "complete") fn();
+    else window.addEventListener("load", fn);
+  }
+
+  // ── Kaydırmayla gelinen sayfada: önizleme görselini tam ekran koy, sayfa yüklenince sön ──
+  var arrival = null;
+  try {
+    var raw = sessionStorage.getItem("sw-arrive");
+    if (raw) { sessionStorage.removeItem("sw-arrive"); arrival = JSON.parse(raw); }
+  } catch (e) {}
+  if (arrival && arrival.slug === current && Date.now() - arrival.t < 8000) showArrivalCover();
+
+  function showArrivalCover() {
+    var c = document.createElement("div");
+    c.setAttribute("aria-hidden", "true");
+    c.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;pointer-events:none;background:var(--cream,#f7f2e8);";
+    var im = new Image();
+    im.alt = "";
+    im.style.cssText = "display:block;width:100%;height:100%;object-fit:cover;object-position:top center;";
+    im.onerror = function () { if (c.parentNode) c.parentNode.removeChild(c); };
+    im.src = imgUrl(items[cur]);
+    c.appendChild(im);
+    html.appendChild(c);
+    var gone = false;
+    function hide() {
+      if (gone) return;
+      gone = true;
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          c.style.transition = "opacity .25s ease";
+          c.style.opacity = "0";
+          setTimeout(function () { if (c.parentNode) c.parentNode.removeChild(c); }, 320);
+        });
+      });
+    }
+    afterLoad(function () {
+      var f = document.fonts && document.fonts.ready;
+      (f ? f : Promise.resolve()).then(hide, hide);
+    });
+    setTimeout(hide, 4000);
+  }
+
+  // ── Komşu sayfaların görsellerini önceden indir ──
+  var preloaded = {};
+  function preload() {
+    if (navigator.connection && navigator.connection.saveData) return;
+    [nextItem, prevItem].forEach(function (it) {
+      var u = imgUrl(it);
+      if (preloaded[u]) return;
+      var im = new Image();
+      im.decoding = "async";
+      im.src = u;
+      preloaded[u] = im;
+    });
+  }
+  if (window.MutationObserver) {
+    new MutationObserver(preload).observe(html, { attributes: true, attributeFilter: ["data-theme"] });
+  }
+
+  // ── Sürükleme durumu ──
+  var st = null;          // dokunuş durumu
+  var busy = false;       // animasyon sürerken yeni dokunuş kabul edilmez
+  var kids = [];          // gövdenin kaydırılan doğrudan çocukları
+  var peeks = { next: null, prev: null };
+  var W = 0, H = 0, T = 0;
+  var savedOverflowX = "";
+  var raf = 0, pendingDx = 0;
+
+  function restTransform(dir) {
+    var y = H * (1 - MIN_SCALE) / 2;
+    var x = dir === "next" ? W : -W * MIN_SCALE;
+    return "translate3d(" + x + "px," + y + "px,0) scale(" + MIN_SCALE + ")";
+  }
+
+  function makePeek(it, dir) {
+    var d = document.createElement("div");
+    d.setAttribute("aria-hidden", "true");
+    d.style.cssText = "position:fixed;top:0;left:0;width:" + W + "px;height:" + H + "px;overflow:hidden;" +
+      "z-index:-1;pointer-events:none;transform-origin:0 0;will-change:transform;visibility:hidden;" +
+      "background:var(--aged,#ece4cc);box-shadow:0 0 28px rgba(0,0,0,.35);border-radius:16px;";
+    d.style.transform = restTransform(dir);
+    var lab = document.createElement("div");
+    lab.textContent = it.label;
+    lab.style.cssText = "position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;" +
+      "justify-content:center;padding:24px;text-align:center;" +
+      "font:600 1.6rem/1.3 'Source Serif 4',Georgia,serif;color:var(--ink,#12100e);";
+    var im = new Image();
+    im.alt = "";
+    im.draggable = false;
+    im.decoding = "async";
+    im.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;";
+    im.onerror = function () { im.style.display = "none"; };
+    im.src = imgUrl(it);
+    d.appendChild(lab);
+    d.appendChild(im);
+    html.appendChild(d);
+    return d;
+  }
+
+  function setAnim(ms) {
+    var kt = ms > 0 ? "translate " + ms + "ms " + EASE : "none";
+    var pt = ms > 0 ? "transform " + ms + "ms " + EASE + ", border-radius " + ms + "ms " + EASE : "none";
+    kids.forEach(function (el) { el.style.transition = kt; });
+    ["next", "prev"].forEach(function (k) { if (peeks[k]) peeks[k].style.transition = pt; });
+  }
+
+  function prepare() {
+    W = html.clientWidth;
+    H = window.innerHeight;
+    T = W * THRESHOLD;
+    kids = Array.prototype.filter.call(document.body.children, function (el) {
+      var t = el.tagName;
+      return t !== "SCRIPT" && t !== "STYLE" && t !== "LINK" && t !== "NOSCRIPT";
+    });
+    kids.forEach(function (el) { el.style.willChange = "translate"; });
+    savedOverflowX = html.style.overflowX;
+    html.style.overflowX = "hidden";
+    peeks.next = makePeek(nextItem, "next");
+    peeks.prev = makePeek(prevItem, "prev");
+    setAnim(0);
+  }
+
+  function cleanup() {
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    kids.forEach(function (el) {
+      el.style.translate = "";
+      el.style.transition = "";
+      el.style.willChange = "";
+    });
+    ["next", "prev"].forEach(function (k) {
+      if (peeks[k] && peeks[k].parentNode) peeks[k].parentNode.removeChild(peeks[k]);
+      peeks[k] = null;
+    });
+    html.style.overflowX = savedOverflowX;
+    kids = [];
+    st = null;
+    busy = false;
+  }
+
+  // Sayfayı dx kadar kaydır, ilgili önizlemeyi parmağın arkasında konumlandır
+  function apply(dx) {
+    dx = Math.max(-W, Math.min(W, dx));
+    var ad = Math.abs(dx);
+    var p = Math.min(1, ad / T);
+    var s = MIN_SCALE + (1 - MIN_SCALE) * p;
+    var tx = dx + "px 0";
+    kids.forEach(function (el) { el.style.translate = tx; });
+    var k = dx < 0 ? peeks.next : (dx > 0 ? peeks.prev : null);
+    if (peeks.next) peeks.next.style.visibility = dx < 0 ? "visible" : "hidden";
+    if (peeks.prev) peeks.prev.style.visibility = dx > 0 ? "visible" : "hidden";
+    if (!k) return;
+    var x = dx < 0 ? (W - ad) : (dx - s * W);
+    var y = H * (1 - s) / 2;
+    k.style.transform = "translate3d(" + x + "px," + y + "px,0) scale(" + s + ")";
+    k.style.borderRadius = (16 * (1 - p)) + "px";
+  }
+
+  function schedule(dx) {
+    pendingDx = dx;
+    if (!raf) raf = requestAnimationFrame(function () { raf = 0; apply(pendingDx); });
+  }
+
+  // Geçişi tamamla: eski sayfa tam çıkar, önizleme tam boyuta büyür, sonra gerçek sayfaya geç
+  function commit(dir) {
+    busy = true;
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    var it = dir === "next" ? nextItem : prevItem;
+    try { sessionStorage.setItem("sw-arrive", JSON.stringify({ slug: it.slug, t: Date.now() })); } catch (e) {}
+    try { localStorage.setItem("sw-nudge", "1"); } catch (e) {}
+    var k = peeks[dir];
+    setAnim(animMs);
+    kids.forEach(function (el) { el.style.translate = (dir === "next" ? -W : W) + "px 0"; });
+    if (peeks.next) peeks.next.style.visibility = dir === "next" ? "visible" : "hidden";
+    if (peeks.prev) peeks.prev.style.visibility = dir === "prev" ? "visible" : "hidden";
+    if (k) { k.style.transform = "translate3d(0,0,0) scale(1)"; k.style.borderRadius = "0px"; }
+    setTimeout(function () { location.replace(hrefOf(it)); }, animMs + 20);
+    // Gezinme herhangi bir nedenle gerçekleşmezse sayfayı eski haline getir
+    setTimeout(cleanup, 5000);
+  }
+
+  // Geçişi iptal et: sayfa yerine döner, önizleme kenara çekilir
+  function rest(dir) {
+    busy = true;
+    if (raf) { cancelAnimationFrame(raf); raf = 0; }
+    setAnim(animMs);
+    kids.forEach(function (el) { el.style.translate = "0px 0"; });
+    var k = peeks[dir];
+    if (k) { k.style.transform = restTransform(dir); k.style.borderRadius = "16px"; }
+    setTimeout(cleanup, animMs + 30);
+  }
+
+  // ── Hangi dokunuşlar yok sayılır ──
+  var BLOCK_SEL = "input,textarea,select,[contenteditable],canvas,video,audio,iframe,[data-no-swipe],#site-nav";
+  function blocked(el) {
+    if (!el || !el.closest) return true;
+    if (el.closest(BLOCK_SEL)) return true;
+    for (var p = el; p && p !== document.body && p !== html; p = p.parentElement) {
+      var cs = getComputedStyle(p);
+      if ((cs.overflowX === "auto" || cs.overflowX === "scroll") && p.scrollWidth > p.clientWidth + 1) return true;
+    }
+    return false;
+  }
+
+  function onStart(e) {
+    if (busy) return;
+    if (st && st.mode === "swipe") {            // ikinci parmak geldi: iptal
+      var s0 = st; st = null;
+      rest((s0.dx || 0) < 0 ? "next" : "prev");
+      return;
+    }
+    st = null;
+    if (e.touches.length !== 1) return;
+    if (window.visualViewport && window.visualViewport.scale > 1.02) return;    // yakınlaştırılmışsa
+    if (document.body.style.position === "fixed" || document.querySelector(".lightbox-overlay.show")) return;
+    if (document.querySelector("#site-nav .nav-inner.open")) return;            // menü açıkken
+    var sel = window.getSelection && window.getSelection();
+    if (sel && !sel.isCollapsed && String(sel).length) return;                  // metin seçilirken
+    var t = e.touches[0];
+    var vw = html.clientWidth;
+    if (t.clientX < DEAD_EDGE || t.clientX > vw - DEAD_EDGE) return;
+    if (blocked(e.target)) return;
+    st = { x0: t.clientX, y0: t.clientY, mode: "pending", pts: [], dx: 0 };
+  }
+
+  function onMove(e) {
+    if (!st || st.mode === "ignore" || busy) return;
+    var t = e.touches[0];
+    if (!t) return;
+    var dx = t.clientX - st.x0, dy = t.clientY - st.y0;
+    if (st.mode === "pending") {
+      if (Math.abs(dx) < INTENT_PX && Math.abs(dy) < INTENT_PX) return;
+      if (Math.abs(dx) > DIR_RATIO * Math.abs(dy)) {
+        st.mode = "swipe";
+        st.x0 = t.clientX;      // sayfa, yön belirlendiği noktadan itibaren parmağı izler
+        dx = 0;
+        prepare();
+      } else {
+        st.mode = "ignore";     // dikey hareket: normal sayfa kaydırması
+        return;
+      }
+    }
+    if (e.cancelable) e.preventDefault();
+    var now = e.timeStamp || Date.now();
+    st.pts.push({ x: t.clientX, t: now });
+    while (st.pts.length > 2 && now - st.pts[0].t > 100) st.pts.shift();
+    st.dx = dx;
+    schedule(dx);
+  }
+
+  function onEnd() {
+    if (!st) return;
+    var s = st; st = null;
+    if (s.mode !== "swipe") return;
+    var dx = s.dx || 0, ad = Math.abs(dx);
+    var v = 0, p = s.pts;
+    if (p.length >= 2) {
+      var dt = p[p.length - 1].t - p[0].t;
+      if (dt > 0) v = (p[p.length - 1].x - p[0].x) / dt;
+    }
+    var flick = Math.abs(v) >= FLICK_SPEED && ad >= FLICK_MIN_PX && ((v < 0) === (dx < 0));
+    if (ad >= T || flick) commit(dx < 0 ? "next" : "prev");
+    else rest(dx < 0 ? "next" : "prev");
+  }
+
+  function onCancel() {
+    if (!st) return;
+    var s = st; st = null;
+    if (s.mode === "swipe") rest((s.dx || 0) < 0 ? "next" : "prev");
+  }
+
+  document.addEventListener("touchstart",  onStart,  { passive: true });
+  document.addEventListener("touchmove",   onMove,   { passive: false });
+  document.addEventListener("touchend",    onEnd,    { passive: true });
+  document.addEventListener("touchcancel", onCancel, { passive: true });
+  window.addEventListener("pageshow", function (e) { if (e.persisted) cleanup(); });
+  // Yatay kaydırmada tarayıcının kendi kenar/geri hareketini azalt
+  html.style.overscrollBehaviorX = "none";
+
+  // ── Ana Sayfa'da bir kez gösterilen kısa ipucu hareketi ──
+  function maybeNudge() {
+    if (current !== "index" || reduceMotion) return;
+    if (!(window.matchMedia && matchMedia("(pointer: coarse)").matches)) return;
+    try { if (localStorage.getItem("sw-nudge")) return; } catch (e) { return; }
+    setTimeout(function () {
+      if (busy || st || document.visibilityState !== "visible" || window.scrollY > 5) return;
+      try { localStorage.setItem("sw-nudge", "1"); } catch (e) {}
+      busy = true;
+      prepare();
+      void html.offsetWidth;
+      setAnim(320);
+      apply(-Math.round(W * 0.12));
+      setTimeout(function () { rest("next"); }, 700);
+    }, 1400);
+  }
+
+  afterLoad(function () {
+    if (window.requestIdleCallback) window.requestIdleCallback(preload);
+    else setTimeout(preload, 500);
+    maybeNudge();
+  });
+})();
