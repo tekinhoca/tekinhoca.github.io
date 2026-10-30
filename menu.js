@@ -2,16 +2,28 @@
 // Yeni sayfa eklenince sadece bu dosyayı güncelle.
 
 const MENU_ITEMS = [
-  { label: "Ana Sayfa",            href: "https://tekinhoca.github.io/" },
-  { label: "Hesaplama Araçları",   href: "hesap-araclar.html" },
-  { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html" },
-  { label: "Mantık-Zekâ Oyunları", href: "html-oyunlar.html" },
-  { label: "Kulüp Dosyaları",      href: "kulup-dosyalari.html" },
-  { label: "Atatürk ve Matematik", href: "ataturk-matematik.html" },
-  { label: "Matematik Tarihi",     href: "matematik-tarihi.html" },
-  { label: "Estetik Matematik",    href: "estetik-matematik.html" },
-  { label: "Matematik Hikayeleri", href: "matematik-hikayeleri.html" },
+  { label: "Ana Sayfa",            href: "https://tekinhoca.github.io/",
+    title: "Tekin",        accent: "Hoca",               sub: "Matematik · Zekâ Oyunları · Kulübü" },
+  { label: "Hesaplama Araçları",   href: "hesap-araclar.html",
+    title: "Hesaplama",    accent: "Araçları",           sub: "Formülleri Gör · Örnekleri Karşılaştır · Uygulayarak Öğren" },
+  { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html",
+    title: "İnteraktif",   accent: "Ortaokul Matematik", sub: "Eğlen · Keşfet · Uygula · Öğren" },
+  { label: "Mantık-Zekâ Oyunları", href: "html-oyunlar.html",
+    title: "Mantık ve",    accent: "Zekâ Oyunları",      sub: "Oyna · Düşün · Kendini Geliştir" },
+  { label: "Kulüp Dosyaları",      href: "kulup-dosyalari.html",
+    title: "Kulüp",        accent: "Dosyaları",          sub: "Oku · İzle · Keşfet" },
+  { label: "Atatürk ve Matematik", href: "ataturk-matematik.html",
+    title: "Atatürk ve",   accent: "Matematik",          sub: "Geometri Terimleri · Eğitim Reformu · Dil Devrimi" },
+  { label: "Matematik Tarihi",     href: "matematik-tarihi.html",
+    title: "Matematiğin",  accent: "Tarihi",             sub: "Sayıların, Şekillerin ve Fikirlerin Büyük Yolculuğu" },
+  { label: "Estetik Matematik",    href: "estetik-matematik.html",
+    title: "Estetik",      accent: "Matematik",          sub: "Sayıların Gizli Güzelliği" },
+  { label: "Matematik Hikayeleri", href: "matematik-hikayeleri.html",
+    title: "Matematik",    accent: "Hikayeleri",         sub: "Sayıların Ardındaki Efsaneler, Paradokslar ve Deha Anları" },
 ];
+// label: menüde görünen ad. title / accent / sub: kaydırma önizlemesindeki başlık kartı
+// (title normal, accent altın-italik, sub alt başlık). Yeni sayfa eklerken üçünü de doldur;
+// boş bırakırsan kartta yalnızca label gösterilir.
 
 // ── TEMA — localStorage'dan oku, hemen uygula (flash önleme) ──
 (function () {
@@ -117,16 +129,23 @@ const MENU_ITEMS = [
   document.body.appendChild(toggle);
 })();
 
-
 // ══════════════════════════════════════════════════════════════
 // SAYFALAR ARASI KAYDIRMA (yalnızca dokunmatik cihazlar)
 // ──────────────────────────────────────────────────────────────
 // • Sayfa sırası MENU_ITEMS'tan okunur. Menü sırasını değiştirirsen
 //   kaydırma sırası da kendiliğinden değişir; bu bölüme dokunman gerekmez.
 // • Son sayfadan sonra ilk sayfa (Ana Sayfa), Ana Sayfa'dan geriye son sayfa gelir.
-// • Önizleme görselleri: onizleme/<sayfa-adı>-light.webp ve -dark.webp
-//   (örn. onizleme/matematik-tarihi-dark.webp, Ana Sayfa için index-light.webp).
-//   Görsel yoksa yerine sayfanın menüdeki adını taşıyan düz bir panel gösterilir.
+// • ÖNİZLEME: Sıradaki sayfanın "başlık kartı" gösterilir (GİDİLECEK SAYFA,
+//   süs çizgisi, başlık, alt başlık). Metinler MENU_ITEMS içindeki title / accent / sub
+//   alanlarından, görünüm common.css sonundaki ".sw-card" kurallarından gelir.
+//   Görsel dosyası gerekmez; her cihazda aynı görünür.
+// • TARAYICI GEÇMİŞİ: Ana Sayfa'dan yapılan ilk kaydırma geçmişe yeni kayıt ekler
+//   (location.assign). Zincirin devamındaki kaydırmalar o kaydı değiştirir
+//   (location.replace). Böylece kaç sayfa gezilirse gezilsin GERİ → Ana Sayfa,
+//   bir kez daha GERİ → siteye gelmeden önceki sayfa olur. Zincir içindeyken
+//   Ana Sayfa'ya kaydırılırsa yeni kayıt açılmaz, history.back() ile mevcut
+//   Ana Sayfa kaydına dönülür (geçmişte çift Ana Sayfa kaydı oluşmaz).
+//   Zincirdeki sayfalar history.state içinde {sw:1} işaretiyle tanınır.
 // • Sürgü, giriş kutusu, canvas ve yatay kaydırılan alanlarda başlayan
 //   hareketler sayfa geçişini tetiklemez. Bir alanı da hariç tutmak için
 //   o öğeye data-no-swipe niteliği verebilirsin.
@@ -152,6 +171,7 @@ const MENU_ITEMS = [
   var MIN_SCALE    = 0.7;   // önizlemenin başlangıç boyutu (yükseklik oranı)
   var ANIM_MS      = 240;   // geçiş animasyonu süresi
   var EASE         = "cubic-bezier(.2,.8,.2,1)";
+  var KICKER_TEXT  = "GİDİLECEK SAYFA";   // kartın en üstündeki satır
 
   var reduceMotion = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   var animMs = reduceMotion ? 0 : ANIM_MS;
@@ -164,7 +184,14 @@ const MENU_ITEMS = [
     return name || "index";
   }
   var items = MENU_ITEMS.map(function (it) {
-    return { label: it.label, href: it.href, slug: slugOf(it.href) };
+    return {
+      label: it.label,
+      href: it.href,
+      slug: slugOf(it.href),
+      title: it.title || it.label,   // kart başlığı (title yoksa menü adı)
+      accent: it.accent || "",       // başlığın altın/italik bölümü
+      sub: it.sub || ""              // alt başlık (boşsa gösterilmez)
+    };
   });
   var n = items.length;
   var current = slugOf(location.href);
@@ -174,8 +201,6 @@ const MENU_ITEMS = [
   var nextItem = items[(cur + 1) % n];
   var prevItem = items[(cur - 1 + n) % n];
 
-  function theme() { return html.getAttribute("data-theme") === "dark" ? "dark" : "light"; }
-  function imgUrl(it) { return "onizleme/" + it.slug + "-" + theme() + ".webp"; }
   function hrefOf(it) {
     // Ana Sayfa bağlantısı mutlak adrestir; yerelde/başka adreste denerken o siteye
     // götürmemesi için, adres sitenin kendi adresiyle aynı değilse index.html kullanılır.
@@ -192,24 +217,73 @@ const MENU_ITEMS = [
     else window.addEventListener("load", fn);
   }
 
-  // ── Kaydırmayla gelinen sayfada: önizleme görselini tam ekran koy, sayfa yüklenince sön ──
+  // ── Önizleme kartı (header görünümü; renk ve yazı tipleri common.css'ten) ──
+  function div(cls) {
+    var d = document.createElement("div");
+    if (cls) d.className = cls;
+    return d;
+  }
+  function buildCard(it) {
+    var card = div("sw-card");
+    card.lang = "tr";
+    var kicker = div("sw-kicker");
+    kicker.textContent = KICKER_TEXT;
+    var band = div("logo-band");
+    band.appendChild(div("logo-line"));
+    band.appendChild(div("logo-diamond"));
+    band.appendChild(div("logo-line r"));
+    var title = div("sw-title");
+    title.appendChild(document.createTextNode(it.accent ? it.title + " " : it.title));
+    if (it.accent) {
+      var sp = document.createElement("span");
+      sp.textContent = it.accent;
+      title.appendChild(sp);
+    }
+    card.appendChild(kicker);
+    card.appendChild(band);
+    card.appendChild(title);
+    if (it.sub) {
+      var sub = div("sw-sub");
+      sub.textContent = it.sub;
+      card.appendChild(sub);
+    }
+    return card;
+  }
+
+  // ── Tarayıcı geçmişi işareti ──
+  // chain: bu geçmiş kaydı "Ana Sayfa → kaydırma" zincirinin içinde mi?
+  // (Yani hemen altındaki kayıt Ana Sayfa mı?)
+  var chain = false;
+  try { chain = !!(history.state && history.state.sw === 1); } catch (e) {}
+  function markChain() {
+    try {
+      var s = history.state;
+      if (s === null || typeof s === "undefined") s = {};
+      if (typeof s !== "object") return;
+      var copy = {};
+      for (var k in s) { if (Object.prototype.hasOwnProperty.call(s, k)) copy[k] = s[k]; }
+      copy.sw = 1;
+      history.replaceState(copy, "");
+      chain = true;
+    } catch (e) {}
+  }
+
+  // ── Kaydırmayla gelinen sayfada: başlık kartını tam ekran koy, sayfa yüklenince sön ──
   var arrival = null;
   try {
     var raw = sessionStorage.getItem("sw-arrive");
     if (raw) { sessionStorage.removeItem("sw-arrive"); arrival = JSON.parse(raw); }
   } catch (e) {}
-  if (arrival && arrival.slug === current && Date.now() - arrival.t < 8000) showArrivalCover();
+  if (arrival && arrival.slug === current && Date.now() - arrival.t < 8000) {
+    if (arrival.mark) markChain();
+    showArrivalCover();
+  }
 
   function showArrivalCover() {
     var c = document.createElement("div");
     c.setAttribute("aria-hidden", "true");
-    c.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;pointer-events:none;background:var(--cream,#f7f2e8);";
-    var im = new Image();
-    im.alt = "";
-    im.style.cssText = "display:block;width:100%;height:100%;object-fit:cover;object-position:top center;";
-    im.onerror = function () { if (c.parentNode) c.parentNode.removeChild(c); };
-    im.src = imgUrl(items[cur]);
-    c.appendChild(im);
+    c.style.cssText = "position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483000;pointer-events:none;overflow:hidden;";
+    c.appendChild(buildCard(items[cur]));
     html.appendChild(c);
     var gone = false;
     function hide() {
@@ -230,32 +304,6 @@ const MENU_ITEMS = [
     setTimeout(hide, 4000);
   }
 
-  // ── Komşu sayfaların görsellerini önceden indir ──
-  // Görsel öğesi bir kez oluşturulur, decode() ile önceden çözülür ve sürükleme
-  // başladığında aynı öğe önizlemeye yerleştirilir (ilk gösterimdeki takılmayı azaltır).
-  var preloaded = {};
-  function getImg(it) {
-    var u = imgUrl(it);
-    if (!preloaded[u]) {
-      var im = new Image();
-      im.decoding = "async";
-      im.alt = "";
-      im.draggable = false;
-      im.src = u;
-      if (im.decode) im.decode().catch(function () {});
-      preloaded[u] = im;
-    }
-    return preloaded[u];
-  }
-  function preload() {
-    if (navigator.connection && navigator.connection.saveData) return;
-    getImg(nextItem);
-    getImg(prevItem);
-  }
-  if (window.MutationObserver) {
-    new MutationObserver(preload).observe(html, { attributes: true, attributeFilter: ["data-theme"] });
-  }
-
   // ── Sürükleme durumu ──
   var st = null;          // dokunuş durumu
   var busy = false;       // animasyon sürerken yeni dokunuş kabul edilmez
@@ -264,6 +312,7 @@ const MENU_ITEMS = [
   var W = 0, H = 0, T = 0;
   var savedOverflowX = "";
   var raf = 0, pendingDx = 0;
+  var navToken = 0;       // sayfa önbellekten geri yüklenirse bekleyen gezinmeleri geçersiz kılar
 
   function restTransform(dir) {
     var y = H * (1 - MIN_SCALE) / 2;
@@ -276,20 +325,9 @@ const MENU_ITEMS = [
     d.setAttribute("aria-hidden", "true");
     d.style.cssText = "position:fixed;top:0;left:0;width:" + W + "px;height:" + H + "px;overflow:hidden;" +
       "z-index:-1;pointer-events:none;transform-origin:0 0;will-change:transform;visibility:hidden;" +
-      "background:var(--aged,#ece4cc);box-shadow:0 0 28px rgba(0,0,0,.35);";
+      "box-shadow:0 0 0 1px rgba(200,150,12,.35),0 0 28px rgba(0,0,0,.35);";
     d.style.transform = restTransform(dir);
-    var lab = document.createElement("div");
-    lab.textContent = it.label;
-    lab.style.cssText = "position:absolute;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;" +
-      "justify-content:center;padding:24px;text-align:center;" +
-      "font:600 1.6rem/1.3 'Source Serif 4',Georgia,serif;color:var(--ink,#12100e);";
-    var base = getImg(it);
-    var im = base.parentNode ? base.cloneNode(false) : base;   // aynı öğe başka önizlemedeyse kopyasını kullan
-    im.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:top center;";
-    im.onerror = function () { im.style.display = "none"; };
-    if (im.complete && im.src && !im.naturalWidth) im.style.display = "none";
-    d.appendChild(lab);
-    d.appendChild(im);
+    d.appendChild(buildCard(it));
     html.appendChild(d);
     return d;
   }
@@ -329,11 +367,7 @@ const MENU_ITEMS = [
       el.style.willChange = "";
     });
     ["next", "prev"].forEach(function (k) {
-      if (peeks[k]) {
-        var pim = peeks[k].lastChild;
-        if (pim && pim.tagName === "IMG") peeks[k].removeChild(pim);
-        if (peeks[k].parentNode) peeks[k].parentNode.removeChild(peeks[k]);
-      }
+      if (peeks[k] && peeks[k].parentNode) peeks[k].parentNode.removeChild(peeks[k]);
       peeks[k] = null;
     });
     html.style.overflowX = savedOverflowX;
@@ -365,13 +399,24 @@ const MENU_ITEMS = [
     if (!raf) raf = requestAnimationFrame(function () { raf = 0; apply(pendingDx); });
   }
 
-  // Geçişi tamamla: eski sayfa tam çıkar, önizleme tam boyuta büyür, sonra gerçek sayfaya geç
+  // Geçişi tamamla: eski sayfa tam çıkar, kart tam boyuta büyür, sonra gerçek sayfaya geç
   function commit(dir) {
     busy = true;
     if (raf) { cancelAnimationFrame(raf); raf = 0; }
     var it = dir === "next" ? nextItem : prevItem;
-    try { sessionStorage.setItem("sw-arrive", JSON.stringify({ slug: it.slug, t: Date.now() })); } catch (e) {}
+
+    // Geçmiş yönetimi:
+    //  assign  → Ana Sayfa'dan ilk kaydırma: Ana Sayfa kaydı geçmişte kalır
+    //  back    → zincirden Ana Sayfa'ya: mevcut Ana Sayfa kaydına geri dön
+    //  replace → zincir içinde veya zincir dışında: mevcut kaydı değiştir
+    var mode, mark;
+    if (current === "index") { mode = "assign"; mark = true; }
+    else if (chain && it.slug === "index") { mode = "back"; mark = false; }
+    else { mode = "replace"; mark = chain; }
+
+    try { sessionStorage.setItem("sw-arrive", JSON.stringify({ slug: it.slug, t: Date.now(), mark: mark })); } catch (e) {}
     try { localStorage.setItem("sw-nudge", "1"); } catch (e) {}
+
     var k = ensurePeek(dir);
     void html.offsetWidth;
     setAnim(animMs);
@@ -379,7 +424,20 @@ const MENU_ITEMS = [
     if (peeks.next) peeks.next.style.visibility = dir === "next" ? "visible" : "hidden";
     if (peeks.prev) peeks.prev.style.visibility = dir === "prev" ? "visible" : "hidden";
     if (k) k.style.transform = "translate3d(0,0,0) scale(1)";
-    setTimeout(function () { location.replace(hrefOf(it)); }, animMs + 20);
+
+    var tok = ++navToken;
+    setTimeout(function () {
+      if (tok !== navToken) return;
+      if (mode === "back") {
+        history.back();
+        // Geri gitme gerçekleşmezse (beklenmedik geçmiş durumu) normal geçişe dön
+        setTimeout(function () { if (tok === navToken) location.replace(hrefOf(it)); }, 4000);
+      } else if (mode === "assign") {
+        location.assign(hrefOf(it));
+      } else {
+        location.replace(hrefOf(it));
+      }
+    }, animMs + 20);
     // Gezinme herhangi bir nedenle gerçekleşmezse sayfayı eski haline getir
     setTimeout(cleanup, 5000);
   }
@@ -478,7 +536,13 @@ const MENU_ITEMS = [
   document.addEventListener("touchmove",   onMove,   { passive: false });
   document.addEventListener("touchend",    onEnd,    { passive: true });
   document.addEventListener("touchcancel", onCancel, { passive: true });
-  window.addEventListener("pageshow", function (e) { if (e.persisted) cleanup(); });
+  // Sayfa tarayıcının geri/ileri önbelleğinden geri yüklenirse her şeyi sıfırla
+  window.addEventListener("pageshow", function (e) {
+    if (!e.persisted) return;
+    navToken++;
+    try { sessionStorage.removeItem("sw-arrive"); } catch (x) {}
+    cleanup();
+  });
   // Yatay kaydırmada tarayıcının kendi kenar/geri hareketini azalt
   html.style.overscrollBehaviorX = "none";
 
@@ -500,9 +564,5 @@ const MENU_ITEMS = [
     }, 1400);
   }
 
-  afterLoad(function () {
-    if (window.requestIdleCallback) window.requestIdleCallback(preload);
-    else setTimeout(preload, 500);
-    maybeNudge();
-  });
+  afterLoad(maybeNudge);
 })();
