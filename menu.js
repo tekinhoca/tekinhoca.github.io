@@ -3,7 +3,7 @@
 
 const MENU_ITEMS = [
   { label: "Ana Sayfa",            href: "https://tekinhoca.github.io/",
-    title: "Tekin",        accent: "Hoca",               sub: "Matematik · Zekâ Oyunları · Kulübü" },
+    title: "Ana",        accent: "Sayfa",               sub: "Matematik · Zekâ Oyunları · Kulübü" },
   { label: "Hesaplama Araçları",   href: "hesap-araclar.html",
     title: "Hesaplama",    accent: "Araçları",           sub: "Formülleri Gör · Örnekleri Karşılaştır · Uygulayarak Öğren" },
   { label: "Ortaokul Matematik",   href: "ortaokul-matematik.html",
@@ -19,7 +19,7 @@ const MENU_ITEMS = [
   { label: "Estetik Matematik",    href: "estetik-matematik.html",
     title: "Estetik",      accent: "Matematik",          sub: "Sayıların Gizli Güzelliği" },
   { label: "Matematik Hikayeleri", href: "matematik-hikayeleri.html",
-    title: "Matematik",    accent: "Hikayeleri",         sub: "Sayıların Ardındaki Efsaneler, Paradokslar ve Deha Anları" },
+    title: "Matematik",    accent: "Hikayeleri",         sub: "Sayıların Ardındaki Efsaneler · Paradokslar · Deha Anları" },
 ];
 // label: menüde görünen ad. title / accent / sub: kaydırma önizlemesindeki başlık kartı
 // (title normal, accent altın-italik, sub alt başlık). Yeni sayfa eklerken üçünü de doldur;
