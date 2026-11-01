@@ -139,13 +139,16 @@ const MENU_ITEMS = [
 //   süs çizgisi, başlık, alt başlık). Metinler MENU_ITEMS içindeki title / accent / sub
 //   alanlarından, görünüm common.css sonundaki ".sw-card" kurallarından gelir.
 //   Görsel dosyası gerekmez; her cihazda aynı görünür.
-// • TARAYICI GEÇMİŞİ: Ana Sayfa'dan yapılan ilk kaydırma geçmişe yeni kayıt ekler
-//   (location.assign). Zincirin devamındaki kaydırmalar o kaydı değiştirir
-//   (location.replace). Böylece kaç sayfa gezilirse gezilsin GERİ → Ana Sayfa,
-//   bir kez daha GERİ → siteye gelmeden önceki sayfa olur. Zincir içindeyken
-//   Ana Sayfa'ya kaydırılırsa yeni kayıt açılmaz, history.back() ile mevcut
-//   Ana Sayfa kaydına dönülür (geçmişte çift Ana Sayfa kaydı oluşmaz).
-//   Zincirdeki sayfalar history.state içinde {sw:1} işaretiyle tanınır.
+// • TARAYICI GEÇMİŞİ: Zincirin başı, ziyaretçinin kaydırmaya başladığı ilk sayfadır
+//   (Ana Sayfa'dan veya doğrudan girilen herhangi bir sayfadan). O sayfadan yapılan
+//   ilk kaydırma geçmişe yeni kayıt ekler (location.assign) ve baştaki sayfanın kaydı
+//   geçmişte kalır. Zincirin devamındaki kaydırmalar o yeni kaydı değiştirir
+//   (location.replace). Böylece kaç sayfa gezilirse gezilsin GERİ → zincirin başındaki
+//   sayfa, bir kez daha GERİ → siteye gelmeden önceki sayfa olur. Zincir içindeyken
+//   baştaki sayfaya kaydırılırsa yeni kayıt açılmaz, history.back() ile mevcut kayda
+//   dönülür (geçmişte çift kayıt oluşmaz). Geçmişe sahte kayıt eklenmez; yalnızca
+//   ziyaretçinin kendi kaydırma hareketiyle açılan gerçek gezinme kayıtları vardır.
+//   Zincirdeki sayfalar history.state içinde {sw:1, anchor:"<baştaki sayfa>"} ile tanınır.
 // • Sürgü, giriş kutusu, canvas ve yatay kaydırılan alanlarda başlayan
 //   hareketler sayfa geçişini tetiklemez. Bir alanı da hariç tutmak için
 //   o öğeye data-no-swipe niteliği verebilirsin.
@@ -251,11 +254,26 @@ const MENU_ITEMS = [
   }
 
   // ── Tarayıcı geçmişi işareti ──
-  // chain: bu geçmiş kaydı "Ana Sayfa → kaydırma" zincirinin içinde mi?
-  // (Yani hemen altındaki kayıt Ana Sayfa mı?)
+  // chain: bu geçmiş kaydı kaydırma zincirinin içinde mi?
+  // (Yani hemen altındaki kayıt zincirin başındaki sayfanın kaydı mı?)
+  // anchor: zincirin başındaki sayfanın adı (slug). Yalnızca MENU_ITEMS içindeki
+  // bilinen adlar kabul edilir; başka her değer yok sayılır.
+  function knownSlug(s) {
+    if (typeof s !== "string") return false;
+    for (var j = 0; j < n; j++) { if (items[j].slug === s) return true; }
+    return false;
+  }
   var chain = false;
-  try { chain = !!(history.state && history.state.sw === 1); } catch (e) {}
-  function markChain() {
+  var anchor = "index";
+  try {
+    var hs = history.state;
+    if (hs && typeof hs === "object" && hs.sw === 1) {
+      chain = true;
+      // anchor alanı olmayan eski kayıtlar Ana Sayfa zinciri sayılır
+      if (knownSlug(hs.anchor)) anchor = hs.anchor;
+    }
+  } catch (e) {}
+  function markChain(a) {
     try {
       var s = history.state;
       if (s === null || typeof s === "undefined") s = {};
@@ -263,8 +281,10 @@ const MENU_ITEMS = [
       var copy = {};
       for (var k in s) { if (Object.prototype.hasOwnProperty.call(s, k)) copy[k] = s[k]; }
       copy.sw = 1;
+      copy.anchor = knownSlug(a) ? a : "index";
       history.replaceState(copy, "");
       chain = true;
+      anchor = copy.anchor;
     } catch (e) {}
   }
 
@@ -275,7 +295,7 @@ const MENU_ITEMS = [
     if (raw) { sessionStorage.removeItem("sw-arrive"); arrival = JSON.parse(raw); }
   } catch (e) {}
   if (arrival && arrival.slug === current && Date.now() - arrival.t < 8000) {
-    if (arrival.mark) markChain();
+    if (arrival.mark) markChain(arrival.anchor);
     showArrivalCover();
   }
 
@@ -406,15 +426,16 @@ const MENU_ITEMS = [
     var it = dir === "next" ? nextItem : prevItem;
 
     // Geçmiş yönetimi:
-    //  assign  → Ana Sayfa'dan ilk kaydırma: Ana Sayfa kaydı geçmişte kalır
-    //  back    → zincirden Ana Sayfa'ya: mevcut Ana Sayfa kaydına geri dön
-    //  replace → zincir içinde veya zincir dışında: mevcut kaydı değiştir
-    var mode, mark;
-    if (current === "index") { mode = "assign"; mark = true; }
-    else if (chain && it.slug === "index") { mode = "back"; mark = false; }
-    else { mode = "replace"; mark = chain; }
+    //  assign  → zincirin dışındaki sayfadan ilk kaydırma: bu sayfa zincirin başı olur,
+    //            kaydı geçmişte kalır, gidilen sayfa yeni kayıt olarak eklenir
+    //  back    → zincirden, zincirin başındaki sayfaya: mevcut kayda geri dön
+    //  replace → zincir içinde: mevcut kaydı değiştir (zincirin başı değişmez)
+    var mode, mark, anchorNext;
+    if (!chain) { mode = "assign"; mark = true; anchorNext = current; }
+    else if (it.slug === anchor) { mode = "back"; mark = false; anchorNext = anchor; }
+    else { mode = "replace"; mark = true; anchorNext = anchor; }
 
-    try { sessionStorage.setItem("sw-arrive", JSON.stringify({ slug: it.slug, t: Date.now(), mark: mark })); } catch (e) {}
+    try { sessionStorage.setItem("sw-arrive", JSON.stringify({ slug: it.slug, t: Date.now(), mark: mark, anchor: anchorNext })); } catch (e) {}
     try { localStorage.setItem("sw-nudge", "1"); } catch (e) {}
 
     var k = ensurePeek(dir);
