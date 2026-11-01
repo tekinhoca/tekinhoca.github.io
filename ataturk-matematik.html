@@ -105,6 +105,88 @@ main { max-width: 920px; }
 .quiz-bitis p { font-size: 0.95rem; color: var(--muted); margin-bottom: 20px; }
 .quiz-yeniden-btn { font-family: 'Source Serif 4', serif; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--on-dark); background: var(--rust); border: 1px solid var(--gold); border-radius: 3px; padding: 10px 22px; cursor: pointer; transition: background 0.2s; }
 .quiz-yeniden-btn:hover { background: var(--sepia); }
+
+
+/* ── AÇILIR-KAPANIR TERİM SÖZLÜĞÜ ── */
+.terim-section { margin-top: 44px; animation: fadeUp 0.55s ease both; }
+.terim-aciklama { color: var(--muted); font-size: 0.9rem; line-height: 1.7; margin: -8px 0 18px; }
+.terim-details { border: 1px solid rgba(200,150,12,0.48); border-radius: 5px; background: var(--card-elevated); overflow: hidden; }
+.terim-details > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 19px; cursor: pointer; color: var(--gold); font-family: 'Source Serif 4', serif; font-size: 0.88rem; font-weight: 700; letter-spacing: 0.09em; }
+.terim-details > summary::-webkit-details-marker { display: none; }
+.terim-details > summary::marker { content: ''; }
+.terim-details > summary:hover { background: rgba(200,150,12,0.07); }
+.terim-chevron { font-family: sans-serif; font-size: 1.25rem; line-height: 1; transition: transform 0.2s; }
+.terim-details[open] .terim-chevron { transform: rotate(45deg); }
+.terim-icerik { padding: 4px 19px 20px; border-top: 1px solid rgba(200,150,12,0.2); }
+.terim-search-label { display: block; color: var(--muted); font-size: 0.78rem; margin: 15px 0 7px; }
+.terim-search { box-sizing: border-box; width: 100%; padding: 11px 13px; border: 1px solid rgba(122,92,30,0.35); border-radius: 4px; background: var(--cream); color: var(--ink); font: 0.9rem 'Source Serif 4', serif; outline: none; }
+.terim-search:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(200,150,12,0.13); }
+.terim-sayac { color: var(--muted); font-size: 0.73rem; margin: 9px 0 8px; text-align: right; }
+.terim-list { border-top: 1px solid rgba(200,150,12,0.2); max-height: 420px; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+.terim-row[hidden] { display: none !important; }
+.terim-row { display: grid; grid-template-columns: minmax(0,1fr) 24px minmax(0,1fr); align-items: center; gap: 9px; padding: 9px 4px; border-bottom: 1px solid rgba(200,150,12,0.13); font-size: 0.86rem; line-height: 1.45; }
+.terim-eski { color: var(--ink); }
+.terim-ok { color: var(--gold); text-align: center; }
+.terim-yeni { color: var(--gold); font-weight: 600; }
+.terim-bulunamadi { padding: 18px 4px; color: var(--muted); text-align: center; font-size: 0.85rem; }
+.terim-kaynak-notu { margin: 18px 0 15px; padding: 12px 14px; border-left: 3px solid var(--gold); background: rgba(200,150,12,0.07); color: var(--muted); font-size: 0.76rem; line-height: 1.7; }
+.terim-kaynak-notu strong { color: var(--ink); }
+.terim-kaynak-notu a { color: var(--gold); text-decoration: underline; text-underline-offset: 2px; }
+.terim-pdf { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid rgba(200,150,12,0.38); border-radius: 4px; color: var(--ink); text-decoration: none; background: rgba(200,150,12,0.06); transition: background 0.2s, border-color 0.2s; }
+.terim-pdf:hover { background: rgba(200,150,12,0.13); border-color: var(--gold); }
+.terim-pdf-icon { display: grid; place-items: center; width: 38px; height: 42px; flex: 0 0 38px; border-radius: 3px; background: var(--rust); color: #fff; font: 700 0.68rem 'Source Serif 4',serif; }
+.terim-pdf-yazi { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+.terim-pdf-yazi strong { font-size: 0.84rem; }
+.terim-pdf-yazi small { color: var(--muted); font-size: 0.72rem; }
+.terim-pdf-ok { color: var(--gold); font-size: 1.25rem; }
+@media (max-width: 500px) {
+  .terim-icerik { padding-left: 12px; padding-right: 12px; }
+  .terim-row { grid-template-columns: minmax(0,1fr) 17px minmax(0,1fr); gap: 5px; font-size: 0.78rem; }
+  .terim-list { max-height: 400px; }
+  .terim-details > summary { padding: 14px; }
+}
+
+
+
+/* ── BİRBİRİNİ DIŞLAYAN AÇILIR-KAPANIR BÖLÜMLER ── */
+.quiz-details { margin-top: 44px; border: 1px solid rgba(200,150,12,0.48); border-radius: 5px; background: var(--card-elevated); overflow: hidden; animation: fadeUp 0.6s ease both; }
+.quiz-details > summary { list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 19px; cursor: pointer; color: var(--gold); font-family: 'Source Serif 4', serif; font-size: 0.88rem; font-weight: 700; letter-spacing: 0.09em; }
+.quiz-details > summary::-webkit-details-marker { display: none; }
+.quiz-details > summary::marker { content: ''; }
+.quiz-details > summary:hover { background: rgba(200,150,12,0.07); }
+.quiz-details[open] .quiz-chevron { transform: rotate(45deg); }
+.quiz-chevron { font-family: sans-serif; font-size: 1.25rem; line-height: 1; transition: transform 0.2s; }
+.quiz-details .quiz-section { margin-top: 0; padding: 0 19px 20px; }
+.quiz-details .sec-title { margin-top: 4px; }
+@media (max-width: 500px) {
+  .quiz-details > summary { padding: 14px; }
+  .quiz-details .quiz-section { padding-left: 12px; padding-right: 12px; }
+}
+
+/* Açık temada metin kontrastı */
+html:not([data-theme="dark"]) .terim-eski,
+html:not([data-theme="dark"]) .terim-kaynak-notu,
+html:not([data-theme="dark"]) .terim-kaynak-notu strong,
+html:not([data-theme="dark"]) .terim-pdf,
+html:not([data-theme="dark"]) .terim-pdf-yazi small { color: #30251b; }
+html:not([data-theme="dark"]) .terim-yeni,
+html:not([data-theme="dark"]) .terim-kaynak-notu a,
+html:not([data-theme="dark"]) .terim-pdf-ok { color: #76500b; }
+
+/* Açık temada açılır-kapanır bölümlerin açık renkli arka planı */
+html:not([data-theme="dark"]) .terim-details,
+html:not([data-theme="dark"]) .quiz-details {
+  background: linear-gradient(135deg, var(--cream), var(--aged));
+  border-color: rgba(122,92,30,0.3);
+  box-shadow: 2px 3px 12px var(--shadow);
+}
+html:not([data-theme="dark"]) .terim-details > summary,
+html:not([data-theme="dark"]) .quiz-details > summary { color: #76500b; }
+html:not([data-theme="dark"]) .terim-details > summary:hover,
+html:not([data-theme="dark"]) .quiz-details > summary:hover { background: rgba(122,92,30,0.08); }
+html:not([data-theme="dark"]) .terim-icerik { border-top-color: rgba(122,92,30,0.2); }
+html:not([data-theme="dark"]) .terim-search { background: rgba(255,255,255,0.55); }
+
 </style>
 </head>
 <body>
@@ -215,8 +297,363 @@ main { max-width: 920px; }
     </svg>
   </div>
 
+
+  <!-- TERİM SÖZLÜĞÜ -->
+  <section class="terim-section" aria-labelledby="terimBaslik">
+    <div class="sec-title">
+      <h2 id="terimBaslik">Eski Matematik Terimleri ve Türkçe Karşılıkları</h2>
+      <div class="sec-line"></div>
+    </div>
+    <p class="terim-aciklama">Eski matematik terimlerini ve Türkçe karşılıklarını inceleyebilir, aradığınız sözcüğü listede bulabilirsiniz.</p>
+    <details class="terim-details">
+      <summary><span>TERİM LİSTESİNİ GÖSTER</span><span class="terim-chevron" aria-hidden="true">＋</span></summary>
+      <div class="terim-icerik">
+        <label class="terim-search-label" for="terimAra">Eski veya Türkçe terimle arayın</label>
+        <input type="search" id="terimAra" class="terim-search" placeholder="Örneğin: müselles, üçgen, çember..." autocomplete="off">
+        <p class="terim-sayac" id="terimSayac" aria-live="polite">65 terim</p>
+        <div class="terim-list" id="terimList">
+        <div class="terim-row" data-search="Maksumunaleyh Bölen">
+          <span class="terim-eski">Maksumunaleyh</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Bölen</span>
+        </div>
+        <div class="terim-row" data-search="Taksim Bölme">
+          <span class="terim-eski">Taksim</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Bölme</span>
+        </div>
+        <div class="terim-row" data-search="Haric-i Kısmet Bölüm">
+          <span class="terim-eski">Haric-i Kısmet</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Bölüm</span>
+        </div>
+        <div class="terim-row" data-search="Kabiliyet-i Taksim Bölünebilme">
+          <span class="terim-eski">Kabiliyet-i Taksim</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Bölünebilme</span>
+        </div>
+        <div class="terim-row" data-search="Zarb Çarpı">
+          <span class="terim-eski">Zarb</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Çarpı</span>
+        </div>
+        <div class="terim-row" data-search="Mazrup Çarpan">
+          <span class="terim-eski">Mazrup</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Çarpan</span>
+        </div>
+        <div class="terim-row" data-search="Mazrubata Tefrik Çarpanlara Ayırma">
+          <span class="terim-eski">Mazrubata Tefrik</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Çarpanlara Ayırma</span>
+        </div>
+        <div class="terim-row" data-search="Muhit-i Daire Çember">
+          <span class="terim-eski">Muhit-i Daire</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Çember</span>
+        </div>
+        <div class="terim-row" data-search="Tarh Çıkarma">
+          <span class="terim-eski">Tarh</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Çıkarma</span>
+        </div>
+        <div class="terim-row" data-search="Amudi Dikey">
+          <span class="terim-eski">Amudi</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Dikey</span>
+        </div>
+        <div class="terim-row" data-search="Hatt-ı Müstakim-i Ka’im Dik Çizgi">
+          <span class="terim-eski">Hatt-ı Müstakim-i Ka’im</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Dik Çizgi</span>
+        </div>
+        <div class="terim-row" data-search="Gaye Limit">
+          <span class="terim-eski">Gaye</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Limit</span>
+        </div>
+        <div class="terim-row" data-search="Aşar&#x27;i Ondalık">
+          <span class="terim-eski">Aşar&#x27;i</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Ondalık</span>
+        </div>
+        <div class="terim-row" data-search="Kat&#x27;ı Mükafti Parabol">
+          <span class="terim-eski">Kat&#x27;ı Mükafti</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Parabol</span>
+        </div>
+        <div class="terim-row" data-search="Ehram Piramit">
+          <span class="terim-eski">Ehram</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Piramit</span>
+        </div>
+        <div class="terim-row" data-search="Menşur Pürüzma (Prizma)">
+          <span class="terim-eski">Menşur</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Prizma (kitapta: pürüzma)</span>
+        </div>
+        <div class="terim-row" data-search="İhtisar Sadeleştirme">
+          <span class="terim-eski">İhtisar</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Sadeleştirme</span>
+        </div>
+        <div class="terim-row" data-search="Suret Pay">
+          <span class="terim-eski">Suret</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Pay</span>
+        </div>
+        <div class="terim-row" data-search="Mahrec Payda">
+          <span class="terim-eski">Mahrec</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Payda</span>
+        </div>
+        <div class="terim-row" data-search="Hatt-ı Mümas Teğet Çizgi">
+          <span class="terim-eski">Hatt-ı Mümas</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Teğet Çizgi</span>
+        </div>
+        <div class="terim-row" data-search="Bu&#x27;ud Boyut">
+          <span class="terim-eski">Bu&#x27;ud</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Boyut</span>
+        </div>
+        <div class="terim-row" data-search="Mekan Uzay">
+          <span class="terim-eski">Mekan</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Uzay</span>
+        </div>
+        <div class="terim-row" data-search="Satıh Yüzey">
+          <span class="terim-eski">Satıh</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Yüzey</span>
+        </div>
+        <div class="terim-row" data-search="Kutur Çap">
+          <span class="terim-eski">Kutur</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Çap</span>
+        </div>
+        <div class="terim-row" data-search="Nısf-ı Kutur Yarıçap">
+          <span class="terim-eski">Nısf-ı Kutur</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Yarıçap</span>
+        </div>
+        <div class="terim-row" data-search="Kavis Yay">
+          <span class="terim-eski">Kavis</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Yay</span>
+        </div>
+        <div class="terim-row" data-search="Mümâs Teğet">
+          <span class="terim-eski">Mümâs</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Teğet</span>
+        </div>
+        <div class="terim-row" data-search="Zâviye Açı">
+          <span class="terim-eski">Zâviye</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Açı</span>
+        </div>
+        <div class="terim-row" data-search="Re&#x27;sen Mütekabil Zâviyetân Ters Açılar">
+          <span class="terim-eski">Re&#x27;sen Mütekabil Zâviyetân</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Ters Açılar</span>
+        </div>
+        <div class="terim-row" data-search="Zâviyetan-ı Mütabâdiletân-ı Dâhiletan İç Ters Açılar">
+          <span class="terim-eski">Zâviyetan-ı Mütabâdiletân-ı Dâhiletan</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">İç Ters Açılar</span>
+        </div>
+        <div class="terim-row" data-search="Kaaide Taban">
+          <span class="terim-eski">Kaaide</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Taban</span>
+        </div>
+        <div class="terim-row" data-search="Ufkî Yatay">
+          <span class="terim-eski">Ufkî</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Yatay</span>
+        </div>
+        <div class="terim-row" data-search="Şâkulî Düşey">
+          <span class="terim-eski">Şâkulî</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Düşey</span>
+        </div>
+        <div class="terim-row" data-search="Müteselsil Ardışık">
+          <span class="terim-eski">Müteselsil</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Ardışık</span>
+        </div>
+        <div class="terim-row" data-search="Zâviyetân-ı Mütevâfıkatân Yöndeş Açılar">
+          <span class="terim-eski">Zâviyetân-ı Mütevâfıkatân</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Yöndeş Açılar</span>
+        </div>
+        <div class="terim-row" data-search="Va&#x27;zîyet Konum">
+          <span class="terim-eski">Va&#x27;zîyet</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Konum</span>
+        </div>
+        <div class="terim-row" data-search="Mustatîl Dikdörtgen">
+          <span class="terim-eski">Mustatîl</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Dikdörtgen</span>
+        </div>
+        <div class="terim-row" data-search="Muhammes Beşgen">
+          <span class="terim-eski">Muhammes</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Beşgen</span>
+        </div>
+        <div class="terim-row" data-search="Müselles-i Mütesâviyü&#x27;l-adlâ Eşkenar Üçgen">
+          <span class="terim-eski">Müselles-i Mütesâviyü&#x27;l-adlâ</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Eşkenar Üçgen</span>
+        </div>
+        <div class="terim-row" data-search="Müselles-i Mütesâviyü&#x27;s-sâkeyn İkizkenar Üçgen">
+          <span class="terim-eski">Müselles-i Mütesâviyü&#x27;s-sâkeyn</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">İkizkenar Üçgen</span>
+        </div>
+        <div class="terim-row" data-search="Şibh-i Münharif Yamuk">
+          <span class="terim-eski">Şibh-i Münharif</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Yamuk</span>
+        </div>
+        <div class="terim-row" data-search="Mecmû Toplam">
+          <span class="terim-eski">Mecmû</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Toplam</span>
+        </div>
+        <div class="terim-row" data-search="Nisbet Oran">
+          <span class="terim-eski">Nisbet</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Oran</span>
+        </div>
+        <div class="terim-row" data-search="Tenasüb Orantı">
+          <span class="terim-eski">Tenasüb</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Orantı</span>
+        </div>
+        <div class="terim-row" data-search="Mesâha-i Sathiyye Alan">
+          <span class="terim-eski">Mesâha-i Sathiyye</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Alan</span>
+        </div>
+        <div class="terim-row" data-search="Müştak Türev">
+          <span class="terim-eski">Müştak</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Türev</span>
+        </div>
+        <div class="terim-row" data-search="Müsavi Eşit">
+          <span class="terim-eski">Müsavi</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Eşit</span>
+        </div>
+        <div class="terim-row" data-search="Mahrut Koni">
+          <span class="terim-eski">Mahrut</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Koni</span>
+        </div>
+        <div class="terim-row" data-search="Faraziye Varsayı (Varsayım)">
+          <span class="terim-eski">Faraziye</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Varsayı (bugünkü biçimi: varsayım)</span>
+        </div>
+        <div class="terim-row" data-search="Hat Çizgi">
+          <span class="terim-eski">Hat</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Çizgi</span>
+        </div>
+        <div class="terim-row" data-search="Mukavves Eğri">
+          <span class="terim-eski">Mukavves</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Eğri</span>
+        </div>
+        <div class="terim-row" data-search="Seviye Düzey">
+          <span class="terim-eski">Seviye</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Düzey</span>
+        </div>
+        <div class="terim-row" data-search="Dılı Kenar">
+          <span class="terim-eski">Dılı</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Kenar</span>
+        </div>
+        <div class="terim-row" data-search="Muvazi Paralel / Koşut">
+          <span class="terim-eski">Muvazi</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Paralel / Koşut</span>
+        </div>
+        <div class="terim-row" data-search="Hatt-ı Muvazi Paralel Çizgi">
+          <span class="terim-eski">Hatt-ı Muvazi</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Paralel Çizgi</span>
+        </div>
+        <div class="terim-row" data-search="Hattı Mail Eğik Çizgi">
+          <span class="terim-eski">Hattı Mail</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Eğik Çizgi</span>
+        </div>
+        <div class="terim-row" data-search="Veter Kiriş">
+          <span class="terim-eski">Veter</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Kiriş</span>
+        </div>
+        <div class="terim-row" data-search="Re&#x27;s Köşe">
+          <span class="terim-eski">Re&#x27;s</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Köşe</span>
+        </div>
+        <div class="terim-row" data-search="Zaviyei Hadde Dar Açı">
+          <span class="terim-eski">Zaviyei Hadde</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Dar Açı</span>
+        </div>
+        <div class="terim-row" data-search="Hattı Munassıf Açıortay">
+          <span class="terim-eski">Hattı Munassıf</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Açıortay</span>
+        </div>
+        <div class="terim-row" data-search="Muhit Çevre">
+          <span class="terim-eski">Muhit</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Çevre</span>
+        </div>
+        <div class="terim-row" data-search="Kaim Zaviyeli Müselles Dikey Üçgen (Dik Üçgen)">
+          <span class="terim-eski">Kaim Zaviyeli Müselles</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Dikey üçgen (bugünkü kullanım: dik üçgen)</span>
+        </div>
+        <div class="terim-row" data-search="Tamamlıyan Zaviye Tümler Açı">
+          <span class="terim-eski">Tamamlıyan Zaviye</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Tümey açı (bugünkü kullanım: tümler açı)</span>
+        </div>
+        <div class="terim-row" data-search="Murabba Kare">
+          <span class="terim-eski">Murabba</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Kare</span>
+        </div>
+        <div class="terim-row" data-search="Müselles Üçgen">
+          <span class="terim-eski">Müselles</span>
+          <span class="terim-ok" aria-hidden="true">→</span>
+          <span class="terim-yeni">Üçgen</span>
+        </div>
+        </div>
+        <p class="terim-bulunamadi" id="terimBulunamadi" hidden>Aradığınız terim listede bulunamadı.</p>
+        <div class="terim-kaynak-notu">
+          <strong>Kaynak ve kapsam notu:</strong> Bu liste, Atatürk'ün 1937 tarihli <em>Geometri</em> kitabının eksiksiz ve birebir terim dizini değildir. Farklı yayınlarda Atatürk'ün matematik ve geometri terminolojisiyle ilişkilendirilerek aktarılan eski terim–Türkçe karşılık eşleştirmelerini bir araya getirir. Bazı yazılışlar ve karşılıklar kaynaklar arasında farklılık gösterebilir. Kitabın kendisi ve kapsamı için <a href="https://tdk.gov.tr/yayinlar/yeni-yayinlar/yeni-yayinlar/" target="_blank" rel="noopener">Türk Dil Kurumunun Geometri yayınına</a>; terim eşleştirmeleri için <a href="https://www.fmv.edu.tr/resources/files/ataturk-kitaplari/ataturkveturkdildevrimi.pdf" target="_blank" rel="noopener">Atatürk ve Türk Dil Devrimi</a> çalışmasına ve <a href="https://katalog.marmara.edu.tr/veriler/yordambt/cokluortam/6F/T0064101.pdf" target="_blank" rel="noopener">Marmara Üniversitesi tezindeki terim tablosuna</a> başvurulmuştur.
+        </div>
+<a class="terim-pdf" href="kulup-dosyalari/gmtr.pdf" download="gmtr.pdf" target="_blank" rel="noopener noreferrer" aria-label="Geometri terimleri PDF dosyasını indir">
+  <span class="terim-pdf-icon" aria-hidden="true">PDF</span>
+  <span class="terim-pdf-yazi"><strong>Terim listesini PDF olarak indir</strong><small>Yazdırmak veya çevrimdışı incelemek için</small></span>
+  <span class="terim-pdf-ok" aria-hidden="true">↓</span>
+</a>      </div>
+    </details>
+  </section>
+
   <!-- QUIZ BÖLÜMÜ -->
-  <div class="quiz-section">
+  <details class="quiz-details" id="quizDetails" open>
+    <summary><span>GEOMETRİ TERİMLERİ OYUNUNU GÖSTER</span><span class="quiz-chevron" aria-hidden="true">＋</span></summary>
+    <div class="quiz-section">
     <div class="sec-title">
       <h2>Atatürk'ün Getirdiği Geometri Terimleri</h2>
       <div class="sec-line"></div>
@@ -242,7 +679,8 @@ main { max-width: 920px; }
       </div>
     </div>
 
-  </div>
+    </div>
+  </details>
 
 </main>
 <footer>
@@ -257,7 +695,64 @@ main { max-width: 920px; }
   window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
   btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
 
-  // TERİM LİSTESİ
+
+
+  // TERİM LİSTESİ: TÜRKÇE ALFABETİK SIRALAMA VE ARAMA
+  (function() {
+    const arama = document.getElementById('terimAra');
+    const liste = document.getElementById('terimList');
+    const satirlar = Array.from(liste.querySelectorAll('.terim-row'));
+    const sayac = document.getElementById('terimSayac');
+    const bulunamadi = document.getElementById('terimBulunamadi');
+
+    function normalizeTerim(metin) {
+      return metin.toLocaleLowerCase('tr-TR')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/ı/g, 'i');
+    }
+
+    // Listeyi eski terimlerin Türk alfabesine göre sırala.
+    satirlar.sort(function(a, b) {
+      return a.querySelector('.terim-eski').textContent.trim().localeCompare(
+        b.querySelector('.terim-eski').textContent.trim(), 'tr-TR', { sensitivity: 'base' }
+      );
+    }).forEach(function(satir) {
+      liste.appendChild(satir);
+    });
+
+    function filtrele() {
+      const aranan = normalizeTerim(arama.value.trim());
+      let gorunen = 0;
+      satirlar.forEach(function(satir) {
+        const eslesir = normalizeTerim(satir.textContent).includes(aranan);
+        satir.hidden = !eslesir;
+        if (eslesir) gorunen++;
+      });
+      sayac.textContent = aranan
+        ? gorunen + ' / ' + satirlar.length + ' terim'
+        : satirlar.length + ' terim';
+      bulunamadi.hidden = gorunen !== 0;
+    }
+
+    arama.addEventListener('input', filtrele);
+    filtrele();
+  })();
+
+  // TERİM LİSTESİ VE OYUN BÖLÜMLERİ BİRBİRİNİ KAPATIR.
+  (function() {
+    const terimDetails = document.querySelector('.terim-details');
+    const quizDetails = document.getElementById('quizDetails');
+
+    terimDetails.addEventListener('toggle', function() {
+      if (terimDetails.open && quizDetails.open) quizDetails.open = false;
+    });
+    quizDetails.addEventListener('toggle', function() {
+      if (quizDetails.open && terimDetails.open) terimDetails.open = false;
+    });
+  })();
+
+  // OYUNDA KULLANILAN TERİM ÇİFTLERİ
   const TERIMLER = [
     ["Maksumunaleyh","Bölen"],
     ["Taksim","Bölme"],
@@ -322,7 +817,8 @@ main { max-width: 920px; }
     ["Muhit","Çevre"],
     ["Kaim Zaviyeli Müselles","Dikey Üçgen (Dik Üçgen)"],
     ["Tamamlıyan Zaviye","Tümler Açı"],
-    ["Murabba","Kare"]
+    ["Murabba","Kare"],
+    ["Müselles","Üçgen"]
   ];
 
   const SORU_SAYISI = 10;
