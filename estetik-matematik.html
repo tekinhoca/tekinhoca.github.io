@@ -115,7 +115,8 @@ main { max-width:920px; }
 
 /* FORMÜLLER VE GÖRSELLER */
 .visual-section{margin-bottom:48px;}
-.visuals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;}
+.visuals-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;}
+@media (max-width:600px){.visuals-grid{grid-template-columns:1fr;}}
 .visual-item{background:linear-gradient(145deg,var(--cream),var(--aged));border:1px solid rgba(122,92,30,0.2);border-radius:6px;padding:20px;text-align:center;box-shadow:2px 3px 10px var(--shadow);animation:fadeUp 0.5s ease both;}
 .visual-item svg{width:100%;max-width:180px;height:auto;margin:0 auto 14px;display:block;}
 .visual-item h4{font-family:'Playfair Display',serif;font-size:0.9rem;font-weight:700;color:var(--rust);margin-bottom:5px;}
@@ -219,6 +220,52 @@ main { max-width:920px; }
   margin-bottom: 0.4rem;
 }
 
+/* ── AÇILIR / KAPANIR BÖLÜMLER ── */
+.acc-section{margin-bottom:22px;scroll-margin-top:var(--nav-height);}
+.acc-h{margin:0;font-size:inherit;font-weight:inherit;}
+.acc-head{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit;
+  background:linear-gradient(145deg,var(--cream),var(--aged));
+  border:1px solid rgba(122,92,30,0.2);border-left:3px solid var(--gold);
+  border-radius:6px;padding:16px 22px;box-shadow:2px 3px 12px var(--shadow);
+  transition:background 0.2s,border-color 0.2s,box-shadow 0.2s;
+}
+.acc-head:hover{background:linear-gradient(145deg,var(--aged),var(--cream));border-color:rgba(155,53,16,0.4);border-left-color:var(--gold);}
+.acc-head:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.acc-title{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--rust);line-height:1.3;}
+.acc-plus{
+  flex-shrink:0;width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Source Serif 4',Georgia,serif;font-size:1.3rem;line-height:1;color:var(--rust);
+}
+.acc-plus::before{content:"+";}
+.acc-head[aria-expanded="true"] .acc-plus::before{content:"\2212";}
+.acc-panel{padding-top:24px;}
+.acc-panel[hidden]{display:none;}
+.acc-panel .topic-grid{margin-bottom:8px;}
+@media (max-width:600px){.acc-head{padding:14px 16px;}.acc-title{font-size:1.1rem;}}
+
+/* ── KOYU MOD: kırmızımsı (--rust) başlıklar açık renge çevrilir ── */
+[data-theme="dark"] .acc-title,
+[data-theme="dark"] .visual-item h4,
+[data-theme="dark"] .number-card-content h3,
+[data-theme="dark"] .record-facts-card .card-header h3,
+[data-theme="dark"] .record-facts-card .facts-list li strong,
+[data-theme="dark"] .intro-attr{color:var(--ink);}
+[data-theme="dark"] .acc-plus{color:var(--gold);}
+/* ── SVG'LER: kartın arka planını kullanır, renkler moda göre değişir ── */
+.visual-item svg{--svg-a:#8f680a;--svg-b:#9b3510;aspect-ratio:1/1;}
+[data-theme="dark"] .visual-item svg{--svg-a:#c8960c;--svg-b:#e0703a;}
+.svf-a{fill:var(--svg-a);} .svs-a{stroke:var(--svg-a);}
+.svf-b{fill:var(--svg-b);} .svs-b{stroke:var(--svg-b);}
+
+/* ── KOYU MOD: bölüm başlık kartları içerik kartlarından ayrışır ── */
+[data-theme="dark"] .acc-head{
+  background:linear-gradient(135deg,#5a4519,#43330f);
+  border-color:rgba(200,150,12,0.6);border-left:4px solid var(--gold);
+}
+[data-theme="dark"] .acc-head:hover{background:linear-gradient(135deg,#6a5220,#4d3b12);border-color:var(--gold);}
 </style>
 </head>
 <body>
@@ -248,12 +295,14 @@ main { max-width:920px; }
     <p class="intro-attr">— Bertrand Russell</p>
   </div>
 
-  <div class="number-section">
-    <div class="sec-title">
-      <h2>Özel / İlginç Sayı Kümeleri</h2>
-      <div class="sec-line"></div>
-    </div>
-
+  <section class="acc-section" id="ozel-sayilar">
+  <h2 class="acc-h">
+    <button type="button" class="acc-head" id="acc-btn-1" aria-expanded="false" aria-controls="acc-panel-1">
+      <span class="acc-title">Özel / İlginç Sayı Kümeleri</span>
+      <span class="acc-plus" aria-hidden="true"></span>
+    </button>
+  </h2>
+  <div class="acc-panel" id="acc-panel-1" role="region" aria-labelledby="acc-btn-1" hidden>
     <div class="number-list">
       
       <div class="number-card" style="animation-delay: 0.1s;">
@@ -389,15 +438,18 @@ main { max-width:920px; }
     </div>
   </div>
 </div>
-      </div>
-      </div>
-
-
-  <div class="sec-title">
-    <h2>Matematiğin En Zarif Formülleri</h2>
-    <div class="sec-line"></div>
+    </div>
   </div>
+</section>
 
+<section class="acc-section" id="zarif-formuller">
+  <h2 class="acc-h">
+    <button type="button" class="acc-head" id="acc-btn-2" aria-expanded="false" aria-controls="acc-panel-2">
+      <span class="acc-title">Matematiğin En Zarif Formülleri</span>
+      <span class="acc-plus" aria-hidden="true"></span>
+    </button>
+  </h2>
+  <div class="acc-panel" id="acc-panel-2" role="region" aria-labelledby="acc-btn-2" hidden>
   <div class="topic-grid">
     <div class="formula-card">
       <div class="formula">e<sup style="font-size:0.85rem">iπ</sup> + 1 = 0</div>
@@ -419,13 +471,28 @@ main { max-width:920px; }
       <h4>Basel Problemi</h4>
       <p>Euler'in 1734'te çözdüğü problem:<br>tüm doğal sayıların karelerinin terslerinin toplamı.</p>
     </div>
+    <div class="formula-card">
+      <div class="formula">V − E + F = 2</div>
+      <h4>Euler'in Çokyüzlü Formülü</h4>
+      <p>Köşe (V), ayrıt (E) ve yüz (F) sayıları arasındaki ilişki.<br>Dışbükey çokyüzlülerde değişmez.<br>KÜP: 8 − 12 + 6 = 2</p>
+    </div>
+    <div class="formula-card">
+      <div class="formula">1 + 2 + 3 + … + n = n(n+1)/2</div>
+      <h4>Üçgensel Sayılar</h4>
+      <p>1, 3, 6, 10, 15, …<br>İlk n tane doğal sayının toplamı;<br>bu sayıda eş nesne, eşkenar üçgen oluşturacak biçimde dizilebilir.</p>
+    </div>
   </div>
-
-  <div class="sec-title">
-    <h2>Matematiğin Güzel Yüzleri</h2>
-    <div class="sec-line"></div>
   </div>
+</section>
 
+<section class="acc-section" id="guzel-yuzler">
+  <h2 class="acc-h">
+    <button type="button" class="acc-head" id="acc-btn-3" aria-expanded="false" aria-controls="acc-panel-3">
+      <span class="acc-title">Matematiğin Güzel Yüzleri</span>
+      <span class="acc-plus" aria-hidden="true"></span>
+    </button>
+  </h2>
+  <div class="acc-panel" id="acc-panel-3" role="region" aria-labelledby="acc-btn-3" hidden>
   <div class="topic-grid">
     <div class="topic-card">
       <div class="topic-card-head"><span class="topic-icon">🌀</span><h3>Fibonacci Sayıları ve Mil Hesabı</h3></div>
@@ -479,73 +546,33 @@ main { max-width:920px; }
         <h3>Matematik ve Müzik</h3>
       </div>
       <div class="topic-card-body">
-        <p>Müzikteki oktav ilişkisi 2:1 frekans oranına, beşli aralık ise 3:2 oranına dayanır. Pisagor, bu matematiksel ilişkileri ilk inceleyen kişidir.</p>
+        <p>Müzikteki oktav ilişkisi 2:1 frekans oranına, beşli aralık ise 3:2 oranına dayanır. Pisagor'un, <b>monokord</b> adı verilen tek telli bir düzenek üzerinde deneyler yaptığı, frekans ile telin uzunluğu arasındaki ilişkiyi incelediği anlatılır.</p>
         <p>Bach'ın fügleri ve Beethoven'ın sonatları, matematiksel simetri ve orantı açısından da analiz edilir.</p>
-        <div class="topic-highlight"><p>Eşit tampere (12 ton) sistemi, 2'nin 12. kökü olan<br>
-         ¹²√2 ≈ 1.0595 oranına dayanır.
+        <div class="topic-highlight">Eşit tampere (12 ton) sistemi, 2'nin 12. kökü olan<br>
+         ¹²√2 ≈ 1.0595 oranına dayanır.</div>
       </div>
     </div>
 
   </div>
-
-
-    </div>
   </div>
+</section>
 
   <!-- GEOMETRİK GÖRSELLER (SVG) -->
-  <div class="visual-section">
-    <div class="sec-title">
-      <h2>Geometrik Güzellikler</h2>
-      <div class="sec-line"></div>
-    </div>
+<section class="acc-section" id="geometrik-guzellikler">
+  <h2 class="acc-h">
+    <button type="button" class="acc-head" id="acc-btn-4" aria-expanded="false" aria-controls="acc-panel-4">
+      <span class="acc-title">Geometrik Güzellikler</span>
+      <span class="acc-plus" aria-hidden="true"></span>
+    </button>
+  </h2>
+  <div class="acc-panel" id="acc-panel-4" role="region" aria-labelledby="acc-btn-4" hidden>
     <div class="visuals-grid">
 
       <!-- Sierpinski Üçgeni -->
       <div class="visual-item">
-        <svg viewBox="0 0 200 185" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sierpinski Üçgeni Fraktal Görseli">
-          <rect width="200" height="185" fill="#12100e" rx="4"/>
-          <polygon points="100,12 10,172 190,172" fill="#c8960c" fill-opacity="0.75"/>
-          <polygon points="55.0,92.0 100.0,172.0 145.0,92.0" fill="#12100e"/>
-          <polygon points="77.5,52.0 100.0,92.0 122.5,52.0" fill="#12100e"/>
-          <polygon points="88.8,32.0 100.0,52.0 111.2,32.0" fill="#12100e"/>
-          <polygon points="94.4,22.0 100.0,32.0 105.6,22.0" fill="#12100e"/>
-          <polygon points="83.1,42.0 88.8,52.0 94.4,42.0" fill="#12100e"/>
-          <polygon points="105.6,42.0 111.2,52.0 116.9,42.0" fill="#12100e"/>
-          <polygon points="66.2,72.0 77.5,92.0 88.8,72.0" fill="#12100e"/>
-          <polygon points="71.9,62.0 77.5,72.0 83.1,62.0" fill="#12100e"/>
-          <polygon points="60.6,82.0 66.2,92.0 71.9,82.0" fill="#12100e"/>
-          <polygon points="83.1,82.0 88.8,92.0 94.4,82.0" fill="#12100e"/>
-          <polygon points="111.2,72.0 122.5,92.0 133.8,72.0" fill="#12100e"/>
-          <polygon points="116.9,62.0 122.5,72.0 128.1,62.0" fill="#12100e"/>
-          <polygon points="105.6,82.0 111.2,92.0 116.9,82.0" fill="#12100e"/>
-          <polygon points="128.1,82.0 133.8,92.0 139.4,82.0" fill="#12100e"/>
-          <polygon points="32.5,132.0 55.0,172.0 77.5,132.0" fill="#12100e"/>
-          <polygon points="43.8,112.0 55.0,132.0 66.2,112.0" fill="#12100e"/>
-          <polygon points="49.4,102.0 55.0,112.0 60.6,102.0" fill="#12100e"/>
-          <polygon points="38.1,122.0 43.8,132.0 49.4,122.0" fill="#12100e"/>
-          <polygon points="60.6,122.0 66.2,132.0 71.9,122.0" fill="#12100e"/>
-          <polygon points="21.2,152.0 32.5,172.0 43.8,152.0" fill="#12100e"/>
-          <polygon points="26.9,142.0 32.5,152.0 38.1,142.0" fill="#12100e"/>
-          <polygon points="15.6,162.0 21.2,172.0 26.9,162.0" fill="#12100e"/>
-          <polygon points="38.1,162.0 43.8,172.0 49.4,162.0" fill="#12100e"/>
-          <polygon points="66.2,152.0 77.5,172.0 88.8,152.0" fill="#12100e"/>
-          <polygon points="71.9,142.0 77.5,152.0 83.1,142.0" fill="#12100e"/>
-          <polygon points="60.6,162.0 66.2,172.0 71.9,162.0" fill="#12100e"/>
-          <polygon points="83.1,162.0 88.8,172.0 94.4,162.0" fill="#12100e"/>
-          <polygon points="122.5,132.0 145.0,172.0 167.5,132.0" fill="#12100e"/>
-          <polygon points="133.8,112.0 145.0,132.0 156.2,112.0" fill="#12100e"/>
-          <polygon points="139.4,102.0 145.0,112.0 150.6,102.0" fill="#12100e"/>
-          <polygon points="128.1,122.0 133.8,132.0 139.4,122.0" fill="#12100e"/>
-          <polygon points="150.6,122.0 156.2,132.0 161.9,122.0" fill="#12100e"/>
-          <polygon points="111.2,152.0 122.5,172.0 133.8,152.0" fill="#12100e"/>
-          <polygon points="116.9,142.0 122.5,152.0 128.1,142.0" fill="#12100e"/>
-          <polygon points="105.6,162.0 111.2,172.0 116.9,162.0" fill="#12100e"/>
-          <polygon points="128.1,162.0 133.8,172.0 139.4,162.0" fill="#12100e"/>
-          <polygon points="156.2,152.0 167.5,172.0 178.8,152.0" fill="#12100e"/>
-          <polygon points="161.9,142.0 167.5,152.0 173.1,142.0" fill="#12100e"/>
-          <polygon points="150.6,162.0 156.2,172.0 161.9,162.0" fill="#12100e"/>
-          <polygon points="173.1,162.0 178.8,172.0 184.4,162.0" fill="#12100e"/>
-          <polygon points="100,12 10,172 190,172" fill="none" stroke="#c8960c" stroke-width="0.8"/>
+        <svg viewBox="0 -7.5 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sierpinski Üçgeni Fraktal Görseli">
+          <path class="svf-a" fill-rule="evenodd" fill-opacity="0.75" d="M100,12 L10,172 L190,172 Z M55.0,92.0 L100.0,172.0 L145.0,92.0 Z M77.5,52.0 L100.0,92.0 L122.5,52.0 Z M88.8,32.0 L100.0,52.0 L111.2,32.0 Z M94.4,22.0 L100.0,32.0 L105.6,22.0 Z M83.1,42.0 L88.8,52.0 L94.4,42.0 Z M105.6,42.0 L111.2,52.0 L116.9,42.0 Z M66.2,72.0 L77.5,92.0 L88.8,72.0 Z M71.9,62.0 L77.5,72.0 L83.1,62.0 Z M60.6,82.0 L66.2,92.0 L71.9,82.0 Z M83.1,82.0 L88.8,92.0 L94.4,82.0 Z M111.2,72.0 L122.5,92.0 L133.8,72.0 Z M116.9,62.0 L122.5,72.0 L128.1,62.0 Z M105.6,82.0 L111.2,92.0 L116.9,82.0 Z M128.1,82.0 L133.8,92.0 L139.4,82.0 Z M32.5,132.0 L55.0,172.0 L77.5,132.0 Z M43.8,112.0 L55.0,132.0 L66.2,112.0 Z M49.4,102.0 L55.0,112.0 L60.6,102.0 Z M38.1,122.0 L43.8,132.0 L49.4,122.0 Z M60.6,122.0 L66.2,132.0 L71.9,122.0 Z M21.2,152.0 L32.5,172.0 L43.8,152.0 Z M26.9,142.0 L32.5,152.0 L38.1,142.0 Z M15.6,162.0 L21.2,172.0 L26.9,162.0 Z M38.1,162.0 L43.8,172.0 L49.4,162.0 Z M66.2,152.0 L77.5,172.0 L88.8,152.0 Z M71.9,142.0 L77.5,152.0 L83.1,142.0 Z M60.6,162.0 L66.2,172.0 L71.9,162.0 Z M83.1,162.0 L88.8,172.0 L94.4,162.0 Z M122.5,132.0 L145.0,172.0 L167.5,132.0 Z M133.8,112.0 L145.0,132.0 L156.2,112.0 Z M139.4,102.0 L145.0,112.0 L150.6,102.0 Z M128.1,122.0 L133.8,132.0 L139.4,122.0 Z M150.6,122.0 L156.2,132.0 L161.9,122.0 Z M111.2,152.0 L122.5,172.0 L133.8,152.0 Z M116.9,142.0 L122.5,152.0 L128.1,142.0 Z M105.6,162.0 L111.2,172.0 L116.9,162.0 Z M128.1,162.0 L133.8,172.0 L139.4,162.0 Z M156.2,152.0 L167.5,172.0 L178.8,152.0 Z M161.9,142.0 L167.5,152.0 L173.1,142.0 Z M150.6,162.0 L156.2,172.0 L161.9,162.0 Z M173.1,162.0 L178.8,172.0 L184.4,162.0 Z"/>
+          <polygon class="svs-a" points="100,12 10,172 190,172" fill="none" stroke-width="0.8"/>
         </svg>
         <h4>Sierpinski Üçgeni</h4>
         <p>1915 yılında Polonyalı matematikçi Wacław Sierpiński tarafından tanımlanan bu fraktal yapı, son derece basit bir kurala dayanır: bir eşkenar üçgenin tam ortasındaki üçgen çıkarılır; kalan üç küçük üçgenin her birine aynı işlem uygulanır ve bu süreç sonsuza kadar devam eder.</p>
@@ -554,9 +581,8 @@ main { max-width:920px; }
 
       <!-- Koch Kar Tanesi -->
       <div class="visual-item">
-<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fraktal Geometri Görseli">
-          <rect width="200" height="200" fill="#12100e" rx="4"/>
-          <polygon points="100.0,27.0 97.8,30.9 93.3,30.9 95.5,34.8 93.3,38.7 88.8,38.7 86.5,34.8 84.3,38.7 79.8,38.7 82.0,42.6 79.8,46.4 84.3,46.4 86.5,50.3 84.3,54.2 79.8,54.2 82.0,58.1 79.8,62.0 75.3,62.0 73.1,58.1 70.8,62.0 66.3,62.0 64.1,58.1 66.3,54.2 61.8,54.2 59.6,50.3 57.3,54.2 52.8,54.2 55.1,58.1 52.8,62.0 48.4,62.0 46.1,58.1 43.9,62.0 39.4,62.0 41.6,65.9 39.4,69.8 43.9,69.8 46.1,73.7 43.9,77.6 39.4,77.6 41.6,81.4 39.4,85.3 43.9,85.3 46.1,89.2 48.4,85.3 52.8,85.3 55.1,89.2 52.8,93.1 57.3,93.1 59.6,97.0 57.3,100.9 52.8,100.9 55.1,104.8 52.8,108.7 48.4,108.7 46.1,104.8 43.9,108.7 39.4,108.7 41.6,112.6 39.4,116.4 43.9,116.4 46.1,120.3 43.9,124.2 39.4,124.2 41.6,128.1 39.4,132.0 43.9,132.0 46.1,135.9 48.4,132.0 52.8,132.0 55.1,135.9 52.8,139.8 57.3,139.8 59.6,143.7 61.8,139.8 66.3,139.8 64.1,135.9 66.3,132.0 70.8,132.0 73.1,135.9 75.3,132.0 79.8,132.0 82.0,135.9 79.8,139.8 84.3,139.8 86.5,143.7 84.3,147.6 79.8,147.6 82.0,151.4 79.8,155.3 84.3,155.3 86.5,159.2 88.8,155.3 93.3,155.3 95.5,159.2 93.3,163.1 97.8,163.1 100.0,167.0 102.2,163.1 106.7,163.1 104.5,159.2 106.7,155.3 111.2,155.3 113.5,159.2 115.7,155.3 120.2,155.3 118.0,151.4 120.2,147.6 115.7,147.6 113.5,143.7 115.7,139.8 120.2,139.8 118.0,135.9 120.2,132.0 124.7,132.0 126.9,135.9 129.2,132.0 133.7,132.0 135.9,135.9 133.7,139.8 138.2,139.8 140.4,143.7 142.7,139.8 147.2,139.8 144.9,135.9 147.2,132.0 151.6,132.0 153.9,135.9 156.1,132.0 160.6,132.0 158.4,128.1 160.6,124.2 156.1,124.2 153.9,120.3 156.1,116.4 160.6,116.4 158.4,112.6 160.6,108.7 156.1,108.7 153.9,104.8 151.6,108.7 147.2,108.7 144.9,104.8 147.2,100.9 142.7,100.9 140.4,97.0 142.7,93.1 147.2,93.1 144.9,89.2 147.2,85.3 151.6,85.3 153.9,89.2 156.1,85.3 160.6,85.3 158.4,81.4 160.6,77.6 156.1,77.6 153.9,73.7 156.1,69.8 160.6,69.8 158.4,65.9 160.6,62.0 156.1,62.0 153.9,58.1 151.6,62.0 147.2,62.0 144.9,58.1 147.2,54.2 142.7,54.2 140.4,50.3 138.2,54.2 133.7,54.2 135.9,58.1 133.7,62.0 129.2,62.0 126.9,58.1 124.7,62.0 120.2,62.0 118.0,58.1 120.2,54.2 115.7,54.2 113.5,50.3 115.7,46.4 120.2,46.4 118.0,42.6 120.2,38.7 115.7,38.7 113.5,34.8 111.2,38.7 106.7,38.7 104.5,34.8 106.7,30.9 102.2,30.9" fill="#c8960c" fill-opacity="0.2" stroke="#c8960c" stroke-width="0.9" stroke-linejoin="round"/>
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Koch kar tanesi fraktal görseli">
+          <polygon class="svf-a svs-a" points="100.0,27.0 97.8,30.9 93.3,30.9 95.5,34.8 93.3,38.7 88.8,38.7 86.5,34.8 84.3,38.7 79.8,38.7 82.0,42.6 79.8,46.4 84.3,46.4 86.5,50.3 84.3,54.2 79.8,54.2 82.0,58.1 79.8,62.0 75.3,62.0 73.1,58.1 70.8,62.0 66.3,62.0 64.1,58.1 66.3,54.2 61.8,54.2 59.6,50.3 57.3,54.2 52.8,54.2 55.1,58.1 52.8,62.0 48.4,62.0 46.1,58.1 43.9,62.0 39.4,62.0 41.6,65.9 39.4,69.8 43.9,69.8 46.1,73.7 43.9,77.6 39.4,77.6 41.6,81.4 39.4,85.3 43.9,85.3 46.1,89.2 48.4,85.3 52.8,85.3 55.1,89.2 52.8,93.1 57.3,93.1 59.6,97.0 57.3,100.9 52.8,100.9 55.1,104.8 52.8,108.7 48.4,108.7 46.1,104.8 43.9,108.7 39.4,108.7 41.6,112.6 39.4,116.4 43.9,116.4 46.1,120.3 43.9,124.2 39.4,124.2 41.6,128.1 39.4,132.0 43.9,132.0 46.1,135.9 48.4,132.0 52.8,132.0 55.1,135.9 52.8,139.8 57.3,139.8 59.6,143.7 61.8,139.8 66.3,139.8 64.1,135.9 66.3,132.0 70.8,132.0 73.1,135.9 75.3,132.0 79.8,132.0 82.0,135.9 79.8,139.8 84.3,139.8 86.5,143.7 84.3,147.6 79.8,147.6 82.0,151.4 79.8,155.3 84.3,155.3 86.5,159.2 88.8,155.3 93.3,155.3 95.5,159.2 93.3,163.1 97.8,163.1 100.0,167.0 102.2,163.1 106.7,163.1 104.5,159.2 106.7,155.3 111.2,155.3 113.5,159.2 115.7,155.3 120.2,155.3 118.0,151.4 120.2,147.6 115.7,147.6 113.5,143.7 115.7,139.8 120.2,139.8 118.0,135.9 120.2,132.0 124.7,132.0 126.9,135.9 129.2,132.0 133.7,132.0 135.9,135.9 133.7,139.8 138.2,139.8 140.4,143.7 142.7,139.8 147.2,139.8 144.9,135.9 147.2,132.0 151.6,132.0 153.9,135.9 156.1,132.0 160.6,132.0 158.4,128.1 160.6,124.2 156.1,124.2 153.9,120.3 156.1,116.4 160.6,116.4 158.4,112.6 160.6,108.7 156.1,108.7 153.9,104.8 151.6,108.7 147.2,108.7 144.9,104.8 147.2,100.9 142.7,100.9 140.4,97.0 142.7,93.1 147.2,93.1 144.9,89.2 147.2,85.3 151.6,85.3 153.9,89.2 156.1,85.3 160.6,85.3 158.4,81.4 160.6,77.6 156.1,77.6 153.9,73.7 156.1,69.8 160.6,69.8 158.4,65.9 160.6,62.0 156.1,62.0 153.9,58.1 151.6,62.0 147.2,62.0 144.9,58.1 147.2,54.2 142.7,54.2 140.4,50.3 138.2,54.2 133.7,54.2 135.9,58.1 133.7,62.0 129.2,62.0 126.9,58.1 124.7,62.0 120.2,62.0 118.0,58.1 120.2,54.2 115.7,54.2 113.5,50.3 115.7,46.4 120.2,46.4 118.0,42.6 120.2,38.7 115.7,38.7 113.5,34.8 111.2,38.7 106.7,38.7 104.5,34.8 106.7,30.9 102.2,30.9" fill-opacity="0.2" stroke-width="0.9" stroke-linejoin="round"/>
         </svg>
         <h4>Koch Kar Tanesi</h4>
         <p>1904 yılında İsveçli matematikçi Helge von Koch tarafından tanımlanan bu eğri, eşkenar üçgenin her kenarına tekrar tekrar uygulanır: her kenar üçe bölünür, ortadaki parçanın yerine bir üçgen çıkıntı eklenir ve bu işlem sonsuza kadar sürdürülür.</p>
@@ -567,19 +593,18 @@ main { max-width:920px; }
       <!-- Pisagor Teoreminin Geometrik Kanıtı -->
       <div class="visual-item">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pisagor Teoreminin Geometrik Kanıtı Görseli">
-          <rect width="200" height="200" fill="#12100e" rx="4"/>
           <!-- Dik üçgen: A(75,125) B(125,125) C(125,75) -->
-          <polygon points="75,125 125,125 125,75" fill="none" stroke="#c8960c" stroke-width="1.5"/>
-          <polyline points="119,125 119,119 125,119" fill="none" stroke="#c8960c" stroke-width="1"/>
+          <polygon class="svs-a" points="75,125 125,125 125,75" fill="none" stroke-width="1.5"/>
+          <polyline class="svs-a" points="119,125 119,119 125,119" fill="none" stroke-width="1"/>
           <!-- a² karesi (alt, 50×50) -->
-          <rect x="75" y="125" width="50" height="50" fill="#c8960c" fill-opacity="0.25" stroke="#c8960c" stroke-width="1"/>
-          <text x="100" y="156" text-anchor="middle" font-size="11" fill="#c8960c" font-family="Georgia,serif" font-style="italic">a²</text>
+          <rect class="svf-a svs-a" x="75" y="125" width="50" height="50" fill-opacity="0.25" stroke-width="1"/>
+          <text class="svf-a" x="100" y="156" text-anchor="middle" font-size="11" font-family="Georgia,serif" font-style="italic">a²</text>
           <!-- b² karesi (sağ, 50×50) -->
-          <rect x="125" y="75" width="50" height="50" fill="#9b3510" fill-opacity="0.25" stroke="#9b3510" stroke-width="1"/>
-          <text x="150" y="106" text-anchor="middle" font-size="11" fill="#9b3510" font-family="Georgia,serif" font-style="italic">b²</text>
+          <rect class="svf-b svs-b" x="125" y="75" width="50" height="50" fill-opacity="0.25" stroke-width="1"/>
+          <text class="svf-b" x="150" y="106" text-anchor="middle" font-size="11" font-family="Georgia,serif" font-style="italic">b²</text>
           <!-- c² karesi: köşeler A(75,125) C(125,75) C+(75,25) A+(25,75) -->
-          <polygon points="75,125 125,75 75,25 25,75" fill="#c8960c" fill-opacity="0.12" stroke="#c8960c" stroke-width="1" stroke-dasharray="4,2"/>
-          <text x="58" y="88" text-anchor="middle" font-size="11" fill="#c8960c" font-family="Georgia,serif" font-style="italic">c²</text>
+          <polygon class="svf-a svs-a" points="75,125 125,75 75,25 25,75" fill-opacity="0.12" stroke-width="1" stroke-dasharray="4,2"/>
+          <text class="svf-a" x="58" y="88" text-anchor="middle" font-size="11" font-family="Georgia,serif" font-style="italic">c²</text>
         </svg>
         <h4>Pisagor Teoreminin Geometrik Kanıtı</h4>
         <p>M.Ö. 570'te yaşamış olan Pisagor'a atfedilen bu teorem, dik üçgenlerin evrensel yasasını görünür kılar:<br>Her karenin alanı, kenar uzunluğunun karesine eşittir;<br>dik üçgende iki katetin (dik kenarların) karelerinin toplamı, hipotenüsün karesine eşittir.</p>
@@ -588,44 +613,75 @@ main { max-width:920px; }
 
       <!-- Sinüs Dalgası ve Çember İlişkisi -->
       <div class="visual-item">
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sinüs Dalgası ve Çember İlişkisi Görseli">
-          <rect width="200" height="200" fill="#12100e" rx="4"/>
-          <circle cx="55" cy="100" r="45" fill="none" stroke="#c8960c" stroke-width="1" stroke-opacity="0.5"/>
-          <line x1="10" y1="100" x2="100" y2="100" stroke="#c8960c" stroke-width="0.8" stroke-opacity="0.4"/>
-          <line x1="55" y1="55" x2="55" y2="145" stroke="#c8960c" stroke-width="0.8" stroke-opacity="0.4"/>
-          <line x1="100" y1="100" x2="195" y2="100" stroke="#c8960c" stroke-width="0.8" stroke-opacity="0.4"/>
-          <polyline points="100.0,100.0 100.8,97.6 101.5,95.3 102.3,93.0 103.1,90.6 103.9,88.4 104.7,86.1 105.4,83.9 106.2,81.7 107.0,79.6 107.8,77.5 108.5,75.5 109.3,73.5 110.1,71.7 110.8,69.9 111.6,68.2 112.4,66.6 113.2,65.0 114.0,63.6 114.7,62.3 115.5,61.0 116.3,59.9 117.0,58.9 117.8,58.0 118.6,57.2 119.4,56.5 120.2,56.0 120.9,55.6 121.7,55.2 122.5,55.1 123.2,55.0 124.0,55.1 124.8,55.2 125.6,55.6 126.3,56.0 127.1,56.5 127.9,57.2 128.7,58.0 129.4,58.9 130.2,59.9 131.0,61.0 131.8,62.3 132.6,63.6 133.3,65.0 134.1,66.6 134.9,68.2 135.7,69.9 136.4,71.7 137.2,73.5 138.0,75.5 138.8,77.5 139.5,79.6 140.3,81.7 141.1,83.9 141.8,86.1 142.6,88.4 143.4,90.6 144.2,93.0 144.9,95.3 145.7,97.6 146.5,100.0 147.3,102.4 148.1,104.7 148.8,107.0 149.6,109.4 150.4,111.6 151.2,113.9 151.9,116.1 152.7,118.3 153.5,120.4 154.2,122.5 155.0,124.5 155.8,126.5 156.6,128.3 157.3,130.1 158.1,131.8 158.9,133.4 159.7,135.0 160.4,136.4 161.2,137.7 162.0,139.0 162.8,140.1 163.6,141.1 164.3,142.0 165.1,142.8 165.9,143.5 166.7,144.0 167.4,144.4 168.2,144.8 169.0,144.9 169.8,145.0 170.5,144.9 171.3,144.8 172.1,144.4 172.8,144.0 173.6,143.5 174.4,142.8 175.2,142.0 175.9,141.1 176.7,140.1 177.5,139.0 178.3,137.7 179.1,136.4 179.8,135.0 180.6,133.4 181.4,131.8 182.1,130.1 182.9,128.3 183.7,126.5 184.5,124.5 185.2,122.5 186.0,120.4 186.8,118.3 187.6,116.1 188.3,113.9 189.1,111.6 189.9,109.4 190.7,107.0 191.4,104.7 192.2,102.4 193.0,100.0" fill="none" stroke="#9b3510" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="55.0" y1="100.0" x2="86.8" y2="68.2" stroke="#c8960c" stroke-width="1.2"/>
-          <circle cx="86.8" cy="68.2" r="3.5" fill="#c8960c"/>
-          <line x1="86.8" y1="68.2" x2="111.6" y2="68.2" stroke="#c8960c" stroke-width="0.8" stroke-dasharray="3,2"/>
-          <circle cx="111.6" cy="68.2" r="3" fill="#9b3510"/>
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Çember üzerinde dönen noktanın yüksekliğinden sinüs dalgasının oluşması">
+          <line class="svs-a" x1="10" y1="100" x2="194" y2="100" stroke-width="0.8" stroke-opacity="0.45"/>
+          <line class="svs-a" x1="48" y1="54" x2="48" y2="146" stroke-width="0.8" stroke-opacity="0.45"/>
+          <circle class="svs-a" cx="48" cy="100" r="38" fill="none" stroke-width="1.2" stroke-opacity="0.8"/>
+          <line class="svs-a" x1="138" y1="97" x2="138" y2="103" stroke-width="1" stroke-opacity="0.7"/>
+          <text class="svf-a" x="138" y="116" text-anchor="middle" font-size="9" fill-opacity="0.85" font-family="Georgia,serif" font-style="italic">π</text>
+          <line class="svs-a" x1="190" y1="97" x2="190" y2="103" stroke-width="1" stroke-opacity="0.7"/>
+          <text class="svf-a" x="190" y="116" text-anchor="middle" font-size="9" fill-opacity="0.85" font-family="Georgia,serif" font-style="italic">2π</text>
+          <polyline class="svs-b" points="86,100 87.1,97.5 88.2,95 89.2,92.6 90.3,90.2 91.4,87.8 92.5,85.5 93.6,83.2 94.7,81 95.8,78.9 96.8,76.9 97.9,74.9 99,73.1 100.1,71.4 101.2,69.9 102.2,68.4 103.3,67.1 104.4,65.9 105.5,64.9 106.6,64 107.7,63.3 108.8,62.7 109.8,62.3 110.9,62.1 112,62 113.1,62.1 114.2,62.3 115.2,62.7 116.3,63.3 117.4,64 118.5,64.9 119.6,65.9 120.7,67.1 121.8,68.4 122.8,69.9 123.9,71.4 125,73.1 126.1,74.9 127.2,76.9 128.2,78.9 129.3,81 130.4,83.2 131.5,85.5 132.6,87.8 133.7,90.2 134.8,92.6 135.8,95 136.9,97.5 138,100 139.1,102.5 140.2,105 141.2,107.4 142.3,109.8 143.4,112.2 144.5,114.5 145.6,116.8 146.7,119 147.8,121.1 148.8,123.1 149.9,125.1 151,126.9 152.1,128.6 153.2,130.1 154.2,131.6 155.3,132.9 156.4,134.1 157.5,135.1 158.6,136 159.7,136.7 160.8,137.3 161.8,137.7 162.9,137.9 164,138 165.1,137.9 166.2,137.7 167.2,137.3 168.3,136.7 169.4,136 170.5,135.1 171.6,134.1 172.7,132.9 173.8,131.6 174.8,130.1 175.9,128.6 177,126.9 178.1,125.1 179.2,123.1 180.2,121.1 181.3,119 182.4,116.8 183.5,114.5 184.6,112.2 185.7,109.8 186.8,107.4 187.8,105 188.9,102.5 190,100" fill="none" stroke-width="1.2" stroke-opacity="0.55" stroke-linecap="round" stroke-linejoin="round"/>
+          <polyline class="svs-b" points="86,100 87.1,97.5 88.2,95 89.2,92.6 90.3,90.2 91.4,87.8 92.5,85.5 93.6,83.2 94.7,81 95.8,78.9 96.8,76.9 97.9,74.9 99,73.1 100.1,71.4 101.2,69.9 102.2,68.4 103.3,67.1 103.3,67.1" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line class="svs-a" x1="48" y1="100" x2="67" y2="67.1" stroke-width="1.3"/>
+          <line class="svs-a" x1="67" y1="67.1" x2="67" y2="100" stroke-width="1" stroke-dasharray="2.5,2"/>
+          <line class="svs-a" x1="67" y1="67.1" x2="103.3" y2="67.1" stroke-width="0.9" stroke-dasharray="3,2.5" stroke-opacity="0.9"/>
+          <path class="svs-a" d="M57,100 A9,9 0 0 0 52.5,92.2" fill="none" stroke-width="1"/>
+          <text class="svf-a" x="62.4" y="96" text-anchor="middle" font-size="8.5" font-family="Georgia,serif" font-style="italic">θ</text>
+          <circle class="svf-a" cx="67" cy="67.1" r="3.2"/>
+          <circle class="svf-b" cx="103.3" cy="67.1" r="3.2"/>
+          <text class="svf-a" x="70" y="95" font-size="7.5" font-family="Georgia,serif" font-style="italic">sin θ</text>
         </svg>
         <h4>Sinüs Dalgası ve Çember İlişkisi</h4>
         <p>Çember üzerinde dönen bir noktanın dikey konumu izlendiğinde, ortaya sinüs dalgası çıkar. Bu basit gözlem, trigonometrinin çemberle olan derin bağını açığa çıkarır.</p>
         <p>Ses dalgaları, ışık, elektrik akımı, mevsimsel değişimler — doğadaki pek çok döngüsel olgu bu matematiksel yapıyla betimlenir.</p>
       </div>
+      <!-- Altın Spiral -->
+      <div class="visual-item">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fibonacci kareleri ve çeyrek çember yaylarından oluşan altın spiral">
+          <rect class="svf-a svs-a" x="135" y="122.5" width="5" height="5" fill-opacity="0.07" stroke-width="0.9" stroke-opacity="0.65"/>
+          <rect class="svf-a svs-a" x="140" y="122.5" width="5" height="5" fill-opacity="0.07" stroke-width="0.9" stroke-opacity="0.65"/>
+          <rect class="svf-a svs-a" x="135" y="112.5" width="10" height="10" fill-opacity="0.07" stroke-width="0.9" stroke-opacity="0.65"/>
+          <rect class="svf-a svs-a" x="120" y="112.5" width="15" height="15" fill-opacity="0.07" stroke-width="0.9" stroke-opacity="0.65"/>
+          <rect class="svf-a svs-a" x="120" y="127.5" width="25" height="25" fill-opacity="0.07" stroke-width="0.9" stroke-opacity="0.65"/>
+          <rect class="svf-a svs-a" x="145" y="112.5" width="40" height="40" fill-opacity="0.07" stroke-width="0.9" stroke-opacity="0.65"/>
+          <rect class="svf-a svs-a" x="120" y="47.5" width="65" height="65" fill-opacity="0.07" stroke-width="0.9" stroke-opacity="0.65"/>
+          <rect class="svf-a svs-a" x="15" y="47.5" width="105" height="105" fill-opacity="0.07" stroke-width="0.9" stroke-opacity="0.65"/>
+          <text class="svf-a" x="127.5" y="122.6" text-anchor="middle" font-size="7" fill-opacity="0.8" font-family="Georgia,serif" font-style="italic">3</text>
+          <text class="svf-a" x="132.5" y="142.6" text-anchor="middle" font-size="7" fill-opacity="0.8" font-family="Georgia,serif" font-style="italic">5</text>
+          <text class="svf-a" x="165" y="136.1" text-anchor="middle" font-size="10" fill-opacity="0.8" font-family="Georgia,serif" font-style="italic">8</text>
+          <text class="svf-a" x="152.5" y="83.6" text-anchor="middle" font-size="10" fill-opacity="0.8" font-family="Georgia,serif" font-style="italic">13</text>
+          <text class="svf-a" x="67.5" y="103.6" text-anchor="middle" font-size="10" fill-opacity="0.8" font-family="Georgia,serif" font-style="italic">21</text>
+          <path class="svs-b" d="M135,122.5 A5,5 0 0 0 140,127.5 A5,5 0 0 0 145,122.5 A10,10 0 0 0 135,112.5 A15,15 0 0 0 120,127.5 A25,25 0 0 0 145,152.5 A40,40 0 0 0 185,112.5 A65,65 0 0 0 120,47.5 A105,105 0 0 0 15,152.5" fill="none" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <h4>Altın Spiral</h4>
+        <p>Kenarları ardışık Fibonacci sayıları olan kareler (1, 1, 2, 3, 5, 8, 13, 21) birbirine eklendiğinde 34 × 21 birimlik bir dikdörtgen oluşur. Bu dikdörtgenin en-boy oranı 34/21 ≈ 1,619'dur ve altın oran olan φ ≈ 1,618'e çok yakındır. Her karenin içine çizilen çeyrek çember yayları uç uca eklenince spiral ortaya çıkar.</p>
+        <p>Her çeyrek turda yarıçap yaklaşık φ kat büyür. Buradaki eğri, gerçek altın spiralin (logaritmik spiral) çeyrek çemberlerle yapılmış bir yaklaşımıdır. Doğadaki her sarmalın altın spiral olduğu söylenemez.</p>
+      </div>
 
       <!-- Düzgün Çokgenler -->
       <div class="visual-item">
-        <svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Düzgün Çokgenler Görseli">
-          <rect width="200" height="160" fill="#12100e" rx="4"/>
-          <polygon points="30.0,25.0 47.3,55.0 12.7,55.0" fill="none" stroke="#c8960c" stroke-width="1.2"/>
-          <text x="30" y="73" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">3gen</text>
-          <polygon points="80.0,25.0 100.0,45.0 80.0,65.0 60.0,45.0" fill="none" stroke="#9b3510" stroke-width="1.2"/>
-          <text x="80" y="73" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">4gen</text>
-          <polygon points="133.0,25.0 152.0,38.8 144.8,61.2 121.2,61.2 114.0,38.8" fill="none" stroke="#c8960c" stroke-width="1.2"/>
-          <text x="133" y="73" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">5gen</text>
-          <polygon points="170.0,25.0 187.3,35.0 187.3,55.0 170.0,65.0 152.7,55.0 152.7,35.0" fill="none" stroke="#9b3510" stroke-width="1.2"/>
-          <text x="170" y="73" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">6gen</text>
-          <polygon points="50.0,85.0 71.2,93.8 80.0,115.0 71.2,136.2 50.0,145.0 28.8,136.2 20.0,115.0 28.8,93.8" fill="none" stroke="#c8960c" stroke-width="1.2"/>
-          <text x="50" y="153" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">8gen</text>
-          <polygon points="145.0,85.0 160.0,89.0 171.0,100.0 175.0,115.0 171.0,130.0 160.0,141.0 145.0,145.0 130.0,141.0 119.0,130.0 115.0,115.0 119.0,100.0 130.0,89.0" fill="none" stroke="#9b3510" stroke-width="1.2"/>
-          <text x="145" y="153" text-anchor="middle" font-size="9" fill="#9b3510" font-family="Georgia,serif">12gen</text>
+        <svg viewBox="0 -20 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Düzgün Çokgenler Görseli">
+          <polygon class="svs-a" points="30.0,25.0 47.3,55.0 12.7,55.0" fill="none" stroke-width="1.2"/>
+          <text class="svf-a" x="30" y="73" text-anchor="middle" font-size="9" font-family="Georgia,serif">3gen</text>
+          <polygon class="svs-b" points="80.0,25.0 100.0,45.0 80.0,65.0 60.0,45.0" fill="none" stroke-width="1.2"/>
+          <text class="svf-b" x="80" y="73" text-anchor="middle" font-size="9" font-family="Georgia,serif">4gen</text>
+          <polygon class="svs-a" points="133.0,25.0 152.0,38.8 144.8,61.2 121.2,61.2 114.0,38.8" fill="none" stroke-width="1.2"/>
+          <text class="svf-a" x="133" y="73" text-anchor="middle" font-size="9" font-family="Georgia,serif">5gen</text>
+          <polygon class="svs-b" points="170.0,25.0 187.3,35.0 187.3,55.0 170.0,65.0 152.7,55.0 152.7,35.0" fill="none" stroke-width="1.2"/>
+          <text class="svf-b" x="170" y="73" text-anchor="middle" font-size="9" font-family="Georgia,serif">6gen</text>
+          <polygon class="svs-a" points="50.0,85.0 71.2,93.8 80.0,115.0 71.2,136.2 50.0,145.0 28.8,136.2 20.0,115.0 28.8,93.8" fill="none" stroke-width="1.2"/>
+          <text class="svf-a" x="50" y="153" text-anchor="middle" font-size="9" font-family="Georgia,serif">8gen</text>
+          <polygon class="svs-b" points="145.0,85.0 160.0,89.0 171.0,100.0 175.0,115.0 171.0,130.0 160.0,141.0 145.0,145.0 130.0,141.0 119.0,130.0 115.0,115.0 119.0,100.0 130.0,89.0" fill="none" stroke-width="1.2"/>
+          <text class="svf-b" x="145" y="153" text-anchor="middle" font-size="9" font-family="Georgia,serif">12gen</text>
         </svg>
         <h4>Düzgün Çokgenler</h4>
         <p>Kenar sayısı arttıkça düzgün çokgen çembere yaklaşır. Üçgenin iç açıları toplamı 180°, karenin 360°, beşgenin 540° — her yeni kenar 180° ekler.</p>
         <p>Bu ilişki, çemberin "sonsuz kenarlı çokgen" olarak düşünülebileceğini gösterir. Arşimet, π sayısını hesaplamak için tam da bu yaklaşımı kullanmıştır.</p>
       </div>
+    </div>
+  </div>
+</section>
 
 </main>
 
@@ -642,6 +698,32 @@ main { max-width:920px; }
   window.addEventListener('scroll',function(){btn.classList.toggle('visible',window.scrollY>300);});
   btn.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});
 </script>
+
+<script>
+(function(){
+  var nav = document.getElementById('site-nav');
+  var heads = Array.prototype.slice.call(document.querySelectorAll('.acc-head'));
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function setState(h, open){
+    h.setAttribute('aria-expanded', open ? 'true' : 'false');
+    var panel = document.getElementById(h.getAttribute('aria-controls'));
+    if (open) panel.removeAttribute('hidden'); else panel.setAttribute('hidden', '');
+  }
+
+  heads.forEach(function(h){
+    h.addEventListener('click', function(){
+      if (h.getAttribute('aria-expanded') === 'true') { setState(h, false); return; }
+      heads.forEach(function(o){ if (o !== h && o.getAttribute('aria-expanded') === 'true') setState(o, false); });
+      setState(h, true);
+      var navH = nav ? nav.getBoundingClientRect().height : 0;
+      var top = h.getBoundingClientRect().top + window.pageYOffset - navH - 12;
+      window.scrollTo({ top: Math.max(0, top), behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+})();
+</script>
+
 <script>
 document.getElementById('math-analyze-btn').addEventListener('click', analyzeNumber);
 document.getElementById('math-number-input').addEventListener('keydown', function(e) {
@@ -851,6 +933,5 @@ function isHarshadDetailed(n) {
   return { isHarshad: isHarshad, detailText: detailText };
 }
 </script>
-</div>
 </body>
 </html>
