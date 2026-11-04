@@ -1,336 +1,156 @@
 <!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<meta name="robots" content="noindex, nofollow">
-<title>Reversi</title>
+<html lang="tr"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow"><title>Reversi</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#0a160a;font-family:Georgia,serif;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden}
-.wrap{width:100%;max-width:560px;display:flex;flex-direction:column;gap:7px;padding:8px;height:100%;overflow:hidden}
-
-/* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
-.modal-overlay.hidden{display:none}
-.modal-box{background:#0e1e0e;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease}
-@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-.modal-title{font-size:20px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em}
-.modal-sub{font-size:11px;color:rgba(247,242,232,0.35);text-align:center}
-.modal-rules{font-size:12px;color:rgba(247,242,232,0.55);line-height:1.85}
-.modal-rules b{color:#c8960c}
-.modal-btns{display:flex;gap:8px;justify-content:center}
-button.modal-start{background:rgba(200,150,12,0.2);border:1px solid rgba(200,150,12,0.6);border-radius:5px;padding:8px 26px;font-size:13px;font-weight:700;cursor:pointer;color:#e8d5a0;font-family:Georgia,serif;transition:background .2s}
-button.modal-start:hover{background:rgba(200,150,12,0.35)}
-button.modal-close{background:transparent;border:1px solid rgba(255,255,255,0.12);border-radius:5px;padding:8px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.4);font-family:Georgia,serif}
-button.modal-close:hover{background:rgba(255,255,255,0.06)}
-.modal-logo{text-align:center;margin-top:2px}
-.modal-logo img{height:28px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s}
-.modal-logo img:hover{opacity:.7}
-
-/* ── ÜST BAR ── */
-.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;flex-shrink:0}
-.game-title{font-size:16px;font-weight:700;color:#c8960c;letter-spacing:.06em}
-.mode-sel{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4)}
-.mode-sel select{background:#0e1e0e;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
-
-/* ── SKOR ── */
-.scorebar{display:flex;align-items:stretch;gap:0;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);flex-shrink:0}
-.sbox{flex:1;padding:6px 10px;text-align:center}
-.sbox.black{background:#1a1a1a}
-.sbox.white{background:#e8e8e8}
-.sbox .sname{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
-.sbox.black .sname{color:rgba(247,242,232,0.4)}
-.sbox.white .sname{color:rgba(18,16,14,0.5)}
-.sbox .scount{font-size:20px;font-weight:700}
-.sbox.black .scount{color:#f0f0f0}
-.sbox.white .scount{color:#1a1a1a}
-.sbox.active-turn{outline:2px solid #c8960c;outline-offset:-2px}
-.smid{background:#1e2e1e;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 10px;gap:1px}
-.smid .sl{font-size:9px;color:rgba(247,242,232,0.3);letter-spacing:.05em}
-.smid .sv{font-size:11px;color:rgba(247,242,232,0.5);font-weight:600}
-
-/* ── TAHTA ── */
-.board-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
-.board{display:grid;grid-template-columns:repeat(8,1fr);gap:2px;background:#1a4a1a;border-radius:4px;padding:5px;border:2px solid #1a4a1a}
-.cell{background:#2a6a2a;border-radius:2px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:background .15s}
-.cell:hover{background:#336633}
-.cell.hint{background:#336633}
-.cell.hint::after{content:'';width:30%;height:30%;border-radius:50%;background:rgba(200,150,12,0.5);position:absolute}
-.cell.no-hint{cursor:default}
-.cell.no-hint:hover{background:#2a6a2a}
-
-/* ── TAŞ ── */
-.piece{width:78%;height:78%;border-radius:50%;position:absolute;transition:transform .18s}
-.piece.black{background:radial-gradient(circle at 35% 35%,#555,#111);box-shadow:1px 2px 4px rgba(0,0,0,0.6)}
-.piece.white{background:radial-gradient(circle at 35% 35%,#fff,#ccc);box-shadow:1px 2px 4px rgba(0,0,0,0.4)}
-@keyframes flip{0%{transform:scaleX(1)}50%{transform:scaleX(0)}100%{transform:scaleX(1)}}
-
-/* ── ALT ── */
-.msg{font-size:11px;color:rgba(247,242,232,0.5);text-align:center;min-height:15px;flex-shrink:0}
-.win-banner{display:none;background:rgba(111,207,151,0.1);border:1px solid rgba(111,207,151,0.3);border-radius:5px;padding:8px 14px;text-align:center;flex-shrink:0}
-.win-banner.show{display:block}
-.win-banner h2{font-size:13px;color:#6fcf97;margin-bottom:2px}
-.win-banner p{font-size:11px;color:rgba(247,242,232,0.5)}
-.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;flex-shrink:0}
-button.a{background:rgba(10,22,10,0.8);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.75);font-family:Georgia,serif;transition:background .2s}
-button.a:hover{background:rgba(155,53,16,0.45)}
-</style>
-</head>
-<body>
-
-<!-- ── MODAL ── -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <div class="modal-title">Reversi</div>
-    <div class="modal-sub">Klasik strateji oyunu</div>
-    <div class="modal-rules">
-      <b>Nasıl Oynanır?</b><br>
-      Başlangıçta ortada 2 siyah ve 2 beyaz taş çapraz dizilidir.<br>
-      Her hamlede taşınızı, en az bir tane rakip taşı <b>iki taşınızın arasına sıkıştıracak şekilde</b> koymalısınız.<br>
-      Sıkışan tüm rakip taşlar sizin taşlarınızın renginize döner.<br>
-      Yapılabilecek geçerli bir hamle yoksa sıra rakibe geçer.<br>
-      Tahta dolduğunda ya da her iki taraf da hamle yapamadığında oyun biter.<br>
-      <b>Daha çok taşa sahip olan oyuncu kazanır.</b><br><br>
-      <b style="color:#c8960c">İpucu:</b> Köşelerdeki kareleri ele geçirmek büyük avantaj sağlar.
-    </div>
-    <div class="modal-btns">
-      <button class="modal-close" onclick="closeModal()">Kapat</button>
-      <button class="modal-start" onclick="closeModal()">♟ Başla</button>
-    </div>
-    <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo">
-    </div>
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+html,body{height:100%}
+body{height:100vh;height:100dvh;background:#0a160a;font-family:Georgia,serif;color:#e8d5a0;overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation;padding:max(8px,env(safe-area-inset-top)) 8px max(6px,env(safe-area-inset-bottom))}
+body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background:radial-gradient(40% 35% at 20% 15%,rgba(200,150,12,.15),transparent 70%),radial-gradient(35% 30% at 85% 30%,rgba(60,190,110,.14),transparent 70%),radial-gradient(40% 35% at 50% 95%,rgba(40,170,190,.12),transparent 70%);animation:drift 28s ease-in-out infinite alternate}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:radial-gradient(1.5px 1.5px at 20px 30px,#ffd96699,transparent),radial-gradient(1px 1px at 120px 80px,#ffffff88,transparent),radial-gradient(1.5px 1.5px at 70px 160px,#7dffb399,transparent);background-size:200px 200px;animation:twinkle 4s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(4%,3%,0) scale(1.08)}}@keyframes twinkle{from{opacity:.25}to{opacity:.75}}
+@keyframes shimmer{to{background-position:-200% 0}}@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes pulse{50%{transform:scale(1.2)}}@keyframes flip{50%{transform:perspective(300px) rotateY(90deg) scale(1.1)}}
+@keyframes drop{from{transform:scale(1.5);opacity:0}}@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+.app{height:100%;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
+.title{flex:none;text-align:center;font-size:min(26px,3.4dvh);font-weight:700;letter-spacing:.07em;background:linear-gradient(90deg,#c8960c,#ffe9a8,#c8960c);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shimmer 4s linear infinite}
+.stage{flex:1 1 0;min-height:0;display:flex;flex-direction:column;gap:8px}
+#top,#bot{flex:none;display:flex;flex-direction:column;gap:8px;width:100%;max-width:480px;margin:0 auto}
+#boardcol{position:relative;flex:1 1 0;min-width:0;min-height:0;overflow:hidden}
+#bo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+#board{width:100%;height:100%;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));gap:2px;padding:6px;background:#0b2a12;border:2px solid rgba(200,150,12,.55);border-radius:10px;box-shadow:0 0 28px rgba(60,160,80,.18),inset 0 0 14px rgba(0,0,0,.5)}
+.cell{position:relative;display:flex;align-items:center;justify-content:center;border-radius:3px;background:radial-gradient(circle at 30% 25%,#2f8a3e,#1d6a2b)}
+.cell.hint{cursor:pointer;background:radial-gradient(circle at 30% 25%,#3aa04b,#27803a);box-shadow:inset 0 0 12px rgba(255,217,102,.4)}.cell.last{box-shadow:inset 0 0 0 2px rgba(255,217,102,.85)}
+@media(hover:hover){.cell.hint:hover{background:radial-gradient(circle at 30% 25%,#3aa04b,#27803a)}}
+.cell.hint::after{content:"";position:absolute;width:34%;height:34%;border-radius:50%;border:2px solid rgba(255,217,102,.9);background:rgba(255,217,102,.25);box-shadow:0 0 10px 3px rgba(255,217,102,.65);animation:pulse 1.6s ease-in-out infinite}
+.piece{position:absolute;width:80%;height:80%;border-radius:50%}
+.piece.black{background:radial-gradient(circle at 35% 30%,#6a6a6a,#1a1a1a 55%,#050505);box-shadow:0 2px 5px rgba(0,0,0,.7),inset 0 -2px 4px rgba(0,0,0,.5)}
+.piece.white{background:radial-gradient(circle at 35% 30%,#fffdf5,#e4dcc8 55%,#b9b09a);box-shadow:0 2px 5px rgba(0,0,0,.5),inset 0 -2px 4px rgba(0,0,0,.2)}
+.piece::after{content:"";position:absolute;left:22%;top:14%;width:34%;height:20%;border-radius:50%;background:rgba(255,255,255,.3);transform:rotate(-30deg)}.piece.white::after{background:rgba(255,255,255,.85)}
+.piece.new{animation:drop .22s ease-out}.piece.flip{animation:flip .32s ease-in-out}
+.modes{display:flex;gap:6px}
+.modes button{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:8px 4px;font:13px/1.2 Georgia,serif;color:rgba(247,242,232,.78);cursor:pointer;transition:transform .15s}
+.modes button:active{transform:scale(.96)}.modes button.on{background:linear-gradient(135deg,rgba(200,150,12,.38),rgba(255,217,102,.16));border-color:#ffd966;color:#fff3c4}
+.scorebar{display:flex;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+.sbox{flex:1;padding:min(8px,1dvh) 10px;text-align:center;transition:box-shadow .3s}
+.sbox.black{background:linear-gradient(160deg,#242424,#0d0d0d)}.sbox.white{background:linear-gradient(160deg,#f4efe2,#d9d1bc)}
+.sname{font-size:11px;font-weight:600;letter-spacing:.04em}.black .sname{color:rgba(247,242,232,.65)}.white .sname{color:rgba(18,16,14,.7)}
+.scount{font-size:min(30px,4.2dvh);font-weight:700;line-height:1.1}.black .scount{color:#f4f4f4}.white .scount{color:#1a1a1a}.scount.bump{animation:pop .3s}
+.sbox.active{box-shadow:inset 0 0 0 2px #ffd966,0 0 18px rgba(255,217,102,.45)}
+.smid{background:#10240f;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px 12px}
+.smid .sl{font-size:10px;color:rgba(247,242,232,.6)}.smid .sv{font-size:min(18px,2.6dvh);color:#ffd966;font-weight:700}
+.msg{font-size:14px;line-height:1.3;min-height:2.6em;text-align:center;color:rgba(247,242,232,.75)}
+.btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+button.a{background:linear-gradient(135deg,rgba(200,150,12,.3),rgba(255,217,102,.12));border:1px solid rgba(200,150,12,.55);border-radius:8px;padding:10px 16px;font-size:14px;cursor:pointer;color:#f1e2b4;font-family:Georgia,serif;transition:transform .15s,box-shadow .2s}
+button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#ffd966}
+@media(hover:hover){button.a:hover{box-shadow:0 0 14px rgba(255,217,102,.3)}}
+.foot{flex:none;display:flex;justify-content:center;height:min(34px,5dvh);pointer-events:none}.foot.w{display:none}
+.foot img{height:100%;width:auto;opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}.foot img:hover{opacity:.7}
+@media(min-aspect-ratio:5/4) and (min-width:560px){
+.stage{display:grid;grid-template-columns:minmax(0,1fr) min(290px,38vw);grid-template-rows:minmax(0,1fr) auto auto minmax(0,1fr);column-gap:24px;row-gap:12px}
+#boardcol{grid-column:1;grid-row:1/5}#top{grid-column:2;grid-row:2}#bot{grid-column:2;grid-row:3}
+.btns{flex-direction:column}.app>.foot{display:none}.foot.w{display:flex;height:min(44px,6dvh);margin-top:6px}}
+.end{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(6,14,6,.78);border-radius:10px;animation:pop .35s}
+.ecard{text-align:center;padding:12px;max-width:94%;display:flex;flex-direction:column;gap:min(10px,1.5dvh)}
+.ecard h2{font-size:clamp(26px,min(9vw,5dvh),44px);color:#ffd966;text-shadow:0 0 24px rgba(255,200,60,.5)}.end.lose h2{color:#e8d5a0;text-shadow:none}
+.end.win .ecard{border:1px solid rgba(255,217,102,.55);border-radius:14px;box-shadow:0 0 40px rgba(255,200,60,.35)}
+.ecard p{font-size:15px;color:rgba(247,242,232,.8)}.estats{display:flex;gap:8px;justify-content:center}
+.estats div{background:rgba(255,255,255,.07);border-radius:8px;padding:6px 10px}.estats b{display:block;font-size:22px;color:#ffd966}.estats span{font-size:11px;color:rgba(247,242,232,.65)}
+#fx{position:fixed;left:50%;top:38%;width:0;height:0;pointer-events:none;z-index:80}
+#fx i{position:absolute;width:9px;height:9px;border-radius:2px;animation:burst 1.8s ease-out forwards}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:12px}
+.mbox{--mw:130px;background:#0d1b0d;border:1px solid rgba(200,150,12,.5);border-radius:14px;max-width:440px;width:100%;max-height:85dvh;overflow:auto;padding:0 18px 16px;text-align:center;scrollbar-width:none;animation:pop .3s}
+.mbox.sm{padding:18px}.mimg{display:block;margin:0 auto;width:var(--mw);max-width:100%;max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%)}
+.mtext{font-size:14px;line-height:1.7;color:rgba(247,242,232,.82);margin:6px 0 14px}.mtext p{margin-bottom:6px}.mtext b{color:#ffd966}#rBtn{min-width:var(--mw)}
+@media(prefers-reduced-motion:reduce){body::before,body::after,.title,.cell.hint::after{animation:none}}
+</style></head><body>
+<div class="app">
+ <div class="title">Reversi</div>
+ <div class="stage">
+  <div id="top">
+   <div class="modes" id="modes" role="group" aria-label="Oyun modu"><button data-m="2p">İki<br>oyuncu</button><button data-m="cpu-easy">Bilgisayar<br>kolay</button><button data-m="cpu-hard">Bilgisayar<br>zor</button></div>
+   <div class="scorebar"><div class="sbox black" id="sB"><div class="sname">&#9679; Siyah</div><div class="scount" id="cB">2</div></div>
+    <div class="smid"><div class="sl">Hamle</div><div class="sv" id="mc">0</div></div>
+    <div class="sbox white" id="sW"><div class="sname" id="nW">&#9675; Beyaz</div><div class="scount" id="cW">2</div></div></div>
   </div>
+  <div id="boardcol"><div id="bo"><div id="board"></div>
+   <div id="end" class="end" hidden><div class="ecard"><h2 id="eT"></h2><p id="eB"></p>
+    <div class="estats"><div><b id="eS"></b><span>Siyah</span></div><div><b id="eW"></b><span>Beyaz</span></div><div><b id="eM"></b><span>Hamle</span></div></div>
+    <div class="btns"><button class="a pri" id="eNew">Yeni Oyun</button><button class="a" id="eClose">Tahtayı gör</button></div></div></div></div></div>
+  <div id="bot"><div class="msg" id="msg"></div>
+   <div class="btns"><button class="a pri" id="bNew">&#8635; Yeni Oyun</button><button class="a" id="bRules">&#9432; Kurallar</button></div>
+   <div class="foot w"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div></div>
+ </div>
+ <div class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div>
 </div>
-
-<div class="wrap">
-  <div class="top-bar">
-    <div class="game-title">Reversi</div>
-    <div class="mode-sel">
-      <label>Mod:</label>
-      <select id="modeSelect" onchange="resetGame(); this.blur()">
-        <option value="2p">İki oyuncu</option>
-        <option value="cpu-easy">Bilgisayar (kolay)</option>
-        <option value="cpu-hard">Bilgisayar (zor)</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="scorebar">
-    <div class="sbox black" id="sboxBlack">
-      <div class="sname">&#9679; Siyah</div>
-      <div class="scount" id="scoreBlack">2</div>
-    </div>
-    <div class="smid">
-      <div class="sl">Hamle</div>
-      <div class="sv" id="moveCount">0</div>
-    </div>
-    <div class="sbox white" id="sboxWhite">
-      <div class="sname">&#9675; Beyaz</div>
-      <div class="scount" id="scoreWhite">2</div>
-    </div>
-  </div>
-
-  <div class="board-wrap">
-    <div class="board" id="board"></div>
-  </div>
-
-  <div class="msg" id="msg">Siyah başlar. Bir kareye tıklayın.</div>
-  <div class="win-banner" id="winBanner">
-    <h2 id="winTitle"></h2>
-    <p id="winBody"></p>
-  </div>
-
-  <div class="br">
-    <button class="a" onclick="resetGame()">&#8635; Yeni Oyun</button>
-    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
-  </div>
-</div>
-
+<div id="fx"></div>
+<div class="modal" id="rules" role="dialog" aria-modal="true" aria-label="Kurallar" hidden><div class="mbox">
+ <img class="mimg" src="../img/mecesml.webp" alt="Tekin Hoca">
+ <div class="mtext"><p>Başlangıçta ortada 2 siyah ve 2 beyaz taş çapraz dizilidir.</p><p>Her hamlede taşınızı, en az bir rakip taşı <b>iki taşınızın arasına sıkıştıracak şekilde</b> koymalısınız. Sıkışan tüm rakip taşlar sizin renginize döner.</p><p>Geçerli hamle yoksa sıra rakibe geçer. Tahta dolduğunda ya da iki taraf da hamle yapamadığında oyun biter. <b>Daha çok taşa sahip olan kazanır.</b></p><p><b>İpucu:</b> Köşeleri ele geçirmek büyük avantaj sağlar.</p></div>
+ <button class="a pri" id="rBtn">Başla</button></div></div>
+<div class="modal" id="cf" role="dialog" aria-modal="true" aria-label="Onay" hidden><div class="mbox sm"><div class="mtext" id="cfT"></div><div class="btns"><button class="a" id="cfNo">Vazgeç</button><button class="a pri" id="cfYes">Değiştir</button></div></div></div>
 <script>
-const EMPTY=0,BLACK=1,WHITE=2;
-const DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
-let board,turn,moveCount,won,cpuMode,cpuHard,cpuTimer=null;
-
-function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
-function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
-
-function fitBoard(){
-  // DOM'a değil pencere boyutuna göre hesapla — her zaman sabit
-  const wH = window.innerHeight;
-  const wW = Math.min(window.innerWidth, 560); // max-width
-  // Sabit öğeler: topbar~36, skor~46, msg~16, br~30, padding~16, gap~35
-  const reserved = 260;
-  const avail = Math.min(wH - reserved, wW - 16);
-  const cellPx = Math.max(28, Math.floor((avail - 14) / 8));
-  document.documentElement.style.setProperty('--cell-px', cellPx + 'px');
-  document.getElementById('board').style.gridTemplateColumns = `repeat(8,${cellPx}px)`;
-  document.querySelectorAll('#board .cell').forEach(c => {
-    c.style.width = cellPx + 'px';
-    c.style.height = cellPx + 'px';
-  });
-}
-
-function resetGame(){
-  if(cpuTimer) clearTimeout(cpuTimer);
-  const mode=document.getElementById('modeSelect').value;
-  cpuMode=mode!=='2p'; cpuHard=mode==='cpu-hard';
-  board=Array.from({length:8},()=>Array(8).fill(EMPTY));
-  board[3][3]=WHITE;board[3][4]=BLACK;board[4][3]=BLACK;board[4][4]=WHITE;
-  turn=BLACK;moveCount=0;won=false;
-  document.getElementById('winBanner').classList.remove('show');
-  fitBoard();
-  updateScorebar();render();
-  setMsg(turnName(turn)+' başlar. Bir kareye tıklayın.');
-}
-
-function turnName(t){return t===BLACK?'Siyah':'Beyaz';}
-function cpuTurn(){return cpuMode&&turn===WHITE;}
-
-function validMoves(t){
-  const moves=[];
-  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
-    if(board[r][c]!==EMPTY) continue;
-    if(flips(r,c,t).length>0) moves.push([r,c]);
-  }
-  return moves;
-}
-
-function flips(r,c,t){
-  const opp=t===BLACK?WHITE:BLACK,result=[];
-  for(const [dr,dc] of DIRS){
-    const line=[];let nr=r+dr,nc=c+dc;
-    while(nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===opp){line.push([nr,nc]);nr+=dr;nc+=dc;}
-    if(line.length>0&&nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===t) result.push(...line);
-  }
-  return result;
-}
-
-function applyMove(r,c,t){
-  const f=flips(r,c,t);
-  board[r][c]=t;
-  for(const [fr,fc] of f) board[fr][fc]=t;
-  moveCount++;
-  turn=t===BLACK?WHITE:BLACK;
-  if(validMoves(turn).length===0){
-    const skipped=turnName(turn);
-    turn=turn===BLACK?WHITE:BLACK;
-    if(validMoves(turn).length===0){endGame();return;}
-    updateScorebar();render();
-    setMsg(skipped+' pas geçti. '+turnName(turn)+' oynuyor.');
-    if(cpuTurn()) scheduleCpu();
-    return;
-  }
-  updateScorebar();render();
-  if(won) return;
-  if(countPieces().black+countPieces().white===64){endGame();return;}
-  if(cpuTurn()){setMsg('Bilgisayar düşünüyor…');scheduleCpu();}
-  else setMsg(turnName(turn)+', hamlenizi yapın.');
-}
-
-function scheduleCpu(){
-  cpuTimer=setTimeout(function(){
-    const moves=validMoves(turn);
-    if(!moves.length){endGame();return;}
-    const chosen=cpuHard?bestMove(turn):easyMove(moves);
-    applyMove(chosen[0],chosen[1],turn);
-  },500);
-}
-
-function easyMove(moves){
-  const corners=[[0,0],[0,7],[7,0],[7,7]];
-  for(const [r,c] of moves) for(const [cr,cc] of corners) if(r===cr&&c===cc) return [r,c];
-  return moves[Math.floor(Math.random()*moves.length)];
-}
-
+const $=id=>document.getElementById(id),RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+const EMPTY=0,BLACK=1,WHITE=2,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+let board,turn,moveCount,won,mode='2p',cpuMode,cpuHard,cpuTimer=null,lastMove=null;const cells=[];
+for(let r=0;r<8;r++){cells[r]=[];for(let c=0;c<8;c++){const d=document.createElement('div');d.className='cell';d.dataset.r=r;d.dataset.c=c;$('board').appendChild(d);cells[r][c]=d;}}
+const turnName=t=>t===BLACK?'Siyah':'Beyaz',cpuTurn=()=>cpuMode&&turn===WHITE,setMsg=t=>$('msg').textContent=t;
+function size(){const w=$('boardcol').clientWidth,h=$('boardcol').clientHeight,S=Math.max(120,Math.floor(Math.min(w,h,780)));$('bo').style.width=$('bo').style.height=S+'px';}
+function resetGame(){if(cpuTimer)clearTimeout(cpuTimer);cpuMode=mode!=='2p';cpuHard=mode==='cpu-hard';
+ board=Array.from({length:8},()=>Array(8).fill(EMPTY));board[3][3]=WHITE;board[3][4]=BLACK;board[4][3]=BLACK;board[4][4]=WHITE;
+ turn=BLACK;moveCount=0;won=false;lastMove=null;cells.forEach(row=>row.forEach(d=>d.textContent=''));$('end').hidden=true;
+ $('nW').innerHTML=cpuMode?'&#9675; Beyaz · Bilgisayar':'&#9675; Beyaz';
+ document.querySelectorAll('#modes button').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));
+ updateScorebar();render();setMsg('Siyah başlar. Parlayan karelerden birine tıklayın.');}
+function validMoves(t){const m=[];for(let r=0;r<8;r++)for(let c=0;c<8;c++)if(board[r][c]===EMPTY&&flips(r,c,t).length)m.push([r,c]);return m;}
+function flips(r,c,t){const opp=t===BLACK?WHITE:BLACK,res=[];
+ for(const[dr,dc]of DIRS){const line=[];let nr=r+dr,nc=c+dc;while(nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===opp){line.push([nr,nc]);nr+=dr;nc+=dc;}
+  if(line.length&&nr>=0&&nr<8&&nc>=0&&nc<8&&board[nr][nc]===t)res.push(...line);}return res;}
+function applyMove(r,c,t){const f=flips(r,c,t);board[r][c]=t;for(const[fr,fc]of f)board[fr][fc]=t;moveCount++;lastMove=[r,c];vib(10);turn=t===BLACK?WHITE:BLACK;
+ if(!validMoves(turn).length){const sk=turnName(turn);turn=turn===BLACK?WHITE:BLACK;
+  if(!validMoves(turn).length){endGame();return;}
+  updateScorebar();render();setMsg(sk+' pas geçti. '+turnName(turn)+' oynuyor.');if(cpuTurn())scheduleCpu();return;}
+ updateScorebar();render();const n=countPieces();if(n.black+n.white===64){endGame();return;}
+ if(cpuTurn()){setMsg('Bilgisayar düşünüyor…');scheduleCpu();}else setMsg(turnName(turn)+', hamlenizi yapın.');}
+function scheduleCpu(){cpuTimer=setTimeout(()=>{const m=validMoves(turn);if(!m.length){endGame();return;}const ch=cpuHard?bestMove(turn):easyMove(m);applyMove(ch[0],ch[1],turn);},500);}
+function easyMove(moves){const cs=[[0,0],[0,7],[7,0],[7,7]];for(const[r,c]of moves)for(const[a,b]of cs)if(r===a&&c===b)return[r,c];return moves[Math.floor(Math.random()*moves.length)];}
 const W=[[120,-20,20,5,5,20,-20,120],[-20,-40,-5,-5,-5,-5,-40,-20],[20,-5,15,3,3,15,-5,20],[5,-5,3,3,3,3,-5,5],[5,-5,3,3,3,3,-5,5],[20,-5,15,3,3,15,-5,20],[-20,-40,-5,-5,-5,-5,-40,-20],[120,-20,20,5,5,20,-20,120]];
-
-function bestMove(t){
-  const moves=validMoves(t);let best=null,bestVal=-Infinity;
-  for(const [r,c] of moves){
-    const saved=board.map(row=>row.slice());
-    const f=flips(r,c,t);board[r][c]=t;
-    for(const [fr,fc] of f) board[fr][fc]=t;
-    const opp=t===BLACK?WHITE:BLACK;
-    let val=0;
-    for(let i=0;i<8;i++) for(let j=0;j<8;j++){
-      if(board[i][j]===t) val+=W[i][j];
-      else if(board[i][j]===opp) val-=W[i][j];
-    }
-    board=saved;
-    if(val>bestVal){bestVal=val;best=[r,c];}
-  }
-  return best||moves[0];
-}
-
-function countPieces(){
-  let black=0,white=0;
-  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
-    if(board[r][c]===BLACK) black++;
-    else if(board[r][c]===WHITE) white++;
-  }
-  return{black,white};
-}
-
-function endGame(){
-  won=true;
-  const {black,white}=countPieces();
-  updateScorebar();render();
-  let title,body;
-  if(black>white){title='Siyah kazandı!';body='Siyah: '+black+' — Beyaz: '+white;}
-  else if(white>black){title='Beyaz kazandı!';body='Beyaz: '+white+' — Siyah: '+black;}
-  else{title='Berabere!';body='Siyah: '+black+' — Beyaz: '+white;}
-  document.getElementById('winTitle').textContent=title;
-  document.getElementById('winBody').textContent=body;
-  document.getElementById('winBanner').classList.add('show');
-  setMsg('');
-}
-
-function updateScorebar(){
-  const {black,white}=countPieces();
-  document.getElementById('scoreBlack').textContent=black;
-  document.getElementById('scoreWhite').textContent=white;
-  document.getElementById('moveCount').textContent=moveCount;
-  document.getElementById('sboxBlack').classList.toggle('active-turn',turn===BLACK&&!won);
-  document.getElementById('sboxWhite').classList.toggle('active-turn',turn===WHITE&&!won);
-}
-
-function render(){
-  const cellPx=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell-px'))||46;
-  const boardEl=document.getElementById('board');
-  boardEl.innerHTML='';
-  boardEl.style.gridTemplateColumns=`repeat(8,${cellPx}px)`;
-  const vm=won?[]:validMoves(turn);
-  const vmSet=new Set(vm.map(([r,c])=>r+','+c));
-  for(let r=0;r<8;r++) for(let c=0;c<8;c++){
-    const cell=document.createElement('div');
-    const isHint=vmSet.has(r+','+c);
-    cell.className='cell'+(isHint?' hint':' no-hint');
-    cell.style.width=cellPx+'px';
-    cell.style.height=cellPx+'px';
-    if(board[r][c]!==EMPTY){
-      const p=document.createElement('div');
-      p.className='piece '+(board[r][c]===BLACK?'black':'white');
-      cell.appendChild(p);
-    }
-    if(isHint&&!(cpuMode&&turn===WHITE)){
-      cell.addEventListener('click',(function(row,col){return function(){handleClick(row,col);};})(r,c));
-    }
-    boardEl.appendChild(cell);
-  }
-}
-
-function handleClick(r,c){
-  if(won||(cpuMode&&turn===WHITE)) return;
-  if(flips(r,c,turn).length===0) return;
-  applyMove(r,c,turn);
-}
-
-function setMsg(t){document.getElementById('msg').textContent=t;}
-
-window.addEventListener('resize',()=>{fitBoard();render();});
-resetGame();
-</script>
-</body>
-</html>
+function bestMove(t){const moves=validMoves(t);let best=null,bv=-Infinity;
+ for(const[r,c]of moves){const saved=board.map(x=>x.slice()),f=flips(r,c,t);board[r][c]=t;for(const[fr,fc]of f)board[fr][fc]=t;const opp=t===BLACK?WHITE:BLACK;let v=0;
+  for(let i=0;i<8;i++)for(let j=0;j<8;j++){if(board[i][j]===t)v+=W[i][j];else if(board[i][j]===opp)v-=W[i][j];}
+  board=saved;if(v>bv){bv=v;best=[r,c];}}return best||moves[0];}
+function countPieces(){let black=0,white=0;for(let r=0;r<8;r++)for(let c=0;c<8;c++){if(board[r][c]===BLACK)black++;else if(board[r][c]===WHITE)white++;}return{black,white};}
+function fx(n){if(RM)return;const cs=['#ffd966','#c8960c','#3fd6cc','#b388ff','#ff6b6b','#50c878'],b=$('fx');
+ for(let i=0;i<n;i++){const e=document.createElement('i'),a=Math.random()*6.283,d=120+Math.random()*320;
+  e.style.cssText=`--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d+60}px;--r:${Math.random()*720-360}deg;background:${cs[i%6]}`;b.appendChild(e);setTimeout(()=>e.remove(),1900);}}
+function endGame(){won=true;const{black,white}=countPieces();updateScorebar();render();
+ const humanWin=cpuMode?black>white:black!==white;let T,B;
+ if(black===white){T='Berabere!';B='İki taraf da '+black+' taşla bitirdi.';}
+ else if(cpuMode)[T,B]=black>white?['Kazandınız!',(black-white)+' taş farkla yendiniz.']:['Bilgisayar kazandı',(white-black)+' taş farkla kaybettiniz.'];
+ else[T,B]=[(black>white?'Siyah':'Beyaz')+' kazandı!',Math.abs(black-white)+' taş farkla.'];
+ $('eT').textContent=T;$('eB').textContent=B;$('eS').textContent=black;$('eW').textContent=white;$('eM').textContent=moveCount;
+ $('end').className='end '+(humanWin?'win':'lose');$('end').hidden=false;setMsg('');
+ if(humanWin&&black!==white){vib([30,40,60]);fx(80);}}
+function updateScorebar(){const{black,white}=countPieces();
+ for(const[id,v]of[['cB',black],['cW',white]]){const e=$(id);if(e.textContent!=v){e.textContent=v;e.classList.remove('bump');void e.offsetWidth;e.classList.add('bump');}}
+ $('mc').textContent=moveCount;$('sB').classList.toggle('active',turn===BLACK&&!won);$('sW').classList.toggle('active',turn===WHITE&&!won);}
+function render(){const vs=new Set((won||cpuTurn()?[]:validMoves(turn)).map(([r,c])=>r*8+c));
+ for(let r=0;r<8;r++)for(let c=0;c<8;c++){const el=cells[r][c],v=board[r][c],p=el.firstChild;
+  el.classList.toggle('hint',vs.has(r*8+c));el.classList.toggle('last',!!lastMove&&lastMove[0]===r&&lastMove[1]===c);
+  if(v===EMPTY){if(p)p.remove();continue;}
+  const want=v===BLACK?'black':'white';
+  if(!p){const n=document.createElement('div');n.className='piece '+want+(lastMove&&lastMove[0]===r&&lastMove[1]===c?' new':'');el.appendChild(n);}
+  else if(!p.classList.contains(want)){p.classList.add('flip');setTimeout(()=>{p.classList.remove('black','white');p.classList.add(want);},150);setTimeout(()=>p.classList.remove('flip'),340);}}}
+$('board').addEventListener('click',e=>{const d=e.target.closest('.cell');if(!d||!d.classList.contains('hint')||won||cpuTurn())return;applyMove(+d.dataset.r,+d.dataset.c,turn);});
+function setMode(m){mode=m;resetGame();}
+function ask(t,cb){$('cfT').textContent=t;$('cf').hidden=false;$('cfYes').onclick=()=>{$('cf').hidden=true;cb();};}
+document.querySelectorAll('#modes button').forEach(b=>b.onclick=()=>{const m=b.dataset.m;if(m===mode)return;
+ if(moveCount>0&&!won)ask('Devam eden oyun silinecek. Modu değiştirmek istiyor musunuz?',()=>setMode(m));else setMode(m);});
+$('cfNo').onclick=()=>{$('cf').hidden=true;};
+const openR=first=>{$('rBtn').textContent=first?'Başla':'Kapat';$('rules').hidden=false;$('rBtn').focus();},closeR=()=>{$('rules').hidden=true;};
+$('bNew').onclick=$('eNew').onclick=resetGame;$('bRules').onclick=()=>openR(false);$('rBtn').onclick=closeR;$('eClose').onclick=()=>{$('end').hidden=true;};
+for(const id of['rules','cf'])$(id).addEventListener('pointerdown',e=>{if(e.target===$(id))$(id).hidden=true;});
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeR();$('cf').hidden=true;}});
+new ResizeObserver(size).observe($('boardcol'));size();resetGame();openR(true);
+</script></body></html>
