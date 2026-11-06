@@ -10,7 +10,9 @@ body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:radial-gradient(1.5px 1.5px at 20px 30px,#ffd96699,transparent),radial-gradient(1px 1px at 120px 80px,#ffffff88,transparent),radial-gradient(1.5px 1.5px at 70px 160px,#7dffb399,transparent);background-size:200px 200px;animation:twinkle 4s ease-in-out infinite alternate}
 @keyframes drift{to{transform:translate3d(4%,3%,0) scale(1.08)}}@keyframes twinkle{from{opacity:.25}to{opacity:.75}}
 @keyframes shimmer{to{background-position:-200% 0}}@keyframes pop{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
-@keyframes pulse{50%{transform:scale(1.2)}}@keyframes flip{50%{transform:perspective(300px) rotateY(90deg) scale(1.1)}}
+@keyframes pulse{50%{transform:scale(1.2)}}@keyframes flipBW{0%{background:var(--bgB);box-shadow:var(--shB);transform:none}49.9%{background:var(--bgB);box-shadow:var(--shB);transform:perspective(300px) rotateY(90deg) scale(1.1)}50%{background:var(--bgW);box-shadow:var(--shW);transform:perspective(300px) rotateY(90deg) scale(1.1)}100%{background:var(--bgW);box-shadow:var(--shW);transform:none}}
+@keyframes flipWB{0%{background:var(--bgW);box-shadow:var(--shW);transform:none}49.9%{background:var(--bgW);box-shadow:var(--shW);transform:perspective(300px) rotateY(90deg) scale(1.1)}50%{background:var(--bgB);box-shadow:var(--shB);transform:perspective(300px) rotateY(90deg) scale(1.1)}100%{background:var(--bgB);box-shadow:var(--shB);transform:none}}
+@keyframes glintBW{0%,49.9%{background:var(--gB)}50%,100%{background:var(--gW)}}@keyframes glintWB{0%,49.9%{background:var(--gW)}50%,100%{background:var(--gB)}}
 @keyframes drop{from{transform:scale(1.5);opacity:0}}@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
 .app{height:100%;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:8px}
 .title{flex:none;text-align:center;font-size:min(26px,3.4dvh);font-weight:700;letter-spacing:.07em;background:linear-gradient(90deg,#c8960c,#ffe9a8,#c8960c);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:shimmer 4s linear infinite}
@@ -23,11 +25,13 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 .cell.hint{cursor:pointer;background:radial-gradient(circle at 30% 25%,#3aa04b,#27803a);box-shadow:inset 0 0 12px rgba(255,217,102,.4)}.cell.last{box-shadow:inset 0 0 0 2px rgba(255,217,102,.85)}
 @media(hover:hover){.cell.hint:hover{background:radial-gradient(circle at 30% 25%,#3aa04b,#27803a)}}
 .cell.hint::after{content:"";position:absolute;width:34%;height:34%;border-radius:50%;border:2px solid rgba(255,217,102,.9);background:rgba(255,217,102,.25);box-shadow:0 0 10px 3px rgba(255,217,102,.65);animation:pulse 1.6s ease-in-out infinite}
+:root{--bgB:radial-gradient(circle at 35% 30%,#6a6a6a,#1a1a1a 55%,#050505);--shB:0 2px 5px rgba(0,0,0,.7),inset 0 -2px 4px rgba(0,0,0,.5);--bgW:radial-gradient(circle at 35% 30%,#fffdf5,#e4dcc8 55%,#b9b09a);--shW:0 2px 5px rgba(0,0,0,.5),inset 0 -2px 4px rgba(0,0,0,.2);--gB:rgba(255,255,255,.3);--gW:rgba(255,255,255,.85)}
 .piece{position:absolute;width:80%;height:80%;border-radius:50%}
-.piece.black{background:radial-gradient(circle at 35% 30%,#6a6a6a,#1a1a1a 55%,#050505);box-shadow:0 2px 5px rgba(0,0,0,.7),inset 0 -2px 4px rgba(0,0,0,.5)}
-.piece.white{background:radial-gradient(circle at 35% 30%,#fffdf5,#e4dcc8 55%,#b9b09a);box-shadow:0 2px 5px rgba(0,0,0,.5),inset 0 -2px 4px rgba(0,0,0,.2)}
-.piece::after{content:"";position:absolute;left:22%;top:14%;width:34%;height:20%;border-radius:50%;background:rgba(255,255,255,.3);transform:rotate(-30deg)}.piece.white::after{background:rgba(255,255,255,.85)}
-.piece.new{animation:drop .22s ease-out}.piece.flip{animation:flip .32s ease-in-out}
+.piece.black{background:var(--bgB);box-shadow:var(--shB)}
+.piece.white{background:var(--bgW);box-shadow:var(--shW)}
+.piece::after{content:"";position:absolute;left:22%;top:14%;width:34%;height:20%;border-radius:50%;background:rgba(255,255,255,.3);transform:rotate(-30deg)}.piece.white::after{background:var(--gW)}
+.piece.new{animation:drop .22s ease-out}.piece.flipBW{animation:flipBW .32s ease-in-out}.piece.flipWB{animation:flipWB .32s ease-in-out}
+.piece.flipBW::after{animation:glintBW .32s ease-in-out}.piece.flipWB::after{animation:glintWB .32s ease-in-out}
 .modes{display:flex;gap:6px}
 .modes button{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:8px 4px;font:13px/1.2 Georgia,serif;color:rgba(247,242,232,.78);cursor:pointer;transition:transform .15s}
 .modes button:active{transform:scale(.96)}.modes button.on{background:linear-gradient(135deg,rgba(200,150,12,.38),rgba(255,217,102,.16));border-color:#ffd966;color:#fff3c4}
@@ -141,7 +145,11 @@ function render(){const vs=new Set((won||cpuTurn()?[]:validMoves(turn)).map(([r,
   if(v===EMPTY){if(p)p.remove();continue;}
   const want=v===BLACK?'black':'white';
   if(!p){const n=document.createElement('div');n.className='piece '+want+(lastMove&&lastMove[0]===r&&lastMove[1]===c?' new':'');el.appendChild(n);}
-  else if(!p.classList.contains(want)){p.classList.add('flip');setTimeout(()=>{p.classList.remove('black','white');p.classList.add(want);},150);setTimeout(()=>p.classList.remove('flip'),340);}}}
+  else if(!p.classList.contains(want)){
+   p.classList.remove('new','flipBW','flipWB','black','white');p.classList.add(want,want==='white'?'flipBW':'flipWB');
+   const k=p._ft=(p._ft||0)+1;setTimeout(()=>{if(p._ft===k)p.classList.remove('flipBW','flipWB');},700);}}}
+$('board').addEventListener('animationend',e=>{const p=e.target;if(!p.classList||!p.classList.contains('piece')||e.pseudoElement)return;
+ if(e.animationName==='drop')p.classList.remove('new');else if(e.animationName==='flipBW'||e.animationName==='flipWB')p.classList.remove('flipBW','flipWB');});
 $('board').addEventListener('click',e=>{const d=e.target.closest('.cell');if(!d||!d.classList.contains('hint')||won||cpuTurn())return;applyMove(+d.dataset.r,+d.dataset.c,turn);});
 function setMode(m){mode=m;resetGame();}
 function ask(t,cb){$('cfT').textContent=t;$('cf').hidden=false;$('cfYes').onclick=()=>{$('cf').hidden=true;cb();};}
