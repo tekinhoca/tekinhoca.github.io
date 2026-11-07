@@ -56,7 +56,9 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 .haz.glow{box-shadow:inset 0 6px 12px rgba(0,0,0,.7),0 0 0 3px rgba(var(--rc),.95),0 0 24px rgba(var(--rc),.8)}
 .haz .hn{font-size:calc(var(--ps)*.42);font-weight:700;color:#ffd966;line-height:1;text-shadow:0 1px 3px #000}
 .haz .hl{font-size:max(9px,calc(var(--ps)*.16));color:rgba(var(--rc),.95);letter-spacing:.04em;font-weight:600;text-align:center;line-height:1.1}
-#board.v .haz{flex-direction:row;gap:calc(var(--ps)*.18)}#board.v .hl br{display:none}
+.ho,.hw{display:block}
+#board.v .haz{flex-direction:row;justify-content:center;gap:calc(var(--ps)*.2)}#board.v .hl{white-space:nowrap}#board.v .ho,#board.v .hw{display:inline}
+#board.v .haz.h1 .hn{order:-1}#board.v .haz.h2 .hn{order:1}
 .fly{position:absolute;z-index:6;font-weight:700;color:#ffd966;font-size:calc(var(--ps)*.34);text-shadow:0 2px 6px #000;pointer-events:none;animation:fly 1s ease-out forwards}
 #bar{flex:none;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
 .hand{font-size:13px;font-weight:700;padding:2px 12px;border-radius:12px;border:1.5px solid rgba(255,255,255,.2);color:#ffe9a8}
@@ -147,7 +149,7 @@ function oppIdx(i){return 11-i;}
 let pitEls=[],hazEls=[];
 function buildBoard(){const b=$('board');b.innerHTML='';pitEls=[];hazEls=[];
  for(let i=0;i<12;i++){const e=document.createElement('button');e.className='pit '+(i<6?'r1':'r2');e.dataset.i=i;e.type='button';e.innerHTML='<div class="st"></div><span class="cnt"></span>';b.appendChild(e);pitEls.push(e);}
- for(let k=0;k<2;k++){const e=document.createElement('div');e.className='haz h'+(k+1);e.innerHTML='<div class="hn">0</div><div class="hl">Oyuncu '+(k+1)+'<br>HAZİNE</div>';b.appendChild(e);hazEls.push(e);}
+ for(let k=0;k<2;k++){const e=document.createElement('div');e.className='haz h'+(k+1);e.innerHTML='<div class="hn">0</div><div class="hl"><span class="ho">Oyuncu&nbsp;'+(k+1)+'</span> <span class="hw">HAZİNE</span></div>';b.appendChild(e);hazEls.push(e);}
  layoutPits();}
 function layoutPits(){
  for(let i=0;i<12;i++){const e=pitEls[i];
