@@ -2,512 +2,292 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Mangala</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{
-  min-height:100%;background:#2a1a08;font-family:Georgia,serif;
-  display:flex;align-items:flex-start;justify-content:center;
-  padding:8px;overflow-y:auto;
-  scrollbar-width:none;-ms-overflow-style:none;
-}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-.wrap{width:100%;max-width:700px;margin:auto}
-.turn-header{display:flex;justify-content:center;gap:24px;align-items:center;margin-bottom:8px}
-.player-tag{font-size:13px;font-weight:600;color:rgba(247,242,232,0.4);padding:4px 14px;border-radius:16px;border:1.5px solid transparent;transition:all .3s}
-.player-tag.p1.active{font-size:16px;color:#c8845a;border-color:#c8845a;animation:pulse1 1.4s ease-in-out infinite}
-.player-tag.p2.active{font-size:16px;color:#6a9fc0;border-color:#6a9fc0;animation:pulse2 1.4s ease-in-out infinite}
-@keyframes pulse1{0%,100%{box-shadow:0 0 0 0 rgba(200,132,90,0.3)}50%{box-shadow:0 0 0 7px rgba(200,132,90,0)}}
-@keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(106,159,192,0.3)}50%{box-shadow:0 0 0 7px rgba(106,159,192,0)}}
-.vs{font-size:12px;color:rgba(247,242,232,0.2)}
-.scoreboard{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
-.sc{background:rgba(255,255,255,0.06);border-radius:5px;padding:4px 10px;font-size:11px;color:rgba(247,242,232,0.45);display:flex;gap:6px;align-items:center}
-.sc b{font-size:12px;color:rgba(247,242,232,0.8)}
-.set-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.2);display:inline-block;margin:0 1px}
-.set-dot.win1{background:#c8845a;border-color:#c8845a}
-.set-dot.win2{background:#6a9fc0;border-color:#6a9fc0}
-.set-dot.draw{background:#888;border-color:#888}
-
-/* ── TAHTA — akışkan ── */
-.board{
-  background:#7a5230;border-radius:clamp(28px,6vw,52px);
-  padding:clamp(8px,2vw,14px) clamp(6px,1.5vw,12px);
-  display:flex;align-items:center;
-  gap:clamp(3px,1vw,7px);
-  width:100%;
-}
-
-/* Hazine */
-.hazine{
-  background:#5a3010;
-  border-radius:clamp(18px,4vw,32px);
-  width:clamp(36px,8vw,60px);
-  min-height:clamp(72px,16vw,108px);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  border:2px solid rgba(255,255,255,0.12);
-  gap:3px;padding:5px 3px;flex-shrink:0;
-}
-.hlbl{font-size:clamp(7px,1.6vw,9px);color:rgba(255,255,255,0.5);font-weight:600;text-align:center}
-.hcnt{font-size:clamp(14px,3.5vw,20px);font-weight:600;color:#FFD97A}
-
-/* Kuyu alanı */
-.pa{flex:1;display:flex;flex-direction:column;gap:clamp(4px,1vw,7px);min-width:0}
-.row{display:flex;gap:clamp(2px,0.8vw,5px);justify-content:center}
-
-/* Kuyu — boyutu tamamen akışkan */
-.pit{
-  background:#5a3010;border-radius:50%;
-  width:clamp(36px,10.5vw,66px);
-  height:clamp(36px,10.5vw,66px);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  border:2px solid rgba(255,255,255,0.10);
-  cursor:pointer;transition:background .15s,transform .1s;
-  gap:1px;user-select:none;flex-shrink:0;
-}
-.pit:hover{background:#6e3e18;transform:scale(1.07)}
-.pit.empty{opacity:.45;cursor:not-allowed}
-
-/* Taşlar */
-.sw{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:clamp(26px,7.5vw,48px)}
-.s{
-  width:clamp(5px,1.5vw,8px);
-  height:clamp(5px,1.5vw,8px);
-  border-radius:50%;background:#c8845a;border:1px solid rgba(0,0,0,0.2);flex-shrink:0
-}
-.s.b{background:#6a9fc0}
-.pcnt{font-size:clamp(11px,3vw,16px);font-weight:600;color:#FFD97A;line-height:1}
-.rowlbl{text-align:center;font-size:9px;font-weight:600;margin:0 0 1px;color:rgba(255,255,255,0.35);letter-spacing:.04em}
-
-/* Alt bilgi */
-.ip{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
-.ic{background:rgba(255,255,255,0.06);border-radius:5px;padding:5px 8px;flex:1;min-width:70px}
-.ic .l{font-size:10px;color:rgba(247,242,232,0.35);margin-bottom:1px}
-.ic .v{font-size:13px;font-weight:600;color:rgba(247,242,232,0.8)}
-.msg{font-size:11px;color:rgba(247,242,232,0.5);text-align:center;margin-top:5px;min-height:15px}
-.set-modal{display:none;margin-top:9px;background:rgba(18,16,14,0.92);border:1px solid #c8960c;border-radius:3px;padding:12px 16px;text-align:center}
-.set-modal.show{display:block}
-.set-modal h2{font-size:14px;font-weight:700;margin:0 0 4px;color:#c8960c}
-.set-modal p{font-size:11px;color:rgba(247,242,232,0.55);margin:0 0 9px}
-.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
-button.a{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.45);border-radius:3px;padding:5px 13px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.75);font-family:Georgia,serif;transition:background .2s}
-button.a:hover{background:rgba(155,53,16,0.7)}
-
-/* ── Parıldama Animasyonu ── */
-.pit.glow-p1{
-  background:#7a3d10 !important;
-  border-color:#c8845a !important;
-  box-shadow:0 0 14px 4px rgba(200,132,90,0.65);
-  transform:scale(1.13) !important;
-  transition:background .08s,box-shadow .08s,transform .08s !important;
-}
-.pit.glow-p2{
-  background:#1a3d5a !important;
-  border-color:#6a9fc0 !important;
-  box-shadow:0 0 14px 4px rgba(106,159,192,0.65);
-  transform:scale(1.13) !important;
-  transition:background .08s,box-shadow .08s,transform .08s !important;
-}
-.hazine.glow-p1{
-  border-color:#c8845a !important;
-  box-shadow:0 0 16px 5px rgba(200,132,90,0.6);
-  transition:box-shadow .08s !important;
-}
-.hazine.glow-p2{
-  border-color:#6a9fc0 !important;
-  box-shadow:0 0 16px 5px rgba(106,159,192,0.6);
-  transition:box-shadow .08s !important;
-}
-/* ── Açılış Modalı ── */
-.modal-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.85);
-  display:flex;align-items:center;justify-content:center;
-  z-index:1000;padding:16px;
-}
-.modal-overlay.hidden{display:none;}
-.modal-box{
-  background:#1e1005;
-  border:1px solid rgba(200,150,12,0.5);
-  border-radius:8px;
-  padding:22px 20px 18px;
-  max-width:360px;width:100%;
-  display:flex;flex-direction:column;gap:12px;
-  animation:modalIn .3s ease;
-}
-@keyframes modalIn{
-  from{opacity:0;transform:scale(.94);}
-  to{opacity:1;transform:scale(1);}
-}
-.modal-title{
-  font-size:22px;font-weight:700;
-  color:#FFD97A;text-align:center;
-  letter-spacing:.06em;
-}
-.modal-rules{
-  font-size:11.5px;
-  color:rgba(247,242,232,0.72);
-  line-height:1.75;
-  border-top:1px solid rgba(200,150,12,0.2);
-  border-bottom:1px solid rgba(200,150,12,0.2);
-  padding:10px 4px;
-}
-.modal-rules li{
-  margin-bottom:3px;
-  padding-left:4px;
-  list-style:none;
-}
-.modal-rules li::before{
-  content:"⬡ ";
-  color:#c8960c;
-  font-size:10px;
-}
-.modal-btns{
-  display:flex;gap:10px;justify-content:center;
-}
-.modal-close{
-  background:rgba(18,16,14,0.7);
-  border:1px solid rgba(200,150,12,0.35);
-  border-radius:3px;padding:6px 18px;
-  font-size:12px;cursor:pointer;
-  color:rgba(247,242,232,0.6);
-  font-family:Georgia,serif;transition:background .2s;
-}
-.modal-close:hover{background:rgba(80,40,10,0.8);}
-.modal-start{
-  background:rgba(155,83,16,0.75);
-  border:1px solid rgba(200,150,12,0.6);
-  border-radius:3px;padding:6px 22px;
-  font-size:12px;cursor:pointer;
-  color:#FFD97A;font-weight:600;
-  font-family:Georgia,serif;transition:background .2s;
-}
-.modal-start:hover{background:rgba(180,100,20,0.9);}
-.modal-logo{
-  display:flex;justify-content:center;
-  padding-top:4px;
-}
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+html,body{height:100%}
+:root{--c1:255,107,107;--c2:106,169,255}
+body{height:100vh;height:100dvh;background:#0e0c08;font-family:Georgia,serif;color:#e8d5a0;overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation;padding:max(8px,env(safe-area-inset-top)) 8px max(6px,env(safe-area-inset-bottom))}
+body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background:radial-gradient(40% 35% at 18% 15%,rgba(200,150,12,.15),transparent 70%),radial-gradient(35% 30% at 85% 28%,rgba(255,107,107,.11),transparent 70%),radial-gradient(40% 35% at 55% 92%,rgba(60,200,190,.09),transparent 70%);animation:drift 40s ease-in-out infinite alternate}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:radial-gradient(1.5px 1.5px at 20px 30px,#ffd96699,transparent),radial-gradient(1px 1px at 120px 80px,#ffffff88,transparent),radial-gradient(1.5px 1.5px at 210px 140px,#ffb3a788,transparent),radial-gradient(1px 1px at 60px 170px,#ffffff77,transparent);background-size:240px 200px;animation:twinkle 6s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(4%,3%,0) scale(1.08)}}@keyframes twinkle{from{opacity:.25}to{opacity:.75}}
+@keyframes pop{0%{transform:scale(.88);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes dropin{0%{transform:scale(1.9);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes ring1{50%{box-shadow:0 0 0 7px rgba(var(--c1),0)}}@keyframes ring2{50%{box-shadow:0 0 0 7px rgba(var(--c2),0)}}
+@keyframes fly{0%{transform:translate(-50%,0);opacity:0}15%{opacity:1}100%{transform:translate(-50%,-150%);opacity:0}}
+@keyframes bump{50%{transform:scale(1.35)}}
+.app{height:100%;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:min(8px,1.1dvh)}
+#head{flex:none;display:flex;flex-direction:column;align-items:center;gap:min(6px,1dvh)}
+.tags{display:flex;gap:14px;align-items:center}.vs{color:rgba(247,242,232,.3)}
+.ptag{font-size:14px;font-weight:600;color:rgba(247,242,232,.55);padding:3px 12px;border-radius:16px;border:1.5px solid transparent;display:flex;align-items:center;gap:7px;transition:all .3s}
+.ptag i{width:12px;height:12px;border-radius:50%;display:block}
+.ptag.p1 i{background:radial-gradient(circle at 35% 30%,#fff,rgb(var(--c1)) 45%,#a83a3a)}.ptag.p2 i{background:radial-gradient(circle at 35% 30%,#fff,rgb(var(--c2)) 45%,#2f64a8)}
+.ptag.p1.active{color:#ffd9d9;border-color:rgb(var(--c1));animation:ring1 1.5s ease-in-out infinite;box-shadow:0 0 0 0 rgba(var(--c1),.4)}
+.ptag.p2.active{color:#d6e8ff;border-color:rgb(var(--c2));animation:ring2 1.5s ease-in-out infinite;box-shadow:0 0 0 0 rgba(var(--c2),.4)}
+.score{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.sc{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:3px 10px;font-size:12px;color:rgba(247,242,232,.7);display:flex;gap:6px;align-items:center}
+.sc b{color:#ffd966}
+.set-dot{width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,.25);display:inline-block;margin:0 1px}
+.set-dot.win1{background:rgb(var(--c1));border-color:rgb(var(--c1))}.set-dot.win2{background:rgb(var(--c2));border-color:rgb(var(--c2))}.set-dot.draw{background:#888;border-color:#888}
+#stagecol{position:relative;flex:1 1 0;min-height:0}
+#board{--ps:60px;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;gap:calc(var(--ps)*.1);padding:calc(var(--ps)*.3);border-radius:calc(var(--ps)*.55);
+ background:linear-gradient(145deg,#4a2f1b,#2b1a0e 58%,#3a2414);box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 0 2px rgba(200,150,12,.55),inset 0 2px 3px rgba(255,210,150,.15);
+ grid-template-columns:calc(var(--ps)*.95) repeat(6,var(--ps)) calc(var(--ps)*.95);grid-template-rows:repeat(2,var(--ps))}
+#board.v{grid-template-columns:repeat(2,var(--ps));grid-template-rows:calc(var(--ps)*.8) repeat(6,var(--ps)) calc(var(--ps)*.8)}
+#board::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.55;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.3' numOctaves='3' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.03 0 0 0 0 0.01 1.9 0 0 0 -0.7'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(#f)'/%3E%3C/svg%3E") center/cover no-repeat}
+.pit{position:relative;z-index:1;width:100%;height:100%;border-radius:50%;border:0;padding:0;font-family:inherit;color:inherit;cursor:pointer;display:block;
+ background:radial-gradient(circle at 50% 33%,#0e0703 0%,#1a0e06 55%,#3a2413 100%);box-shadow:inset 0 5px 10px rgba(0,0,0,.8),inset 0 -2px 4px rgba(255,200,140,.08),0 1px 0 rgba(255,220,170,.14);transition:box-shadow .2s,transform .12s}
+.pit.r1{--rc:var(--c1)}.pit.r2{--rc:var(--c2)}
+.pit.act{box-shadow:inset 0 5px 10px rgba(0,0,0,.8),0 0 0 2px rgba(var(--rc),.8),0 0 14px rgba(var(--rc),.45)}
+.pit.empty{opacity:.5}.pit:active{transform:scale(.95)}
+.pit.glow{box-shadow:inset 0 5px 10px rgba(0,0,0,.7),0 0 0 3px rgba(var(--rc),.95),0 0 22px rgba(var(--rc),.8);transform:scale(1.07)}
+.pit.cap{box-shadow:0 0 0 3px #ffd966,0 0 26px rgba(255,217,102,.85)}
+#board.busy .pit{cursor:default}#board.busy .pit.act:not(.glow){box-shadow:inset 0 5px 10px rgba(0,0,0,.8),0 1px 0 rgba(255,220,170,.14)}
+.st{position:absolute;inset:13%;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:calc(var(--ps)*.025);pointer-events:none}
+.stone{width:calc(var(--ps)*.19);height:calc(var(--ps)*.19);border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0,rgba(var(--rc),1) 38%,rgba(var(--rc),.55) 100%);box-shadow:0 1px 2px rgba(0,0,0,.7)}
+.stone.in{animation:dropin .26s ease-out}
+.cnt{position:absolute;right:5%;bottom:3%;font-size:calc(var(--ps)*.23);font-weight:700;color:#ffe9a8;text-shadow:0 1px 3px #000,0 0 6px #000;pointer-events:none;line-height:1}
+.cnt.bump{animation:bump .3s}
+.haz{position:relative;z-index:1;border-radius:calc(var(--ps)*.42);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--ps)*.04);
+ background:radial-gradient(ellipse at 50% 30%,#0e0703,#1c1008 60%,#35210f);box-shadow:inset 0 6px 12px rgba(0,0,0,.85),inset 0 -2px 4px rgba(255,200,140,.07),0 1px 0 rgba(255,220,170,.14);transition:box-shadow .2s}
+.haz.h1{--rc:var(--c1)}.haz.h2{--rc:var(--c2)}
+.haz.glow{box-shadow:inset 0 6px 12px rgba(0,0,0,.7),0 0 0 3px rgba(var(--rc),.95),0 0 24px rgba(var(--rc),.8)}
+.haz .hn{font-size:calc(var(--ps)*.42);font-weight:700;color:#ffd966;line-height:1;text-shadow:0 1px 3px #000}
+.haz .hl{font-size:max(9px,calc(var(--ps)*.16));color:rgba(var(--rc),.95);letter-spacing:.04em;font-weight:600;text-align:center;line-height:1.1}
+#board.v .haz{flex-direction:row;gap:calc(var(--ps)*.18)}#board.v .hl br{display:none}
+.fly{position:absolute;z-index:6;font-weight:700;color:#ffd966;font-size:calc(var(--ps)*.34);text-shadow:0 2px 6px #000;pointer-events:none;animation:fly 1s ease-out forwards}
+#bar{flex:none;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px}
+.hand{font-size:13px;font-weight:700;padding:2px 12px;border-radius:12px;border:1.5px solid rgba(255,255,255,.2);color:#ffe9a8}
+.hand.p1{border-color:rgb(var(--c1));color:#ffd9d9}.hand.p2{border-color:rgb(var(--c2));color:#d6e8ff}
+.msg{font-size:14px;min-height:1.4em;color:rgba(247,242,232,.82);line-height:1.3}
+#info{flex:none;display:flex;gap:6px;justify-content:center}
+.ic{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:4px 10px;min-width:92px;text-align:center}
+.ic .l{font-size:10.5px;color:rgba(247,242,232,.6)}.ic .v{font-size:15px;font-weight:700;color:#ffd966}
+#btns{flex:none;display:flex;gap:6px;justify-content:center;flex-wrap:nowrap}
+button.a{background:linear-gradient(135deg,rgba(200,150,12,.3),rgba(255,217,102,.12));border:1px solid rgba(200,150,12,.55);border-radius:8px;padding:9px 6px;font-size:clamp(11.5px,3.4vw,14px);cursor:pointer;color:#f1e2b4;font-family:Georgia,serif;white-space:nowrap;transition:transform .15s,box-shadow .2s,opacity .2s;flex:1 1 0;min-width:0}
+button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#ffd966}button.a.on{border-color:#ffd966;color:#fff3c4;background:linear-gradient(135deg,rgba(200,150,12,.5),rgba(255,217,102,.2))}button.a:disabled{opacity:.4;pointer-events:none}
+@media(hover:hover){button.a:hover{box-shadow:0 0 14px rgba(255,217,102,.3)}.pit:not(.empty):hover{box-shadow:inset 0 5px 10px rgba(0,0,0,.8),0 0 0 2px rgba(var(--rc),.6)}#board.busy .pit:hover{box-shadow:inset 0 5px 10px rgba(0,0,0,.8),0 1px 0 rgba(255,220,170,.14)}}
+.foot{flex:none;display:flex;justify-content:center;height:min(34px,5dvh);pointer-events:none}
+.foot img{height:100%;width:auto;opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}.foot img:hover{opacity:.7}
+.set-modal{position:absolute;inset:0;z-index:8;display:none;align-items:center;justify-content:center;pointer-events:none}
+.set-modal.show{display:flex}
+.set-modal .card{pointer-events:auto;background:rgba(10,8,5,.93);border:1px solid #c8960c;border-radius:14px;padding:16px 20px;text-align:center;max-width:min(92%,420px);animation:pop .35s;box-shadow:0 0 40px rgba(0,0,0,.7)}
+.set-modal h2{font-size:clamp(20px,5vw,28px);color:#ffd966;margin-bottom:6px;text-shadow:0 0 24px rgba(255,200,60,.5)}
+.set-modal p{font-size:14px;color:rgba(247,242,232,.85);margin-bottom:12px;line-height:1.45}
+.set-modal .card button{padding:9px 22px;flex:none}
+.modal-overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.74);display:flex;align-items:center;justify-content:center;padding:12px}.modal-overlay.hidden{display:none}
+.mbox{--mw:130px;background:#0d1b0d;border:1px solid rgba(200,150,12,.5);border-radius:14px;max-width:440px;width:100%;max-height:85dvh;overflow:auto;padding:0 18px 14px;text-align:center;scrollbar-width:none;animation:pop .3s}
+.mimg{display:block;margin:0 auto;width:var(--mw);max-width:100%;max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%)}
+.pgs{display:grid;margin:2px 0 6px;text-align:left}.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}
+.pgt{text-align:center;color:#ffd966;font-weight:700;font-size:15px;margin:0 0 4px}
+.mtext{font-size:14px;line-height:1.5;color:rgba(247,242,232,.86);margin:4px 0 6px}.mtext p{margin-bottom:7px}.mtext b{color:#ffd966}
+.rnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}
+.rarr{width:38px;height:38px;border-radius:50%;padding:0;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;flex:none}
+.rdots{display:flex;gap:8px}.rdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .2s}.rdots span.on{background:#ffd966}
+#rBtn,#cfYes,#cfNo{flex:none;min-width:var(--mw,130px);padding:9px 14px}
+.cfbox{padding:18px}.cfbox .mtext{text-align:center;margin-bottom:12px}.cfbtns{display:flex;gap:8px;justify-content:center}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+@media(max-width:430px){.tn{display:none}}
+@media(max-height:700px){#info{display:none}}
+@media(max-height:480px){.mimg{display:none}.mbox{padding-top:12px}.foot{display:none}#head{flex-direction:row;justify-content:center;gap:14px}}
+@media(prefers-reduced-motion:reduce){body::before,body::after,.ptag.active,.stone.in{animation:none}}
 </style>
 </head>
 <body>
-
-<!-- Açılış Modalı -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <div class="modal-title">MANGALA</div>
-    <ul class="modal-rules">
-      <li>Her oyuncu 6 kuyuya sahiptir; sağdaki hazineye taş biriktirirsiniz.</li>
-      <li>Aldığın taşları birer birer sağındaki kuyulara bırakırsın; ilkini kendi kuyuna koyarsın.</li>
-      <li>Son taşın kendi kuyuna denk gelirse tekrar oynarsın.</li>
-      <li>Son taşın rakip kuyudaki taş sayısını çift yaparsa o kuyudaki tüm taşlar senin olur.</li>
-      <li>Son taşın kendi boş kuyuna gelirse karşısındaki rakip kuyudaki taşlar senin olur.</li>
-      <li>Hazinesine ilk ulaşan oyuncu rakibin kalan taşlarını da alır; oyun biter.</li>
-      <li>Hazinesinde daha çok taş biriktiren kazanır.</li>
-    </ul>
-    <div class="modal-btns">
-      <button class="modal-close" onclick="closeModal()">Kapat</button>
-      <button class="modal-start" onclick="closeModal()">Başla</button>
-    </div>
-    <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
-           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
-           onmouseover="this.style.opacity='0.65'"
-           onmouseout="this.style.opacity='0.38'">
-    </div>
-  </div>
+<div class="app">
+ <div id="head">
+  <div class="tags"><div class="ptag p1" id="tag1"><i></i>Oyuncu 1</div><span class="vs">—</span><div class="ptag p2" id="tag2"><i></i>Oyuncu 2</div></div>
+  <div class="score"><div class="sc">Set <b id="setnum">1 / 3</b></div><div class="sc">Oyuncu 1: <b id="pts1">0</b> <span id="dots1"></span></div><div class="sc">Oyuncu 2: <b id="pts2">0</b> <span id="dots2"></span></div></div>
+ </div>
+ <div id="stagecol">
+  <div id="board" role="group" aria-label="Mangala tahtası"></div>
+  <div class="set-modal" id="modal"><div class="card"><h2 id="modal-title"></h2><p id="modal-body"></p><button class="a pri" id="modal-btn"></button></div></div>
+ </div>
+ <div id="bar"><div class="hand" id="hand" style="visibility:hidden">Elde: 0</div><div class="msg" id="msg">Oyuncu 1, bir kuyu seçin.</div></div>
+ <div id="info"><div class="ic"><div class="l">Oyuncu 1 toplam</div><div class="v" id="tot1">24</div></div><div class="ic"><div class="l">Oyuncu 2 toplam</div><div class="v" id="tot2">24</div></div><div class="ic"><div class="l">Hamle</div><div class="v" id="mc">0</div></div></div>
+ <div id="btns"><button class="a" id="m3" onclick="setMaxSets(3)">3 Set<span class="tn"> (Turnuva)</span></button><button class="a" id="m5" onclick="setMaxSets(5)">5 Set</button><button class="a pri" onclick="askNew()">&#8635; Yeni Oyun</button><button class="a" onclick="openModal()">&#9432; Kurallar</button></div>
+ <div class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div>
 </div>
-
-<div class="wrap">
-  <div class="turn-header">
-    <div class="player-tag p1" id="tag1">Oyuncu 1</div>
-    <div class="vs">—</div>
-    <div class="player-tag p2" id="tag2">Oyuncu 2</div>
-  </div>
-  <div class="scoreboard">
-    <div class="sc">Set: <b id="setnum">1 / 5</b></div>
-    <div class="sc">Oyuncu 1: <b id="pts1">0</b> <span id="dots1"></span></div>
-    <div class="sc">Oyuncu 2: <b id="pts2">0</b> <span id="dots2"></span></div>
-  </div>
-  <div class="board">
-    <div class="hazine">
-      <div class="hlbl">HAZİNE</div>
-      <div class="hcnt" id="h2c">0</div>
-      <div class="hlbl" style="color:#6a9fc0;font-size:8px">Oyuncu 2</div>
-    </div>
-    <div class="pa">
-      <div>
-        <div class="rowlbl">Oyuncu 2 &#8594;</div>
-        <div class="row" id="row2"></div>
-      </div>
-      <div>
-        <div class="row" id="row1"></div>
-        <div class="rowlbl">Oyuncu 1 &#8594;</div>
-      </div>
-    </div>
-    <div class="hazine">
-      <div class="hlbl">HAZİNE</div>
-      <div class="hcnt" id="h1c">0</div>
-      <div class="hlbl" style="color:#c8845a;font-size:8px">Oyuncu 1</div>
-    </div>
-  </div>
-  <div class="ip">
-    <div class="ic"><div class="l">Oyuncu 1</div><div class="v" id="tot1">24</div></div>
-    <div class="ic"><div class="l">Oyuncu 2</div><div class="v" id="tot2">24</div></div>
-    <div class="ic"><div class="l">Hamle</div><div class="v" id="mc">0</div></div>
-  </div>
-  <div class="msg" id="msg">Oyuncu 1, bir kuyu seçin.</div>
-  <div class="set-modal" id="modal">
-    <h2 id="modal-title"></h2>
-    <p id="modal-body"></p>
-    <div class="br"><button class="a" id="modal-btn"></button></div>
-  </div>
-  <div class="br" style="margin-top:9px">
-    <button class="a" onclick="resetAll()">&#8635; Yeni Oyun</button>
-    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
-  </div>
-</div>
-
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Kurallar"><div class="mbox">
+ <img class="mimg" src="../img/mecesml.webp" alt="Tekin Hoca">
+ <div class="pgs" id="rpages">
+  <div class="pg on"><div class="pgt">Tahta ve dağıtım</div><div class="mtext">
+   <p>Her oyuncunun 6 kuyusu ve sağında bir hazinesi vardır. Başlangıçta her kuyuda 4 taş bulunur (toplam 48).</p>
+   <p>Sıranız geldiğinde kendi kuyularınızdan birine dokunun: içindeki tüm taşlar alınır. İlk taşı aynı kuyuya, diğerlerini saatin tersi yönünde sağdaki kuyulara birer birer bırakırsınız. Rakibin hazinesine taş bırakılmaz.</p>
+   <p>Son taşınız kendi hazinenize denk gelirse <b>tekrar oynarsınız</b>. Kuyuda tek taş varsa o taş sağdaki kuyuya taşınır ve sıra rakibe geçer.</p></div></div>
+  <div class="pg"><div class="pgt">Taş kazanma</div><div class="mtext">
+   <p><b>Çift yapma:</b> Son taşınız rakibin kuyusundaki taş sayısını çift yaparsa (2, 4, 6…) o kuyudaki tüm taşları alırsınız.</p>
+   <p><b>Boş kuyu:</b> Son taşınız kendi boş kuyunuza denk gelirse ve karşısındaki rakip kuyuda taş varsa, o taşları ve bıraktığınız taşı alırsınız.</p>
+   <p>Her iki durumda da sıra rakibe geçer.</p></div></div>
+  <div class="pg"><div class="pgt">Set sonu ve puan</div><div class="mtext">
+   <p>Bölgesindeki taşları ilk bitiren oyuncu, rakibinin bölgesinde kalan tüm taşları da alır ve set biter. Hazinesinde daha çok taş olan seti kazanır.</p>
+   <p>Seti kazanan 1, kaybeden 0 puan alır; beraberlikte ikisi de 0,5 puan alır. Seti dönüşümlü olarak başlatırsınız.</p>
+   <p><b>3 set (turnuva):</b> 2 puana ulaşan oyunu kazanır, 3. set oynanmaz. <b>5 set:</b> beş set de oynanır.</p></div></div>
+ </div>
+ <div class="rnav"><button class="a rarr" id="rPrev" aria-label="Önceki sayfa">&#8249;</button><div class="rdots" id="rDots" aria-hidden="true"><span class="on"></span><span></span><span></span></div><button class="a rarr" id="rNext" aria-label="Sonraki sayfa">&#8250;</button></div>
+ <button class="a pri" id="rBtn">Başla</button></div></div>
+<div class="modal-overlay hidden" id="cf" role="dialog" aria-modal="true" aria-label="Onay"><div class="mbox cfbox"><div class="mtext" id="cfT"></div><div class="cfbtns"><button class="a" id="cfNo">Vazgeç</button><button class="a pri" id="cfYes">Yeni Oyun</button></div></div></div>
 <script>
-/*
-  DÖNGÜ: pit[0]→1→2→3→4→5→H1→pit[6]→7→8→9→10→11→H2→pit[0]
-  P1: 0..5 (alt sıra, ekranda soldan sağa)
-  P2: 6..11 (üst sıra, ekranda pit[11]..pit[6])
-  Karşı kuyu: oppIdx(i) = 11 - i
-*/
-const MAX_SETS=5;
-let pits,hazine,turn,moves,over,setNum,points,setHistory,lastWasHazine,lastPlayer;
-let animating=false;
-
-function delay(ms){return new Promise(r=>setTimeout(r,ms));}
-
-function calcGlowSequence(pitIdx,p,total){
-  let seq=[];
-  if(total===1){
-    let dest=nextPos(pitIdx,p);
-    seq.push({type:'pit',idx:pitIdx});
-    seq.push(dest==='H1'?{type:'haz',idx:0}:dest==='H2'?{type:'haz',idx:1}:{type:'pit',idx:dest});
-    return seq;
-  }
-  seq.push({type:'pit',idx:pitIdx});
-  let stones=total-1,cur=pitIdx;
-  while(stones>0){
-    cur=nextPos(cur,p);
-    if(cur==='H1'){seq.push({type:'haz',idx:0});stones--;}
-    else if(cur==='H2'){seq.push({type:'haz',idx:1});stones--;}
-    else{seq.push({type:'pit',idx:cur});stones--;}
-  }
-  return seq;
-}
-
-function getPitEl(idx){
-  const r1=document.getElementById('row1');
-  const r2=document.getElementById('row2');
-  if(idx<=5) return r1.children[idx];
-  return r2.children[11-idx];
-}
-
-function getHazEl(idx){
-  const hazs=document.querySelectorAll('.hazine');
-  return idx===0?hazs[1]:hazs[0];
-}
-
-async function runGlowAnim(seq,p){
-  const gcls=p===0?'glow-p1':'glow-p2';
-  const STEP=220,HOLD=120,LAST_HOLD=320;
-  for(let i=0;i<seq.length;i++){
-    const s=seq[i];
-    const el=s.type==='pit'?getPitEl(s.idx):getHazEl(s.idx);
-    if(!el) continue;
-    el.classList.add(gcls);
-    const waitMs=(i===seq.length-1)?LAST_HOLD:HOLD;
-    await delay(waitMs);
-    el.classList.remove(gcls);
-    if(i<seq.length-1) await delay(STEP-HOLD);
-  }
-}
-
-function closeModal(){
-  document.getElementById('modalOverlay').classList.add('hidden');
-}
-function openModal(){
-  document.getElementById('modalOverlay').classList.remove('hidden');
-}
-
-function resetAll(){
-  setNum=1;points=[0,0];setHistory=[];
-  document.getElementById('modal').classList.remove('show');
-  initSet(0);updateScoreboard();
-}
-function initSet(sp){
-  pits=Array(12).fill(4);hazine=[0,0];
-  turn=sp;moves=0;over=false;lastWasHazine=false;lastPlayer=sp;
-  document.getElementById('modal').classList.remove('show');
-  setMsg('Oyuncu '+(turn+1)+', bir kuyu seçin.');
-  render();
-}
-function nextPos(pos,p){
-  if(pos==='H1') return 6;
-  if(pos==='H2') return 0;
-  if(pos===5)  return p===0?'H1':6;
-  if(pos===11) return p===1?'H2':0;
-  return pos+1;
-}
+const STEP=480;            /* her taş bırakma adımı (ms) — yavaşlatmak/hızlandırmak için */
+let ANIM=1;                /* testlerde 0 */
+let MAX_SETS=3;try{if(localStorage.getItem('mangala-set')==='5')MAX_SETS=5;}catch(e){}
+let pits,hazine,turn,moves,over,setNum,points,setHistory,lastWasHazine,lastPlayer,animating=false,vertical=false;
+const $=id=>document.getElementById(id);
+const delay=ms=>ANIM?new Promise(r=>setTimeout(r,ms*ANIM)):Promise.resolve();
+const vib=ms=>{try{navigator.vibrate&&navigator.vibrate(ms);}catch(e){}};
+const RM=(()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}})();
+function nextPos(pos,p){if(pos===12)return 6;if(pos===13)return 0;if(pos===5)return p===0?12:6;if(pos===11)return p===1?13:0;return pos+1;}
 function isMyPit(i,p){return p===0?i<=5:i>=6;}
 function isOppPit(i,p){return p===0?i>=6:i<=5;}
 function oppIdx(i){return 11-i;}
-
+/* ---- tahta DOM ---- */
+let pitEls=[],hazEls=[];
+function buildBoard(){const b=$('board');b.innerHTML='';pitEls=[];hazEls=[];
+ for(let i=0;i<12;i++){const e=document.createElement('button');e.className='pit '+(i<6?'r1':'r2');e.dataset.i=i;e.type='button';e.innerHTML='<div class="st"></div><span class="cnt"></span>';b.appendChild(e);pitEls.push(e);}
+ for(let k=0;k<2;k++){const e=document.createElement('div');e.className='haz h'+(k+1);e.innerHTML='<div class="hn">0</div><div class="hl">Oyuncu '+(k+1)+'<br>HAZİNE</div>';b.appendChild(e);hazEls.push(e);}
+ layoutPits();}
+function layoutPits(){
+ for(let i=0;i<12;i++){const e=pitEls[i];
+  if(!vertical){e.style.gridRow=i<6?2:1;e.style.gridColumn=i<6?i+2:(11-i)+2;}
+  else{e.style.gridColumn=i<6?1:2;e.style.gridRow=i<6?i+2:13-i;}}
+ const h1=hazEls[0],h2=hazEls[1];
+ if(!vertical){h2.style.gridColumn=1;h2.style.gridRow='1 / 3';h1.style.gridColumn=8;h1.style.gridRow='1 / 3';}
+ else{h2.style.gridColumn='1 / 3';h2.style.gridRow=1;h1.style.gridColumn='1 / 3';h1.style.gridRow=8;}
+ $('board').classList.toggle('v',vertical);}
+function fit(){const sc=$('stagecol'),W=sc.clientWidth,H=sc.clientHeight;
+ const psH=Math.min(W/9.2,H/2.7),psV=Math.min(W/2.7,H/8.9),v=psV>psH*1.25;
+ let ps=Math.floor(Math.min(v?psV:psH,118));ps=Math.max(ps,24);
+ if(v!==vertical){vertical=v;layoutPits();}
+ $('board').style.setProperty('--ps',ps+'px');}
+function setPit(i,c,fresh){const e=pitEls[i],st=e.firstChild,cn=e.lastChild;
+ const show=Math.min(c,16);let h='';for(let k=0;k<show;k++)h+='<div class="stone'+(fresh&&k===show-1?' in':'')+'"></div>';
+ st.innerHTML=h;cn.textContent=c>0?c:'';e.classList.toggle('empty',c===0);
+ e.setAttribute('aria-label','Oyuncu '+(i<6?1:2)+', kuyu '+((i%6)+1)+', '+c+' taş');
+ if(fresh){cn.classList.remove('bump');void cn.offsetWidth;cn.classList.add('bump');}}
+function setHaz(k,c){hazEls[k].firstChild.textContent=c;}
+function flash(el,cls,ms){el.classList.add(cls);setTimeout(()=>el.classList.remove(cls),ms);}
+function showHand(n,p){const h=$('hand');h.className='hand p'+(p+1);h.textContent='Elde: '+n;h.style.visibility='visible';}
+function hideHand(){$('hand').style.visibility='hidden';}
+function flyText(el,txt){const sc=$('stagecol'),r=el.getBoundingClientRect(),s=sc.getBoundingClientRect(),f=document.createElement('div');
+ f.className='fly';f.textContent=txt;f.style.left=(r.left-s.left+r.width/2)+'px';f.style.top=(r.top-s.top+r.height*.2)+'px';sc.appendChild(f);setTimeout(()=>f.remove(),1100);}
+/* ---- kural motoru: bir hamleyi hesaplar (görünümden bağımsız) ---- */
+function simulate(P,H,p,pit){
+ const steps=[],total=P[pit];steps.push({t:'take',pit,n:total});P[pit]=0;
+ if(total===1){const d=nextPos(pit,p);
+  if(d>=12){H[d-12]++;steps.push({t:'drop',k:'h',i:d-12,c:H[d-12],hand:0});}else{P[d]++;steps.push({t:'drop',k:'p',i:d,c:P[d],hand:0});}
+  return {steps,P,H,extra:false,single:true,lm:''};}
+ P[pit]=1;let stones=total-1,cur=pit,extra=false,lm='';steps.push({t:'drop',k:'p',i:pit,c:1,hand:stones});
+ while(stones>0){cur=nextPos(cur,p);stones--;
+  if(cur>=12){H[cur-12]++;steps.push({t:'drop',k:'h',i:cur-12,c:H[cur-12],hand:stones});if(stones===0)extra=true;}
+  else{P[cur]++;steps.push({t:'drop',k:'p',i:cur,c:P[cur],hand:stones});
+   if(stones===0){const c=P[cur];
+    if(isOppPit(cur,p)&&c%2===0&&c>0){H[p]+=c;P[cur]=0;steps.push({t:'cap',pit:cur,n:c,h:p,hc:H[p]});lm='Oyuncu '+(p+1)+' çift yaptı ('+c+' taş)!';}
+    else if(isMyPit(cur,p)&&c===1){const o=oppIdx(cur);
+     if(P[o]>0){const g=P[o]+1;H[p]+=g;P[cur]=0;P[o]=0;steps.push({t:'cap2',pit:cur,opp:o,n:g,h:p,hc:H[p]});lm='Oyuncu '+(p+1)+' boş kuyuya düşürdü, +'+g+' taş!';}}}}}
+ return {steps,P,H,extra,single:false,lm};}
+async function playSteps(steps,p,total){
+ const ms=total>=12?STEP*.72:STEP;
+ for(const s of steps){
+  if(s.t==='take'){setPit(s.pit,0);showHand(s.n,p);flash(pitEls[s.pit],'glow',ms*.9);await delay(ms*.85);}
+  else if(s.t==='drop'){
+   if(s.k==='p'){setPit(s.i,s.c,true);flash(pitEls[s.i],'glow',ms*.85);}else{setHaz(s.i,s.c);flash(hazEls[s.i],'glow',ms*.85);}
+   showHand(s.hand,p);await delay(ms);}
+  else if(s.t==='cap'){flash(pitEls[s.pit],'cap',ms*1.3);await delay(ms*.7);setPit(s.pit,0);setHaz(s.h,s.hc);flyText(hazEls[s.h],'+'+s.n);vib(25);await delay(ms*.8);}
+  else if(s.t==='cap2'){flash(pitEls[s.opp],'cap',ms*1.3);flash(pitEls[s.pit],'cap',ms*1.3);await delay(ms*.7);setPit(s.opp,0);setPit(s.pit,0);setHaz(s.h,s.hc);flyText(hazEls[s.h],'+'+s.n);vib(25);await delay(ms*.8);}}
+ hideHand();}
+/* ---- oyun akışı ---- */
 async function sow(pitIdx){
-  if(over||animating) return;
-  let p=turn;
-  if(!isMyPit(pitIdx,p)){setMsg('Sadece kendi kuyularınızdan taş alabilirsiniz!');return;}
-  let total=pits[pitIdx];
-  if(total===0){setMsg('Bu kuyu boş.');return;}
-
-  /* Animasyon: önce glow dizisini hesapla, sonra çalıştır */
-  animating=true;
-  const seq=calcGlowSequence(pitIdx,p,total);
-  await runGlowAnim(seq,p);
-  animating=false;
-
-  lastPlayer=p;lastWasHazine=false;
-
-  if(total===1){
-    let dest=nextPos(pitIdx,p);
-    pits[pitIdx]=0;
-    if(dest==='H1'){hazine[0]++;lastWasHazine=true;}
-    else if(dest==='H2'){hazine[1]++;lastWasHazine=true;}
-    else pits[dest]++;
-    moves++;turn=1-p;
-    setMsg('Oyuncu '+(p+1)+' tek taşını taşıdı. Sıra Oyuncu '+(turn+1)+"'de.");
-    checkSetEnd();return;
-  }
-
-  let emptyBefore=new Set();
-  for(let i=0;i<12;i++){if(i!==pitIdx&&pits[i]===0)emptyBefore.add(i);}
-  pits[pitIdx]=1;
-  let stones=total-1,cur=pitIdx,extraTurn=false,lm='';
-
-  while(stones>0){
-    cur=nextPos(cur,p);
-    if(cur==='H1'){hazine[0]++;stones--;if(stones===0){extraTurn=true;lastWasHazine=true;}}
-    else if(cur==='H2'){hazine[1]++;stones--;if(stones===0){extraTurn=true;lastWasHazine=true;}}
-    else{
-      pits[cur]++;stones--;
-      if(stones===0){
-        let c=pits[cur];
-        if(isOppPit(cur,p)&&c%2===0&&c>0){
-          hazine[p]+=c;pits[cur]=0;
-          lm='Oyuncu '+(p+1)+' çift yaptı ('+c+' taş)!';
-        } else if(isMyPit(cur,p)&&emptyBefore.has(cur)){
-          let opp=oppIdx(cur);
-          if(pits[opp]>0){
-            let g=pits[opp]+1;
-            hazine[p]+=g;pits[cur]=0;pits[opp]=0;
-            lm='Oyuncu '+(p+1)+' boş kuyuya düşürdü, +'+g+' taş!';
-          }
-        }
-      }
-    }
-  }
-  moves++;
-  if(!extraTurn) turn=1-p;
-  if(lm) setMsg(lm);
-  else if(extraTurn) setMsg('Oyuncu '+(p+1)+', son taş hazineye — tekrar oynayın!');
-  else setMsg('Oyuncu '+(turn+1)+', sıra sizde.');
-  checkSetEnd();
-}
-
+ if(over||animating)return;
+ const p=turn;
+ if(!isMyPit(pitIdx,p)){setMsg('Sadece kendi kuyularınızdan taş alabilirsiniz!');return;}
+ const total=pits[pitIdx];
+ if(total===0){setMsg('Bu kuyu boş.');return;}
+ animating=true;$('board').classList.add('busy');
+ const sim=simulate(pits.slice(),hazine.slice(),p,pitIdx);
+ await playSteps(sim.steps,p,total);
+ pits=sim.P;hazine=sim.H;lastPlayer=p;lastWasHazine=sim.extra;moves++;
+ if(sim.single){turn=1-p;setMsg('Oyuncu '+(p+1)+' tek taşını taşıdı. Sıra Oyuncu '+(turn+1)+"'de.");}
+ else{if(!sim.extra)turn=1-p;
+  if(sim.lm)setMsg(sim.lm);else if(sim.extra){setMsg('Oyuncu '+(p+1)+', son taş hazineye — tekrar oynayın!');vib([15,40,15]);}
+  else setMsg('Oyuncu '+(turn+1)+', sıra sizde.');}
+ animating=false;$('board').classList.remove('busy');
+ checkSetEnd();}
 function checkSetEnd(){
-  let p1e=pits.slice(0,6).every(v=>v===0);
-  let p2e=pits.slice(6).every(v=>v===0);
-  if(!p1e&&!p2e){render();return;}
-  over=true;
-  if(lastWasHazine){
-    let p=lastPlayer,opp=1-p;
-    let os=opp===0?0:6,oe=opp===0?6:12;
-    let ms=p===0?0:6,me=p===0?6:12;
-    for(let i=os;i<oe;i++){hazine[p]+=pits[i];pits[i]=0;}
-    for(let i=ms;i<me;i++){hazine[p]+=pits[i];pits[i]=0;}
-  } else {
-    if(pits.slice(0,6).every(v=>v===0)){
-      let k=pits.slice(6).reduce((a,b)=>a+b,0);hazine[1]+=k;for(let i=6;i<12;i++)pits[i]=0;
-    } else {
-      let k=pits.slice(0,6).reduce((a,b)=>a+b,0);hazine[0]+=k;for(let i=0;i<6;i++)pits[i]=0;
-    }
-  }
-  let sr;
-  if(hazine[0]>hazine[1])     {points[0]+=1;sr=1;}
-  else if(hazine[1]>hazine[0]){points[1]+=1;sr=2;}
-  else                        {points[0]+=.5;points[1]+=.5;sr=0;}
-  setHistory.push(sr);
-  updateScoreboard();render();
-  let wt=sr===1?'Oyuncu 1 bu seti kazandı':sr===2?'Oyuncu 2 bu seti kazandı':'Berabere';
-  let body=wt+'. ('+hazine[0]+' – '+hazine[1]+')';
-  let mt=document.getElementById('modal-title');
-  let mb=document.getElementById('modal-body');
-  let mbtn=document.getElementById('modal-btn');
-  if(setNum>=MAX_SETS){
-    let ch=points[0]>points[1]?'Oyuncu 1 kazandı!':points[1]>points[0]?'Oyuncu 2 kazandı!':'Berabere!';
-    mt.textContent='5 Set Tamamlandı';
-    mb.textContent=body+' Genel: '+ch+' ('+points[0]+' – '+points[1]+' puan)';
-    mbtn.textContent='Yeni Oyun';mbtn.onclick=resetAll;
-  } else {
-    mt.textContent='Set '+setNum+' Bitti';
-    mb.textContent=body;
-    mbtn.textContent='Set '+(setNum+1)+"'e Geç";mbtn.onclick=nextSet;
-  }
-  document.getElementById('modal').classList.add('show');
-}
-function nextSet(){
-  if(setNum>=MAX_SETS){resetAll();return;}
-  setNum++;
-  let last=setHistory[setHistory.length-1];
-  let next=last===1?1:last===2?0:(turn===0?1:0);
-  initSet(next);updateScoreboard();
-}
+ let p1e=pits.slice(0,6).every(v=>v===0),p2e=pits.slice(6).every(v=>v===0);
+ if(!p1e&&!p2e){render();return;}
+ over=true;
+ /* PDF madde 11 / 4. temel kural: bölgesindeki taşları ilk bitiren oyuncu, rakibinin bölgesindeki tüm taşları alır */
+ if(p1e&&!p2e){let k=pits.slice(6).reduce((a,b)=>a+b,0);hazine[0]+=k;for(let i=6;i<12;i++)pits[i]=0;}
+ else if(p2e&&!p1e){let k=pits.slice(0,6).reduce((a,b)=>a+b,0);hazine[1]+=k;for(let i=0;i<6;i++)pits[i]=0;}
+ let sr;
+ if(hazine[0]>hazine[1]){points[0]+=1;sr=1;}else if(hazine[1]>hazine[0]){points[1]+=1;sr=2;}else{points[0]+=.5;points[1]+=.5;sr=0;}
+ setHistory.push(sr);updateScoreboard();render();
+ let wt=sr===1?'Oyuncu 1 bu seti kazandı':sr===2?'Oyuncu 2 bu seti kazandı':'Berabere';
+ let body=wt+'. ('+hazine[0]+' – '+hazine[1]+')',mt=$('modal-title'),mb=$('modal-body'),mbtn=$('modal-btn');
+ const tourOver=setNum>=MAX_SETS||(MAX_SETS===3&&(points[0]>=2||points[1]>=2));
+ let win=false;
+ if(tourOver){
+  let ch=points[0]>points[1]?'Oyuncu 1 kazandı!':points[1]>points[0]?'Oyuncu 2 kazandı!':'Berabere!';
+  mt.textContent='Oyun Bitti';mb.textContent=body+' Genel: '+ch+' ('+points[0]+' – '+points[1]+' puan)';
+  mbtn.textContent='Yeni Oyun';mbtn.onclick=resetAll;win=points[0]!==points[1];
+ }else{mt.textContent='Set '+setNum+' Bitti';mb.textContent=body;mbtn.textContent='Set '+(setNum+1)+"'e Geç";mbtn.onclick=nextSet;}
+ vib([20,40,20]);
+ delay(650).then(()=>{if(over){$('modal').classList.add('show');if(win)confetti();}});}
+function nextSet(){if(setNum>=MAX_SETS){resetAll();return;}setNum++;initSet((setNum-1)%2);updateScoreboard();}
+function resetAll(){setNum=1;points=[0,0];setHistory=[];$('modal').classList.remove('show');cancelAnimationFrame(fxRaf);clearFx();initSet(0);updateScoreboard();}
+function initSet(sp){pits=Array(12).fill(4);hazine=[0,0];turn=sp;moves=0;over=false;lastWasHazine=false;lastPlayer=sp;animating=false;
+ $('modal').classList.remove('show');$('board').classList.remove('busy');hideHand();setMsg('Oyuncu '+(turn+1)+', bir kuyu seçin.');render();}
+function setMaxSets(n){if(moves>0||setNum>1||setHistory.length)return;MAX_SETS=n;try{localStorage.setItem('mangala-set',String(n));}catch(e){}updateScoreboard();render();}
 function updateScoreboard(){
-  document.getElementById('setnum').textContent=setNum+' / '+MAX_SETS;
-  document.getElementById('pts1').textContent=points[0];
-  document.getElementById('pts2').textContent=points[1];
-  let d1='',d2='';
-  setHistory.forEach(r=>{
-    d1+='<span class="set-dot '+(r===1?'win1':r===2?'':'draw')+'"></span>';
-    d2+='<span class="set-dot '+(r===2?'win2':r===1?'':'draw')+'"></span>';
-  });
-  document.getElementById('dots1').innerHTML=d1;
-  document.getElementById('dots2').innerHTML=d2;
-}
-function setMsg(t){document.getElementById('msg').textContent=t;}
-function makePit(i,count,isP2){
-  let d=document.createElement('div');
-  d.className='pit'+(count===0?' empty':'');
-  d.title='Kuyu '+(i+1)+': '+count+' taş';
-  let sw=document.createElement('div');sw.className='sw';
-  let show=Math.min(count,12);
-  for(let k=0;k<show;k++){let s=document.createElement('div');s.className='s'+(isP2?' b':'');sw.appendChild(s);}
-  d.appendChild(sw);
-  let cn=document.createElement('div');cn.className='pcnt';cn.textContent=count;d.appendChild(cn);
-  d.onclick=()=>sow(i);
-  return d;
-}
+ $('setnum').textContent=setNum+' / '+MAX_SETS;$('pts1').textContent=points[0];$('pts2').textContent=points[1];
+ let d1='',d2='';setHistory.forEach(r=>{d1+='<span class="set-dot '+(r===1?'win1':r===2?'':'draw')+'"></span>';d2+='<span class="set-dot '+(r===2?'win2':r===1?'':'draw')+'"></span>';});
+ $('dots1').innerHTML=d1;$('dots2').innerHTML=d2;}
+function setMsg(t){$('msg').textContent=t;}
 function render(){
-  let r1=document.getElementById('row1'),r2=document.getElementById('row2');
-  r1.innerHTML='';r2.innerHTML='';
-  for(let i=0;i<=5;i++)  r1.appendChild(makePit(i,pits[i],false));
-  for(let i=11;i>=6;i--) r2.appendChild(makePit(i,pits[i],true));
-  document.getElementById('h1c').textContent=hazine[0];
-  document.getElementById('h2c').textContent=hazine[1];
-  document.getElementById('tot1').textContent=hazine[0]+pits.slice(0,6).reduce((a,b)=>a+b,0);
-  document.getElementById('tot2').textContent=hazine[1]+pits.slice(6).reduce((a,b)=>a+b,0);
-  document.getElementById('mc').textContent=moves;
-  let t1=document.getElementById('tag1'),t2=document.getElementById('tag2');
-  if(!over){
-    t1.className='player-tag p1'+(turn===0?' active':'');
-    t2.className='player-tag p2'+(turn===1?' active':'');
-  } else {t1.className='player-tag p1';t2.className='player-tag p2';}
-}
-resetAll();
+ if(!pitEls.length)buildBoard();
+ for(let i=0;i<12;i++){setPit(i,pits[i]);pitEls[i].classList.toggle('act',!over&&i<6===(turn===0)&&pits[i]>0);}
+ setHaz(0,hazine[0]);setHaz(1,hazine[1]);
+ $('tot1').textContent=hazine[0]+pits.slice(0,6).reduce((a,b)=>a+b,0);$('tot2').textContent=hazine[1]+pits.slice(6).reduce((a,b)=>a+b,0);
+ $('mc').textContent=moves;
+ const lk=moves>0||setNum>1||setHistory.length>0;
+ ['m3','m5'].forEach(id=>{const b=$(id);b.disabled=lk;b.classList.toggle('on',(id==='m3')===(MAX_SETS===3));});
+ $('tag1').className='ptag p1'+(!over&&turn===0?' active':'');$('tag2').className='ptag p2'+(!over&&turn===1?' active':'');}
+$('board').addEventListener('click',e=>{const b=e.target.closest('.pit');if(b)sow(+b.dataset.i);});
+/* ---- pencereler ---- */
+let rp=0;
+function rPage(i){const pgs=document.querySelectorAll('#rpages .pg'),n=pgs.length;rp=Math.max(0,Math.min(n-1,i));
+ pgs.forEach((p,k)=>p.classList.toggle('on',k===rp));document.querySelectorAll('#rDots span').forEach((d,k)=>d.classList.toggle('on',k===rp));
+ $('rPrev').disabled=rp===0;$('rNext').disabled=rp===n-1;}
+function closeModal(){$('modalOverlay').classList.add('hidden');}
+function openModal(){rPage(0);$('rBtn').textContent='Kapat';$('modalOverlay').classList.remove('hidden');$('rBtn').focus();}
+$('rPrev').onclick=()=>rPage(rp-1);$('rNext').onclick=()=>rPage(rp+1);$('rBtn').onclick=closeModal;
+(function(){let x0=null;const el=$('rpages');
+ el.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+ el.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)rPage(rp+(dx<0?1:-1));},{passive:true});})();
+function askNew(){if(moves>0&&!over){$('cfT').textContent='Devam eden oyun silinecek. Yeni oyun başlatılsın mı?';$('cf').classList.remove('hidden');}else resetAll();}
+$('cfYes').onclick=()=>{$('cf').classList.add('hidden');resetAll();};$('cfNo').onclick=()=>$('cf').classList.add('hidden');
+for(const id of['modalOverlay','cf'])$(id).addEventListener('pointerdown',e=>{if(e.target===$(id))$(id).classList.add('hidden');});
+addEventListener('keydown',e=>{if(e.key==='Escape'){$('modalOverlay').classList.add('hidden');$('cf').classList.add('hidden');}
+ else if(!$('modalOverlay').classList.contains('hidden')){if(e.key==='ArrowRight')rPage(rp+1);else if(e.key==='ArrowLeft')rPage(rp-1);}});
+/* ---- konfeti ---- */
+let fxRaf=0;
+function clearFx(){const cv=$('fx'),cx=cv.getContext&&cv.getContext('2d');if(cx)cx.clearRect(0,0,cv.width,cv.height);}
+function confetti(){if(RM)return;const cv=$('fx'),ctx=cv.getContext&&cv.getContext('2d');if(!ctx)return;
+ const dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+ const cols=['#ffd966','#ffe9a8','#c8960c','#ff6b6b','#ffb3a7','#6aa9ff','#f8f1de'],ps=[];
+ for(let i=0;i<150;i++){const l=i%2===0;ps.push({x:l?W*.12:W*.88,y:H*.4,vx:(l?1:-1)*(2+Math.random()*6)+(Math.random()-.5)*2,vy:-(7+Math.random()*9),w:5+Math.random()*6,h:3+Math.random()*4,r:Math.random()*6.28,vr:(Math.random()-.5)*.35,c:cols[i%cols.length]});}
+ const t0=performance.now();cancelAnimationFrame(fxRaf);
+ const step=now=>{const t=now-t0;ctx.clearRect(0,0,W,H);let alive=0;
+  for(const p of ps){p.vy+=.28;p.vx*=.992;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+   if(p.y<H+20){alive++;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.globalAlpha=Math.max(0,Math.min(1,(4200-t)/900));ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);ctx.restore();}}
+  if(t<4200&&alive)fxRaf=requestAnimationFrame(step);else ctx.clearRect(0,0,W,H);};
+ fxRaf=requestAnimationFrame(step);}
+/* ---- başlat ---- */
+new ResizeObserver(fit).observe($('stagecol'));
+buildBoard();resetAll();fit();rPage(0);
 </script>
 </body>
 </html>
