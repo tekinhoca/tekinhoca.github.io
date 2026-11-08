@@ -196,7 +196,7 @@ button.a{font-size:13px;padding:10px 18px}
 #fx{position:fixed;left:50%;top:38%;width:0;height:0;pointer-events:none;z-index:998}
 #fx i{position:absolute;width:8px;height:8px;border-radius:2px;animation:burst 1.3s ease-out forwards}
 #fx b{position:absolute;left:-50px;top:-20px;width:100px;text-align:center;font-size:36px;color:#ffd966;text-shadow:0 0 14px #c8960c;animation:floatUp 1.4s ease-out forwards}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){body::before,body::after,.game-title,.target-num,.target-num.pop,.card.selected,button.primary.pulse,.timer-bar.low{animation:none}}
 
 /* ── EKRANA SIĞDIRMA (dvh tabanlı) ── */
 html,body{height:100%}
@@ -229,6 +229,39 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
 .sbox{padding:min(6px,.8dvh) 10px}
 .mode-btn{padding:min(22px,3dvh) 10px}.mode-btn .mode-icon{font-size:min(30px,4dvh)}
 .handoff-name{font-size:min(52px,12vw,7dvh)}.handoff-msg{font-size:min(18px,2.6dvh)}
+
+/* ── Yeni: kurallar modalı, ilerleme noktaları, döküm, iki sütun, logo hover ── */
+[hidden]{display:none!important}
+.foot{opacity:1}.foot img{opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}.foot img:hover{opacity:.7}
+#gA,#gL,#gB{display:contents}
+#scGame .topbar,#scGame .scorebar,#scGame .dots,#scGame .target-wrap,#scGame .cards-area,#scGame .ops-area,#scGame .msg,#scGame .result-banner,#scGame .br-btns{flex:none}
+#scGame .history-wrap{flex:0 1 auto;min-height:0;overflow-y:auto}#scGame .br-btns{margin-top:auto}
+.dots{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}.dots:empty{display:none}
+.dots i{font-style:normal;width:min(16px,2.2dvh);height:min(16px,2.2dvh);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;border:1.5px solid rgba(255,255,255,.22);color:rgba(247,242,232,.6)}
+.dots i.cur{border-color:#ffd966;color:#ffd966;box-shadow:0 0 8px rgba(255,217,102,.6)}.dots i.ex{background:#50c878;border-color:#50c878;color:#08210f}
+.dots i.cl{background:#c8960c;border-color:#c8960c;color:#201500}.dots i.ms{background:#4a4a4a;border-color:#666;color:#ddd}
+.result-banner .sol{font-size:12px;color:rgba(247,242,232,.6);margin-top:4px}
+.brk{display:flex;flex-direction:column;gap:3px;font-size:13px;min-height:0;overflow-y:auto}
+.brow{display:flex;justify-content:space-between;gap:8px;padding:3px 8px;background:rgba(255,255,255,.05);border-radius:5px;color:rgba(247,242,232,.8)}.brow b{color:#ffd966;min-width:2ch;text-align:right}
+.rec{color:#4dd0e1;font-weight:700;text-align:center}.bestl{text-align:center;color:rgba(247,242,232,.65);padding-top:4px}
+.modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.72);display:flex;align-items:center;justify-content:center;padding:12px}
+.mbox{--mw:130px;background:#0d1b0d;border:1px solid rgba(200,150,12,.5);border-radius:14px;max-width:440px;width:100%;max-height:85dvh;overflow:auto;padding:0 18px 16px;text-align:center;scrollbar-width:none;animation:pop .3s}
+.mimg{display:block;margin:0 auto;width:var(--mw);max-width:100%;max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%)}
+.mtext{font-size:14px;line-height:1.65;color:rgba(247,242,232,.84);margin:6px 0 14px;text-align:left}.mtext p{margin-bottom:7px}.mtext b{color:#ffd966}#rBtn2{min-width:var(--mw)}
+@media(min-aspect-ratio:5/4) and (min-width:700px){
+.wrap{max-width:1100px}
+#scGame.active{display:grid;grid-template-columns:minmax(0,1fr) min(360px,36vw);grid-template-rows:auto minmax(0,1fr);column-gap:32px;row-gap:10px}
+#gL{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:min(18px,2.4dvh);grid-column:1;grid-row:1/3;min-height:0}
+#gA{display:flex;flex-direction:column;gap:8px;grid-column:2;grid-row:1}
+#gB{display:flex;flex-direction:column;gap:8px;grid-column:2;grid-row:2;min-height:0}
+.target-num{font-size:min(130px,17dvh)}.cards-area{max-width:560px}
+.card{width:min(130px,15dvh);height:min(130px,15dvh);font-size:min(42px,4.8dvh)}.card.big-num{font-size:min(34px,4dvh)}
+.op-btn{width:min(92px,10.5dvh);height:min(92px,10.5dvh);font-size:min(40px,4.6dvh)}
+.history-item{font-size:min(20px,2.8dvh)}
+.mode-btns{display:grid;grid-template-columns:repeat(4,1fr);width:100%;max-width:900px;margin-inline:auto}}
+.cards-area.locked,.ops-area.locked{pointer-events:none}
+.ops-area.locked{opacity:.4}
+@media(max-width:700px){#scNames.active{justify-content:flex-start;padding-top:min(8dvh,48px)}}
 </style>
 </head>
 <body>
@@ -237,7 +270,7 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
   <!-- ── MOD SEÇİMİ ── -->
   <div class="screen active" id="scMode">
     <div class="game-title">Sayı Hedefi</div>
-    <div class="subtitle">Verilen sayılarla hedefe ulaş</div>
+    <div class="subtitle">Verilen sayılarla hedefe ulaşın</div>
     <div class="mode-btns">
       <div class="mode-btn" onclick="G.selectMode(1,true)">
         <span class="mode-icon">🎯</span>
@@ -264,6 +297,7 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
         <span class="mode-desc">kıyasıya rekabet</span>
       </div>
     </div>
+    <button class="a" onclick="openRules()" style="align-self:center">ⓘ Kurallar</button>
   </div>
 
   <!-- ── İSİM GİRİŞİ ── -->
@@ -281,6 +315,7 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
 
   <!-- ── OYUN ── -->
   <div class="screen" id="scGame">
+    <div id="gA">
     <!-- Üst bilgi -->
     <div class="topbar">
       <div style="font-size:11px;color:rgba(247,242,232,0.35)" id="gameInfo">—</div>
@@ -293,6 +328,9 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
     <!-- Skor (2 kişide) -->
     <div class="scorebar" id="scorebar" style="display:none"></div>
 
+    <div class="dots" id="dots"></div>
+    </div>
+    <div id="gL">
     <!-- Hedef -->
     <div class="target-wrap">
       <div class="target-label">Hedef</div>
@@ -310,6 +348,8 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
       <div class="op-btn" data-op="/" onclick="G.selectOp(this)">÷</div>
     </div>
 
+    </div>
+    <div id="gB">
     <!-- Hesap geçmişi -->
     <div class="history-wrap">
       <div class="history-title">İşlemler</div>
@@ -323,6 +363,7 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
       <button class="a" onclick="G.timeUp(true)">⏱ Süreyi Bitir</button>
     </div>
     <div class="br-btns" id="nextArea"><button class="primary big" id="nextBtn">İLERLE</button></div>
+    </div>
   </div>
 
   <!-- ── OYUN SONU ── -->
@@ -331,11 +372,16 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
     <div class="final-scores" id="finalScores"></div>
     <div class="br-btns">
       <button class="primary" onclick="G.showScreen('scMode')">Yeni Oyun</button>
+      <button class="a" onclick="openRules()">ⓘ Kurallar</button>
     </div>
   </div>
   <div class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca"></div>
 </div>
 
+<div class="modal" id="rulesM" role="dialog" aria-modal="true" aria-label="Kurallar" hidden><div class="mbox">
+ <img class="mimg" src="../img/mecesml.webp" alt="Tekin Hoca">
+ <div class="mtext"><p>Altı sayı ve 3 basamaklı bir hedef verilir. İki sayıyı seçip bir işlem (+, −, ×, ÷) uygulayın. Sonuç yeni bir sayı olarak eklenir, kullandığınız iki sayı kalkar.</p><p>Sonuç <b>pozitif bir tam sayı</b> olmalıdır: bölme tam bölünmeli, çıkarma sıfır ya da negatif çıkmamalıdır.</p><p>Süre <b>90 saniyedir</b>. Hedefe ulaşınca ya da tüm sayılar bitince tur biter, isterseniz "Süreyi Bitir" ile erken bitirebilirsiniz. Ara sonuçlar dahil, hedefe en yakın sayınız değerlendirilir.</p><p><b>Puan:</b> tam isabet 20. Fark 1-19 ise 20 − fark. Fark 20 ve üzeriyse 0.</p><p>İki kişilik modda aynı bulmacayı sırayla çözersiniz. Sorular ilerledikçe hedefe ulaşmak için gereken en kısa işlem sayısı artar (3, 4, 5).</p></div>
+ <button class="primary" id="rBtn2">Kapat</button></div></div>
 <script>
 const G = (function(){
   const TOTAL_TIME = 90;
@@ -348,6 +394,7 @@ const G = (function(){
   let history; // işlem geçmişi
   let bestResult; // o tura kadar bulunan en iyi sonuç
   let popId=null;
+  let results=[], curMin=3;
 
   // ── EKRAN YÖNETİMİ ──
   function showScreen(id){
@@ -385,6 +432,7 @@ const G = (function(){
     }
     scores = [0,0];
     roundScores = [[],[]];
+    results = [];
     currentQ = 0;
     currentP = 0;
     document.getElementById('scorebar').style.display = mode===2?'flex':'none';
@@ -393,18 +441,14 @@ const G = (function(){
   }
 
   // ── BULMACA ÜRETME ──
-  function generatePuzzle(){
-    let attempt=0;
-    while(attempt<1000){
-      attempt++;
-      const nums = generateNumbers();
-      const minOps = minSolutionLength(nums);
-      // Hedefe ulaşmak için gereken MİNİMUM işlem sayısı en az 3 olmalı
-      if(minOps && minOps.minOps >= 3){
-        return {target: minOps.result, nums};
-      }
+  function generatePuzzle(level){
+    level=level||3;
+    for(let attempt=0;attempt<1000;attempt++){
+      const nums=generateNumbers();
+      const r=minSolutionLength(nums,level);
+      if(r&&r.minOps>=3) return {target:r.result,nums,minOps:r.minOps};
     }
-    return {target: 432, nums:[3,4,6,7,8,75]};
+    return {target:432,nums:[3,4,6,7,8,75],minOps:3};
   }
 
   function generateNumbers(){
@@ -426,7 +470,7 @@ const G = (function(){
   // sürüm yalnızca i<j çiftlerini tarar ve aynı sayı kümesinin tekrar
   // taranmasını "visited" haritasıyla engeller. Sonuç kümesi (minOpsMap)
   // matematiksel olarak birebir aynıdır; sadece hesaplama çok daha hızlıdır.
-  function minSolutionLength(nums){
+  function minSolutionLength(nums,level){
     // Her ulaşılabilir sayının minimum kaç işlemde bulunduğunu tut
     const minOpsMap = new Map(); // result -> minOps
     const visited = new Map();  // sıralı sayı kümesi anahtarı -> daha önce hangi derinlikte tarandığı
@@ -466,8 +510,11 @@ const G = (function(){
     });
     if(candidates.length===0) return null;
     // Rastgele birini seç (min 3 olanları tercih et, ama 4-5 de kabul et)
-    const minThree = candidates.filter(c=>c.minOps===3);
-    const pool = minThree.length>0 ? minThree : candidates;
+    // İstenen seviye (en kısa çözümün işlem sayısı); yoksa bir alt seviyeye düş
+    const want=level||3;
+    let pool=candidates.filter(c=>c.minOps===want);
+    for(let l=want-1;l>=3&&!pool.length;l--) pool=candidates.filter(c=>c.minOps===l);
+    if(!pool.length) pool=candidates;
     return pool[Math.floor(Math.random()*pool.length)];
   }
 
@@ -496,7 +543,7 @@ const G = (function(){
       // donmuş gibi görünmüyor, kullanıcı bir geri bildirim görüyor.
       setMsg('Yeni bulmaca hazırlanıyor…');
       setTimeout(()=>{
-        const puzzle = generatePuzzle();
+        const puzzle = generatePuzzle(levelFor(currentQ,maxQ));
         startRound(puzzle, 0, currentQ+1, maxQ);
       }, 20);
     } else {
@@ -514,7 +561,7 @@ const G = (function(){
       if(currentP===0){
         setMsg('Yeni bulmaca hazırlanıyor…');
         setTimeout(()=>{
-          G._currentPuzzle = generatePuzzle();
+          G._currentPuzzle = generatePuzzle(levelFor(currentQ,maxQ));
           proceedToHandoff();
         }, 20);
       } else {
@@ -530,12 +577,18 @@ const G = (function(){
       <div class="handoff-name p${pIdx}">${name}</div>
       <div class="handoff-score">${players[0]} ${scores[0]} – ${scores[1]} ${players[1]}</div>
       <div class="handoff-msg">Hazır olduğunuzda <b>BAŞLA</b>’ya basın.<br>${TOTAL_TIME} saniye hemen başlar.</div>
-      <button class="primary big pulse" id="handoffBtn">BAŞLA</button>`;
+      <button class="primary big pulse" id="handoffBtn">BAŞLA</button>
+      <button class="a" onclick="openRules()">ⓘ Kurallar</button>`;
     showScreen('scHandoff');
     document.getElementById('handoffBtn').onclick = ()=>{ showScreen('scGame'); cb(); };
   }
 
-  let roundOver = false;
+  let roundOver = false, locked = false;
+  function setLock(on){
+    locked=on;
+    document.getElementById('cardsArea').classList.toggle('locked',on);
+    document.querySelector('.ops-area').classList.toggle('locked',on);
+  }
 
   function startRound(puzzle, playerIdx, qNum, maxQ){
     target = puzzle.target;
@@ -544,12 +597,14 @@ const G = (function(){
     history = [];
     bestResult = null;
     timeLeft = TOTAL_TIME;
-    roundOver = false;
+    roundOver = false; setLock(false);
+    curMin = puzzle.minOps||3;
+    renderDots(qNum-1);
 
-    document.getElementById('gameInfo').textContent =
-      mode===1
-        ? `Soru ${qNum} / ${maxQ}`
-        : `Tur ${qNum} / ${maxQ} — ${players[playerIdx]}`;
+    const gi=document.getElementById('gameInfo');
+    gi.textContent = mode===1 ? '' : `Tur ${qNum} / ${maxQ} — ${players[playerIdx]}`;
+    gi.style.display = mode===1 ? 'none' : '';
+    gi.nextElementSibling.style.marginLeft = mode===1 ? '0' : '10px';
 
     if(mode===2) updateScorebar(playerIdx);
 
@@ -588,6 +643,7 @@ const G = (function(){
   function timeUp(manual, playerIdx, qNum, maxQ){
     if(roundOver) return;
     roundOver = true;
+    setLock(true); sel1=null; selOp=null; clearOps(); renderCards();
     if(manual){ clearInterval(timerID); const ctx=G._timerCtx; playerIdx=ctx.playerIdx; qNum=ctx.qNum; maxQ=ctx.maxQ; }
     clearInterval(timerID);
 
@@ -615,8 +671,10 @@ const G = (function(){
       banner.innerHTML=`<h2>Hedef: ${target}</h2><p>Ulaşılan: <b>${best===0?'Yok':best}</b>${best>0?` — Fark: <b>${diff}</b>`:''}</p><p style="margin-top:4px">Puan: <b>0</b></p>`;
     }
 
+    banner.innerHTML += `<p class="sol">En kısa çözüm: ${curMin} işlem</p>`;
     scores[playerIdx] += pts;
     if(mode===2) roundScores[playerIdx].push(pts);
+    if(mode===1&&!singleMode){ results.push({q:qNum,lvl:curMin,target,best,diff,pts}); renderDots(-1); }
 
     fx(diff,pts);
     const advance=()=>{
@@ -651,7 +709,7 @@ const G = (function(){
   }
 
   function selectCard(i){
-    if(cards[i].used) return; vib(10);
+    if(locked||cards[i].used) return; vib(10);
     if(sel1===null){
       sel1=i; renderCards(); setMsg('İşlem sembolü seçin.');
     } else if(sel1===i){
@@ -663,7 +721,7 @@ const G = (function(){
     }
   }
 
-  function selectOp(el){ vib(10);
+  function selectOp(el){ if(locked) return; vib(10);
     if(sel1===null){setMsg('Önce bir sayı seçin.',true);return;}
     document.querySelectorAll('.op-btn').forEach(b=>b.classList.remove('op-selected'));
     el.classList.add('op-selected');
@@ -672,6 +730,7 @@ const G = (function(){
   }
 
   function doOp(i,j){
+    if(locked) return;
     const a=cards[i].val, b=cards[j].val;
     let res;
     const opSym={'+':'+','-':'−','*':'×','/':'÷'};
@@ -705,6 +764,7 @@ const G = (function(){
     sel1=null;selOp=null;clearOps();renderCards();
 
     if(res===target){
+      setLock(true);
       setMsg('🎯 Hedefe ulaştınız!','good');
       document.getElementById('endBtnArea').style.display='none';
       setTimeout(()=>timeUp(false,...Object.values(G._timerCtx)),600);
@@ -712,6 +772,7 @@ const G = (function(){
       const remaining=cards.filter(c=>!c.used);
       if(remaining.length<=1){
         // Tek kart kaldı, daha fazla işlem yapılamaz — otomatik bitir
+        setLock(true);
         document.getElementById('endBtnArea').style.display='none';
         setMsg('Tüm sayılar kullanıldı.');
         setTimeout(()=>timeUp(false,...Object.values(G._timerCtx)),800);
@@ -752,6 +813,15 @@ const G = (function(){
         </div>
         <div class="final-score">${scores[0]} puan</div>`;
       fs.appendChild(div);
+      if(!singleMode){
+        const prev=getBest(), total=scores[0], rec=prev>0&&total>prev;
+        if(total>prev) setBest(total);
+        const b=document.createElement('div'); b.className='brk';
+        b.innerHTML=(rec?'<div class="rec">★ Yeni rekor!</div>':'')
+          +results.map(r=>`<div class="brow"><span>${r.q}. soru</span><span>${r.best||'—'} / ${r.target}</span><b>${r.pts}</b></div>`).join('')
+          +`<div class="bestl">En yüksek puan: ${Math.max(prev,total)}</div>`;
+        fs.appendChild(b);
+      }
     } else {
       const sorted=[0,1].map(i=>({name:players[i],score:scores[i],idx:i,rounds:roundScores[i]}))
         .sort((a,b)=>b.score-a.score);
@@ -778,6 +848,20 @@ const G = (function(){
     showScreen('scEnd');
   }
 
+  function levelFor(q,maxQ){
+    if(singleMode) return 4;
+    return ({10:[3,3,3,4,4,4,4,4,5,5],8:[3,3,4,4,4,4,4,5]}[maxQ]||[])[q]||4;
+  }
+  function renderDots(cur){
+    const d=document.getElementById('dots');
+    if(!(mode===1&&!singleMode)){ d.innerHTML=''; return; }
+    d.innerHTML=Array.from({length:10},(_,i)=>{
+      const r=results[i], cls=r?(r.diff===0?'ex':r.pts>0?'cl':'ms'):(i===cur?'cur':'');
+      return `<i class="${cls}"></i>`;
+    }).join('');
+  }
+  const getBest=()=>{try{return +localStorage.getItem('sayiHedefiBest10')||0}catch(e){return 0}};
+  const setBest=v=>{try{localStorage.setItem('sayiHedefiBest10',v)}catch(e){}};
   const OPC={'+':'61,220,151','-':'255,107,107','*':'179,136,255','/':'77,208,225'};
   const REDUCED=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}; // yalnızca Chromium tabanlı Android tarayıcılarda çalışır
@@ -808,5 +892,11 @@ const G = (function(){
 <div id="fx"></div>
 
 
+<script>
+(function(){const m=document.getElementById('rulesM'),close=()=>{m.hidden=true;};
+ window.openRules=()=>{m.hidden=false;document.getElementById('rBtn2').focus();};
+ document.getElementById('rBtn2').onclick=close;m.addEventListener('pointerdown',e=>{if(e.target===m)close();});
+ addEventListener('keydown',e=>{if(e.key==='Escape')close();});})();
+</script>
 </body>
 </html>
