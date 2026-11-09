@@ -43,10 +43,10 @@ const MENU_ITEMS = [
   MENU_ITEMS.forEach(function (item) {
     const a = document.createElement("a");
 
-    // "Ana Sayfa" linki için: offline (file://) modda yerel index.html'e,
-    // online (https://) modda ise canonical adrese yönlendir.
-    if (item.href === "https://tekinhoca.github.io/" && window.location.protocol === "file:") {
-      a.href = "index.html";
+    // Ana Sayfa: yerelde index.html, çevrimiçi ortamda mevcut alan adının kökü.
+    // Böylece GitHub Pages ve Netlify aynı menü dosyasıyla doğru çalışır.
+    if (item.href === "https://tekinhoca.github.io/") {
+      a.href = window.location.protocol === "file:" ? "index.html" : "/";
     } else {
       a.href = item.href;
     }
@@ -205,13 +205,9 @@ const MENU_ITEMS = [
   var prevItem = items[(cur - 1 + n) % n];
 
   function hrefOf(it) {
-    // Ana Sayfa bağlantısı mutlak adrestir; yerelde/başka adreste denerken o siteye
-    // götürmemesi için, adres sitenin kendi adresiyle aynı değilse index.html kullanılır.
+    // Ana Sayfa: yerelde index.html, çevrimiçi ortamda ziyaret edilen alan adının kökü.
     if (it.slug === "index") {
-      try {
-        if (new URL(it.href, location.href).hostname === location.hostname) return it.href;
-      } catch (e) {}
-      return "index.html";
+      return location.protocol === "file:" ? "index.html" : "/";
     }
     return it.href;
   }
