@@ -18,43 +18,54 @@ body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opa
 #top,#bot{flex:none;display:flex;flex-direction:column;gap:7px;width:100%;max-width:480px;margin:0 auto}
 #boardcol{position:relative;flex:1 1 0;min-width:0;min-height:0;overflow:hidden}
 #bo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
-#board{position:absolute;inset:0;display:grid;grid-template:repeat(8,1fr)/repeat(8,1fr);border-radius:10px;overflow:hidden;box-shadow:0 0 28px rgba(230,120,60,.22),0 0 0 2px rgba(200,150,12,.55)}
-.cell{position:relative;background:linear-gradient(145deg,#8f4c2b,#6a361f);box-shadow:inset 0 0 0 1px rgba(255,200,120,.16);cursor:pointer}
-.cell i{position:absolute;font-style:normal;font-size:min(12px,1.7dvh);color:rgba(255,230,180,.55);pointer-events:none}.cell .rk{left:3px;top:2px}.cell .fl{right:3px;bottom:1px}
-.cell.last{box-shadow:inset 0 0 0 2px rgba(255,217,102,.6)}.cell.sel{box-shadow:inset 0 0 0 3px #ffd966;background:linear-gradient(145deg,#a35a33,#7d4224)}.cell.trail{background:linear-gradient(145deg,#b06a35,#8a4a22)}
+#board{position:absolute;inset:0;display:grid;grid-template:repeat(8,1fr)/repeat(8,1fr);border-radius:10px;overflow:hidden;box-shadow:0 0 28px rgba(230,120,60,.22),0 0 0 3px #5a3a1c,0 0 0 5px rgba(200,150,12,.6)}
+.cell{position:relative;background:linear-gradient(145deg,#e3c08a,#cfa56a);box-shadow:inset 0 0 0 1px rgba(90,58,28,.5);cursor:pointer}
+.cell i{position:absolute;font-style:normal;font-size:min(12px,1.7dvh);color:rgba(70,42,18,.72);pointer-events:none}.cell .rk{left:3px;top:2px}.cell .fl{right:3px;bottom:1px}
+.cell.last{box-shadow:inset 0 0 0 2px rgba(190,120,10,.9)}.cell.sel{box-shadow:inset 0 0 0 3px #7d5200;background:linear-gradient(145deg,#f3d89f,#e2bd7c)}.cell.trail{background:linear-gradient(145deg,#f0cf8f,#dcb273)}
 .cell.opt::after,.cell.optc::after{content:"";position:absolute;inset:34%;border-radius:50%;pointer-events:none;animation:pulse 1.4s ease-in-out infinite}
-.cell.opt::after{background:rgba(255,217,102,.9);box-shadow:0 0 10px rgba(255,217,102,.9)}.cell.optc::after{background:rgba(255,120,100,.95);box-shadow:0 0 10px rgba(255,100,80,.9)}
+.cell.opt::after{background:rgba(112,52,4,.96);box-shadow:0 0 8px rgba(255,255,255,.65)}.cell.optc::after{background:rgba(172,22,18,.96);box-shadow:0 0 8px rgba(255,255,255,.65)}
 #pcs{position:absolute;inset:0;pointer-events:none;--fs:calc(var(--cs,40px)*.5)}
 .pc{position:absolute;left:0;top:0;width:12.5%;height:12.5%;display:flex;align-items:center;justify-content:center;transition:transform .26s ease-in-out;font-size:var(--fs)}
 .pc .in{position:relative;width:76%;height:76%;border-radius:50%;box-shadow:0 3px 6px rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;line-height:1}
 .pc.w .in{background:radial-gradient(circle at 35% 30%,#fffdf5,#eadfc4 55%,#b8a47c)}.pc.b .in{background:radial-gradient(circle at 35% 30%,#76625a,#2d1f1a 55%,#0e0806)}
-.pc.d .in{box-shadow:0 0 0 2px #ffd966,0 3px 6px rgba(0,0,0,.55),0 0 12px rgba(255,217,102,.6)}.pc.d .in::after{content:"♛";color:#b8860b}.pc.d.b .in::after{color:#ffd966}
-.pc.must .in{box-shadow:0 0 0 3px rgba(255,107,107,.95),0 3px 6px rgba(0,0,0,.55)}.pc.pend{opacity:.4}
+.pc.w .in{box-shadow:0 0 0 1.5px #5a3a1c,0 3px 6px rgba(0,0,0,.45)}.pc.b .in{box-shadow:0 0 0 1.5px #e6d6b0,0 3px 6px rgba(0,0,0,.55)}
+.pc.d.w .in{box-shadow:0 0 0 1.5px #5a3a1c,0 0 0 3.5px #d9a21b,0 3px 6px rgba(0,0,0,.5),0 0 12px rgba(217,162,27,.55)}.pc.d.b .in{box-shadow:0 0 0 1.5px #e6d6b0,0 0 0 3.5px #d9a21b,0 3px 6px rgba(0,0,0,.55),0 0 12px rgba(217,162,27,.55)}
+.pc.d .in::after{content:"♛";color:#7a5200}.pc.d.b .in::after{color:#ffd966}
+.pc.w.must .in{box-shadow:0 0 0 1.5px #5a3a1c,0 0 0 4.5px rgba(220,50,40,.95),0 3px 6px rgba(0,0,0,.5)}.pc.b.must .in{box-shadow:0 0 0 1.5px #e6d6b0,0 0 0 4.5px rgba(220,50,40,.95),0 3px 6px rgba(0,0,0,.55)}.pc.pend{opacity:.4}
 .pc.gone .in{animation:poof .35s ease-in forwards}.pc.crowned .in{animation:crown .5s}
 .modes{display:flex;gap:6px}
 .modes button{flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:7px 2px;font:13px/1.2 Georgia,serif;color:rgba(247,242,232,.78);cursor:pointer;transition:transform .15s}
 .modes button:active{transform:scale(.96)}.modes button.on{background:linear-gradient(135deg,rgba(200,150,12,.38),rgba(255,217,102,.16));border-color:#ffd966;color:#fff3c4}
-.tags{display:flex;justify-content:center;gap:12px;align-items:center}.vs{color:rgba(247,242,232,.35)}
-.ptag{font-size:14px;font-weight:600;color:rgba(247,242,232,.6);padding:4px 11px;border-radius:16px;border:1.5px solid transparent;display:flex;align-items:center;gap:7px;transition:all .3s}
+.tags{display:flex;justify-content:center;gap:10px;align-items:center;flex-wrap:nowrap}.vs{color:rgba(247,242,232,.35)}
+.ptag b{color:#ffd966;font-size:.95em;margin-left:2px}
+.ptag{font-size:clamp(12.5px,3.7vw,14px);white-space:nowrap;font-weight:600;color:rgba(247,242,232,.6);padding:4px 11px;border-radius:16px;border:1.5px solid transparent;display:flex;align-items:center;gap:7px;transition:all .3s}
 .ptag.active.t1{color:#fff3d6;border-color:#eadfc4;box-shadow:0 0 14px rgba(255,235,190,.4);animation:g1 1.6s ease-in-out infinite}
 .ptag.active.t2{color:#ffd2b8;border-color:#e08a5a;box-shadow:0 0 14px rgba(230,120,70,.45);animation:g2 1.6s ease-in-out infinite}
 .sp{width:14px;height:14px;border-radius:50%}.sp.w{background:radial-gradient(circle at 35% 30%,#fffdf5,#b8a47c)}.sp.b{background:radial-gradient(circle at 35% 30%,#76625a,#0e0806);box-shadow:0 0 0 1px rgba(255,255,255,.25)}
-.infobar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.ibox{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:5px 4px;text-align:center}
-.ibox .l{font-size:11px;color:rgba(247,242,232,.65)}.ibox .v{font-size:min(20px,2.8dvh);font-weight:700;color:#ffd966}
 .msg{font-size:14px;line-height:1.3;min-height:2.6em;text-align:center;color:rgba(247,242,232,.8)}
 .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+#bot .btns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+#bot .btns button{white-space:nowrap;padding:10px 4px;font-size:clamp(12px,3.6vw,14px)}
+#bTable{order:1}#bRes{order:2}#bDraw{order:3}#bNew{order:4}#bRules{order:5}
+.lp{display:none}.lm{display:inline}
 button.a{background:linear-gradient(135deg,rgba(200,150,12,.3),rgba(255,217,102,.12));border:1px solid rgba(200,150,12,.55);border-radius:8px;padding:10px 14px;font-size:14px;cursor:pointer;color:#f1e2b4;font-family:Georgia,serif;transition:transform .15s,box-shadow .2s}
 button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#ffd966}
 @media(hover:hover){button.a:hover{box-shadow:0 0 14px rgba(255,217,102,.3)}.cell:hover{filter:brightness(1.12)}}
 .foot{flex:none;display:flex;justify-content:center;height:min(34px,5dvh);pointer-events:none}.foot.w{display:none}
 .foot img{height:100%;width:auto;opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}.foot img:hover{opacity:.7}
 @media(min-aspect-ratio:5/4) and (min-width:560px){
+.zone{display:none}
 .stage{display:grid;grid-template-columns:minmax(0,1fr) min(290px,38vw);grid-template-rows:minmax(0,1fr) auto auto minmax(0,1fr);column-gap:24px;row-gap:12px}
 #boardcol{grid-column:1;grid-row:1/5}#top{grid-column:2;grid-row:2}#bot{grid-column:2;grid-row:3}
-#bot .btns{display:grid;grid-template-columns:1fr 1fr}.app>.foot{display:none}.foot.w{display:flex;height:min(44px,6dvh);margin-top:6px}}
+#bot .btns{display:grid;grid-template-columns:1fr 1fr}#bot .btns button{order:0;white-space:normal;padding:10px 14px;font-size:14px}.lp{display:inline}.lm{display:none}
+.app>.foot{display:none}.foot.w{display:flex;height:min(44px,6dvh);margin-top:6px}
+.zbtns{flex-wrap:wrap}.zbtns button.a:not(.ic){flex:1 1 auto;padding:7px 9px;font-size:12.5px}.zbtns button.ic{flex:0 0 36px}
+body.table .stage{grid-template-columns:minmax(0,1fr) var(--bs,50%) minmax(0,1fr);grid-template-rows:minmax(0,1fr) minmax(0,1fr);column-gap:10px;row-gap:8px}
+body.table #boardcol{grid-column:2;grid-row:1/3}body.table .zb{grid-column:1;grid-row:1}body.table .zw{grid-column:3;grid-row:2}
+body.table .foot.tb{display:flex;grid-column:3;grid-row:1;align-self:start;justify-self:end;height:min(34px,5dvh)}}
 @media(min-aspect-ratio:5/4) and (max-height:520px){.foot.w{display:none}}
-.end{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(20,8,4,.8);border-radius:10px;animation:pop .35s}
+.foot.tb{display:none}
+.end{position:absolute;inset:0;z-index:6;flex-direction:column;display:flex;align-items:center;justify-content:center;background:rgba(20,8,4,.8);border-radius:10px;animation:pop .35s}
 .ecard{text-align:center;padding:12px;max-width:94%;display:flex;flex-direction:column;gap:min(10px,1.5dvh)}
 .ecard h2{font-size:clamp(26px,min(9vw,5dvh),44px);color:#ffd966;text-shadow:0 0 24px rgba(255,200,60,.5)}.end.lose h2{color:#e8d5a0;text-shadow:none}
 .end.win .ecard{border:1px solid rgba(255,217,102,.55);border-radius:14px;box-shadow:0 0 40px rgba(255,200,60,.35)}.ecard p{font-size:15px;color:rgba(247,242,232,.85)}
@@ -65,28 +76,73 @@ button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#
 .mbox.sm{padding:18px}.mimg{display:block;margin:0 auto;width:var(--mw);max-width:100%;max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%)}
 .mtext{font-size:14px;line-height:1.65;color:rgba(247,242,232,.84);margin:6px 0 14px;text-align:left}.mtext p{margin-bottom:7px}.mtext b{color:#ffd966}#rBtn{min-width:var(--mw)}
 @media(prefers-reduced-motion:reduce){body::before,body::after,.title,.ptag.active,.cell.opt::after,.cell.optc::after{animation:none}}
+
+.end[hidden]{display:none}body.table .end{justify-content:space-around}.ecard.rot{transform:rotate(180deg)}
+.modal.rot{transform:rotate(180deg)}
+.rb{padding-bottom:14px}.pgs{display:grid;margin:2px 0 6px;text-align:left}
+.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}
+.pgt{text-align:center;color:#ffd966;font-weight:700;font-size:15px;margin:0 0 4px}
+.rb .mtext{margin:4px 0 6px;font-size:14px;line-height:1.5}
+.rnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}
+.rarr{width:38px;height:38px;border-radius:50%;padding:0;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center}
+.rdots{display:flex;gap:8px}.rdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .2s}.rdots span.on{background:#ffd966}
+@media(max-height:480px){.rb .mimg{display:none}.rb{padding-top:12px}}
+.zone{display:none;flex-direction:column;justify-content:center;gap:min(6px,1.2dvh);min-width:0;min-height:0;padding:6px 8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:12px;transition:border-color .3s,box-shadow .3s}
+.zone.act{border-color:#ffd966;box-shadow:0 0 16px rgba(255,217,102,.25)}.zb{transform:rotate(180deg)}
+.zhead{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.zhead .ptag{padding:3px 9px}
+.zmsg{font-size:13px;line-height:1.25;min-height:1.3em;color:rgba(247,242,232,.85)}
+.zbtns{display:flex;flex-wrap:nowrap;gap:5px}
+.zbtns button.a:not(.ic){flex:1 1 0;min-width:0;padding:7px 2px;font-size:clamp(10.5px,3.1vw,13px);white-space:nowrap}
+.zbtns button.ic{flex:0 0 clamp(30px,9vw,36px);padding:6px 0;display:flex;align-items:center;justify-content:center}.zbtns button svg{width:18px;height:18px}
+.zbtns button.a:disabled,#bot .btns button:disabled{opacity:.35;pointer-events:none}
+body.table .title,body.table #top,body.table #bot,body.table .app>.foot{display:none}
+body.table .zone{display:flex}
+body.table .stage{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:6px}
+body.table #boardcol{grid-row:2}body.table .zb{grid-row:1}body.table .zw{grid-row:3}
+body.table .cell i{display:none}body.table .pc.b.d .in::after{display:inline-block;transform:rotate(180deg)}
+@media(prefers-reduced-motion:reduce){.zone{transition:none}}
+button.a.on{border-color:#ffd966;color:#fff3c4;background:linear-gradient(135deg,rgba(200,150,12,.5),rgba(255,217,102,.2))}
 </style></head><body>
 <div class="app">
  <div class="title">Türk Daması</div>
- <div class="stage">
+ <div class="stage" id="stage">
+  <div class="zone zb" data-c="2" id="zb"><div class="zhead"><div class="ptag t2"><span class="sp b"></span><span>Siyah</span><b class="cB">16</b></div></div><div class="zmsg"></div><div class="zbtns"><button class="a" data-act="draw">Beraberlik</button><button class="a" data-act="res">Pes Et</button><button class="a" data-act="new">Baştan</button><button class="a ic" data-act="rules" aria-label="Kurallar" title="Kurallar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></button><button class="a ic" data-act="exit" aria-label="Masa modundan çık" title="Masa modundan çık"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9l6 6M15 9l-6 6"/></svg></button></div></div>
   <div id="top">
    <div class="modes" id="modes" role="group" aria-label="Oyun modu"><button data-m="2p">İki<br>oyuncu</button><button data-m="e">Bilgisayar<br>kolay</button><button data-m="m">Bilgisayar<br>orta</button><button data-m="h">Bilgisayar<br>zor</button></div>
-   <div class="tags"><div class="ptag t1" id="tag1"><span class="sp w"></span><span id="n1">Beyaz</span></div><span class="vs">—</span><div class="ptag t2" id="tag2"><span class="sp b"></span><span id="n2">Siyah</span></div></div>
-   <div class="infobar"><div class="ibox"><div class="l">Beyaz taş</div><div class="v" id="cW">16</div></div><div class="ibox"><div class="l">Hamle</div><div class="v" id="mc">0</div></div><div class="ibox"><div class="l">Siyah taş</div><div class="v" id="cB">16</div></div></div>
+   <div class="tags"><div class="ptag t1" id="tag1"><span class="sp w"></span><span id="n1">Beyaz</span><b class="cW">16</b></div><span class="vs">—</span><div class="ptag t2" id="tag2"><span class="sp b"></span><span id="n2">Siyah</span><b class="cB">16</b></div></div>
   </div>
   <div id="boardcol"><div id="bo"><div id="board"></div><div id="pcs"></div>
-   <div id="end" class="end" hidden><div class="ecard"><h2 id="eT"></h2><p id="eB"></p><div class="btns"><button class="a pri" id="eNew">Yeni Oyun</button><button class="a" id="eClose">Tahtayı gör</button></div></div></div>
+   <div id="end" class="end" hidden></div>
   </div></div>
   <div id="bot"><div class="msg" id="msg"></div>
-   <div class="btns"><button class="a pri" id="bNew">&#8635; Yeni Oyun</button><button class="a" id="bUndo">&#8592; Geri Al</button><button class="a" id="bRes">&#9873; Pes Et</button><button class="a" id="bRules">&#9432; Kurallar</button></div>
+   <div class="btns"><button class="a pri" data-act="new" id="bNew">&#8635; <span class="lp">Yeni Oyun</span><span class="lm">Baştan</span></button><button class="a" data-act="table" id="bTable" aria-pressed="false">Masa modu</button><button class="a" data-act="draw" id="bDraw">Beraberlik</button><button class="a" data-act="res" id="bRes">&#9873; Pes Et</button><button class="a" data-act="rules" id="bRules">&#9432; Kurallar</button></div>
    <div class="foot w"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div></div>
+  <div class="zone zw" data-c="1" id="zw"><div class="zhead"><div class="ptag t1"><span class="sp w"></span><span>Beyaz</span><b class="cW">16</b></div></div><div class="zmsg"></div><div class="zbtns"><button class="a" data-act="draw">Beraberlik</button><button class="a" data-act="res">Pes Et</button><button class="a" data-act="new">Baştan</button><button class="a ic" data-act="rules" aria-label="Kurallar" title="Kurallar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg></button><button class="a ic" data-act="exit" aria-label="Masa modundan çık" title="Masa modundan çık"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9l6 6M15 9l-6 6"/></svg></button></div></div>
+  <div class="foot tb"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div>
  </div>
  <div class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div>
 </div>
 <div id="fx"></div>
-<div class="modal" id="rules" role="dialog" aria-modal="true" aria-label="Kurallar" hidden><div class="mbox">
+<div class="modal" id="rules" role="dialog" aria-modal="true" aria-label="Kurallar" hidden><div class="mbox rb">
  <img class="mimg" src="../img/mecesml.webp" alt="Tekin Hoca">
- <div class="mtext"><p>Her oyuncunun 16 taşı vardır. İlk hamleyi beyaz yapar.</p><p><b>Yoz taş</b> ileriye, sağa ya da sola birer kare gidebilir, geri gidemez. Komşu karedeki taşın arkasındaki kare boşsa, üstünden atlayarak o taşı alır. <b>Taş almak zorunludur.</b> En çok taş alınacak yol seçilmelidir.</p><p>Son sıraya ulaşan taş <b>dama</b> olur: Dama, yatayda ve dikeyde dört yönde istediği kadar gidebilir ve uzaktan taş alabilir.</p><p>Taş alarak son sıraya çıkan yoz taş, bitişikte taş varsa yoz taş gibi yana doğru almaya devam eder. Taş almadan çıkan taş dama olur, sıra rakibe geçer.</p><p><b>Kazanma:</b> Rakibin tüm taşlarını almak ya da rakibi hamlesiz bırakmak. <b>Beraberlik:</b> Birer taş kalması veya aynı pozisyonun 3 kez tekrarı.</p></div>
+ <div class="pgs" id="rpages">
+  <div class="pg on"><div class="pgt">Amaç ve yoz taş</div><div class="mtext">
+   <p>Her oyuncunun 16 taşı vardır; taşlar ikişer sıra hâlinde dizilir. İlk hamleyi beyaz yapar.</p>
+   <p><b>Amaç:</b> Rakibin tüm taşlarını almak ya da rakibi hamlesiz bırakmaktır. Taş alma zorunluluğundan yararlanıp rakibi zayıflatmak oyunun temelidir.</p>
+   <p><b>Yoz taş</b> ileriye, sağa ya da sola birer kare gider; çapraz ve geriye gidemez. Son sıraya ulaşan yoz taş <b>dama</b> olur.</p></div></div>
+  <div class="pg"><div class="pgt">Taş alma</div><div class="mtext">
+   <p>Komşu karedeki rakip taşın arkasındaki kare boşsa, üstünden atlayarak o taşı alırsınız. Art arda alma (zincir) aynı hamlede yapılır.</p>
+   <p><b>Taş almak zorunludur.</b> Birden fazla yol varsa <b>en çok taş alınan yol</b> seçilmelidir. Bu kural dama için de yoz taş için de geçerlidir.</p>
+   <p>İki yol eşit sayıda taş alıyorsa istediğinizi seçebilirsiniz; dama ya da yoz taşa öncelik yoktur.</p></div></div>
+  <div class="pg"><div class="pgt">Dama taşı</div><div class="mtext">
+   <p>Dama, yatayda ve dikeyde dört yönde istediği kadar gider (çapraz gitmez). Rakip bir taşın üzerinden atlayıp arkasındaki boş karelerde durabilir; taş alırken köşe dönerek ("L" çizerek) devam edebilir. Ancak geldiği yönün tersine dönüp taş alamaz.</p>
+   <p>Yoz taş <b>taş alarak</b> son sıraya çıkarsa ve bitişikte alınacak taş varsa yoz taş gibi yana doğru almaya devam eder; dama olduğu anda hamlesi biter. Taş <b>almadan</b> son sıraya çıkarsa dama olur, orada kalır ve sıra rakibe geçer.</p></div></div>
+  <div class="pg"><div class="pgt">Oyun sonu ve seçenekler</div><div class="mtext">
+   <p><b>Kazanma:</b> Rakibin tüm taşlarını almak ya da rakibi hamlesiz bırakmak. İsteyen oyuncu <b>pes</b> edebilir.</p>
+   <p><b>Beraberlik:</b> İki tarafta da birer taş kalması, aynı pozisyonun üç kez tekrarlanması veya iki oyunculu modda oyuncuların anlaşması (teklif ve kabul).</p>
+   <p>Bir taşı seçtikten sonra vazgeçip başka taş seçebilirsiniz; ancak oynanan hamle geri alınamaz. <b>Masa modunda</b> iki oyuncu cihazı ortaya koyup karşılıklı oynayabilir.</p></div></div>
+ </div>
+ <div class="rnav"><button class="a rarr" id="rPrev" aria-label="Önceki sayfa">&#8249;</button><div class="rdots" id="rDots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span></div><button class="a rarr" id="rNext" aria-label="Sonraki sayfa">&#8250;</button></div>
  <button class="a pri" id="rBtn">Başla</button></div></div>
 <div class="modal" id="cf" role="dialog" aria-modal="true" aria-label="Onay" hidden><div class="mbox sm"><div class="mtext" style="text-align:center" id="cfT"></div><div class="btns"><button class="a" id="cfNo">Vazgeç</button><button class="a pri" id="cfYes">Evet</button></div></div></div>
 <script id="engine">
@@ -137,18 +193,26 @@ function makeEngine(){
 <script>
 const $=id=>document.getElementById(id),RM=matchMedia('(prefers-reduced-motion: reduce)').matches,ENG=makeEngine();
 const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}},sleep=ms=>new Promise(r=>setTimeout(r,ms));
-let board,turn,moveCount,over,mode='2p',level='m',cpu=false,history=[],keys=[],prefix=[],busy=false,tok=0,lastMv=null;const cells=[],pel=new Array(64).fill(null);
+let board,turn,moveCount,over,mode='2p',level='m',cpu=false,keys=[],prefix=[],busy=false,tok=0,lastMv=null,table=false,cbN=null;
+try{table=localStorage.getItem('dama-masa')==='1';}catch(e){}
+const cells=[],pel=new Array(64).fill(null),NMc={1:'Beyaz',2:'Siyah'},other=c=>3-c,tb=()=>table&&mode==='2p';
 for(let r=0;r<8;r++)for(let c=0;c<8;c++){const d=document.createElement('div');d.className='cell';d.dataset.sq=r*8+c;
  if(c===0){const i=document.createElement('i');i.className='rk';i.textContent=8-r;d.appendChild(i);}
  if(r===7){const i=document.createElement('i');i.className='fl';i.textContent='abcdefgh'[c];d.appendChild(i);}$('board').appendChild(d);cells.push(d);}
-const key=(b,t)=>b.join('')+t,setMsg=t=>$('msg').textContent=t,pre=(m,p)=>p.every((s,i)=>m.path[i]===s);
-function size(){const w=$('boardcol').clientWidth,h=$('boardcol').clientHeight,S=Math.max(120,Math.floor(Math.min(w,h,780)));$('bo').style.width=$('bo').style.height=S+'px';$('bo').style.setProperty('--cs',S/8+'px');}
+const key=(b,t)=>b.join('')+t,pre=(m,p)=>p.every((s,i)=>m.path[i]===s);
+const zmsg=(c,t)=>{const e=document.querySelector('.zone[data-c="'+c+'"] .zmsg');if(e)e.textContent=t;};
+function setMsg(t){$('msg').textContent=t;if(tb())zmsg(turn,t);}
+function size(){const st=$('stage');
+ if(tb()&&matchMedia('(min-aspect-ratio:5/4) and (min-width:560px)').matches)st.style.setProperty('--bs',Math.max(120,Math.min(st.clientHeight,st.clientWidth-400))+'px');else st.style.removeProperty('--bs');
+ const w=$('boardcol').clientWidth,h=$('boardcol').clientHeight,S=Math.max(120,Math.floor(Math.min(w,h,780)/8)*8);$('bo').style.width=$('bo').style.height=S+'px';$('bo').style.setProperty('--cs',S/8+'px');}
+function applyTable(){document.body.classList.toggle('table',tb());size();}
 const place=(e,s)=>{e.style.transform=`translate(${(s&7)*100}%,${(s>>3)*100}%)`;};
 function mkPiece(p){const e=document.createElement('div');e.className='pc '+((p&1)?'w':'b')+(p>=3?' d':'');e.innerHTML='<div class="in"></div>';return e;}
 function syncPieces(){const L=$('pcs');L.textContent='';for(let s=0;s<64;s++){pel[s]=null;const p=board[s];if(!p)continue;const e=mkPiece(p);place(e,s);L.appendChild(e);pel[s]=e;}}
 function newGame(){tok++;board=new Int8Array(64);for(let c=0;c<8;c++){board[8+c]=2;board[16+c]=2;board[40+c]=1;board[48+c]=1;}
- turn=1;moveCount=0;over=false;history=[];keys=[key(board,1)];prefix=[];busy=false;lastMv=null;$('end').hidden=true;syncPieces();upUI();paint();announce();}
+ turn=1;moveCount=0;over=false;keys=[key(board,1)];prefix=[];busy=false;lastMv=null;$('end').hidden=true;$('end').innerHTML='';syncPieces();upUI();paint();announce();}
 function announce(){const lg=ENG.gen(board,turn),n=lg.length&&lg[0].caps.length;
+ if(tb()){for(const c of[1,2])zmsg(c,over?'':(turn===c?(n?'Zorunlu taş alma: en çok '+n+' taş.':'Sıra sizde, bir taş seçin.'):'Rakibin sırası.'));$('msg').textContent='';return;}
  setMsg((turn===1?'Beyaz':'Siyah')+(cpu&&turn===1?' (siz)':'')+': '+(n?'zorunlu taş alma var, en çok '+n+' taş alınmalı.':'bir taş seçin.'));}
 function paint(){const lg=(over||busy||(cpu&&turn===2))?[]:ENG.gen(board,turn);
  cells.forEach(d=>d.classList.remove('last','sel','trail','opt','optc'));pel.forEach(e=>e&&e.classList.remove('must','pend'));
@@ -158,8 +222,12 @@ function paint(){const lg=(over||busy||(cpu&&turn===2))?[]:ENG.gen(board,turn);
   if(isCap)for(let k=0;k<prefix.length-1;k++){const e=pel[cand[0].caps[k]];e&&e.classList.add('pend');}
  }else if(lg.length&&lg[0].caps.length)new Set(lg.map(m=>m.path[0])).forEach(s=>pel[s]&&pel[s].classList.add('must'));}
 function upUI(){let w=0,b=0;for(const p of board){if(p){if(p&1)w++;else b++;}}
- $('cW').textContent=w;$('cB').textContent=b;$('mc').textContent=moveCount;$('n1').textContent=cpu?'Beyaz (siz)':'Beyaz';$('n2').textContent=cpu?'Siyah (bilgisayar)':'Siyah';
+ document.querySelectorAll('.cW').forEach(e=>e.textContent=w);document.querySelectorAll('.cB').forEach(e=>e.textContent=b);
+ $('n1').textContent=cpu?'Siz':'Beyaz';$('n2').textContent=cpu?'Bilgisayar':'Siyah';
  $('tag1').className='ptag t1'+(!over&&turn===1?' active':'');$('tag2').className='ptag t2'+(!over&&turn===2?' active':'');
+ document.querySelectorAll('.zone').forEach(z=>{const c=+z.dataset.c;z.classList.toggle('act',!over&&turn===c);z.querySelectorAll('[data-act=draw],[data-act=res]').forEach(x=>x.disabled=over||busy);});
+ $('bDraw').hidden=cpu;$('bTable').hidden=cpu;$('bDraw').disabled=over||busy;$('bRes').disabled=over||busy;
+ $('bTable').classList.toggle('on',table);$('bTable').setAttribute('aria-pressed',table);
  document.querySelectorAll('#modes button').forEach(x=>x.classList.toggle('on',x.dataset.m===mode));}
 function onCell(sq){if(busy||over||(cpu&&turn===2))return;const lg=ENG.gen(board,turn),p=board[sq],mand=lg.length&&lg[0].caps.length;
  if(prefix.length<2&&p&&((p&1)?1:2)===turn){if(!lg.some(m=>m.path[0]===sq)){prefix=[];paint();setMsg(mand?'Zorunlu taş alma var: en çok '+lg[0].caps.length+' taş alınmalı, bu taşla alınamıyor.':'Bu taşın hamlesi yok.');return;}
@@ -167,8 +235,8 @@ function onCell(sq){if(busy||over||(cpu&&turn===2))return;const lg=ENG.gen(board
  if(prefix.length){const next=lg.filter(m=>pre(m,prefix)&&m.path.length>prefix.length&&m.path[prefix.length]===sq);
   if(next.length){prefix.push(sq);const done=lg.find(m=>m.path.length===prefix.length&&pre(m,prefix));if(done){prefix=[];commit(done);}else paint();return;}}
  prefix=[];paint();}
-function commit(mv){const was=board[mv.path[0]];history.push({board:board.slice(),turn,moveCount,keysLen:keys.length,last:lastMv});
- board=ENG.apply(board,mv);lastMv=[mv.path[0],mv.path[mv.path.length-1]];moveCount++;turn=3-turn;keys.push(key(board,turn));prefix=[];busy=true;const my=tok;vib(10);paint();
+function commit(mv){const was=board[mv.path[0]];
+ board=ENG.apply(board,mv);lastMv=[mv.path[0],mv.path[mv.path.length-1]];moveCount++;turn=3-turn;keys.push(key(board,turn));prefix=[];busy=true;const my=tok;vib(10);paint();upUI();
  animate(mv,was,my).then(()=>{if(my!==tok)return;busy=false;syncPieces();upUI();paint();afterMove();});}
 async function animate(mv,was,my){const el=pel[mv.path[0]];if(!el)return;pel[mv.path[0]]=null;
  for(let k=1;k<mv.path.length;k++){place(el,mv.path[k]);await sleep(RM?0:280);if(my!==tok)return;
@@ -179,9 +247,10 @@ function status(){let w=0,b=0;for(const p of board){if(p){if(p&1)w++;else b++;}}
  if(!ENG.gen(board,turn).length)return{t:'win',w:3-turn,why:(turn===1?w:b)===0?'Rakibin tüm taşları alındı.':'Rakip hamle yapamıyor.'};
  const k=keys[keys.length-1];if(keys.filter(x=>x===k).length>=3)return{t:'draw',why:'Aynı pozisyon üç kez tekrarlandı.'};return null;}
 function afterMove(){const st=status();if(st){endGame(st);return;}announce();if(cpu&&turn===2)cpuPlay();}
-function endGame(st){over=true;prefix=[];busy=false;paint();upUI();setMsg('');let T,B,win=false,human=false;
+function endGame(st){over=true;prefix=[];busy=false;paint();upUI();$('msg').textContent='';zmsg(1,'');zmsg(2,'');let T,B,win=false,human=false;
  if(st.t==='draw'){T='Berabere!';B=st.why;}else{win=true;human=!cpu||st.w===1;T=cpu?(st.w===1?'Kazandınız!':'Bilgisayar kazandı'):(st.w===1?'Beyaz kazandı!':'Siyah kazandı!');B=st.why;}
- setTimeout(()=>{if(!over)return;$('eT').textContent=T;$('eB').textContent=B+' ('+moveCount+' hamle)';$('end').className='end '+(win&&human?'win':'lose');$('end').hidden=false;if(win&&human){vib([30,40,60]);fx(80);}},RM?0:450);}
+ setTimeout(()=>{if(!over)return;const card=r=>'<div class="ecard'+(r?' rot':'')+'"><h2>'+T+'</h2><p>'+B+'</p><div class="btns"><button class="a pri" data-act="eNew">Yeni Oyun</button><button class="a" data-act="eClose">Tahtayı gör</button></div></div>';
+  $('end').innerHTML=tb()?card(true)+card(false):card(false);$('end').className='end '+(win&&human?'win':'lose');$('end').hidden=false;if(win&&human){vib([30,40,60]);fx(80);}},RM?0:450);}
 function fx(n){if(RM)return;const cs=['#ffd966','#c8960c','#e08a5a','#fff3d6','#ff6b6b','#50c878'],b=$('fx');
  for(let i=0;i<n;i++){const e=document.createElement('i'),a=Math.random()*6.283,d=120+Math.random()*320;
   e.style.cssText=`--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d+60}px;--r:${Math.random()*720-360}deg;background:${cs[i%6]}`;b.appendChild(e);setTimeout(()=>e.remove(),1900);}}
@@ -194,17 +263,50 @@ function requestMove(b,sd,lv){return new Promise(res=>{const t0=Date.now(),done=
  setTimeout(()=>done(ENG.search(b.slice(),sd,lv,{t:400})),30);});}
 function cpuPlay(){busy=true;setMsg('Bilgisayar düşünüyor…');const my=tok;
  requestMove(board,2,level).then(m=>{if(my!==tok)return;busy=false;const lg=ENG.gen(board,2),mv=lg.find(x=>x.path.length===m.path.length&&x.path.every((s,i)=>s===m.path[i]))||lg[0];commit(mv);});}
-function undo(){if(busy||!history.length)return;tok++;over=false;
- do{const s=history.pop();board=s.board;turn=s.turn;moveCount=s.moveCount;keys.length=s.keysLen;lastMv=s.last;}while(cpu&&turn!==1&&history.length);
- prefix=[];$('end').hidden=true;syncPieces();upUI();paint();announce();}
-function ask(t,yes,cb){$('cfT').textContent=t;$('cfYes').textContent=yes;$('cf').hidden=false;$('cfYes').onclick=()=>{$('cf').hidden=true;cb();};}
-function setMode(m){mode=m;cpu=m!=='2p';if(cpu)level=m;newGame();}
-function resign(){if(over||busy)return;const loser=cpu?1:turn;ask((cpu?'Pes ediyor musunuz?':(loser===1?'Beyaz':'Siyah')+' pes ediyor mu?'),'Pes Et',()=>{tok++;endGame({t:'win',w:3-loser,why:'Rakip pes etti.'});});}
+/* ---- pencereler ---- */
+function ask(o){$('cfT').textContent=o.t;$('cfYes').textContent=o.yes||'Evet';$('cfNo').textContent=o.no||'Vazgeç';$('cf').classList.toggle('rot',!!o.rot&&tb());
+ cbN=o.onNo||null;$('cfYes').onclick=()=>{$('cf').hidden=true;cbN=null;o.onYes&&o.onYes();};$('cf').hidden=false;}
+$('cfNo').onclick=()=>{$('cf').hidden=true;const f=cbN;cbN=null;f&&f();};
+function guardReset(go,presser){
+ if(!moveCount||over){go();return;}
+ if(mode==='2p'){const me=presser||turn,opp=other(me);
+  ask({t:'Mevcut oyun silinecek. Rakibinizden onay istensin mi?',yes:'Onay iste',rot:me===2,onYes:()=>{
+   ask({t:tb()?'Rakibiniz yeni oyun başlatmak istiyor. Mevcut oyun silinecek. Kabul ediyor musunuz?':'Yeni oyun için diğer oyuncunun da onayı gerekiyor. Mevcut oyun silinecek. Kabul ediyor musunuz?',
+    yes:'Kabul',no:'Reddet',rot:opp===2,onYes:go,onNo:()=>setMsg('Yeni oyun teklifi reddedildi.')});}});}
+ else ask({t:'Devam eden oyun silinecek. Devam edilsin mi?',yes:'Evet',onYes:go});}
+function offerDraw(c){const from=tb()?c:turn,to=other(from);
+ ask({t:tb()?'Rakibiniz beraberlik öneriyor. Kabul ediyor musunuz?':NMc[from]+' beraberlik öneriyor. '+NMc[to]+' kabul ediyor mu?',yes:'Kabul',no:'Reddet',rot:to===2,
+  onYes:()=>{tok++;endGame({t:'draw',why:'Oyuncular beraberlik üzerinde anlaştı.'});},onNo:()=>setMsg('Beraberlik teklifi reddedildi.')});}
+function resign(c){const lo=cpu?1:(tb()?c:turn);
+ ask({t:cpu||tb()?'Pes ediyor musunuz?':NMc[lo]+' pes ediyor mu?',yes:'Pes Et',rot:lo===2,onYes:()=>{tok++;endGame({t:'win',w:other(lo),why:cpu?'Pes ettiniz.':NMc[lo]+' pes etti.'});}});}
+function setMode(m){mode=m;cpu=m!=='2p';if(cpu)level=m;applyTable();newGame();}
+function setTable(on){table=on;try{localStorage.setItem('dama-masa',on?'1':'0');}catch(e){}applyTable();upUI();announce();}
+let rp=0;
+function rPage(i){const pgs=document.querySelectorAll('#rpages .pg'),n=pgs.length;rp=Math.max(0,Math.min(n-1,i));
+ pgs.forEach((p,k)=>p.classList.toggle('on',k===rp));document.querySelectorAll('#rDots span').forEach((d,k)=>d.classList.toggle('on',k===rp));
+ $('rPrev').disabled=rp===0;$('rNext').disabled=rp===n-1;}
+const openR=(first,rot)=>{rPage(0);$('rBtn').textContent=first?'Başla':'Kapat';$('rules').classList.toggle('rot',!!rot&&tb());$('rules').hidden=false;$('rBtn').focus();},closeR=()=>{$('rules').hidden=true;};
+function act(a,c){
+ if(a==='eClose'){$('end').hidden=true;return;}
+ if(a==='eNew'){newGame();return;}
+ if(!$('rules').hidden||!$('cf').hidden)return;
+ if(a==='new')guardReset(newGame,c);
+ else if(a==='rules')openR(false,c===2);
+ else if(a==='exit')setTable(false);
+ else if(a==='table')setTable(!table);
+ else if(a==='draw'&&!over&&!busy&&!cpu)offerDraw(c);
+ else if(a==='res'&&!over&&!busy)resign(c);}
 $('board').addEventListener('click',e=>{const d=e.target.closest('.cell');if(d)onCell(+d.dataset.sq);});
-document.querySelectorAll('#modes button').forEach(b=>b.onclick=()=>{const m=b.dataset.m;if(m===mode)return;if(moveCount>0&&!over)ask('Devam eden oyun silinecek. Modu değiştirmek istiyor musunuz?','Değiştir',()=>setMode(m));else setMode(m);});
-const openR=first=>{$('rBtn').textContent=first?'Başla':'Kapat';$('rules').hidden=false;$('rBtn').focus();},closeR=()=>{$('rules').hidden=true;};
-$('bNew').onclick=$('eNew').onclick=newGame;$('bUndo').onclick=undo;$('bRes').onclick=resign;$('bRules').onclick=()=>openR(false);$('rBtn').onclick=closeR;$('cfNo').onclick=()=>{$('cf').hidden=true;};$('eClose').onclick=()=>{$('end').hidden=true;};
-for(const id of['rules','cf'])$(id).addEventListener('pointerdown',e=>{if(e.target===$(id))$(id).hidden=true;});
-addEventListener('keydown',e=>{if(e.key==='Escape'){closeR();$('cf').hidden=true;}});
-new ResizeObserver(size).observe($('boardcol'));size();newGame();openR(true);
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;const z=b.closest('.zone');act(b.dataset.act,z?+z.dataset.c:null);});
+document.querySelectorAll('#modes button').forEach(b=>b.onclick=()=>{const m=b.dataset.m;if(m===mode||!$('rules').hidden||!$('cf').hidden)return;guardReset(()=>setMode(m),null);});
+$('rPrev').onclick=()=>rPage(rp-1);$('rNext').onclick=()=>rPage(rp+1);$('rBtn').onclick=closeR;
+(function(){let x0=null;const el=$('rpages');
+ el.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+ el.addEventListener('touchend',e=>{if(x0===null)return;let dx=e.changedTouches[0].clientX-x0;x0=null;if($('rules').classList.contains('rot'))dx=-dx;if(Math.abs(dx)>40)rPage(rp+(dx<0?1:-1));},{passive:true});})();
+for(const id of['rules','cf'])$(id).addEventListener('pointerdown',e=>{if(e.target===$(id)){$(id).hidden=true;if(id==='cf')cbN=null;}});
+addEventListener('keydown',e=>{if(e.key==='Escape'){closeR();$('cf').hidden=true;cbN=null;}else if(!$('rules').hidden){if(e.key==='ArrowRight')rPage(rp+1);else if(e.key==='ArrowLeft')rPage(rp-1);}});
+new ResizeObserver(size).observe($('boardcol'));new ResizeObserver(size).observe($('stage'));
+applyTable();newGame();openR(true,false);
+window.__t={onCell,act,setMode,setTable,state:()=>({board,turn,moveCount,over,mode,cpu,busy,table:tb()}),gen:()=>ENG.gen(board,turn)};
+
 </script></body></html>
