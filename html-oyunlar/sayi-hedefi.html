@@ -32,8 +32,8 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 /* ── İSİM GİRİŞİ ── */
 .name-form{display:flex;flex-direction:column;gap:10px}
 .name-row{display:flex;flex-direction:column;gap:4px}
-.name-row label{font-size:10px;color:rgba(247,242,232,0.4);text-transform:uppercase;letter-spacing:.08em}
-.name-row input{background:#16140e;border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:8px 12px;color:#e8d5a0;font-family:Georgia,serif;font-size:14px;outline:none;transition:border-color .2s}
+.name-row label{font-size:14px;color:rgba(247,242,232,0.4);text-transform:uppercase;letter-spacing:.08em}
+.name-row input{background:#16140e;border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:14px 14px;color:#e8d5a0;font-family:Georgia,serif;font-size:19px;outline:none;transition:border-color .2s}
 .name-row input:focus{border-color:rgba(200,150,12,0.7)}
 .name-row input::placeholder{color:rgba(247,242,232,0.2)}
 
@@ -305,7 +305,7 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
   <div class="screen" id="scNames">
     <div class="game-title">Sayı Hedefi</div>
     <div class="name-form" id="nameForm"></div>
-    <button class="primary" onclick="G.startGame()" style="align-self:center">Oyuna Başla →</button>
+    <button class="primary" id="nameStartBtn" onclick="G.startGame()" style="align-self:center">İSİM GİRMEDEN BAŞLA</button>
     <button class="a" onclick="G.showScreen('scMode')" style="align-self:center;font-size:10px">← Geri</button>
   </div>
 
@@ -417,12 +417,17 @@ const G = (function(){
         </div>`;
     }
     showScreen('scNames');
-    // Ekran geçişi tamamlandıktan sonra focus ver
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      const inp=document.getElementById('name0');
-      if(inp) inp.focus();
-    }));
+    updateStartBtn();
   }
+
+  // Kutulardan herhangi birinde yazı varsa "OYUNA BAŞLA", yoksa "İSİM GİRMEDEN BAŞLA"
+  function updateStartBtn(){
+    const btn=document.getElementById('nameStartBtn');
+    if(!btn) return;
+    const typed=[...document.querySelectorAll('#nameForm input')].some(i=>i.value.trim()!=='');
+    btn.textContent=typed?'OYUNA BAŞLA':'İSİM GİRMEDEN BAŞLA';
+  }
+  document.getElementById('nameForm').addEventListener('input',updateStartBtn);
 
   function startGame(){
     players = [];
