@@ -153,6 +153,13 @@ main { max-width: 960px; }
 @media(max-width:700px) { .games-grid { grid-template-columns: repeat(3,1fr); gap:10px; } }
 @media(max-width:480px) { .games-grid { grid-template-columns: repeat(2,1fr); gap:8px; } }
 
+/* 10 kartlık bölüm: PC 5 sütun, orta 4/3, telefon 2 sütun; tamamlanmayan son satır ortalanır */
+.games-grid.g10 { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+.games-grid.g10 .game-thumb { flex: 0 0 calc((100% - 4 * 14px) / 5); min-width: 0; }
+@media(max-width:899px) { .games-grid.g10 .game-thumb { flex-basis: calc((100% - 3 * 14px) / 4); } }
+@media(max-width:700px) { .games-grid.g10 { gap: 10px; } .games-grid.g10 .game-thumb { flex-basis: calc((100% - 2 * 10px) / 3); } }
+@media(max-width:480px) { .games-grid.g10 { gap: 8px; } .games-grid.g10 .game-thumb { flex-basis: calc((100% - 8px) / 2); } }
+
 .game-thumb {
   cursor: pointer;
   border: 1px solid rgba(122,92,30,0.2);
@@ -259,11 +266,55 @@ main { max-width: 960px; }
   </div>
   <div class="games-grid">
 
+    <!-- DİKKAT TESTLERİ -->
+    <div class="game-thumb" data-game="dikkat-testi" data-title="Dikkat Seti">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#0e0e0a"/>
+          <g transform="translate(0,16)">
+          <defs>
+            <radialGradient id="brainGlow" cx="50%" cy="42%" r="55%">
+              <stop offset="0%" stop-color="#FFD97A" stop-opacity=".35"/>
+              <stop offset="100%" stop-color="#FFD97A" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="200" cy="128" r="100" fill="url(#brainGlow)"/>
+          <!-- Beyin taslağı (basitleştirilmiş) -->
+          <g fill="none" stroke="#c8960c" stroke-width="2.5" opacity=".85">
+            <path d="M150,90 C140,65 165,48 188,55 C198,42 222,42 232,55 C258,48 278,70 268,95 C282,108 282,135 266,148 C272,168 256,188 232,186 C224,200 200,205 188,192 C168,200 146,188 144,170 C124,164 118,140 132,122 C122,108 132,94 150,90 Z"/>
+            <path d="M188,55 C186,80 192,100 178,118 C190,128 186,148 174,158" stroke-width="1.8" opacity=".7"/>
+            <path d="M222,58 C228,80 220,102 234,116 C222,130 230,148 220,162" stroke-width="1.8" opacity=".7"/>
+          </g>
+          <!-- Kıvılcımlar -->
+          <g fill="#FFD97A">
+            <circle cx="118" cy="80" r="3"/>
+            <circle cx="284" cy="78" r="2.5"/>
+            <circle cx="296" cy="120" r="2"/>
+            <circle cx="106" cy="135" r="2"/>
+            <circle cx="200" cy="48" r="2.5"/>
+          </g>
+          <!-- İkon şeridi: yedi test (sayı / renk / ok / kare / refleks / zamanlama / ritim) -->
+          <g font-family="Georgia,serif" font-size="14" font-weight="700">
+            <g transform="translate(62,222)"><circle r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/><text y="5" text-anchor="middle" fill="#e8d5a0">7</text></g>
+            <g transform="translate(108,222)"><circle r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/><path d="M-8,0 a8,8 0 1,1 16,0" fill="#6a9fc0" opacity=".75"/><path d="M-8,0 a8,8 0 1,0 16,0" fill="#e67e22" opacity=".75"/></g>
+            <g transform="translate(154,222)"><circle r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/><g fill="none" stroke="#e8d5a0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M-8,-3H6M3,-6L7,-3L3,0"/><path d="M8,4H-6M-3,1L-7,4L-3,7"/></g></g>
+            <g transform="translate(200,222)"><circle r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/><g fill="#e8d5a0" opacity=".85"><rect x="-7.5" y="-7.5" width="6.5" height="6.5" rx="1"/><rect x="1" y="-7.5" width="6.5" height="6.5" rx="1"/><rect x="-7.5" y="1" width="6.5" height="6.5" rx="1"/><rect x="1" y="1" width="6.5" height="6.5" rx="1"/></g></g>
+            <g transform="translate(246,222)"><circle r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/><polygon points="2,-10 -6,2 -1,2 -3,10 6,-3 1,-3" fill="#FFD97A"/></g>
+            <g transform="translate(292,222)"><circle r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/><circle r="7" fill="none" stroke="#e8d5a0" stroke-width="1.4"/><line x1="0" y1="0" x2="0" y2="-5" stroke="#e8d5a0" stroke-width="1.4"/><line x1="0" y1="0" x2="4" y2="2" stroke="#e8d5a0" stroke-width="1.4"/><line x1="-2" y1="-10" x2="2" y2="-10" stroke="#e8d5a0" stroke-width="1.4"/></g>
+            <g transform="translate(338,222)"><circle r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/><g fill="#e8d5a0" stroke="#e8d5a0" stroke-width="1.4" stroke-linecap="round"><ellipse cx="-2.5" cy="6" rx="3.4" ry="2.5" stroke="none"/><path d="M1,6V-8" fill="none"/><path d="M1,-8Q7,-7 6,-1" fill="none"/></g></g>
+          </g>
+          </g>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Dikkat Seti</div>
+    </div>
+
     <!-- ZİNCİR OYUNU -->
     <div class="game-thumb" data-game="zincir" data-title="Zincir Oyunu">
       <div class="thumb-wrap">
         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
           <rect width="400" height="300" fill="#0c130a"/>
+          <g transform="translate(0,8)">
           <defs>
             <radialGradient id="chainGlow" cx="50%" cy="66%" r="45%">
               <stop offset="0%" stop-color="#f39c12" stop-opacity=".45"/>
@@ -301,54 +352,10 @@ main { max-width: 960px; }
             <circle cx="304" cy="198" r="2"/>
             <circle cx="200" cy="222" r="2.4"/>
           </g>
-          <text x="200" y="278" text-anchor="middle" font-size="15" fill="#c8960c" font-family="Georgia,serif" font-weight="700" opacity=".92">Zincir Oyunu</text>
+          </g>
         </svg>
       </div>
       <div class="game-thumb-label">Zincir Oyunu</div>
-    </div>
-
-    <!-- DİKKAT TESTLERİ -->
-    <div class="game-thumb" data-game="dikkat-testi" data-title="Dikkat Seti">
-      <div class="thumb-wrap">
-        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#0e0e0a"/>
-          <defs>
-            <radialGradient id="brainGlow" cx="50%" cy="42%" r="55%">
-              <stop offset="0%" stop-color="#FFD97A" stop-opacity=".35"/>
-              <stop offset="100%" stop-color="#FFD97A" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <circle cx="200" cy="128" r="100" fill="url(#brainGlow)"/>
-          <!-- Beyin taslağı (basitleştirilmiş) -->
-          <g fill="none" stroke="#c8960c" stroke-width="2.5" opacity=".85">
-            <path d="M150,90 C140,65 165,48 188,55 C198,42 222,42 232,55 C258,48 278,70 268,95 C282,108 282,135 266,148 C272,168 256,188 232,186 C224,200 200,205 188,192 C168,200 146,188 144,170 C124,164 118,140 132,122 C122,108 132,94 150,90 Z"/>
-            <path d="M188,55 C186,80 192,100 178,118 C190,128 186,148 174,158" stroke-width="1.8" opacity=".7"/>
-            <path d="M222,58 C228,80 220,102 234,116 C222,130 230,148 220,162" stroke-width="1.8" opacity=".7"/>
-          </g>
-          <!-- Kıvılcımlar -->
-          <g fill="#FFD97A">
-            <circle cx="118" cy="80" r="3"/>
-            <circle cx="284" cy="78" r="2.5"/>
-            <circle cx="296" cy="120" r="2"/>
-            <circle cx="106" cy="135" r="2"/>
-            <circle cx="200" cy="48" r="2.5"/>
-          </g>
-          <!-- İkon şeridi: sayı / renk / zaman -->
-          <g font-family="Georgia,serif" font-size="14" font-weight="700">
-            <circle cx="138" cy="222" r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/>
-            <text x="138" y="227" text-anchor="middle" fill="#e8d5a0">7</text>
-            <circle cx="200" cy="222" r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/>
-            <path d="M192,222 a8,8 0 1,1 16,0" fill="#6a9fc0" opacity=".75"/>
-            <path d="M192,222 a8,8 0 1,0 16,0" fill="#e67e22" opacity=".75"/>
-            <circle cx="262" cy="222" r="17" fill="rgba(200,150,12,0.12)" stroke="#c8960c" stroke-width="1.3"/>
-            <circle cx="262" cy="222" r="7" fill="none" stroke="#e8d5a0" stroke-width="1.4"/>
-            <line x1="262" y1="222" x2="262" y2="217" stroke="#e8d5a0" stroke-width="1.4"/>
-            <line x1="262" y1="222" x2="266" y2="224" stroke="#e8d5a0" stroke-width="1.4"/>
-          </g>
-          <text x="200" y="278" text-anchor="middle" font-size="15" fill="#c8960c" font-family="Georgia,serif" font-weight="700" opacity=".92">Dikkat Seti</text>
-        </svg>
-      </div>
-      <div class="game-thumb-label">Dikkat Seti</div>
     </div>
 
     <!-- SİHİRLİ KARTLAR -->
@@ -381,7 +388,6 @@ main { max-width: 960px; }
           <g fill="#FFD97A">
             <circle cx="92" cy="92" r="2.5"/><circle cx="312" cy="88" r="2"/><circle cx="318" cy="200" r="2.5"/>
           </g>
-          <text x="200" y="278" text-anchor="middle" font-size="15" fill="#c8960c" font-family="Georgia,serif" font-weight="700" opacity=".92">Sihirli Kartlar</text>
         </svg>
       </div>
       <div class="game-thumb-label">Sihirli Kartlar</div>
@@ -392,6 +398,7 @@ main { max-width: 960px; }
       <div class="thumb-wrap">
         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
           <rect width="400" height="300" fill="#0e0a14"/>
+          <g transform="translate(0,7)">
           <defs>
             <radialGradient id="orbGrad" cx="38%" cy="32%" r="60%">
               <stop offset="0%" stop-color="#ffffff" stop-opacity=".85"/>
@@ -419,7 +426,7 @@ main { max-width: 960px; }
             <text x="206" y="248" text-anchor="middle">45</text>
             <text x="256" y="248" text-anchor="middle">✪</text>
           </g>
-          <text x="200" y="285" text-anchor="middle" font-size="15" fill="#c8960c" font-family="Georgia,serif" font-weight="700" opacity=".92">Sihirli Küre</text>
+          </g>
         </svg>
       </div>
       <div class="game-thumb-label">Sihirli Küre</div>
@@ -432,89 +439,7 @@ main { max-width: 960px; }
     <div class="cat-label">Tahta ve Strateji Oyunları</div>
     <div class="cat-line"></div>
   </div>
-  <div class="games-grid">
-
-    <!-- TÜRK DAMASI -->
-    <div class="game-thumb" data-game="turk-damasi" data-title="Türk Daması">
-      <div class="thumb-wrap">
-        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#0e0a06"/>
-          <!-- 5x5 dama tahtası, ortalanmış -->
-          <g transform="translate(87,22)">
-            <!-- Tahta kareleri: tek renk (Türk damasında tüm kareler oynanır) -->
-            <!-- Satır 0 — Beyaz taşlar -->
-            <rect x="0"   y="0"   width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="46"  y="0"   width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="92"  y="0"   width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="138" y="0"   width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="184" y="0"   width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <!-- Satır 1 — Beyaz taşlar -->
-            <rect x="0"   y="46"  width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <rect x="46"  y="46"  width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <rect x="92"  y="46"  width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <rect x="138" y="46"  width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <rect x="184" y="46"  width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <!-- Satır 2 — Boş -->
-            <rect x="0"   y="92"  width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="46"  y="92"  width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="92"  y="92"  width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="138" y="92"  width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="184" y="92"  width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <!-- Satır 3 — Siyah taşlar -->
-            <rect x="0"   y="138" width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <rect x="46"  y="138" width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <rect x="92"  y="138" width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <rect x="138" y="138" width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <rect x="184" y="138" width="46" height="46" fill="#7a4e1e" opacity=".9"/>
-            <!-- Satır 4 — Siyah taşlar -->
-            <rect x="0"   y="184" width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="46"  y="184" width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="92"  y="184" width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="138" y="184" width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <rect x="184" y="184" width="46" height="46" fill="#8a5c28" opacity=".9"/>
-            <!-- Izgara çizgileri -->
-            <line x1="46"  y1="0" x2="46"  y2="230" stroke="#c8960c" stroke-width=".7" opacity=".35"/>
-            <line x1="92"  y1="0" x2="92"  y2="230" stroke="#c8960c" stroke-width=".7" opacity=".35"/>
-            <line x1="138" y1="0" x2="138" y2="230" stroke="#c8960c" stroke-width=".7" opacity=".35"/>
-            <line x1="184" y1="0" x2="184" y2="230" stroke="#c8960c" stroke-width=".7" opacity=".35"/>
-            <line x1="0" y1="46"  x2="230" y2="46"  stroke="#c8960c" stroke-width=".7" opacity=".35"/>
-            <line x1="0" y1="92"  x2="230" y2="92"  stroke="#c8960c" stroke-width=".7" opacity=".35"/>
-            <line x1="0" y1="138" x2="230" y2="138" stroke="#c8960c" stroke-width=".7" opacity=".35"/>
-            <line x1="0" y1="184" x2="230" y2="184" stroke="#c8960c" stroke-width=".7" opacity=".35"/>
-            <!-- Dış çerçeve -->
-            <rect x="0" y="0" width="230" height="230" fill="none" stroke="#c8960c" stroke-width="2" opacity=".6"/>
-            <!-- Beyaz taşlar — satır 0 (5 taş) -->
-            <circle cx="23"  cy="23"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <circle cx="69"  cy="23"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <circle cx="115" cy="23"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <circle cx="161" cy="23"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <circle cx="207" cy="23"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <!-- Beyaz taşlar — satır 1 (5 taş) -->
-            <circle cx="23"  cy="69"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <circle cx="69"  cy="69"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <circle cx="115" cy="69"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <circle cx="161" cy="69"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <circle cx="207" cy="69"  r="17" fill="#f0ece4" stroke="#bbb" stroke-width="1.5"/>
-            <!-- Satır 2 boş — taş yok -->
-            <!-- Siyah taşlar — satır 3 (5 taş) -->
-            <circle cx="23"  cy="161" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <circle cx="69"  cy="161" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <circle cx="115" cy="161" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <circle cx="161" cy="161" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <circle cx="207" cy="161" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <!-- Siyah taşlar — satır 4 (5 taş) -->
-            <circle cx="23"  cy="207" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <circle cx="69"  cy="207" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <circle cx="115" cy="207" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <circle cx="161" cy="207" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-            <circle cx="207" cy="207" r="17" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
-          </g>
-          <!-- Yazı -->
-          <text x="200" y="287" text-anchor="middle" font-size="13" fill="#c8960c" font-family="Georgia,serif" opacity=".9" letter-spacing=".05em">Türk Daması</text>
-        </svg>
-      </div>
-      <div class="game-thumb-label">Türk Daması</div>
-    </div>
+  <div class="games-grid g10">
 
     <!-- SATRANÇ -->
     <div class="game-thumb" data-game="satranc" data-title="Satranç">
@@ -522,6 +447,7 @@ main { max-width: 960px; }
         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
           <defs><g id="satr-K"><g><path d="M22.5 13.5c-7.4 0-12.4 4.8-12.4 10.7 0 4.4 2.7 7.4 4.3 10.2h16.2c1.6-2.8 4.3-5.8 4.3-10.2 0-5.9-5-10.7-12.4-10.7z"/><path d="M12.5 39.5v-3.4c0-1 .8-1.8 1.8-1.8h16.4c1 0 1.8.8 1.8 1.8v3.4z"/><path d="M21 3.6h3v3h3v3h-3v4h-3v-4h-3v-3h3z"/></g><path fill="none" stroke-linecap="round" d="M16.5 26.5h12"/></g><g id="satr-Q"><g><circle cx="8.8" cy="14.4" r="2.6"/><circle cx="15.8" cy="9.2" r="2.6"/><circle cx="22.5" cy="7.2" r="2.6"/><circle cx="29.2" cy="9.2" r="2.6"/><circle cx="36.2" cy="14.4" r="2.6"/><path d="M9.6 17l5.6 11.2 2.6-14.4 4.7 12.8 4.7-12.8 2.6 14.4L35.4 17l-2.6 19.4H12.2z"/><path d="M11.5 39.5v-3.3c0-1 .8-1.8 1.8-1.8h18.4c1 0 1.8.8 1.8 1.8v3.3z"/></g></g><g id="satr-N"><g><path d="M12 39.5c.4-6.3 3-9.6 6.8-13-2-.2-4.2.5-5.9 1.2-1.6.2-3.4-1.3-3-3.3.3-1.8 3-4.6 4-8.4l1.4-6.3 3.7 3.6c7.6.3 14.6 5.8 15.4 16.1.2 3.3-.4 6.6-.6 10.1z"/></g><circle fill="#1a202b" stroke="none" cx="19.2" cy="15.2" r="1.3"/></g><g id="satr-P"><g><circle cx="22.5" cy="12.8" r="5.4"/><path d="M16.8 32.5c0-5.6 2.4-9 5.7-11.6 3.3 2.6 5.7 6 5.7 11.6z"/><path d="M13 39.5v-3.2c0-1.1.9-1.9 1.9-1.9h15.2c1 0 1.9.8 1.9 1.9v3.2z"/></g></g><g id="satr-R"><g><path d="M12.5 39.5v-3.6c0-1 .8-1.8 1.8-1.8h16.4c1 0 1.8.8 1.8 1.8v3.6z"/><path d="M15 34.1l1.3-16.6h12.4l1.3 16.6z"/><path d="M12.6 17.5V8.6h4.4v3.2h3.3V8.6h4.4v3.2H28V8.6h4.4v8.9z"/></g></g><g id="satr-B"><g><circle cx="22.5" cy="8.2" r="2.7"/><path d="M22.5 11c-5.2 3.7-8.3 8.2-8.3 13.2 0 3.2 1.7 5.2 3.7 6.4h9.2c2-1.2 3.7-3.2 3.7-6.4 0-5-3.1-9.5-8.3-13.2z"/><path d="M14.5 30.6h16v3.4h-16z"/><path d="M13 39.5v-3.2c0-1.1.9-1.9 1.9-1.9h15.2c1 0 1.9.8 1.9 1.9v3.2z"/></g><path fill="none" stroke-linecap="round" d="M22.5 14.8v6.2M19.4 17.9h6.2"/></g></defs>
           <rect width="400" height="300" fill="#0a0f17"/>
+          <g transform="translate(0,12)">
           <!-- Tahta (6x5 kesit) -->
           <rect x="80" y="38" width="40" height="40" fill="#c9d3df"/><rect x="120" y="38" width="40" height="40" fill="#5f7a99"/><rect x="160" y="38" width="40" height="40" fill="#c9d3df"/><rect x="200" y="38" width="40" height="40" fill="#5f7a99"/><rect x="240" y="38" width="40" height="40" fill="#c9d3df"/><rect x="280" y="38" width="40" height="40" fill="#5f7a99"/><rect x="80" y="78" width="40" height="40" fill="#5f7a99"/><rect x="120" y="78" width="40" height="40" fill="#c9d3df"/><rect x="160" y="78" width="40" height="40" fill="#5f7a99"/><rect x="200" y="78" width="40" height="40" fill="#c9d3df"/><rect x="240" y="78" width="40" height="40" fill="#5f7a99"/><rect x="280" y="78" width="40" height="40" fill="#c9d3df"/><rect x="80" y="118" width="40" height="40" fill="#c9d3df"/><rect x="120" y="118" width="40" height="40" fill="#5f7a99"/><rect x="160" y="118" width="40" height="40" fill="#c9d3df"/><rect x="200" y="118" width="40" height="40" fill="#5f7a99"/><rect x="240" y="118" width="40" height="40" fill="#c9d3df"/><rect x="280" y="118" width="40" height="40" fill="#5f7a99"/><rect x="80" y="158" width="40" height="40" fill="#5f7a99"/><rect x="120" y="158" width="40" height="40" fill="#c9d3df"/><rect x="160" y="158" width="40" height="40" fill="#5f7a99"/><rect x="200" y="158" width="40" height="40" fill="#c9d3df"/><rect x="240" y="158" width="40" height="40" fill="#5f7a99"/><rect x="280" y="158" width="40" height="40" fill="#c9d3df"/><rect x="80" y="198" width="40" height="40" fill="#c9d3df"/><rect x="120" y="198" width="40" height="40" fill="#5f7a99"/><rect x="160" y="198" width="40" height="40" fill="#c9d3df"/><rect x="200" y="198" width="40" height="40" fill="#5f7a99"/><rect x="240" y="198" width="40" height="40" fill="#c9d3df"/><rect x="280" y="198" width="40" height="40" fill="#5f7a99"/>
           <rect x="200" y="118" width="40" height="40" fill="rgba(255,214,90,.38)"/><rect x="160" y="158" width="40" height="40" fill="rgba(255,214,90,.38)"/>
@@ -529,30 +455,456 @@ main { max-width: 960px; }
           <!-- Taşlar -->
           <use href="#satr-R" transform="translate(80.65 38.65) scale(.86)" fill="#14171e" stroke="#ece4cc" stroke-width="1.5" stroke-linejoin="round"/><use href="#satr-K" transform="translate(240.65 38.65) scale(.86)" fill="#14171e" stroke="#ece4cc" stroke-width="1.5" stroke-linejoin="round"/><use href="#satr-P" transform="translate(160.65 78.65) scale(.86)" fill="#14171e" stroke="#ece4cc" stroke-width="1.5" stroke-linejoin="round"/><use href="#satr-N" transform="translate(200.65 118.65) scale(.86)" fill="#f8f1de" stroke="#1a202b" stroke-width="1.5" stroke-linejoin="round"/><use href="#satr-Q" transform="translate(120.65 158.65) scale(.86)" fill="#f8f1de" stroke="#1a202b" stroke-width="1.5" stroke-linejoin="round"/><use href="#satr-P" transform="translate(280.65 158.65) scale(.86)" fill="#f8f1de" stroke="#1a202b" stroke-width="1.5" stroke-linejoin="round"/><use href="#satr-K" transform="translate(240.65 198.65) scale(.86)" fill="#f8f1de" stroke="#1a202b" stroke-width="1.5" stroke-linejoin="round"/><use href="#satr-B" transform="translate(80.65 198.65) scale(.86)" fill="#14171e" stroke="#ece4cc" stroke-width="1.5" stroke-linejoin="round"/>
           <!-- Etiket -->
-          <text x="200" y="278" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".85">Satranç</text>
+          </g>
         </svg>
       </div>
       <div class="game-thumb-label">Satranç</div>
+    </div>
+
+    <!-- TÜRK DAMASI -->
+    <div class="game-thumb" data-game="turk-damasi" data-title="Türk Daması">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+          <linearGradient id="tdW" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b3a22"/><stop offset="1" stop-color="#46281a"/></linearGradient>
+          <linearGradient id="tdM" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3ead4"/><stop offset=".4" stop-color="#e4ecdf"/><stop offset=".7" stop-color="#f1e2da"/><stop offset="1" stop-color="#e8dcc0"/></linearGradient>
+          <radialGradient id="tdI" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#fffdf5"/><stop offset=".55" stop-color="#eadfc4"/><stop offset="1" stop-color="#b8a47c"/></radialGradient>
+          <radialGradient id="tdE" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#76625a"/><stop offset=".55" stop-color="#2d1f1a"/><stop offset="1" stop-color="#0e0806"/></radialGradient>
+          <radialGradient id="tdG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#c8960c" stop-opacity=".22"/><stop offset="1" stop-color="#c8960c" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="400" height="300" fill="#140b08"/>
+          <ellipse cx="200" cy="150" rx="190" ry="150" fill="url(#tdG)"/>
+          <rect x="72" y="22" width="256" height="256" rx="6" fill="#5a3a1c" stroke="#c8960c" stroke-width="1.5" opacity=".95"/>
+          <rect x="76" y="26" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="107" y="26" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="138" y="26" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="169" y="26" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="200" y="26" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="231" y="26" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="262" y="26" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="293" y="26" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="76" y="57" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="107" y="57" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="138" y="57" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="169" y="57" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="200" y="57" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="231" y="57" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="262" y="57" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="293" y="57" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="76" y="88" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="107" y="88" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="138" y="88" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="169" y="88" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="200" y="88" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="231" y="88" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="262" y="88" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="293" y="88" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="76" y="119" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="107" y="119" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="138" y="119" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="169" y="119" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="200" y="119" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="231" y="119" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="262" y="119" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="293" y="119" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="76" y="150" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="107" y="150" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="138" y="150" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="169" y="150" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="200" y="150" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="231" y="150" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="262" y="150" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="293" y="150" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="76" y="181" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="107" y="181" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="138" y="181" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="169" y="181" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="200" y="181" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="231" y="181" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="262" y="181" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="293" y="181" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="76" y="212" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="107" y="212" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="138" y="212" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="169" y="212" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="200" y="212" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="231" y="212" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="262" y="212" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="293" y="212" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="76" y="243" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="107" y="243" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="138" y="243" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="169" y="243" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="200" y="243" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="231" y="243" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="262" y="243" width="31" height="31" fill="url(#tdW)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <rect x="293" y="243" width="31" height="31" fill="url(#tdM)" stroke="#c8960c" stroke-opacity=".6" stroke-width=".5"/>
+          <circle cx="92.1" cy="74.3" r="11.2" fill="#000" opacity=".38"/><circle cx="91.5" cy="72.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="91.5" cy="72.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="123.1" cy="74.3" r="11.2" fill="#000" opacity=".38"/><circle cx="122.5" cy="72.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="122.5" cy="72.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="154.1" cy="74.3" r="11.2" fill="#000" opacity=".38"/><circle cx="153.5" cy="72.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="153.5" cy="72.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="185.1" cy="74.3" r="11.2" fill="#000" opacity=".38"/><circle cx="184.5" cy="72.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="184.5" cy="72.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="216.1" cy="74.3" r="11.2" fill="#000" opacity=".38"/><circle cx="215.5" cy="72.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="215.5" cy="72.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="247.1" cy="74.3" r="11.2" fill="#000" opacity=".38"/><circle cx="246.5" cy="72.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="246.5" cy="72.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="278.1" cy="74.3" r="11.2" fill="#000" opacity=".38"/><circle cx="277.5" cy="72.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="277.5" cy="72.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="309.1" cy="74.3" r="11.2" fill="#000" opacity=".38"/><circle cx="308.5" cy="72.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="308.5" cy="72.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="92.1" cy="105.3" r="11.2" fill="#000" opacity=".38"/><circle cx="91.5" cy="103.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="91.5" cy="103.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="123.1" cy="105.3" r="11.2" fill="#000" opacity=".38"/><circle cx="122.5" cy="103.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="122.5" cy="103.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="154.1" cy="105.3" r="11.2" fill="#000" opacity=".38"/><circle cx="153.5" cy="103.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="153.5" cy="103.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="185.1" cy="105.3" r="11.2" fill="#000" opacity=".38"/><circle cx="184.5" cy="103.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="184.5" cy="103.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="216.1" cy="105.3" r="11.2" fill="#000" opacity=".38"/><circle cx="215.5" cy="103.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="215.5" cy="103.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="247.1" cy="105.3" r="11.2" fill="#000" opacity=".38"/><circle cx="246.5" cy="103.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="246.5" cy="103.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="278.1" cy="105.3" r="11.2" fill="#000" opacity=".38"/><circle cx="277.5" cy="103.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="277.5" cy="103.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="309.1" cy="105.3" r="11.2" fill="#000" opacity=".38"/><circle cx="308.5" cy="103.5" r="11.2" fill="url(#tdE)" stroke="#e6d6b0" stroke-width="1"/><circle cx="308.5" cy="103.5" r="7.6" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="92.1" cy="198.3" r="11.2" fill="#000" opacity=".38"/><circle cx="91.5" cy="196.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="91.5" cy="196.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="123.1" cy="198.3" r="11.2" fill="#000" opacity=".38"/><circle cx="122.5" cy="196.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="122.5" cy="196.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="154.1" cy="198.3" r="11.2" fill="#000" opacity=".38"/><circle cx="153.5" cy="196.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="153.5" cy="196.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="185.1" cy="198.3" r="11.2" fill="#000" opacity=".38"/><circle cx="184.5" cy="196.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="184.5" cy="196.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="216.1" cy="198.3" r="11.2" fill="#000" opacity=".38"/><circle cx="215.5" cy="196.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="215.5" cy="196.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="247.1" cy="198.3" r="11.2" fill="#000" opacity=".38"/><circle cx="246.5" cy="196.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="246.5" cy="196.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="278.1" cy="198.3" r="11.2" fill="#000" opacity=".38"/><circle cx="277.5" cy="196.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="277.5" cy="196.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="309.1" cy="198.3" r="11.2" fill="#000" opacity=".38"/><circle cx="308.5" cy="196.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="308.5" cy="196.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="92.1" cy="229.3" r="11.2" fill="#000" opacity=".38"/><circle cx="91.5" cy="227.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="91.5" cy="227.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="123.1" cy="229.3" r="11.2" fill="#000" opacity=".38"/><circle cx="122.5" cy="227.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="122.5" cy="227.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="154.1" cy="229.3" r="11.2" fill="#000" opacity=".38"/><circle cx="153.5" cy="227.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="153.5" cy="227.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="185.1" cy="229.3" r="11.2" fill="#000" opacity=".38"/><circle cx="184.5" cy="227.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="184.5" cy="227.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="216.1" cy="229.3" r="11.2" fill="#000" opacity=".38"/><circle cx="215.5" cy="227.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="215.5" cy="227.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="247.1" cy="229.3" r="11.2" fill="#000" opacity=".38"/><circle cx="246.5" cy="227.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="246.5" cy="227.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="278.1" cy="229.3" r="11.2" fill="#000" opacity=".38"/><circle cx="277.5" cy="227.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="277.5" cy="227.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="309.1" cy="229.3" r="11.2" fill="#000" opacity=".38"/><circle cx="308.5" cy="227.5" r="11.2" fill="url(#tdI)" stroke="#5a3a1c" stroke-width="1"/><circle cx="308.5" cy="227.5" r="7.6" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Türk Daması</div>
+    </div>
+
+    <!-- KLASİK TAVLA -->
+    <div class="game-thumb" data-game="tavla" data-title="Klasik Tavla">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+          <linearGradient id="tvW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5b3a22"/><stop offset=".5" stop-color="#52321e"/><stop offset="1" stop-color="#46281a"/></linearGradient>
+          <linearGradient id="tvLt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1e2da"/><stop offset="1" stop-color="#d5cebe"/></linearGradient>
+          <linearGradient id="tvLb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#f1e2da"/><stop offset="1" stop-color="#d5cebe"/></linearGradient>
+          <linearGradient id="tvDt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#46281a"/><stop offset="1" stop-color="#2d1f1a"/></linearGradient>
+          <linearGradient id="tvDb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#46281a"/><stop offset="1" stop-color="#2d1f1a"/></linearGradient>
+          <radialGradient id="tvI" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#fffdf5"/><stop offset=".55" stop-color="#eadfc4"/><stop offset="1" stop-color="#b8a47c"/></radialGradient>
+          <radialGradient id="tvE" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#76625a"/><stop offset=".55" stop-color="#2d1f1a"/><stop offset="1" stop-color="#0e0806"/></radialGradient>
+          <linearGradient id="tvDE" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a5750"/><stop offset="1" stop-color="#1e1512"/></linearGradient>
+          <linearGradient id="tvDI" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e6bd"/><stop offset="1" stop-color="#c9aa6c"/></linearGradient>
+          </defs>
+          <rect width="400" height="300" fill="#0e0c08"/>
+          <rect x="14" y="34" width="372" height="232" rx="8" fill="#2e1b0e" stroke="#c8960c" stroke-width="1" opacity=".95"/>
+          <rect x="22" y="42" width="152" height="216" fill="url(#tvW)"/>
+          <rect x="198" y="42" width="152" height="216" fill="url(#tvW)"/>
+          <rect x="174" y="34" width="24" height="232" fill="#2a190c"/>
+          <rect x="355" y="42" width="23" height="216" fill="#24140a" stroke="#c8960c" stroke-opacity=".55" stroke-width="1"/>
+          <polygon points="22,42 47.3,42 34.7,126" fill="url(#tvDt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="22,258 47.3,258 34.7,174" fill="url(#tvDb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="47.3,42 72.7,42 60,126" fill="url(#tvLt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="47.3,258 72.7,258 60,174" fill="url(#tvLb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="72.7,42 98,42 85.3,126" fill="url(#tvDt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="72.7,258 98,258 85.3,174" fill="url(#tvDb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="98,42 123.3,42 110.7,126" fill="url(#tvLt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="98,258 123.3,258 110.7,174" fill="url(#tvLb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="123.3,42 148.7,42 136,126" fill="url(#tvDt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="123.3,258 148.7,258 136,174" fill="url(#tvDb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="148.7,42 174,42 161.3,126" fill="url(#tvLt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="148.7,258 174,258 161.3,174" fill="url(#tvLb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="198,42 223.3,42 210.7,126" fill="url(#tvDt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="198,258 223.3,258 210.7,174" fill="url(#tvDb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="223.3,42 248.7,42 236,126" fill="url(#tvLt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="223.3,258 248.7,258 236,174" fill="url(#tvLb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="248.7,42 274,42 261.3,126" fill="url(#tvDt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="248.7,258 274,258 261.3,174" fill="url(#tvDb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="274,42 299.3,42 286.7,126" fill="url(#tvLt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="274,258 299.3,258 286.7,174" fill="url(#tvLb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="299.3,42 324.7,42 312,126" fill="url(#tvDt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="299.3,258 324.7,258 312,174" fill="url(#tvDb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="324.7,42 350,42 337.3,126" fill="url(#tvLt)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <polygon points="324.7,258 350,258 337.3,174" fill="url(#tvLb)" stroke="#1e0f05" stroke-opacity=".5" stroke-width=".5"/>
+          <circle cx="34.7" cy="52.3" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="34.7" cy="52.3" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="34.7" cy="71.7" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="34.7" cy="71.7" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="34.7" cy="91.1" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="34.7" cy="91.1" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="34.7" cy="110.5" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="34.7" cy="110.5" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="34.7" cy="129.9" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="34.7" cy="129.9" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="110.7" cy="52.3" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="110.7" cy="52.3" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="110.7" cy="71.7" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="110.7" cy="71.7" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="110.7" cy="91.1" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="110.7" cy="91.1" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="34.7" cy="247.7" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="34.7" cy="247.7" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="34.7" cy="228.3" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="34.7" cy="228.3" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="34.7" cy="208.9" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="34.7" cy="208.9" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="34.7" cy="189.5" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="34.7" cy="189.5" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="34.7" cy="170.1" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="34.7" cy="170.1" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="110.7" cy="247.7" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="110.7" cy="247.7" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="110.7" cy="228.3" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="110.7" cy="228.3" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="110.7" cy="208.9" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="110.7" cy="208.9" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="210.7" cy="52.3" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="210.7" cy="52.3" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="210.7" cy="71.7" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="210.7" cy="71.7" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="210.7" cy="91.1" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="210.7" cy="91.1" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="210.7" cy="110.5" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="210.7" cy="110.5" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="210.7" cy="129.9" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="210.7" cy="129.9" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="337.3" cy="52.3" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="337.3" cy="52.3" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="337.3" cy="71.7" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="337.3" cy="71.7" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="210.7" cy="247.7" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="210.7" cy="247.7" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="210.7" cy="228.3" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="210.7" cy="228.3" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="210.7" cy="208.9" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="210.7" cy="208.9" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="210.7" cy="189.5" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="210.7" cy="189.5" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="210.7" cy="170.1" r="10.3" fill="url(#tvI)" stroke="#5a3a1c" stroke-width=".9"/>
+          <circle cx="210.7" cy="170.1" r="7" fill="none" stroke="rgba(90,58,28,.45)" stroke-width=".6"/>
+          <circle cx="337.3" cy="247.7" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="337.3" cy="247.7" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <circle cx="337.3" cy="228.3" r="10.3" fill="url(#tvE)" stroke="#e6d6b0" stroke-width=".9"/>
+          <circle cx="337.3" cy="228.3" r="7" fill="none" stroke="rgba(230,214,176,.35)" stroke-width=".6"/>
+          <rect x="88" y="140" width="20" height="20" rx="4" fill="url(#tvDE)" stroke="rgba(230,214,176,.85)" stroke-width="1"/>
+          <circle cx="93" cy="145" r="1.9" fill="#fff0c9"/>
+          <circle cx="98" cy="150" r="1.9" fill="#fff0c9"/>
+          <circle cx="103" cy="155" r="1.9" fill="#fff0c9"/>
+          <rect x="264" y="140" width="20" height="20" rx="4" fill="url(#tvDI)" stroke="rgba(55,32,10,.95)" stroke-width="1"/>
+          <circle cx="269.5" cy="144.5" r="1.7" fill="#2a1a0c"/>
+          <circle cx="269.5" cy="150" r="1.7" fill="#2a1a0c"/>
+          <circle cx="269.5" cy="155.5" r="1.7" fill="#2a1a0c"/>
+          <circle cx="278.5" cy="144.5" r="1.7" fill="#2a1a0c"/>
+          <circle cx="278.5" cy="150" r="1.7" fill="#2a1a0c"/>
+          <circle cx="278.5" cy="155.5" r="1.7" fill="#2a1a0c"/>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Klasik Tavla</div>
+    </div>
+
+    <!-- MANGALA -->
+    <div class="game-thumb" data-game="mangala" data-title="Mangala">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+          <linearGradient id="mgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3322"/><stop offset="1" stop-color="#3a1f13"/></linearGradient>
+          <radialGradient id="mgR" cx=".5" cy=".5" r=".5" fx=".32" fy=".28"><stop offset="0" stop-color="#ffd6d6"/><stop offset=".5" stop-color="#ff6b6b"/><stop offset="1" stop-color="#a82828"/></radialGradient>
+          <radialGradient id="mgU" cx=".5" cy=".5" r=".5" fx=".32" fy=".28"><stop offset="0" stop-color="#e3f0ff"/><stop offset=".5" stop-color="#6aa8ff"/><stop offset="1" stop-color="#2a56b0"/></radialGradient>
+          <radialGradient id="mgG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#c8960c" stop-opacity=".18"/><stop offset="1" stop-color="#c8960c" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="400" height="300" fill="#0e0703"/>
+          <ellipse cx="200" cy="150" rx="195" ry="140" fill="url(#mgG)"/>
+          <rect x="24" y="58" width="352" height="184" rx="34" fill="url(#mgB)" stroke="#c8960c" stroke-width="1.6"/>
+          <rect x="32" y="66" width="336" height="168" rx="28" fill="#1a0e07" stroke="#2e1c0f" stroke-width="1.5"/>
+          <rect x="40" y="82" width="44" height="136" rx="22" fill="#0d0603" stroke="#c8960c" stroke-opacity=".45" stroke-width="1"/>
+          <rect x="316" y="82" width="44" height="136" rx="22" fill="#0d0603" stroke="#c8960c" stroke-opacity=".45" stroke-width="1"/>
+          <text x="62" y="156" text-anchor="middle" font-size="20" font-weight="700" fill="#ffd966" font-family="Georgia,serif">0</text>
+          <text x="338" y="156" text-anchor="middle" font-size="20" font-weight="700" fill="#ffd966" font-family="Georgia,serif">0</text>
+          <circle cx="110" cy="112" r="15.5" fill="#170b05" stroke="#ff8383" stroke-width="1.6" stroke-opacity=".85"/>
+          <circle cx="103.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="110" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="116.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="110" cy="115.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="146" cy="112" r="15.5" fill="#170b05" stroke="#ff8383" stroke-width="1.6" stroke-opacity=".85"/>
+          <circle cx="139.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="146" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="152.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="146" cy="115.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="182" cy="112" r="15.5" fill="#170b05" stroke="#ff8383" stroke-width="1.6" stroke-opacity=".85"/>
+          <circle cx="175.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="182" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="188.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="182" cy="115.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="218" cy="112" r="15.5" fill="#170b05" stroke="#ff8383" stroke-width="1.6" stroke-opacity=".85"/>
+          <circle cx="211.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="218" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="224.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="218" cy="115.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="254" cy="112" r="15.5" fill="#170b05" stroke="#ff8383" stroke-width="1.6" stroke-opacity=".85"/>
+          <circle cx="247.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="254" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="260.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="254" cy="115.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="290" cy="112" r="15.5" fill="#170b05" stroke="#ff8383" stroke-width="1.6" stroke-opacity=".85"/>
+          <circle cx="283.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="290" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="296.5" cy="107.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="290" cy="115.5" r="4.4" fill="url(#mgR)"/>
+          <circle cx="110" cy="188" r="15.5" fill="#170b05" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+          <circle cx="103.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="110" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="116.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="110" cy="191.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="146" cy="188" r="15.5" fill="#170b05" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+          <circle cx="139.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="146" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="152.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="146" cy="191.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="182" cy="188" r="15.5" fill="#170b05" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+          <circle cx="175.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="182" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="188.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="182" cy="191.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="218" cy="188" r="15.5" fill="#170b05" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+          <circle cx="211.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="218" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="224.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="218" cy="191.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="254" cy="188" r="15.5" fill="#170b05" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+          <circle cx="247.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="254" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="260.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="254" cy="191.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="290" cy="188" r="15.5" fill="#170b05" stroke="rgba(255,255,255,.2)" stroke-width="1" />
+          <circle cx="283.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="290" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="296.5" cy="183.5" r="4.4" fill="url(#mgU)"/>
+          <circle cx="290" cy="191.5" r="4.4" fill="url(#mgU)"/>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Mangala</div>
     </div>
 
     <!-- REVERSİ -->
     <div class="game-thumb" data-game="reversi" data-title="Reversi">
       <div class="thumb-wrap">
         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#0a160a"/>
-          <rect x="60" y="50" width="280" height="200" rx="4" fill="#1a4a1a" opacity=".6"/>
-          <line x1="130" y1="50" x2="130" y2="250" stroke="#2a6a2a" stroke-width="1"/>
-          <line x1="200" y1="50" x2="200" y2="250" stroke="#2a6a2a" stroke-width="1"/>
-          <line x1="270" y1="50" x2="270" y2="250" stroke="#2a6a2a" stroke-width="1"/>
-          <line x1="60" y1="120" x2="340" y2="120" stroke="#2a6a2a" stroke-width="1"/>
-          <line x1="60" y1="185" x2="340" y2="185" stroke="#2a6a2a" stroke-width="1"/>
-          <circle cx="165" cy="152" r="28" fill="#f0f0f0" stroke="#ccc" stroke-width="1"/>
-          <circle cx="235" cy="152" r="28" fill="#1a1a1a" stroke="#444" stroke-width="1"/>
-          <circle cx="165" cy="218" r="28" fill="#1a1a1a" stroke="#444" stroke-width="1"/>
-          <circle cx="235" cy="218" r="28" fill="#f0f0f0" stroke="#ccc" stroke-width="1"/>
-          <circle cx="95" cy="85" r="22" fill="#1a1a1a" stroke="#444" stroke-width="1" opacity=".7"/>
-          <circle cx="305" cy="85" r="22" fill="#f0f0f0" stroke="#ccc" stroke-width="1" opacity=".7"/>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".8">Reversi</text>
+          <defs>
+          <linearGradient id="rvT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f8f40"/><stop offset="1" stop-color="#27803a"/></linearGradient>
+          <radialGradient id="rvB" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#6a6a6a"/><stop offset=".5" stop-color="#1a1a1a"/><stop offset="1" stop-color="#000"/></radialGradient>
+          <radialGradient id="rvW" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#f3eedf"/><stop offset="1" stop-color="#c9c1aa"/></radialGradient>
+          <radialGradient id="rvG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#3aa04b" stop-opacity=".25"/><stop offset="1" stop-color="#3aa04b" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="400" height="300" fill="#08140a"/>
+          <ellipse cx="200" cy="150" rx="190" ry="150" fill="url(#rvG)"/>
+          <rect x="75" y="25" width="250" height="250" rx="6" fill="#09220e" stroke="#c8960c" stroke-width="1.6"/>
+          <rect x="80" y="30" width="240" height="240" fill="#1b5f29"/>
+          <rect x="80.8" y="30.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="110.8" y="30.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="30.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="170.8" y="30.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="200.8" y="30.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="230.8" y="30.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="260.8" y="30.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="290.8" y="30.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="80.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="110.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="170.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="170.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="#ffd966" opacity=".2"/>
+          <circle cx="185" cy="75" r="6" fill="none" stroke="#ffd966" stroke-width="1.6"/>
+          <rect x="200.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="230.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="260.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="290.8" y="60.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="80.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="110.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="170.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="200.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="230.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="230.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="#ffd966" opacity=".2"/>
+          <circle cx="245" cy="105" r="6" fill="none" stroke="#ffd966" stroke-width="1.6"/>
+          <rect x="260.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="290.8" y="90.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="80.8" y="120.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="110.8" y="120.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="120.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="170.8" y="120.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="200.8" y="120.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="230.8" y="120.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="260.8" y="120.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="290.8" y="120.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="80.8" y="150.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="110.8" y="150.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="150.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="170.8" y="150.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="200.8" y="150.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="230.8" y="150.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="260.8" y="150.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="290.8" y="150.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="80.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="110.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="#ffd966" opacity=".2"/>
+          <circle cx="155" cy="195" r="6" fill="none" stroke="#ffd966" stroke-width="1.6"/>
+          <rect x="170.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="200.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="230.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="260.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="290.8" y="180.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="80.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="110.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="170.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="200.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="200.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="#ffd966" opacity=".2"/>
+          <circle cx="215" cy="225" r="6" fill="none" stroke="#ffd966" stroke-width="1.6"/>
+          <rect x="230.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="260.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="290.8" y="210.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="80.8" y="240.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="110.8" y="240.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="140.8" y="240.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="170.8" y="240.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="200.8" y="240.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="230.8" y="240.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="260.8" y="240.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <rect x="290.8" y="240.8" width="28.4" height="28.4" rx="1.5" fill="url(#rvT)"/>
+          <circle cx="155.5" cy="106.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="155" cy="105" r="12" fill="url(#rvW)"/>
+          <ellipse cx="151.5" cy="100" rx="4" ry="2.2" fill="#fff" opacity="0.6" transform="rotate(-30 151.5 100)"/>
+          <circle cx="185.5" cy="106.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="185" cy="105" r="12" fill="url(#rvB)"/>
+          <ellipse cx="181.5" cy="100" rx="4" ry="2.2" fill="#fff" opacity="0.5" transform="rotate(-30 181.5 100)"/>
+          <circle cx="215.5" cy="106.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="215" cy="105" r="12" fill="url(#rvB)"/>
+          <ellipse cx="211.5" cy="100" rx="4" ry="2.2" fill="#fff" opacity="0.5" transform="rotate(-30 211.5 100)"/>
+          <circle cx="155.5" cy="136.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="155" cy="135" r="12" fill="url(#rvW)"/>
+          <ellipse cx="151.5" cy="130" rx="4" ry="2.2" fill="#fff" opacity="0.6" transform="rotate(-30 151.5 130)"/>
+          <circle cx="185.5" cy="136.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="185" cy="135" r="12" fill="url(#rvW)"/>
+          <ellipse cx="181.5" cy="130" rx="4" ry="2.2" fill="#fff" opacity="0.6" transform="rotate(-30 181.5 130)"/>
+          <circle cx="215.5" cy="136.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="215" cy="135" r="12" fill="url(#rvB)"/>
+          <ellipse cx="211.5" cy="130" rx="4" ry="2.2" fill="#fff" opacity="0.5" transform="rotate(-30 211.5 130)"/>
+          <circle cx="245.5" cy="136.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="245" cy="135" r="12" fill="url(#rvB)"/>
+          <ellipse cx="241.5" cy="130" rx="4" ry="2.2" fill="#fff" opacity="0.5" transform="rotate(-30 241.5 130)"/>
+          <circle cx="155.5" cy="166.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="155" cy="165" r="12" fill="url(#rvB)"/>
+          <ellipse cx="151.5" cy="160" rx="4" ry="2.2" fill="#fff" opacity="0.5" transform="rotate(-30 151.5 160)"/>
+          <circle cx="185.5" cy="166.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="185" cy="165" r="12" fill="url(#rvW)"/>
+          <ellipse cx="181.5" cy="160" rx="4" ry="2.2" fill="#fff" opacity="0.6" transform="rotate(-30 181.5 160)"/>
+          <circle cx="215.5" cy="166.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="215" cy="165" r="12" fill="url(#rvW)"/>
+          <ellipse cx="211.5" cy="160" rx="4" ry="2.2" fill="#fff" opacity="0.6" transform="rotate(-30 211.5 160)"/>
+          <circle cx="245.5" cy="166.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="245" cy="165" r="12" fill="url(#rvB)"/>
+          <ellipse cx="241.5" cy="160" rx="4" ry="2.2" fill="#fff" opacity="0.5" transform="rotate(-30 241.5 160)"/>
+          <circle cx="185.5" cy="196.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="185" cy="195" r="12" fill="url(#rvB)"/>
+          <ellipse cx="181.5" cy="190" rx="4" ry="2.2" fill="#fff" opacity="0.5" transform="rotate(-30 181.5 190)"/>
+          <circle cx="215.5" cy="196.6" r="12" fill="#000" opacity=".35"/>
+          <circle cx="215" cy="195" r="12" fill="url(#rvW)"/>
+          <ellipse cx="211.5" cy="190" rx="4" ry="2.2" fill="#fff" opacity="0.6" transform="rotate(-30 211.5 190)"/>
         </svg>
       </div>
       <div class="game-thumb-label">Reversi</div>
@@ -562,133 +914,133 @@ main { max-width: 960px; }
     <div class="game-thumb" data-game="mayin-tarlasi" data-title="Mayın Tarlası">
       <div class="thumb-wrap">
         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#0e0e0a"/>
-          <g transform="translate(35,28)">
-            <!-- 6x5 ızgara tabanı -->
-            <rect x="0" y="0" width="330" height="240" rx="4" fill="#16140e" stroke="#c8960c" stroke-width="1.5" opacity=".4"/>
-            <!-- Dikey çizgiler -->
-            <line x1="55"  y1="0" x2="55"  y2="240" stroke="#2a2810" stroke-width="1"/>
-            <line x1="110" y1="0" x2="110" y2="240" stroke="#2a2810" stroke-width="1"/>
-            <line x1="165" y1="0" x2="165" y2="240" stroke="#2a2810" stroke-width="1"/>
-            <line x1="220" y1="0" x2="220" y2="240" stroke="#2a2810" stroke-width="1"/>
-            <line x1="275" y1="0" x2="275" y2="240" stroke="#2a2810" stroke-width="1"/>
-            <!-- Yatay çizgiler -->
-            <line x1="0" y1="48"  x2="330" y2="48"  stroke="#2a2810" stroke-width="1"/>
-            <line x1="0" y1="96"  x2="330" y2="96"  stroke="#2a2810" stroke-width="1"/>
-            <line x1="0" y1="144" x2="330" y2="144" stroke="#2a2810" stroke-width="1"/>
-            <line x1="0" y1="192" x2="330" y2="192" stroke="#2a2810" stroke-width="1"/>
-            <!-- Açık hücreler (sayılar) -->
-            <rect x="1"   y="1"   width="53" height="46" rx="2" fill="#1e1c14"/>
-            <rect x="56"  y="1"   width="53" height="46" rx="2" fill="#1e1c14"/>
-            <rect x="111" y="1"   width="53" height="46" rx="2" fill="#1e1c14"/>
-            <rect x="1"   y="49"  width="53" height="46" rx="2" fill="#1e1c14"/>
-            <rect x="56"  y="49"  width="53" height="46" rx="2" fill="#1e1c14"/>
-            <rect x="111" y="49"  width="53" height="46" rx="2" fill="#1e1c14"/>
-            <rect x="166" y="49"  width="53" height="46" rx="2" fill="#1e1c14"/>
-            <rect x="1"   y="97"  width="53" height="46" rx="2" fill="#1e1c14"/>
-            <!-- Sayılar -->
-            <text x="27"  y="33" text-anchor="middle" font-size="22" fill="#3498db" font-family="Georgia,serif">1</text>
-            <text x="82"  y="33" text-anchor="middle" font-size="22" fill="#2ecc71" font-family="Georgia,serif">2</text>
-            <text x="137" y="33" text-anchor="middle" font-size="22" fill="#3498db" font-family="Georgia,serif">1</text>
-            <text x="27"  y="81" text-anchor="middle" font-size="22" fill="#3498db" font-family="Georgia,serif">1</text>
-            <text x="82"  y="81" text-anchor="middle" font-size="22" fill="#2ecc71" font-family="Georgia,serif">2</text>
-            <text x="137" y="81" text-anchor="middle" font-size="22" fill="#e74c3c" font-family="Georgia,serif">3</text>
-            <text x="192" y="81" text-anchor="middle" font-size="22" fill="#2ecc71" font-family="Georgia,serif">2</text>
-            <text x="27"  y="129" text-anchor="middle" font-size="22" fill="#3498db" font-family="Georgia,serif">1</text>
-            <!-- Kapalı hücreler -->
-            <rect x="166" y="1"   width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="221" y="1"   width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="276" y="1"   width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="221" y="49"  width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="276" y="49"  width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="56"  y="97"  width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="111" y="97"  width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="166" y="97"  width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="221" y="97"  width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <rect x="276" y="97"  width="53" height="46" rx="2" fill="#2a2818" stroke="rgba(200,150,12,0.2)" stroke-width="1"/>
-            <!-- Bayraklı hücre -->
-            <rect x="221" y="49" width="53" height="46" rx="2" fill="#3a1e10" stroke="rgba(231,76,60,0.4)" stroke-width="1.5"/>
-            <line x1="248" y1="58" x2="248" y2="87" stroke="#c8960c" stroke-width="2"/>
-            <polygon points="248,58 268,65 248,72" fill="#e74c3c"/>
-            <!-- Patlayan mayın hücresi -->
-            <rect x="276" y="97"  width="53" height="46" rx="2" fill="#3a0808" stroke="rgba(231,76,60,0.6)" stroke-width="2"/>
-            <circle cx="302" cy="120" r="12" fill="#c8960c" opacity=".9"/>
-            <line x1="302" y1="103" x2="302" y2="96"  stroke="#c8960c" stroke-width="2"/>
-            <line x1="302" y1="137" x2="302" y2="144" stroke="#c8960c" stroke-width="2"/>
-            <line x1="285" y1="120" x2="278" y2="120" stroke="#c8960c" stroke-width="2"/>
-            <line x1="319" y1="120" x2="326" y2="120" stroke="#c8960c" stroke-width="2"/>
-            <line x1="290" y1="108" x2="285" y2="103" stroke="#c8960c" stroke-width="2"/>
-            <line x1="314" y1="108" x2="319" y2="103" stroke="#c8960c" stroke-width="2"/>
-            <line x1="290" y1="132" x2="285" y2="137" stroke="#c8960c" stroke-width="2"/>
-            <line x1="314" y1="132" x2="319" y2="137" stroke="#c8960c" stroke-width="2"/>
-            <!-- Alt satırlar kapalı -->
-            <rect x="0"   y="145" width="329" height="46" rx="0" fill="#252310" opacity=".5"/>
-            <rect x="0"   y="193" width="329" height="46" rx="0" fill="#1e1c0e" opacity=".4"/>
-          </g>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".85">Mayın Tarlası</text>
+          <defs>
+          <linearGradient id="myC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3c4453"/><stop offset="1" stop-color="#2b303c"/></linearGradient>
+          </defs>
+          <rect width="400" height="300" fill="#07080b"/>
+          <rect x="27" y="19" width="346" height="262" rx="8" fill="#0b0d12" stroke="#c8960c" stroke-width="1.4"/>
+          <rect x="33.5" y="25.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="75.5" y="25.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="117.5" y="25.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="159.5" y="25.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="201.5" y="25.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="243.5" y="25.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="285.5" y="25.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="327.5" y="25.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="33.5" y="67.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="75.5" y="67.5" width="39" height="39" rx="4" fill="#524759" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <line x1="90" y1="76" x2="90" y2="98" stroke="#f4e9c9" stroke-width="2" stroke-linecap="round"/>
+          <polygon points="91,76 105,82 91,88" fill="#ff8a3a"/>
+          <rect x="117.5" y="67.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="159.5" y="67.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="179" y="95" text-anchor="middle" font-size="24" font-weight="700" fill="#4fe39a" font-family="Georgia,serif">2</text>
+          <rect x="201.5" y="67.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="221" y="95" text-anchor="middle" font-size="24" font-weight="700" fill="#4fe39a" font-family="Georgia,serif">2</text>
+          <rect x="243.5" y="67.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="263" y="95" text-anchor="middle" font-size="24" font-weight="700" fill="#b79cff" font-family="Georgia,serif">4</text>
+          <rect x="285.5" y="67.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="327.5" y="67.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="33.5" y="109.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="75.5" y="109.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="117.5" y="109.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="159.5" y="109.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="179" y="137" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="201.5" y="109.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="243.5" y="109.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="263" y="137" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="285.5" y="109.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="305" y="137" text-anchor="middle" font-size="24" font-weight="700" fill="#ff6b6b" font-family="Georgia,serif">3</text>
+          <rect x="327.5" y="109.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="33.5" y="151.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="75.5" y="151.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="95" y="179" text-anchor="middle" font-size="24" font-weight="700" fill="#ff6b6b" font-family="Georgia,serif">3</text>
+          <rect x="117.5" y="151.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="137" y="179" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="159.5" y="151.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="179" y="179" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="201.5" y="151.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="243.5" y="151.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="285.5" y="151.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="305" y="179" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="327.5" y="151.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="33.5" y="193.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="53" y="221" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="75.5" y="193.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="95" y="221" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="117.5" y="193.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="159.5" y="193.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="201.5" y="193.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="243.5" y="193.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="263" y="221" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="285.5" y="193.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="305" y="221" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="327.5" y="193.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="33.5" y="235.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="75.5" y="235.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="117.5" y="235.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="159.5" y="235.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="179" y="263" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="201.5" y="235.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="221" y="263" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="243.5" y="235.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <rect x="285.5" y="235.5" width="39" height="39" rx="4" fill="#12151b"/>
+          <text x="305" y="263" text-anchor="middle" font-size="24" font-weight="700" fill="#5db8ff" font-family="Georgia,serif">1</text>
+          <rect x="327.5" y="235.5" width="39" height="39" rx="4" fill="url(#myC)" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
         </svg>
       </div>
       <div class="game-thumb-label">Mayın Tarlası</div>
-    </div>
-
-    <!-- MANGALA -->
-    <div class="game-thumb" data-game="mangala" data-title="Mangala">
-      <div class="thumb-wrap">
-        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#1a0e05"/>
-          <!-- Tahta gövdesi -->
-          <rect x="30" y="90" width="340" height="130" rx="50" fill="#7a5230"/>
-          <!-- Sol hazine -->
-          <ellipse cx="68" cy="155" rx="28" ry="45" fill="#4a2008"/>
-          <!-- Sağ hazine -->
-          <ellipse cx="332" cy="155" rx="28" ry="45" fill="#4a2008"/>
-          <!-- 6 üst kuyu -->
-          <ellipse cx="118" cy="125" rx="22" ry="22" fill="#4a2008"/>
-          <ellipse cx="160" cy="125" rx="22" ry="22" fill="#4a2008"/>
-          <ellipse cx="202" cy="125" rx="22" ry="22" fill="#4a2008"/>
-          <ellipse cx="244" cy="125" rx="22" ry="22" fill="#4a2008"/>
-          <ellipse cx="286" cy="125" rx="22" ry="22" fill="#4a2008"/>
-          <!-- 6 alt kuyu -->
-          <ellipse cx="118" cy="183" rx="22" ry="22" fill="#4a2008"/>
-          <ellipse cx="160" cy="183" rx="22" ry="22" fill="#4a2008"/>
-          <ellipse cx="202" cy="183" rx="22" ry="22" fill="#4a2008"/>
-          <ellipse cx="244" cy="183" rx="22" ry="22" fill="#4a2008"/>
-          <ellipse cx="286" cy="183" rx="22" ry="22" fill="#4a2008"/>
-          <!-- Taşlar — üst (kırmızımsı) -->
-          <circle cx="110" cy="120" r="5" fill="#c8845a"/><circle cx="122" cy="118" r="5" fill="#b06040"/><circle cx="114" cy="131" r="5" fill="#c8845a"/><circle cx="126" cy="129" r="5" fill="#b06040"/>
-          <circle cx="152" cy="120" r="5" fill="#c8845a"/><circle cx="164" cy="118" r="5" fill="#b06040"/><circle cx="156" cy="131" r="5" fill="#c8845a"/><circle cx="168" cy="129" r="5" fill="#b06040"/>
-          <!-- Taşlar — alt (mavimsi) -->
-          <circle cx="110" cy="178" r="5" fill="#6a9fc0"/><circle cx="122" cy="176" r="5" fill="#4a7fa0"/><circle cx="114" cy="189" r="5" fill="#6a9fc0"/><circle cx="126" cy="187" r="5" fill="#4a7fa0"/>
-          <circle cx="152" cy="178" r="5" fill="#6a9fc0"/><circle cx="164" cy="176" r="5" fill="#4a7fa0"/><circle cx="156" cy="189" r="5" fill="#6a9fc0"/><circle cx="168" cy="187" r="5" fill="#4a7fa0"/>
-          <!-- Etiket -->
-          <text x="200" y="262" text-anchor="middle" font-size="16" fill="#c8960c" font-family="Georgia,serif" opacity=".85">Mangala</text>
-        </svg>
-      </div>
-      <div class="game-thumb-label">Mangala</div>
     </div>
 
     <!-- 9 TAŞ -->
     <div class="game-thumb" data-game="dokuz-tas" data-title="Dokuz Taş">
       <div class="thumb-wrap">
         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#12100e"/>
-          <rect x="60" y="45" width="280" height="210" rx="2" fill="none" stroke="#c8960c" stroke-width="2.5" opacity=".5"/>
-          <rect x="130" y="95" width="140" height="110" rx="2" fill="none" stroke="#c8960c" stroke-width="2.5" opacity=".5"/>
-          <rect x="165" y="120" width="70" height="60" rx="2" fill="none" stroke="#c8960c" stroke-width="2" opacity=".4"/>
-          <line x1="200" y1="45" x2="200" y2="95" stroke="#c8960c" stroke-width="1.5" opacity=".3"/>
-          <line x1="200" y1="205" x2="200" y2="255" stroke="#c8960c" stroke-width="1.5" opacity=".3"/>
-          <line x1="60" y1="150" x2="130" y2="150" stroke="#c8960c" stroke-width="1.5" opacity=".3"/>
-          <line x1="270" y1="150" x2="340" y2="150" stroke="#c8960c" stroke-width="1.5" opacity=".3"/>
-          <circle cx="60" cy="45" r="6" fill="#c8960c" opacity=".7"/>
-          <circle cx="340" cy="45" r="6" fill="#c8960c" opacity=".7"/>
-          <circle cx="60" cy="255" r="6" fill="#c8960c" opacity=".7"/>
-          <circle cx="340" cy="255" r="6" fill="#c8960c" opacity=".7"/>
-          <circle cx="200" cy="45" r="10" fill="#e8d5a0"/>
-          <circle cx="60" cy="150" r="10" fill="#e8d5a0"/>
-          <circle cx="130" cy="95" r="10" fill="#4a6aaf"/>
-          <circle cx="270" cy="95" r="10" fill="#4a6aaf"/>
-          <circle cx="165" cy="150" r="9" fill="#e8d5a0"/>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".8">Dokuz Taş</text>
+          <defs>
+          <linearGradient id="dzB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#211946"/><stop offset="1" stop-color="#140e2e"/></linearGradient>
+          <radialGradient id="dzC" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#fffbe6"/><stop offset=".55" stop-color="#f1d38a"/><stop offset="1" stop-color="#b98a2e"/></radialGradient>
+          <radialGradient id="dzU" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#e3f0ff"/><stop offset=".55" stop-color="#7fb0ff"/><stop offset="1" stop-color="#3b64c0"/></radialGradient>
+          </defs>
+          <rect width="400" height="300" fill="#0a0818"/>
+          <rect x="74" y="24" width="252" height="252" rx="14" fill="url(#dzB)" stroke="#644b27" stroke-width="1.6"/>
+          <g fill="none" stroke="#c8960c" stroke-width="2" opacity=".85">
+          <rect x="96" y="46" width="208" height="208"/>
+          <rect x="131" y="81" width="138" height="138"/>
+          <rect x="165" y="115" width="70" height="70"/>
+          <path d="M200,46V115M200,185V254M96,150H165M235,150H304"/>
+          </g>
+          <circle cx="131" cy="81" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="131" cy="150" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="165" cy="150" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="165" cy="185" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="200" cy="46" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="200" cy="81" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="200" cy="115" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="200" cy="185" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="200" cy="219" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="200" cy="254" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="235" cy="115" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="235" cy="150" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="235" cy="185" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="269" cy="150" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="269" cy="219" r="3.6" fill="#c8960c" opacity=".8"/>
+          <circle cx="304" cy="150" r="3.6" fill="#c8960c" opacity=".8"/>
+          <line x1="96" y1="46" x2="96" y2="254" stroke="#ffd966" stroke-width="3" opacity=".55"/>
+          <circle cx="96.6" cy="47.6" r="10" fill="#000" opacity=".4"/>
+          <circle cx="96" cy="46" r="10" fill="url(#dzC)" stroke="#fff3c4" stroke-opacity=".5" stroke-width=".8"/>
+          <circle cx="96.6" cy="151.6" r="10" fill="#000" opacity=".4"/>
+          <circle cx="96" cy="150" r="10" fill="url(#dzC)" stroke="#fff3c4" stroke-opacity=".5" stroke-width=".8"/>
+          <circle cx="96.6" cy="255.6" r="10" fill="#000" opacity=".4"/>
+          <circle cx="96" cy="254" r="10" fill="url(#dzC)" stroke="#fff3c4" stroke-opacity=".5" stroke-width=".8"/>
+          <circle cx="269.6" cy="82.6" r="10" fill="#000" opacity=".4"/>
+          <circle cx="269" cy="81" r="10" fill="url(#dzC)" stroke="#fff3c4" stroke-opacity=".5" stroke-width=".8"/>
+          <circle cx="131.6" cy="220.6" r="10" fill="#000" opacity=".4"/>
+          <circle cx="131" cy="219" r="10" fill="url(#dzU)" stroke="#e3f0ff" stroke-opacity=".5" stroke-width=".8"/>
+          <circle cx="165.6" cy="116.6" r="10" fill="#000" opacity=".4"/>
+          <circle cx="165" cy="115" r="10" fill="url(#dzU)" stroke="#e3f0ff" stroke-opacity=".5" stroke-width=".8"/>
+          <circle cx="304.6" cy="47.6" r="10" fill="#000" opacity=".4"/>
+          <circle cx="304" cy="46" r="10" fill="url(#dzU)" stroke="#e3f0ff" stroke-opacity=".5" stroke-width=".8"/>
+          <circle cx="304.6" cy="255.6" r="10" fill="#000" opacity=".4"/>
+          <circle cx="304" cy="254" r="10" fill="url(#dzU)" stroke="#e3f0ff" stroke-opacity=".5" stroke-width=".8"/>
         </svg>
       </div>
       <div class="game-thumb-label">Dokuz Taş</div>
@@ -728,7 +1080,6 @@ main { max-width: 960px; }
           <circle cx="205" cy="120" r="18" fill="#f0f0f0" stroke="#bbb" stroke-width="1.5"/>
           <circle cx="295" cy="120" r="18" fill="#f0f0f0" stroke="#bbb" stroke-width="1.5"/>
           <!-- Vurgu oku -->
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".85">Beş Taş</text>
         </svg>
       </div>
       <div class="game-thumb-label">Beş Taş</div>
@@ -772,10 +1123,48 @@ main { max-width: 960px; }
           <line x1="228" y1="92" x2="188" y2="132" stroke="rgba(240,192,64,0.3)" stroke-width="1"/>
           <circle cx="300" cy="160" r="15" fill="#e05030"/>
           <circle cx="300" cy="145" r="10" fill="#f0b090"/>
-          <text x="200" y="272" text-anchor="middle" font-size="14" fill="#f0c040" font-family="Georgia,serif" opacity=".9">Sokoban</text>
         </svg>
       </div>
       <div class="game-thumb-label">Sokoban</div>
+    </div>
+
+    <!-- IŞIKLARI SÖNDÜR -->
+    <div class="game-thumb" data-game="isiklari-sondur" data-title="Işıkları Söndür">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="lsG" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur in="SourceGraphic" stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+          <rect width="400" height="300" fill="#0a0a0e"/>
+          <rect x="90" y="40" width="220" height="220" rx="9" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+          <rect x="98" y="48" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="140" y="48" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="182" y="48" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="224" y="48" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="266" y="48" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="98" y="90" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="140" y="90" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="182" y="90" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="224" y="90" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="266" y="90" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="98" y="132" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="140" y="132" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="182" y="132" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="224" y="132" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="266" y="132" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="98" y="174" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="140" y="174" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="182" y="174" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="224" y="174" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="266" y="174" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="98" y="216" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="140" y="216" width="36" height="36" rx="5" fill="#1a1620" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+          <rect x="182" y="216" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="224" y="216" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+          <rect x="266" y="216" width="36" height="36" rx="5" fill="#f0c040" filter="url(#lsG)"/>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Işıkları Söndür</div>
     </div>
 
   </div>
@@ -786,6 +1175,139 @@ main { max-width: 960px; }
     <div class="cat-line"></div>
   </div>
   <div class="games-grid">
+
+    <!-- SAYI HEDEFİ -->
+    <div class="game-thumb" data-game="sayi-hedefi" data-title="Sayı Hedefi">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+          <linearGradient id="shT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset="1" stop-color="#ffd966"/></linearGradient>
+          <linearGradient id="shC" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d2716"/><stop offset="1" stop-color="#171309"/></linearGradient>
+          <linearGradient id="shB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c8960c"/><stop offset="1" stop-color="#ffd966"/></linearGradient>
+          <filter id="shF" x="-30%" y="-40%" width="160%" height="180%"><feGaussianBlur stdDeviation="6"/></filter>
+          <radialGradient id="shG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#c8960c" stop-opacity=".16"/><stop offset="1" stop-color="#c8960c" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="400" height="300" fill="#0e0c08"/>
+          <ellipse cx="200" cy="90" rx="190" ry="110" fill="url(#shG)"/>
+          <rect x="24" y="16" width="300" height="7" rx="3.5" fill="url(#shB)" opacity=".9"/>
+          <text x="376" y="24" text-anchor="end" font-size="16" font-weight="700" fill="#c8960c" font-family="Georgia,serif">89</text>
+          <text x="200" y="50" text-anchor="middle" font-size="10" letter-spacing="3" fill="#e8d5a0" opacity=".6" font-family="Georgia,serif">HEDEF</text>
+          <text x="200" y="100" text-anchor="middle" font-size="52" font-weight="700" fill="#ffd966" opacity=".55" filter="url(#shF)" font-family="Georgia,serif">279</text>
+          <text x="200" y="100" text-anchor="middle" font-size="52" font-weight="700" fill="url(#shT)" font-family="Georgia,serif">279</text>
+          <rect x="108" y="118" width="56" height="50" rx="7" fill="url(#shC)" stroke="#c8960c" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="136" y="151" text-anchor="middle" font-size="26" font-weight="700" fill="#f1e2b4" font-family="Georgia,serif">8</text>
+          <rect x="172" y="118" width="56" height="50" rx="7" fill="url(#shC)" stroke="#c8960c" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="200" y="151" text-anchor="middle" font-size="26" font-weight="700" fill="#f1e2b4" font-family="Georgia,serif">6</text>
+          <rect x="236" y="118" width="56" height="50" rx="7" fill="url(#shC)" stroke="#c8960c" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="264" y="151" text-anchor="middle" font-size="26" font-weight="700" fill="#f1e2b4" font-family="Georgia,serif">9</text>
+          <rect x="108" y="176" width="56" height="50" rx="7" fill="url(#shC)" stroke="#c8960c" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="136" y="209" text-anchor="middle" font-size="26" font-weight="700" fill="#f1e2b4" font-family="Georgia,serif">2</text>
+          <rect x="172" y="176" width="56" height="50" rx="7" fill="url(#shC)" stroke="#c8960c" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="200" y="209" text-anchor="middle" font-size="26" font-weight="700" fill="#f1e2b4" font-family="Georgia,serif">7</text>
+          <rect x="236" y="176" width="56" height="50" rx="7" fill="url(#shC)" stroke="#c8960c" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="264" y="209" text-anchor="middle" font-size="22" font-weight="700" fill="#f1e2b4" font-family="Georgia,serif">75</text>
+          <rect x="112" y="244" width="38" height="30" rx="6" fill="#50c878" fill-opacity=".1" stroke="#50c878" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="131" y="265" text-anchor="middle" font-size="22" font-weight="700" fill="#50c878" font-family="Georgia,serif">+</text>
+          <rect x="158" y="244" width="38" height="30" rx="6" fill="#ff7a6b" fill-opacity=".1" stroke="#ff7a6b" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="177" y="265" text-anchor="middle" font-size="22" font-weight="700" fill="#ff7a6b" font-family="Georgia,serif">−</text>
+          <rect x="204" y="244" width="38" height="30" rx="6" fill="#a97cff" fill-opacity=".1" stroke="#a97cff" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="223" y="265" text-anchor="middle" font-size="22" font-weight="700" fill="#a97cff" font-family="Georgia,serif">×</text>
+          <rect x="250" y="244" width="38" height="30" rx="6" fill="#4dd0e1" fill-opacity=".1" stroke="#4dd0e1" stroke-opacity=".6" stroke-width="1.2"/>
+          <text x="269" y="265" text-anchor="middle" font-size="22" font-weight="700" fill="#4dd0e1" font-family="Georgia,serif">÷</text>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Sayı Hedefi</div>
+    </div>
+
+    <!-- ŞİFREYİ BUL -->
+    <div class="game-thumb" data-game="sifreyibul" data-title="Şifreyi Bul">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#0e0a0a"/>
+          <g transform="translate(0,23)">
+          <g transform="translate(40,30)">
+            <rect x="0"   y="0"  width="44" height="44" rx="5" fill="#1a1218"/>
+            <rect x="52"  y="0"  width="44" height="44" rx="5" fill="#1a1218"/>
+            <rect x="104" y="0"  width="44" height="44" rx="5" fill="#1a1218"/>
+            <rect x="156" y="0"  width="44" height="44" rx="5" fill="#1a1218"/>
+            <text x="22"  y="30" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">1</text>
+            <text x="74"  y="30" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">2</text>
+            <text x="126" y="30" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">3</text>
+            <text x="178" y="30" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">4</text>
+            <text x="240" y="18" text-anchor="middle" font-size="18" fill="#c8960c" font-family="Georgia,serif" font-weight="bold">2</text>
+            <line x1="225" y1="26" x2="255" y2="26" stroke="rgba(200,150,12,0.3)" stroke-width="1"/>
+            <text x="240" y="40" text-anchor="middle" font-size="14" fill="rgba(247,242,232,0.4)" font-family="Georgia,serif">1</text>
+            <rect x="0"   y="56" width="44" height="44" rx="5" fill="#1a1218"/>
+            <rect x="52"  y="56" width="44" height="44" rx="5" fill="#1a1218"/>
+            <rect x="104" y="56" width="44" height="44" rx="5" fill="#1a1218"/>
+            <rect x="156" y="56" width="44" height="44" rx="5" fill="#1a1218"/>
+            <text x="22"  y="86" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">5</text>
+            <text x="74"  y="86" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">7</text>
+            <text x="126" y="86" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">9</text>
+            <text x="178" y="86" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">1</text>
+            <text x="240" y="74" text-anchor="middle" font-size="18" fill="#c8960c" font-family="Georgia,serif" font-weight="bold">1</text>
+            <line x1="225" y1="82" x2="255" y2="82" stroke="rgba(200,150,12,0.3)" stroke-width="1"/>
+            <text x="240" y="96" text-anchor="middle" font-size="14" fill="rgba(247,242,232,0.4)" font-family="Georgia,serif">2</text>
+            <rect x="0"   y="112" width="44" height="44" rx="5" fill="#1e1420" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
+            <rect x="52"  y="112" width="44" height="44" rx="5" fill="#1e1420" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
+            <rect x="104" y="112" width="44" height="44" rx="5" fill="#1e1420" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
+            <rect x="156" y="112" width="44" height="44" rx="5" fill="#1e1420" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
+            <line x1="0" y1="168" x2="270" y2="168" stroke="rgba(200,150,12,0.5)" stroke-width="2"/>
+            <text x="90"  y="186" text-anchor="middle" font-size="10" fill="rgba(247,242,232,0.3)" font-family="Georgia,serif" letter-spacing="1">TAHMİN</text>
+            <text x="228" y="182" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">DOĞRU</text>
+            <text x="228" y="194" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif" opacity=".6">YERDE</text>
+          </g>
+          </g>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Şifreyi Bul</div>
+    </div>
+
+    <!-- RAKAM AVCISI -->
+    <div class="game-thumb" data-game="rakam-avcisi" data-title="Rakam Avcısı">
+      <div class="thumb-wrap">
+        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+          <rect width="400" height="300" fill="#0a0e0a"/>
+          <g transform="translate(0,20)">
+          <g transform="translate(68,18)">
+            <!-- Satır 1 -->
+            <rect x="0"   y="0"  width="52" height="52" rx="5" fill="#27ae60"/>
+            <rect x="58"  y="0"  width="52" height="52" rx="5" fill="#1a2018" stroke="rgba(200,150,12,0.3)" stroke-width="1.5"/>
+            <rect x="116" y="0"  width="52" height="52" rx="5" fill="#e67e22"/>
+            <rect x="174" y="0"  width="52" height="52" rx="5" fill="#2a2a2a"/>
+            <text x="26"  y="37" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">7</text>
+            <text x="84"  y="37" text-anchor="middle" font-size="26" fill="rgba(247,242,232,0.5)" font-family="Georgia,serif" font-weight="700">4</text>
+            <text x="142" y="37" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">1</text>
+            <text x="200" y="37" text-anchor="middle" font-size="26" fill="rgba(255,255,255,0.4)" font-family="Georgia,serif" font-weight="700">9</text>
+            <!-- Satır 2 -->
+            <rect x="0"   y="58" width="52" height="52" rx="5" fill="#27ae60"/>
+            <rect x="58"  y="58" width="52" height="52" rx="5" fill="#27ae60"/>
+            <rect x="116" y="58" width="52" height="52" rx="5" fill="#2a2a2a"/>
+            <rect x="174" y="58" width="52" height="52" rx="5" fill="#e67e22"/>
+            <text x="26"  y="95" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">7</text>
+            <text x="84"  y="95" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">3</text>
+            <text x="142" y="95" text-anchor="middle" font-size="26" fill="rgba(255,255,255,0.4)" font-family="Georgia,serif" font-weight="700">8</text>
+            <text x="200" y="95" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">5</text>
+            <!-- Satır 3: tümü yeşil -->
+            <rect x="0"   y="116" width="52" height="52" rx="5" fill="#27ae60"/>
+            <rect x="58"  y="116" width="52" height="52" rx="5" fill="#27ae60"/>
+            <rect x="116" y="116" width="52" height="52" rx="5" fill="#27ae60"/>
+            <rect x="174" y="116" width="52" height="52" rx="5" fill="#27ae60"/>
+            <text x="26"  y="153" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">7</text>
+            <text x="84"  y="153" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">3</text>
+            <text x="142" y="153" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">5</text>
+            <text x="200" y="153" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">1</text>
+            <!-- Satır 4: boş -->
+            <rect x="0"   y="174" width="52" height="52" rx="5" fill="#141a12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <rect x="58"  y="174" width="52" height="52" rx="5" fill="#141a12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <rect x="116" y="174" width="52" height="52" rx="5" fill="#141a12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+            <rect x="174" y="174" width="52" height="52" rx="5" fill="#141a12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+          </g>
+          </g>
+        </svg>
+      </div>
+      <div class="game-thumb-label">Rakam Avcısı</div>
+    </div>
 
     <!-- SUDOKU -->
     <div class="game-thumb" data-game="sudoku" data-title="Sudoku">
@@ -813,7 +1335,6 @@ main { max-width: 960px; }
             <text x="130" y="215" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif" opacity=".5">1</text>
             <text x="218" y="215" text-anchor="middle" font-size="22" fill="#c8960c" font-family="Georgia,serif">6</text>
           </g>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".8">Sudoku</text>
         </svg>
       </div>
       <div class="game-thumb-label">Sudoku</div>
@@ -842,7 +1363,6 @@ main { max-width: 960px; }
             <text x="75" y="160" text-anchor="middle" font-size="18" fill="#6fcf97" font-family="Georgia,serif">∧</text>
             <text x="195" y="160" text-anchor="middle" font-size="18" fill="#6fcf97" font-family="Georgia,serif">∨</text>
           </g>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".8">Futoshiki</text>
         </svg>
       </div>
       <div class="game-thumb-label">Futoshiki</div>
@@ -878,7 +1398,6 @@ main { max-width: 960px; }
             <text x="245" y="168" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">2</text>
             <rect x="0" y="0" width="280" height="255" rx="3" fill="none" stroke="#c8960c" stroke-width="1.5" opacity=".3"/>
           </g>
-          <text x="200" y="291" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".8">Kakuro</text>
         </svg>
       </div>
       <div class="game-thumb-label">Kakuro</div>
@@ -889,6 +1408,7 @@ main { max-width: 960px; }
       <div class="thumb-wrap">
         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
           <rect width="400" height="300" fill="#0e0e0a"/>
+          <g transform="translate(0,6)">
           <g transform="translate(80,25)">
             <rect x="0" y="0" width="240" height="240" rx="3" fill="#1a1a0a" opacity=".8"/>
             <line x1="60" y1="0" x2="60" y2="240" stroke="#3a3a1a" stroke-width="1.5"/>
@@ -912,98 +1432,10 @@ main { max-width: 960px; }
             <text x="90" y="102" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">3</text>
             <rect x="0" y="0" width="240" height="240" rx="3" fill="none" stroke="#c8960c" stroke-width="1.5" opacity=".3"/>
           </g>
-          <text x="200" y="283" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".8">Matdoku</text>
+          </g>
         </svg>
       </div>
       <div class="game-thumb-label">Matdoku</div>
-    </div>
-
-    <!-- ŞİFREYİ BUL -->
-    <div class="game-thumb" data-game="sifreyibul" data-title="Şifreyi Bul">
-      <div class="thumb-wrap">
-        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#0e0a0a"/>
-          <g transform="translate(40,30)">
-            <rect x="0"   y="0"  width="44" height="44" rx="5" fill="#1a1218"/>
-            <rect x="52"  y="0"  width="44" height="44" rx="5" fill="#1a1218"/>
-            <rect x="104" y="0"  width="44" height="44" rx="5" fill="#1a1218"/>
-            <rect x="156" y="0"  width="44" height="44" rx="5" fill="#1a1218"/>
-            <text x="22"  y="30" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">1</text>
-            <text x="74"  y="30" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">2</text>
-            <text x="126" y="30" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">3</text>
-            <text x="178" y="30" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">4</text>
-            <text x="240" y="18" text-anchor="middle" font-size="18" fill="#c8960c" font-family="Georgia,serif" font-weight="bold">2</text>
-            <line x1="225" y1="26" x2="255" y2="26" stroke="rgba(200,150,12,0.3)" stroke-width="1"/>
-            <text x="240" y="40" text-anchor="middle" font-size="14" fill="rgba(247,242,232,0.4)" font-family="Georgia,serif">1</text>
-            <rect x="0"   y="56" width="44" height="44" rx="5" fill="#1a1218"/>
-            <rect x="52"  y="56" width="44" height="44" rx="5" fill="#1a1218"/>
-            <rect x="104" y="56" width="44" height="44" rx="5" fill="#1a1218"/>
-            <rect x="156" y="56" width="44" height="44" rx="5" fill="#1a1218"/>
-            <text x="22"  y="86" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">5</text>
-            <text x="74"  y="86" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">7</text>
-            <text x="126" y="86" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">9</text>
-            <text x="178" y="86" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif">1</text>
-            <text x="240" y="74" text-anchor="middle" font-size="18" fill="#c8960c" font-family="Georgia,serif" font-weight="bold">1</text>
-            <line x1="225" y1="82" x2="255" y2="82" stroke="rgba(200,150,12,0.3)" stroke-width="1"/>
-            <text x="240" y="96" text-anchor="middle" font-size="14" fill="rgba(247,242,232,0.4)" font-family="Georgia,serif">2</text>
-            <rect x="0"   y="112" width="44" height="44" rx="5" fill="#1e1420" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
-            <rect x="52"  y="112" width="44" height="44" rx="5" fill="#1e1420" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
-            <rect x="104" y="112" width="44" height="44" rx="5" fill="#1e1420" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
-            <rect x="156" y="112" width="44" height="44" rx="5" fill="#1e1420" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
-            <line x1="0" y1="168" x2="270" y2="168" stroke="rgba(200,150,12,0.5)" stroke-width="2"/>
-            <text x="90"  y="186" text-anchor="middle" font-size="10" fill="rgba(247,242,232,0.3)" font-family="Georgia,serif" letter-spacing="1">TAHMİN</text>
-            <text x="228" y="182" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif">DOĞRU</text>
-            <text x="228" y="194" text-anchor="middle" font-size="9" fill="#c8960c" font-family="Georgia,serif" opacity=".6">YERDE</text>
-          </g>
-          <text x="200" y="272" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".9">Şifreyi Bul</text>
-        </svg>
-      </div>
-      <div class="game-thumb-label">Şifreyi Bul</div>
-    </div>
-
-    <!-- RAKAM AVCISI -->
-    <div class="game-thumb" data-game="rakam-avcisi" data-title="Rakam Avcısı">
-      <div class="thumb-wrap">
-        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#0a0e0a"/>
-          <g transform="translate(68,18)">
-            <!-- Satır 1 -->
-            <rect x="0"   y="0"  width="52" height="52" rx="5" fill="#27ae60"/>
-            <rect x="58"  y="0"  width="52" height="52" rx="5" fill="#1a2018" stroke="rgba(200,150,12,0.3)" stroke-width="1.5"/>
-            <rect x="116" y="0"  width="52" height="52" rx="5" fill="#e67e22"/>
-            <rect x="174" y="0"  width="52" height="52" rx="5" fill="#2a2a2a"/>
-            <text x="26"  y="37" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">7</text>
-            <text x="84"  y="37" text-anchor="middle" font-size="26" fill="rgba(247,242,232,0.5)" font-family="Georgia,serif" font-weight="700">4</text>
-            <text x="142" y="37" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">1</text>
-            <text x="200" y="37" text-anchor="middle" font-size="26" fill="rgba(255,255,255,0.4)" font-family="Georgia,serif" font-weight="700">9</text>
-            <!-- Satır 2 -->
-            <rect x="0"   y="58" width="52" height="52" rx="5" fill="#27ae60"/>
-            <rect x="58"  y="58" width="52" height="52" rx="5" fill="#27ae60"/>
-            <rect x="116" y="58" width="52" height="52" rx="5" fill="#2a2a2a"/>
-            <rect x="174" y="58" width="52" height="52" rx="5" fill="#e67e22"/>
-            <text x="26"  y="95" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">7</text>
-            <text x="84"  y="95" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">3</text>
-            <text x="142" y="95" text-anchor="middle" font-size="26" fill="rgba(255,255,255,0.4)" font-family="Georgia,serif" font-weight="700">8</text>
-            <text x="200" y="95" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">5</text>
-            <!-- Satır 3: tümü yeşil -->
-            <rect x="0"   y="116" width="52" height="52" rx="5" fill="#27ae60"/>
-            <rect x="58"  y="116" width="52" height="52" rx="5" fill="#27ae60"/>
-            <rect x="116" y="116" width="52" height="52" rx="5" fill="#27ae60"/>
-            <rect x="174" y="116" width="52" height="52" rx="5" fill="#27ae60"/>
-            <text x="26"  y="153" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">7</text>
-            <text x="84"  y="153" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">3</text>
-            <text x="142" y="153" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">5</text>
-            <text x="200" y="153" text-anchor="middle" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">1</text>
-            <!-- Satır 4: boş -->
-            <rect x="0"   y="174" width="52" height="52" rx="5" fill="#141a12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-            <rect x="58"  y="174" width="52" height="52" rx="5" fill="#141a12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-            <rect x="116" y="174" width="52" height="52" rx="5" fill="#141a12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-            <rect x="174" y="174" width="52" height="52" rx="5" fill="#141a12" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-          </g>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".9">Rakam Avcısı</text>
-        </svg>
-      </div>
-      <div class="game-thumb-label">Rakam Avcısı</div>
     </div>
 
     <!-- NIM -->
@@ -1055,44 +1487,9 @@ main { max-width: 960px; }
           <text x="247" y="268" text-anchor="middle" font-size="10" fill="rgba(200,150,12,0.45)" font-family="Georgia,serif">C</text>
           <text x="330" y="268" text-anchor="middle" font-size="10" fill="rgba(200,150,12,0.45)" font-family="Georgia,serif">D</text>
 
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".9">Nim Oyunu</text>
         </svg>
       </div>
       <div class="game-thumb-label">Nim Oyunu</div>
-    </div>
-
-    <!-- SAYI HEDEFİ -->
-    <div class="game-thumb" data-game="sayi-hedefi" data-title="Sayı Hedefi">
-      <div class="thumb-wrap">
-        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#0e0c08"/>
-          <!-- Hedef sayı kutusu -->
-          <rect x="120" y="28" width="160" height="72" rx="6" fill="#1e1c14" stroke="#c8960c" stroke-width="2" opacity=".9"/>
-          <text x="145" y="52" font-size="11" fill="rgba(200,150,12,0.5)" font-family="Georgia,serif" letter-spacing="2">HEDEF</text>
-          <text x="200" y="90" text-anchor="middle" font-size="36" fill="#e8d5a0" font-family="Georgia,serif" font-weight="700">432</text>
-          <!-- 6 sayı kartı -->
-          <rect x="28"  y="122" width="52" height="52" rx="5" fill="#1a1810" stroke="rgba(200,150,12,0.4)" stroke-width="1.5"/>
-          <rect x="88"  y="122" width="52" height="52" rx="5" fill="#1a1810" stroke="rgba(200,150,12,0.4)" stroke-width="1.5"/>
-          <rect x="148" y="122" width="52" height="52" rx="5" fill="#1a1810" stroke="rgba(200,150,12,0.4)" stroke-width="1.5"/>
-          <rect x="208" y="122" width="52" height="52" rx="5" fill="#1a1810" stroke="rgba(200,150,12,0.4)" stroke-width="1.5"/>
-          <rect x="268" y="122" width="52" height="52" rx="5" fill="#1a1810" stroke="rgba(200,150,12,0.4)" stroke-width="1.5"/>
-          <rect x="328" y="122" width="52" height="52" rx="5" fill="#1e2014" stroke="rgba(200,150,12,0.6)" stroke-width="1.5"/>
-          <!-- Sayılar -->
-          <text x="54"  y="157" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif" font-weight="700">6</text>
-          <text x="114" y="157" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif" font-weight="700">8</text>
-          <text x="174" y="157" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif" font-weight="700">3</text>
-          <text x="234" y="157" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif" font-weight="700">7</text>
-          <text x="294" y="157" text-anchor="middle" font-size="22" fill="#e8d5a0" font-family="Georgia,serif" font-weight="700">4</text>
-          <text x="354" y="157" text-anchor="middle" font-size="18" fill="#c8960c"  font-family="Georgia,serif" font-weight="700">75</text>
-          <!-- İşlem sembolleri -->
-          <text x="100" y="222" text-anchor="middle" font-size="22" fill="rgba(200,150,12,0.5)" font-family="Georgia,serif">+</text>
-          <text x="167" y="222" text-anchor="middle" font-size="22" fill="rgba(200,150,12,0.5)" font-family="Georgia,serif">−</text>
-          <text x="234" y="222" text-anchor="middle" font-size="22" fill="rgba(200,150,12,0.5)" font-family="Georgia,serif">×</text>
-          <text x="301" y="222" text-anchor="middle" font-size="22" fill="rgba(200,150,12,0.5)" font-family="Georgia,serif">÷</text>
-          <text x="200" y="270" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".85">Sayı Hedefi</text>
-        </svg>
-      </div>
-      <div class="game-thumb-label">Sayı Hedefi</div>
     </div>
 
   </div>
@@ -1134,7 +1531,6 @@ main { max-width: 960px; }
           <text x="107" y="255" text-anchor="middle" font-size="13" fill="#c8960c" font-family="Georgia,serif" opacity=".6">A</text>
           <text x="200" y="255" text-anchor="middle" font-size="13" fill="#c8960c" font-family="Georgia,serif" opacity=".6">B</text>
           <text x="293" y="255" text-anchor="middle" font-size="13" fill="#c8960c" font-family="Georgia,serif" opacity=".6">C</text>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".85">Hanoi Kulesi</text>
         </svg>
       </div>
       <div class="game-thumb-label">Hanoi Kulesi</div>
@@ -1144,36 +1540,113 @@ main { max-width: 960px; }
     <div class="game-thumb" data-game="solo-test" data-title="Solo Test">
       <div class="thumb-wrap">
         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-          <rect width="400" height="300" fill="#12100a"/>
-          <!-- Artı şeklinde tahta -->
-          <g transform="translate(200,150)">
-            <!-- Yatay bant -->
-            <rect x="-150" y="-30" width="300" height="60" rx="8" fill="#2a1e08" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
-            <!-- Dikey bant -->
-            <rect x="-30" y="-130" width="60" height="260" rx="8" fill="#2a1e08" stroke="#c8960c" stroke-width="1.5" opacity=".6"/>
-            <!-- Delikler — yatay satır (ortada) -->
-            <circle cx="-110" cy="0" r="16" fill="#4a2a08" stroke="#c8960c" stroke-width="1" opacity=".7"/>
-            <circle cx="-65"  cy="0" r="16" fill="#4a2a08" stroke="#c8960c" stroke-width="1" opacity=".7"/>
-            <circle cx="0"    cy="0" r="16" fill="#1a0e02" stroke="#c8960c" stroke-width="1.5" opacity=".9"/>
-            <circle cx="65"   cy="0" r="16" fill="#4a2a08" stroke="#c8960c" stroke-width="1" opacity=".7"/>
-            <circle cx="110"  cy="0" r="16" fill="#4a2a08" stroke="#c8960c" stroke-width="1" opacity=".7"/>
-            <!-- Delikler — dikey sütun (üst) -->
-            <circle cx="0" cy="-90" r="16" fill="#4a2a08" stroke="#c8960c" stroke-width="1" opacity=".7"/>
-            <circle cx="0" cy="-45" r="16" fill="#4a2a08" stroke="#c8960c" stroke-width="1" opacity=".7"/>
-            <!-- Delikler — dikey sütun (alt) -->
-            <circle cx="0" cy="45"  r="16" fill="#4a2a08" stroke="#c8960c" stroke-width="1" opacity=".7"/>
-            <circle cx="0" cy="90"  r="16" fill="#4a2a08" stroke="#c8960c" stroke-width="1" opacity=".7"/>
-            <!-- Taşlar (dolu delikler) — kahverengi -->
-            <circle cx="-110" cy="0" r="11" fill="#c8845a"/>
-            <circle cx="-65"  cy="0" r="11" fill="#c8845a"/>
-            <circle cx="65"   cy="0" r="11" fill="#c8845a"/>
-            <circle cx="110"  cy="0" r="11" fill="#c8845a"/>
-            <circle cx="0" cy="-90" r="11" fill="#c8845a"/>
-            <circle cx="0" cy="-45" r="11" fill="#c8845a"/>
-            <circle cx="0" cy="45"  r="11" fill="#c8845a"/>
-            <circle cx="0" cy="90"  r="11" fill="#c8845a"/>
-          </g>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".85">Solo Test</text>
+          <defs>
+          <linearGradient id="slB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a2813"/><stop offset="1" stop-color="#2a1c0c"/></linearGradient>
+          <radialGradient id="slM" cx=".5" cy=".5" r=".5" fx=".35" fy=".3"><stop offset="0" stop-color="#c9fffa"/><stop offset=".35" stop-color="#3fd6cc"/><stop offset=".75" stop-color="#1b9a98"/><stop offset="1" stop-color="#0d6d6b"/></radialGradient>
+          </defs>
+          <rect width="400" height="300" fill="#0b0805"/>
+          <rect x="75" y="93" width="250" height="114" rx="18" fill="url(#slB)" stroke="#c8960c" stroke-opacity=".8" stroke-width="2"/>
+          <rect x="143" y="25" width="114" height="250" rx="18" fill="url(#slB)" stroke="#c8960c" stroke-opacity=".8" stroke-width="2"/>
+          <rect x="76.2" y="94.2" width="247.6" height="111.6" rx="17" fill="url(#slB)"/>
+          <rect x="144.2" y="26.2" width="111.6" height="247.6" rx="17" fill="url(#slB)"/>
+          <circle cx="166" cy="48" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="166" cy="48" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="162" cy="42.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 162 42.5)"/>
+          <circle cx="200" cy="48" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="200" cy="48" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="196" cy="42.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 196 42.5)"/>
+          <circle cx="234" cy="48" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="234" cy="48" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="230" cy="42.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 230 42.5)"/>
+          <circle cx="166" cy="82" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="166" cy="82" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="162" cy="76.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 162 76.5)"/>
+          <circle cx="200" cy="82" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="200" cy="82" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="196" cy="76.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 196 76.5)"/>
+          <circle cx="234" cy="82" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="234" cy="82" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="230" cy="76.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 230 76.5)"/>
+          <circle cx="98" cy="116" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="98" cy="116" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="94" cy="110.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 94 110.5)"/>
+          <circle cx="132" cy="116" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="132" cy="116" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="128" cy="110.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 128 110.5)"/>
+          <circle cx="166" cy="116" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="166" cy="116" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="162" cy="110.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 162 110.5)"/>
+          <circle cx="200" cy="116" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="200" cy="116" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="196" cy="110.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 196 110.5)"/>
+          <circle cx="234" cy="116" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="234" cy="116" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="230" cy="110.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 230 110.5)"/>
+          <circle cx="268" cy="116" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="268" cy="116" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="264" cy="110.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 264 110.5)"/>
+          <circle cx="302" cy="116" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="302" cy="116" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="298" cy="110.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 298 110.5)"/>
+          <circle cx="98" cy="150" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="98" cy="150" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="94" cy="144.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 94 144.5)"/>
+          <circle cx="132" cy="150" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="132" cy="150" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="128" cy="144.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 128 144.5)"/>
+          <circle cx="166" cy="150" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="166" cy="150" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="162" cy="144.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 162 144.5)"/>
+          <circle cx="200" cy="150" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="200" cy="150" r="12" fill="#090603"/>
+          <circle cx="234" cy="150" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="234" cy="150" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="230" cy="144.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 230 144.5)"/>
+          <circle cx="268" cy="150" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="268" cy="150" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="264" cy="144.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 264 144.5)"/>
+          <circle cx="302" cy="150" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="302" cy="150" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="298" cy="144.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 298 144.5)"/>
+          <circle cx="98" cy="184" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="98" cy="184" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="94" cy="178.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 94 178.5)"/>
+          <circle cx="132" cy="184" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="132" cy="184" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="128" cy="178.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 128 178.5)"/>
+          <circle cx="166" cy="184" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="166" cy="184" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="162" cy="178.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 162 178.5)"/>
+          <circle cx="200" cy="184" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="200" cy="184" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="196" cy="178.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 196 178.5)"/>
+          <circle cx="234" cy="184" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="234" cy="184" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="230" cy="178.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 230 178.5)"/>
+          <circle cx="268" cy="184" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="268" cy="184" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="264" cy="178.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 264 178.5)"/>
+          <circle cx="302" cy="184" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="302" cy="184" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="298" cy="178.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 298 178.5)"/>
+          <circle cx="166" cy="218" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="166" cy="218" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="162" cy="212.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 162 212.5)"/>
+          <circle cx="200" cy="218" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="200" cy="218" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="196" cy="212.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 196 212.5)"/>
+          <circle cx="234" cy="218" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="234" cy="218" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="230" cy="212.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 230 212.5)"/>
+          <circle cx="166" cy="252" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="166" cy="252" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="162" cy="246.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 162 246.5)"/>
+          <circle cx="200" cy="252" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="200" cy="252" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="196" cy="246.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 196 246.5)"/>
+          <circle cx="234" cy="252" r="14.5" fill="#1b1208" stroke="#3a2810" stroke-width="1"/>
+          <circle cx="234" cy="252" r="12.5" fill="url(#slM)"/>
+          <ellipse cx="230" cy="246.5" rx="4" ry="2.4" fill="#fff" opacity=".6" transform="rotate(-35 230 246.5)"/>
         </svg>
       </div>
       <div class="game-thumb-label">Solo Test</div>
@@ -1228,7 +1701,6 @@ main { max-width: 960px; }
             <text x="147" y="214" text-anchor="middle" font-size="20" fill="#e8d5a0"  font-family="Georgia,serif">15</text>
             <text x="205" y="214" text-anchor="middle" font-size="20" fill="#e74c3c"  font-family="Georgia,serif">12</text>
           </g>
-          <text x="200" y="285" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".85">15-Puzzle</text>
         </svg>
       </div>
       <div class="game-thumb-label">15-Puzzle</div>
@@ -1261,7 +1733,6 @@ main { max-width: 960px; }
             <rect x="266" y="128" width="36" height="36" rx="2" fill="#f1c40f" opacity=".85"/>
             <rect x="266" y="164" width="36" height="36" rx="2" fill="#f1c40f" opacity=".85"/>
           </g>
-          <text x="200" y="283" text-anchor="middle" font-size="14" fill="#c8960c" font-family="Georgia,serif" opacity=".8">Pentomino</text>
         </svg>
       </div>
       <div class="game-thumb-label">Pentomino</div>
@@ -1300,6 +1771,8 @@ main { max-width: 960px; }
     'reversi':       'html-oyunlar/reversi.html',
     'dokuz-tas':     'html-oyunlar/dokuz-tas.html',
     'sokoban':       'html-oyunlar/sokoban.html',
+    'tavla':         'html-oyunlar/tavla.html',
+    'isiklari-sondur':'html-oyunlar/isiklari-sondur.html',
     'bes-tas':       'html-oyunlar/bes-tas.html',
     'mayin-tarlasi': 'html-oyunlar/mayin-tarlasi.html',
     'sudoku':        'html-oyunlar/sudoku.html',
