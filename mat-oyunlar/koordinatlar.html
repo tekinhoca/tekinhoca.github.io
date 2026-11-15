@@ -2,328 +2,233 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Koordinatlar</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#12100e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-.wrap{width:100%;max-width:520px;display:flex;flex-direction:column;gap:8px;margin:auto;}
-.top-bar{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.game-title{font-size:20px;font-weight:700;color:#c8960c;letter-spacing:.06em}
-.infobar{display:flex;gap:6px;}
-.ibox{background:rgba(255,255,255,0.05);border-radius:5px;padding:5px 0;text-align:center;border:1px solid rgba(200,150,12,0.2);width:56px;flex-shrink:0}
-.ibox .l{font-size:9px;color:rgba(247,242,232,0.32);margin-bottom:1px;text-transform:uppercase;letter-spacing:.07em}
-.ibox .v{font-size:14px;font-weight:700;color:#FFD97A;font-family:'Courier New',Courier,monospace}
-
-.game-container {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 5 / 7;
-    background: #1e1a14;
-    border: 3px solid #c8960c;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: crosshair;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+html,body{height:100%}
+:root{--bx:110,168,255;--oy:255,159,90}
+body{height:100vh;height:100dvh;background:#0a0e16;font-family:Georgia,serif;color:#e8d5a0;overflow:hidden;-webkit-tap-highlight-color:transparent;touch-action:manipulation;padding:max(8px,env(safe-area-inset-top)) 6px max(6px,env(safe-area-inset-bottom))}
+body::before{content:"";position:fixed;inset:-20%;z-index:-1;pointer-events:none;background:radial-gradient(40% 35% at 18% 15%,rgba(200,150,12,.13),transparent 70%),radial-gradient(35% 30% at 85% 28%,rgba(110,168,255,.14),transparent 70%),radial-gradient(40% 35% at 55% 92%,rgba(255,159,90,.09),transparent 70%);animation:drift 40s ease-in-out infinite alternate}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:radial-gradient(1.5px 1.5px at 20px 30px,#ffd96699,transparent),radial-gradient(1px 1px at 120px 80px,#ffffff88,transparent),radial-gradient(1.5px 1.5px at 210px 140px,#9fc4ff88,transparent),radial-gradient(1px 1px at 60px 170px,#ffffff77,transparent);background-size:240px 200px;animation:twinkle 6s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate3d(4%,3%,0) scale(1.08)}}@keyframes twinkle{from{opacity:.25}to{opacity:.75}}
+@keyframes pop{0%{transform:scale(.88);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes lowpulse{50%{transform:scale(1.18)}}
+.app{height:100%;max-width:1100px;margin:0 auto;display:flex;flex-direction:column;gap:min(8px,1.1dvh)}
+#hud{order:1;flex:none;display:flex;flex-direction:column;gap:6px}
+.stats{display:flex;gap:6px}
+.stat{flex:1;min-width:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:4px 6px;text-align:center}
+.stat .l{font-size:9.5px;text-transform:uppercase;letter-spacing:.07em;color:rgba(247,242,232,.6)}
+.stat .v{font-size:clamp(16px,5vw,20px);font-weight:700;color:#ffd97a;font-family:'Courier New',monospace;line-height:1.15}
+.stat.streak .v{color:#2dd4a8}.stat.time .v{color:#ff9f5a;display:inline-block}.stat.time.low .v{color:#ff5a4f;animation:lowpulse .9s ease-in-out infinite}
+.tbar{height:6px;border-radius:3px;background:#1b2840;overflow:hidden}.tbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff9f5a,#ffd45a);transition:width .12s linear}.tbar.low i{background:#ff5a4f}
+#stagecol{order:2;position:relative;flex:1 1 0;min-height:0}
+#panel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:14px;background:radial-gradient(120% 90% at 50% 30%,#0d1a30,#08101e);box-shadow:0 8px 28px rgba(0,0,0,.6),0 0 0 2px rgba(200,150,12,.55);overflow:hidden}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair;-webkit-user-select:none;user-select:none}
+.ov{position:absolute;inset:0;z-index:5;display:none;align-items:center;justify-content:center;background:rgba(6,10,18,.86);padding:12px}.ov.show{display:flex}
+.card{text-align:center;max-width:100%;animation:pop .3s}
+.card h2{font-size:clamp(22px,6vw,30px);color:#ffd966;margin-bottom:8px;text-shadow:0 0 22px rgba(255,200,60,.4)}
+.card p{font-size:14px;color:rgba(247,242,232,.86);line-height:1.6;margin-bottom:12px}.card b{color:#ffd97a}
+.card .row{display:flex;gap:8px;justify-content:center}.card .row button.a{flex:none;padding:9px 18px}
+.card .newrec{color:#2dd4a8;font-weight:700}
+#target{order:3;flex:none;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,.05);border:1px solid rgba(200,150,12,.4);border-radius:12px;padding:6px 12px}
+#target svg{width:22px;height:22px;color:#ffd45a;flex:none}
+#target .tl{font-size:10px;text-transform:uppercase;letter-spacing:.09em;color:rgba(247,242,232,.6)}
+#target .tc{font-size:clamp(22px,7vw,28px);font-weight:700;font-family:'Courier New',monospace;letter-spacing:1px;color:#ffd97a}
+#target .tc .x{color:#6ea8ff}#target .tc .y{color:#ff9f5a}
+#bar{order:4;flex:none;text-align:center}.msg{font-size:13.5px;min-height:2.7em;display:flex;align-items:center;justify-content:center;color:rgba(247,242,232,.8);line-height:1.3}
+.msg.ok{color:#2dd4a8}.msg.bad{color:#ff8d82}
+#btns{order:5;flex:none;display:flex;gap:6px;justify-content:center}
+button.a{background:linear-gradient(135deg,rgba(200,150,12,.3),rgba(255,217,102,.12));border:1px solid rgba(200,150,12,.55);border-radius:8px;padding:9px 6px;font-size:clamp(12px,3.5vw,14px);cursor:pointer;color:#f1e2b4;font-family:Georgia,serif;white-space:nowrap;transition:transform .15s,box-shadow .2s,opacity .2s;flex:1 1 0;min-width:0}
+button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#ffd966}button.a:disabled{opacity:.4;pointer-events:none}
+@media(hover:hover){button.a:hover{box-shadow:0 0 14px rgba(255,217,102,.3)}}
+.foot{order:6;flex:none;display:none;justify-content:center;height:min(34px,5dvh);pointer-events:none}
+.foot img{height:100%;width:auto;opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}.foot img:hover{opacity:.7}
+.modal-overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.74);display:flex;align-items:center;justify-content:center;padding:12px}.modal-overlay.hidden{display:none}
+.mbox{--mw:130px;background:#0d1b0d;border:1px solid rgba(200,150,12,.5);border-radius:14px;max-width:440px;width:100%;max-height:85dvh;overflow:auto;padding:0 18px 14px;text-align:center;scrollbar-width:none;animation:pop .3s}
+.mimg{display:block;margin:0 auto;width:var(--mw);max-width:100%;max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%)}
+.pgs{display:grid;margin:2px 0 6px;text-align:left}.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}
+.pgt{text-align:center;color:#ffd966;font-weight:700;font-size:15px;margin:0 0 4px}
+.mtext{font-size:14px;line-height:1.5;color:rgba(247,242,232,.86);margin:4px 0 6px}.mtext p{margin-bottom:7px}.mtext b{color:#ffd966}.mtext .x{color:#6ea8ff;font-weight:700}.mtext .y{color:#ff9f5a;font-weight:700}
+.rnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}
+.rarr{width:38px;height:38px;border-radius:50%;padding:0;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;flex:none}
+.rdots{display:flex;gap:8px}.rdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .2s}.rdots span.on{background:#ffd966}
+#rBtn{flex:none;min-width:var(--mw);padding:9px 14px}
+@media(max-height:480px){.mimg{display:none}.mbox{padding-top:12px}}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
+@media(min-aspect-ratio:5/4) and (min-width:560px){
+ .app{display:grid;grid-template-columns:minmax(0,1fr) min(320px,34vw);grid-template-rows:minmax(0,1fr) auto auto auto auto auto minmax(0,1fr);column-gap:24px;row-gap:12px}
+ #stagecol{grid-column:1;grid-row:1/8}#target{grid-column:2;grid-row:2}#hud{grid-column:2;grid-row:3}#bar{grid-column:2;grid-row:4}#btns{grid-column:2;grid-row:5}
+ .foot{display:flex;grid-column:2;grid-row:6;height:min(44px,6dvh);margin-top:6px}
+ .stats{flex-wrap:wrap}.stat{flex:1 1 40%}.stat .v{font-size:22px}
 }
-canvas { width: 100%; height: 100%; display: block; }
-
-/* Hedef kutusu — kompakt */
-.target-display {
-    background: rgba(155,53,16,0.12);
-    border: 1px solid rgba(155,53,16,0.5);
-    padding: 6px 12px;
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-.target-label { font-size: 9px; color: rgba(247,242,232,0.4); text-transform: uppercase; letter-spacing: .09em; white-space: nowrap; }
-.target-coords { font-size: 22px; font-weight: bold; color: #FFD97A; font-family: 'Courier New', monospace; letter-spacing: 1px; }
-
-.msg { text-align: center; color: rgba(247,242,232,0.55); font-size: 11px; min-height: 14px; }
-button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;white-space:nowrap}
-button.a:hover{background:rgba(200,150,12,0.2)}
-
-/* WIN OVERLAY */
-.win-overlay{display:none;position:absolute;inset:0;background:rgba(10,8,5,0.9);border-radius:8px;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:50}
-.win-overlay.show{display:flex}
-.win-title{font-size:20px;font-weight:700;color:#50c878;font-family:Georgia,serif}
-.win-body{font-size:12px;color:rgba(247,242,232,0.55);text-align:center;line-height:1.7}
-.win-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
-
-/* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px;}
-.modal-overlay.hidden{display:none;}
-.modal-box{background:#0d0b08;border:1px solid rgba(200,150,12,0.5);border-radius:8px;padding:22px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:12px;animation:modalIn .3s ease;}
-@keyframes modalIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
-.modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em;}
-.modal-rules{font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);padding:10px 4px;list-style:none;}
-.modal-rules li{margin-bottom:3px;padding-left:4px;}
-.modal-rules li::before{content:"◈ ";color:#c8960c;}
-.modal-btns{display:flex;gap:10px;justify-content:center;}
-.modal-close{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s;}
-.modal-close:hover{background:rgba(40,30,10,0.9);}
-.modal-start{background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s;}
-.modal-start:hover{background:rgba(60,40,5,0.9);}
-.modal-logo{display:flex;justify-content:center;padding-top:4px;}
-
-/* MASAÜSTÜ: daha geniş ve okunaklı açılış/kurallar modali */
-@media (min-width: 768px) {
-  .modal-overlay { padding: 24px; }
-  .modal-box {
-    width: min(92vw, 760px);
-    max-width: 760px;
-    max-height: 90vh;
-    padding: 26px 32px 22px;
-    gap: 16px;
-    overflow: auto;
-  }
-  .modal-title { font-size: clamp(25px, 2.2vw, 32px); }
-  .modal-rules {
-    font-size: 16px;
-    line-height: 1.7;
-    padding: 14px 10px;
-  }
-  .modal-rules li { margin-bottom: 7px; padding-left: 7px; }
-  .modal-btns { gap: 14px; }
-  .modal-close, .modal-start { font-size: 14px; padding: 9px 24px; }
-  .modal-logo { padding-top: 2px; }
-}
-
+@media(min-aspect-ratio:5/4) and (max-height:520px){.foot{display:none}}
+@media(prefers-reduced-motion:reduce){body::before,body::after,.stat.time.low .v{animation:none}}
 </style>
 </head>
 <body>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <div class="modal-title">KOORDİNATLAR</div>
-    <ul class="modal-rules">
-      <li>Ekranda bir <b style="color:#c8960c">(x, y)</b> koordinat düzlemi gösterilir.</li>
-      <li>Altta koordinatları verilen hedef noktayı koordinat düzleminde bul ve doğru yere <b style="color:#c8960c">tıkla</b> veya dokun.</li>
-      <li><b style="color:#c8960c">x ekseni</b> [−5, +5] ve <b style="color:#c8960c">y ekseni</b> ise [−7, +7] aralığında verilmiştir.</li>
-      <li>Her isabetli seçim <b style="color:#c8960c">10 puan</b> kazandırır.</li>
-      <li>60 saniye içinde mümkün olduğunca çok puan topla!</li>
-    </ul>
-    <div class="modal-btns">
-      <button class="modal-close" onclick="closeModal()">Kapat</button>
-      <button class="modal-start" onclick="closeModal()">Başla</button>
-    </div>
-    <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
-           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
-           onmouseover="this.style.opacity='0.65'"
-           onmouseout="this.style.opacity='0.38'">
-    </div>
+<div class="app">
+ <div id="hud">
+  <div class="stats">
+   <div class="stat"><div class="l">Puan</div><div class="v" id="score">0</div></div>
+   <div class="stat streak"><div class="l">Seri</div><div class="v" id="streak">0</div></div>
+   <div class="stat"><div class="l">Rekor</div><div class="v" id="best">0</div></div>
+   <div class="stat time" id="timeBox"><div class="l">Süre</div><div class="v" id="timer">60</div></div>
   </div>
+  <div class="tbar" id="tbar"><i id="tfill"></i></div>
+ </div>
+ <div id="stagecol"><div id="panel"><canvas id="gameCanvas" aria-label="Koordinat düzlemi"></canvas>
+  <div class="ov" id="startOv"><div class="card"><h2>Hazır mısınız?</h2><p>60 saniyede mümkün olduğunca çok hedefi bulun.</p><div class="row"><button class="a pri" id="goBtn">Başla</button><button class="a" id="rules2">&#9432; Kurallar</button></div></div></div>
+  <div class="ov" id="endOv"><div class="card"><h2>Süre Doldu!</h2><p id="endBody"></p><div class="row"><button class="a pri" id="againBtn">&#8635; Tekrar</button></div></div></div>
+ </div></div>
+ <div id="target"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg><span class="tl">Hedef<br>koordinat</span><span class="tc" id="targetCoords"><span class="x">0</span>, <span class="y">0</span></span></div>
+ <div id="bar"><div class="msg" id="msg"></div></div>
+ <div id="btns"><button class="a pri" id="restartBtn">&#8635; Yeniden Başlat</button><button class="a" id="rulesBtn">&#9432; Kurallar</button></div>
+ <div class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div>
 </div>
-
-<div class="wrap">
-    <div class="top-bar">
-        <div class="game-title">Koordinatlar</div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <div class="infobar">
-            <div class="ibox"><div class="l">Puan</div><div class="v" id="score">0</div></div>
-            <div class="ibox"><div class="l">Süre</div><div class="v" id="timer">60</div></div>
-          </div>
-          <button style="background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;white-space:nowrap;" onmouseenter="this.style.background='rgba(200,150,12,0.2)'" onmouseleave="this.style.background='rgba(200,150,12,0.08)'" onclick="openModal()">&#9432; Kurallar</button>
-        </div>
-    </div>
-
-    <div class="game-container" id="container">
-        <canvas id="gameCanvas"></canvas>
-        <div class="win-overlay" id="winOverlay">
-          <div class="win-title">Süre Doldu!</div>
-          <div class="win-body" id="winBody"></div>
-          <div class="win-btns">
-            <button class="a" onclick="restartGame()">&#8635; Tekrar</button>
-          </div>
-        </div>
-    </div>
-
-    <div class="target-display">
-        <span class="target-label">Hedef Koordinat</span>
-        <span class="target-coords" id="targetCoords">(0, 0)</span>
-    </div>
-
-    <div class="msg" id="msg">Koordinat düzleminde hedefi işaretle!</div>
-
-    <div style="text-align:center;">
-        <button onclick="restartGame()" style="background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s;" onmouseenter="this.style.background='rgba(200,150,12,0.2)'" onmouseleave="this.style.background='rgba(200,150,12,0.08)'">&#8635; Yeniden Başlat</button>
-    </div>
-</div>
-
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="modal-overlay hidden" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Kurallar"><div class="mbox">
+ <img class="mimg" src="../img/mecesml.webp" alt="Tekin Hoca">
+ <div class="pgs" id="rpages">
+  <div class="pg on"><div class="pgt">Nasıl oynanır?</div><div class="mtext">
+   <p>Ekranda bir <b>(x, y)</b> koordinat düzlemi gösterilir. Hedef koordinat düzlemin yanında ya da altında yazılıdır.</p>
+   <p>Hedef noktayı düzlemde bulup <b>dokunun</b> ya da <b>tıklayın</b>. Telefonda parmağınızı basılı tutup kaydırarak nişan alabilirsiniz; en yakın nokta ve koordinatı gösterilir, parmağınızı kaldırınca nokta işaretlenir.</p>
+   <p><span class="x">x ekseni</span> [−5, +5], <span class="y">y ekseni</span> [−7, +7] aralığındadır. Her doğru işaret <b>10 puan</b> kazandırır; 60 saniyede mümkün olduğunca çok puan toplayın.</p></div></div>
+  <div class="pg"><div class="pgt">Koordinat nasıl okunur?</div><div class="mtext">
+   <p>Koordinat (x, y) biçiminde yazılır: önce <span class="x">x (yatay)</span>, sonra <span class="y">y (dikey)</span>. Hedef kutusunda ve eksenlerde x mavi, y turuncudur.</p>
+   <p>Pozitif x sağa, negatif x sola; pozitif y yukarı, negatif y aşağı gider. Örnek: (3, −2) noktası orijinden 3 birim sağda ve 2 birim aşağıdadır. Eksenler düzlemi I, II, III, IV numaralı bölgelere ayırır.</p>
+   <p>Yanlış işaretlerseniz doğru nokta gösterilir ve yeni bir hedef verilir. Doğruluk yüzdeniz sonuç ekranında görünür.</p></div></div>
+ </div>
+ <div class="rnav"><button class="a rarr" id="rPrev" aria-label="Önceki sayfa">&#8249;</button><div class="rdots" id="rDots" aria-hidden="true"><span class="on"></span><span></span></div><button class="a rarr" id="rNext" aria-label="Sonraki sayfa">&#8250;</button></div>
+ <button class="a pri" id="rBtn">Başla</button></div></div>
 <script>
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const container = document.getElementById('container');
-
-// Eksen aralıkları
-const X_RANGE = 5;  // x: -5 … +5
-const Y_RANGE = 7;  // y: -7 … +7
-
-let score = 0, timeLeft = 60, targetX = 0, targetY = 0;
-let gameActive = false, timerInterval;
-let stepX, stepY;  // piksel başına birim — x ve y için ayrı
-
-function initCanvas() {
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width  = w * dpr;
-    canvas.height = h * dpr;
-    ctx.scale(dpr, dpr);
-    canvas.style.width  = w + 'px';
-    canvas.style.height = h + 'px';
-
-    // Kılavuz çizgileri için kenar boşluğu
-    const padX = w * 0.08;
-    const padY = h * 0.06;
-    const innerW = w - padX * 2;
-    const innerH = h - padY * 2;
-
-    stepX = innerW / (X_RANGE * 2);
-    stepY = innerH / (Y_RANGE * 2);
-
-    drawGrid();
-}
-
-function midX(){ return container.clientWidth  * 0.5; }
-function midY(){ return container.clientHeight * 0.5; }
-
-function drawGrid() {
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    ctx.clearRect(0, 0, w, h);
-    const mx = midX(), my = midY();
-
-    // Kılavuz çizgileri
-    ctx.strokeStyle = 'rgba(200,150,12,0.1)';
-    ctx.lineWidth = 1;
-    for(let i = -X_RANGE; i <= X_RANGE; i++){
-        const px = mx + i * stepX;
-        ctx.beginPath(); ctx.moveTo(px, my - Y_RANGE * stepY); ctx.lineTo(px, my + Y_RANGE * stepY); ctx.stroke();
-    }
-    for(let j = -Y_RANGE; j <= Y_RANGE; j++){
-        const py = my + j * stepY;
-        ctx.beginPath(); ctx.moveTo(mx - X_RANGE * stepX, py); ctx.lineTo(mx + X_RANGE * stepX, py); ctx.stroke();
-    }
-
-    // Eksenler
-    ctx.strokeStyle = '#c8960c';
-    ctx.lineWidth = 2.5;
-    ctx.beginPath(); ctx.moveTo(mx - X_RANGE * stepX - 8, my); ctx.lineTo(mx + X_RANGE * stepX + 8, my); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(mx, my - Y_RANGE * stepY - 8); ctx.lineTo(mx, my + Y_RANGE * stepY + 8); ctx.stroke();
-
-    // Eksen etiketleri
-    ctx.fillStyle = '#FFD97A';
-    ctx.font = 'bold 11px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    for(let i = -X_RANGE; i <= X_RANGE; i++){
-        if(i === 0) continue;
-        const px = mx + i * stepX;
-        ctx.fillText(i, px, my + 14);
-    }
-    for(let j = -Y_RANGE; j <= Y_RANGE; j++){
-        if(j === 0) continue;
-        const py = my - j * stepY;  // y ekseni yukarı artar
-        ctx.textAlign = 'right';
-        ctx.fillText(j, mx - 8, py);
-    }
-
-    // x, y etiketleri
-    ctx.font = 'bold 13px Georgia';
-    ctx.textAlign = 'center';
-    ctx.fillText('x', mx + X_RANGE * stepX + 16, my - 10);
-    ctx.fillText('y', mx + 14, my - Y_RANGE * stepY - 14);
-}
-
-function generateTarget() {
-    targetX = Math.floor(Math.random() * (X_RANGE * 2 + 1)) - X_RANGE;
-    targetY = Math.floor(Math.random() * (Y_RANGE * 2 + 1)) - Y_RANGE;
-    document.getElementById('targetCoords').textContent = `(${targetX}, ${targetY})`;
-    document.getElementById('msg').textContent = 'Koordinat düzleminde hedefi işaretle!';
-}
-
-function handleTargetClick(e) {
-    if (!gameActive) return;
-    const rect = canvas.getBoundingClientRect();
-    const mx = midX(), my = midY();
-
-    // Touch desteği
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
-
-    const clickedX = Math.round((x - mx) / stepX);
-    const clickedY = Math.round((my - y) / stepY);
-
-    if (clickedX === targetX && clickedY === targetY) {
-        score += 10;
-        document.getElementById('score').textContent = score;
-        document.getElementById('msg').textContent = '✓ Tam isabet!';
-        drawPoint(mx + targetX * stepX, my - targetY * stepY, '#1d9e75');
-        setTimeout(() => { drawGrid(); generateTarget(); }, 280);
-    } else {
-        document.getElementById('msg').textContent = `✗ Burası (${clickedX}, ${clickedY})`;
-        drawPoint(x, y, '#9b3510');
-        setTimeout(drawGrid, 280);
-    }
-}
-
-function drawPoint(x, y, color) {
-    ctx.fillStyle = color;
-    ctx.beginPath(); ctx.arc(x, y, 10, 0, Math.PI * 2); ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.7)'; ctx.lineWidth = 1.5; ctx.stroke();
-}
-
-function closeModal() {
-    document.getElementById('modalOverlay').classList.add('hidden');
-    gameActive = true;
-    generateTarget();
-    timerInterval = setInterval(() => {
-        timeLeft--;
-        document.getElementById('timer').textContent = timeLeft;
-        if (timeLeft <= 0) endGame();
-    }, 1000);
-}
-function openModal() {
-    document.getElementById('modalOverlay').classList.remove('hidden');
-}
-
-function endGame() {
-    gameActive = false;
-    clearInterval(timerInterval);
-    document.getElementById('winBody').innerHTML =
-        `Toplam Puan: <b style="color:#FFD97A">${score}</b>`;
-    document.getElementById('winOverlay').classList.add('show');
-    document.getElementById('msg').textContent = '';
-}
-
-function restartGame() {
-    score = 0; timeLeft = 60; gameActive = false;
-    clearInterval(timerInterval);
-    document.getElementById('score').textContent = '0';
-    document.getElementById('timer').textContent = '60';
-    document.getElementById('winOverlay').classList.remove('show');
-    document.getElementById('msg').textContent = 'Koordinat düzleminde hedefi işaretle!';
-    document.getElementById('targetCoords').textContent = '(0, 0)';
-    drawGrid();
-    // Başla butonuyla yeniden başlatmak için modal göster
-    openModal();
-}
-
-canvas.addEventListener('mousedown', handleTargetClick);
-canvas.addEventListener('touchstart', e => { e.preventDefault(); handleTargetClick(e); }, {passive:false});
-window.addEventListener('resize', initCanvas);
-window.onload = initCanvas;
+const $=id=>document.getElementById(id);
+const RM=(()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}})();
+const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+const canvas=$('gameCanvas'),ctx=canvas.getContext('2d'),panel=$('panel');
+const XR=5,YR=7,GAME_MS=60000;
+let state='ready',score=0,streak=0,correct=0,wrong=0,best=0,tx=0,ty=0,remain=GAME_MS,deadline=0,tick=null,lock=false,fb=null,pv=null,down=false,raf=0,fxRaf=0;
+let G={u:20,cx:0,cy:0,W:0,H:0};
+try{best=+(localStorage.getItem('koordinat-best')||0)||0;}catch(e){}
+/* ---- geometri: x ve y birimleri birebir aynı (kare ızgara) ---- */
+function fit(){const sc=$('stagecol'),W0=sc.clientWidth,H0=sc.clientHeight;
+ const u=Math.max(10,Math.floor(Math.min(W0/(2*XR+2.6),H0/(2*YR+2.6))));
+ const W=Math.round(u*(2*XR+2.6)),H=Math.round(u*(2*YR+2.6)),dpr=window.devicePixelRatio||1;
+ panel.style.width=W+'px';panel.style.height=H+'px';canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);
+ ctx.setTransform(dpr,0,0,dpr,0,0);G={u,cx:W/2,cy:H/2,W,H};draw();}
+const px=x=>G.cx+x*G.u,py=y=>G.cy-y*G.u;
+function toGrid(clientX,clientY){const r=canvas.getBoundingClientRect(),x=clientX-r.left,y=clientY-r.top;
+ const gx=Math.round((x-G.cx)/G.u),gy=Math.round((G.cy-y)/G.u);
+ return(Math.abs(gx)<=XR&&Math.abs(gy)<=YR&&x>=0&&y>=0&&x<=G.W&&y<=G.H)?{x:gx,y:gy}:null;}
+/* ---- çizim ---- */
+function pill(txt,x,y,color){ctx.font='bold '+Math.max(12,G.u*.5)+'px "Courier New",monospace';const parts=txt;let w=0;for(const p of parts)w+=ctx.measureText(p[0]).width;
+ const pw=w+16,ph=Math.max(22,G.u*.9);let bx=Math.min(Math.max(x-pw/2,4),G.W-pw-4),by=Math.max(y-ph/2,4);
+ ctx.fillStyle='rgba(8,16,30,.94)';ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.beginPath();ctx.roundRect?ctx.roundRect(bx,by,pw,ph,8):ctx.rect(bx,by,pw,ph);ctx.fill();ctx.stroke();
+ ctx.textAlign='left';ctx.textBaseline='middle';let cx=bx+8;for(const p of parts){ctx.fillStyle=p[1];ctx.fillText(p[0],cx,by+ph/2+1);cx+=ctx.measureText(p[0]).width;}}
+const coordParts=(x,y)=>[['(','#ffd97a'],[String(x).replace('-','−'),'#6ea8ff'],[', ','#ffd97a'],[String(y).replace('-','−'),'#ff9f5a'],[')','#ffd97a']];
+function guides(x,y,alpha,dash){ctx.save();ctx.globalAlpha=alpha;ctx.lineWidth=1.8;ctx.setLineDash(dash?[5,5]:[]);
+ ctx.strokeStyle='#6ea8ff';ctx.beginPath();ctx.moveTo(px(x),py(0));ctx.lineTo(px(x),py(y));ctx.stroke();
+ ctx.strokeStyle='#ff9f5a';ctx.beginPath();ctx.moveTo(px(0),py(y));ctx.lineTo(px(x),py(y));ctx.stroke();ctx.restore();}
+function ring(x,y,r,color,w,a){ctx.save();ctx.globalAlpha=a==null?1:a;ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();ctx.arc(px(x),py(y),r,0,6.2832);ctx.stroke();ctx.restore();}
+function dot(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(px(x),py(y),r,0,6.2832);ctx.fill();}
+function draw(){if(!G.W)return;const{u,cx,cy,W,H}=G;ctx.clearRect(0,0,W,H);
+ // bölgeler
+ const q=[[1,1,'45,212,168','I'],[-1,1,'110,168,255','II'],[-1,-1,'181,140,255','III'],[1,-1,'255,179,71','IV']];
+ for(const[sx,sy,c,l]of q){const x0=sx>0?px(0):px(-XR),y0=sy>0?py(YR):py(0);ctx.fillStyle='rgba('+c+',.055)';ctx.fillRect(x0,y0,XR*u,YR*u);
+  ctx.fillStyle='rgba('+c+',.38)';ctx.font='bold '+Math.max(13,u*.62)+'px Georgia';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(l,px(sx*(XR-.9)),py(sy*(YR-.9)));}
+ // ızgara + kesişim noktaları
+ ctx.lineWidth=1;ctx.strokeStyle='rgba(127,184,255,.2)';
+ for(let i=-XR;i<=XR;i++){if(!i)continue;ctx.beginPath();ctx.moveTo(px(i),py(-YR));ctx.lineTo(px(i),py(YR));ctx.stroke();}
+ for(let j=-YR;j<=YR;j++){if(!j)continue;ctx.beginPath();ctx.moveTo(px(-XR),py(j));ctx.lineTo(px(XR),py(j));ctx.stroke();}
+ ctx.fillStyle='rgba(159,208,255,.5)';for(let i=-XR;i<=XR;i++)for(let j=-YR;j<=YR;j++){ctx.beginPath();ctx.arc(px(i),py(j),Math.max(1.3,u*.06),0,6.2832);ctx.fill();}
+ // eksenler ve oklar
+ const ah=Math.max(7,u*.38);ctx.lineWidth=2.4;
+ ctx.strokeStyle='#6ea8ff';ctx.fillStyle='#6ea8ff';ctx.beginPath();ctx.moveTo(px(-XR)-u*.4,cy);ctx.lineTo(px(XR)+u*.4,cy);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(px(XR)+u*.4,cy-ah*.55);ctx.lineTo(px(XR)+u*.4+ah,cy);ctx.lineTo(px(XR)+u*.4,cy+ah*.55);ctx.closePath();ctx.fill();
+ ctx.strokeStyle='#ff9f5a';ctx.fillStyle='#ff9f5a';ctx.beginPath();ctx.moveTo(cx,py(-YR)+u*.4);ctx.lineTo(cx,py(YR)-u*.4);ctx.stroke();
+ ctx.beginPath();ctx.moveTo(cx-ah*.55,py(YR)-u*.4);ctx.lineTo(cx,py(YR)-u*.4-ah);ctx.lineTo(cx+ah*.55,py(YR)-u*.4);ctx.closePath();ctx.fill();
+ // çentik ve sayılar
+ const fs=Math.max(11,u*.46);ctx.font='bold '+fs+'px Georgia';
+ for(let i=-XR;i<=XR;i++){if(!i)continue;ctx.strokeStyle='#6ea8ff';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px(i),cy-4);ctx.lineTo(px(i),cy+4);ctx.stroke();
+  ctx.fillStyle='#9cc2ff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(String(i).replace('-','−'),px(i),cy+u*.62);}
+ for(let j=-YR;j<=YR;j++){if(!j)continue;ctx.strokeStyle='#ff9f5a';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx-4,py(j));ctx.lineTo(cx+4,py(j));ctx.stroke();
+  ctx.fillStyle='#ffc197';ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillText(String(j).replace('-','−'),cx-u*.3,py(j)+1);}
+ ctx.fillStyle='#ffd45a';ctx.font='bold '+Math.max(11,u*.42)+'px Georgia';ctx.textAlign='right';ctx.fillText('O',cx-u*.22,cy+u*.5);
+ ctx.font='bold '+Math.max(14,u*.6)+'px Georgia';ctx.textAlign='left';ctx.fillStyle='#6ea8ff';ctx.fillText('x',px(XR)+u*.4+ah+4,cy-u*.35);ctx.fillStyle='#ff9f5a';ctx.textAlign='center';ctx.fillText('y',cx+u*.6,py(YR)-u*.4-ah-2);
+ // önizleme
+ if(pv&&state==='playing'&&!lock){guides(pv.x,pv.y,.65,true);ring(pv.x,pv.y,u*.4,'#ffd45a',2.5);dot(pv.x,pv.y,Math.max(3,u*.14),'#ffd45a');
+  pill(coordParts(pv.x,pv.y),px(pv.x),Math.max(py(pv.y)-u*1.15,u*.6),'#ffd45a');}
+ // geri bildirim
+ if(fb){const t=Math.min(1,(performance.now()-fb.t0)/fb.dur),ok=fb.ok;
+  if(ok){guides(tx,ty,.85,true);const pr=RM?1:Math.min(1,t*2.2);ring(tx,ty,u*(.35+.45*pr),'#2dd4a8',3,1-(RM?0:pr)*.6);dot(tx,ty,Math.max(4,u*.17),'#2dd4a8');
+   ctx.font='bold '+Math.max(14,u*.62)+'px Georgia';ctx.fillStyle='#2dd4a8';ctx.globalAlpha=RM?1:1-t;ctx.textAlign='center';ctx.fillText('+10',px(tx),py(ty)-u*(.9+(RM?0:t*1.2)));ctx.globalAlpha=1;}
+  else{guides(tx,ty,.9,true);const pulse=RM?1:.5+.5*Math.sin(t*14);ring(tx,ty,u*(.4+.12*pulse),'#2dd4a8',3.2);dot(tx,ty,Math.max(4,u*.17),'#2dd4a8');
+   pill(coordParts(tx,ty),px(tx),Math.max(py(ty)-u*1.15,u*.6),'#2dd4a8');
+   const s=u*.3;ctx.save();ctx.strokeStyle='#ff5a4f';ctx.lineWidth=Math.max(3,u*.13);ctx.lineCap='round';ctx.beginPath();ctx.moveTo(px(fb.gx)-s,py(fb.gy)-s);ctx.lineTo(px(fb.gx)+s,py(fb.gy)+s);ctx.moveTo(px(fb.gx)-s,py(fb.gy)+s);ctx.lineTo(px(fb.gx)+s,py(fb.gy)-s);ctx.stroke();ctx.restore();ring(fb.gx,fb.gy,u*.45,'#ff5a4f',1.5,.55);}}}
+function animLoop(){cancelAnimationFrame(raf);const step=()=>{draw();if(fb&&performance.now()<fb.t0+fb.dur)raf=requestAnimationFrame(step);};raf=requestAnimationFrame(step);}
+/* ---- oyun akışı ---- */
+const fmtC=(x,y)=>'('+String(x).replace('-','−')+', '+String(y).replace('-','−')+')';
+function newTarget(){tx=Math.floor(Math.random()*(2*XR+1))-XR;ty=Math.floor(Math.random()*(2*YR+1))-YR;
+ $('targetCoords').innerHTML='(<span class="x">'+String(tx).replace('-','−')+'</span>, <span class="y">'+String(ty).replace('-','−')+'</span>)';}
+function setMsg(t,cls){const m=$('msg');m.textContent=t;m.className='msg'+(cls?' '+cls:'');}
+function hud(){$('score').textContent=score;$('streak').textContent=streak;$('best').textContent=best;
+ const s=Math.max(0,Math.ceil(remain/1000));$('timer').textContent=s;const low=state==='playing'&&s<=10;$('timeBox').classList.toggle('low',low);$('tbar').classList.toggle('low',low);
+ $('tfill').style.width=Math.max(0,remain/GAME_MS*100)+'%';}
+function stopTick(){if(tick){clearInterval(tick);tick=null;}}
+function startTick(){stopTick();deadline=Date.now()+remain;tick=setInterval(()=>{remain=deadline-Date.now();if(remain<=0){remain=0;hud();endGame();return;}hud();},100);}
+function resetGame(){stopTick();state='ready';score=0;streak=0;correct=0;wrong=0;remain=GAME_MS;lock=false;fb=null;pv=null;down=false;
+ $('targetCoords').innerHTML='(<span class="x">0</span>, <span class="y">0</span>)';$('endOv').classList.remove('show');$('startOv').classList.add('show');setMsg('Hazır olunca Başla\'ya basın.');hud();draw();}
+function startGame(){stopTick();score=0;streak=0;correct=0;wrong=0;remain=GAME_MS;lock=false;fb=null;pv=null;state='playing';
+ $('startOv').classList.remove('show');$('endOv').classList.remove('show');newTarget();setMsg('Hedefi koordinat düzleminde bulun!');hud();draw();startTick();}
+function endGame(){stopTick();state='over';lock=false;pv=null;down=false;fb=null;draw();
+ const tot=correct+wrong,acc=tot?Math.round(100*correct/tot):0;let rec='';
+ if(score>best&&score>0){best=score;try{localStorage.setItem('koordinat-best',String(best));}catch(e){}rec='<br><span class="newrec">Yeni rekor!</span>';}else rec='<br>Rekorunuz: <b>'+best+'</b>';
+ $('endBody').innerHTML='Toplam puan: <b>'+score+'</b><br>Doğru: <b>'+correct+'</b> · Yanlış: <b>'+wrong+'</b> · Doğruluk: <b>%'+acc+'</b>'+rec;
+ $('endOv').classList.add('show');setMsg('');hud();vib([30,40,60]);if(rec.indexOf('Yeni')>=0)confetti();}
+function pause(){if(state!=='playing')return;stopTick();remain=Math.max(0,deadline-Date.now());state='paused';}
+function resume(){if(state!=='paused')return;state='playing';startTick();}
+function commit(g){if(state!=='playing'||lock||!g)return;lock=true;pv=null;
+ if(g.x===tx&&g.y===ty){score+=10;streak++;correct++;setMsg('✓ Tam isabet!','ok');fb={ok:true,t0:performance.now(),dur:560};vib(12);}
+ else{streak=0;wrong++;setMsg('✗ Hedef '+fmtC(tx,ty)+' idi; siz '+fmtC(g.x,g.y)+' işaretlediniz.','bad');fb={ok:false,gx:g.x,gy:g.y,t0:performance.now(),dur:1100};vib([25,40,25]);}
+ hud();animLoop();const f=fb;setTimeout(()=>{if(fb!==f)return;fb=null;lock=false;if(state==='playing'||state==='paused'){newTarget();if(state==='playing')setMsg('Hedefi koordinat düzleminde bulun!');}draw();},f.dur);}
+/* ---- girdi: fare üzerinde gezinme, dokunmada basılı tutup kaydırma; bırakınca işaretle ---- */
+function upd(e){pv=toGrid(e.clientX,e.clientY);draw();}
+canvas.addEventListener('pointerdown',e=>{if(state!=='playing'||lock)return;if(e.pointerType==='mouse'&&e.button!==0)return;down=true;try{canvas.setPointerCapture(e.pointerId);}catch(x){}upd(e);});
+canvas.addEventListener('pointermove',e=>{if(state!=='playing'||lock)return;if(e.pointerType==='mouse'||down)upd(e);});
+canvas.addEventListener('pointerup',e=>{if(!down)return;down=false;if(e.pointerType==='mouse'&&e.button!==0)return;const g=toGrid(e.clientX,e.clientY);pv=null;if(g)commit(g);else draw();});
+canvas.addEventListener('pointercancel',()=>{down=false;pv=null;draw();});
+canvas.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&!down){pv=null;draw();}});
+canvas.addEventListener('contextmenu',e=>e.preventDefault());
+/* ---- konfeti ---- */
+function confetti(){if(RM)return;const cv=$('fx'),cx=cv.getContext&&cv.getContext('2d');if(!cx)return;
+ const dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);cx.setTransform(dpr,0,0,dpr,0,0);
+ const cols=['#ffd966','#ffe9a8','#c8960c','#6ea8ff','#ff9f5a','#2dd4a8','#f8f1de'],ps=[];
+ for(let i=0;i<150;i++){const l=i%2===0;ps.push({x:l?W*.12:W*.88,y:H*.4,vx:(l?1:-1)*(2+Math.random()*6)+(Math.random()-.5)*2,vy:-(7+Math.random()*9),w:5+Math.random()*6,h:3+Math.random()*4,r:Math.random()*6.28,vr:(Math.random()-.5)*.35,c:cols[i%cols.length]});}
+ const t0=performance.now();cancelAnimationFrame(fxRaf);
+ const step=now=>{const t=now-t0;cx.clearRect(0,0,W,H);let alive=0;
+  for(const p of ps){p.vy+=.28;p.vx*=.992;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;if(p.y<H+20){alive++;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.globalAlpha=Math.max(0,Math.min(1,(4200-t)/900));cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore();}}
+  if(t<4200&&alive)fxRaf=requestAnimationFrame(step);else cx.clearRect(0,0,W,H);};
+ fxRaf=requestAnimationFrame(step);}
+/* ---- kurallar penceresi ---- */
+let rp=0;
+function rPage(i){const pgs=document.querySelectorAll('#rpages .pg'),n=pgs.length;rp=Math.max(0,Math.min(n-1,i));
+ pgs.forEach((p,k)=>p.classList.toggle('on',k===rp));document.querySelectorAll('#rDots span').forEach((d,k)=>d.classList.toggle('on',k===rp));
+ $('rPrev').disabled=rp===0;$('rNext').disabled=rp===n-1;}
+function openModal(){pause();rPage(0);$('rBtn').textContent=state==='ready'?'Başla':(state==='paused'?'Devam':'Kapat');$('modalOverlay').classList.remove('hidden');$('rBtn').focus();}
+function closeModal(){if($('modalOverlay').classList.contains('hidden'))return;$('modalOverlay').classList.add('hidden');if(state==='paused')resume();}
+$('rBtn').onclick=()=>{const wasReady=state==='ready';closeModal();if(wasReady)startGame();};
+$('rulesBtn').onclick=openModal;$('rules2').onclick=openModal;
+$('rPrev').onclick=()=>rPage(rp-1);$('rNext').onclick=()=>rPage(rp+1);
+(function(){let x0=null;const el=$('rpages');
+ el.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+ el.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)rPage(rp+(dx<0?1:-1));},{passive:true});})();
+$('modalOverlay').addEventListener('pointerdown',e=>{if(e.target===$('modalOverlay'))closeModal();});
+addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();else if(!$('modalOverlay').classList.contains('hidden')){if(e.key==='ArrowRight')rPage(rp+1);else if(e.key==='ArrowLeft')rPage(rp-1);}});
+$('goBtn').onclick=startGame;$('againBtn').onclick=resetGame;$('restartBtn').onclick=resetGame;
+new ResizeObserver(fit).observe($('stagecol'));
+resetGame();fit();openModal();
+window.__k={state:()=>({state,score,streak,correct,wrong,best,tx,ty,remain,lock,G}),toGrid,commit,setTarget:(x,y)=>{tx=x;ty=y;},draw};
 </script>
 </body>
 </html>
