@@ -2,947 +2,656 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content">
+<meta name="theme-color" content="#0e0c08">
 <meta name="robots" content="noindex, nofollow">
 <title>Dikkat Testleri</title>
 <style>
-  :root{
-    --bg-deep:#0e0e0a;--accent-cyan:#c8960c;--accent-violet:#FFD97A;
-    --accent-pink:#e8d5a0;--text-dim:rgba(247,242,232,0.45);--text-bright:rgba(247,242,232,0.92);
-    --danger:#eb5757;--success:#50c878;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;font-family:Georgia,serif;
-    background:var(--bg-deep);
-    color:var(--text-bright);overflow-x:hidden;min-height:100dvh;
-    display:flex;flex-direction:column;
-    overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none;}
-  html::-webkit-scrollbar,body::-webkit-scrollbar{display:none;}
-  .stage{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;padding:32px 20px;}
-  .panel{width:100%;max-width:560px;text-align:center;}
-  .eyebrow{letter-spacing:.35em;text-transform:uppercase;font-size:12px;color:var(--text-dim);margin-bottom:18px;}
-  .glow-title{font-size:clamp(26px,6vw,40px);font-weight:800;margin:0 0 8px;
-    background:linear-gradient(90deg,var(--accent-cyan),var(--accent-violet),var(--accent-pink));
-    -webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:1px;}
-  .subtitle{color:var(--text-dim);font-size:14px;margin-bottom:28px;line-height:1.6;}
+/* ═══ DİKKAT TESTLERİ · stil ═══════════════════════════════════════ */
+:root{
+  --bg:#0e0c08; --gold:#c8960c; --gold2:#ffd966; --gold3:#ffe9a8; --tx:#e8d5a0;
+  --text-bright:rgba(247,242,232,.94); --text-dim:rgba(247,242,232,.66);
+  --ok:#50c878; --warn:#e67e22; --bad:#e74c3c;
+  --ac:#ffd966; --ac-rgb:255,217,102;
+}
+[data-test="numbers"]{--ac:#ffd966;--ac-rgb:255,217,102;}
+[data-test="colors"]{--ac:#ff6b6b;--ac-rgb:255,107,107;}
+[data-test="symbols"]{--ac:#4dd0e1;--ac-rgb:77,208,225;}
+[data-test="spatial"]{--ac:#6aa8ff;--ac-rgb:106,168,255;}
+[data-test="reflex"]{--ac:#3ddc97;--ac-rgb:61,220,151;}
+[data-test="timing"]{--ac:#b388ff;--ac-rgb:179,136,255;}
+[data-test="simon"]{--ac:#ff7eb6;--ac-rgb:255,126,182;}
 
-  /* Zorluk seçim kartları */
-  .difficulty-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;}
-  .diff-card{padding:16px 12px;border-radius:16px;border:1.5px solid rgba(255,255,255,.12);
-    background:rgba(255,255,255,.04);cursor:pointer;transition:all .2s ease;text-align:center;}
-  .diff-card:hover{border-color:var(--accent-cyan);box-shadow:0 0 20px rgba(79,227,255,.15);transform:translateY(-2px);}
-  .diff-card.selected{border-color:var(--accent-violet);background:rgba(176,107,255,.12);
-    box-shadow:0 0 24px rgba(176,107,255,.25);}
-  .diff-card .diff-name{font-size:15px;font-weight:700;color:var(--text-bright);margin-bottom:6px;}
-  .diff-card .diff-detail{font-size:11px;color:var(--text-dim);line-height:1.5;}
-  .diff-card .diff-pts{font-size:11px;color:var(--accent-cyan);margin-top:4px;font-weight:600;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+[hidden]{display:none!important;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text-bright);
+  font-family:Georgia,'Times New Roman',serif;}
+body{overscroll-behavior:none;}
+button{font-family:inherit;touch-action:manipulation;}
 
-  /* Sayı kartı */
-  .number-card{position:relative;padding:34px 20px;border-radius:22px;
-    background:linear-gradient(160deg,rgba(79,227,255,.07),rgba(176,107,255,.05));
-    border:1px solid rgba(176,107,255,.35);
-    box-shadow:0 0 60px rgba(79,227,255,.08),inset 0 0 40px rgba(176,107,255,.06);
-    margin-bottom:24px;}
-  .number-card::before,.number-card::after{content:'';position:absolute;width:10px;height:10px;
-    border-radius:50%;background:var(--accent-cyan);box-shadow:0 0 12px var(--accent-cyan);}
-  .number-card::before{top:-5px;left:18%;}
-  .number-card::after{bottom:-5px;right:18%;background:var(--accent-pink);box-shadow:0 0 12px var(--accent-pink);}
-  .digit-display{font-size:clamp(28px,8vw,58px);font-weight:800;letter-spacing:8px;
-    font-family:'Consolas','Courier New',monospace;color:var(--text-bright);
-    text-shadow:0 0 8px var(--accent-cyan),0 0 22px rgba(79,227,255,.6),0 0 46px rgba(176,107,255,.4);
-    word-break:break-all;}
-  .countdown-display{font-size:clamp(48px,12vw,80px);font-weight:800;color:var(--accent-violet);
-    text-shadow:0 0 20px var(--accent-violet),0 0 50px rgba(176,107,255,.5);}
-  .timer-bar-wrap{width:100%;height:8px;background:rgba(255,255,255,.08);border-radius:8px;overflow:hidden;margin-top:16px;}
-  .timer-bar{height:100%;width:100%;background:linear-gradient(90deg,var(--accent-cyan),var(--accent-pink));
-    transform-origin:left;box-shadow:0 0 10px var(--accent-cyan);}
+/* ── Arka plan: yavaş kayan ışıklar + parıldayan yıldızlar ───── */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.bg .l{position:absolute;width:70vmax;height:70vmax;border-radius:50%;filter:blur(8px);opacity:.9;}
+.bg .l1{left:-25vmax;top:-30vmax;background:radial-gradient(circle,rgba(200,150,12,.17),transparent 62%);animation:drift1 46s ease-in-out infinite alternate;}
+.bg .l2{right:-30vmax;bottom:-35vmax;background:radial-gradient(circle,rgba(150,110,255,.12),transparent 62%);animation:drift2 58s ease-in-out infinite alternate;}
+.bg .l3{left:20%;top:55%;width:60vmax;height:60vmax;background:radial-gradient(circle,rgba(var(--ac-rgb),.10),transparent 62%);transition:background .6s ease;animation:drift3 52s ease-in-out infinite alternate;}
+@keyframes drift1{to{transform:translate(12vmax,10vmax);}}
+@keyframes drift2{to{transform:translate(-14vmax,-8vmax);}}
+@keyframes drift3{to{transform:translate(-10vmax,-12vmax);}}
+.bg .st{position:absolute;inset:0;}
+.bg .st.a{animation:twinkle 5s ease-in-out infinite;}
+.bg .st.b{animation:twinkle 7s ease-in-out -2.5s infinite;}
+@keyframes twinkle{0%,100%{opacity:.25;}50%{opacity:1;}}
 
-  /* Geri sayım bilgi metni */
-  .trivia-text{font-size:13px;color:var(--text-dim);line-height:1.65;
-    min-height:40px;padding:0 8px;margin-top:4px;font-style:italic;}
+/* ── Uygulama kabuğu ─────────────────────────────────────────── */
+.app{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);}
+.topbar{flex:none;display:flex;align-items:center;gap:10px;height:clamp(36px,6dvh,50px);
+  padding:0 clamp(10px,2.5vw,26px);}
+.top-title{flex:1;min-width:0;text-align:center;font-size:12px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.top-actions{display:flex;gap:8px;}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid rgba(200,150,12,.45);
+  background:linear-gradient(180deg,rgba(200,150,12,.2),rgba(200,150,12,.08));color:var(--gold2);
+  font-size:16px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:background .2s,transform .1s;}
+.icon-btn:active{transform:scale(.93);}
+.icon-btn.ghost-hidden{visibility:hidden;}
+@media(hover:hover){.icon-btn:hover{background:rgba(200,150,12,.32);}}
 
-  /* Cevap ekranı */
-  .question-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--text-dim);margin-bottom:16px;}
-  .question-meta b{color:var(--accent-cyan);}
-  .answer-prompt{color:var(--text-dim);font-size:13px;margin-bottom:12px;}
-  input.answer-input{width:100%;font-size:clamp(22px,6vw,36px);letter-spacing:8px;text-align:center;
-    font-family:'Consolas','Courier New',monospace;padding:14px 8px;border-radius:16px;
-    border:1.5px solid rgba(79,227,255,.45);background:rgba(255,255,255,.04);
-    color:var(--text-bright);outline:none;caret-color:var(--accent-cyan);}
-  input.answer-input:focus{border-color:var(--accent-violet);box-shadow:0 0 0 4px rgba(176,107,255,.15);}
+.panel{flex:1;min-height:0;position:relative;width:100%;max-width:1280px;margin:0 auto;}
+.foot{flex:none;height:min(34px,5dvh);display:flex;justify-content:center;align-items:center;pointer-events:none;margin-bottom:2px;}
+.foot img{height:100%;width:auto;opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto;}
+.foot img:hover{opacity:.7;}
 
-  /* Butonlar */
-  .btn{appearance:none;border:1px solid rgba(200,150,12,0.6);cursor:pointer;font-size:14px;font-weight:700;
-    padding:10px 24px;border-radius:4px;color:var(--accent-cyan);
-    background:rgba(200,150,12,0.18);font-family:Georgia,serif;letter-spacing:.04em;
-    transition:background .2s ease;margin-top:18px;}
-  .btn:hover{background:rgba(200,150,12,0.32);}
-  .btn:active{transform:none;}
-  .btn:disabled{opacity:.35;cursor:not-allowed;}
-  .btn.secondary{background:rgba(200,150,12,0.08);color:var(--text-bright);
-    border:1px solid rgba(200,150,12,0.3);}
-  .btn.secondary:hover{background:rgba(200,150,12,0.2);}
-  .row-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+/* ── Ekran = üç bölge (üst bilgi / ana alan / alt kontrol) ───── */
+.screen{position:absolute;inset:0;display:grid;grid-template-columns:minmax(0,1fr);
+  grid-template-rows:auto minmax(140px,1fr) auto;grid-template-areas:"head" "main" "foot";
+  gap:clamp(6px,1.4dvh,16px);padding:clamp(4px,1dvh,12px) clamp(12px,3vw,32px) clamp(4px,1dvh,10px);
+  overflow-x:hidden;overflow-y:auto;scrollbar-width:none;text-align:center;}
+.screen::-webkit-scrollbar{display:none;}
+.screen.hidden{display:none!important;}
+.z-head{grid-area:head;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;}
+.z-main{grid-area:main;min-width:0;min-height:0;position:relative;container-type:size;display:grid;place-items:center;}
+.z-foot{grid-area:foot;min-width:0;display:flex;flex-direction:column;align-items:center;gap:8px;}
 
-  .menu-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-    max-width:480px;
-    margin:0 auto;
-  }
-  .menu-grid .btn{
-    margin-top:0;
-    font-size:14px;
-    padding:16px 10px;
-    white-space:normal;
-    line-height:1.3;
-  }
-  @media (max-width:380px){
-    .menu-grid .btn{ font-size:12.5px; padding:14px 6px; }
-  }
+@media (min-aspect-ratio:13/10) and (min-width:640px){
+  .screen:not(.screen-menu){grid-template-columns:minmax(220px,36%) minmax(0,1fr);
+    grid-template-rows:1fr auto;grid-template-areas:"head main" "foot main";column-gap:clamp(14px,3vw,40px);}
+  .screen:not(.screen-menu) .z-head{justify-content:center;align-self:center;}
+  .screen:not(.screen-menu) .z-foot{align-self:end;}
+}
 
-  /* Sonuç ekranı */
-  .feedback-digits{display:flex;gap:var(--box-gap,6px);justify-content:center;margin:14px 0;flex-wrap:nowrap;}
-  .digit-box{width:var(--box-size,40px);height:calc(var(--box-size,40px) * 1.25);border-radius:10px;
-    display:flex;align-items:center;justify-content:center;flex-shrink:0;
-    font-family:'Consolas','Courier New',monospace;font-size:var(--box-font,20px);font-weight:700;
-    background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.15);}  .digit-box.correct{color:var(--success);border-color:var(--success);box-shadow:0 0 14px rgba(95,255,176,.4);}
-  .digit-box.wrong{color:var(--danger);border-color:var(--danger);box-shadow:0 0 14px rgba(255,95,109,.4);}
-  .score-pill{display:inline-block;font-size:15px;padding:8px 18px;border-radius:999px;
-    background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);margin-top:12px;}
-  .score-pill b{color:var(--accent-cyan);font-size:18px;}
-  .level-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;
-    border-radius:999px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;}
-  .badge-easy{background:rgba(95,255,176,.12);color:var(--success);border:1px solid rgba(95,255,176,.3);}
-  .badge-medium{background:rgba(79,227,255,.12);color:var(--accent-cyan);border:1px solid rgba(79,227,255,.3);}
-  .badge-hard{background:rgba(176,107,255,.12);color:var(--accent-violet);border:1px solid rgba(176,107,255,.3);}
-  .badge-progressive{background:rgba(255,95,176,.12);color:var(--accent-pink);border:1px solid rgba(255,95,176,.3);}
+/* ── Tipografi ───────────────────────────────────────────────── */
+.eyebrow{letter-spacing:.35em;text-transform:uppercase;font-size:clamp(10px,1.6dvh,12px);color:var(--text-dim);margin-bottom:clamp(6px,1.4dvh,14px);}
+.glow-title{font-size:clamp(20px,min(5.6vw,5.2dvh),40px);font-weight:800;margin:0 0 6px;letter-spacing:1px;line-height:1.15;
+  background:linear-gradient(100deg,var(--gold),var(--gold2) 30%,#fff3c4 50%,var(--gold2) 70%,var(--gold));
+  background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shimmer 7s linear infinite;}
+@keyframes shimmer{from{background-position:120% 0;}to{background-position:-120% 0;}}
+.glow-title.sm{font-size:clamp(15px,3.2dvh,22px);margin-top:2px;}
+.subtitle{color:var(--text-dim);font-size:clamp(12px,2dvh,15px);line-height:1.6;margin-bottom:clamp(4px,1.2dvh,14px);max-width:60ch;}
+.hint-text,.trivia-text{color:var(--text-dim);font-size:clamp(11px,1.9dvh,13px);line-height:1.6;}
+.trivia-text{font-style:italic;min-height:2.4em;padding:0 8px;max-width:60ch;}
+.question-meta{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+  font-size:clamp(12px,2dvh,14px);color:var(--text-dim);margin-bottom:6px;}
+.question-meta>span:first-child{padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid rgba(var(--ac-rgb),.35);}
+.question-meta b{color:var(--ac);}
+.answer-prompt{color:var(--text-dim);font-size:clamp(12px,2.1dvh,15px);line-height:1.5;margin-bottom:4px;max-width:46ch;}
 
-  /* Final ekranı */
-  .final-score{font-size:clamp(54px,14vw,90px);font-weight:800;margin:8px 0 4px;
-    background:linear-gradient(90deg,var(--accent-cyan),var(--accent-violet),var(--accent-pink));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-    animation:pulseGlow 1.8s ease-in-out infinite;}
-  .final-max{font-size:14px;color:var(--text-dim);margin-bottom:16px;}
-  @keyframes pulseGlow{
-    0%,100%{filter:drop-shadow(0 0 8px rgba(79,227,255,.4));}
-    50%{filter:drop-shadow(0 0 26px rgba(176,107,255,.7));}}
-  .per-question-recap{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0;}
-  .recap-chip{font-size:12px;padding:7px 11px;border-radius:10px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:var(--text-dim);}
-  .recap-chip b{color:var(--text-bright);}
-  .recap-chip .chip-cat{font-size:10px;display:block;margin-top:2px;}
+/* ── Düğmeler ────────────────────────────────────────────────── */
+.btn{appearance:none;cursor:pointer;font-size:clamp(13px,2.2dvh,15px);font-weight:700;letter-spacing:.04em;
+  padding:clamp(8px,1.6dvh,12px) clamp(16px,3vw,26px);border-radius:8px;color:#1a1204;
+  border:1px solid rgba(255,217,102,.7);background:linear-gradient(180deg,#ffe28a,#c8960c);
+  box-shadow:0 4px 14px rgba(200,150,12,.25),inset 0 1px 0 rgba(255,255,255,.35);transition:transform .1s,filter .2s,opacity .2s;}
+.btn:active{transform:scale(.96);}
+.btn:disabled{opacity:.38;cursor:not-allowed;filter:saturate(.5);box-shadow:none;}
+.btn.secondary{color:var(--tx);background:rgba(200,150,12,.08);border:1px solid rgba(200,150,12,.38);box-shadow:none;}
+.btn.tiny{font-size:11px;padding:6px 12px;font-weight:400;letter-spacing:.02em;}
+@media(hover:hover){.btn:not(:disabled):hover{filter:brightness(1.08);}.btn.secondary:not(:disabled):hover{background:rgba(200,150,12,.22);}}
+.row-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
 
-  .hidden{display:none!important;}
-  .fade-in{animation:fadeIn .3s ease;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-  @media(prefers-reduced-motion:reduce){.final-score{animation:none;}.btn{transition:none;}}
+/* ── Ana menü ────────────────────────────────────────────────── */
+.screen-menu{grid-template-rows:auto minmax(0,1fr) auto!important;grid-template-areas:"head" "main" "foot"!important;}
+.menu-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));
+  gap:clamp(8px,1.6vw,16px);width:min(100cqw,980px);height:min(100cqh,720px);}
+.menu-grid .m-card:last-child{grid-column:1/-1;}
+@media (min-aspect-ratio:13/10) and (min-width:640px){
+  .menu-grid{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));}
+  .menu-grid .m-card:last-child{grid-column:span 2;}
+}
+.m-card{position:relative;overflow:hidden;appearance:none;cursor:pointer;border-radius:16px;color:var(--text-bright);
+  border:1.5px solid rgba(var(--ac-rgb),.38);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(3px,1dvh,8px);
+  background:linear-gradient(160deg,rgba(var(--ac-rgb),.14),rgba(255,255,255,.03) 60%);
+  box-shadow:0 0 0 rgba(var(--ac-rgb),0),inset 0 0 28px rgba(var(--ac-rgb),.05);
+  transition:transform .15s,box-shadow .25s,border-color .25s;padding:6px;}
+.m-card::after{content:'';position:absolute;inset:-40% -10% auto -10%;height:70%;
+  background:radial-gradient(ellipse at 50% 0,rgba(var(--ac-rgb),.28),transparent 70%);opacity:.55;pointer-events:none;}
+.m-card:active{transform:scale(.96);}
+@media(hover:hover){.m-card:hover{transform:translateY(-3px);border-color:rgba(var(--ac-rgb),.85);box-shadow:0 0 28px rgba(var(--ac-rgb),.28),inset 0 0 28px rgba(var(--ac-rgb),.1);}}
+.m-ico{width:clamp(26px,min(9vw,6.4dvh),46px);height:clamp(26px,min(9vw,6.4dvh),46px);color:var(--ac);
+  filter:drop-shadow(0 0 8px rgba(var(--ac-rgb),.6));position:relative;z-index:1;}
+.m-name{font-size:clamp(11px,min(3.4vw,2.3dvh),16px);font-weight:800;letter-spacing:.06em;line-height:1.25;color:var(--tx);position:relative;z-index:1;}
+.m-rec{font-size:clamp(9px,1.5dvh,11px);color:rgba(var(--ac-rgb),.95);min-height:1.2em;position:relative;z-index:1;letter-spacing:.02em;}
+.m-key{position:absolute;top:6px;right:8px;font-size:10px;color:var(--text-dim);display:none;z-index:1;}
 
-  /* ── RENK OYUNU ─────────────────────────────────────────── */
-  .color-word-list{display:flex;flex-direction:column;gap:10px;align-items:center;}
-  .color-word{font-size:clamp(20px,5.5vw,30px);font-weight:800;letter-spacing:2px;
-    color:var(--text-bright);text-transform:uppercase;
-    text-shadow:0 0 8px rgba(241,243,255,.35);}
+/* ── Seviye kartları ─────────────────────────────────────────── */
+.difficulty-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);
+  gap:clamp(8px,1.6vw,16px);width:min(100cqw,820px);height:min(100cqh,440px);}
+.diff-card{appearance:none;cursor:pointer;color:var(--text-bright);border-radius:16px;padding:8px 10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(2px,.8dvh,6px);
+  border:1.5px solid rgba(var(--ac-rgb),.28);background:linear-gradient(160deg,rgba(var(--ac-rgb),.10),rgba(255,255,255,.03));
+  transition:border-color .2s,box-shadow .25s,transform .15s,background .2s;}
+.diff-card:active{transform:scale(.97);}
+@media(hover:hover){.diff-card:hover{border-color:rgba(var(--ac-rgb),.8);box-shadow:0 0 22px rgba(var(--ac-rgb),.22);}}
+.diff-card.selected{border-color:var(--ac);background:linear-gradient(160deg,rgba(var(--ac-rgb),.26),rgba(var(--ac-rgb),.07));
+  box-shadow:0 0 28px rgba(var(--ac-rgb),.38),inset 0 0 22px rgba(var(--ac-rgb),.14);}
+.diff-name{font-size:clamp(14px,2.6dvh,18px);font-weight:800;color:var(--text-bright);}
+.diff-detail{font-size:clamp(11px,1.9dvh,13px);color:var(--text-dim);line-height:1.5;}
+.diff-pts{font-size:clamp(10px,1.7dvh,12px);color:var(--ac);font-weight:700;}
+.diff-rec{font-size:clamp(9px,1.5dvh,11px);color:var(--gold3);min-height:1.2em;}
+.sound-grid{grid-template-rows:minmax(0,1fr);height:min(100cqh,180px);width:min(100cqw,440px);}
 
-  .color-slots{display:flex;gap:var(--cbox-gap,8px);justify-content:center;margin:16px 0;
-    flex-wrap:wrap;row-gap:10px;}
-  .color-slot{width:var(--cbox-size,42px);height:var(--cbox-size,42px);border-radius:10px;
-    border:1.5px dashed rgba(255,255,255,.25);flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.03);}
-  .color-slot.filled{border-style:solid;border-color:rgba(255,255,255,.3);}
+/* ── Kartlar, sayılar, zamanlayıcı ───────────────────────────── */
+.number-card{position:relative;width:min(100cqw,780px);height:min(100cqh,320px);display:grid;place-items:center;
+  border-radius:24px;padding:12px 16px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(var(--ac-rgb),.10),rgba(255,255,255,.025) 55%,rgba(var(--ac-rgb),.05));
+  border:1px solid rgba(var(--ac-rgb),.5);
+  box-shadow:0 0 50px rgba(var(--ac-rgb),.14),inset 0 0 40px rgba(var(--ac-rgb),.08);}
+.number-card::before,.number-card::after{content:'';position:absolute;width:9px;height:9px;border-radius:50%;
+  background:var(--ac);box-shadow:0 0 12px var(--ac);animation:pulseDot 3.2s ease-in-out infinite;}
+.number-card::before{top:12px;left:18px;}
+.number-card::after{bottom:12px;right:18px;animation-delay:-1.6s;}
+@keyframes pulseDot{0%,100%{opacity:.35;transform:scale(.8);}50%{opacity:1;transform:scale(1.15);}}
+.digit-display{font-size:min(11.4cqw,34cqh);font-weight:800;letter-spacing:.12em;padding-left:.12em;
+  font-family:Consolas,'Courier New',monospace;color:var(--text-bright);white-space:nowrap;
+  text-shadow:0 0 8px var(--ac),0 0 24px rgba(var(--ac-rgb),.6),0 0 48px rgba(var(--ac-rgb),.35);}
+.countdown-display{font-size:min(36cqw,64cqh);font-weight:800;line-height:1;color:var(--ac);
+  text-shadow:0 0 20px var(--ac),0 0 54px rgba(var(--ac-rgb),.55);animation:beat 1s ease-in-out infinite;}
+.countdown-display.txt{font-size:min(11cqw,26cqh);letter-spacing:.06em;}
+@keyframes beat{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
+.timer-bar-wrap{width:min(100%,560px);height:clamp(6px,1.2dvh,9px);background:rgba(255,255,255,.09);border-radius:8px;overflow:hidden;}
+.timer-bar{height:100%;width:100%;background:linear-gradient(90deg,var(--ac),#fff3c4);transform-origin:left;box-shadow:0 0 12px var(--ac);}
 
-  .color-palette{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
-    max-width:280px;margin:18px auto 0;}
-  .color-swatch{aspect-ratio:1;width:100%;border-radius:12px;cursor:pointer;border:2px solid rgba(255,255,255,.18);
-    transition:transform .12s ease,box-shadow .12s ease;}
-  .color-swatch:hover{transform:translateY(-3px) scale(1.06);}
-  .color-swatch:active{transform:translateY(0) scale(.96);}
+/* ── Rozetler ────────────────────────────────────────────────── */
+.level-badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;letter-spacing:.08em;text-transform:uppercase;}
+.badge-easy{background:rgba(80,200,120,.14);color:#50c878;border:1px solid rgba(80,200,120,.4);}
+.badge-medium{background:rgba(106,168,255,.14);color:#6aa8ff;border:1px solid rgba(106,168,255,.4);}
+.badge-hard{background:rgba(179,136,255,.14);color:#b388ff;border:1px solid rgba(179,136,255,.4);}
+.badge-progressive{background:rgba(255,217,102,.14);color:#ffd966;border:1px solid rgba(255,217,102,.4);}
 
-  .cw-kirmizi{background:#ff3b30;}
-  .cw-turuncu{background:#ff8a00;}
-  .cw-sari{background:#ffd60a;}
-  .cw-yesil{background:#34c759;}
-  .cw-mavi{background:#3a8dff;}
-  .cw-mor{background:#8b5cf6;}
-  .cw-beyaz{background:#f1f3ff;}
+/* ── Sayı cevabı ve ekran tuş takımı ─────────────────────────── */
+.answer-box{width:min(100cqw,520px);display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2dvh,16px);}
+input.answer-input{width:100%;font-size:clamp(20px,min(6vw,6dvh),36px);letter-spacing:.3em;padding:12px 8px 12px calc(8px + .3em);text-align:center;
+  font-family:Consolas,'Courier New',monospace;border-radius:16px;border:1.5px solid rgba(var(--ac-rgb),.55);
+  background:rgba(255,255,255,.05);color:var(--text-bright);outline:none;caret-color:var(--ac);}
+input.answer-input:focus{border-color:var(--ac);box-shadow:0 0 0 4px rgba(var(--ac-rgb),.16),0 0 22px rgba(var(--ac-rgb),.25);}
+.keypad{display:none;width:min(100%,420px);grid-template-columns:repeat(6,1fr);gap:clamp(5px,1.2dvh,10px);}
+@media(pointer:coarse){.keypad{display:grid;}}
+.keypad button{appearance:none;cursor:pointer;aspect-ratio:1.25;max-height:min(11dvh,60px);border-radius:12px;font-size:clamp(16px,3.4dvh,24px);font-weight:700;
+  color:var(--text-bright);background:linear-gradient(180deg,rgba(var(--ac-rgb),.16),rgba(255,255,255,.04));
+  border:1px solid rgba(var(--ac-rgb),.4);font-family:Consolas,'Courier New',monospace;}
+.keypad button:active{transform:scale(.92);background:rgba(var(--ac-rgb),.32);}
+.keypad button.wide{grid-column:span 1;font-size:clamp(14px,2.6dvh,18px);}
 
-  .color-feedback{flex-wrap:wrap!important;}
-  .color-feedback .digit-box{width:var(--cresult-box-size,34px);height:var(--cresult-box-size,34px);
-    border-radius:8px;gap:var(--cresult-box-gap,6px);}
+/* ── Geri bildirim kutuları ──────────────────────────────────── */
+.fb-block{width:min(100cqw,760px);}
+.fb-block+.fb-block{margin-top:clamp(6px,2dvh,22px);}
+.fb-block .glow-title{margin-bottom:clamp(4px,1dvh,10px);}
+.feedback-digits{container-type:inline-size;display:flex;justify-content:center;gap:6px!important;flex-wrap:nowrap;
+  --bx:clamp(20px,calc((100cqw - (var(--n,6) - 1) * 6px) / var(--n,6)),var(--bxmax,48px));}
+.digit-box{width:var(--bx)!important;height:calc(var(--bx) * 1.2)!important;flex-shrink:0;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-family:Consolas,'Courier New',monospace;font-size:calc(var(--bx) * .5);font-weight:700;
+  background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.18);animation:popIn .35s cubic-bezier(.2,1.4,.4,1) both;}
+.digit-box:nth-child(2){animation-delay:.04s}.digit-box:nth-child(3){animation-delay:.08s}.digit-box:nth-child(4){animation-delay:.12s}
+.digit-box:nth-child(5){animation-delay:.16s}.digit-box:nth-child(6){animation-delay:.2s}.digit-box:nth-child(7){animation-delay:.24s}
+.digit-box:nth-child(8){animation-delay:.28s}.digit-box:nth-child(9){animation-delay:.32s}.digit-box:nth-child(10){animation-delay:.36s}
+@keyframes popIn{from{opacity:0;transform:scale(.4) translateY(8px);}to{opacity:1;transform:none;}}
+.digit-box.correct{color:var(--ok);border-color:var(--ok);box-shadow:0 0 14px rgba(80,200,120,.45);}
+.digit-box.wrong{color:#ff7a6b;border-color:#ff7a6b;box-shadow:0 0 14px rgba(255,107,107,.4);}
+.color-feedback .digit-box,.symbol-feedback .digit-box{height:var(--bx)!important;}
+.coord-feedback{--bxmax:44px;}.coord-feedback .digit-box{font-size:calc(var(--bx) * .36);}
+.symbol-feedback{--bxmax:40px;}.symbol-feedback .digit-box{font-size:calc(var(--bx) * .55);}
+.color-feedback{--bxmax:38px;}
+.score-pill{display:inline-block;font-size:clamp(13px,2.3dvh,16px);padding:7px 18px;border-radius:999px;
+  background:rgba(var(--ac-rgb),.08);border:1px solid rgba(var(--ac-rgb),.4);margin-top:6px;}
+.score-pill b{color:var(--ac);font-size:1.25em;}
+.rec-line{min-height:1.4em;font-size:clamp(12px,2.1dvh,15px);color:var(--gold3);margin:2px 0 4px;}
+.rec-line.new{color:#fff3c4;font-weight:800;text-shadow:0 0 14px rgba(255,217,102,.8);animation:beat 1.2s ease-in-out infinite;}
 
-  /* ── SEMBOL OYUNU ───────────────────────────────────────── */
-  .symbol-display{display:flex;flex-wrap:wrap;gap:14px 18px;justify-content:center;align-items:center;}
-  .symbol-display .sym-item{font-size:clamp(34px,9vw,52px);font-weight:700;color:var(--text-bright);
-    font-family:'Consolas','Courier New',monospace;
-    text-shadow:0 0 8px var(--accent-cyan),0 0 22px rgba(79,227,255,.5);}
+/* ── Set sonu ────────────────────────────────────────────────── */
+.final-score{font-size:clamp(46px,min(14vw,15dvh),96px);font-weight:800;line-height:1.05;margin:4px 0 0;
+  background:linear-gradient(100deg,var(--ac),#fff3c4 50%,var(--ac));background-size:200% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 5s linear infinite,pulseGlow 2.2s ease-in-out infinite;}
+.final-max{font-size:clamp(12px,2dvh,14px);color:var(--text-dim);margin-bottom:4px;}
+@keyframes pulseGlow{0%,100%{filter:drop-shadow(0 0 8px rgba(var(--ac-rgb),.4));}50%{filter:drop-shadow(0 0 24px rgba(var(--ac-rgb),.8));}}
+.per-question-recap{display:flex;gap:8px;justify-content:center;align-content:center;flex-wrap:wrap;width:min(100cqw,760px);}
+.recap-chip{font-size:clamp(11px,1.9dvh,13px);padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(var(--ac-rgb),.3);color:var(--text-dim);animation:popIn .4s cubic-bezier(.2,1.4,.4,1) both;}
+.recap-chip:nth-child(2){animation-delay:.07s}.recap-chip:nth-child(3){animation-delay:.14s}.recap-chip:nth-child(4){animation-delay:.21s}.recap-chip:nth-child(5){animation-delay:.28s}
+.recap-chip b{color:var(--text-bright);}.recap-chip .chip-cat{font-size:.85em;display:block;margin-top:2px;}
+.fade-in{animation:fadeIn .32s ease both;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 
-  .symbol-slots{display:flex;flex-wrap:wrap;gap:10px;row-gap:10px;justify-content:center;margin:16px 0;}
-  .symbol-slot{width:48px;height:48px;border-radius:10px;border:1.5px dashed rgba(255,255,255,.25);
-    display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.03);
-    font-size:24px;font-family:'Consolas','Courier New',monospace;color:var(--text-bright);}
-  .symbol-slot.filled{border-style:solid;border-color:rgba(79,227,255,.45);
-    background:rgba(79,227,255,.08);box-shadow:0 0 12px rgba(79,227,255,.18);}
+/* ── Renk testi ──────────────────────────────────────────────── */
+.color-word-list{display:grid;grid-auto-flow:column;grid-template-rows:repeat(var(--rows,4),auto);
+  grid-template-columns:repeat(var(--cols,1),auto);gap:clamp(4px,1.6cqh,12px) clamp(24px,8cqw,64px);justify-content:center;align-items:center;}
+.color-word{font-size:min(calc(78cqh / var(--rows,4) / 1.35),calc(88cqw / var(--cols,1) / 6.4));font-weight:800;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--text-bright);text-shadow:0 0 10px rgba(var(--ac-rgb),.5);}
+.color-slots{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;--slot:clamp(28px,min(10cqw,10cqh),54px);}
+.color-slot{width:var(--slot);height:var(--slot);border-radius:12px;border:1.5px dashed rgba(255,255,255,.3);flex-shrink:0;background:rgba(255,255,255,.04);}
+.color-slot.filled{border-style:solid;border-color:rgba(255,255,255,.4);box-shadow:0 0 12px rgba(255,255,255,.15);animation:popIn .25s ease both;}
+.pick-box{width:min(100cqw,640px);display:flex;flex-direction:column;align-items:center;gap:clamp(10px,3dvh,26px);}
+.color-palette{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.6dvh,14px);width:min(100%,460px);}
+@container (min-width:420px){.color-palette{grid-template-columns:repeat(7,minmax(0,1fr));}}
+.color-swatch{position:relative;aspect-ratio:1;max-height:min(16dvh,84px);width:100%;border-radius:14px;cursor:pointer;border:2px solid rgba(255,255,255,.22);
+  transition:transform .12s,box-shadow .12s;justify-self:center;box-shadow:0 4px 12px rgba(0,0,0,.35),inset 0 2px 6px rgba(255,255,255,.25);}
+.color-swatch:active{transform:scale(.92);}
+@media(hover:hover){.color-swatch:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 8px 18px rgba(0,0,0,.45);}}
+.cw-kirmizi{background:#ff3b30;}.cw-turuncu{background:#ff8a00;}.cw-sari{background:#ffd60a;}.cw-yesil{background:#34c759;}
+.cw-mavi{background:#3a8dff;}.cw-mor{background:#8b5cf6;}.cw-beyaz{background:#f1f3ff;}
+.color-swatch::after,.symbol-swatch::after{content:attr(data-k);position:absolute;right:6px;bottom:3px;font-size:10px;font-weight:700;
+  color:rgba(0,0,0,.55);display:none;}
+.symbol-swatch::after{color:var(--text-dim);}
+@media(hover:hover) and (pointer:fine){.color-swatch::after,.symbol-swatch::after{display:block;}.m-key{display:block;}}
 
-  /* Palet: mobilde 2 satırda 5'er (grid 5 sütun), masaüstünde tek satır */
-  .symbol-palette{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;
-    max-width:340px;margin:18px auto 0;}
-  .symbol-swatch{aspect-ratio:1;border-radius:12px;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-    font-size:22px;font-weight:700;color:var(--text-bright);
-    font-family:'Consolas','Courier New',monospace;
-    background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.18);
-    transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease;}
-  .symbol-swatch:hover{transform:translateY(-3px) scale(1.05);border-color:var(--accent-cyan);
-    box-shadow:0 0 16px rgba(79,227,255,.25);}
-  .symbol-swatch:active{transform:translateY(0) scale(.95);}
+/* ── Ok testi ────────────────────────────────────────────────── */
+.symbol-display{display:grid;grid-template-columns:repeat(var(--cols,4),auto);gap:clamp(6px,3cqh,22px) clamp(14px,5cqw,40px);justify-content:center;align-items:center;}
+.symbol-display .sym-item{font-size:min(calc(80cqh / var(--rows,1) / 1.5),calc(88cqw / var(--cols,4) / 1.5));font-weight:700;line-height:1;
+  color:var(--text-bright);font-family:Consolas,'Courier New',monospace;
+  text-shadow:0 0 10px var(--ac),0 0 26px rgba(var(--ac-rgb),.55);}
+.symbol-slots{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+.symbol-slot{width:clamp(30px,min(10cqw,10cqh),52px);height:clamp(30px,min(10cqw,10cqh),52px);border-radius:12px;border:1.5px dashed rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);font-size:clamp(16px,3.4dvh,26px);
+  font-family:Consolas,'Courier New',monospace;color:var(--text-bright);}
+.symbol-slot.filled{border-style:solid;border-color:rgba(var(--ac-rgb),.6);background:rgba(var(--ac-rgb),.1);box-shadow:0 0 14px rgba(var(--ac-rgb),.25);animation:popIn .25s ease both;}
+.symbol-palette{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(8px,1.6dvh,12px);width:min(100%,420px);}
+@container (min-width:560px){.symbol-palette{grid-template-columns:repeat(10,minmax(0,1fr));width:min(100%,640px);}}
+.symbol-swatch{position:relative;aspect-ratio:1;max-height:min(14dvh,74px);width:100%;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(20px,4.4dvh,32px);font-weight:700;color:var(--text-bright);font-family:Consolas,'Courier New',monospace;
+  background:linear-gradient(180deg,rgba(var(--ac-rgb),.14),rgba(255,255,255,.04));border:1.5px solid rgba(var(--ac-rgb),.35);
+  transition:transform .12s,box-shadow .12s,border-color .12s;justify-self:center;}
+.symbol-swatch:active{transform:scale(.92);}
+@media(hover:hover){.symbol-swatch:hover{transform:translateY(-3px);border-color:var(--ac);box-shadow:0 0 18px rgba(var(--ac-rgb),.3);}}
 
-  .symbol-feedback{flex-wrap:wrap!important;}
-  .symbol-feedback .digit-box{width:var(--sresult-box-size,34px);height:var(--sresult-box-size,34px);
-    border-radius:8px;font-size:var(--sresult-box-font,16px);
-    font-family:'Consolas','Courier New',monospace;}
+/* ── Zamanlama ───────────────────────────────────────────────── */
+.timing-ring{width:min(94cqw,94cqh);height:min(94cqw,94cqh);filter:drop-shadow(0 0 18px rgba(var(--ac-rgb),.5));}
+.ring-track{fill:none;stroke:rgba(255,255,255,.1);stroke-width:10;}
+.ring-progress{fill:none;stroke:url(#ringGradient);stroke-width:10;stroke-linecap:round;transform-origin:100px 100px;
+  transform:rotate(-90deg);stroke-dasharray:527.79;stroke-dashoffset:527.79;}
+.timing-target,.reflex-target{appearance:none;border:none;cursor:pointer;border-radius:50%;display:block;font-family:inherit;font-weight:800;letter-spacing:.06em;
+  -webkit-user-select:none;user-select:none;touch-action:none;font-size:clamp(16px,min(5cqw,7cqh),24px);}
+.timing-target{width:min(90cqw,90cqh);height:min(90cqw,90cqh);color:#1a1204;
+  background:radial-gradient(circle at 35% 30%,#e5ccff,var(--ac) 55%,#6d44d6 100%);
+  box-shadow:0 0 40px rgba(var(--ac-rgb),.45),0 10px 30px rgba(0,0,0,.35);transition:transform .08s,box-shadow .08s;}
+.timing-target.pressed,.timing-target:active{transform:scale(.94);box-shadow:0 0 64px rgba(var(--ac-rgb),.8),inset 0 0 30px rgba(0,0,0,.25);}
+.reflex-target{width:min(90cqw,90cqh);height:min(90cqw,90cqh);color:var(--text-bright);
+  background:radial-gradient(circle at 35% 30%,#5a5f78,#3a3d52 60%,#2a2c3d 100%);box-shadow:0 8px 26px rgba(0,0,0,.45);
+  transition:background .08s,box-shadow .08s,transform .08s;}
+.reflex-target.go{color:#06281a;background:radial-gradient(circle at 35% 30%,#b6ffe0,var(--ac) 55%,#16a56c 100%);box-shadow:0 0 64px rgba(61,220,151,.7),0 10px 30px rgba(0,0,0,.35);}
+.reflex-target:active{transform:scale(.95);}
+.timing-result-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;width:min(100cqw,560px);}
+.timing-result-box{flex:1 1 150px;max-width:260px;background:rgba(255,255,255,.05);border:1px solid rgba(var(--ac-rgb),.4);
+  border-radius:18px;padding:clamp(12px,3dvh,22px) 10px;box-shadow:0 0 28px rgba(var(--ac-rgb),.12);}
+.timing-result-label{font-size:12px;color:var(--text-dim);margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;}
+.timing-result-value{font-size:clamp(24px,5dvh,36px);font-weight:800;font-family:Consolas,'Courier New',monospace;color:var(--text-bright);text-shadow:0 0 12px rgba(var(--ac-rgb),.6);}
+.early-ring{width:min(70cqw,70cqh);height:min(70cqw,70cqh);border-radius:50%;display:grid;place-items:center;text-align:center;
+  font-size:min(9cqw,12cqh);font-weight:800;letter-spacing:.08em;color:#ff9a8b;border:3px solid rgba(255,107,107,.7);
+  background:radial-gradient(circle,rgba(255,107,107,.18),transparent 70%);box-shadow:0 0 44px rgba(255,107,107,.35);}
 
-  @media (min-width:480px){
-    .symbol-palette{grid-template-columns:repeat(10,1fr);max-width:560px;}
-    .color-palette{grid-template-columns:repeat(7,1fr);max-width:420px;}
-  }
+/* ── Konum hafızası ──────────────────────────────────────────── */
+.spatial-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:clamp(5px,1.6cqmin,10px);
+  width:min(98cqw,98cqh);height:min(98cqw,98cqh);}
+.spatial-cell{position:relative;border-radius:clamp(8px,2.4cqmin,14px);background:rgba(255,255,255,.05);border:1.5px solid rgba(var(--ac-rgb),.22);
+  cursor:pointer;transition:background .15s,box-shadow .15s,border-color .15s;}
+.spatial-cell .coord-label{position:absolute;top:4px;right:6px;font-size:clamp(8px,2cqmin,11px);color:rgba(241,243,255,.38);
+  font-family:Consolas,'Courier New',monospace;pointer-events:none;}
+.spatial-cell.lit{background:rgba(var(--ac-rgb),.45);border-color:var(--ac);box-shadow:0 0 26px rgba(var(--ac-rgb),.7),inset 0 0 16px rgba(var(--ac-rgb),.4);}
+.spatial-cell.correct-flash{background:rgba(80,200,120,.4)!important;border-color:var(--ok)!important;box-shadow:0 0 24px rgba(80,200,120,.65),inset 0 0 14px rgba(80,200,120,.3)!important;}
+.spatial-cell.wrong-flash{background:rgba(231,76,60,.4)!important;border-color:var(--bad)!important;box-shadow:0 0 24px rgba(231,76,60,.65),inset 0 0 14px rgba(231,76,60,.3)!important;}
+.spatial-cell.locked{cursor:not-allowed;}
 
-  /* ── ZAMANLAMA OYUNU ────────────────────────────────────── */
-  .timing-ring-wrap{display:flex;justify-content:center;align-items:center;margin:24px 0;}
-  .timing-ring{width:min(72vw,260px);height:min(72vw,260px);
-    filter:drop-shadow(0 0 18px rgba(79,227,255,.45));}
-  .ring-track{fill:none;stroke:rgba(255,255,255,.10);stroke-width:10;}
-  .ring-progress{fill:none;stroke:url(#ringGradient);stroke-width:10;stroke-linecap:round;
-    transform-origin:100px 100px;transform:rotate(-90deg);
-    stroke-dasharray:527.79; /* 2*pi*84 */
-    stroke-dashoffset:527.79;}
+/* ── Ritim hafızası ──────────────────────────────────────────── */
+.simon-grid{display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr);gap:clamp(8px,2.4cqmin,14px);
+  width:min(98cqw,98cqh);height:min(98cqw,98cqh);}
+.simon-cell{position:relative;border-radius:clamp(14px,5cqmin,26px);cursor:pointer;transition:filter .12s,transform .08s,box-shadow .12s;
+  filter:brightness(.5) saturate(.75);border:2px solid rgba(255,255,255,.14);}
+.simon-cell:active{transform:scale(.97);}
+.simon-cell.lit{filter:brightness(1.35) saturate(1.3);}
+.simon-cell.faded{opacity:.28;filter:saturate(.35) brightness(.8);transition:opacity .18s,filter .18s;}
+.simon-cell.correct-hint{box-shadow:0 0 0 4px var(--bad),0 0 55px 10px var(--bad);opacity:1!important;filter:none!important;animation:simonPulse .55s ease-in-out infinite;}
+@keyframes simonPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
+.simon-grid.locked .simon-cell{cursor:not-allowed;}
+.simon-cell::after{content:attr(data-k);position:absolute;left:10px;top:6px;font-size:12px;font-weight:700;color:rgba(0,0,0,.5);display:none;}
+@media(hover:hover) and (pointer:fine){.simon-cell::after{display:block;}}
+.simon-cell.yellow{background:radial-gradient(circle at 35% 30%,#fff3a0,#ffcc00 60%,#b38600);}
+.simon-cell.yellow.lit{box-shadow:0 0 44px rgba(255,204,0,.85);}
+.simon-cell.blue{background:radial-gradient(circle at 35% 30%,#9fd3ff,#2b8fff 60%,#1a4f99);}
+.simon-cell.blue.lit{box-shadow:0 0 44px rgba(43,143,255,.85);}
+.simon-cell.red{background:radial-gradient(circle at 35% 30%,#ffb3ad,#ff3b30 60%,#99221c);}
+.simon-cell.red.lit{box-shadow:0 0 44px rgba(255,59,48,.85);}
+.simon-cell.green{background:radial-gradient(circle at 35% 30%,#b3ffce,#34c759 60%,#1f7a37);}
+.simon-cell.green.lit{box-shadow:0 0 44px rgba(52,199,89,.85);}
+.big-round{font-size:min(30cqw,50cqh);}
 
-  .timing-target{
-    appearance:none;border:none;cursor:pointer;
-    width:min(58vw,220px);height:min(58vw,220px);
-    border-radius:50%;
-    margin:18px auto 0;display:block;
-    font-size:18px;font-weight:800;letter-spacing:1px;
-    color:var(--bg-deep);
-    background:radial-gradient(circle at 35% 30%, #7fefff, var(--accent-cyan) 55%, var(--accent-violet) 100%);
-    box-shadow:0 0 36px rgba(79,227,255,.4), 0 10px 30px rgba(0,0,0,.35);
-    transition:transform .08s ease, box-shadow .08s ease;
-    -webkit-user-select:none;user-select:none;touch-action:none;
-  }
-  .timing-target:active,.timing-target.pressed{
-    transform:scale(.94);
-    box-shadow:0 0 50px rgba(176,107,255,.6), inset 0 0 30px rgba(0,0,0,.25);
-  }
+/* ── Onay penceresi ve efekt katmanı ─────────────────────────── */
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60;}
+.modal{position:fixed;inset:0;z-index:70;display:grid;place-items:center;background:rgba(6,5,3,.72);padding:20px;}
+.modal.hidden{display:none;}
+.modal-box{width:min(92vw,400px);padding:22px 20px;border-radius:14px;text-align:center;background:#14110a;border:1px solid rgba(200,150,12,.55);
+  box-shadow:0 0 50px rgba(200,150,12,.18);animation:fadeIn .25s ease both;}
+.modal-box p{margin-bottom:16px;line-height:1.55;color:var(--text-bright);}
 
-  /* ── REFLEKS OYUNU ──────────────────────────────────────── */
-  .reflex-target{
-    appearance:none;border:none;cursor:pointer;
-    width:min(70vw,260px);height:min(70vw,260px);
-    border-radius:50%;
-    margin:24px auto 0;display:block;
-    font-size:20px;font-weight:800;letter-spacing:1px;
-    color:var(--text-bright);
-    background:radial-gradient(circle at 35% 30%, #5a5f78, #3a3d52 60%, #2a2c3d 100%);
-    box-shadow:0 8px 26px rgba(0,0,0,.4);
-    transition:background .08s ease, box-shadow .08s ease, transform .08s ease;
-    -webkit-user-select:none;user-select:none;touch-action:none;
-  }
-  .reflex-target.go{
-    background:radial-gradient(circle at 35% 30%, #9dffce, var(--success) 55%, #2fae7a 100%);
-    box-shadow:0 0 50px rgba(95,255,176,.6), 0 10px 30px rgba(0,0,0,.35);
-  }
-  .reflex-target:active{
-    transform:scale(.95);
-  }
+/* ── Kısa ve yatay ekranlar (telefon yatay) ──────────────────── */
+@media (max-height:520px){
+  .eyebrow{margin-bottom:4px;letter-spacing:.25em;}
+  .subtitle{margin-bottom:4px;line-height:1.45;}
+  .screen{gap:6px;}
+  .final-score{margin:0;}
+  .score-pill{margin-top:2px;}
+}
+@media (max-height:520px) and (min-aspect-ratio:13/10){
+  .screen-menu .subtitle{display:none;}
+}
 
-  .timing-result-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:18px 0 6px;}
-  .timing-result-box{flex:1 1 140px;max-width:200px;
-    background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);
-    border-radius:16px;padding:16px 10px;}
-  .timing-result-label{font-size:12px;color:var(--text-dim);margin-bottom:6px;
-    text-transform:uppercase;letter-spacing:.08em;}
-  .timing-result-value{font-size:clamp(22px,6vw,30px);font-weight:800;
-    font-family:'Consolas','Courier New',monospace;color:var(--text-bright);
-    text-shadow:0 0 10px rgba(79,227,255,.4);}
+/* ── Hareket azaltma: döngüsel hareketler kapanır, kısa geri bildirimler kalır ── */
+@media(prefers-reduced-motion:reduce){
+  .bg .l,.bg .st,.glow-title,.final-score,.countdown-display,.number-card::before,.number-card::after,.rec-line.new,.simon-cell.correct-hint{animation:none!important;}
+  .glow-title{background-position:50% 0;}
+  .fade-in,.digit-box,.recap-chip{animation-duration:.01s!important;}
+  .final-score{filter:drop-shadow(0 0 14px rgba(var(--ac-rgb),.6));}
+}
 
-  /* ── KONUM HAFIZASI OYUNU ───────────────────────────────── */
-  .spatial-grid-wrap{display:flex;justify-content:center;margin:18px 0;}
-  .spatial-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    grid-template-rows:repeat(4,1fr);
-    gap:8px;
-    width:min(82vw,300px);
-    height:min(82vw,300px);
-  }
-  .spatial-cell{
-    position:relative;
-    border-radius:12px;
-    background:rgba(255,255,255,.05);
-    border:1.5px solid rgba(255,255,255,.14);
-    cursor:pointer;
-    transition:background .15s ease, box-shadow .15s ease, border-color .15s ease;
-  }
-  .spatial-cell .coord-label{
-    position:absolute;top:4px;right:6px;
-    font-size:10px;color:rgba(241,243,255,.28);
-    font-family:'Consolas','Courier New',monospace;
-    pointer-events:none;
-    letter-spacing:.5px;
-  }
-  .spatial-cell.lit{
-    background:rgba(79,227,255,.35);
-    border-color:var(--accent-cyan);
-    box-shadow:0 0 22px rgba(79,227,255,.55), inset 0 0 14px rgba(79,227,255,.3);
-  }
-  .spatial-cell.correct-flash{
-    background:rgba(95,255,176,.35)!important;
-    border-color:var(--success)!important;
-    box-shadow:0 0 22px rgba(95,255,176,.55), inset 0 0 14px rgba(95,255,176,.3)!important;
-  }
-  .spatial-cell.wrong-flash{
-    background:rgba(255,95,109,.35)!important;
-    border-color:var(--danger)!important;
-    box-shadow:0 0 22px rgba(255,95,109,.55), inset 0 0 14px rgba(255,95,109,.3)!important;
-  }
-  .spatial-cell.locked{
-    cursor:not-allowed;
-  }
-  .coord-feedback .digit-box{
-    font-size:13px;font-family:'Consolas','Courier New',monospace;
-  }
+.kb-hint{display:none;font-size:11px;color:var(--text-dim);}
+@media(hover:hover) and (pointer:fine){.kb-hint{display:block;}}
 
-  /* ── RİTİM HAFIZASI (SIMON) ─────────────────────────────── */
-  .simon-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    grid-template-rows:repeat(2,1fr);
-    gap:10px;
-    width:min(78vw,320px);
-    height:min(78vw,320px);
-  }
-  .simon-cell{
-    border-radius:20px;
-    cursor:pointer;
-    transition:filter .12s ease, transform .08s ease, box-shadow .12s ease;
-    filter:brightness(0.45) saturate(0.7);
-    border:2px solid rgba(255,255,255,.12);
-  }
-  .simon-cell:active{ transform:scale(.97); }
-  .simon-cell.lit{
-    filter:brightness(1.35) saturate(1.3);
-  }
-  .simon-cell.locked{ cursor:not-allowed; }
-  .simon-cell.faded{ opacity:.28; filter:saturate(.35) brightness(.8); transition:opacity .18s, filter .18s; }
-  .simon-cell.correct-hint{ box-shadow:0 0 0 4px var(--danger), 0 0 55px 10px var(--danger); opacity:1!important; filter:none!important; animation:simonCorrectPulse .55s ease-in-out infinite; }
-  @keyframes simonCorrectPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.04); } }
-
-  .simon-cell.yellow{ background:radial-gradient(circle at 35% 30%, #fff3a0, #ffcc00 60%, #b38600 100%); }
-  .simon-cell.yellow.lit{ box-shadow:0 0 40px rgba(255,204,0,.85); }
-
-  .simon-cell.blue{ background:radial-gradient(circle at 35% 30%, #9fd3ff, #2b8fff 60%, #1a4f99 100%); }
-  .simon-cell.blue.lit{ box-shadow:0 0 40px rgba(43,143,255,.85); }
-
-  .simon-cell.red{ background:radial-gradient(circle at 35% 30%, #ffb3ad, #ff3b30 60%, #99221c 100%); }
-  .simon-cell.red.lit{ box-shadow:0 0 40px rgba(255,59,48,.85); }
-
-  .simon-cell.green{ background:radial-gradient(circle at 35% 30%, #b3ffce, #34c759 60%, #1f7a37 100%); }
-  .simon-cell.green.lit{ box-shadow:0 0 40px rgba(52,199,89,.85); }
-
-
+.bg .st.a{background-image:radial-gradient(1.6px 1.6px at 43% 21%,rgba(200,150,12,.9),transparent 100%),radial-gradient(0.8px 0.8px at 11% 70%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1px 1px at 9% 66%,rgba(255,233,168,.9),transparent 100%),radial-gradient(0.8px 0.8px at 57% 55%,rgba(255,233,168,.9),transparent 100%),radial-gradient(0.8px 0.8px at 72% 56%,rgba(200,150,12,.9),transparent 100%),radial-gradient(0.8px 0.8px at 30% 82%,rgba(200,150,12,.55),transparent 100%),radial-gradient(1px 1px at 52% 8%,rgba(255,233,168,.55),transparent 100%),radial-gradient(1.6px 1.6px at 19% 39%,rgba(255,233,168,.55),transparent 100%),radial-gradient(1.2px 1.2px at 17% 75%,rgba(200,150,12,.55),transparent 100%),radial-gradient(1px 1px at 25% 15%,rgba(255,255,255,.9),transparent 100%),radial-gradient(0.8px 0.8px at 72% 93%,rgba(200,150,12,.9),transparent 100%),radial-gradient(1.6px 1.6px at 81% 28%,rgba(200,150,12,.55),transparent 100%),radial-gradient(1.6px 1.6px at 56% 42%,rgba(200,150,12,.7),transparent 100%),radial-gradient(1px 1px at 48% 40%,rgba(255,233,168,.55),transparent 100%),radial-gradient(1.2px 1.2px at 33% 12%,rgba(200,150,12,.7),transparent 100%),radial-gradient(1.6px 1.6px at 45% 95%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1.6px 1.6px at 11% 17%,rgba(255,233,168,.7),transparent 100%),radial-gradient(1.6px 1.6px at 21% 64%,rgba(255,233,168,.55),transparent 100%),radial-gradient(1.2px 1.2px at 11% 73%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1.6px 1.6px at 46% 78%,rgba(200,150,12,.7),transparent 100%),radial-gradient(1.2px 1.2px at 10% 13%,rgba(255,255,255,.55),transparent 100%),radial-gradient(0.8px 0.8px at 87% 10%,rgba(200,150,12,.55),transparent 100%),radial-gradient(1.6px 1.6px at 41% 84%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1.2px 1.2px at 51% 87%,rgba(255,233,168,.7),transparent 100%),radial-gradient(0.8px 0.8px at 47% 23%,rgba(255,255,255,.9),transparent 100%),radial-gradient(1px 1px at 29% 38%,rgba(200,150,12,.9),transparent 100%);}
+.bg .st.b{background-image:radial-gradient(1.6px 1.6px at 52% 52%,rgba(255,233,168,.9),transparent 100%),radial-gradient(1.2px 1.2px at 59% 53%,rgba(255,233,168,.7),transparent 100%),radial-gradient(1.6px 1.6px at 72% 37%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1px 1px at 50% 31%,rgba(255,233,168,.9),transparent 100%),radial-gradient(1px 1px at 21% 31%,rgba(255,233,168,.7),transparent 100%),radial-gradient(1.2px 1.2px at 77% 25%,rgba(255,255,255,.9),transparent 100%),radial-gradient(1.2px 1.2px at 20% 55%,rgba(200,150,12,.55),transparent 100%),radial-gradient(0.8px 0.8px at 42% 18%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1.6px 1.6px at 73% 52%,rgba(255,255,255,.7),transparent 100%),radial-gradient(1.6px 1.6px at 15% 63%,rgba(255,233,168,.9),transparent 100%),radial-gradient(1.6px 1.6px at 10% 28%,rgba(255,233,168,.9),transparent 100%),radial-gradient(0.8px 0.8px at 45% 78%,rgba(255,233,168,.9),transparent 100%),radial-gradient(0.8px 0.8px at 74% 21%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1px 1px at 5% 11%,rgba(200,150,12,.7),transparent 100%),radial-gradient(1.2px 1.2px at 21% 83%,rgba(255,255,255,.55),transparent 100%),radial-gradient(0.8px 0.8px at 48% 62%,rgba(255,233,168,.7),transparent 100%),radial-gradient(1.6px 1.6px at 61% 63%,rgba(255,255,255,.9),transparent 100%),radial-gradient(1.2px 1.2px at 20% 15%,rgba(200,150,12,.7),transparent 100%),radial-gradient(1px 1px at 63% 90%,rgba(200,150,12,.9),transparent 100%),radial-gradient(1.2px 1.2px at 28% 69%,rgba(255,233,168,.55),transparent 100%),radial-gradient(1.2px 1.2px at 71% 5%,rgba(200,150,12,.9),transparent 100%),radial-gradient(1.2px 1.2px at 91% 35%,rgba(255,233,168,.7),transparent 100%),radial-gradient(1.2px 1.2px at 30% 70%,rgba(200,150,12,.9),transparent 100%),radial-gradient(1px 1px at 80% 26%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1.6px 1.6px at 31% 27%,rgba(255,255,255,.55),transparent 100%),radial-gradient(1.2px 1.2px at 5% 5%,rgba(255,255,255,.7),transparent 100%);}
 </style>
 </head>
 <body>
-<div class="stage">
-<div class="panel">
+<div class="bg" aria-hidden="true"><div class="l l1"></div><div class="l l2"></div><div class="l l3"></div><div class="st a"></div><div class="st b"></div></div>
+<div class="app">
+  <header class="topbar">
+    <button class="icon-btn ghost-hidden" id="btn-home" title="Ana menü (Esc)" aria-label="Ana menü">⌂</button>
+    <div class="top-title" id="top-title">Dikkat Testleri</div>
+    <div class="top-actions">
+      <button class="icon-btn" id="btn-sound" aria-label="Ses ve titreşim">🔇</button>
+      <button class="icon-btn" id="btn-fs" aria-label="Tam ekran" hidden>⛶</button>
+    </div>
+  </header>
+  <main class="panel">
+<section class="screen screen-menu fade-in" id="screen-menu" data-test="" data-title="Dikkat Testleri">
+  <div class="z-head"><h1 class="glow-title">DİKKAT TESTLERİ</h1><p class="subtitle">Dikkat seviyenizi hangi testle ölçmek istersiniz?</p></div>
+  <div class="z-main"><div class="menu-grid">
+<button class="m-card" data-test="numbers" id="btn-menu-numbers"><span class="m-key">1</span><svg class="m-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3.5"/><text x="12" y="15.8" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" stroke="none" font-family="Consolas,monospace">123</text></svg><span class="m-name">SAYILARI<br>EZBERLEME</span><span class="m-rec" data-test="numbers"></span></button>
+<button class="m-card" data-test="colors" id="btn-menu-colors"><span class="m-key">2</span><svg class="m-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="5" fill="#ff6b6b" opacity=".9"/><circle cx="15" cy="9" r="5" fill="#ffd60a" opacity=".9" style="mix-blend-mode:screen"/><circle cx="12" cy="15" r="5" fill="#3a8dff" opacity=".9" style="mix-blend-mode:screen"/></svg><span class="m-name">RENKLERİ<br>EZBERLEME</span><span class="m-rec" data-test="colors"></span></button>
+<button class="m-card" data-test="symbols" id="btn-menu-symbols"><span class="m-key">3</span><svg class="m-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4"/></svg><span class="m-name">OKLARI<br>EZBERLEME</span><span class="m-rec" data-test="symbols"></span></button>
+<button class="m-card" data-test="spatial" id="btn-menu-spatial"><span class="m-key">4</span><svg class="m-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2" fill="currentColor" fill-opacity=".55"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg><span class="m-name">KARELERİ<br>EZBERLEME</span><span class="m-rec" data-test="spatial"></span></button>
+<button class="m-card" data-test="reflex" id="btn-menu-reflex"><span class="m-key">5</span><svg class="m-ico" viewBox="0 0 24 24" fill="currentColor" fill-opacity=".28" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg><span class="m-name">REFLEKS<br>TESTİ</span><span class="m-rec" data-test="reflex"></span></button>
+<button class="m-card" data-test="timing" id="btn-menu-timing"><span class="m-key">6</span><svg class="m-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13.5" r="8"/><path d="M12 13.5V8.5M9.5 2.5h5M12 2.5v3"/></svg><span class="m-name">ZAMANLAMA<br>TESTİ</span><span class="m-rec" data-test="timing"></span></button>
+<button class="m-card" data-test="simon" id="btn-menu-simon"><span class="m-key">7</span><svg class="m-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></svg><span class="m-name">RİTİM<br>HAFIZASI</span><span class="m-rec" data-test="simon"></span></button>
+</div></div>
+  <div class="z-foot"><button class="btn secondary tiny" id="btn-reset-rec">Rekorları sıfırla</button><p class="kb-hint">Klavye: 1–7 test seçer · F tam ekran · Esc geri</p></div>
+</section>
 
-  <!-- ANA MENÜ -->
-  <div id="screen-menu" class="fade-in">
-    <h1 class="glow-title">DİKKAT TESTLERİ</h1>
-    <p class="subtitle">Dikkat seviyeni hangisinde test etmek istersin?</p>
-    <div class="menu-grid">
-      <button class="btn" id="btn-menu-numbers">🔢<br>SAYILARI<br>EZBERLEME</button>
-      <button class="btn" id="btn-menu-colors">🎨<br>RENKLERİ<br>EZBERLEME</button>
-      <button class="btn" id="btn-menu-symbols">⇆<br>OKLARI<br>EZBERLEME</button>
-      <button class="btn" id="btn-menu-spatial">▦<br>KARELERİ<br>EZBERLEME</button>
-      <button class="btn" id="btn-menu-reflex">⚡<br>REFLEKS<br>TESTİ</button>
-      <button class="btn" id="btn-menu-timing">⏱<br>ZAMANLAMA<br>TESTİ</button>
-      <button class="btn" id="btn-menu-simon" style="grid-column:1/-1;">🎵<br>RİTİM HAFIZASI</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-start" data-test="numbers" data-title="Sayıları Ezberleme">
+  <div class="z-head"><h1 class="glow-title">RAKAMLARI EZBERLEME OYUNU</h1><p class="subtitle">Ekranda beliren sayıyı ezberleyin,<br>geri sayımın ardından yeniden yazın.</p></div>
+  <div class="z-main"><div class="difficulty-grid">
+<button type="button" class="diff-card" data-level="easy"><div class="diff-name">🟢 Kolay</div><div class="diff-detail">6 basamak · 3 saniye<br>5 soru</div><div class="diff-pts">10 puan / basamak · maks. 300</div><div class="diff-rec" data-rec="numbers:easy"></div></button>
+<button type="button" class="diff-card" data-level="medium"><div class="diff-name">🔵 Orta</div><div class="diff-detail">8 basamak · 3 saniye<br>5 soru</div><div class="diff-pts">15 puan / basamak · maks. 600</div><div class="diff-rec" data-rec="numbers:medium"></div></button>
+<button type="button" class="diff-card" data-level="hard"><div class="diff-name">🟣 Zor</div><div class="diff-detail">10 basamak · 3 saniye<br>5 soru</div><div class="diff-pts">20 puan / basamak · maks. 1000</div><div class="diff-rec" data-rec="numbers:hard"></div></button>
+<button type="button" class="diff-card" data-level="progressive"><div class="diff-name">🌈 Kademeli</div><div class="diff-detail">6→8→8→10→10 basamak<br>5 soru</div><div class="diff-pts">Karma puanlama · maks. 700</div><div class="diff-rec" data-rec="numbers:progressive"></div></button>
+</div></div>
+  <div class="z-foot"><button class="btn" id="btn-start" disabled>Seviye Seçin</button><button class="btn secondary" id="btn-start-back">← Ana Menü</button><p class="kb-hint">Klavye: 1–4 seviye seçer · Enter başlatır · Esc ana menü</p></div>
+</section>
 
-  <!-- BAŞLANGIÇ -->
-  <div id="screen-start" class="hidden">
-   <!-- <div class="eyebrow">Sayı Hafızası</div> -->
-    <h1 class="glow-title">RAKAMLARI EZBERLEME OYUNU</h1>
-    <p class="subtitle">Ekranda beliren sayıyı ezberle,<br>geriye sayımın ardından yeniden yaz.</p>
-    <div class="difficulty-grid">
-      <div class="diff-card" data-level="easy">
-        <div class="diff-name">🟢 Kolay</div>
-        <div class="diff-detail">6 basamak · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">10 puan / basamak · maks. 300</div>
-      </div>
-      <div class="diff-card" data-level="medium">
-        <div class="diff-name">🔵 Orta</div>
-        <div class="diff-detail">8 basamak · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">15 puan / basamak · maks. 600</div>
-      </div>
-      <div class="diff-card" data-level="hard">
-        <div class="diff-name">🟣 Zor</div>
-        <div class="diff-detail">10 basamak · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">20 puan / basamak · maks. 1000</div>
-      </div>
-      <div class="diff-card" data-level="progressive">
-        <div class="diff-name">🌈 Kademeli</div>
-        <div class="diff-detail">6→8→8→10→10 basamak<br>5 soru</div>
-        <div class="diff-pts">Karma puanlama · maks. 700</div>
-      </div>
-    </div>
-    <button class="btn" id="btn-start" disabled>Seviye Seç</button>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-start-back">← Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-memorize" data-test="numbers" data-title="Sayıları Ezberleme">
+  <div class="z-head"><div class="question-meta"><span>Soru <b id="memorize-qnum">1</b> / <b id="memorize-total">5</b></span><span id="memorize-badge"></span></div></div>
+  <div class="z-main"><div class="number-card"><div class="digit-display" id="memorize-number"></div></div></div>
+  <div class="z-foot"><div class="timer-bar-wrap"><div class="timer-bar" id="memorize-bar"></div></div><p class="hint-text">Sayıyı dikkatlice inceleyin.</p></div>
+</section>
 
-  <!-- EZBERLEME -->
-  <div id="screen-memorize" class="hidden">
-    <div class="question-meta">
-      <span>Soru <b id="memorize-qnum">1</b> / <b id="memorize-total">5</b></span>
-      <span id="memorize-badge"></span>
-    </div>
-    <div class="number-card">
-      <div class="digit-display" id="memorize-number"></div>
-    </div>
-    <div class="timer-bar-wrap"><div class="timer-bar" id="memorize-bar"></div></div>
-    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Sayıyı dikkatlice incele.</p>
-  </div>
+<section class="screen  hidden" id="screen-countdown" data-test="numbers" data-title="Sayıları Ezberleme">
+  <div class="z-head"><div class="eyebrow">Hazırlanın</div></div>
+  <div class="z-main"><div class="number-card"><div class="countdown-display" id="countdown-number">3</div></div></div>
+  <div class="z-foot"><p class="trivia-text" id="trivia-display"></p></div>
+</section>
 
-  <!-- GERİ SAYIM -->
-  <div id="screen-countdown" class="hidden">
-    <div class="eyebrow">Hazırlan</div>
-    <div class="number-card">
-      <div class="countdown-display" id="countdown-number">3</div>
-    </div>
-    <p class="trivia-text" id="trivia-display"></p>
-  </div>
+<section class="screen  hidden" id="screen-answer" data-test="numbers" data-title="Sayıları Ezberleme">
+  <div class="z-head"><div class="question-meta"><span>Soru <b id="answer-qnum">1</b> / <b id="answer-total">5</b></span><span id="answer-badge"></span></div><p class="answer-prompt" id="answer-prompt"></p></div>
+  <div class="z-main"><div class="answer-box"><input type="text" inputmode="numeric" class="answer-input" id="answer-input" autocomplete="off" aria-label="Sayıyı yazın"><div class="keypad" id="keypad"><button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button><button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="back" class="wide" aria-label="Sil">⌫</button><button type="button" data-k="6">6</button><button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button><button type="button" data-k="0">0</button><button type="button" data-k="ok" class="wide" aria-label="Gönder">✓</button></div></div></div>
+  <div class="z-foot"><button class="btn" id="btn-submit" disabled>Cevabı Gönder</button><p class="kb-hint">Enter: gönder</p></div>
+</section>
 
-  <!-- CEVAP -->
-  <div id="screen-answer" class="hidden">
-    <div class="question-meta">
-      <span>Soru <b id="answer-qnum">1</b> / <b id="answer-total">5</b></span>
-      <span id="answer-badge"></span>
-    </div>
-    <p class="answer-prompt" id="answer-prompt"></p>
-    <input type="text" inputmode="numeric" class="answer-input" id="answer-input" autocomplete="off">
-    <div class="row-buttons">
-      <button class="btn" id="btn-submit" disabled>Cevabı Gönder</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-result" data-test="numbers" data-title="Sayıları Ezberleme">
+  <div class="z-head"><div class="eyebrow">Soru Sonucu</div><div id="result-badge-wrap"></div><div class="score-pill">Bu sorudan: <b id="result-score">0</b> puan</div></div>
+  <div class="z-main"><div class="fb-wrap"><div class="fb-block"><h2 class="glow-title sm">Doğru Sayı</h2><div class="feedback-digits " id="feedback-correct"></div></div><div class="fb-block"><h2 class="glow-title sm">Cevabınız</h2><div class="feedback-digits " id="feedback-user"></div></div></div></div>
+  <div class="z-foot"><button class="btn" id="btn-next">Sıradaki Soru</button><p class="kb-hint">Enter veya Boşluk: sıradaki</p></div>
+</section>
 
-  <!-- SORU SONUCU -->
-  <div id="screen-result" class="hidden fade-in">
-    <div class="eyebrow">Soru Sonucu</div>
-    <div id="result-badge-wrap"></div>
-    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sayı</h2>
-    <div class="feedback-digits" id="feedback-correct"></div>
-    <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
-    <div class="feedback-digits" id="feedback-user"></div>
-    <div class="score-pill">Bu sorudan: <b id="result-score">0</b> puan</div>
-    <div class="row-buttons">
-      <button class="btn" id="btn-next">Sıradaki Soru</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-final" data-test="numbers" data-title="Sayıları Ezberleme">
+  <div class="z-head"><div class="eyebrow">Set Tamamlandı</div><h2 class="glow-title sm">Toplam Puanınız</h2><div class="final-score" id="final-score">0</div><div class="final-max" id="final-max"></div><div class="rec-line" id="final-rec"></div></div>
+  <div class="z-main"><div class="per-question-recap" id="final-recap"></div></div>
+  <div class="z-foot"><p class="subtitle" style="margin:0">Ne yapmak istersiniz?</p><div class="row-buttons"><button class="btn" id="btn-restart">Yeni Set</button><button class="btn secondary" id="btn-goto-menu">Ana Menü</button></div></div>
+</section>
 
-  <!-- SET SONU -->
-  <div id="screen-final" class="hidden fade-in">
-    <div class="eyebrow">Set Tamamlandı</div>
-    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
-    <div class="final-score" id="final-score">0</div>
-    <div class="final-max" id="final-max"></div>
-    <div class="per-question-recap" id="final-recap"></div>
-    <p class="subtitle">Ne yapmak istersin?</p>
-    <div class="row-buttons">
-      <button class="btn" id="btn-restart">Yeni Set</button>
-      <button class="btn secondary" id="btn-goto-menu">Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-color-start" data-test="colors" data-title="Renkleri Ezberleme">
+  <div class="z-head"><h1 class="glow-title">RENKLERİ EZBERLEME OYUNU</h1><p class="subtitle">Ekranda beliren renk listesini ezberleyin,<br>geri sayımın ardından renklere doğru sırayla dokunun.</p></div>
+  <div class="z-main"><div class="difficulty-grid">
+<button type="button" class="diff-card" data-clevel="easy"><div class="diff-name">🟢 Kolay</div><div class="diff-detail">4 renk · 3 saniye<br>5 soru</div><div class="diff-pts">10 puan / renk · maks. 200</div><div class="diff-rec" data-rec="colors:easy"></div></button>
+<button type="button" class="diff-card" data-clevel="medium"><div class="diff-name">🔵 Orta</div><div class="diff-detail">6 renk · 3 saniye<br>5 soru</div><div class="diff-pts">15 puan / renk · maks. 450</div><div class="diff-rec" data-rec="colors:medium"></div></button>
+<button type="button" class="diff-card" data-clevel="hard"><div class="diff-name">🟣 Zor</div><div class="diff-detail">8 renk · 3 saniye<br>5 soru</div><div class="diff-pts">20 puan / renk · maks. 800</div><div class="diff-rec" data-rec="colors:hard"></div></button>
+<button type="button" class="diff-card" data-clevel="progressive"><div class="diff-name">🌈 Kademeli</div><div class="diff-detail">4→6→6→8→8 renk<br>5 soru</div><div class="diff-pts">Karma puanlama · maks. 540</div><div class="diff-rec" data-rec="colors:progressive"></div></button>
+</div></div>
+  <div class="z-foot"><button class="btn" id="btn-color-start" disabled>Seviye Seçin</button><button class="btn secondary" id="btn-color-start-back">← Ana Menü</button><p class="kb-hint">Klavye: 1–4 seviye seçer · Enter başlatır · Esc ana menü</p></div>
+</section>
 
-  <!-- RENK ZORLUK SEÇİMİ -->
-  <div id="screen-color-start" class="hidden">
-    <h1 class="glow-title">RENKLERİ EZBERLEME OYUNU</h1>
-    <p class="subtitle">Ekranda beliren renk listesini ezberle,<br>geriye sayımın ardından renklere doğru sırayla dokun.</p>
-    <div class="difficulty-grid">
-      <div class="diff-card" data-clevel="easy">
-        <div class="diff-name">🟢 Kolay</div>
-        <div class="diff-detail">4 renk · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">10 puan / renk · maks. 200</div>
-      </div>
-      <div class="diff-card" data-clevel="medium">
-        <div class="diff-name">🔵 Orta</div>
-        <div class="diff-detail">6 renk · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">15 puan / renk · maks. 450</div>
-      </div>
-      <div class="diff-card" data-clevel="hard">
-        <div class="diff-name">🟣 Zor</div>
-        <div class="diff-detail">8 renk · 3 saniye<br>5 soru</div>
-        <div class="diff-pts">20 puan / renk · maks. 800</div>
-      </div>
-      <div class="diff-card" data-clevel="progressive">
-        <div class="diff-name">🌈 Kademeli</div>
-        <div class="diff-detail">4→6→6→8→8 renk<br>5 soru</div>
-        <div class="diff-pts">Karma puanlama · maks. 510</div>
-      </div>
-    </div>
-    <button class="btn" id="btn-color-start" disabled>Seviye Seç</button>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-color-start-back">← Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-color-memorize" data-test="colors" data-title="Renkleri Ezberleme">
+  <div class="z-head"><div class="question-meta"><span>Soru <b id="cmemorize-qnum">1</b> / <b id="cmemorize-total">5</b></span><span id="cmemorize-badge"></span></div></div>
+  <div class="z-main"><div class="number-card"><div class="color-word-list" id="cmemorize-list"></div></div></div>
+  <div class="z-foot"><div class="timer-bar-wrap"><div class="timer-bar" id="cmemorize-bar"></div></div><p class="hint-text">Renk sırasını dikkatlice inceleyin.</p></div>
+</section>
 
-  <!-- RENK EZBERLEME -->
-  <div id="screen-color-memorize" class="hidden">
-    <div class="question-meta">
-      <span>Soru <b id="cmemorize-qnum">1</b> / <b id="cmemorize-total">5</b></span>
-      <span id="cmemorize-badge"></span>
-    </div>
-    <div class="number-card">
-      <div class="color-word-list" id="cmemorize-list"></div>
-    </div>
-    <div class="timer-bar-wrap"><div class="timer-bar" id="cmemorize-bar"></div></div>
-    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Renk sırasını dikkatlice incele.</p>
-  </div>
+<section class="screen  hidden" id="screen-color-answer" data-test="colors" data-title="Renkleri Ezberleme">
+  <div class="z-head"><div class="question-meta"><span>Soru <b id="canswer-qnum">1</b> / <b id="canswer-total">5</b></span><span id="canswer-badge"></span></div><p class="answer-prompt" id="canswer-prompt"></p></div>
+  <div class="z-main"><div class="pick-box"><div class="color-slots" id="color-slots"></div><div class="color-palette" id="color-palette"></div></div></div>
+  <div class="z-foot"><div class="row-buttons"><button class="btn secondary" id="btn-color-undo">⌫ Son Rengi Sil</button><button class="btn" id="btn-color-submit" disabled>Cevabı Gönder</button></div><p class="kb-hint">Klavye: 1–7 renk seçer · Geri tuşu siler · Enter gönderir</p></div>
+</section>
 
-  <!-- RENK CEVAP -->
-  <div id="screen-color-answer" class="hidden">
-    <div class="question-meta">
-      <span>Soru <b id="canswer-qnum">1</b> / <b id="canswer-total">5</b></span>
-      <span id="canswer-badge"></span>
-    </div>
-    <p class="answer-prompt" id="canswer-prompt"></p>
-    <div class="color-slots" id="color-slots"></div>
-    <div class="color-palette" id="color-palette"></div>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-color-undo">⌫ Son Rengi Sil</button>
-      <button class="btn" id="btn-color-submit" disabled>Cevabı Gönder</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-color-result" data-test="colors" data-title="Renkleri Ezberleme">
+  <div class="z-head"><div class="eyebrow">Soru Sonucu</div><div id="cresult-badge-wrap"></div><div class="score-pill">Bu sorudan: <b id="cresult-score">0</b> puan</div></div>
+  <div class="z-main"><div class="fb-wrap"><div class="fb-block"><h2 class="glow-title sm">Doğru Sıra</h2><div class="feedback-digits color-feedback" id="cfeedback-correct"></div></div><div class="fb-block"><h2 class="glow-title sm">Cevabınız</h2><div class="feedback-digits color-feedback" id="cfeedback-user"></div></div></div></div>
+  <div class="z-foot"><button class="btn" id="btn-color-next">Sıradaki Soru</button><p class="kb-hint">Enter veya Boşluk: sıradaki</p></div>
+</section>
 
-  <!-- RENK SONUÇ -->
-  <div id="screen-color-result" class="hidden fade-in">
-    <div class="eyebrow">Soru Sonucu</div>
-    <div id="cresult-badge-wrap"></div>
-    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sıra</h2>
-    <div class="feedback-digits color-feedback" id="cfeedback-correct"></div>
-    <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
-    <div class="feedback-digits color-feedback" id="cfeedback-user"></div>
-    <div class="score-pill">Bu sorudan: <b id="cresult-score">0</b> puan</div>
-    <div class="row-buttons">
-      <button class="btn" id="btn-color-next">Sıradaki Soru</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-color-final" data-test="colors" data-title="Renkleri Ezberleme">
+  <div class="z-head"><div class="eyebrow">Set Tamamlandı</div><h2 class="glow-title sm">Toplam Puanınız</h2><div class="final-score" id="cfinal-score">0</div><div class="final-max" id="cfinal-max"></div><div class="rec-line" id="cfinal-rec"></div></div>
+  <div class="z-main"><div class="per-question-recap" id="cfinal-recap"></div></div>
+  <div class="z-foot"><p class="subtitle" style="margin:0">Ne yapmak istersiniz?</p><div class="row-buttons"><button class="btn" id="btn-color-restart">Yeni Set</button><button class="btn secondary" id="btn-color-menu">Ana Menü</button></div></div>
+</section>
 
-  <!-- RENK SET SONU -->
-  <div id="screen-color-final" class="hidden fade-in">
-    <div class="eyebrow">Set Tamamlandı</div>
-    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
-    <div class="final-score" id="cfinal-score">0</div>
-    <div class="final-max" id="cfinal-max"></div>
-    <div class="per-question-recap" id="cfinal-recap"></div>
-    <p class="subtitle">Ne yapmak istersin?</p>
-    <div class="row-buttons">
-      <button class="btn" id="btn-color-restart">Yeni Set</button>
-      <button class="btn secondary" id="btn-color-menu">Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-symbol-start" data-test="symbols" data-title="Okları Ezberleme">
+  <div class="z-head"><h1 class="glow-title">OKLARI EZBERLEME OYUNU</h1><p class="subtitle">Ekranda beliren dizideki okların yönlerini ezberleyin,<br>geri sayımın ardından doğru sırayla oklara dokunun.</p></div>
+  <div class="z-main"><div class="difficulty-grid">
+<button type="button" class="diff-card" data-slevel="easy"><div class="diff-name">🟢 Kolay</div><div class="diff-detail">4 ok · 4 saniye<br>5 soru</div><div class="diff-pts">10 puan / ok · maks. 200</div><div class="diff-rec" data-rec="symbols:easy"></div></button>
+<button type="button" class="diff-card" data-slevel="medium"><div class="diff-name">🔵 Orta</div><div class="diff-detail">6 ok · 5 saniye<br>5 soru</div><div class="diff-pts">15 puan / ok · maks. 450</div><div class="diff-rec" data-rec="symbols:medium"></div></button>
+<button type="button" class="diff-card" data-slevel="hard"><div class="diff-name">🟣 Zor</div><div class="diff-detail">8 ok · 6 saniye<br>5 soru</div><div class="diff-pts">20 puan / ok · maks. 800</div><div class="diff-rec" data-rec="symbols:hard"></div></button>
+<button type="button" class="diff-card" data-slevel="progressive"><div class="diff-name">🌈 Kademeli</div><div class="diff-detail">4→6→6→8→8 ok<br>5 soru</div><div class="diff-pts">Karma puanlama · maks. 540</div><div class="diff-rec" data-rec="symbols:progressive"></div></button>
+</div></div>
+  <div class="z-foot"><button class="btn" id="btn-symbol-start" disabled>Seviye Seçin</button><button class="btn secondary" id="btn-symbol-start-back">← Ana Menü</button><p class="kb-hint">Klavye: 1–4 seviye seçer · Enter başlatır · Esc ana menü</p></div>
+</section>
 
-  <!-- SEMBOL ZORLUK SEÇİMİ -->
-  <div id="screen-symbol-start" class="hidden">
-    <h1 class="glow-title">OKLARI EZBERLEME OYUNU</h1>
-    <p class="subtitle">Ekranda beliren dizideki okların yönlerini ezberle,<br>geriye sayımın ardından doğru sırayla oklara dokun.</p>
-    <div class="difficulty-grid">
-      <div class="diff-card" data-slevel="easy">
-        <div class="diff-name">🟢 Kolay</div>
-        <div class="diff-detail">4 ok · 4 saniye<br>5 soru</div>
-        <div class="diff-pts">10 puan / ok · maks. 200</div>
-      </div>
-      <div class="diff-card" data-slevel="medium">
-        <div class="diff-name">🔵 Orta</div>
-        <div class="diff-detail">6 ok · 5 saniye<br>5 soru</div>
-        <div class="diff-pts">15 puan / ok · maks. 450</div>
-      </div>
-      <div class="diff-card" data-slevel="hard">
-        <div class="diff-name">🟣 Zor</div>
-        <div class="diff-detail">8 ok · 6 saniye<br>5 soru</div>
-        <div class="diff-pts">20 puan / ok · maks. 800</div>
-      </div>
-      <div class="diff-card" data-slevel="progressive">
-        <div class="diff-name">🌈 Kademeli</div>
-        <div class="diff-detail">4→6→6→8→8 ok<br>5 soru</div>
-        <div class="diff-pts">Karma puanlama · maks. 510</div>
-      </div>
-    </div>
-    <button class="btn" id="btn-symbol-start" disabled>Seviye Seç</button>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-symbol-start-back">← Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-symbol-memorize" data-test="symbols" data-title="Okları Ezberleme">
+  <div class="z-head"><div class="question-meta"><span>Soru <b id="smemorize-qnum">1</b> / <b id="smemorize-total">5</b></span><span id="smemorize-badge"></span></div></div>
+  <div class="z-main"><div class="number-card"><div class="symbol-display" id="smemorize-list"></div></div></div>
+  <div class="z-foot"><div class="timer-bar-wrap"><div class="timer-bar" id="smemorize-bar"></div></div><p class="hint-text">Okların yönlerini dikkatlice inceleyin.</p></div>
+</section>
 
-  <!-- SEMBOL EZBERLEME -->
-  <div id="screen-symbol-memorize" class="hidden">
-    <div class="question-meta">
-      <span>Soru <b id="smemorize-qnum">1</b> / <b id="smemorize-total">5</b></span>
-      <span id="smemorize-badge"></span>
-    </div>
-    <div class="number-card">
-      <div class="symbol-display" id="smemorize-list"></div>
-    </div>
-    <div class="timer-bar-wrap"><div class="timer-bar" id="smemorize-bar"></div></div>
-    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Okların yönlerini dikkatlice incele.</p>
-  </div>
+<section class="screen  hidden" id="screen-symbol-answer" data-test="symbols" data-title="Okları Ezberleme">
+  <div class="z-head"><div class="question-meta"><span>Soru <b id="sanswer-qnum">1</b> / <b id="sanswer-total">5</b></span><span id="sanswer-badge"></span></div><p class="answer-prompt" id="sanswer-prompt"></p></div>
+  <div class="z-main"><div class="pick-box"><div class="symbol-slots" id="symbol-slots"></div><div class="symbol-palette" id="symbol-palette"></div></div></div>
+  <div class="z-foot"><div class="row-buttons"><button class="btn secondary" id="btn-symbol-undo">⌫ Son Oku Sil</button><button class="btn" id="btn-symbol-submit" disabled>Cevabı Gönder</button></div><p class="kb-hint">Klavye: ok tuşları veya 1–9, 0 · Geri tuşu siler · Enter gönderir</p></div>
+</section>
 
-  <!-- SEMBOL CEVAP -->
-  <div id="screen-symbol-answer" class="hidden">
-    <div class="question-meta">
-      <span>Soru <b id="sanswer-qnum">1</b> / <b id="sanswer-total">5</b></span>
-      <span id="sanswer-badge"></span>
-    </div>
-    <p class="answer-prompt" id="sanswer-prompt"></p>
-    <div class="symbol-slots" id="symbol-slots"></div>
-    <div class="symbol-palette" id="symbol-palette"></div>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-symbol-undo">⌫ Son Oku Sil</button>
-      <button class="btn" id="btn-symbol-submit" disabled>Cevabı Gönder</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-symbol-result" data-test="symbols" data-title="Okları Ezberleme">
+  <div class="z-head"><div class="eyebrow">Soru Sonucu</div><div id="sresult-badge-wrap"></div><div class="score-pill">Bu sorudan: <b id="sresult-score">0</b> puan</div></div>
+  <div class="z-main"><div class="fb-wrap"><div class="fb-block"><h2 class="glow-title sm">Doğru Sıralama</h2><div class="feedback-digits symbol-feedback" id="sfeedback-correct"></div></div><div class="fb-block"><h2 class="glow-title sm">Cevabınız</h2><div class="feedback-digits symbol-feedback" id="sfeedback-user"></div></div></div></div>
+  <div class="z-foot"><button class="btn" id="btn-symbol-next">Sıradaki Soru</button><p class="kb-hint">Enter veya Boşluk: sıradaki</p></div>
+</section>
 
-  <!-- SEMBOL SONUÇ -->
-  <div id="screen-symbol-result" class="hidden fade-in">
-    <div class="eyebrow">Soru Sonucu</div>
-    <div id="sresult-badge-wrap"></div>
-    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sıralama</h2>
-    <div class="feedback-digits symbol-feedback" id="sfeedback-correct"></div>
-    <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
-    <div class="feedback-digits symbol-feedback" id="sfeedback-user"></div>
-    <div class="score-pill">Bu sorudan: <b id="sresult-score">0</b> puan</div>
-    <div class="row-buttons">
-      <button class="btn" id="btn-symbol-next">Sıradaki Soru</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-symbol-final" data-test="symbols" data-title="Okları Ezberleme">
+  <div class="z-head"><div class="eyebrow">Set Tamamlandı</div><h2 class="glow-title sm">Toplam Puanınız</h2><div class="final-score" id="sfinal-score">0</div><div class="final-max" id="sfinal-max"></div><div class="rec-line" id="sfinal-rec"></div></div>
+  <div class="z-main"><div class="per-question-recap" id="sfinal-recap"></div></div>
+  <div class="z-foot"><p class="subtitle" style="margin:0">Ne yapmak istersiniz?</p><div class="row-buttons"><button class="btn" id="btn-symbol-restart">Yeni Set</button><button class="btn secondary" id="btn-symbol-menu">Ana Menü</button></div></div>
+</section>
 
-  <!-- SEMBOL SET SONU -->
-  <div id="screen-symbol-final" class="hidden fade-in">
-    <div class="eyebrow">Set Tamamlandı</div>
-    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
-    <div class="final-score" id="sfinal-score">0</div>
-    <div class="final-max" id="sfinal-max"></div>
-    <div class="per-question-recap" id="sfinal-recap"></div>
-    <p class="subtitle">Ne yapmak istersin?</p>
-    <div class="row-buttons">
-      <button class="btn" id="btn-symbol-restart">Yeni Set</button>
-      <button class="btn secondary" id="btn-symbol-menu">Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-spatial-start" data-test="spatial" data-title="Kareleri Ezberleme">
+  <div class="z-head"><h1 class="glow-title">KONUM HAFIZASI</h1><p class="subtitle">Izgarada sırayla yanıp sönen hücreleri ezberleyin,<br>geri sayımın ardından aynı sırayla dokunarak tekrarlayın.<br>Her dokunuş kaydedilir.</p></div>
+  <div class="z-main"><div class="difficulty-grid">
+<button type="button" class="diff-card" data-glevel="easy"><div class="diff-name">🟢 Kolay</div><div class="diff-detail">4 hücre<br>5 soru</div><div class="diff-pts">10 puan / hücre · maks. 200</div><div class="diff-rec" data-rec="spatial:easy"></div></button>
+<button type="button" class="diff-card" data-glevel="medium"><div class="diff-name">🔵 Orta</div><div class="diff-detail">6 hücre<br>5 soru</div><div class="diff-pts">15 puan / hücre · maks. 450</div><div class="diff-rec" data-rec="spatial:medium"></div></button>
+<button type="button" class="diff-card" data-glevel="hard"><div class="diff-name">🟣 Zor</div><div class="diff-detail">8 hücre<br>5 soru</div><div class="diff-pts">20 puan / hücre · maks. 800</div><div class="diff-rec" data-rec="spatial:hard"></div></button>
+<button type="button" class="diff-card" data-glevel="progressive"><div class="diff-name">🌈 Kademeli</div><div class="diff-detail">4→6→6→8→8 hücre<br>5 soru</div><div class="diff-pts">Karma puanlama · maks. 540</div><div class="diff-rec" data-rec="spatial:progressive"></div></button>
+</div></div>
+  <div class="z-foot"><button class="btn" id="btn-spatial-start" disabled>Seviye Seçin</button><button class="btn secondary" id="btn-spatial-start-back">← Ana Menü</button><p class="kb-hint">Klavye: 1–4 seviye seçer · Enter başlatır · Esc ana menü</p></div>
+</section>
 
-  <!-- REFLEKS AÇIKLAMA -->
-  <div id="screen-reflex-start" class="hidden">
-    <h1 class="glow-title">REFLEKS TESTİ</h1>
-    <p class="subtitle">Ekranda <strong>gri daire</strong> varken bekle<br>sakın ekrana dokunma.<br>
-    Daire <strong>yeşile</strong> döndüğü anda<br>olabildiğince hızlı dokun.<br>
-    Erken dokunursan o denemeden sıfır puan alırsın.<br>
-    5 denemelik bir set seni bekliyor.</p>
-    <button class="btn" id="btn-reflex-start">Oyuna Başla</button>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-reflex-start-back">← Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-spatial-memorize" data-test="spatial" data-title="Kareleri Ezberleme">
+  <div class="z-head"><div class="question-meta"><span>Soru <b id="gmemorize-qnum">1</b> / <b id="gmemorize-total">5</b></span><span id="gmemorize-badge"></span></div></div>
+  <div class="z-main"><div class="spatial-grid" id="spatial-grid-memorize"></div></div>
+  <div class="z-foot"><div class="timer-bar-wrap"><div class="timer-bar" id="gmemorize-bar"></div></div><p class="hint-text">Yanıp sönen hücrelerin sırasını dikkatlice izleyin.</p></div>
+</section>
 
-  <!-- REFLEKS: BEKLEME / SİNYAL -->
-  <div id="screen-reflex-wait" class="hidden">
-    <div class="question-meta">
-      <span>Deneme <b id="rwait-qnum">1</b> / <b id="rwait-total">5</b></span>
-      <span style="color:var(--text-dim);font-size:12px;">Bekle</span>
-    </div>
-    <p class="answer-prompt" id="reflex-instruction">Yeşili bekle, henüz dokunma...</p>
-    <button class="reflex-target" id="reflex-target-btn">BEKLE</button>
-  </div>
+<section class="screen  hidden" id="screen-spatial-answer" data-test="spatial" data-title="Kareleri Ezberleme">
+  <div class="z-head"><div class="question-meta"><span>Soru <b id="ganswer-qnum">1</b> / <b id="ganswer-total">5</b></span><span id="ganswer-badge"></span></div><p class="answer-prompt" id="ganswer-prompt"></p><p class="hint-text">Dokunuş: <b id="ganswer-progress" style="color:var(--ac)">0</b> / <b id="ganswer-progress-total">4</b></p></div>
+  <div class="z-main"><div class="spatial-grid" id="spatial-grid-answer"></div></div>
+  <div class="z-foot"><p class="kb-hint">Klavye: önce satır harfi (a–d), sonra sütun rakamı (1–4)</p></div>
+</section>
 
-  <!-- REFLEKS: ERKEN BASMA UYARISI -->
-  <div id="screen-reflex-early" class="hidden fade-in">
-    <div class="eyebrow">Çok Erken!</div>
-    <h2 class="glow-title" style="font-size:24px;">Yeşili Beklemeliydin</h2>
-    <p class="subtitle">Gri daireye dokundun.<br>Bu deneme <strong>0 puan</strong> olarak kaydedildi.</p>
-    <div class="score-pill">Bu denemeden: <b>0</b> puan</div>
-    <div class="row-buttons">
-      <button class="btn" id="btn-reflex-early-next">Sıradaki Deneme</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-spatial-result" data-test="spatial" data-title="Kareleri Ezberleme">
+  <div class="z-head"><div class="eyebrow">Soru Sonucu</div><div id="gresult-badge-wrap"></div><div class="score-pill">Bu sorudan: <b id="gresult-score">0</b> puan</div></div>
+  <div class="z-main"><div class="fb-wrap"><div class="fb-block"><h2 class="glow-title sm">Doğru Sıra</h2><div class="feedback-digits coord-feedback" id="gfeedback-correct"></div></div><div class="fb-block"><h2 class="glow-title sm">Cevabınız</h2><div class="feedback-digits coord-feedback" id="gfeedback-user"></div></div></div></div>
+  <div class="z-foot"><button class="btn" id="btn-spatial-next">Sıradaki Soru</button><p class="kb-hint">Enter veya Boşluk: sıradaki</p></div>
+</section>
 
-  <!-- REFLEKS SONUÇ -->
-  <div id="screen-reflex-result" class="hidden fade-in">
-    <div class="eyebrow">Deneme Sonucu</div>
-    <div class="timing-result-row">
-      <div class="timing-result-box">
-        <div class="timing-result-label">Tepki Süren</div>
-        <div class="timing-result-value" id="rresult-time">0 ms</div>
-      </div>
-    </div>
-    <p class="hint-text" id="rresult-comment" style="margin:10px 0;"></p>
-    <div class="score-pill">Bu denemeden: <b id="rresult-score">0</b> puan</div>
-    <div class="row-buttons">
-      <button class="btn" id="btn-reflex-next">Sıradaki Deneme</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-spatial-final" data-test="spatial" data-title="Kareleri Ezberleme">
+  <div class="z-head"><div class="eyebrow">Set Tamamlandı</div><h2 class="glow-title sm">Toplam Puanınız</h2><div class="final-score" id="gfinal-score">0</div><div class="final-max" id="gfinal-max"></div><div class="rec-line" id="gfinal-rec"></div></div>
+  <div class="z-main"><div class="per-question-recap" id="gfinal-recap"></div></div>
+  <div class="z-foot"><p class="subtitle" style="margin:0">Ne yapmak istersiniz?</p><div class="row-buttons"><button class="btn" id="btn-spatial-restart">Yeni Set</button><button class="btn secondary" id="btn-spatial-menu">Ana Menü</button></div></div>
+</section>
 
-  <!-- REFLEKS SET SONU -->
-  <div id="screen-reflex-final" class="hidden fade-in">
-    <div class="eyebrow">Set Tamamlandı</div>
-    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
-    <div class="final-score" id="rfinal-score">0</div>
-    <div class="final-max" id="rfinal-max">/ 500 puan</div>
-    <div class="per-question-recap" id="rfinal-recap"></div>
-    <p class="subtitle">Ne yapmak istersin?</p>
-    <div class="row-buttons">
-      <button class="btn" id="btn-reflex-restart">Yeni Set</button>
-      <button class="btn secondary" id="btn-reflex-menu">Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-reflex-start" data-test="reflex" data-title="Refleks Testi">
+  <div class="z-head"><h1 class="glow-title">REFLEKS TESTİ</h1><p class="subtitle">Ekranda <strong>gri daire</strong> varken bekleyin,<br>sakın ekrana dokunmayın.<br>Daire <strong>yeşile</strong> döndüğü anda<br>olabildiğince hızlı dokunun.<br>Erken dokunursanız o denemeden sıfır puan alırsınız.<br>5 denemelik bir set sizi bekliyor.</p><div class="rec-line" data-recline="reflex"></div></div>
+  <div class="z-main"><div class="early-ring" style="border-color:rgba(61,220,151,.7);color:#8dfcc8;background:radial-gradient(circle,rgba(61,220,151,.16),transparent 70%);box-shadow:0 0 44px rgba(61,220,151,.3)">5 DENEME</div></div>
+  <div class="z-foot"><button class="btn" id="btn-reflex-start">Oyuna Başla</button><button class="btn secondary" id="btn-reflex-start-back">← Ana Menü</button><p class="kb-hint">Enter başlatır · Esc ana menü</p></div>
+</section>
 
-  <!-- ZAMANLAMA AÇIKLAMA -->
-  <div id="screen-timing-start" class="hidden">
-    <h1 class="glow-title">ZAMANLAMA HASSASİYETİ</h1>
-    <p class="subtitle">Ekranda dairesel bir animasyon göreceksin.<br>
-    Animasyonun süresini belirlemeye çalış<br>Daha sonra ekrana basılı tutarak<br>aynı süreyi bir kez de sen<br>
-    tekrar etmeye çalışacaksın.<br>
-    5 denemelik bir set seni bekliyor.</p>
-    <button class="btn" id="btn-timing-start">Oyuna Başla</button>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-timing-start-back">← Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-reflex-wait" data-test="reflex" data-title="Refleks Testi">
+  <div class="z-head"><div class="question-meta"><span>Deneme <b id="rwait-qnum">1</b> / <b id="rwait-total">5</b></span><span style="color:var(--text-dim);font-size:12px">Bekleyin</span></div><p class="answer-prompt" id="reflex-instruction">Yeşili bekleyin, henüz dokunmayın...</p></div>
+  <div class="z-main"><button class="reflex-target" id="reflex-target-btn">BEKLEYİN</button></div>
+  <div class="z-foot"><p class="kb-hint">Boşluk veya Enter: dokun</p></div>
+</section>
 
-  <!-- ZAMANLAMA: ANİMASYON İZLEME -->
-  <div id="screen-timing-watch" class="hidden">
-    <div class="question-meta">
-      <span>Deneme <b id="twatch-qnum">1</b> / <b id="twatch-total">5</b></span>
-      <span style="color:var(--text-dim);font-size:12px;">İzle</span>
-    </div>
-    <div class="timing-ring-wrap">
-      <svg class="timing-ring" id="timing-ring-svg" viewBox="0 0 200 200">
-        <defs>
-          <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#4fe3ff"/>
-            <stop offset="50%" stop-color="#b06bff"/>
-            <stop offset="100%" stop-color="#ff5fb0"/>
-          </linearGradient>
-        </defs>
-        <circle class="ring-track" cx="100" cy="100" r="84"/>
-        <circle class="ring-progress" id="ring-progress" cx="100" cy="100" r="84"/>
-      </svg>
-    </div>
-    <p class="trivia-text" style="margin-top:14px;color:var(--text-dim);font-style:normal;font-size:13px;">Halkanın dönüşünü dikkatlice izle.</p>
-  </div>
+<section class="screen  hidden" id="screen-reflex-early" data-test="reflex" data-title="Refleks Testi">
+  <div class="z-head"><div class="eyebrow">Çok Erken!</div><h2 class="glow-title">Yeşili Beklemeliydiniz</h2><p class="subtitle">Gri daireye dokundunuz.<br>Bu deneme <strong>0 puan</strong> olarak kaydedildi.</p><div class="score-pill">Bu denemeden: <b>0</b> puan</div></div>
+  <div class="z-main"><div class="early-ring">ERKEN</div></div>
+  <div class="z-foot"><button class="btn" id="btn-reflex-early-next">Sıradaki Deneme</button><p class="kb-hint">Enter veya Boşluk: sıradaki</p></div>
+</section>
 
-  <!-- ZAMANLAMA: HAZIR OL -->
-  <div id="screen-timing-ready" class="hidden">
-    <div class="eyebrow">Hazırlan</div>
-    <div class="number-card">
-      <div class="countdown-display" id="timing-ready-text">HAZIR OL</div>
-    </div>
-    <p class="trivia-text" id="timing-trivia-display"></p>
-  </div>
+<section class="screen  hidden" id="screen-reflex-result" data-test="reflex" data-title="Refleks Testi">
+  <div class="z-head"><div class="eyebrow">Deneme Sonucu</div><p class="hint-text" id="rresult-comment" style="font-size:clamp(14px,2.6dvh,18px);color:var(--text-bright)"></p><div class="score-pill">Bu denemeden: <b id="rresult-score">0</b> puan</div></div>
+  <div class="z-main"><div class="timing-result-row"><div class="timing-result-box"><div class="timing-result-label">Tepki Süreniz</div><div class="timing-result-value" id="rresult-time">0 ms</div></div></div></div>
+  <div class="z-foot"><button class="btn" id="btn-reflex-next">Sıradaki Deneme</button><p class="kb-hint">Enter veya Boşluk: sıradaki</p></div>
+</section>
 
-  <!-- ZAMANLAMA: CEVAP -->
-  <div id="screen-timing-answer" class="hidden">
-    <div class="question-meta">
-      <span>Deneme <b id="tanswer-qnum">1</b> / <b id="tanswer-total">5</b></span>
-      <span style="color:var(--text-dim);font-size:12px;">Basılı tut</span>
-    </div>
-    <p class="answer-prompt">Hedefe basılı tutarak az önce izlediğin süreyi tekrarla:</p>
-    <button class="timing-target" id="timing-target-btn">BAS &amp; TUT</button>
-    <p class="trivia-text" style="margin-top:14px;color:var(--text-dim);font-style:normal;font-size:12px;" id="timing-live-readout"></p>
-  </div>
+<section class="screen  hidden" id="screen-reflex-final" data-test="reflex" data-title="Refleks Testi">
+  <div class="z-head"><div class="eyebrow">Set Tamamlandı</div><h2 class="glow-title sm">Toplam Puanınız</h2><div class="final-score" id="rfinal-score">0</div><div class="final-max" id="rfinal-max"></div><div class="rec-line" id="rfinal-rec"></div></div>
+  <div class="z-main"><div class="per-question-recap" id="rfinal-recap"></div></div>
+  <div class="z-foot"><p class="subtitle" style="margin:0">Ne yapmak istersiniz?</p><div class="row-buttons"><button class="btn" id="btn-reflex-restart">Yeni Set</button><button class="btn secondary" id="btn-reflex-menu">Ana Menü</button></div></div>
+</section>
 
-  <!-- ZAMANLAMA SONUÇ -->
-  <div id="screen-timing-result" class="hidden fade-in">
-    <div class="eyebrow">Deneme Sonucu</div>
-    <div class="timing-result-row">
-      <div class="timing-result-box">
-        <div class="timing-result-label">Hedef Süre</div>
-        <div class="timing-result-value" id="tresult-target">0,00 sn</div>
-      </div>
-      <div class="timing-result-box">
-        <div class="timing-result-label">Senin Süren</div>
-        <div class="timing-result-value" id="tresult-user">0,00 sn</div>
-      </div>
-    </div>
-    <p class="hint-text" id="tresult-diff" style="margin:10px 0;"></p>
-    <div class="score-pill">Bu denemeden: <b id="tresult-score">0</b> puan</div>
-    <div class="row-buttons">
-      <button class="btn" id="btn-timing-next">Sıradaki Deneme</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-timing-start" data-test="timing" data-title="Zamanlama Testi">
+  <div class="z-head"><h1 class="glow-title">ZAMANLAMA HASSASİYETİ</h1><p class="subtitle">Ekranda dairesel bir animasyon göreceksiniz.<br>Animasyonun süresini belirlemeye çalışın.<br>Daha sonra ekrana basılı tutarak aynı süreyi bir kez de siz tekrar etmeye çalışacaksınız.<br>5 denemelik bir set sizi bekliyor.</p><div class="rec-line" data-recline="timing"></div></div>
+  <div class="z-main"><div class="early-ring" style="border-color:rgba(179,136,255,.7);color:#d9c2ff;background:radial-gradient(circle,rgba(179,136,255,.16),transparent 70%);box-shadow:0 0 44px rgba(179,136,255,.3)">5 DENEME</div></div>
+  <div class="z-foot"><button class="btn" id="btn-timing-start">Oyuna Başla</button><button class="btn secondary" id="btn-timing-start-back">← Ana Menü</button><p class="kb-hint">Enter başlatır · Esc ana menü</p></div>
+</section>
 
-  <!-- ZAMANLAMA SET SONU -->
-  <div id="screen-timing-final" class="hidden fade-in">
-    <div class="eyebrow">Set Tamamlandı</div>
-    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
-    <div class="final-score" id="tfinal-score">0</div>
-    <div class="final-max" id="tfinal-max">/ 500 puan</div>
-    <div class="per-question-recap" id="tfinal-recap"></div>
-    <p class="subtitle">Ne yapmak istersin?</p>
-    <div class="row-buttons">
-      <button class="btn" id="btn-timing-restart">Yeni Set</button>
-      <button class="btn secondary" id="btn-timing-menu">Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-timing-watch" data-test="timing" data-title="Zamanlama Testi">
+  <div class="z-head"><div class="question-meta"><span>Deneme <b id="twatch-qnum">1</b> / <b id="twatch-total">5</b></span><span style="color:var(--text-dim);font-size:12px">İzleyin</span></div></div>
+  <div class="z-main"><svg class="timing-ring" id="timing-ring-svg" viewBox="0 0 200 200"><defs><linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b388ff"/><stop offset="55%" stop-color="#e5a8ff"/><stop offset="100%" stop-color="#ffd966"/></linearGradient></defs><circle class="ring-track" cx="100" cy="100" r="84"/><circle class="ring-progress" id="ring-progress" cx="100" cy="100" r="84"/></svg></div>
+  <div class="z-foot"><p class="hint-text">Halkanın dönüşünü dikkatlice izleyin.</p></div>
+</section>
 
-  <!-- KONUM ZORLUK SEÇİMİ -->
-  <div id="screen-spatial-start" class="hidden">
-    <h1 class="glow-title">KONUM HAFIZASI</h1>
-    <p class="subtitle">Izgarada sırayla yanıp sönen hücreleri ezberle,<br>
-    geriye sayımın ardından aynı sırayla dokunarak tekrarla.<br>
-    Her dokunuş kaydedilir.</p>
-    <div class="difficulty-grid">
-      <div class="diff-card" data-glevel="easy">
-        <div class="diff-name">🟢 Kolay</div>
-        <div class="diff-detail">4 hücre<br>5 soru</div>
-        <div class="diff-pts">10 puan / hücre · maks. 200</div>
-      </div>
-      <div class="diff-card" data-glevel="medium">
-        <div class="diff-name">🔵 Orta</div>
-        <div class="diff-detail">6 hücre<br>5 soru</div>
-        <div class="diff-pts">15 puan / hücre · maks. 450</div>
-      </div>
-      <div class="diff-card" data-glevel="hard">
-        <div class="diff-name">🟣 Zor</div>
-        <div class="diff-detail">8 hücre<br>5 soru</div>
-        <div class="diff-pts">20 puan / hücre · maks. 800</div>
-      </div>
-      <div class="diff-card" data-glevel="progressive">
-        <div class="diff-name">🌈 Kademeli</div>
-        <div class="diff-detail">4→6→6→8→8 hücre<br>5 soru</div>
-        <div class="diff-pts">Karma puanlama · maks. 510</div>
-      </div>
-    </div>
-    <button class="btn" id="btn-spatial-start" disabled>Seviye Seç</button>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-spatial-start-back">← Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-timing-ready" data-test="timing" data-title="Zamanlama Testi">
+  <div class="z-head"><div class="eyebrow">Hazırlanın</div></div>
+  <div class="z-main"><div class="number-card"><div class="countdown-display txt" id="timing-ready-text">HAZIR OLUN</div></div></div>
+  <div class="z-foot"><p class="trivia-text" id="timing-trivia-display"></p></div>
+</section>
 
-  <!-- KONUM EZBERLEME -->
-  <div id="screen-spatial-memorize" class="hidden">
-    <div class="question-meta">
-      <span>Soru <b id="gmemorize-qnum">1</b> / <b id="gmemorize-total">5</b></span>
-      <span id="gmemorize-badge"></span>
-    </div>
-    <div class="spatial-grid-wrap">
-      <div class="spatial-grid" id="spatial-grid-memorize"></div>
-    </div>
-    <div class="timer-bar-wrap"><div class="timer-bar" id="gmemorize-bar"></div></div>
-    <p class="trivia-text" style="margin-top:10px;color:var(--text-dim);font-style:normal;font-size:12px;">Yanıp sönen hücrelerin sırasını dikkatlice izle.</p>
-  </div>
+<section class="screen  hidden" id="screen-timing-answer" data-test="timing" data-title="Zamanlama Testi">
+  <div class="z-head"><div class="question-meta"><span>Deneme <b id="tanswer-qnum">1</b> / <b id="tanswer-total">5</b></span><span style="color:var(--text-dim);font-size:12px">Basılı tutun</span></div><p class="answer-prompt">Hedefe basılı tutarak az önce izlediğiniz süreyi tekrarlayın:</p></div>
+  <div class="z-main"><button class="timing-target" id="timing-target-btn">BASIN &amp; TUTUN</button></div>
+  <div class="z-foot"><p class="hint-text" id="timing-live-readout" style="min-height:1.6em"></p><p class="kb-hint">Boşluk tuşunu basılı tutun</p></div>
+</section>
 
-  <!-- KONUM CEVAP -->
-  <div id="screen-spatial-answer" class="hidden">
-    <div class="question-meta">
-      <span>Soru <b id="ganswer-qnum">1</b> / <b id="ganswer-total">5</b></span>
-      <span id="ganswer-badge"></span>
-    </div>
-    <p class="answer-prompt" id="ganswer-prompt"></p>
-    <p class="hint-text" style="margin-bottom:10px;">Dokunuş: <b id="ganswer-progress" style="color:var(--accent-cyan);">0</b> / <b id="ganswer-progress-total">4</b></p>
-    <div class="spatial-grid-wrap">
-      <div class="spatial-grid" id="spatial-grid-answer"></div>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-timing-result" data-test="timing" data-title="Zamanlama Testi">
+  <div class="z-head"><div class="eyebrow">Deneme Sonucu</div><p class="hint-text" id="tresult-diff" style="font-size:clamp(14px,2.6dvh,18px);color:var(--text-bright)"></p><div class="score-pill">Bu denemeden: <b id="tresult-score">0</b> puan</div></div>
+  <div class="z-main"><div class="timing-result-row"><div class="timing-result-box"><div class="timing-result-label">Hedef Süre</div><div class="timing-result-value" id="tresult-target">0,00 sn</div></div><div class="timing-result-box"><div class="timing-result-label">Süreniz</div><div class="timing-result-value" id="tresult-user">0,00 sn</div></div></div></div>
+  <div class="z-foot"><button class="btn" id="btn-timing-next">Sıradaki Deneme</button><p class="kb-hint">Enter veya Boşluk: sıradaki</p></div>
+</section>
 
-  <!-- KONUM SONUÇ -->
-  <div id="screen-spatial-result" class="hidden fade-in">
-    <div class="eyebrow">Soru Sonucu</div>
-    <div id="gresult-badge-wrap"></div>
-    <h2 class="glow-title" style="font-size:22px;margin-top:4px;">Doğru Sıra</h2>
-    <div class="feedback-digits coord-feedback" id="gfeedback-correct"></div>
-    <h2 class="glow-title" style="font-size:22px;">Senin Cevabın</h2>
-    <div class="feedback-digits coord-feedback" id="gfeedback-user"></div>
-    <div class="score-pill">Bu sorudan: <b id="gresult-score">0</b> puan</div>
-    <div class="row-buttons">
-      <button class="btn" id="btn-spatial-next">Sıradaki Soru</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-timing-final" data-test="timing" data-title="Zamanlama Testi">
+  <div class="z-head"><div class="eyebrow">Set Tamamlandı</div><h2 class="glow-title sm">Toplam Puanınız</h2><div class="final-score" id="tfinal-score">0</div><div class="final-max" id="tfinal-max"></div><div class="rec-line" id="tfinal-rec"></div></div>
+  <div class="z-main"><div class="per-question-recap" id="tfinal-recap"></div></div>
+  <div class="z-foot"><p class="subtitle" style="margin:0">Ne yapmak istersiniz?</p><div class="row-buttons"><button class="btn" id="btn-timing-restart">Yeni Set</button><button class="btn secondary" id="btn-timing-menu">Ana Menü</button></div></div>
+</section>
 
-  <!-- KONUM SET SONU -->
-  <div id="screen-spatial-final" class="hidden fade-in">
-    <div class="eyebrow">Set Tamamlandı</div>
-    <h2 class="glow-title" style="font-size:22px;">Toplam Puanın</h2>
-    <div class="final-score" id="gfinal-score">0</div>
-    <div class="final-max" id="gfinal-max"></div>
-    <div class="per-question-recap" id="gfinal-recap"></div>
-    <p class="subtitle">Ne yapmak istersin?</p>
-    <div class="row-buttons">
-      <button class="btn" id="btn-spatial-restart">Yeni Set</button>
-      <button class="btn secondary" id="btn-spatial-menu">Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-simon-start" data-test="simon" data-title="Ritim Hafızası">
+  <div class="z-head"><h1 class="glow-title">RİTİM HAFIZASI</h1><p class="subtitle">Yanıp sönen melodili hücreleri <strong>aynı sırayla</strong> tekrarlayın.<br>Her turda bir hücre daha eklenecek.<br>Turlar ilerledikçe dizi biraz daha hızlı gösterilir.<br>Bir hata yaptığınızda veya süre içinde dokunamadığınızda oyun biter.</p><div class="rec-line" data-recline="simon"></div></div>
+  <div class="z-main"><div class="difficulty-grid sound-grid"><button type="button" class="diff-card" data-sound="on"><div class="diff-name">🔊 Sesli</div></button><button type="button" class="diff-card" data-sound="off"><div class="diff-name">🔇 Sessiz</div></button></div></div>
+  <div class="z-foot"><button class="btn" id="btn-simon-start" disabled>Önce Bir Seçim Yapın</button><button class="btn secondary" id="btn-simon-start-back">← Ana Menü</button><p class="kb-hint">1 sesli · 2 sessiz · Enter başlatır · Esc ana menü</p></div>
+</section>
 
-  <!-- RİTİM HAFIZASI AÇIKLAMA -->
-  <div id="screen-simon-start" class="hidden">
-    <h1 class="glow-title">RİTİM HAFIZASI</h1>
-    <p class="subtitle">Yanıp sönen melodili hücreleri <strong>aynı sırayla</strong> tekrarla.<br>
-    Her turda bir hücre daha eklenecek.<br>
-    Turlar ilerledikçe dizi biraz daha hızlı gösterilir.<br>
-    Bir hata yaptığında veya süre içinde dokunamadığında oyun biter.</p>
+<section class="screen  hidden" id="screen-simon-play" data-test="simon" data-title="Ritim Hafızası">
+  <div class="z-head"><div class="question-meta"><span>Tur <b id="simon-round">1</b></span><span id="simon-status" style="font-size:12px">İzleyin</span></div></div>
+  <div class="z-main"><div class="simon-grid" id="simon-grid"></div></div>
+  <div class="z-foot"><p class="hint-text" id="simon-hint">Diziyi izleyin...</p><p class="kb-hint">Klavye: 1–4 veya Q W A S</p></div>
+</section>
 
-    <div class="difficulty-grid" style="grid-template-columns:1fr 1fr;max-width:340px;margin:0 auto 20px;">
-      <div class="diff-card" data-sound="on">
-        <div class="diff-name">🔊 Sesli</div>
-      </div>
-      <div class="diff-card" data-sound="off">
-        <div class="diff-name">🔇 Sessiz</div>
-      </div>
-    </div>
+<section class="screen  hidden" id="screen-simon-final" data-test="simon" data-title="Ritim Hafızası">
+  <div class="z-head"><div class="eyebrow">Oyun Bitti</div><h2 class="glow-title sm">Ulaştığınız Tur</h2><p class="hint-text" id="simon-final-detail" style="margin:6px 0"></p><div class="rec-line" id="simon-final-rec"></div></div>
+  <div class="z-main"><div class="final-score big-round" id="simon-final-round">0</div></div>
+  <div class="z-foot"><p class="subtitle" style="margin:0">Ne yapmak istersiniz?</p><div class="row-buttons"><button class="btn" id="btn-simon-restart">Yeniden Deneyin</button><button class="btn secondary" id="btn-simon-menu">Ana Menü</button></div></div>
+</section>
 
-    <button class="btn" id="btn-simon-start" disabled>Önce Bir Seçim Yap</button>
-    <div class="row-buttons">
-      <button class="btn secondary" id="btn-simon-start-back">← Ana Menü</button>
-    </div>
-  </div>
+<section class="screen  hidden" id="screen-bye" data-test="" data-title="Dikkat Testleri">
+  <div class="z-head"><div class="eyebrow">Görüşmek Üzere</div><h1 class="glow-title">Teşekkürler!</h1><p class="subtitle">Belleğinizi test etmeye geldiğinizde buradayız.</p></div>
+  <div class="z-main"></div>
+  <div class="z-foot"></div>
+</section>
 
-  <!-- RİTİM HAFIZASI OYUN EKRANI -->
-  <div id="screen-simon-play" class="hidden">
-    <div class="question-meta">
-      <span>Tur <b id="simon-round">1</b></span>
-      <span id="simon-status" style="color:var(--text-dim);font-size:12px;">İzle</span>
-    </div>
-    <div class="spatial-grid-wrap">
-      <div class="simon-grid" id="simon-grid"></div>
-    </div>
-    <p class="hint-text" style="margin-top:14px;" id="simon-hint">Diziyi izle...</p>
-  </div>
-
-  <!-- RİTİM HAFIZASI BİTİŞ -->
-  <div id="screen-simon-final" class="hidden fade-in">
-    <div class="eyebrow">Oyun Bitti</div>
-    <h2 class="glow-title" style="font-size:22px;">Ulaştığın Tur</h2>
-    <div class="final-score" id="simon-final-round">0</div>
-    <p class="hint-text" id="simon-final-detail" style="margin:10px 0;"></p>
-    <p class="subtitle">Ne yapmak istersin?</p>
-    <div class="row-buttons">
-      <button class="btn" id="btn-simon-restart">Yeniden Dene</button>
-      <button class="btn secondary" id="btn-simon-menu">Ana Menü</button>
-    </div>
-  </div>
-
-  <!-- ÇIKIŞ -->
-  <div id="screen-bye" class="hidden fade-in">
-    <div class="eyebrow">Görüşmek Üzere</div>
-    <h1 class="glow-title">Teşekkürler!</h1>
-    <p class="subtitle">Belleğini test etmeye geldiğinde buradayız.</p>
-  </div>
-
+  </main>
+  <footer class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></footer>
 </div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-label="Onay">
+  <div class="modal-box"><p id="modal-text"></p>
+    <div class="row-buttons"><button class="btn secondary" id="modal-no">Hayır</button><button class="btn" id="modal-yes">Evet</button></div></div>
 </div>
-
+<script>
+/* Zamanlayıcı kaydı: oyundan çıkışta bekleyen tüm zamanlayıcılar iptal edilir */
+(function(){
+  const N={st:window.setTimeout.bind(window),ct:window.clearTimeout.bind(window),si:window.setInterval.bind(window),ci:window.clearInterval.bind(window),raf:window.requestAnimationFrame.bind(window),caf:window.cancelAnimationFrame.bind(window)};
+  window.__native=N; const T=new Set(),I=new Set(),R=new Set();
+  window.setTimeout=function(f,ms){const a=[].slice.call(arguments,2);const id=N.st(function(){T.delete(id);f.apply(null,a);},ms);T.add(id);return id;};
+  window.clearTimeout=function(id){T.delete(id);N.ct(id);};
+  window.setInterval=function(f,ms){const a=[].slice.call(arguments,2);const id=N.si(function(){f.apply(null,a);},ms);I.add(id);return id;};
+  window.clearInterval=function(id){I.delete(id);N.ci(id);};
+  window.requestAnimationFrame=function(f){const id=N.raf(function(t){R.delete(id);f(t);});R.add(id);return id;};
+  window.cancelAnimationFrame=function(id){R.delete(id);N.caf(id);};
+  window.abortAll=function(){T.forEach(N.ct);I.forEach(N.ci);R.forEach(N.caf);T.clear();I.clear();R.clear();};
+})();
+</script>
 <script>
 (function(){
 
@@ -1213,8 +922,398 @@ const screens={
 };
 function showScreen(name){
   Object.values(screens).forEach(el=>el.classList.add('hidden'));
-  screens[name].classList.remove('hidden');
+  const el=screens[name];
+  el.classList.remove('hidden');
+  el.classList.remove('fade-in'); void el.offsetWidth; el.classList.add('fade-in');
+  onScreenChange(name, el);
 }
+/* ════════════════════════════════════════════════════════════
+   EK MODÜLLER: ses/titreşim · rekor · efekt · klavye · tam ekran
+   ════════════════════════════════════════════════════════════ */
+const REDUCED = ()=>window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NAT = window.__native;
+
+/* ── SES + TİTREŞİM ──────────────────────────────────────── */
+const SFX=(function(){
+  const KEY='dikkat.ses';
+  let mem=null; try{ mem=localStorage.getItem(KEY); }catch(e){}
+  let on=(mem==='on'), ctx=null;
+  function getCtx(){
+    if(!ctx){ ctx=new (window.AudioContext||window.webkitAudioContext)(); }
+    if(ctx.state==='suspended'){ ctx.resume(); }
+    return ctx;
+  }
+  function tone(f,d,type,vol,delay){
+    if(!on) return;
+    try{
+      const c=getCtx(), t=c.currentTime+(delay||0), o=c.createOscillator(), g=c.createGain();
+      o.type=type||'sine'; o.frequency.value=f;
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(vol||0.18,t+0.015);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+d/1000);
+      o.connect(g); g.connect(c.destination);
+      o.start(t); o.stop(t+d/1000+0.03);
+    }catch(e){}
+  }
+  const api={
+    get on(){return on;},
+    ctx:getCtx,
+    pref(){return mem;},
+    set(v){
+      on=!!v; mem=on?'on':'off';
+      try{ localStorage.setItem(KEY,mem); }catch(e){}
+      if(api.onchange) api.onchange();
+    },
+    onchange:null,
+    click(){ tone(720,40,'sine',.12); },
+    tick(){ tone(880,50,'sine',.14); },
+    ok(){ tone(523,130,'sine',.16); },
+    good(){ tone(659,110,'sine',.17,0); tone(784,110,'sine',.17,.1); tone(1047,180,'sine',.17,.2); },
+    bad(){ tone(150,280,'sawtooth',.12); },
+    go(){ tone(1100,150,'square',.09); },
+    win(){ [523,659,784,1047,1319].forEach((f,i)=>tone(f,200,'triangle',.16,i*.11)); },
+    vib(p){ if(on && navigator.vibrate){ try{ navigator.vibrate(p); }catch(e){} } }
+  };
+  return api;
+})();
+
+/* ── REKORLAR ────────────────────────────────────────────── */
+const REC=(function(){
+  const KEY='dikkat.rekor.v1';
+  let mem={};
+  function load(){ try{ const s=localStorage.getItem(KEY); return s?JSON.parse(s):mem; }catch(e){ return mem; } }
+  function store(o){ mem=o; try{ localStorage.setItem(KEY,JSON.stringify(o)); }catch(e){} }
+  return {
+    all:load,
+    submit(id,score,max){
+      const o=load(), p=o[id];
+      const isNew = score>0 && (!p || score>p.s);
+      if(isNew){ o[id]={s:score,m:max||null}; store(o); }
+      return {isNew:isNew, best:isNew?o[id]:(p||null)};
+    },
+    reset(){ mem={}; try{ localStorage.removeItem(KEY); }catch(e){} }
+  };
+})();
+
+function refreshRecs(){
+  const all=REC.all();
+  document.querySelectorAll('[data-rec]').forEach(el=>{
+    const r=all[el.dataset.rec];
+    el.textContent=r?('🏆 '+r.s+(r.m?' / '+r.m:'')):'Rekor yok';
+  });
+  document.querySelectorAll('[data-recline]').forEach(el=>{
+    const r=all[el.dataset.recline+':all'];
+    el.textContent=r?('🏆 Rekorunuz: '+r.s+(r.m?' / '+r.m:'')+(el.dataset.recline==='simon'?'. tur':'')):'';
+  });
+  document.querySelectorAll('.m-rec').forEach(el=>{
+    const t=el.dataset.test; let txt='Henüz rekor yok';
+    if(t==='simon'){
+      const r=all['simon:all']; if(r) txt='🏆 '+r.s+'. tur';
+    }else{
+      let best=null;
+      Object.keys(all).forEach(k=>{
+        if(k.indexOf(t+':')===0){ const r=all[k]; if(r&&r.m){ const q=r.s/r.m; if(best===null||q>best) best=q; } }
+      });
+      if(best!==null) txt='🏆 %'+Math.round(best*100);
+    }
+    el.textContent=txt;
+  });
+}
+
+/* ── PARÇACIK EFEKTLERİ (konfeti / parıltı) ─────────────── */
+const FX=(function(){
+  const cv=document.getElementById('fx'), cx=cv.getContext('2d');
+  let W=0,H=0,ps=[],run=false;
+  function size(){
+    const d=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth; H=window.innerHeight;
+    cv.width=W*d; cv.height=H*d; cx.setTransform(d,0,0,d,0,0);
+  }
+  window.addEventListener('resize',size); size();
+  const COLS=['#ffd966','#ffe9a8','#c8960c','#ffffff'];
+  function add(x,y,n,o){
+    for(let i=0;i<n;i++){
+      const a=(o.angle!==undefined?o.angle:Math.random()*Math.PI*2)+(Math.random()-.5)*(o.spread||Math.PI*2);
+      const v=(o.speed||6)*(.4+Math.random()*.8);
+      ps.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,g:o.g||.18,r:2+Math.random()*(o.size||4),
+        rot:Math.random()*6,vr:(Math.random()-.5)*.4,c:o.colors[(Math.random()*o.colors.length)|0],
+        life:0,max:(o.life||70)+Math.random()*30,sq:Math.random()<.5});
+    }
+    if(!run){ run=true; NAT.raf(loop); }
+  }
+  function loop(){
+    cx.clearRect(0,0,W,H);
+    ps=ps.filter(p=>p.life<p.max && p.y<H+30);
+    ps.forEach(p=>{
+      p.life++; p.vy+=p.g; p.vx*=.992; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
+      cx.globalAlpha=Math.max(0,1-p.life/p.max);
+      cx.fillStyle=p.c; cx.save(); cx.translate(p.x,p.y); cx.rotate(p.rot);
+      if(p.sq) cx.fillRect(-p.r,-p.r/2,p.r*2,p.r); else { cx.beginPath(); cx.arc(0,0,p.r/1.4,0,6.3); cx.fill(); }
+      cx.restore();
+    });
+    cx.globalAlpha=1;
+    if(ps.length) NAT.raf(loop); else { run=false; cx.clearRect(0,0,W,H); }
+  }
+  return {
+    burst(x,y,color){
+      if(REDUCED()) return;
+      add(x,y,26,{speed:5,g:.12,life:40,size:3,colors:[color||'#ffd966','#ffffff','#ffe9a8']});
+    },
+    confetti(power){
+      if(REDUCED()) return;
+      const n=Math.round(60*(power||1));
+      const ac=getComputedStyle(document.body).getPropertyValue('--ac').trim()||'#ffd966';
+      const cols=COLS.concat([ac,ac]);
+      add(W*.15,H*.85,n,{angle:-Math.PI*.38,spread:.9,speed:15,g:.28,life:90,size:5,colors:cols});
+      add(W*.85,H*.85,n,{angle:-Math.PI*.62,spread:.9,speed:15,g:.28,life:90,size:5,colors:cols});
+      add(W*.5,H*.2,Math.round(n/2),{angle:Math.PI/2,spread:Math.PI,speed:4,g:.12,life:110,size:4,colors:cols});
+    }
+  };
+})();
+
+function burstAtSel(sel){
+  const el=document.querySelector(sel); if(!el) return;
+  const r=el.getBoundingClientRect();
+  FX.burst(r.left+r.width/2,r.top+r.height/2,getComputedStyle(document.body).getPropertyValue('--ac').trim());
+}
+
+/* ── GERİ BİLDİRİM İŞARETLERİ ────────────────────────────── */
+function cueClick(){ SFX.click(); }
+function cueTick(){ SFX.tick(); }
+function cueGo(){ SFX.go(); SFX.vib(25); }
+function cueBad(){ SFX.bad(); SFX.vib([60,40,60]); }
+function cueTap(ok){ if(ok){ SFX.good(); SFX.vib(15); } else { SFX.bad(); SFX.vib(70); } }
+function cueResult(score,max){
+  if(max>0 && score>=max){ SFX.good(); SFX.vib([20,40,20]); burstAtSel('.screen:not(.hidden) .score-pill'); }
+  else if(score<=0){ SFX.bad(); SFX.vib(80); }
+  else { SFX.ok(); }
+}
+function cueReflex(ms,score){
+  if(ms<=250){ SFX.good(); SFX.vib(20); burstAtSel('.screen:not(.hidden) .score-pill'); }
+  else if(score<=0){ SFX.bad(); }
+  else SFX.ok();
+}
+function cueTiming(diff,score){
+  if(diff<=100){ SFX.good(); SFX.vib([20,40,20]); burstAtSel('.screen:not(.hidden) .score-pill'); }
+  else if(score<=0){ SFX.bad(); }
+  else SFX.ok();
+}
+function countUp(el,to){
+  if(!el) return;
+  if(REDUCED()||to<=0){ el.textContent=to; return; }
+  const t0=performance.now(), dur=900;
+  (function f(now){
+    const p=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(to*e);
+    if(p<1) NAT.raf(f);
+  })(t0);
+}
+function afterFinal(test,level,total,max,recId){
+  const r=REC.submit(test+':'+level,total,max);
+  const el=document.getElementById(recId);
+  if(el){
+    if(r.isNew){ el.className='rec-line new'; el.textContent='🏆 Yeni rekor!'; }
+    else { el.className='rec-line'; el.textContent=r.best?('🏆 Rekorunuz: '+r.best.s+(r.best.m?' / '+r.best.m:'')+(test==='simon'?'. tur':'')):''; }
+  }
+  const ratio=max?total/max:(r.isNew?1:0);
+  if(ratio>=.9 || (test==='simon' && r.isNew)){ FX.confetti(1.5); SFX.win(); SFX.vib([40,60,40,60,80]); }
+  else if(ratio>=.6){ FX.confetti(.8); SFX.win(); }
+  else { SFX.ok(); }
+  if(test!=='simon') countUp(document.getElementById(recId.replace('-rec','-score')),total);
+}
+function setListVars(el,n,mode){
+  let cols,rows;
+  if(mode==='col'){ cols=n>4?2:1; rows=Math.ceil(n/cols); }
+  else { rows=n>4?2:1; cols=Math.ceil(n/rows); }
+  el.style.setProperty('--cols',cols); el.style.setProperty('--rows',rows);
+}
+const COUNTDOWN_THEME={number:['numbers','Sayıları Ezberleme'],color:['colors','Renkleri Ezberleme'],symbol:['symbols','Okları Ezberleme'],spatial:['spatial','Kareleri Ezberleme']};
+function setCountdownTheme(mode){
+  const t=COUNTDOWN_THEME[mode]||COUNTDOWN_THEME.number;
+  screens.countdown.dataset.test=t[0]; screens.countdown.dataset.title=t[1];
+}
+
+/* ── ÜST ÇUBUK · ONAY PENCERESİ · TAM EKRAN ─────────────── */
+let currentScreenName='menu';
+const topTitle=document.getElementById('top-title');
+const btnHome=document.getElementById('btn-home');
+const btnSound=document.getElementById('btn-sound');
+const btnFs=document.getElementById('btn-fs');
+const modal=document.getElementById('modal');
+let modalYes=null;
+
+function isPlaying(name){
+  return !(name==='menu'||name==='bye'||name==='final'||/Final$/.test(name)||name==='start'||/Start$/.test(name));
+}
+function onScreenChange(name,el){
+  currentScreenName=name;
+  document.body.dataset.test=el.dataset.test||'';
+  topTitle.textContent=el.dataset.title||'Dikkat Testleri';
+  btnHome.classList.toggle('ghost-hidden',name==='menu');
+  if(name==='menu'||name==='start'||/Start$/.test(name)) refreshRecs();
+  if(name==='simonStart') resetSimonSoundChoice();
+}
+function askConfirm(text,yes){
+  document.getElementById('modal-text').textContent=text;
+  modalYes=yes; modal.classList.remove('hidden');
+  document.getElementById('modal-yes').focus();
+}
+function closeModal(ok){
+  modal.classList.add('hidden');
+  const f=modalYes; modalYes=null;
+  if(ok && f) f();
+}
+function requestHome(){
+  if(currentScreenName==='menu') return;
+  if(isPlaying(currentScreenName)){
+    askConfirm('Oyundan çıkıp ana menüye dönmek istiyor musunuz? Bu setin ilerlemesi kaybolacak.',()=>{ abortAll(); showScreen('menu'); });
+  }else{
+    showScreen('menu');
+  }
+}
+document.getElementById('modal-yes').addEventListener('click',()=>closeModal(true));
+document.getElementById('modal-no').addEventListener('click',()=>closeModal(false));
+modal.addEventListener('click',(e)=>{ if(e.target===modal) closeModal(false); });
+btnHome.addEventListener('click',requestHome);
+
+function updSound(){
+  btnSound.textContent=SFX.on?'🔊':'🔇';
+  const t=SFX.on?'Ses ve titreşim açık (kapatmak için dokunun)':'Ses ve titreşim kapalı (açmak için dokunun)';
+  btnSound.title=t; btnSound.setAttribute('aria-label',t); btnSound.setAttribute('aria-pressed',SFX.on?'true':'false');
+}
+SFX.onchange=()=>{ updSound(); if(currentScreenName==='simonStart') resetSimonSoundChoice(); };
+btnSound.addEventListener('click',()=>{ SFX.set(!SFX.on); if(SFX.on) SFX.ok(); });
+updSound();
+
+const fsOK=!!(document.fullscreenEnabled||document.webkitFullscreenEnabled);
+function inFs(){ return document.fullscreenElement||document.webkitFullscreenElement; }
+function toggleFs(){
+  if(!fsOK) return;
+  const de=document.documentElement;
+  try{
+    if(inFs()){ const x=(document.exitFullscreen||document.webkitExitFullscreen).call(document); if(x&&x.catch) x.catch(()=>{}); }
+    else { const x=(de.requestFullscreen||de.webkitRequestFullscreen).call(de); if(x&&x.catch) x.catch(()=>{}); }
+  }catch(e){}
+}
+function updFs(){
+  const f=!!inFs();
+  btnFs.textContent=f?'⤡':'⛶';
+  const t=f?'Tam ekrandan çık (F)':'Tam ekran (F)';
+  btnFs.title=t; btnFs.setAttribute('aria-label',t);
+}
+btnFs.hidden=!fsOK;
+btnFs.addEventListener('click',toggleFs);
+document.addEventListener('fullscreenchange',updFs);
+document.addEventListener('webkitfullscreenchange',updFs);
+updFs();
+
+document.getElementById('btn-reset-rec').addEventListener('click',()=>{
+  askConfirm('Kayıtlı tüm rekorlar silinsin mi?',()=>{ REC.reset(); refreshRecs(); });
+});
+
+/* ── EKRAN TUŞ TAKIMI (dokunmatik cihazlarda sayı girişi) ── */
+(function(){
+  const ans=document.getElementById('answer-input');
+  if(window.matchMedia && matchMedia('(pointer:coarse)').matches){
+    ans.readOnly=true; ans.setAttribute('inputmode','none');
+  }
+  document.getElementById('keypad').addEventListener('click',(e)=>{
+    const b=e.target.closest('button'); if(!b) return;
+    const k=b.dataset.k;
+    if(k==='ok'){ const s=document.getElementById('btn-submit'); if(!s.disabled) s.click(); return; }
+    cueClick();
+    if(k==='back'){ ans.value=ans.value.slice(0,-1); }
+    else if(ans.value.length<(ans.maxLength>0?ans.maxLength:20)){ ans.value+=k; }
+    ans.dispatchEvent(new Event('input',{bubbles:true}));
+  });
+})();
+
+/* ── KLAVYE ──────────────────────────────────────────────── */
+const NEXT_BTN={result:'btn-next',colorResult:'btn-color-next',symbolResult:'btn-symbol-next',spatialResult:'btn-spatial-next',
+  reflexResult:'btn-reflex-next',reflexEarly:'btn-reflex-early-next',timingResult:'btn-timing-next'};
+const FINAL_BTN={final:'btn-restart',colorFinal:'btn-color-restart',symbolFinal:'btn-symbol-restart',spatialFinal:'btn-spatial-restart',
+  reflexFinal:'btn-reflex-restart',timingFinal:'btn-timing-restart',simonFinal:'btn-simon-restart'};
+const START_BTN={start:'btn-start',colorStart:'btn-color-start',symbolStart:'btn-symbol-start',spatialStart:'btn-spatial-start',
+  reflexStart:'btn-reflex-start',timingStart:'btn-timing-start',simonStart:'btn-simon-start'};
+const MENU_IDS=['btn-menu-numbers','btn-menu-colors','btn-menu-symbols','btn-menu-spatial','btn-menu-reflex','btn-menu-timing','btn-menu-simon'];
+let kbRow='';
+function clickId(id){ const b=document.getElementById(id); if(b && !b.disabled){ b.click(); return true; } return false; }
+function pickByIndex(sel,i){ const l=document.querySelectorAll(sel); if(l[i]){ l[i].click(); return true; } return false; }
+
+document.addEventListener('keydown',(e)=>{
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  const k=e.key;
+  if(!modal.classList.contains('hidden')){
+    if(k==='Escape'){ closeModal(false); e.preventDefault(); }
+    else if(k==='Enter'){ closeModal(true); e.preventDefault(); }
+    return;
+  }
+  const n=currentScreenName;
+  const inInput=e.target && e.target.tagName==='INPUT';
+  if(k==='Escape'){ if(n!=='menu'){ requestHome(); e.preventDefault(); } return; }
+  if((k==='f'||k==='F') && !inInput){ toggleFs(); e.preventDefault(); return; }
+  if(inInput){ if(k==='Enter'){ e.preventDefault(); clickId('btn-submit'); } return; }
+  const handled=()=>{ e.preventDefault(); if(document.activeElement && document.activeElement.blur) document.activeElement.blur(); };
+
+  if(n==='menu'){
+    if(/^[1-7]$/.test(k)){ handled(); clickId(MENU_IDS[+k-1]); }
+    return;
+  }
+  if(START_BTN[n]){
+    if(n==='simonStart'){
+      if(k==='1'||k==='2'){ handled(); pickByIndex('#screen-simon-start .diff-card',+k-1); return; }
+    }else if(/^[1-4]$/.test(k)){ handled(); pickByIndex('#screen-'+(n==='start'?'start':n.replace('Start','')+'-start')+' .diff-card',+k-1); return; }
+    if(k==='Enter'){ handled(); clickId(START_BTN[n]); }
+    return;
+  }
+  if(NEXT_BTN[n]){ if(k==='Enter'||k===' '){ handled(); clickId(NEXT_BTN[n]); } return; }
+  if(FINAL_BTN[n]){ if(k==='Enter'){ handled(); clickId(FINAL_BTN[n]); } return; }
+
+  if(n==='colorAnswer'){
+    if(/^[1-7]$/.test(k)){ handled(); pickByIndex('#color-palette .color-swatch',+k-1); }
+    else if(k==='Backspace'){ handled(); clickId('btn-color-undo'); }
+    else if(k==='Enter'){ handled(); clickId('btn-color-submit'); }
+    return;
+  }
+  if(n==='symbolAnswer'){
+    const AR={ArrowLeft:'⇐',ArrowUp:'⇑',ArrowRight:'⇒',ArrowDown:'⇓'};
+    if(/^[0-9]$/.test(k)){ handled(); pickByIndex('#symbol-palette .symbol-swatch',(+k+9)%10); }
+    else if(AR[k]){ handled(); pickByIndex('#symbol-palette .symbol-swatch',SYMBOL_KEYS.indexOf(AR[k])); }
+    else if(k==='Backspace'){ handled(); clickId('btn-symbol-undo'); }
+    else if(k==='Enter'){ handled(); clickId('btn-symbol-submit'); }
+    return;
+  }
+  if(n==='spatialAnswer'){
+    const low=k.toLowerCase();
+    if(/^[a-d]$/.test(low)){ handled(); kbRow=low; }
+    else if(/^[1-4]$/.test(k) && kbRow){
+      handled();
+      const idx='abcd'.indexOf(kbRow)*4+(+k-1); kbRow='';
+      pickByIndex('#spatial-grid-answer .spatial-cell',idx);
+    }
+    return;
+  }
+  if(n==='reflexWait'){
+    if((k===' '||k==='Enter') && !e.repeat){ handled(); handleReflexPress({preventDefault(){}}); }
+    return;
+  }
+  if(n==='timingAnswer'){
+    if(k===' ' && !e.repeat){ handled(); timingPressStart({preventDefault(){}}); }
+    return;
+  }
+  if(n==='simonPlay'){
+    const map={'1':0,'2':1,'3':2,'4':3,q:0,w:1,a:2,s:3};
+    const i=map[k.toLowerCase()];
+    if(i!==undefined){ handled(); pickByIndex('#simon-grid .simon-cell',i); }
+    return;
+  }
+});
+document.addEventListener('keyup',(e)=>{
+  if(e.key===' ' && currentScreenName==='timingAnswer' && tstate.isPressed){
+    e.preventDefault(); timingPressEnd({preventDefault(){}});
+  }
+});
+
 
 /* ── BADGE HTML ───────────────────────────────────────────── */
 function badgeHTML(levelKey, label){
@@ -1296,6 +1395,7 @@ function runMemorizePhase(q){
 
 /* ── GERİ SAYIM (her iki mod için ortak) ──────────────────── */
 function runCountdownPhase(q, triviaIndex, onDone){
+  setCountdownTheme(onDone.mode);
   showScreen('countdown');
 
   let queue;
@@ -1309,12 +1409,12 @@ function runCountdownPhase(q, triviaIndex, onDone){
 
   let remaining=COUNTDOWN_START;
   const el=document.getElementById('countdown-number');
-  el.textContent=remaining;
+  el.textContent=remaining; cueTick();
 
   const interval=setInterval(()=>{
     remaining--;
     if(remaining<=0){ clearInterval(interval); onDone(q); }
-    else el.textContent=remaining;
+    else { el.textContent=remaining; cueTick(); }
   },1000);
 }
 
@@ -1324,7 +1424,7 @@ function runAnswerPhase(q){
   document.getElementById('answer-total').textContent=TOTAL_QUESTIONS;
   document.getElementById('answer-badge').innerHTML=badgeHTML(q.sub,q.subLabel);
   document.getElementById('answer-prompt').textContent=
-    `Az önce gördüğün ${q.digits} basamaklı sayıyı yaz:`;
+    `Az önce gördüğünüz ${q.digits} basamaklı sayıyı yazın:`;
 
   const inp=document.getElementById('answer-input');
   inp.value='';
@@ -1381,7 +1481,7 @@ function renderResult(correct,userAnswer,score,q){
 
   const cWrap=document.getElementById('feedback-correct');
   const uWrap=document.getElementById('feedback-user');
-  cWrap.innerHTML=''; uWrap.innerHTML='';
+  cWrap.innerHTML=''; uWrap.innerHTML=''; cWrap.style.setProperty('--n',correct.length); uWrap.style.setProperty('--n',correct.length);
 
   for(let i=0;i<correct.length;i++){
     const match=userAnswer[i]===correct[i];
@@ -1405,7 +1505,7 @@ function renderResult(correct,userAnswer,score,q){
   nextBtn.disabled=true;
   setTimeout(()=>{ nextBtn.disabled=false; },600);
 
-  showScreen('result');
+  showScreen('result'); cueResult(score, q.digits*q.pts);
 }
 
 /* ── SET SONU ─────────────────────────────────────────────── */
@@ -1425,13 +1525,14 @@ function showFinal(){
     recapWrap.appendChild(chip);
   });
 
+  afterFinal('numbers', state.level, total, max, 'final-rec');
   showScreen('final');
 }
 
 /* ── ZORLUK SEÇİMİ ────────────────────────────────────────── */
-document.querySelectorAll('.diff-card').forEach(card=>{
+document.querySelectorAll('#screen-start .diff-card').forEach(card=>{
   card.addEventListener('click',()=>{
-    document.querySelectorAll('.diff-card').forEach(c=>c.classList.remove('selected'));
+    document.querySelectorAll('#screen-start .diff-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     state.level=card.dataset.level;
     const btn=document.getElementById('btn-start');
@@ -1466,12 +1567,6 @@ document.getElementById('btn-next').addEventListener('click',()=>{
   if(!screens.result.classList.contains('hidden')) nextQuestion();
 });
 
-document.addEventListener('keyup',(e)=>{
-  const nextBtn=document.getElementById('btn-next');
-  if(e.key==='Enter'&&!screens.result.classList.contains('hidden')&&!nextBtn.disabled){
-    nextQuestion();
-  }
-});
 
 document.getElementById('btn-restart').addEventListener('click',()=>{
   // Seviye seçimini koru, tekrar başlat
@@ -1556,6 +1651,7 @@ function runColorMemorizePhase(q){
 
   const listEl=document.getElementById('cmemorize-list');
   listEl.innerHTML='';
+  setListVars(listEl, cstate.currentColors.length, 'col');
   cstate.currentColors.forEach(key=>{
     const div=document.createElement('div');
     div.className='color-word';
@@ -1599,7 +1695,7 @@ function runColorAnswerPhase(q){
   document.getElementById('canswer-total').textContent=TOTAL_QUESTIONS;
   document.getElementById('canswer-badge').innerHTML=cBadgeHTML(q.sub,q.subLabel);
   document.getElementById('canswer-prompt').textContent=
-    `Az önce gördüğün ${q.count} renklik diziyi sırasıyla seç:`;
+    `Az önce gördüğünüz ${q.count} renklik diziyi sırasıyla seçin:`;
 
   cstate.userColors=[];
   renderColorSlots(q.count, cstate.userColors);
@@ -1608,13 +1704,13 @@ function runColorAnswerPhase(q){
   // Palet butonlarını bir kez oluştur (her soruda aynı 7 renk)
   const palette=document.getElementById('color-palette');
   palette.innerHTML='';
-  COLOR_KEYS.forEach(key=>{
+  COLOR_KEYS.forEach((key,ki)=>{
     const sw=document.createElement('div');
     sw.className='color-swatch cw-'+key;
-    sw.title=COLOR_NAMES[key];
+    sw.title=COLOR_NAMES[key]; sw.dataset.k=ki+1; sw.setAttribute('role','button'); sw.setAttribute('aria-label',COLOR_NAMES[key]);
     sw.addEventListener('click',()=>{
       if(cstate.userColors.length>=q.count) return;
-      cstate.userColors.push(key);
+      cueClick(); cstate.userColors.push(key);
       renderColorSlots(q.count, cstate.userColors);
       document.getElementById('btn-color-submit').disabled=(cstate.userColors.length!==q.count);
     });
@@ -1658,7 +1754,7 @@ function renderColorResult(correct,userAnswer,score,q){
 
   const cWrap=document.getElementById('cfeedback-correct');
   const uWrap=document.getElementById('cfeedback-user');
-  cWrap.innerHTML=''; uWrap.innerHTML='';
+  cWrap.innerHTML=''; uWrap.innerHTML=''; cWrap.style.setProperty('--n',correct.length); uWrap.style.setProperty('--n',correct.length);
   cWrap.style.gap = boxGap+'px';
   uWrap.style.gap = boxGap+'px';
 
@@ -1686,7 +1782,7 @@ function renderColorResult(correct,userAnswer,score,q){
   nextBtn.disabled=true;
   setTimeout(()=>{ nextBtn.disabled=false; },600);
 
-  showScreen('colorResult');
+  showScreen('colorResult'); cueResult(score, q.count*q.pts);
 }
 
 function showColorFinal(){
@@ -1705,6 +1801,7 @@ function showColorFinal(){
     recapWrap.appendChild(chip);
   });
 
+  afterFinal('colors', cstate.level, total, max, 'cfinal-rec');
   showScreen('colorFinal');
 }
 
@@ -1739,12 +1836,6 @@ document.getElementById('btn-color-next').addEventListener('click',()=>{
   if(!screens.colorResult.classList.contains('hidden')) nextColorQuestion();
 });
 
-document.addEventListener('keyup',(e)=>{
-  const nextBtn=document.getElementById('btn-color-next');
-  if(e.key==='Enter'&&!screens.colorResult.classList.contains('hidden')&&!nextBtn.disabled){
-    nextColorQuestion();
-  }
-});
 
 document.getElementById('btn-color-restart').addEventListener('click',()=>{
   showScreen('colorStart');
@@ -1808,6 +1899,7 @@ function runSymbolMemorizePhase(q){
 
   const listEl=document.getElementById('smemorize-list');
   listEl.innerHTML='';
+  setListVars(listEl, sstate.currentSymbols.length, 'sym');
   sstate.currentSymbols.forEach(sym=>{
     const div=document.createElement('div');
     div.className='sym-item';
@@ -1849,7 +1941,7 @@ function runSymbolAnswerPhase(q){
   document.getElementById('sanswer-total').textContent=TOTAL_QUESTIONS;
   document.getElementById('sanswer-badge').innerHTML=sBadgeHTML(q.sub,q.subLabel);
   document.getElementById('sanswer-prompt').textContent=
-    `Az önce gördüğün ${q.count} sembollük diziyi sırasıyla seç:`;
+    `Az önce gördüğünüz ${q.count} oktan oluşan diziyi sırasıyla seçin:`;
 
   sstate.userSymbols=[];
   renderSymbolSlots(q.count, sstate.userSymbols);
@@ -1857,13 +1949,13 @@ function runSymbolAnswerPhase(q){
 
   const palette=document.getElementById('symbol-palette');
   palette.innerHTML='';
-  SYMBOL_KEYS.forEach(sym=>{
+  SYMBOL_KEYS.forEach((sym,ki)=>{
     const sw=document.createElement('div');
     sw.className='symbol-swatch';
-    sw.textContent=sym;
+    sw.textContent=sym; sw.dataset.k=(ki+1)%10; sw.setAttribute('role','button');
     sw.addEventListener('click',()=>{
       if(sstate.userSymbols.length>=q.count) return;
-      sstate.userSymbols.push(sym);
+      cueClick(); sstate.userSymbols.push(sym);
       renderSymbolSlots(q.count, sstate.userSymbols);
       document.getElementById('btn-symbol-submit').disabled=(sstate.userSymbols.length!==q.count);
     });
@@ -1908,7 +2000,7 @@ function renderSymbolResult(correct,userAnswer,score,q){
 
   const cWrap=document.getElementById('sfeedback-correct');
   const uWrap=document.getElementById('sfeedback-user');
-  cWrap.innerHTML=''; uWrap.innerHTML='';
+  cWrap.innerHTML=''; uWrap.innerHTML=''; cWrap.style.setProperty('--n',correct.length); uWrap.style.setProperty('--n',correct.length);
   cWrap.style.gap = boxGap+'px';
   uWrap.style.gap = boxGap+'px';
 
@@ -1934,7 +2026,7 @@ function renderSymbolResult(correct,userAnswer,score,q){
   nextBtn.disabled=true;
   setTimeout(()=>{ nextBtn.disabled=false; },600);
 
-  showScreen('symbolResult');
+  showScreen('symbolResult'); cueResult(score, q.count*q.pts);
 }
 
 function showSymbolFinal(){
@@ -1953,6 +2045,7 @@ function showSymbolFinal(){
     recapWrap.appendChild(chip);
   });
 
+  afterFinal('symbols', sstate.level, total, max, 'sfinal-rec');
   showScreen('symbolFinal');
 }
 
@@ -1987,12 +2080,6 @@ document.getElementById('btn-symbol-next').addEventListener('click',()=>{
   if(!screens.symbolResult.classList.contains('hidden')) nextSymbolQuestion();
 });
 
-document.addEventListener('keyup',(e)=>{
-  const nextBtn=document.getElementById('btn-symbol-next');
-  if(e.key==='Enter'&&!screens.symbolResult.classList.contains('hidden')&&!nextBtn.disabled){
-    nextSymbolQuestion();
-  }
-});
 
 document.getElementById('btn-symbol-restart').addEventListener('click',()=>{
   showScreen('symbolStart');
@@ -2062,7 +2149,7 @@ function runTimingReadyPhase(){
   showScreen('timingReady');
   const trivia = tstate.triviaQueue[tstate.currentQuestion-1] || '';
   document.getElementById('timing-trivia-display').textContent = trivia;
-  document.getElementById('timing-ready-text').textContent='HAZIR OL';
+  document.getElementById('timing-ready-text').textContent='HAZIR OLUN';
 
   setTimeout(runTimingAnswerPhase, 1200);
 }
@@ -2141,7 +2228,7 @@ function renderTimingResult(targetMs, userMs, diff, score){
   nextBtn.disabled=true;
   setTimeout(()=>{ nextBtn.disabled=false; },600);
 
-  showScreen('timingResult');
+  showScreen('timingResult'); cueTiming(diff, score);
 }
 
 function showTimingFinal(){
@@ -2156,10 +2243,11 @@ function showTimingFinal(){
     const chip=document.createElement('div');
     chip.className='recap-chip';
     chip.innerHTML=`<b>Deneme ${idx+1}: ${o.score} puan</b>
-      <span class="chip-cat">Hedef ${formatSeconds(o.targetMs)} · Sen ${formatSeconds(o.userMs)}</span>`;
+      <span class="chip-cat">Hedef ${formatSeconds(o.targetMs)} · Siz ${formatSeconds(o.userMs)}</span>`;
     recapWrap.appendChild(chip);
   });
 
+  afterFinal('timing', 'all', total, max, 'tfinal-rec');
   showScreen('timingFinal');
 }
 
@@ -2167,23 +2255,14 @@ function showTimingFinal(){
 document.getElementById('btn-timing-start').addEventListener('click', startTimingGame);
 
 const timingBtn=document.getElementById('timing-target-btn');
-timingBtn.addEventListener('mousedown', timingPressStart);
-timingBtn.addEventListener('mouseup', timingPressEnd);
-timingBtn.addEventListener('mouseleave', (e)=>{ if(tstate.isPressed) timingPressEnd(e); });
-timingBtn.addEventListener('touchstart', timingPressStart, {passive:false});
-timingBtn.addEventListener('touchend', timingPressEnd, {passive:false});
-timingBtn.addEventListener('touchcancel', timingPressEnd, {passive:false});
+timingBtn.addEventListener('pointerdown',(e)=>{ try{ timingBtn.setPointerCapture(e.pointerId); }catch(_){} timingPressStart(e); });
+timingBtn.addEventListener('pointerup', timingPressEnd);
+timingBtn.addEventListener('pointercancel', timingPressEnd);
 
 document.getElementById('btn-timing-next').addEventListener('click',()=>{
   if(!screens.timingResult.classList.contains('hidden')) nextTimingQuestion();
 });
 
-document.addEventListener('keyup',(e)=>{
-  const nextBtn=document.getElementById('btn-timing-next');
-  if(e.key==='Enter'&&!screens.timingResult.classList.contains('hidden')&&!nextBtn.disabled){
-    nextTimingQuestion();
-  }
-});
 
 document.getElementById('btn-timing-restart').addEventListener('click',()=>{
   showScreen('timingStart');
@@ -2299,7 +2378,7 @@ function runSpatialAnswerPhase(q){
   document.getElementById('ganswer-total').textContent=TOTAL_QUESTIONS;
   document.getElementById('ganswer-badge').innerHTML=gBadgeHTML(q.sub,q.subLabel);
   document.getElementById('ganswer-prompt').textContent=
-    `Az önce yanıp sönen ${q.count} hücreyi sırasıyla seç:`;
+    `Az önce yanıp sönen ${q.count} hücreyi sırasıyla seçin:`;
   document.getElementById('ganswer-progress').textContent='0';
   document.getElementById('ganswer-progress-total').textContent=q.count;
 
@@ -2320,7 +2399,7 @@ function runSpatialAnswerPhase(q){
 
       gstate.inputLocked=true;
       cells.forEach(c=>c.classList.add('locked'));
-      cellEl.classList.add(isCorrect?'correct-flash':'wrong-flash');
+      cellEl.classList.add(isCorrect?'correct-flash':'wrong-flash'); cueTap(isCorrect);
 
       gstate.userCells.push(idx);
       document.getElementById('ganswer-progress').textContent=gstate.userCells.length;
@@ -2365,7 +2444,7 @@ function renderSpatialResult(correct,userAnswer,score,q){
 
   const cWrap=document.getElementById('gfeedback-correct');
   const uWrap=document.getElementById('gfeedback-user');
-  cWrap.innerHTML=''; uWrap.innerHTML='';
+  cWrap.innerHTML=''; uWrap.innerHTML=''; cWrap.style.setProperty('--n',correct.length); uWrap.style.setProperty('--n',correct.length);
   cWrap.style.gap = boxGap+'px';
   uWrap.style.gap = boxGap+'px';
 
@@ -2394,7 +2473,7 @@ function renderSpatialResult(correct,userAnswer,score,q){
   nextBtn.disabled=true;
   setTimeout(()=>{ nextBtn.disabled=false; },600);
 
-  showScreen('spatialResult');
+  showScreen('spatialResult'); cueResult(score, q.count*q.pts);
 }
 
 function showSpatialFinal(){
@@ -2413,6 +2492,7 @@ function showSpatialFinal(){
     recapWrap.appendChild(chip);
   });
 
+  afterFinal('spatial', gstate.level, total, max, 'gfinal-rec');
   showScreen('spatialFinal');
 }
 
@@ -2437,12 +2517,6 @@ document.getElementById('btn-spatial-next').addEventListener('click',()=>{
   if(!screens.spatialResult.classList.contains('hidden')) nextSpatialQuestion();
 });
 
-document.addEventListener('keyup',(e)=>{
-  const nextBtn=document.getElementById('btn-spatial-next');
-  if(e.key==='Enter'&&!screens.spatialResult.classList.contains('hidden')&&!nextBtn.disabled){
-    nextSpatialQuestion();
-  }
-});
 
 document.getElementById('btn-spatial-restart').addEventListener('click',()=>{
   showScreen('spatialStart');
@@ -2468,11 +2542,11 @@ function nextReflexQuestion(){
 function runReflexWaitPhase(){
   document.getElementById('rwait-qnum').textContent=rstate.currentQuestion;
   document.getElementById('rwait-total').textContent=TOTAL_QUESTIONS;
-  document.getElementById('reflex-instruction').textContent='Sinyali bekle, henüz dokunma...';
+  document.getElementById('reflex-instruction').textContent='Sinyali bekleyin, henüz dokunmayın...';
 
   const btn=document.getElementById('reflex-target-btn');
   btn.classList.remove('go');
-  btn.textContent='BEKLE';
+  btn.textContent='BEKLEYİN';
 
   rstate.awaitingSignal=true;
   showScreen('reflexWait');
@@ -2481,9 +2555,9 @@ function runReflexWaitPhase(){
   rstate.waitTimeoutId=setTimeout(()=>{
     rstate.awaitingSignal=false;
     rstate.signalTime=null; // rAF henüz çalışmadı; bu pencerede basışı erken-basma gibi ele alma riskini önler
-    btn.classList.add('go');
-    btn.textContent='ŞİMDİ DOKUN!';
-    document.getElementById('reflex-instruction').textContent='DOKUN!';
+    btn.classList.add('go'); cueGo();
+    btn.textContent='ŞİMDİ DOKUNUN!';
+    document.getElementById('reflex-instruction').textContent='DOKUNUN!';
     // signalTime, stil değişikliğinin DOM'a yazılmasından hemen sonra ama
     // tarayıcının bir sonraki boyamasından (paint) hemen önceki noktada
     // kaydedilir. Böylece "düğme görsel olarak yeşil oldu" anıyla "saat
@@ -2500,7 +2574,7 @@ function handleReflexPress(e){
     // Erken basma: sinyal gelmeden dokundu
     clearTimeout(rstate.waitTimeoutId);
     rstate.scores.push({score:0, reactionMs:null, early:true});
-    showScreen('reflexEarly');
+    cueBad(); showScreen('reflexEarly');
     return;
   }
   if(rstate.signalTime===null){
@@ -2508,7 +2582,7 @@ function handleReflexPress(e){
     // basıldı. İnsan refleksiyle imkansıza yakın olsa da, ölçüm güvenilir
     // olmayacağı için bu basışı da erken-basma gibi ele alıyoruz.
     rstate.scores.push({score:0, reactionMs:null, early:true});
-    showScreen('reflexEarly');
+    cueBad(); showScreen('reflexEarly');
     return;
   }
   // Geçerli tepki
@@ -2532,7 +2606,7 @@ function renderReflexResult(reactionMs, score){
   if(reactionMs<=REFLEX_BEST_MS) commentEl.textContent='Olağanüstü bir refleks!';
   else if(reactionMs<=250) commentEl.textContent='Çok iyi bir tepki süresi.';
   else if(reactionMs<=400) commentEl.textContent='Ortalama bir tepki süresi.';
-  else commentEl.textContent='Biraz daha hızlı olabilirsin.';
+  else commentEl.textContent='Biraz daha hızlı olabilirsiniz.';
 
   document.getElementById('rresult-score').textContent=score;
 
@@ -2542,7 +2616,7 @@ function renderReflexResult(reactionMs, score){
   nextBtn.disabled=true;
   setTimeout(()=>{ nextBtn.disabled=false; },600);
 
-  showScreen('reflexResult');
+  showScreen('reflexResult'); cueReflex(reactionMs, score);
 }
 
 function showReflexFinal(){
@@ -2562,6 +2636,7 @@ function showReflexFinal(){
     recapWrap.appendChild(chip);
   });
 
+  afterFinal('reflex', 'all', total, max, 'rfinal-rec');
   showScreen('reflexFinal');
 }
 
@@ -2569,8 +2644,7 @@ function showReflexFinal(){
 document.getElementById('btn-reflex-start').addEventListener('click', startReflexGame);
 
 const reflexBtn=document.getElementById('reflex-target-btn');
-reflexBtn.addEventListener('mousedown', handleReflexPress);
-reflexBtn.addEventListener('touchstart', handleReflexPress, {passive:false});
+reflexBtn.addEventListener('pointerdown', handleReflexPress);
 
 document.getElementById('btn-reflex-early-next').addEventListener('click',()=>{
   nextReflexQuestion();
@@ -2580,12 +2654,6 @@ document.getElementById('btn-reflex-next').addEventListener('click',()=>{
   if(!screens.reflexResult.classList.contains('hidden')) nextReflexQuestion();
 });
 
-document.addEventListener('keyup',(e)=>{
-  const nextBtn=document.getElementById('btn-reflex-next');
-  if(e.key==='Enter'&&!screens.reflexResult.classList.contains('hidden')&&!nextBtn.disabled){
-    nextReflexQuestion();
-  }
-});
 
 document.getElementById('btn-reflex-restart').addEventListener('click',()=>{
   showScreen('reflexStart');
@@ -2596,19 +2664,10 @@ document.getElementById('btn-reflex-menu').addEventListener('click',()=>showScre
    RİTİM HAFIZASI (SIMON) OYUNU
    ════════════════════════════════════════════════════════════ */
 
-function getAudioCtx(){
-  if(!simonState.audioCtx){
-    simonState.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  // Bazı tarayıcılarda kullanıcı etkileşimi sonrası context "suspended" kalabilir
-  if(simonState.audioCtx.state==='suspended'){
-    simonState.audioCtx.resume();
-  }
-  return simonState.audioCtx;
-}
+function getAudioCtx(){ return SFX.ctx(); }
 
 function playTone(freq, durationMs){
-  if(!simonState.soundEnabled) return;
+  if(!SFX.on) return;
   try{
     const ctx=getAudioCtx();
     const osc=ctx.createOscillator();
@@ -2629,7 +2688,7 @@ function playTone(freq, durationMs){
 
 function playErrorTone(durationMs){
   // Hatalı tıklamada çalan, doğru tonlardan ayırt edilebilir, kısa ve düşük perdeli "buzzer" sesi
-  if(!simonState.soundEnabled) return;
+  if(!SFX.on) return;
   try{
     const ctx=getAudioCtx();
     const osc=ctx.createOscillator();
@@ -2668,12 +2727,17 @@ function buildSimonGridDOM(){
 }
 
 function resetSimonSoundChoice(){
-  // Önceki seçimin görsel ve mantıksal izini tamamen temizler:
-  // kartlardaki 'selected' işaretini kaldırır, butonu yeniden pasif yapar.
-  document.querySelectorAll('#screen-simon-start .diff-card').forEach(c=>c.classList.remove('selected'));
+  const cards=document.querySelectorAll('#screen-simon-start .diff-card');
+  cards.forEach(c=>c.classList.remove('selected'));
   const btn=document.getElementById('btn-simon-start');
-  btn.disabled=true;
-  btn.textContent='Önce Bir Seçim Yap';
+  const pref=SFX.pref();
+  if(pref){
+    cards.forEach(c=>{ if(c.dataset.sound===pref) c.classList.add('selected'); });
+    simonState.soundEnabled=(pref==='on');
+    btn.disabled=false; btn.textContent='Oyuna Başla';
+  }else{
+    btn.disabled=true; btn.textContent='Önce Bir Seçim Yapın';
+  }
 }
 
 function startSimonGame(){
@@ -2699,8 +2763,8 @@ function nextSimonRound(){
 
 async function playSimonSequence(){
   simonState.locked=true;
-  document.getElementById('simon-status').textContent='İzle';
-  document.getElementById('simon-hint').textContent='Diziyi izle...';
+  document.getElementById('simon-status').textContent='İzleyin';
+  document.getElementById('simon-hint').textContent='Diziyi izleyin...';
 
   const grid=document.getElementById('simon-grid');
   grid.classList.add('locked');
@@ -2721,8 +2785,8 @@ async function playSimonSequence(){
 
   grid.classList.remove('locked');
   simonState.locked=false;
-  document.getElementById('simon-status').textContent='Senin sıran';
-  document.getElementById('simon-hint').textContent='Diziyi aynı sırayla tekrarla.';
+  document.getElementById('simon-status').textContent='Sıra sizde';
+  document.getElementById('simon-hint').textContent='Diziyi aynı sırayla tekrarlayın.';
 
   armSimonUserTimeout();
 }
@@ -2801,11 +2865,12 @@ function endSimonGame(){
 
   document.getElementById('simon-final-round').textContent=reachedRound;
   const detailEl=document.getElementById('simon-final-detail');
-  if(reachedRound<=1) detailEl.textContent='İlk turda biraz şanssızdın, tekrar dene!';
-  else if(reachedRound<=5) detailEl.textContent='İyi bir başlangıç, devam et!';
+  if(reachedRound<=1) detailEl.textContent='İlk turda biraz şanssız kaldınız, tekrar deneyin!';
+  else if(reachedRound<=5) detailEl.textContent='İyi bir başlangıç, devam edin!';
   else if(reachedRound<=10) detailEl.textContent='Gerçekten güçlü bir hafıza!';
   else detailEl.textContent='Olağanüstü! Bu seviyeye çok az kişi ulaşır.';
 
+  afterFinal('simon', 'all', reachedRound, null, 'simon-final-rec');
   showScreen('simonFinal');
 }
 
@@ -2816,6 +2881,7 @@ document.querySelectorAll('#screen-simon-start .diff-card').forEach(card=>{
     document.querySelectorAll('#screen-simon-start .diff-card').forEach(c=>c.classList.remove('selected'));
     card.classList.add('selected');
     simonState.soundEnabled = (card.dataset.sound==='on');
+    SFX.set(card.dataset.sound==='on');
     const btn=document.getElementById('btn-simon-start');
     btn.disabled=false;
     btn.textContent='Oyuna Başla';
@@ -2838,10 +2904,5 @@ document.getElementById('btn-simon-menu').addEventListener('click',()=>showScree
 
 })();
 </script>
-<div style="position:fixed;bottom:10px;left:0;right:0;text-align:center;pointer-events:none;z-index:999">
-  <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
-       style="height:32px;opacity:0.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto"
-       onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='0.35'">
-</div>
 </body>
 </html>
