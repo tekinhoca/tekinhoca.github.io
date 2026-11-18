@@ -2,387 +2,483 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Hanoi Kulesi</title>
+<meta name="theme-color" content="#0a0d1f">
+<title>Hanoi Kuleleri</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#1a1208;font-family:Georgia,serif;display:flex;align-items:center;justify-content:center;padding:10px}
-.wrap{width:100%;max-width:720px;display:flex;flex-direction:column;gap:10px}
-
-/* BAŞLIK */
-.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.game-title{font-size:16px;font-weight:700;color:#c8960c;letter-spacing:.06em}
-.disk-select{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(247,242,232,0.45)}
-.disk-select label{white-space:nowrap}
-.disk-select select{background:#2a1a08;border:1px solid rgba(200,150,12,0.35);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:3px 6px;cursor:pointer}
-
-/* SAYAÇLAR */
-.counters{display:flex;gap:7px;flex-wrap:wrap}
-.cnt{background:rgba(255,255,255,0.05);border-radius:5px;padding:6px 12px;flex:1;min-width:80px;text-align:center}
-.cnt .l{font-size:10px;color:rgba(247,242,232,0.35);margin-bottom:2px}
-.cnt .v{font-size:16px;font-weight:700;color:#FFD97A}
-.cnt .v.good{color:#6fcf97}
-.cnt .v.bad{color:#eb5757}
-
-/* OYUN ALANI */
-.game-area{position:relative;background:#2a1a08;border-radius:8px;border:1px solid rgba(200,150,12,0.15);padding:16px 12px 0;user-select:none}
-
-/* MİLLER */
-.towers{display:flex;justify-content:space-around;align-items:flex-end;height:220px;position:relative}
-.tower{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;flex:1;cursor:pointer;position:relative;padding-bottom:0}
-.tower:hover .pole{background:rgba(200,150,12,0.6)}
-.tower.selected .pole{background:#c8960c}
-.tower.target .pole{background:rgba(111,207,151,0.6)}
-
-.pole{width:6px;height:180px;background:rgba(200,150,12,0.3);border-radius:3px 3px 0 0;position:absolute;bottom:0;left:50%;transform:translateX(-50%);transition:background .2s;z-index:1}
-
-/* DİSKLER */
-.disks{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:100%;height:180px;position:relative;z-index:2}
-.disk{border-radius:4px;height:20px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:rgba(18,16,14,0.7);cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;margin-top:1px}
-.disk:hover{transform:scaleY(1.08)}
-.disk.lifted{box-shadow:0 8px 24px rgba(0,0,0,0.6);transform:translateY(-12px) scaleY(1.1)}
-
-/* Disk renkleri — disk sayısına göre indeks */
-.disk[data-size="1"] {background:#e74c3c}
-.disk[data-size="2"] {background:#e67e22}
-.disk[data-size="3"] {background:#f1c40f}
-.disk[data-size="4"] {background:#2ecc71}
-.disk[data-size="5"] {background:#1abc9c}
-.disk[data-size="6"] {background:#3498db}
-.disk[data-size="7"] {background:#9b59b6}
-.disk[data-size="8"] {background:#e91e63}
-
-/* TABAN */
-.base{height:12px;background:rgba(200,150,12,0.35);border-radius:0 0 6px 6px;margin:0 4px;border-top:2px solid rgba(200,150,12,0.5)}
-
-/* KULELERİN ETIKETLERI */
-.tower-labels{display:flex;justify-content:space-around;padding:6px 0 10px}
-.tower-label{flex:1;text-align:center;font-size:10px;color:rgba(247,242,232,0.3);letter-spacing:.08em;font-weight:600}
-.tower-label.sel{color:#c8960c}
-.tower-label.tgt{color:#6fcf97}
-
-/* MESAJ */
-.msg{font-size:11px;color:rgba(247,242,232,0.5);text-align:center;min-height:15px}
-
-/* KAZANMA MESAJI */
-.win-banner{display:none;background:rgba(111,207,151,0.12);border:1px solid rgba(111,207,151,0.4);border-radius:5px;padding:10px 16px;text-align:center}
-.win-banner.show{display:block}
-.win-banner h2{font-size:14px;color:#6fcf97;margin-bottom:4px}
-.win-banner p{font-size:11px;color:rgba(247,242,232,0.55)}
-
-/* BUTONLAR */
-.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap}
-button.a{background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.4);border-radius:3px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.75);font-family:Georgia,serif;transition:background .2s}
-button.a:hover{background:rgba(155,53,16,0.6)}
-button.a.hint-btn{border-color:rgba(52,152,219,0.4);color:rgba(147,197,253,0.75)}
-button.a.hint-btn:hover{background:rgba(52,152,219,0.15)}
-
-/* ÇÖZÜM İPUCU */
-.hint-box{display:none;background:rgba(52,152,219,0.08);border:1px solid rgba(52,152,219,0.25);border-radius:5px;padding:8px 14px;font-size:11px;color:rgba(147,197,253,0.8);line-height:1.7}
-.hint-box.show{display:block}
-.hint-box b{color:rgba(147,197,253,1)}
-
-/* ── Açılış Modalı ── */
-.modal-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.85);
-  display:flex;align-items:center;justify-content:center;
-  z-index:1000;padding:16px;
+:root{--gold:#c8960c;--gold2:#ffd966;--gold3:#ffe9a8;--tx:#e8d5a0;--text:rgba(247,242,232,.94);--dim:rgba(247,242,232,.64);
+--ok:#50c878;--bad:#e74c3c;--mw:130px;--ar:1.7;--ac-rgb:96,176,255}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden;background:#0a0d1f;color:var(--text);font-family:Georgia,'Times New Roman',serif;overscroll-behavior:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+button{font-family:inherit;touch-action:manipulation}
+.nm{font-family:'Segoe UI','Helvetica Neue',Arial,Roboto,sans-serif;font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1;font-weight:700}
+/* arka plan */
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg .l{position:absolute;width:70vmax;height:70vmax;border-radius:50%}
+.bg .l1{left:-25vmax;top:-30vmax;background:radial-gradient(circle,rgba(70,120,255,.34),transparent 62%);animation:d1 46s ease-in-out infinite alternate}
+.bg .l2{right:-30vmax;bottom:-35vmax;background:radial-gradient(circle,rgba(230,70,190,.26),transparent 62%);animation:d2 58s ease-in-out infinite alternate}
+.bg .l3{left:25%;top:50%;width:55vmax;height:55vmax;background:radial-gradient(circle,rgba(40,210,190,.2),transparent 62%);animation:d3 52s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(12vmax,10vmax)}}@keyframes d2{to{transform:translate(-14vmax,-8vmax)}}@keyframes d3{to{transform:translate(-10vmax,-12vmax)}}
+.bg .st{position:absolute;inset:0}.bg .st.a{animation:tw 5s ease-in-out infinite}.bg .st.b{animation:tw 7s ease-in-out -2.5s infinite}
+@keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}
+.bg .st.a{background-image:radial-gradient(1.4px 1.4px at 12% 14%,rgba(255,233,168,.8),transparent),radial-gradient(1px 1px at 26% 36%,rgba(255,255,255,.8),transparent),radial-gradient(1.6px 1.6px at 39% 8%,rgba(255,233,168,.7),transparent),radial-gradient(1px 1px at 56% 50%,rgba(255,255,255,.7),transparent),radial-gradient(1.4px 1.4px at 81% 29%,rgba(255,233,168,.8),transparent),radial-gradient(1px 1px at 92% 65%,rgba(255,255,255,.8),transparent),radial-gradient(1.4px 1.4px at 70% 88%,rgba(255,233,168,.7),transparent),radial-gradient(1px 1px at 9% 78%,rgba(255,255,255,.7),transparent)}
+.bg .st.b{background-image:radial-gradient(1px 1px at 20% 60%,rgba(255,255,255,.8),transparent),radial-gradient(1.4px 1.4px at 47% 27%,rgba(255,233,168,.8),transparent),radial-gradient(1px 1px at 63% 12%,rgba(255,255,255,.7),transparent),radial-gradient(1.6px 1.6px at 76% 56%,rgba(255,233,168,.7),transparent),radial-gradient(1px 1px at 88% 90%,rgba(255,255,255,.8),transparent),radial-gradient(1.4px 1.4px at 33% 92%,rgba(255,233,168,.7),transparent),radial-gradient(1px 1px at 4% 38%,rgba(255,255,255,.7),transparent),radial-gradient(1.4px 1.4px at 96% 8%,rgba(255,233,168,.8),transparent)}
+/* kabuk */
+.app{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.topbar{flex:none;display:flex;align-items:center;gap:8px;height:clamp(40px,6.4dvh,52px);padding:0 clamp(8px,2.5vw,24px)}
+.top-l,.top-r{display:flex;gap:8px;flex:0 0 auto}
+.game-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-size:clamp(16px,3.2dvh,22px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+background:linear-gradient(100deg,var(--gold),var(--gold2) 40%,#fff3c4 55%,var(--gold2),var(--gold));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 6s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:1px solid rgba(var(--ac-rgb),.6);background:linear-gradient(180deg,rgba(var(--ac-rgb),.28),rgba(var(--ac-rgb),.08));color:#e1f0ff;font-size:17px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:transform .15s,background .2s}
+.icon-btn:active{transform:scale(.93)}
+@media(max-width:430px){.icon-btn{width:32px;height:32px;font-size:15px}.top-l,.top-r{gap:5px}.topbar{gap:5px}.game-title{font-size:15px;letter-spacing:.06em}}
+@media(hover:hover){.icon-btn:hover{background:rgba(var(--ac-rgb),.4)}}
+.main{flex:1;min-height:0;width:100%;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"info" "board" "foot";gap:clamp(6px,1.3dvh,14px);padding:0 clamp(8px,2.5vw,24px) clamp(6px,1dvh,12px)}
+.info{grid-area:info;display:flex;flex-direction:column;gap:clamp(5px,1dvh,9px)}
+.seg{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.seg button{appearance:none;cursor:pointer;border-radius:10px;padding:clamp(4px,.8dvh,7px) 2px;color:var(--text);background:rgba(var(--ac-rgb),.08);border:1px solid rgba(var(--ac-rgb),.38);display:flex;flex-direction:column;align-items:center;line-height:1.15;transition:transform .15s,border-color .2s,box-shadow .2s}
+.seg button:active{transform:scale(.95)}
+.seg b{font-size:clamp(14px,2.5dvh,17px)}
+.seg i{font-style:normal;font-size:clamp(8px,1.5dvh,10px);color:var(--dim)}
+.seg button.on{border-color:var(--gold2);background:linear-gradient(180deg,rgba(255,217,102,.26),rgba(200,150,12,.08));box-shadow:0 0 16px rgba(255,217,102,.3)}
+.seg button.on b{color:var(--gold2)}
+@media(hover:hover){.seg button:hover{border-color:rgba(var(--ac-rgb),.9)}}
+.ibar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ibox{background:rgba(var(--ac-rgb),.09);border:1px solid rgba(var(--ac-rgb),.32);border-radius:10px;padding:clamp(3px,.6dvh,5px) 6px;display:flex;align-items:baseline;justify-content:center;gap:6px}
+.ibox .l{font-size:clamp(9px,1.6dvh,11px);color:var(--dim);letter-spacing:.06em}
+.ibox .v{font-size:clamp(15px,2.8dvh,20px);color:var(--gold2)}
+.ibox .v.bad{color:#ff8a7a}
+.msg{font-size:clamp(11px,1.9dvh,13px);color:var(--dim);text-align:center;min-height:1.5em;line-height:1.35}
+.msg.warn{color:#ff9a8b}
+.kb-hint{display:none;font-size:11px;color:var(--dim);text-align:center}
+@media(hover:hover) and (pointer:fine){.kb-hint{display:block}}
+.board{grid-area:board;min-height:0;min-width:0;container-type:size;display:grid;place-items:center}
+@media(max-aspect-ratio:1/1){:root{--ar:.9}}
+.field{position:relative;container-type:size;width:min(100cqw,calc(var(--ar)*100cqh));height:min(100cqh,calc(100cqw/var(--ar)));display:flex;flex-direction:column;
+background:linear-gradient(180deg,#2a3b8f,#141c52);border:1px solid rgba(var(--ac-rgb),.55);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.55),0 0 30px rgba(var(--ac-rgb),.14),inset 0 1px 0 rgba(var(--ac-rgb),.3);padding:2cqh 2cqw 0}
+.towers{--dh:7.6cqh;flex:1;min-height:0;display:flex;justify-content:space-around;align-items:flex-end}
+.tower{position:relative;flex:1;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;cursor:pointer;touch-action:none}
+.pole{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:max(6px,1.5cqw);height:92%;background:linear-gradient(90deg,#3b4a73,#e6f0ff 42%,#9db2d8 60%,#3a4870);opacity:.6;border-radius:5px 5px 0 0;transition:opacity .2s,box-shadow .2s;z-index:1}
+.tower.selected .pole{opacity:1;box-shadow:0 0 14px rgba(255,217,102,.8)}
+.tower.target .pole{background:linear-gradient(90deg,#1f6b44,#6fcf97 45%,#2e8b5a);opacity:.95;box-shadow:0 0 12px rgba(111,207,151,.6)}
+.tower.shake{animation:shk .3s}
+@keyframes shk{25%{transform:translateX(-2%)}60%{transform:translateX(2%)}}
+@media(hover:hover){.tower:hover .pole{opacity:.85}}
+.disks{position:relative;z-index:2;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+.disk{height:var(--dh);border-radius:999px;display:flex;align-items:center;justify-content:center;font:700 calc(var(--dh)*.5)/1 'Segoe UI','Helvetica Neue',Arial,Roboto,sans-serif;font-variant-numeric:lining-nums;color:rgba(18,16,14,.78);text-shadow:0 1px 0 rgba(255,255,255,.35);position:relative;margin-top:1px;
+background-image:linear-gradient(90deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 16%,rgba(255,255,255,.2) 38%,rgba(0,0,0,0) 62%,rgba(0,0,0,.45) 100%),linear-gradient(180deg,rgba(255,255,255,.5) 0%,rgba(255,255,255,0) 42%,rgba(0,0,0,.34) 100%);
+box-shadow:inset 0 1px 1px rgba(255,255,255,.6),inset 0 -2px 3px rgba(0,0,0,.42),0 3px 3px rgba(0,0,0,.55);transition:transform .15s,box-shadow .15s,filter .15s}
+.disk::before{content:"";position:absolute;left:8%;right:8%;top:1px;height:34%;border-radius:50%;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0));pointer-events:none}
+.disk.lifted{box-shadow:inset 0 1px 1px rgba(255,255,255,.6),inset 0 -2px 3px rgba(0,0,0,.42),0 10px 18px rgba(0,0,0,.65);transform:translateY(calc(var(--dh)*-.55));filter:brightness(1.14)}
+.disk[data-size="1"]{background-color:#e74c3c}.disk[data-size="2"]{background-color:#e67e22}.disk[data-size="3"]{background-color:#f1c40f}.disk[data-size="4"]{background-color:#2ecc71}
+.disk[data-size="5"]{background-color:#1abc9c}.disk[data-size="6"]{background-color:#3498db}.disk[data-size="7"]{background-color:#9b59b6}.disk[data-size="8"]{background-color:#e91e63}
+.base{flex:none;height:5cqh;background:linear-gradient(180deg,#9aa8d6,#56639a 55%,#2b3566);border-radius:0 0 8px 8px;border-top:2px solid #d6e4ff;box-shadow:0 3px 6px rgba(0,0,0,.5);margin:0 -1cqw}
+.labels{flex:none;height:7cqh;display:flex;justify-content:space-around;align-items:center}
+.labels span{flex:1;text-align:center;font-size:max(11px,3.2cqh);font-weight:700;letter-spacing:.1em;color:var(--dim)}
+.labels span.sel{color:var(--gold2)}.labels span.tgt{color:#6fcf97}
+.foot{grid-area:foot;display:flex;justify-content:center;height:min(34px,5dvh);pointer-events:none}
+.foot img{height:100%;width:auto;opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}
+.foot img:hover{opacity:.7}
+@media(max-aspect-ratio:13/10) and (max-height:760px){.foot{display:none}}
+@media(min-aspect-ratio:13/10) and (max-height:560px){.foot{display:none}}
+@media(min-aspect-ratio:13/10) and (min-width:640px){
+ .main{grid-template-columns:minmax(260px,36%) minmax(0,1fr);grid-template-rows:1fr auto;grid-template-areas:"info board" "foot board"}
+ .info{align-self:center}.foot{align-self:end}
 }
-.modal-overlay.hidden{display:none;}
-.modal-box{
-  background:#110d04;
-  border:1px solid rgba(200,150,12,0.5);
-  border-radius:8px;
-  padding:22px 20px 18px;
-  max-width:360px;width:100%;
-  display:flex;flex-direction:column;gap:12px;
-  animation:modalIn .3s ease;
-}
-@keyframes modalIn{
-  from{opacity:0;transform:scale(.94);}
-  to{opacity:1;transform:scale(1);}
-}
-.modal-title{
-  font-size:22px;font-weight:700;
-  color:#FFD97A;text-align:center;
-  letter-spacing:.06em;
-}
-.modal-rules{
-  font-size:11.5px;
-  color:rgba(247,242,232,0.72);
-  line-height:1.75;
-  border-top:1px solid rgba(200,150,12,0.2);
-  border-bottom:1px solid rgba(200,150,12,0.2);
-  padding:10px 4px;
-  list-style:none;
-}
-.modal-rules li{margin-bottom:3px;padding-left:4px;}
-.modal-rules li::before{content:"🗼 ";font-size:10px;}
-.modal-btns{display:flex;gap:10px;justify-content:center;}
-.modal-close{
-  background:rgba(18,16,14,0.7);
-  border:1px solid rgba(200,150,12,0.35);
-  border-radius:3px;padding:6px 18px;
-  font-size:12px;cursor:pointer;
-  color:rgba(247,242,232,0.6);
-  font-family:Georgia,serif;transition:background .2s;
-}
-.modal-close:hover{background:rgba(50,30,5,0.9);}
-.modal-start{
-  background:rgba(140,80,10,0.75);
-  border:1px solid rgba(200,150,12,0.6);
-  border-radius:3px;padding:6px 22px;
-  font-size:12px;cursor:pointer;
-  color:#FFD97A;font-weight:600;
-  font-family:Georgia,serif;transition:background .2s;
-}
-.modal-start:hover{background:rgba(180,110,15,0.9);}
-.modal-logo{display:flex;justify-content:center;padding-top:4px;}
-
-@media(max-width:480px){
-  .towers{height:180px}
-  .pole{height:148px}
-  .disks{height:148px}
-}
+@media(max-height:430px){.kb-hint{display:none!important}}
+/* katmanlar */
+.ov{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:16px;background:rgba(4,6,20,.82)}
+#confirm{z-index:60}
+.btn{appearance:none;cursor:pointer;font-size:14px;font-weight:700;letter-spacing:.04em;padding:10px 22px;border-radius:8px;color:#1a1204;min-width:var(--mw);border:1px solid var(--gold2);background:linear-gradient(180deg,var(--gold3),var(--gold2) 45%,var(--gold));box-shadow:0 2px 10px rgba(200,150,12,.3);transition:transform .15s,filter .2s}
+.btn:active{transform:scale(.96)}
+.btn.secondary{color:var(--tx);background:rgba(200,150,12,.08);border:1px solid rgba(200,150,12,.38);box-shadow:none}
+.btn.tiny{font-size:11px;padding:6px 12px;font-weight:400;min-width:0}
+.btn:disabled{opacity:.45;pointer-events:none}
+@media(hover:hover){.btn:hover{filter:brightness(1.08)}}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+/* kurallar modalı (çok sayfalı) */
+.rules-box{width:min(94vw,440px);max-height:85dvh;overflow:auto;scrollbar-width:none;background:#0d1b0d;border:1px solid rgba(200,150,12,.5);border-radius:14px;padding:0 18px 14px;text-align:center;animation:pop .3s ease both}
+.rules-box::-webkit-scrollbar{display:none}
+.rules-img{display:block;margin:0 auto;width:var(--mw);max-width:100%;max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%)}
+.pgs{display:grid;margin:2px 0 8px;text-align:left;border-top:1px solid rgba(200,150,12,.22);padding-top:8px}
+.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}
+.pgt{text-align:center;color:var(--gold2);font-weight:700;font-size:15px;margin:0 0 6px}
+.rl{list-style:none;font-size:14px;line-height:1.55;color:rgba(247,242,232,.88)}
+.rl li{margin-bottom:7px}.rl li::before{content:"🗼 ";font-size:11px}.rl b{color:var(--gold2)}
+.rnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}
+.rdots{display:flex;gap:8px}.rdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .2s}.rdots span.on{background:var(--gold2)}
+.rarr{width:38px;height:38px;min-width:0;border-radius:50%;padding:0;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;flex:none}
+.rarr:disabled{opacity:.4;pointer-events:none}
+@media(min-width:768px){.rules-box{width:min(92vw,520px)}.rl{font-size:15.5px}}
+@media(max-height:520px){.rules-img{max-height:20dvh}.rl{font-size:13px;line-height:1.45}.rl li{margin-bottom:4px}.rnav{margin-bottom:8px}}
+@media (max-height:520px) and (min-aspect-ratio:13/10){.rules-box{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:18px;align-items:center;width:min(94vw,700px);padding:10px 18px}
+ .rules-img{grid-column:1;grid-row:1/4;width:110px;max-height:60dvh}.pgs{grid-column:2;grid-row:1;margin:0;border-top:none;padding-top:0}.rnav{grid-column:2;grid-row:2;margin:4px 0}.rules-box>.btn{grid-column:2;grid-row:3;justify-self:center}}
+/* İpucu ve Sonuç kartları: tahta/altın iskelet, kurallar modalından ayrı vurgu */
+.mcard{position:relative;z-index:1;--glow:255,217,102;--ac:var(--gold2);width:min(92vw,430px);max-height:92dvh;overflow:auto;scrollbar-width:none;text-align:center;padding:clamp(14px,3dvh,24px) 20px;border-radius:18px;border:1px solid rgba(var(--glow),.55);background:var(--bgc);box-shadow:0 0 40px rgba(var(--glow),.2),0 20px 60px rgba(0,0,0,.6);animation:pop .3s ease both}
+.mcard::-webkit-scrollbar{display:none}
+.mcard.hint{--glow:77,208,225;--ac:#8fe3ee;--bgc:linear-gradient(160deg,#0c2c3d,#0d1230 72%)}
+.mcard.res{--bgc:linear-gradient(160deg,#2f2478,#0f1433 72%)}
+.eyebrow{letter-spacing:.35em;text-transform:uppercase;font-size:11px;color:var(--ac);margin-bottom:6px}
+.mcard h2{font-size:clamp(20px,4dvh,30px);font-weight:800;background:linear-gradient(100deg,var(--gold),var(--gold2) 40%,#fff3c4 55%,var(--gold2),var(--gold));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 5s linear infinite}
+.mcard.hint h2{background-image:linear-gradient(100deg,#2fa8ba,#8fe3ee 40%,#e4fbff 55%,#8fe3ee,#2fa8ba);background-size:200% 100%}
+.mcard p{color:var(--dim);margin:8px 0;font-size:14px;line-height:1.5}
+.hc{text-align:left;background:rgba(255,255,255,.05);border:1px solid rgba(var(--glow),.25);border-radius:10px;padding:9px 12px;margin:8px 0}
+.hc h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);margin-bottom:3px}
+.hc b.nm{white-space:nowrap}
+.nm sup{font-size:.7em;line-height:0}
+.hc p{margin:0;color:rgba(247,242,232,.88);font-size:14px}.hc b{color:var(--ac)}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 6px}
+.st{background:rgba(255,255,255,.06);border:1px solid rgba(var(--glow),.28);border-radius:10px;padding:8px 4px}
+.st b{display:block;font-size:22px;color:var(--gold2)}.st span{font-size:11px;color:var(--dim)}
+.badge{display:inline-block;margin:2px 0 4px;padding:3px 12px;border-radius:999px;background:rgba(80,200,120,.16);border:1px solid rgba(80,200,120,.6);color:#8be0a8;font-size:12px;font-weight:700}
+.rec-line{min-height:1.4em;font-size:14px;color:var(--gold3);margin:6px 0 10px}
+.rec-line.new{color:#fff3c4;font-weight:800;text-shadow:0 0 14px rgba(255,217,102,.8)}
+.mcard .row{margin-top:8px}
+.mlogo{display:flex;justify-content:center;margin-top:12px;pointer-events:none}
+.mlogo img{height:min(30px,5dvh);width:auto;opacity:.4;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}
+.mlogo img:hover{opacity:.75}
+@media(max-height:400px){.mlogo{display:none}}
+@media(max-height:700px){.mcard{padding:12px 16px}.hc{margin:6px 0;padding:7px 10px}.hc p,.mcard p{font-size:13px;line-height:1.4}.eyebrow{margin-bottom:2px}.stats3{margin:6px 0 4px}.st b{font-size:19px}.mlogo{margin-top:8px}}
+@media(max-height:520px) and (min-aspect-ratio:13/10){.mcard{width:min(92vw,660px)}.eyebrow{display:none}}
+.small-box{width:min(92vw,380px);padding:22px 20px;border-radius:14px;text-align:center;background:#0f1433;border:1px solid rgba(var(--ac-rgb),.6);animation:pop .25s ease both}
+.small-box p{margin-bottom:16px;line-height:1.55}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+#fx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+@media(prefers-reduced-motion:reduce){.bg .l,.bg .st,.game-title,.mcard h2{animation:none}.tower.shake{animation:none}.mcard,.rules-box,.small-box{animation-duration:.01s}}
 </style>
 </head>
 <body>
-<!-- Açılış Modalı -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <div class="modal-title">HANOİ KULESİ</div>
-    <ul class="modal-rules">
-      <li>Tüm diskleri A kulesinden C kulesine taşıyın.</li>
-      <li>Her seferinde yalnızca bir disk taşınabilir.</li>
-      <li>Büyük bir disk küçük bir diskin üzerine konulamaz.</li>
-      <li>N disk için minimum hamle sayısı <b style="color:#FFD97A">2ᴺ − 1</b>'dir.</li>
-      <li>Kuleye tıklayarak diski seçin, sonra hedef kuleye tıklayın.</li>
-    </ul>
-    <div class="modal-btns">
-      <button class="modal-close" onclick="closeModal()">Kapat</button>
-      <button class="modal-start" onclick="closeModal()">Başla</button>
-    </div>
-    <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
-           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
-           onmouseover="this.style.opacity='0.65'"
-           onmouseout="this.style.opacity='0.38'">
-    </div>
+<div class="bg" aria-hidden="true"><div class="l l1"></div><div class="l l2"></div><div class="l l3"></div><div class="st a"></div><div class="st b"></div></div>
+
+<div class="app">
+ <header class="topbar">
+  <div class="top-l">
+   <button class="icon-btn" id="btnNew" title="Yeni oyun (N)" aria-label="Yeni oyun">↻</button>
+   <button class="icon-btn" id="btnRules" title="Kurallar" aria-label="Kurallar">ⓘ</button>
+   <button class="icon-btn" id="btnHint" title="İpucu (H)" aria-label="İpucu">💡</button>
   </div>
-</div>
-
-<div class="wrap">
-
-  <div class="top-bar">
-    <div class="game-title">Hanoi Kulesi</div>
-    <div class="disk-select">
-      <label for="diskCount">Disk sayısı:</label>
-      <select id="diskCount">
-        <option value="3" selected>3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-        <option value="7">7</option>
-        <option value="8">8</option>
-      </select>
-    </div>
+  <div class="game-title">Hanoi Kuleleri</div>
+  <div class="top-r">
+   <button class="icon-btn" id="btnSound" aria-label="Ses ve titreşim" aria-pressed="false">🔇</button>
+   <button class="icon-btn" id="btnFs" aria-label="Tam ekran" hidden>⛶</button>
   </div>
-
-  <div class="counters">
-    <div class="cnt"><div class="l">Hamle</div><div class="v" id="moves">0</div></div>
-    <div class="cnt"><div class="l">Minimum</div><div class="v" id="minMoves">7</div></div>
-    <div class="cnt"><div class="l">Durum</div><div class="v" id="status">Devam ediyor</div></div>
-  </div>
-
-  <div class="game-area">
+ </header>
+ <main class="main">
+  <section class="info">
+   <div class="seg" id="seg" role="group" aria-label="Disk sayısı"></div>
+   <div class="ibar">
+    <div class="ibox"><div class="l">Hamle</div><div class="v nm" id="mv">0</div></div>
+    <div class="ibox"><div class="l">Minimum</div><div class="v nm" id="mn">7</div></div>
+    <div class="ibox"><div class="l">En iyi</div><div class="v nm" id="bst">—</div></div>
+   </div>
+   <div class="msg" id="msg" aria-live="polite"></div>
+   <div class="kb-hint">Klavye: A B C veya 1 2 3 kule seçer · H ipucu · N yeni oyun · F tam ekran</div>
+  </section>
+  <section class="board" id="board">
+   <div class="field" id="field">
     <div class="towers" id="towers">
-      <div class="tower" id="tower-0" onclick="selectTower(0)">
-        <div class="disks" id="disks-0"></div>
-        <div class="pole"></div>
-      </div>
-      <div class="tower" id="tower-1" onclick="selectTower(1)">
-        <div class="disks" id="disks-1"></div>
-        <div class="pole"></div>
-      </div>
-      <div class="tower" id="tower-2" onclick="selectTower(2)">
-        <div class="disks" id="disks-2"></div>
-        <div class="pole"></div>
-      </div>
+     <div class="tower" id="tower-0" data-t="0" role="button"><div class="pole"></div><div class="disks" id="disks-0"></div></div>
+     <div class="tower" id="tower-1" data-t="1" role="button"><div class="pole"></div><div class="disks" id="disks-1"></div></div>
+     <div class="tower" id="tower-2" data-t="2" role="button"><div class="pole"></div><div class="disks" id="disks-2"></div></div>
     </div>
     <div class="base"></div>
-    <div class="tower-labels">
-      <div class="tower-label" id="lbl-0">A</div>
-      <div class="tower-label" id="lbl-1">B</div>
-      <div class="tower-label" id="lbl-2">C</div>
-    </div>
+    <div class="labels"><span id="lbl-0">A</span><span id="lbl-1">B</span><span id="lbl-2">C</span></div>
+   </div>
+  </section>
+  <footer class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo" onerror="this.remove()"></footer>
+ </main>
+</div>
+
+<!-- Sonuç -->
+<div class="ov" id="result" hidden>
+ <canvas id="fx" aria-hidden="true"></canvas>
+ <div class="mcard res" role="dialog" aria-modal="true" aria-labelledby="rtitle">
+  <div class="eyebrow">Çözüldü</div>
+  <h2 id="rtitle">Tebrikler!</h2>
+  <p id="rbody"></p>
+  <div id="rbadge" class="badge" hidden>★ Minimum hamle</div>
+  <div class="stats3"><div class="st"><b class="nm" id="rsM">0</b><span>Hamle</span></div><div class="st"><b class="nm" id="rsN">0</b><span>Minimum</span></div><div class="st"><b class="nm" id="rsE">0</b><span>Verimlilik</span></div></div>
+  <div class="rec-line" id="rrec"></div>
+  <div class="row"><button class="btn" id="rNew">Yeniden Oyna</button><button class="btn secondary" id="rClose">Tahtayı Gör</button></div>
+  <div class="mlogo"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo" onerror="this.remove()"></div>
+ </div>
+</div>
+
+<!-- İpucu -->
+<div class="ov" id="hint" hidden>
+ <div class="mcard hint" role="dialog" aria-modal="true" aria-labelledby="htitle">
+  <div class="eyebrow">Strateji</div>
+  <h2 id="htitle">İpucu</h2>
+  <div id="hbody">
+   <div class="hc"><h3>En az hamle sayısı</h3>
+    <p>N tane disk için en az <b class="nm">2<sup>N</sup> − 1</b> tane hamle yapmanız gerekir. <span class="nm">3</span> disk için en az <span class="nm">7</span> hamle, <span class="nm">4</span> disk için en az <span class="nm">15</span> hamle, … gibi.</p></div>
+   <div class="hc"><h3>Hamle sırası</h3>
+    <p><b>Tek sayıda disk</b> ile oynarken <b>en küçük diski C’ye</b> koyarak başlamak, <b>çift sayıda disk</b> ile oynarken ise <b>en küçük diski B’ye</b> koyarak başlamak minimum hamle hedefini tutturmanızı sağlayabilir.</p></div>
   </div>
+  <div class="row"><button class="btn" id="hOk">Anladım</button></div>
+  <div class="mlogo"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo" onerror="this.remove()"></div>
+ </div>
+</div>
 
-  <div class="msg" id="msg">A kulesine tıklayarak başlayın.</div>
-  <div class="win-banner" id="winBanner">
-    <h2 id="winTitle">Tebrikler!</h2>
-    <p id="winBody"></p>
+<!-- Kurallar -->
+<div class="ov" id="rules" hidden role="dialog" aria-modal="true" aria-label="Kurallar">
+ <div class="rules-box">
+  <img class="rules-img" src="../img/mecesml.webp" alt="Tekin Hoca" width="399" height="434" onerror="this.style.display='none'">
+  <div class="pgs" id="rpages">
+   <div class="pg on"><div class="pgt">Oyunun amacı</div><ul class="rl">
+    <li>A kulesindeki diskleri C kulesine taşımalısınız. C kulesinde diskler yine büyükten küçüğe doğru üst üste sıralanmış olmalı.</li>
+    <li>Taşıma sırasında bazı diskleri geçici olarak B kulesine koymanız gerekecek.</li>
+    <li>Hiçbir zaman bir diski daha küçük bir diskin üstüne koyamazsınız.</li></ul></div>
+   <div class="pg"><div class="pgt">Nasıl oynanır</div><ul class="rl">
+    <li>Dolu bir kuleye dokunduğunuzda en üstteki disk seçilir.</li>
+    <li>Bu diski taşıyabileceğiniz kule(ler) yeşil renkte parlar.</li>
+    <li>Yeşil renkli kuleye dokunarak, seçili diski bu kuleye taşırsınız.</li>
+    <li>Ardından yeni bir disk seçmek için kulelerden birine dokunur ve devam edersiniz.</li></ul></div>
+   <div class="pg"><div class="pgt">Klavye ve ayarlar</div><ul class="rl">
+    <li>PC’de kule seçimi için <b>A</b>, <b>B</b>, <b>C</b> ya da <span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span> tuşlarını kullanabilirsiniz.</li>
+    <li>PC’de; <b>H</b> ipucu, <b>N</b> yeni oyun, <b>F</b> tam ekran ve <b>Esc</b> iptal ve çıkış tuşlarıdır.</li>
+    <li>Sağ üstteki düğmeyle ses ve titreşimi açabilirsiniz.</li></ul>
+    <div style="text-align:center"><button class="btn secondary tiny" id="resetRec" hidden>Rekorları Sıfırla</button></div></div>
   </div>
+  <div class="rnav"><button class="btn secondary rarr" id="rPrev" aria-label="Önceki sayfa">&#8249;</button><div class="rdots" id="rDots" aria-hidden="true"><span class="on"></span><span></span><span></span></div><button class="btn secondary rarr" id="rNext" aria-label="Sonraki sayfa">&#8250;</button></div>
+  <button class="btn" id="rulesBtn">Başla</button>
+ </div>
+</div>
 
-  <div class="br">
-    <button class="a" onclick="resetGame()">&#8635; Yeniden Başla</button>
-    <button class="a hint-btn" onclick="toggleHint()">&#9998; İpucu</button>
-    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
-  </div>
+<!-- Onay -->
+<div class="ov" id="confirm" hidden>
+ <div class="small-box" role="alertdialog" aria-modal="true" aria-labelledby="ctext">
+  <p id="ctext"></p>
+  <div class="row"><button class="btn secondary" id="cNo">Hayır</button><button class="btn" id="cYes">Evet</button></div>
+ </div>
+</div>
 
-  <div class="hint-box" id="hintBox">
-    <b>Hanoi Kulesi Stratejisi</b><br>
-    N disk için minimum hamle sayısı <b>2ᴺ − 1</b>'dir.<br>
-    Temel strateji: N diski C'ye taşımak için önce N-1 diski B'ye, büyük diski C'ye, ardından N-1 diski B'den C'ye taşıyın.<br>
-    Tek sayıda disk varsa <b>A→C→B→A</b> döngüsünde, çift sayıda disk varsa <b>A→B→C→A</b> döngüsünde hareket edin.
-  </div>
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const RM=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(e){return false}};
+const NAMES=['A','B','C'];
+const minMoves=n=>Math.pow(2,n)-1;
 
-</div><script>
-let towers, moves, selected, diskCount, won;
+/* ── zamanlayıcılar ── */
+const TM=[];
+const later=(f,ms)=>{const id=setTimeout(f,ms);TM.push(id);return id};
+const clearTimers=()=>{TM.forEach(clearTimeout);TM.length=0};
 
-function init(){
-  diskCount = parseInt(document.getElementById('diskCount').value);
-  towers = [[], [], []];
-  moves = 0; selected = null; won = false;
-  document.getElementById('minMoves').textContent = Math.pow(2, diskCount) - 1;
-  document.getElementById('moves').textContent = '0';
-  document.getElementById('moves').className = 'v';
-  document.getElementById('status').textContent = 'Devam ediyor';
-  document.getElementById('status').className = 'v';
-  document.getElementById('winBanner').classList.remove('show');
-  document.getElementById('hintBox').classList.remove('show');
-  // Diskleri A kulesine ekle (büyükten küçüğe)
-  for(let i = diskCount; i >= 1; i--) towers[0].push(i);
-  clearSelection();
-  render();
-  setMsg('A kulesine tıklayarak başlayın.');
+/* ── SES + TİTREŞİM (tek düğme, varsayılan kapalı) ── */
+const SFX=(function(){
+ const KEY='hanoi.ses';let mem=null;try{mem=localStorage.getItem(KEY)}catch(e){}
+ let on=(mem==='on'),ctx=null;
+ function c(){if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();if(ctx.state==='suspended')ctx.resume();return ctx}
+ function tone(f,d,type,vol,delay){if(!on)return;
+  try{const a=c(),t=a.currentTime+(delay||0),o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.value=f;
+   g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol||.12,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+   o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.03)}catch(e){}}
+ const vib=p=>{if(on&&navigator.vibrate){try{navigator.vibrate(p)}catch(e){}}};
+ return{get on(){return on},
+  set(v){on=!!v;try{localStorage.setItem(KEY,on?'on':'off')}catch(e){}},
+  pick(){tone(880,.07,'sine',.09)},lift(){tone(520,.08,'triangle',.08)},drop(){tone(200,.12,'triangle',.14)},
+  bad(){tone(150,.18,'sawtooth',.1);vib(60)},
+  win(p){[523,659,784,1047].concat(p?[1319]:[]).forEach((f,i)=>tone(f,.22,'triangle',.12,i*.1));vib(p?[40,60,40,60,90]:[40,60,40])}};
+})();
+
+/* ── REKOR (disk sayısı başına en az hamle) ── */
+const REC=(function(){
+ const KEY='hanoi.rekor.v1';let mem={};
+ const load=()=>{try{const s=localStorage.getItem(KEY);return s?JSON.parse(s):mem}catch(e){return mem}};
+ const store=o=>{mem=o;try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}};
+ return{get:n=>load()[n]||null,any:()=>Object.keys(load()).length>0,
+  submit(n,m){const o=load(),b=o[n];if(!b||m<b){o[n]=m;store(o);return{isNew:true,best:m}}return{isNew:false,best:b}},
+  reset(){store({})}};
+})();
+
+/* ── oyun durumu ── */
+let T=[[],[],[]],N=3,moves=0,sel=null,won=false,busy=false,GEN=0,curAnim=null;
+
+function msg(t,warn){const m=$('msg');m.textContent=t;m.classList.toggle('warn',!!warn)}
+function updCounters(){
+ $('mv').textContent=moves;$('mv').classList.toggle('bad',moves>minMoves(N));
+ $('mn').textContent=minMoves(N);const b=REC.get(N);$('bst').textContent=b?b:'—';
 }
-
-function resetGame(){ init(); }
-
-function diskWidth(size, total){
-  // En büyük disk %90, en küçük %28 genişlik
-  const min = 28, max = 90;
-  return min + (max - min) * (size - 1) / (total - 1 || 1);
-}
-
+function diskWidth(size){return 28+(90-28)*(size-1)/((N-1)||1)}
 function render(){
-  for(let t = 0; t < 3; t++){
-    const container = document.getElementById('disks-' + t);
-    container.innerHTML = '';
-    const topSize = towers[t].length > 0 ? towers[t][towers[t].length - 1] : null;
-    // Diziyi tersine kopyala: küçük diskler önce DOM'a girer → flex-end ile üstte görünür
-    // Büyük diskler son girer → görsel olarak altta olur
-    const reversed = towers[t].slice().reverse();
-    reversed.forEach(function(size){
-      const d = document.createElement('div');
-      const isTop = (selected !== null && selected === t && size === topSize);
-      d.className = 'disk' + (isTop ? ' lifted' : '');
-      d.dataset.size = size;
-      const w = diskWidth(size, diskCount);
-      d.style.width = w + '%';
-      d.textContent = size;
-      container.appendChild(d);
-    });
+ for(let t=0;t<3;t++){
+  const c=$('disks-'+t);c.textContent='';const st=T[t];
+  for(let i=st.length-1;i>=0;i--){
+   const d=document.createElement('div');d.className='disk'+(sel===t&&i===st.length-1?' lifted':'');
+   d.dataset.size=st[i];d.style.width=diskWidth(st[i])+'%';d.textContent=st[i];c.appendChild(d);
   }
+  $('tower-'+t).setAttribute('aria-label',NAMES[t]+' kulesi, '+st.length+' disk');
+ }
 }
-
-function clearSelection(){
-  selected = null;
-  for(let i = 0; i < 3; i++){
-    document.getElementById('tower-' + i).classList.remove('selected','target');
-    document.getElementById('lbl-' + i).className = 'tower-label';
-  }
+function paintSel(){
+ const topOf=t=>T[t].length?T[t][T[t].length-1]:Infinity;
+ for(let t=0;t<3;t++){
+  const tw=$('tower-'+t),lb=$('lbl-'+t);
+  const isSel=sel===t,isTgt=sel!==null&&t!==sel&&topOf(t)>topOf(sel);
+  tw.classList.toggle('selected',isSel);tw.classList.toggle('target',isTgt);
+  lb.className=isSel?'sel':isTgt?'tgt':'';
+ }
 }
-
-function selectTower(t){
-  if(won) return;
-
-  if(selected === null){
-    // İlk tıklama: kaynak seç
-    if(towers[t].length === 0){
-      setMsg('Bu kule boş. Taşı olan bir kule seçin.');
-      return;
-    }
-    selected = t;
-    document.getElementById('tower-' + t).classList.add('selected');
-    document.getElementById('lbl-' + t).className = 'tower-label sel';
-    // Geçerli hedefleri göster
-    for(let i = 0; i < 3; i++){
-      if(i !== t){
-        const topDisk = towers[i].length === 0 ? Infinity : towers[i][towers[i].length-1];
-        if(topDisk > towers[t][towers[t].length-1]){
-          document.getElementById('tower-' + i).classList.add('target');
-          document.getElementById('lbl-' + i).className = 'tower-label tgt';
-        }
-      }
-    }
-    render();
-    const names = ['A','B','C'];
-    setMsg(names[t] + ' kulesi seçildi. Hedef kuleye tıklayın.');
-  } else {
-    // İkinci tıklama: hareket et
-    if(t === selected){
-      clearSelection();
-      render();
-      setMsg('Seçim iptal edildi.');
-      return;
-    }
-    const fromDisk = towers[selected][towers[selected].length - 1];
-    const toDisk   = towers[t].length === 0 ? Infinity : towers[t][towers[t].length - 1];
-
-    if(fromDisk < toDisk){
-      // Geçerli hamle
-      towers[t].push(towers[selected].pop());
-      moves++;
-      document.getElementById('moves').textContent = moves;
-      const min = Math.pow(2, diskCount) - 1;
-      if(moves > min){
-        document.getElementById('moves').className = 'v bad';
-      }
-      clearSelection();
-      render();
-      checkWin();
-      if(!won) setMsg('Hamle yapıldı. Devam edin.');
-    } else {
-      // Geçersiz hamle
-      clearSelection();
-      render();
-      setMsg('Geçersiz hamle! Büyük disk küçük diskin üzerine konulamaz.');
-    }
-  }
+function buildSeg(){
+ const s=$('seg');s.textContent='';
+ for(let n=3;n<=8;n++){const b=document.createElement('button');b.type='button';b.dataset.n=n;
+  b.innerHTML='<b class="nm">'+n+'</b><i>'+minMoves(n)+' hamle</i>';s.appendChild(b)}
 }
+function paintSeg(){document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',+b.dataset.n===N))}
 
+function init(n){
+ GEN++;clearTimers();if(curAnim){try{curAnim.cancel()}catch(e){}curAnim=null}
+ clearFx();N=n;T=[[],[],[]];for(let i=N;i>=1;i--)T[0].push(i);
+ moves=0;sel=null;won=false;busy=false;
+ $('field').style.setProperty('--n',N);
+ render();paintSel();paintSeg();updCounters();
+ msg('Bir kuleye dokunarak en üstteki diski seçin.');
+}
+function pick(t){
+ if(won||busy||anyOverlay())return;
+ if(sel===null){
+  if(!T[t].length){msg('Bu kule boş. Diski olan bir kule seçin.',true);shake(t);SFX.bad();return}
+  sel=t;render();paintSel();SFX.pick();
+  msg(+T[t][T[t].length-1]+' numaralı disk seçildi. Hedef kuleye dokunun.');
+  return;
+ }
+ if(t===sel){sel=null;render();paintSel();msg('Seçim iptal edildi.');return}
+ const f=T[sel][T[sel].length-1],to=T[t].length?T[t][T[t].length-1]:Infinity;
+ if(f<to){move(sel,t)}
+ else{sel=null;render();paintSel();msg('Geçersiz hamle! Büyük disk küçük diskin üzerine konamaz.',true);shake(t);SFX.bad()}
+}
+function shake(t){const e=$('tower-'+t);e.classList.remove('shake');void e.offsetWidth;e.classList.add('shake')}
+function move(from,to){
+ busy=true;const gen=GEN;
+ const src=$('disks-'+from).firstElementChild,r0=src.getBoundingClientRect();
+ T[to].push(T[from].pop());moves++;sel=null;
+ updCounters();render();paintSel();
+ const el=$('disks-'+to).firstElementChild;SFX.lift();
+ fly(el,r0,Math.abs(from-to)>1?560:440).then(()=>{
+  if(gen!==GEN)return;
+  busy=false;SFX.drop();
+  if(!checkWin())msg('Hamle yapıldı. Devam edin.');
+ });
+}
+function fly(el,r0,dur){
+ if(RM()||!el||!el.animate)return Promise.resolve();
+ const r1=el.getBoundingClientRect(),pole=document.querySelector('.pole').getBoundingClientRect();
+ const dx=r0.left-r1.left,dy=r0.top-r1.top,ym=Math.min(pole.top-r1.height*1.3-r1.top,dy);
+ el.style.zIndex=8;
+ const a=el.animate([{transform:'translate('+dx+'px,'+dy+'px)'},{transform:'translate('+dx+'px,'+ym+'px)',offset:.28},
+  {transform:'translate(0px,'+ym+'px)',offset:.72},{transform:'translate(0px,0px)'}],{duration:dur,easing:'cubic-bezier(.45,.05,.4,1)'});
+ curAnim=a;
+ return a.finished.catch(()=>{}).then(()=>{el.style.zIndex=''});
+}
 function checkWin(){
-  if(towers[2].length === diskCount){
-    won = true;
-    const min = Math.pow(2, diskCount) - 1;
-    const perfect = moves === min;
-    document.getElementById('status').textContent = perfect ? 'Mükemmel!' : 'Tamamlandı';
-    document.getElementById('status').className = 'v good';
-    const banner = document.getElementById('winBanner');
-    document.getElementById('winTitle').textContent = perfect ? 'Mükemmel Çözüm!' : 'Tebrikler!';
-    document.getElementById('winBody').textContent =
-      diskCount + ' diski ' + moves + ' hamlede taşıdınız.' +
-      (perfect ? ' Minimum hamle sayısına ulaştınız!' : ' Minimum ' + min + ' hamlede mümkündü.');
-    banner.classList.add('show');
-    setMsg('');
-  }
+ if(T[2].length!==N)return false;
+ won=true;const min=minMoves(N),perfect=moves===min,r=REC.submit(N,moves);
+ updCounters();msg('Çözüldü! Yeniden başlamak için ↻ düğmesini kullanın.');
+ SFX.win(perfect);
+ $('rtitle').textContent=perfect?'Mükemmel Çözüm!':'Tebrikler!';
+ $('rbody').textContent=N+' diski '+moves+' hamlede taşıdınız. '+(perfect?'Minimum hamle sayısına ulaştınız!':'Minimum '+min+' hamlede mümkündü.');
+ $('rbadge').hidden=!perfect;
+ $('rsM').textContent=moves;$('rsN').textContent=min;$('rsE').textContent='%'+Math.round(min/moves*100);
+ const rl=$('rrec');rl.className='rec-line'+(r.isNew?' new':'');rl.textContent=r.isNew?'🏆 Yeni rekor! ('+N+' disk)':'Rekorunuz: '+r.best+' hamle ('+N+' disk)';
+ later(()=>{$('result').hidden=false;$('rNew').focus();confetti(perfect?110:60)},520);
+ return true;
 }
 
-function toggleHint(){
-  const h = document.getElementById('hintBox');
-  h.classList.toggle('show');
+/* ── katmanlar ── */
+const anyOverlay=()=>['rules','hint','result','confirm'].some(id=>!$(id).hidden);
+let rp=0,confirmYes=null;
+function rPage(i){const pg=document.querySelectorAll('#rpages .pg'),n=pg.length;rp=Math.max(0,Math.min(n-1,i));
+ pg.forEach((p,k)=>p.classList.toggle('on',k===rp));document.querySelectorAll('#rDots span').forEach((d,k)=>d.classList.toggle('on',k===rp));
+ $('rPrev').disabled=rp===0;$('rNext').disabled=rp===n-1}
+function openRules(start){rPage(0);$('rulesBtn').textContent=start?'Başla':'Kapat';$('resetRec').hidden=!REC.any();$('rules').hidden=false;$('rulesBtn').focus()}
+function closeRules(){$('rules').hidden=true}
+function openHint(){$('hint').hidden=false;$('hOk').focus()}
+function closeHint(){$('hint').hidden=true}
+function closeResult(){$('result').hidden=true}
+function ask(text,yes,cb){$('ctext').textContent=text;$('cYes').textContent=yes;confirmYes=cb;$('confirm').hidden=false;$('cYes').focus()}
+function closeConfirm(ok){$('confirm').hidden=true;const cb=confirmYes;confirmYes=null;if(ok&&cb)cb()}
+function askNew(){
+ if(moves>0&&!won)ask('Oyun baştan başlasın mı? Bu oyunun ilerlemesi kaybolacak.','Baştan başla',()=>init(N));
+ else init(N);
+}
+function setN(n){
+ if(n===N)return;
+ if(moves>0&&!won)ask('Disk sayısını değiştirirseniz bu oyunun ilerlemesi kaybolacak. Devam edilsin mi?','Evet',()=>init(n));
+ else init(n);
 }
 
-function setMsg(t){ document.getElementById('msg').textContent = t; }
-function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
-function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
+/* ── konfeti ── */
+let fxRaf=0;
+function clearFx(){cancelAnimationFrame(fxRaf);fxRaf=0;const cv=$('fx'),c=cv.getContext&&cv.getContext('2d');if(c)c.clearRect(0,0,cv.width,cv.height)}
+function confetti(count){
+ if(RM())return;const cv=$('fx'),c=cv.getContext&&cv.getContext('2d');if(!c)return;
+ const dpr=Math.min(2,window.devicePixelRatio||1),W=innerWidth,H=innerHeight;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);c.setTransform(dpr,0,0,dpr,0,0);
+ const cols=['#ffd966','#ffe9a8','#e74c3c','#e67e22','#f1c40f','#2ecc71','#3498db','#9b59b6'],ps=[];
+ for(let i=0;i<count;i++){const l=i%2===0;
+  ps.push({x:l?W*.08:W*.92,y:H*.8,vx:(l?1:-1)*(120+Math.random()*380),vy:-(520+Math.random()*560),r:Math.random()*6,vr:(Math.random()-.5)*12,
+   w:5+Math.random()*6,h:3+Math.random()*4,t:0,life:2.2+Math.random()*1.2,c:cols[i%cols.length]})}
+ let last=performance.now();
+ (function step(ts){
+  const dt=Math.min((ts-last)/1000,.05);last=ts;c.clearRect(0,0,W,H);let alive=0;
+  for(const p of ps){p.t+=dt;if(p.t>p.life)continue;alive++;p.vy+=1100*dt;p.vx*=.992;p.x+=p.vx*dt;p.y+=p.vy*dt;p.r+=p.vr*dt;
+   c.globalAlpha=Math.max(0,Math.min(1,(p.life-p.t)/.5));c.fillStyle=p.c;c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillRect(-p.w/2,-p.h/2,p.w,p.h);c.restore()}
+  if(alive)fxRaf=requestAnimationFrame(step);else{fxRaf=0;c.clearRect(0,0,W,H)}
+ })(last);
+}
 
-document.getElementById('diskCount').addEventListener('change', init);
-init();
+/* ── tam ekran ── */
+const fsOK=!!(document.fullscreenEnabled||document.webkitFullscreenEnabled);
+const inFs=()=>document.fullscreenElement||document.webkitFullscreenElement;
+function toggleFs(){if(!fsOK)return;const de=document.documentElement;
+ try{const x=inFs()?(document.exitFullscreen||document.webkitExitFullscreen).call(document):(de.requestFullscreen||de.webkitRequestFullscreen).call(de);if(x&&x.catch)x.catch(()=>{})}catch(e){}}
+function updFs(){const b=$('btnFs');b.textContent=inFs()?'⤡':'⛶';b.setAttribute('aria-label',inFs()?'Tam ekrandan çık':'Tam ekran')}
+function updSound(){const b=$('btnSound');b.textContent=SFX.on?'🔊':'🔇';b.setAttribute('aria-pressed',SFX.on)}
+
+/* ── olaylar ── */
+buildSeg();
+$('seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b)setN(+b.dataset.n)});
+document.querySelectorAll('.tower').forEach(el=>el.addEventListener('pointerdown',e=>{e.preventDefault();pick(+el.dataset.t)}));
+$('btnNew').onclick=e=>{e.currentTarget.blur();askNew()};
+$('btnRules').onclick=e=>{e.currentTarget.blur();openRules(false)};
+$('btnHint').onclick=e=>{e.currentTarget.blur();openHint()};
+$('btnSound').onclick=e=>{SFX.set(!SFX.on);updSound();if(SFX.on)SFX.pick();e.currentTarget.blur()};
+if(fsOK){$('btnFs').hidden=false;$('btnFs').onclick=e=>{toggleFs();e.currentTarget.blur()};
+ document.addEventListener('fullscreenchange',updFs);document.addEventListener('webkitfullscreenchange',updFs)}
+$('rPrev').onclick=()=>rPage(rp-1);$('rNext').onclick=()=>rPage(rp+1);$('rulesBtn').onclick=closeRules;
+$('resetRec').onclick=()=>ask('Tüm rekorlar silinsin mi?','Sil',()=>{REC.reset();$('resetRec').hidden=true;updCounters()});
+$('hOk').onclick=closeHint;
+$('rNew').onclick=()=>{closeResult();init(N)};$('rClose').onclick=()=>{closeResult();msg('Çözüldü! Yeniden başlamak için ↻ düğmesini kullanın.')};
+$('cNo').onclick=()=>closeConfirm(false);$('cYes').onclick=()=>closeConfirm(true);
+['rules','hint','confirm'].forEach(id=>$(id).addEventListener('pointerdown',e=>{if(e.target===$(id)){if(id==='rules')closeRules();else if(id==='hint')closeHint();else closeConfirm(false)}}));
+$('result').addEventListener('pointerdown',e=>{if(e.target===$('result'))closeResult()});
+(function(){let x0=null;const el=$('rpages');
+ el.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+ el.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>40)rPage(rp+(dx<0?1:-1))},{passive:true})})();
+
+/* ── klavye (tek merkezî dinleyici) ── */
+document.addEventListener('keydown',function(e){
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ const k=e.key,l=k.length===1?k.toLowerCase():k;
+ if(!$('confirm').hidden){if(k==='Escape')closeConfirm(false);else if(k==='Enter')closeConfirm(true);else return;e.preventDefault();return}
+ if(!$('rules').hidden){if(k==='Escape'||k==='Enter')closeRules();else if(k==='ArrowRight')rPage(rp+1);else if(k==='ArrowLeft')rPage(rp-1);else return;e.preventDefault();return}
+ if(!$('hint').hidden){if(k==='Escape'||k==='Enter'||k===' ')closeHint();else return;e.preventDefault();return}
+ if(!$('result').hidden){if(k==='Escape')closeResult();else if(k==='Enter'){closeResult();init(N)}else return;e.preventDefault();return}
+ let h=true;
+ if(l==='a'||k==='1')pick(0);else if(l==='b'||k==='2')pick(1);else if(l==='c'||k==='3')pick(2);
+ else if(l==='h')openHint();else if(l==='n')askNew();else if(l==='f')toggleFs();
+ else if(k==='Escape'){if(sel!==null&&!busy){sel=null;render();paintSel();msg('Seçim iptal edildi.')}}
+ else h=false;
+ if(h){e.preventDefault();if(document.activeElement&&document.activeElement.blur)document.activeElement.blur()}
+});
+
+init(3);updSound();updFs();
+openRules(true);
+})();
 </script>
-
 </body>
 </html>
