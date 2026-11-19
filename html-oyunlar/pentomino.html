@@ -416,14 +416,14 @@ function checkSolvable(){
 }
 function setWarn(w){
  if(w===warnUnsolv)return;warnUnsolv=w;$('board').classList.toggle('warn',w);
- if(w){msg('Bu yerleşimle bulmaca tamamlanamaz. Bir parçayı alın ya da ↩ ile geri alın.',true);SFX.warn()}
- else if(!won)msg('Yerleşim yeniden çözülebilir görünüyor.');
+ if(w){msg('Buraya koyarsanız bulmaca tamamlanamaz.',true);SFX.warn()}
+ else if(!won)msg('Şimdi yine doğru yoldayız.');
 }
 function showHint(){
  if(won){return}
  const r=solveState(1500);
  if(r.timeout){msg('Şu an çözüm aranamadı. Birkaç parça daha yerleştirip yeniden deneyin.',true);return}
- if(!r.first){msg('Mevcut yerleşimle çözüm yok. Bir parçayı alın ya da geri alın.',true);return}
+ if(!r.first){msg('Bu şekilde bir çözüm bulunamıyor.',true);return}
  const p=r.first[r.firstEmpty],n=NAMES[p],cells=[];
  for(let i=0;i<r.N;i++)if(r.first[i]===p){const ir=Math.floor(i/r.IC),ic=i%r.IC;cells.push(r.T?[ic,ir]:[ir,ic])}
  hints++;hintCells={n,L:cells};hintUntil=performance.now()+3500;
