@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0b0c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
 <title>Hızlı Matematik</title>
 <style>
 :root{--bg:#0a0b0c;--fg:#f2f2f2;--dim:rgba(242,242,242,.7);--ok:#38ff59;--bad:#ff4d4d;--lv:#4dd0e1;
@@ -20,17 +23,19 @@ button{font:inherit;color:inherit;cursor:pointer}
 .g line,.g polyline{stroke:currentColor;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;fill:none}
 .g .off{opacity:.08}
 /* menü ve sonuç */
-.center{place-items:center;overflow:auto}
-.panel{width:min(92vw,460px);display:flex;flex-direction:column;align-items:center;gap:14px;padding:16px 0;text-align:center}
+.center{place-items:center;overflow:hidden}
+.panel{width:min(92vw,460px);min-height:0;display:flex;flex-direction:column;align-items:center;gap:clamp(6px,1.6dvh,14px);padding:clamp(6px,1.9dvh,16px) 0;text-align:center}
 h1{margin:0;font-size:clamp(34px,9dvh,60px);letter-spacing:.02em;color:var(--ok);text-shadow:0 0 18px rgba(56,255,89,.5)}
-.demo{display:flex;align-items:center;justify-content:center;font-size:clamp(30px,7dvh,50px);color:var(--ok);filter:drop-shadow(0 0 .1em var(--ok));padding:6px 0}
-.demo .mkw{position:relative;width:.7em;height:1em;margin-left:.1em}
-.lead{margin:0;font-size:clamp(14px,2.4dvh,17px);line-height:1.5;color:var(--dim)}
+.game-title{width:100%;max-width:100%;font-family:'Orbitron','Segoe UI',Arial,sans-serif;font-size:clamp(22px,min(9dvh,10vw),60px);font-weight:700;line-height:1.08;letter-spacing:.025em;white-space:nowrap}
+#sStart{background-image:radial-gradient(circle at 13% 19%,transparent 0 5.1%,rgba(56,255,89,.075) 5.2% 5.55%,transparent 5.7%),radial-gradient(circle at 87% 27%,transparent 0 7.6%,rgba(56,255,89,.055) 7.7% 8.05%,transparent 8.2%),radial-gradient(circle at 22% 82%,transparent 0 6.6%,rgba(56,255,89,.045) 6.7% 7.05%,transparent 7.2%),radial-gradient(circle at 91% 83%,transparent 0 4.1%,rgba(56,255,89,.06) 4.2% 4.55%,transparent 4.7%)}
+#sStart .panel,#sStart .logo{position:relative;z-index:1}
+.lead{margin:0;font-size:clamp(12px,2.4dvh,17px);line-height:1.4;color:var(--dim)}
 .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
-.mode{padding:12px 8px;border-radius:12px;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.05);display:flex;flex-direction:column;gap:4px}
-.mode b{font-size:18px}.mode span{font-size:13px;color:var(--dim)}
+.mode{padding:clamp(7px,1.4dvh,12px) 8px;border-radius:12px;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.05);display:flex;flex-direction:column;gap:4px}
+.mode b{font-size:clamp(15px,2.2dvh,18px)}.mode span{font-size:clamp(11px,1.6dvh,13px);color:var(--dim)}
 .mode[aria-pressed=true]{border-color:var(--ok);background:rgba(56,255,89,.12);box-shadow:0 0 14px rgba(56,255,89,.25)}
 .btn{min-width:200px;padding:13px 22px;border-radius:12px;border:2px solid rgba(255,255,255,.55);background:rgba(255,255,255,.1);font-size:19px;font-weight:700}
+.center .btn{min-width:clamp(160px,42vw,200px);padding:clamp(9px,1.6dvh,13px) clamp(16px,3vw,22px);font-size:clamp(16px,2.5dvh,19px)}
 .btn:disabled{opacity:.45}
 .btn:active{transform:scale(.97)}
 @media(hover:hover){.btn:not(:disabled):hover,.mode:hover{background:rgba(255,255,255,.18)}}
@@ -68,8 +73,9 @@ font-size:clamp(13px,min(4.3cqh,calc(var(--s)*.72)),28px);opacity:0;transition:o
 .band{position:absolute;left:12%;right:12%;top:calc(50% - var(--rh)/2);height:var(--rh);border-top:1px solid rgba(255,255,255,.28);border-bottom:1px solid rgba(255,255,255,.28)}
 .row{position:absolute;left:0;right:0;top:50%;height:var(--rh);display:flex;justify-content:center;align-items:center;
 font-size:min(9cqw,calc(60cqw / var(--w,10)));color:#bdbdbd;opacity:0;transform:translateY(calc(var(--k)*var(--rh) - 50%));transition:transform .22s ease-out,opacity .22s}
-.row[data-k="0"]{color:#fff;opacity:1;filter:drop-shadow(0 0 .1em rgba(255,255,255,.5))}
-.row[data-k="1"],.row[data-k="-1"]{opacity:.85}.row[data-k="2"],.row[data-k="-2"]{opacity:.38}
+.row[data-k="0"]{color:#fff;opacity:1;filter:drop-shadow(0 0 .09em #fff) drop-shadow(0 0 .22em rgba(255,255,255,.72))}
+.row[data-k="-1"]{opacity:.85}.row[data-k="-2"]{opacity:.38}
+.row[data-k="1"]{opacity:.58}.row[data-k="2"]{opacity:.27}
 .row.ok{color:var(--ok)}.row.bad{color:var(--bad)}
 .row.ok[data-k="0"],.row.ok[data-k="-1"]{filter:drop-shadow(0 0 .1em var(--ok))}
 .row.bad[data-k="0"],.row.bad[data-k="-1"]{filter:drop-shadow(0 0 .1em var(--bad))}
@@ -137,13 +143,35 @@ box-shadow:0 2px 0 #050505,inset 0 1px 0 rgba(255,255,255,.12);font-size:clamp(2
 .chip{padding:7px 12px;border-radius:999px;border:1.5px solid rgba(255,255,255,.35);background:rgba(255,255,255,.07);font-size:14px;white-space:nowrap}
 .chip[aria-pressed=true]{border-color:var(--ok);background:rgba(56,255,89,.14);color:#d6ffe0}
 .chip[hidden]{display:none}
-.rec{margin:0;min-height:1.3em;font-size:14px;color:var(--dim)}
+.rec{margin:0;min-height:1.3em;font-size:clamp(11px,1.8dvh,14px);color:var(--dim)}
+#recLine:empty{display:none}
 .newrec{margin:0;font-size:clamp(20px,3.6dvh,28px);font-weight:700;color:var(--ok);animation:nt 1.6s ease-out;text-shadow:0 0 .35em currentColor}
 .newrec[hidden]{display:none}
-#sStart,#sEnd{grid-template-rows:1fr auto}
-.logo{height:clamp(36px,8dvh,70px);width:auto;max-width:60vw;object-fit:contain;margin:4px 0 12px;opacity:.9;transition:transform .25s,filter .25s,opacity .25s}
+#sStart,#sEnd{grid-template-rows:minmax(0,1fr) auto}
+.logo{height:clamp(26px,6.5dvh,54px);width:auto;max-width:60vw;object-fit:contain;margin:2px 0 6px;opacity:.35;filter:brightness(1.3);transition:opacity .3s}
 .logo[hidden]{display:none}
-@media(hover:hover){.logo:hover{transform:scale(1.07);opacity:1;filter:drop-shadow(0 0 10px rgba(255,255,255,.6)) brightness(1.12)}}
+@media(hover:hover){.logo:hover{opacity:.7}}
+/* kısa yatay ekranlarda ana menüyü ve logoyu birlikte sığdır */
+@media (orientation:landscape) and (max-height:520px) and (max-width:1000px){
+ #sStart .panel,#sEnd .panel{width:min(90vw,560px);gap:5px;padding:4px 0}
+ #sStart .game-title{font-size:clamp(23px,8dvh,36px);line-height:1.02}
+ #sStart .lead{font-size:clamp(11px,3.1dvh,13px);line-height:1.25}
+ #sStart .modes{gap:8px}
+ #sStart .mode{padding:5px 7px;gap:2px}
+ #sStart .mode b{font-size:clamp(13px,4dvh,16px)}
+ #sStart .mode span{font-size:clamp(10px,2.9dvh,12px)}
+ #sStart .rec{font-size:11px;min-height:0}
+ #sStart .btn{min-width:150px;padding:6px 14px;font-size:clamp(14px,4dvh,16px)}
+ #sStart .chips{gap:6px}
+ #sStart .chip{padding:5px 9px;font-size:11px}
+ #sStart .logo,#sEnd .logo{height:clamp(21px,5.5dvh,29px);margin:0 0 3px}
+ #sEnd .panel{gap:6px}
+ #sEnd h1{font-size:clamp(24px,7dvh,36px)}
+ #sEnd .stats{font-size:12px}
+ #sEnd .stats dd{font-size:clamp(18px,4dvh,24px)}
+ #sEnd .row2{gap:6px}
+ #sEnd .btn{min-width:130px;padding:6px 10px;font-size:14px}
+}
 @media (prefers-reduced-motion:reduce){.row{transition-duration:.01s}.glow.rw{animation-duration:.4s}.dial.sh{animation:none}.row .tp::after{animation:none!important}.cd .g{animation:none}.halo.on{animation-duration:.5s}#dgrp.flash{animation:none}}
 </style>
 </head>
@@ -151,8 +179,7 @@ box-shadow:0 2px 0 #050505,inset 0 1px 0 rgba(255,255,255,.12);font-size:clamp(2
 
 <section id="sStart" class="screen center on">
  <div class="panel">
-  <h1>Hızlı Matematik</h1>
-  <div class="demo" id="demo" aria-hidden="true"></div>
+  <h1 class="game-title">HIZLI<br>MATEMATİK</h1>
   <p class="lead">Süre bitmeden işlemleri zihninizden çözün. Doğru cevaplar süre kazandırır, ardışık 10 doğru cevap süreyi yeniler.</p>
   <div class="modes" role="group" aria-label="Oyun modu">
    <button class="mode" id="mNormal" aria-pressed="true"><b>Normal Mod</b><span>8 saniyeyle başlar</span></button>
@@ -219,7 +246,7 @@ box-shadow:0 2px 0 #050505,inset 0 1px 0 rgba(255,255,255,.12);font-size:clamp(2
 const $=s=>document.querySelector(s);
 const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const pk=a=>a[rnd(0,a.length-1)];
-const BASE=[8,10,11,12,13],COEF=[1,1.1,1.2,1.3,1.4],TH=[0,15,35,60,90];
+const BASE=[8,10,11,12,13],COEF=[1,1.1,1.2,1.3,1.4],TH=[0,20,45,70,100];
 /* İşlem grupları: G[0] 1. seviyede eklenen grup ... G[4] 5. seviyede eklenen grup */
 const G=[
  [()=>{const a=rnd(0,9),b=rnd(0,9);return[`${a} + ${b}`,a+b]},
@@ -228,11 +255,11 @@ const G=[
   ()=>{const b=rnd(1,9),q=rnd(0,Math.floor(9/b));return[`${b*q} ÷ ${b}`,q]}],
  [()=>{const a=rnd(10,99),b=rnd(0,9);return Math.random()<.5?[`${a} + ${b}`,a+b]:[`${b} + ${a}`,a+b]},
   ()=>{const a=rnd(10,99),b=rnd(0,Math.min(9,a));return[`${a} − ${b}`,a-b]},
-  ()=>{let a,r,b;do{a=rnd(10,99);r=rnd(0,9);b=a-r}while(b<10);return[`${a} − ${b}`,r]},
+  ()=>{const q=rnd(2,3),d=rnd(Math.ceil(10/q),Math.floor(99/q));return[`${d*q} ÷ ${d}`,q]}],
+ [()=>{let a,r,b;do{a=rnd(10,99);r=rnd(0,9);b=a-r}while(b<10);return[`${a} − ${b}`,r]},
   ()=>{const d=rnd(2,3),k=rnd(Math.ceil(10/d),Math.floor(99/d));return[`${d*k} ÷ ${d}`,k]}],
  [()=>{const a=rnd(10,99),b=rnd(2,9);return Math.random()<.5?[`${a} × ${b}`,a*b]:[`${b} × ${a}`,a*b]},
-  ()=>{const q=rnd(2,3),d=rnd(Math.ceil(10/q),Math.floor(99/q));return[`${d*q} ÷ ${d}`,q]}],
- [()=>{const q=pk([2,3,10]),d=rnd(Math.max(10,Math.ceil(100/q)),Math.min(99,Math.floor(999/q)));return[`${d*q} ÷ ${d}`,q]}]
+  ()=>{const q=pk([2,3,10]),d=rnd(Math.max(10,Math.ceil(100/q)),Math.min(99,Math.floor(999/q)));return[`${d*q} ÷ ${d}`,q]}]
 ];
 const levelFor=n=>{let l=1;for(let i=1;i<5;i++)if(n>=TH[i])l=i+1;return l};
 function mk(level,prev){
@@ -280,7 +307,7 @@ const tm=$('#tm'),prog=$('#prog'),progG=$('#progG'),rowsEl=$('#rows'),glow=$('#g
 const slots=[];
 (()=>{for(let i=0;i<8;i++){const e=document.createElement('span');e.style.display='inline-flex';tm.appendChild(e);slots.push({e,c:''})}})();
 const setTm=str=>{for(let i=0;i<8;i++)if(slots[i].c!==str[i]){slots[i].c=str[i];slots[i].e.innerHTML=glyph(str[i])}};
-$('#demo').innerHTML=sg('7 × 8 = 56')+`<span class="mkw">${MARK.ok}</span>`;
+
 const dots=[],gl=[],NS='http://www.w3.org/2000/svg';
 (()=>{const g=$('#dots'),gg=$('#dglow');for(let i=0;i<10;i++){const a=(-72+i*36)*Math.PI/180,x=(50+41*Math.cos(a)).toFixed(2),y=(50+41*Math.sin(a)).toFixed(2);
  const b=document.createElementNS(NS,'circle');b.setAttribute('cx',x);b.setAttribute('cy',y);b.setAttribute('r','3.8');b.setAttribute('fill','#38ff59');b.setAttribute('opacity','0');gg.appendChild(b);gl.push(b);
