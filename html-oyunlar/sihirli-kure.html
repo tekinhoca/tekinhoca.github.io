@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Sihirli Küre</title>
   <style>
@@ -177,11 +178,11 @@
       white-space: nowrap;
     }
 
-    .top-btn:hover {
+    @media (hover: hover) { .top-btn:hover {
       background: rgba(200, 150, 12, 0.24);
       border-color: var(--gold2);
       transform: translateY(-1px);
-    }
+    } }
 
     .top-btn:active {
       transform: scale(0.97);
@@ -324,11 +325,11 @@
       transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
     }
 
-    .confirm-btn:hover {
+    @media (hover: hover) { .confirm-btn:hover {
       transform: translateY(-2px);
       filter: brightness(1.1);
       box-shadow: 0 14px 30px rgba(168, 85, 247, 0.45);
-    }
+    } }
 
     .confirm-btn:active {
       transform: scale(0.97);
@@ -353,10 +354,10 @@
       pointer-events: auto;
     }
 
-    .brand-foot img:hover {
+    @media (hover: hover) { .brand-foot img:hover {
       opacity: 0.8;
       transform: scale(1.04);
-    }
+    } }
 
     /* ── SONUÇ MODALI (Tek İkon: Üstte "TUTTUĞUNUZ SEMBOL", Altında Işıldayan Küre İçinde) ── */
     .oracle-overlay {
@@ -520,10 +521,10 @@
       gap: 6px;
     }
 
-    .oracle-close-btn:hover {
+    @media (hover: hover) { .oracle-close-btn:hover {
       transform: translateY(-1px);
       filter: brightness(1.1);
-    }
+    } }
 
     /* ── KURALLAR MODALI (mecesml.webp + #0d1b0d, varsayılan açık) ── */
     .modal-overlay {
@@ -620,10 +621,10 @@
       transition: background 0.2s ease, transform 0.15s ease;
     }
 
-    .modal-start:hover {
+    @media (hover: hover) { .modal-start:hover {
       background: rgba(120, 55, 170, 0.9);
       transform: translateY(-1px);
-    }
+    } }
 
     /* ── MOBİL DİKEY UYUM ── */
     @media (max-width: 820px) and (orientation: portrait) {
@@ -749,6 +750,13 @@
         display: none;
       }
     }
+    /* ── Güncelleme: erişilebilirlik, hover koruması, güvenli alan ── */
+    :focus-visible { outline: 2px solid var(--gold2); outline-offset: 2px; }
+    .app { padding-bottom: max(7px, env(safe-area-inset-bottom)); padding-left: max(9px, env(safe-area-inset-left)); padding-right: max(9px, env(safe-area-inset-right)); }
+    @media (max-width: 640px) { .top-btn .lbl { display: none; } .top-btn { padding: 6px 11px; font-size: 1rem; } }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
@@ -770,7 +778,7 @@
         <li>Hazır olduğunuzda <b>"SEMBOLÜMÜ KÜREYE SOR"</b> düğmesine basın; Sihirli Küre tuttuğunuz sembolü ortaya çıkarsın.</li>
       </ul>
       <div class="modal-btns">
-        <button class="modal-start" type="button" onclick="closeModal()">Başla</button>
+        <button class="modal-start" type="button" id="modalStartBtn">Başla</button>
       </div>
     </div>
   </div>
@@ -782,9 +790,9 @@
         <span>Sihirli Küre</span>
       </div>
       <div class="top-actions">
-        <button class="top-btn icon-only-btn" id="soundBtn" type="button" title="Sesi Aç/Kapat" aria-label="Sesi Aç veya Kapat">🔊</button>
-        <button class="top-btn" type="button" onclick="resetGame()">↻ Yeniden Başla</button>
-        <button class="top-btn" type="button" onclick="openModal()">? Kurallar</button>
+        <button class="top-btn icon-only-btn" id="soundBtn" type="button" title="Sesi Aç/Kapat" aria-label="Sesi Aç veya Kapat" aria-pressed="false">🔇</button>
+        <button class="top-btn" type="button" id="resetBtn" aria-label="Yeniden Başla" title="Yeniden Başla">↻<span class="lbl"> Yeniden Başla</span></button>
+        <button class="top-btn" type="button" id="rulesBtn" aria-label="Kurallar" title="Kurallar">?<span class="lbl"> Kurallar</span></button>
       </div>
     </header>
 
@@ -803,7 +811,7 @@
     </main>
 
     <div class="confirm-wrap">
-      <button class="confirm-btn" type="button" onclick="startOracle()">✓ SEMBOLÜMÜ KÜREYE SOR</button>
+      <button class="confirm-btn" type="button" id="askBtn">✓ SEMBOLÜMÜ KÜREYE SOR</button>
     </div>
 
     <div class="brand-foot">
@@ -818,22 +826,46 @@
       <div class="orb-stage">
         <div class="orb-halo" aria-hidden="true"></div>
         <div class="orb" id="orb">
-          <span class="orb-symbol" id="orbSymbol" aria-live="polite">✦</span>
+          <span class="orb-symbol" id="orbSymbol" aria-hidden="true">✦</span>
         </div>
       </div>
-      <div class="oracle-status" id="oracleText">Sihirli Küre odaklanıyor…</div>
-      <button class="oracle-close-btn" id="oracleCloseBtn" type="button" onclick="playAgain()">↻ TEKRAR OYNA</button>
+      <div class="oracle-status" id="oracleText" aria-live="polite">Sihirli Küre odaklanıyor…</div>
+      <button class="oracle-close-btn" id="oracleCloseBtn" type="button">↻ TEKRAR OYNA</button>
     </div>
   </div>
 
   <script>
-    const symbolsPool = ['🦖','🦆','🦉','🦋','🦨','🦜','🦝','🦢','🦣','🦥','🦦','🦗','🦇','🦈','🦊','🦌','🦄','🦭','🦸','🧀','🧌','🧐','🧬','🧺','🧸','🧲','🧰','🧭','🧫','🧴','🩹','🩺','🩶','🪃','🪁','🪐','🪅','🪇','🪕','🪗','🪚','🪛','🪜','🪞','🪟','🪣','🪔','🪩','🪫','🪭','🪮','🪰','🪲','🪳','🪴','🪵','🪶','🪸','🪺','🪻','🪿','🫁','🫅','🫎','🫐','🫕','🫖','🫓','🫒','🫚','🫛','🫠','🫡','🫣','🫢','🫤','🫥','🫨','🫰','🫵','⏱','⏰','⌨','☄','☎','☔','☠','☹','🌙','☯','☪','♠','♣','♥','♦','♨','♻','♿','⚓','⚗','⚠','⚡','⚽','⛄','⛱','⛸','✈','🆗','🌍','🌉','🌄','🌚','🌜','🌠','🌴','🌵','🌷','🌻','🍄','🍇','🍉','🍓','🍒','🎁','🎓','🎖','🎥','🎧','🎨','🎪','🎭','🎮','🎯','🎵','🎹','🏀','🏈','🏐','🏓','🏠','🏵','🐈','🐚','🐞','🐢','🐣','👣'];
+    const SYMBOLS_ALL = ['🦖','🦆','🦉','🦋','🦨','🦜','🦝','🦢','🦥','🦦','🦗','🦇','🦈','🦊','🦌','🦄','🦸','🧀','🧐','🧬','🧺','🧸','🧲','🧰','🧭','🧫','🧴','🩹','🩺','🪐','🪁','🪔','⏰','☔','⚡','⚽','⛄','🆗','🌍','🌉','🌄','🌙','🌠','🌴','🌵','🌷','🌻','🍄','🍇','🍉','🍓','🍒','🎁','🎓','🎥','🎧','🎨','🎪','🎭','🎮','🎯','🎵','🎹','🏀','🏈','🏐','🏓','🏠','🐈','🐚','🐞','🐢','🐣','👣','⏱\uFE0F','⌨\uFE0F','☄\uFE0F','☎\uFE0F','♨\uFE0F','♻\uFE0F','♿\uFE0F','⚓\uFE0F','⚗\uFE0F','⚠\uFE0F','⛱\uFE0F','⛸\uFE0F','✈\uFE0F','🎖\uFE0F','🏵\uFE0F'];
+    // Emoji desteği yoksa aynı "kutu" görünür ve semboller ayırt edilemez; bu yüzden her sembol çizilip ölçülür.
+    function emojiOK(ch) {
+      try {
+        const c = document.createElement('canvas');
+        c.width = 30; c.height = 30;
+        const x = c.getContext('2d', { willReadFrequently: true });
+        x.textBaseline = 'top';
+        x.font = '22px sans-serif';
+        const sig = (t) => {
+          x.clearRect(0, 0, 30, 30);
+          x.fillText(t, 2, 2);
+          const d = x.getImageData(0, 0, 30, 30).data;
+          let h = 0, n = 0;
+          for (let k = 3; k < d.length; k += 4) { h = (h * 31 + d[k]) | 0; if (d[k]) n++; }
+          return { h, n };
+        };
+        const r = sig(ch);
+        if (r.n === 0) return false;
+        const missing = [sig('\u{10FFFE}'), sig('\u{FFFFF}')];
+        return !missing.some((m) => m.h === r.h);
+      } catch (_) { return true; }
+    }
+    let symbolsPool = SYMBOLS_ALL.filter(emojiOK);
+    if (symbolsPool.length < 24) symbolsPool = SYMBOLS_ALL.slice();
     let magicSymbol = '';
     let numberSymbols = {};
     let currentRange = 'all';
     let cycleTimer = null;
     let revealTimer = null;
-    let soundEnabled = true;
+    let soundEnabled = false;
     let audioCtx = null;
 
     function playSound(kind) {
@@ -895,20 +927,15 @@
       const isLandscapeMobile = h <= 540 && w > h;
       const isPortraitMobile = w <= 820 && h >= w;
 
+      // Yakınlaştırılmış aralık (25 kutu)
       if (currentRange !== 'all') {
-        if (isLandscapeMobile) return 9; // 25 kutu için 3 satır (9+9+7) yatay ekranda çok ferah görünür
-        if (isPortraitMobile) return 5;  // 25 kutu için 5x5 kare matris
+        if (isPortraitMobile) return 5;   // 5x5 kare matris
+        return 13;                        // yatay mobil ve PC: 13+12, 9'un katları ne alt alta ne tek doğru üzerinde
       }
-      if (isPortraitMobile) {
-        return 10;
-      }
-      if (isLandscapeMobile) {
-        return 16;
-      }
-      // PC / Geniş ekran: 9'un katlarının alt alta veya çapraz çizgi oluşturmasını engelleyen 16 sütun
-      if (w >= 1100) return 16;
-      if (w >= 821) return 14;
-      return 10;
+      // Tüm tablo: 9'un katlarının (12 kutu) alt alta gelmediği, uzun çizgi oluşturmadığı sütun sayıları
+      if (isPortraitMobile) return 13;
+      if (isLandscapeMobile) return 14;
+      return 14;
     }
 
     function getVisibleNumbers() {
@@ -923,35 +950,54 @@
       return all.filter((n) => n >= minV && n <= maxV);
     }
 
-    function generateSymbols() {
-      const multiplesOf9 = [0, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99];
-      magicSymbol = symbolsPool[Math.floor(Math.random() * symbolsPool.length)];
-      numberSymbols = {};
-      multiplesOf9.forEach((n) => {
-        numberSymbols[n] = magicSymbol;
-      });
-      const others = symbolsPool.filter((s) => s !== magicSymbol);
-      for (let i = 0; i <= 99; i++) {
-        if (!numberSymbols[i]) {
-          numberSymbols[i] = others[Math.floor(Math.random() * others.length)];
-        }
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
       }
+      return arr;
     }
 
-    function renderTable() {
+    // Her oyunda 8 yeni sembol seçilir. Biri 9'un katlarına (12 sayı) ayrılır; kalan 7 sembol, 9'un katı olmayan
+    // 88 sayıya eşit sayıda (12 veya 13'er) ve tamamen rastgele dağıtılır. Böylece hiçbir sayı sabit bir sembole bağlı kalmaz.
+    function generateSymbols() {
+      const syms = shuffle(symbolsPool.slice()).slice(0, 8);
+      magicSymbol = syms[0];
+      const others = syms.slice(1);
+      numberSymbols = {};
+      const rest = [];
+      for (let n = 0; n <= 99; n++) {
+        if (n % 9 === 0) numberSymbols[n] = magicSymbol;
+        else rest.push(n);
+      }
+      const deck = rest.map((_, i) => others[i % others.length]);
+      shuffle(deck);
+      rest.forEach((n, i) => { numberSymbols[n] = deck[i]; });
+    }
+
+    function renderTable(force) {
       const table = document.getElementById('numberTable');
       const cols = computeColumns();
+      const key = cols + '|' + currentRange;
+      if (!force && key === lastRenderKey) return;
+      lastRenderKey = key;
       const nums = getVisibleNumbers();
 
       document.documentElement.style.setProperty('--cols', String(cols));
       table.classList.toggle('zoomed', currentRange !== 'all');
-      table.innerHTML = '';
+      table.textContent = '';
 
       nums.forEach((i, idx) => {
         const div = document.createElement('div');
         div.className = 'num-item';
         div.style.animationDelay = `${Math.min(idx * 3, 200)}ms`;
-        div.innerHTML = `<div class="num-label nm">${i}</div><div class="symbol">${numberSymbols[i]}</div>`;
+        const lab = document.createElement('div');
+        lab.className = 'num-label nm';
+        lab.textContent = String(i);
+        const sym = document.createElement('div');
+        sym.className = 'symbol';
+        sym.textContent = numberSymbols[i];
+        div.append(lab, sym);
         table.appendChild(div);
       });
     }
@@ -975,6 +1021,7 @@
       const status = document.getElementById('oracleText');
 
       overlay.classList.remove('hidden');
+      appEl.inert = true;
       orb.classList.remove('revealed');
       closeBtn.classList.remove('show');
       heading.textContent = 'TUTTUĞUNUZ SEMBOL';
@@ -995,6 +1042,7 @@
         orb.classList.add('revealed');
         status.textContent = 'Küre sembolünüzü seçti.';
         closeBtn.classList.add('show');
+        closeBtn.focus();
         playSound("reveal");
       }, 2200);
     }
@@ -1003,6 +1051,7 @@
       clearOracleTimers();
       playSound("click");
       document.getElementById('oracleOverlay').classList.add('hidden');
+      appEl.inert = document.getElementById('modalOverlay').classList.contains('hidden') ? false : true;
       initGame();
     }
 
@@ -1010,24 +1059,33 @@
       clearOracleTimers();
       playSound("click");
       document.getElementById('oracleOverlay').classList.add('hidden');
+      appEl.inert = document.getElementById('modalOverlay').classList.contains('hidden') ? false : true;
       initGame();
     }
 
     function initGame() {
       setRangeFilter('all');
       generateSymbols();
-      renderTable();
+      renderTable(true);
       document.getElementById('mainMsg').textContent = 'Sembolünüzü aklınızda tutun ve Sihirli Küreye sorun.';
     }
+
+    const appEl = document.querySelector('.app');
+    let lastFocus = null;
 
     function closeModal() {
       playSound("click");
       document.getElementById('modalOverlay').classList.add('hidden');
+      appEl.inert = false;
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
 
     function openModal() {
       playSound("click");
+      lastFocus = document.activeElement;
       document.getElementById('modalOverlay').classList.remove('hidden');
+      appEl.inert = true;
+      document.getElementById('modalStartBtn').focus();
     }
 
     document.querySelectorAll('.range-btn').forEach((btn) => {
@@ -1041,12 +1099,21 @@
     document.getElementById('soundBtn').addEventListener('click', () => {
       soundEnabled = !soundEnabled;
       document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+      document.getElementById('soundBtn').setAttribute('aria-pressed', String(soundEnabled));
       if (soundEnabled) playSound("click");
     });
 
+    let resizeTimer = null;
     window.addEventListener('resize', () => {
-      renderTable();
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => renderTable(false), 120);
     });
+
+    document.getElementById('resetBtn').addEventListener('click', resetGame);
+    document.getElementById('rulesBtn').addEventListener('click', openModal);
+    document.getElementById('modalStartBtn').addEventListener('click', closeModal);
+    document.getElementById('askBtn').addEventListener('click', startOracle);
+    document.getElementById('oracleCloseBtn').addEventListener('click', playAgain);
 
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -1061,6 +1128,8 @@
     });
 
     initGame();
+    appEl.inert = true;
+    document.getElementById('modalStartBtn').focus();
   </script>
 </body>
 </html>
