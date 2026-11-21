@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Sihirli Küre</title>
+  <style>
+    :root {
+      --bg-0: #090612;
+      --bg-1: #160d29;
+      --panel: rgba(20, 14, 38, 0.86);
+      --panel-border: rgba(200, 150, 12, 0.28);
+      /* Sihirli Kartlardaki gibi dış kabukla kontrastlı, sembolleri öne çıkaran mor-lacivert hücre tonu */
+      --cell-bg: #2a1d54;
+      --cell-border: rgba(216, 180, 254, 0.24);
+      --gold: #c8960c;
+      --gold2: #ffd97a;
+      --text: #f7f2e8;
+      --muted: rgba(247, 242, 232, 0.72);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --shadow: 0 18px 44px rgba(0, 0, 0, 0.58);
+      --cols: 16;
+      --orb-size: clamp(120px, 21vmin, 190px);
+      --orb-icon-size: clamp(48px, 8.6vmin, 82px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nm {
+      font-family: 'Segoe UI', 'Helvetica Neue', Arial, Roboto, sans-serif;
+      font-variant-numeric: lining-nums;
+      font-weight: 700;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 15%, #2b1550 0%, var(--bg-1) 44%, var(--bg-0) 100%);
+      color: var(--text);
+      font-family: Georgia, 'Times New Roman', serif;
+      user-select: none;
+    }
+
+    /* Canlı Arka Plan Işık Katmanları */
+    .cosmos-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(74px);
+      opacity: 0.34;
+      animation: driftNebula 16s ease-in-out infinite alternate;
+    }
+
+    .nebula-a {
+      width: 380px;
+      height: 380px;
+      background: #7e22ce;
+      top: -90px;
+      left: -80px;
+    }
+
+    .nebula-b {
+      width: 340px;
+      height: 340px;
+      background: #4338ca;
+      bottom: -90px;
+      right: -70px;
+      animation-delay: -6s;
+    }
+
+    .nebula-c {
+      width: 240px;
+      height: 240px;
+      background: #b45309;
+      top: 40%;
+      left: 52%;
+      opacity: 0.16;
+      animation-duration: 20s;
+    }
+
+    @keyframes driftNebula {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(24px, -18px) scale(1.07); }
+      100% { transform: translate(-18px, 22px) scale(0.96); }
+    }
+
+    /* Tek Sütunlu Tam Genişlik Kabuk (100dvh, kaydırmasız) */
+    .app {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100dvh;
+      max-width: 1560px;
+      margin: 0 auto;
+      padding: clamp(7px, 1.2vh, 16px) clamp(10px, 1.8vw, 24px);
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+      gap: clamp(5px, 0.9vh, 11px);
+    }
+
+    /* Üst Çubuk */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius-md);
+      padding: clamp(6px, 1vh, 10px) clamp(12px, 1.6vw, 18px);
+      box-shadow: var(--shadow);
+      min-width: 0;
+    }
+
+    .game-title {
+      font-size: clamp(1rem, 2.1vw, 1.45rem);
+      font-weight: 700;
+      color: var(--gold2);
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .title-gem {
+      font-size: clamp(1rem, 2vw, 1.35rem);
+      filter: drop-shadow(0 0 8px rgba(255, 217, 122, 0.55));
+      animation: gemTwinkle 3.2s ease-in-out infinite;
+    }
+
+    @keyframes gemTwinkle {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+      50% { transform: scale(1.12) rotate(12deg); opacity: 1; }
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: clamp(5px, 0.8vw, 9px);
+      flex: none;
+    }
+
+    .top-btn {
+      background: rgba(200, 150, 12, 0.1);
+      border: 1px solid rgba(200, 150, 12, 0.36);
+      border-radius: 9px;
+      padding: clamp(5px, 0.85vh, 8px) clamp(9px, 1.2vw, 14px);
+      font-size: clamp(0.76rem, 1.15vw, 0.9rem);
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--text);
+      font-family: Georgia, serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.16s ease, background 0.2s ease, border-color 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .top-btn:hover {
+      background: rgba(200, 150, 12, 0.24);
+      border-color: var(--gold2);
+      transform: translateY(-1px);
+    }
+
+    .top-btn:active {
+      transform: scale(0.97);
+    }
+
+    .icon-only-btn {
+      width: clamp(32px, 4vh, 38px);
+      height: clamp(32px, 4vh, 38px);
+      padding: 0;
+      justify-content: center;
+      font-size: clamp(0.92rem, 1.45vw, 1.1rem);
+    }
+
+    /* Bilgilendirme Satırı */
+    .msg-banner {
+      text-align: center;
+      font-size: clamp(0.76rem, 1.2vw, 0.92rem);
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      padding: 1px 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Mobil Aralık Filtresi (PC'de gizli; Mobil Dikey ve Yatayda Aktif) */
+    .range-bar {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      flex-wrap: nowrap;
+    }
+
+    .range-btn {
+      flex: 1 1 0;
+      min-width: 0;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(200, 150, 12, 0.3);
+      border-radius: 7px;
+      padding: 4px 2px;
+      font-size: clamp(0.66rem, 2.2vw, 0.78rem);
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+    }
+
+    .range-btn.active {
+      background: rgba(168, 85, 247, 0.32);
+      border-color: var(--gold2);
+      color: var(--gold2);
+    }
+
+    /* Tam Genişlik Sayı / Sembol Tablosu */
+    .table-card {
+      min-height: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius-lg);
+      padding: clamp(7px, 1.2vh, 14px);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .table-area {
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+      grid-auto-rows: minmax(0, 1fr);
+      gap: clamp(3px, 0.5vmin, 7px);
+    }
+
+    /* Kutular Tıklanamaz ve Hover Efektinden Arındırılmış */
+    .num-item {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--cell-bg);
+      border: 1px solid var(--cell-border);
+      border-radius: clamp(5px, 0.75vmin, 9px);
+      padding: 2px;
+      cursor: default;
+      pointer-events: none;
+      animation: cellFadeIn 0.32s ease backwards;
+    }
+
+    @keyframes cellFadeIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .num-label {
+      font-size: clamp(0.66rem, 1.35vmin, 0.96rem);
+      line-height: 1.05;
+      color: rgba(248, 250, 252, 0.85);
+    }
+
+    /* PC'de İkonların Kutuyu Dolgun Şekilde Doldurması İçin Büyütülmüş Ölçek */
+    .symbol {
+      font-size: clamp(1.35rem, 3.6vmin, 2.55rem);
+      line-height: 1.08;
+      margin-top: 2px;
+      color: var(--gold2);
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.45));
+    }
+
+    /* Alt Aksiyon Butonu ve Logo Satırı */
+    .confirm-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+    }
+
+    .confirm-btn {
+      background: linear-gradient(135deg, rgba(110, 42, 165, 0.88), rgba(76, 29, 149, 0.95));
+      border: 1.5px solid rgba(255, 217, 122, 0.65);
+      border-radius: 11px;
+      padding: clamp(8px, 1.2vh, 12px) clamp(20px, 2.6vw, 32px);
+      font-size: clamp(0.82rem, 1.25vw, 1rem);
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--gold2);
+      font-family: Georgia, serif;
+      letter-spacing: 0.04em;
+      box-shadow: 0 10px 24px rgba(126, 34, 206, 0.34);
+      transition: transform 0.18s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .confirm-btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+      box-shadow: 0 14px 30px rgba(168, 85, 247, 0.45);
+    }
+
+    .confirm-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Logo Satırı (Düzen içi satır, sabit pozisyon yok) */
+    .brand-foot {
+      flex: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: min(32px, 4.2dvh);
+      pointer-events: none;
+    }
+
+    .brand-foot img {
+      height: 100%;
+      width: auto;
+      opacity: 0.38;
+      filter: brightness(1.3);
+      transition: opacity 0.28s ease, transform 0.28s ease;
+      pointer-events: auto;
+    }
+
+    .brand-foot img:hover {
+      opacity: 0.8;
+      transform: scale(1.04);
+    }
+
+    /* ── SONUÇ MODALI (Tek İkon: Üstte "TUTTUĞUNUZ SEMBOL", Altında Işıldayan Küre İçinde) ── */
+    .oracle-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(4, 2, 10, 0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1100;
+      padding: clamp(12px, 2.5vw, 24px);
+    }
+
+    .oracle-overlay.hidden {
+      display: none;
+    }
+
+    .oracle-box {
+      background: radial-gradient(circle at 50% 25%, rgba(56, 24, 108, 0.55), rgba(11, 7, 22, 0.98) 72%);
+      border: 1.5px solid rgba(200, 150, 12, 0.52);
+      border-radius: 20px;
+      padding: clamp(18px, 3vh, 32px) clamp(18px, 3vw, 28px);
+      width: min(94vw, 430px);
+      max-height: 92dvh;
+      overflow-y: auto;
+      scrollbar-width: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(12px, 2vh, 20px);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.78), 0 0 48px rgba(168, 85, 247, 0.24);
+      animation: modalIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .oracle-box::-webkit-scrollbar {
+      display: none;
+    }
+
+    .oracle-heading {
+      font-size: clamp(0.88rem, 1.7vw, 1.15rem);
+      font-weight: 700;
+      color: var(--gold2);
+      letter-spacing: 0.1em;
+      text-align: center;
+      text-transform: uppercase;
+      min-height: 1.3em;
+    }
+
+    .orb-stage {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+    }
+
+    .orb-halo {
+      position: absolute;
+      width: calc(var(--orb-size) + 28px);
+      height: calc(var(--orb-size) + 28px);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(192, 132, 252, 0.35), rgba(255, 217, 122, 0.14) 55%, transparent 72%);
+      filter: blur(10px);
+      animation: haloBreath 2.2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes haloBreath {
+      0%, 100% { transform: scale(0.95); opacity: 0.75; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .orb {
+      position: relative;
+      width: var(--orb-size);
+      height: var(--orb-size);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 32% 26%, rgba(255, 255, 255, 0.68) 0%, rgba(216, 180, 254, 0.45) 22%, rgba(126, 34, 206, 0.68) 54%, rgba(30, 8, 58, 0.94) 85%);
+      border: 1.5px solid rgba(255, 217, 122, 0.55);
+      box-shadow:
+        inset -10px -12px 24px rgba(15, 3, 35, 0.75),
+        inset 8px 8px 18px rgba(255, 255, 255, 0.35),
+        0 0 34px 8px rgba(168, 85, 247, 0.48),
+        0 0 70px 18px rgba(107, 33, 168, 0.28);
+      animation: orbPulse 1.5s ease-in-out infinite;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      overflow: hidden;
+    }
+
+    .orb::after {
+      content: "";
+      position: absolute;
+      top: 12%;
+      left: 18%;
+      width: 34%;
+      height: 20%;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.42);
+      transform: rotate(-28deg);
+      filter: blur(2px);
+      pointer-events: none;
+    }
+
+    .orb-symbol {
+      position: relative;
+      z-index: 1;
+      font-size: var(--orb-icon-size);
+      line-height: 1;
+      color: var(--gold2);
+      filter: drop-shadow(0 0 14px rgba(255, 217, 122, 0.7));
+      transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+
+    .orb.revealed .orb-symbol {
+      animation: symbolReveal 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @keyframes symbolReveal {
+      0% { transform: scale(0.55); opacity: 0.2; }
+      70% { transform: scale(1.12); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes orbPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .oracle-status {
+      font-size: clamp(0.84rem, 1.35vw, 0.98rem);
+      color: rgba(233, 213, 255, 0.85);
+      letter-spacing: 0.04em;
+      text-align: center;
+      min-height: 1.2em;
+    }
+
+    .oracle-close-btn {
+      display: none;
+      background: linear-gradient(135deg, rgba(110, 42, 165, 0.85), rgba(76, 29, 149, 0.95));
+      border: 1.5px solid rgba(255, 217, 122, 0.65);
+      border-radius: 10px;
+      padding: 9px 24px;
+      font-size: clamp(0.82rem, 1.25vw, 0.95rem);
+      font-weight: 700;
+      color: var(--gold2);
+      cursor: pointer;
+      font-family: Georgia, serif;
+      transition: transform 0.16s ease, filter 0.2s ease;
+    }
+
+    .oracle-close-btn.show {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .oracle-close-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.1);
+    }
+
+    /* ── KURALLAR MODALI (mecesml.webp + #0d1b0d, varsayılan açık) ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(3, 8, 3, 0.86);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1200;
+      padding: 14px;
+    }
+
+    .modal-overlay.hidden {
+      display: none;
+    }
+
+    .modal-box {
+      background: #0d1b0d;
+      border: 1px solid rgba(200, 150, 12, 0.52);
+      border-radius: 14px;
+      padding: clamp(12px, 2vh, 20px) clamp(16px, 2.5vw, 26px);
+      width: min(94vw, 540px);
+      max-height: 85dvh;
+      overflow-y: auto;
+      scrollbar-width: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+      animation: modalIn 0.28s ease;
+    }
+
+    .modal-box::-webkit-scrollbar {
+      display: none;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .rules-img {
+      display: block;
+      margin: 0 auto;
+      width: clamp(120px, 34vw, 185px);
+      max-height: 26dvh;
+      object-fit: contain;
+      -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000 70%, transparent 100%);
+      mask-image: radial-gradient(ellipse 75% 70% at 50% 45%, #000 70%, transparent 100%);
+    }
+
+    .modal-rules {
+      font-size: clamp(0.84rem, 1.35vw, 1rem);
+      color: rgba(247, 242, 232, 0.9);
+      line-height: 1.62;
+      border-top: 1px solid rgba(200, 150, 12, 0.25);
+      border-bottom: 1px solid rgba(200, 150, 12, 0.25);
+      padding: 10px 6px;
+      list-style: none;
+    }
+
+    .modal-rules li {
+      margin-bottom: 5px;
+    }
+
+    .modal-rules li::before {
+      content: "✦ ";
+      color: var(--gold2);
+    }
+
+    .modal-rules b {
+      color: var(--gold2);
+    }
+
+    .modal-btns {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .modal-start {
+      background: rgba(90, 40, 130, 0.72);
+      border: 1px solid rgba(200, 150, 12, 0.65);
+      border-radius: 8px;
+      padding: 8px 24px;
+      font-size: clamp(0.84rem, 1.2vw, 0.95rem);
+      cursor: pointer;
+      color: var(--gold2);
+      font-weight: 700;
+      font-family: Georgia, serif;
+      transition: background 0.2s ease, transform 0.15s ease;
+    }
+
+    .modal-start:hover {
+      background: rgba(120, 55, 170, 0.9);
+      transform: translateY(-1px);
+    }
+
+    /* ── MOBİL DİKEY UYUM ── */
+    @media (max-width: 820px) and (orientation: portrait) {
+      :root {
+        --orb-size: clamp(118px, 34vw, 168px);
+        --orb-icon-size: clamp(48px, 14vw, 72px);
+      }
+
+      .app {
+        grid-template-rows: auto auto auto minmax(0, 1fr) auto auto;
+        padding: 7px 9px;
+        gap: 5px;
+      }
+
+      .range-bar {
+        display: flex;
+      }
+
+      .table-card {
+        padding: 6px;
+        border-radius: 14px;
+      }
+
+      .table-area {
+        gap: 2.5px;
+      }
+
+      .num-label {
+        font-size: clamp(0.58rem, 2.3vw, 0.76rem);
+      }
+
+      .symbol {
+        font-size: clamp(0.92rem, 4vw, 1.3rem);
+        margin-top: 0;
+      }
+
+      .table-area.zoomed .num-label {
+        font-size: clamp(0.76rem, 3.2vw, 1rem);
+      }
+
+      .table-area.zoomed .symbol {
+        font-size: clamp(1.5rem, 6.8vw, 2.25rem);
+      }
+
+      .confirm-btn {
+        width: 100%;
+        padding: 9px 14px;
+        font-size: 0.84rem;
+        border-radius: 10px;
+      }
+
+      .brand-foot {
+        height: 22px;
+      }
+    }
+
+    /* ── MOBİL YATAY UYUM (Aralık Seçimi Burada da Aktif) ── */
+    @media (max-height: 540px) and (orientation: landscape) {
+      :root {
+        --orb-size: clamp(92px, 28dvh, 138px);
+        --orb-icon-size: clamp(36px, 11dvh, 56px);
+      }
+
+      .app {
+        grid-template-rows: auto auto minmax(0, 1fr) auto;
+        padding: 4px 10px;
+        gap: 4px;
+      }
+
+      .msg-banner, .brand-foot {
+        display: none !important;
+      }
+
+      .top-bar {
+        padding: 4px 10px;
+      }
+
+      .range-bar {
+        display: flex;
+        gap: 5px;
+      }
+
+      .range-btn {
+        padding: 3px 6px;
+        font-size: 0.72rem;
+      }
+
+      .table-card {
+        padding: 5px 7px;
+        border-radius: 12px;
+      }
+
+      .confirm-btn {
+        padding: 5px 18px;
+        font-size: 0.78rem;
+        border-radius: 8px;
+      }
+
+      .table-area {
+        gap: 2px;
+      }
+
+      .num-label {
+        font-size: clamp(0.54rem, 1.6dvh, 0.72rem);
+      }
+
+      .symbol {
+        font-size: clamp(0.84rem, 3dvh, 1.15rem);
+        margin-top: 0;
+      }
+
+      .table-area.zoomed .num-label {
+        font-size: clamp(0.75rem, 3.2dvh, 1.05rem);
+      }
+
+      .table-area.zoomed .symbol {
+        font-size: clamp(1.35rem, 6.8dvh, 2.2rem);
+      }
+    }
+
+    @media (max-height: 680px) and (orientation: portrait) {
+      .brand-foot {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cosmos-bg" aria-hidden="true">
+    <div class="nebula nebula-a"></div>
+    <div class="nebula nebula-b"></div>
+    <div class="nebula nebula-c"></div>
+  </div>
+
+  <!-- ── KURALLAR MODALI (Açılışta Varsayılan Açık) ── -->
+  <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Kurallar">
+    <div class="modal-box">
+      <img class="rules-img" src="../img/mecesml.webp" alt="Tekin Hoca" width="399" height="434" onerror="this.style.display='none'" />
+      <ul class="modal-rules">
+        <li>Aklınızdan iki basamaklı bir sayı tutun. <b>Örnek: <span class="nm">45</span></b></li>
+        <li>Sayının rakamlarını toplayın. <b>Örnek: <span class="nm">4 + 5 = 9</span></b></li>
+        <li>Tuttuğunuz sayıdan bu toplamı çıkarın. <b>Örnek: <span class="nm">45 − 9 = 36</span></b></li>
+        <li>Çıkan sonucu tablodaki sayılar arasından bulup karşısındaki sembolü aklınızda tutun.</li>
+        <li>Hazır olduğunuzda <b>"SEMBOLÜMÜ KÜREYE SOR"</b> düğmesine basın; Sihirli Küre tuttuğunuz sembolü ortaya çıkarsın.</li>
+      </ul>
+      <div class="modal-btns">
+        <button class="modal-start" type="button" onclick="closeModal()">Başla</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app">
+    <header class="top-bar">
+      <div class="game-title">
+        <span class="title-gem" aria-hidden="true">🔮</span>
+        <span>Sihirli Küre</span>
+      </div>
+      <div class="top-actions">
+        <button class="top-btn icon-only-btn" id="soundBtn" type="button" title="Sesi Aç/Kapat" aria-label="Sesi Aç veya Kapat">🔊</button>
+        <button class="top-btn" type="button" onclick="resetGame()">↻ Yeniden Başla</button>
+        <button class="top-btn" type="button" onclick="openModal()">? Kurallar</button>
+      </div>
+    </header>
+
+    <div class="msg-banner" id="mainMsg">Sembolünüzü aklınızda tutun ve Sihirli Küreye sorun.</div>
+
+    <div class="range-bar" id="rangeBar" role="group" aria-label="Sayı Aralığı Yakınlaştırma">
+      <button class="range-btn active" type="button" data-range="all">Tümü</button>
+      <button class="range-btn" type="button" data-range="0-24">0–24</button>
+      <button class="range-btn" type="button" data-range="25-49">25–49</button>
+      <button class="range-btn" type="button" data-range="50-74">50–74</button>
+      <button class="range-btn" type="button" data-range="75-99">75–99</button>
+    </div>
+
+    <main class="table-card" aria-label="Sayı ve Sembol Tablosu">
+      <div class="table-area" id="numberTable"></div>
+    </main>
+
+    <div class="confirm-wrap">
+      <button class="confirm-btn" type="button" onclick="startOracle()">✓ SEMBOLÜMÜ KÜREYE SOR</button>
+    </div>
+
+    <div class="brand-foot">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo" onerror="this.style.display='none'" />
+    </div>
+  </div>
+
+  <!-- ── SONUÇ MODALI (Tek İkon: Üstte "TUTTUĞUNUZ SEMBOL", Altında Işıldayan Küre İçinde) ── -->
+  <div class="oracle-overlay hidden" id="oracleOverlay" role="dialog" aria-modal="true" aria-labelledby="oracleHeading">
+    <div class="oracle-box">
+      <div class="oracle-heading" id="oracleHeading">TUTTUĞUNUZ SEMBOL</div>
+      <div class="orb-stage">
+        <div class="orb-halo" aria-hidden="true"></div>
+        <div class="orb" id="orb">
+          <span class="orb-symbol" id="orbSymbol" aria-live="polite">✦</span>
+        </div>
+      </div>
+      <div class="oracle-status" id="oracleText">Sihirli Küre odaklanıyor…</div>
+      <button class="oracle-close-btn" id="oracleCloseBtn" type="button" onclick="playAgain()">↻ TEKRAR OYNA</button>
+    </div>
+  </div>
+
+  <script>
+    const symbolsPool = ['🦖','🦆','🦉','🦋','🦨','🦜','🦝','🦢','🦣','🦥','🦦','🦗','🦇','🦈','🦊','🦌','🦄','🦭','🦸','🧀','🧌','🧐','🧬','🧺','🧸','🧲','🧰','🧭','🧫','🧴','🩹','🩺','🩶','🪃','🪁','🪐','🪅','🪇','🪕','🪗','🪚','🪛','🪜','🪞','🪟','🪣','🪔','🪩','🪫','🪭','🪮','🪰','🪲','🪳','🪴','🪵','🪶','🪸','🪺','🪻','🪿','🫁','🫅','🫎','🫐','🫕','🫖','🫓','🫒','🫚','🫛','🫠','🫡','🫣','🫢','🫤','🫥','🫨','🫰','🫵','⏱','⏰','⌨','☄','☎','☔','☠','☹','🌙','☯','☪','♠','♣','♥','♦','♨','♻','♿','⚓','⚗','⚠','⚡','⚽','⛄','⛱','⛸','✈','🆗','🌍','🌉','🌄','🌚','🌜','🌠','🌴','🌵','🌷','🌻','🍄','🍇','🍉','🍓','🍒','🎁','🎓','🎖','🎥','🎧','🎨','🎪','🎭','🎮','🎯','🎵','🎹','🏀','🏈','🏐','🏓','🏠','🏵','🐈','🐚','🐞','🐢','🐣','👣'];
+    let magicSymbol = '';
+    let numberSymbols = {};
+    let currentRange = 'all';
+    let cycleTimer = null;
+    let revealTimer = null;
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function playSound(kind) {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          audioCtx = new Ctx();
+        }
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        if (kind === "tick") {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(580, now);
+          gain.gain.setValueAtTime(0.035, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (kind === "reveal") {
+          [587.33, 739.99, 880, 1174.66].forEach((freq, idx) => {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.type = "sine";
+            o.frequency.setValueAtTime(freq, now + idx * 0.08);
+            g.gain.setValueAtTime(0.08, now + idx * 0.08);
+            g.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.26);
+            o.connect(g).connect(audioCtx.destination);
+            o.start(now + idx * 0.08);
+            o.stop(now + idx * 0.08 + 0.28);
+          });
+        } else {
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(460, now);
+          gain.gain.setValueAtTime(0.05, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+          osc.connect(gain).connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.075);
+        }
+      } catch (_) {}
+    }
+
+    function setRangeFilter(rangeVal) {
+      currentRange = rangeVal;
+      document.querySelectorAll('.range-btn').forEach((b) => {
+        b.classList.toggle('active', b.dataset.range === rangeVal);
+      });
+    }
+
+    function computeColumns() {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const isLandscapeMobile = h <= 540 && w > h;
+      const isPortraitMobile = w <= 820 && h >= w;
+
+      if (currentRange !== 'all') {
+        if (isLandscapeMobile) return 9; // 25 kutu için 3 satır (9+9+7) yatay ekranda çok ferah görünür
+        if (isPortraitMobile) return 5;  // 25 kutu için 5x5 kare matris
+      }
+      if (isPortraitMobile) {
+        return 10;
+      }
+      if (isLandscapeMobile) {
+        return 16;
+      }
+      // PC / Geniş ekran: 9'un katlarının alt alta veya çapraz çizgi oluşturmasını engelleyen 16 sütun
+      if (w >= 1100) return 16;
+      if (w >= 821) return 14;
+      return 10;
+    }
+
+    function getVisibleNumbers() {
+      const all = [];
+      for (let i = 99; i >= 0; i--) {
+        all.push(i);
+      }
+      if (currentRange === 'all') return all;
+      const [minStr, maxStr] = currentRange.split('-');
+      const minV = Number(minStr);
+      const maxV = Number(maxStr);
+      return all.filter((n) => n >= minV && n <= maxV);
+    }
+
+    function generateSymbols() {
+      const multiplesOf9 = [0, 9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99];
+      magicSymbol = symbolsPool[Math.floor(Math.random() * symbolsPool.length)];
+      numberSymbols = {};
+      multiplesOf9.forEach((n) => {
+        numberSymbols[n] = magicSymbol;
+      });
+      const others = symbolsPool.filter((s) => s !== magicSymbol);
+      for (let i = 0; i <= 99; i++) {
+        if (!numberSymbols[i]) {
+          numberSymbols[i] = others[Math.floor(Math.random() * others.length)];
+        }
+      }
+    }
+
+    function renderTable() {
+      const table = document.getElementById('numberTable');
+      const cols = computeColumns();
+      const nums = getVisibleNumbers();
+
+      document.documentElement.style.setProperty('--cols', String(cols));
+      table.classList.toggle('zoomed', currentRange !== 'all');
+      table.innerHTML = '';
+
+      nums.forEach((i, idx) => {
+        const div = document.createElement('div');
+        div.className = 'num-item';
+        div.style.animationDelay = `${Math.min(idx * 3, 200)}ms`;
+        div.innerHTML = `<div class="num-label nm">${i}</div><div class="symbol">${numberSymbols[i]}</div>`;
+        table.appendChild(div);
+      });
+    }
+
+    function clearOracleTimers() {
+      clearInterval(cycleTimer);
+      clearTimeout(revealTimer);
+      cycleTimer = null;
+      revealTimer = null;
+    }
+
+    function startOracle() {
+      clearOracleTimers();
+      playSound("click");
+
+      const overlay = document.getElementById('oracleOverlay');
+      const orb = document.getElementById('orb');
+      const orbSymbol = document.getElementById('orbSymbol');
+      const closeBtn = document.getElementById('oracleCloseBtn');
+      const heading = document.getElementById('oracleHeading');
+      const status = document.getElementById('oracleText');
+
+      overlay.classList.remove('hidden');
+      orb.classList.remove('revealed');
+      closeBtn.classList.remove('show');
+      heading.textContent = 'TUTTUĞUNUZ SEMBOL';
+      status.textContent = 'Sihirli Küre odaklanıyor…';
+
+      let tickCount = 0;
+      orbSymbol.textContent = symbolsPool[Math.floor(Math.random() * symbolsPool.length)];
+      cycleTimer = setInterval(() => {
+        orbSymbol.textContent = symbolsPool[Math.floor(Math.random() * symbolsPool.length)];
+        tickCount++;
+        if (tickCount % 2 === 0) playSound("tick");
+      }, 95);
+
+      revealTimer = setTimeout(() => {
+        clearInterval(cycleTimer);
+        cycleTimer = null;
+        orbSymbol.textContent = magicSymbol;
+        orb.classList.add('revealed');
+        status.textContent = 'Küre sembolünüzü seçti.';
+        closeBtn.classList.add('show');
+        playSound("reveal");
+      }, 2200);
+    }
+
+    function playAgain() {
+      clearOracleTimers();
+      playSound("click");
+      document.getElementById('oracleOverlay').classList.add('hidden');
+      initGame();
+    }
+
+    function resetGame() {
+      clearOracleTimers();
+      playSound("click");
+      document.getElementById('oracleOverlay').classList.add('hidden');
+      initGame();
+    }
+
+    function initGame() {
+      setRangeFilter('all');
+      generateSymbols();
+      renderTable();
+      document.getElementById('mainMsg').textContent = 'Sembolünüzü aklınızda tutun ve Sihirli Küreye sorun.';
+    }
+
+    function closeModal() {
+      playSound("click");
+      document.getElementById('modalOverlay').classList.add('hidden');
+    }
+
+    function openModal() {
+      playSound("click");
+      document.getElementById('modalOverlay').classList.remove('hidden');
+    }
+
+    document.querySelectorAll('.range-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        playSound("click");
+        setRangeFilter(btn.dataset.range);
+        renderTable();
+      });
+    });
+
+    document.getElementById('soundBtn').addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+      if (soundEnabled) playSound("click");
+    });
+
+    window.addEventListener('resize', () => {
+      renderTable();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const rulesOv = document.getElementById('modalOverlay');
+        const oracleOv = document.getElementById('oracleOverlay');
+        if (!rulesOv.classList.contains('hidden')) {
+          closeModal();
+        } else if (!oracleOv.classList.contains('hidden')) {
+          playAgain();
+        }
+      }
+    });
+
+    initGame();
+  </script>
+</body>
+</html>
