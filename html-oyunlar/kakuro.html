@@ -2,447 +2,319 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#150d07">
 <title>Kakuro</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#0e0a14;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-.wrap{width:100%;max-width:520px;display:flex;flex-direction:column;gap:7px;margin:auto}
-
-.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
-.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
-.sel-row{display:flex;align-items:center;gap:5px;font-size:11px;color:rgba(247,242,232,0.4);flex-wrap:wrap}
-.sel-row select{background:#100a18;border:1px solid rgba(200,150,12,0.3);border-radius:3px;color:rgba(247,242,232,0.8);font-family:Georgia,serif;font-size:11px;padding:2px 5px;cursor:pointer}
-
-.infobar{display:flex;gap:6px}
-.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
-.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
-.ibox .v{font-size:13px;font-weight:700;color:#c8960c}
-
-/* KAKURO TAHTASI */
-.board-wrap{display:flex;justify-content:center}
-.board{display:inline-grid;gap:2px;padding:2px;background:rgba(200,150,12,0.2);border-radius:4px}
-
-/* Hücre tipleri */
-.cell{
-  width:var(--cs);height:var(--cs);
-  position:relative;
-  border-radius:2px;
-  overflow:hidden;
-}
-/* Dış hücre */
-.cell.outer{background:#0e0a14}
-/* Siyah ipucu hücresi */
-.cell.black{background:#1a1420;cursor:default}
-/* Köşegen çizgi */
-.cell.black::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to bottom left,transparent calc(50% - 0.5px),rgba(200,150,12,0.4) calc(50% - 0.5px),rgba(200,150,12,0.4) calc(50% + 0.5px),transparent calc(50% + 0.5px));
-}
-/* Sağ toplam (üst sağ köşe) */
-.clue-right{
-  position:absolute;top:1px;right:3px;
-  font-size:var(--cf);color:#c8960c;font-weight:700;
-  font-family:Georgia,serif;line-height:1;
-}
-/* Aşağı toplam (alt sol köşe) */
-.clue-down{
-  position:absolute;bottom:1px;left:3px;
-  font-size:var(--cf);color:#a0c0e0;font-weight:700;
-  font-family:Georgia,serif;line-height:1;
-}
-/* Beyaz boş hücre */
-.cell.white{
-  background:#1e1830;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-size:var(--wf);font-weight:700;
-  color:rgba(247,242,232,0.9);
-  font-family:Georgia,serif;
-  transition:background .1s;
-  border:1px solid rgba(200,150,12,0.15);
-}
-.cell.white:hover{background:#2a2440}
-.cell.white.selected{background:#2e2850;outline:2px solid #c8960c;outline-offset:-2px}
-.cell.white.error{background:#2a1020;color:#eb5757}
-.cell.white.done{color:#50c878}
-
-/* NUMPAD */
-.numpad{display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;width:100%}
-.nbtn{
-  flex:1;min-width:28px;height:40px;
-  background:rgba(200,150,12,0.1);border:1px solid rgba(200,150,12,0.3);
-  border-radius:5px;color:rgba(247,242,232,0.85);
-  font-size:16px;font-weight:700;font-family:Georgia,serif;
-  cursor:pointer;transition:background .12s;
-}
-.nbtn:hover{background:rgba(200,150,12,0.25)}
-.nbtn.del{font-size:12px;color:rgba(247,242,232,0.5)}
-
-.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
-.win-banner{display:none;background:rgba(80,200,120,0.1);border:1px solid rgba(80,200,120,0.35);border-radius:5px;padding:8px 14px;text-align:center}
-.win-banner.show{display:block}
-.win-banner h2{font-size:13px;color:#50c878;margin-bottom:2px}
-.win-banner p{font-size:11px;color:rgba(247,242,232,0.45)}
-
-.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
-button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 12px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
-button.a:hover{background:rgba(200,150,12,0.2)}
-
-/* ── Açılış Modalı ── */
-.modal-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.85);
-  display:flex;align-items:center;justify-content:center;
-  z-index:1000;padding:16px;
-}
-.modal-overlay.hidden{display:none;}
-.modal-box{
-  background:#09060f;
-  border:1px solid rgba(200,150,12,0.5);
-  border-radius:8px;
-  padding:22px 20px 18px;
-  max-width:360px;width:100%;
-  display:flex;flex-direction:column;gap:12px;
-  animation:modalIn .3s ease;
-}
-@keyframes modalIn{
-  from{opacity:0;transform:scale(.94);}
-  to{opacity:1;transform:scale(1);}
-}
-.modal-title{
-  font-size:22px;font-weight:700;
-  color:#c8960c;text-align:center;
-  letter-spacing:.06em;
-}
-.modal-rules{
-  font-size:11.5px;
-  color:rgba(247,242,232,0.72);
-  line-height:1.75;
-  border-top:1px solid rgba(200,150,12,0.2);
-  border-bottom:1px solid rgba(200,150,12,0.2);
-  padding:10px 4px;
-  list-style:none;
-}
-.modal-rules li{margin-bottom:3px;padding-left:4px;}
-.modal-rules li::before{content:"∑ ";color:#c8960c;font-weight:700;}
-.modal-btns{display:flex;gap:10px;justify-content:center;}
-.modal-close{
-  background:rgba(18,16,14,0.7);
-  border:1px solid rgba(200,150,12,0.35);
-  border-radius:3px;padding:6px 18px;
-  font-size:12px;cursor:pointer;
-  color:rgba(247,242,232,0.6);
-  font-family:Georgia,serif;transition:background .2s;
-}
-.modal-close:hover{background:rgba(20,10,35,0.9);}
-.modal-start{
-  background:rgba(60,40,110,0.7);
-  border:1px solid rgba(200,150,12,0.6);
-  border-radius:3px;padding:6px 22px;
-  font-size:12px;cursor:pointer;
-  color:#c8960c;font-weight:600;
-  font-family:Georgia,serif;transition:background .2s;
-}
-.modal-start:hover{background:rgba(90,60,150,0.85);}
-.modal-logo{display:flex;justify-content:center;padding-top:4px;}
+:root{--gold:#c8960c;--gold2:#ffd966;--gold3:#ffe9a8;--tx:#e8d5a0;--text:rgba(247,242,232,.94);--dim:rgba(247,242,232,.66);--ok:#50c878;--bad:#ff6b5e;--mw:130px;--ac-rgb:255,160,60}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{height:100%;overflow:hidden;background:#150d07;color:var(--text);font-family:Georgia,'Times New Roman',serif;overscroll-behavior:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+button{font-family:inherit;touch-action:manipulation}
+.nm{font-family:'Segoe UI','Helvetica Neue',Arial,Roboto,sans-serif;font-variant-numeric:lining-nums;font-feature-settings:"lnum" 1;font-weight:700}
+.bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.bg .l{position:absolute;width:70vmax;height:70vmax;border-radius:50%}
+.bg .l1{left:-25vmax;top:-30vmax;background:radial-gradient(circle,rgba(255,160,60,.26),transparent 62%);animation:d1 46s ease-in-out infinite alternate}
+.bg .l2{right:-30vmax;bottom:-35vmax;background:radial-gradient(circle,rgba(255,200,40,.2),transparent 62%);animation:d2 58s ease-in-out infinite alternate}
+.bg .l3{left:25%;top:50%;width:55vmax;height:55vmax;background:radial-gradient(circle,rgba(255,110,90,.18),transparent 62%);animation:d3 52s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(12vmax,10vmax)}}@keyframes d2{to{transform:translate(-14vmax,-8vmax)}}@keyframes d3{to{transform:translate(-10vmax,-12vmax)}}
+.bg .st{position:absolute;inset:0;background-image:radial-gradient(1.4px 1.4px at 12% 14%,rgba(255,233,168,.8),transparent),radial-gradient(1px 1px at 26% 36%,#fff,transparent),radial-gradient(1.6px 1.6px at 39% 8%,rgba(255,233,168,.7),transparent),radial-gradient(1px 1px at 56% 50%,#fff,transparent),radial-gradient(1.4px 1.4px at 71% 22%,rgba(255,233,168,.8),transparent),radial-gradient(1px 1px at 88% 40%,#fff,transparent),radial-gradient(1.4px 1.4px at 92% 8%,rgba(255,233,168,.7),transparent),radial-gradient(1px 1px at 8% 78%,#fff,transparent),radial-gradient(1.4px 1.4px at 64% 88%,rgba(255,233,168,.7),transparent);animation:tw 5s ease-in-out infinite}
+.bg .st.b{background-position:30px 40px;animation:tw 7s ease-in-out -2.5s infinite}
+@keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}
+.app{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.topbar{flex:none;display:flex;align-items:center;gap:8px;height:clamp(40px,6.4dvh,52px);padding:0 clamp(8px,2.5vw,24px)}
+.top-l,.top-r{display:flex;gap:8px;flex:0 0 auto}
+.game-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center;font-size:clamp(16px,3.2dvh,22px);font-weight:800;letter-spacing:.14em;text-transform:uppercase;background:linear-gradient(100deg,var(--gold),var(--gold2) 40%,#fff3c4 55%,var(--gold2),var(--gold));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shim 6s linear infinite}
+@keyframes shim{to{background-position:-200% 0}}
+.icon-btn{position:relative;width:36px;height:36px;border-radius:10px;border:1px solid rgba(var(--ac-rgb),.55);background:linear-gradient(180deg,rgba(var(--ac-rgb),.26),rgba(var(--ac-rgb),.08));color:#fff1de;font-size:17px;line-height:1;cursor:pointer;display:grid;place-items:center;transition:transform .15s,background .2s}
+.icon-btn:active{transform:scale(.93)}.icon-btn:disabled{opacity:.4;pointer-events:none}
+.icon-btn .bd{position:absolute;right:-4px;top:-5px;min-width:16px;height:16px;border-radius:8px;background:var(--gold2);color:#1a1204;font-size:10px;display:grid;place-items:center;padding:0 3px}
+@media(hover:hover){.icon-btn:hover{background:rgba(var(--ac-rgb),.4)}}
+@media(max-width:430px){.icon-btn{width:32px;height:32px;font-size:15px}.top-l,.top-r,.topbar{gap:5px}.game-title{font-size:15px;letter-spacing:.06em}}
+.main{flex:1;min-height:0;width:100%;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"info" "board" "pad" "foot";gap:clamp(5px,1.1dvh,12px);padding:2px clamp(8px,2.5vw,24px) clamp(6px,1dvh,12px)}
+.info{grid-area:info;display:flex;flex-direction:column;gap:clamp(4px,.9dvh,8px)}
+.board{grid-area:board;min-height:0;min-width:0;container-type:size;display:grid;place-items:center}
+.pad{grid-area:pad;display:flex;flex-direction:column;gap:clamp(4px,.8dvh,7px)}
+.foot{grid-area:foot;display:flex;justify-content:center;height:min(34px,5dvh);pointer-events:none}
+.foot img{height:100%;width:auto;opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}.foot img:hover{opacity:.7}
+@media(max-aspect-ratio:13/10) and (max-height:780px){.foot{display:none}}
+@media(min-aspect-ratio:13/10) and (max-height:560px){.foot{display:none}}
+@media(min-aspect-ratio:13/10) and (min-width:640px){.main{grid-template-columns:minmax(260px,36%) minmax(0,1fr);grid-template-rows:1fr auto auto;grid-template-areas:"info board" "pad board" "foot board";column-gap:clamp(14px,3vw,36px)}.info{align-self:end}.pad{align-self:center}.foot{align-self:end}}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.seg button{appearance:none;cursor:pointer;border-radius:10px;padding:clamp(4px,.8dvh,7px) 4px;color:var(--text);background:rgba(var(--ac-rgb),.08);border:1px solid rgba(var(--ac-rgb),.36);font-size:clamp(12px,2.1dvh,14px);font-weight:700}
+.seg button.on{background:linear-gradient(180deg,rgba(var(--ac-rgb),.42),rgba(var(--ac-rgb),.16));border-color:var(--gold2);color:#fff;box-shadow:0 0 14px rgba(var(--ac-rgb),.35)}
+@media(hover:hover){.seg button:hover{border-color:rgba(var(--ac-rgb),.9)}}
+.ibar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ibox{background:rgba(var(--ac-rgb),.09);border:1px solid rgba(var(--ac-rgb),.32);border-radius:10px;padding:clamp(3px,.6dvh,5px) 4px;display:flex;flex-direction:column;align-items:center;line-height:1.15}
+.ibox .l{font-size:clamp(8.5px,1.4dvh,10.5px);color:var(--dim);letter-spacing:.05em}.ibox .v{font-size:clamp(14px,2.5dvh,19px);color:var(--gold2)}
+.msg{font-size:clamp(11px,1.8dvh,13px);color:var(--dim);text-align:center;min-height:1.35em;line-height:1.3}
+.kb{display:none;font-size:11.5px;color:var(--dim);text-align:center}@media(hover:hover) and (pointer:fine){.kb{display:block}}
+@media(max-height:460px){.kb,.msg{display:none!important}}
+.field{--s:min(100cqw,100cqh);--cs:calc(var(--s)/var(--n,6));width:var(--s);height:var(--s);display:grid;border-radius:10px;overflow:hidden;box-shadow:0 0 28px rgba(var(--ac-rgb),.25)}
+.c{position:relative;display:grid;place-items:center;border:1px solid rgba(255,255,255,.13);font-size:calc(var(--cs)*.56);color:#fff1de;transition:background .12s}
+.c.w{cursor:pointer;background-color:rgba(255,160,60,.1);border-color:rgba(255,200,120,.35)}
+.c.k{background-color:#0a0705;cursor:default;border-color:rgba(255,160,60,.18)}
+.c.kd{background-image:linear-gradient(to top right,transparent calc(50% - 1px),rgba(255,217,102,.75) 50%,transparent calc(50% + 1px))}
+.cr,.cd{position:absolute;font-size:calc(var(--cs)*.27);line-height:1;pointer-events:none}
+.cr{right:9%;top:7%;color:var(--gold3)}.cd{left:9%;bottom:7%;color:#8fe3ee}
+.c.hn{color:var(--ok)}
+.c.pr{background-image:linear-gradient(rgba(var(--ac-rgb),.2),rgba(var(--ac-rgb),.2))}
+.c.sm{background-image:linear-gradient(rgba(255,217,102,.3),rgba(255,217,102,.3))}
+.c.sel{background-image:linear-gradient(rgba(var(--ac-rgb),.5),rgba(var(--ac-rgb),.5));box-shadow:inset 0 0 0 2px var(--gold2)}
+.c.er{background-image:linear-gradient(rgba(255,107,94,.45),rgba(255,107,94,.45));color:#ffd2cc}
+.c.pop{animation:pp .25s ease}@keyframes pp{50%{transform:scale(1.15)}}
+.nt{position:absolute;inset:3%;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);pointer-events:none}
+.nt i{font-style:normal;display:grid;place-items:center;font-size:calc(var(--cs)*.2);color:rgba(255,200,140,.95)}
+.np{display:grid;grid-template-columns:repeat(var(--k,6),1fr);gap:clamp(3px,.6vw,6px)}
+.nb{appearance:none;cursor:pointer;height:clamp(38px,6.6dvh,54px);border-radius:10px;border:1px solid rgba(var(--ac-rgb),.5);background:linear-gradient(180deg,rgba(var(--ac-rgb),.28),rgba(var(--ac-rgb),.08));color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;transition:transform .12s}
+.nb b{font-size:clamp(17px,3.2dvh,24px)}.nb i{font-style:normal;font-size:9px;color:var(--dim);margin-top:2px}
+.nb:active{transform:scale(.93)}.nb:disabled{opacity:.3;pointer-events:none}
+@media(hover:hover){.nb:hover{background:rgba(var(--ac-rgb),.4)}}
+.ctrl-row{display:flex;gap:6px}
+.cbtn{flex:1;padding:clamp(6px,1dvh,9px) 6px;border-radius:9px;border:1px solid rgba(var(--ac-rgb),.5);background:rgba(var(--ac-rgb),.13);color:var(--text);font-size:clamp(12px,2dvh,13px);font-weight:700;cursor:pointer}
+.cbtn.on{background:rgba(255,217,102,.25);border-color:var(--gold2);color:var(--gold3)}.cbtn:active{transform:scale(.96)}.cbtn:disabled{opacity:.38;pointer-events:none}
+@media(min-aspect-ratio:13/10) and (min-width:640px){.np{grid-template-columns:repeat(3,1fr)}.nb{height:clamp(36px,7.6dvh,56px)}}
+.ov{position:fixed;inset:0;z-index:50;background:rgba(2,5,14,.78);display:grid;place-items:center;padding:12px}
+#confirm{z-index:60}
+.btn{appearance:none;cursor:pointer;font-size:14px;font-weight:700;letter-spacing:.04em;padding:10px 22px;border-radius:8px;color:#1a1204;min-width:var(--mw);border:1px solid var(--gold2);background:linear-gradient(180deg,var(--gold3),var(--gold2) 45%,var(--gold));box-shadow:0 2px 10px rgba(200,150,12,.3)}
+.btn:active{transform:scale(.96)}.btn.secondary{color:var(--tx);background:rgba(200,150,12,.08);border:1px solid rgba(200,150,12,.38);box-shadow:none}.btn.tiny{font-size:11px;padding:6px 12px;font-weight:400;min-width:0}
+.btn:disabled{opacity:.45;pointer-events:none}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+.rules-box{width:min(94vw,440px);max-height:85dvh;overflow:auto;scrollbar-width:none;background:#0d1b0d;border:1px solid rgba(200,150,12,.5);border-radius:14px;padding:0 18px 14px;text-align:center;animation:pop .3s ease both}
+.rules-img{display:block;margin:0 auto;width:var(--mw);max-width:100%;max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%)}
+.pgs{display:grid;margin:2px 0 8px;text-align:left;border-top:1px solid rgba(200,150,12,.22);padding-top:8px}
+.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}
+.pgt{text-align:center;color:var(--gold2);font-weight:700;font-size:15px;margin:0 0 6px}
+.rl{list-style:none;font-size:14px;line-height:1.55;color:rgba(247,242,232,.88)}.rl li{margin-bottom:7px}.rl b{color:var(--gold2)}
+.rnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}
+.rdots{display:flex;gap:8px}.rdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25)}.rdots span.on{background:var(--gold2)}
+.rarr{width:38px;height:38px;min-width:0;border-radius:50%;padding:0;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center}
+.rarr:disabled{opacity:.4}
+@media(min-width:768px){.rules-box{width:min(92vw,520px)}.rl{font-size:15.5px}}
+@media(max-height:700px){.rl{font-size:13px;line-height:1.45}.rl li{margin-bottom:5px}.rules-img{max-height:24dvh}}
+@media(max-height:520px){.rules-img{max-height:20dvh}.rnav{margin-bottom:8px}}
+@media(max-height:520px) and (min-aspect-ratio:13/10){.rules-box{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:18px;align-items:center;width:min(94vw,700px);padding:10px 18px}.rules-img{grid-column:1;grid-row:1/4;width:110px;max-height:60dvh}.pgs{grid-column:2;grid-row:1;margin:0;border-top:none;padding-top:0}.rnav{grid-column:2;grid-row:2;margin:4px 0}.rules-box>.btn{grid-column:2;grid-row:3;justify-self:center}}
+.mcard{width:min(92vw,430px);max-height:92dvh;overflow:auto;scrollbar-width:none;text-align:center;padding:clamp(14px,3dvh,24px) 20px;border-radius:18px;border:1px solid rgba(255,217,102,.55);background:linear-gradient(160deg,#4a2a10,#160c05 74%);box-shadow:0 0 40px rgba(255,217,102,.2),0 20px 60px rgba(0,0,0,.6);animation:pop .3s ease both}
+.eyebrow{letter-spacing:.35em;text-transform:uppercase;font-size:11px;color:var(--gold2);margin-bottom:6px}
+.mcard h2{font-size:clamp(20px,4dvh,30px);font-weight:800;color:var(--gold2)}
+.mcard p{color:var(--dim);margin:8px 0;font-size:14px;line-height:1.5}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 6px}
+.st{background:rgba(255,255,255,.06);border:1px solid rgba(255,217,102,.28);border-radius:10px;padding:8px 4px}.st b{display:block;font-size:21px;color:var(--gold2)}.st span{font-size:11px;color:var(--dim)}
+.rec-line{min-height:1.4em;font-size:13.5px;color:var(--gold3);margin:6px 0 10px}.rec-line.new{color:#fff3c4;font-weight:800}
+.mcard .row{margin-top:8px}
+#fx{position:fixed;inset:0;z-index:80;pointer-events:none}
+@media(max-height:700px){.mcard{padding:12px 16px}}
+@media(prefers-reduced-motion:reduce){.bg .l,.bg .st,.game-title{animation:none}.c.pop{animation:none}.mcard,.rules-box{animation-duration:.01s}}
 </style>
 </head>
 <body>
-<!-- Açılış Modalı -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <div class="modal-title">KAKURO</div>
-    <ul class="modal-rules">
-      <li>Beyaz hücrelere 1–9 arası rakam girin; aynı grup içinde bir rakam <b style="color:#c8960c">tekrar kullanılamaz</b>.</li>
-      <li><b style="color:#c8960c">Sarı</b> sayı: o satırda sağdaki hücrelerin toplamını gösterir.</li>
-      <li><b style="color:#a0c0e0">Mavi</b> sayı: o sütunda aşağıdaki hücrelerin toplamını gösterir.</li>
-      <li>Klavyeden rakam ve ok tuşları kullanılabilir.</li>
-      <li><b style="color:#c8960c">Kontrol</b> düğmesiyle hatalı hücreler sayılır; <b style="color:#c8960c">Çöz</b> ile çözümü görebilirsiniz.</li>
-    </ul>
-    <div class="modal-btns">
-      <button class="modal-close" onclick="closeModal()">Kapat</button>
-      <button class="modal-start" onclick="closeModal()">Başla</button>
-    </div>
-    <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
-           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
-           onmouseover="this.style.opacity='0.65'"
-           onmouseout="this.style.opacity='0.38'">
-    </div>
+<div class="bg"><div class="l l1"></div><div class="l l2"></div><div class="l l3"></div><div class="st"></div><div class="st b"></div></div>
+<div class="app">
+ <header class="topbar">
+  <div class="top-l">
+   <button class="icon-btn" id="bNew" title="Yeni bulmaca (N)" aria-label="Yeni bulmaca">↻</button>
+   <button class="icon-btn" id="bRules" title="Kurallar" aria-label="Kurallar">ⓘ</button>
+   <button class="icon-btn" id="bUndo" title="Geri al (Z)" aria-label="Geri al">↩</button>
+   <button class="icon-btn" id="bHint" title="İpucu (H)" aria-label="İpucu">💡<span class="bd nm" id="hLeft">3</span></button>
   </div>
+  <div class="game-title">Kakuro</div>
+  <div class="top-r">
+   <button class="icon-btn" id="bSound" aria-label="Ses ve titreşim" aria-pressed="false">🔇</button>
+   <button class="icon-btn" id="bFs" aria-label="Tam ekran" hidden>⛶</button>
+  </div>
+ </header>
+ <main class="main">
+  <section class="info">
+   <div class="seg" id="seg" role="group" aria-label="Boyut"><button data-l="4">Kolay · 5×5</button><button data-l="5" class="on">Orta · 6×6</button><button data-l="6">Zor · 7×7</button></div>
+   <div class="ibar">
+    <div class="ibox"><div class="l">Süre</div><div class="v nm" id="vT">0:00</div></div>
+    <div class="ibox"><div class="l">İpucu</div><div class="v nm" id="vH">0/3</div></div>
+    <div class="ibox"><div class="l">Boş</div><div class="v nm" id="vE">0</div></div>
+    <div class="ibox"><div class="l">En iyi</div><div class="v nm" id="vB">—</div></div>
+   </div>
+   <div class="msg" id="msg" aria-live="polite"></div>
+   <div class="kb">Rakam tuşları · Ok tuşları · N not · Z geri al · H ipucu · K kontrol · F tam ekran</div>
+  </section>
+  <section class="board" id="board"><div class="field" id="field"></div></section>
+  <section class="pad">
+   <div class="np" id="np"></div>
+   <div class="ctrl-row"><button type="button" class="cbtn" id="cNote">✎ Not</button><button type="button" class="cbtn" id="cDel">⌫ Sil</button><button type="button" class="cbtn" id="cChk">✓ Kontrol</button></div>
+  </section>
+  <footer class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo" onerror="this.remove()"></footer>
+ </main>
 </div>
+<canvas id="fx" aria-hidden="true"></canvas>
 
-<div class="wrap">
-  <div class="top-bar">
-    <div class="game-title">Kakuro</div>
-    <div class="sel-row">
-      <label>Zorluk:</label>
-      <select id="diffSel">
-        <option value="easy">Kolay (4×4)</option>
-        <option value="medium" selected>Orta (5×5)</option>
-        <option value="hard">Zor (6×6)</option>
-      </select>
-      <label style="margin-left:6px">Bulmaca:</label>
-      <select id="puzSel"></select>
-    </div>
-  </div>
+<div class="ov" id="rules" hidden><div class="rules-box" role="dialog" aria-modal="true" aria-label="Kurallar">
+ <img class="rules-img" src="../img/mecesml.webp" alt="Tekin Hoca" onerror="this.remove()">
+ <div class="pgs" id="pgs">
+  <div class="pg on"><div class="pgt">Amaç</div><ul class="rl"><li>Boş hücrelere <b>1'den 9'a</b> rakamlar yazılır. Siyah kutudaki sayı, kendisinden sonraki boş hücrelerin toplamıdır: <b style="color:var(--gold3)">sağ üstteki</b> sayı yatay, <b style="color:#8fe3ee">sol alttaki</b> sayı dikey sıranın toplamıdır.</li><li>Bir sıradaki rakamlar <b>birbirinden farklı</b> olmalıdır.</li><li>Her bulmacanın tek çözümü vardır ve tahmin yürütmeden bulunabilir. Kolay 5×5, Orta 6×6, Zor 7×7'dir (ipucu satırı ve sütunu dahil).</li></ul></div>
+  <div class="pg"><div class="pgt">Not ve ipucu</div><ul class="rl"><li>Bir hücreye dokununca bilgi satırında o hücrenin yatay ve dikey sıradaki toplamları ve <b>kalan</b> değerleri yazar.</li><li><b>Not</b> düğmesi açıkken rakamlar aday notu olur. İpucu bir oyunda en fazla <b>3</b> kez kullanılır, her biri süreye <b>30 sn</b> ekler.</li><li>Az kutulardan başlayın: 2 hücrede 3, 4, 16, 17; 3 hücrede 6, 7, 23, 24 toplamlarının tek rakam kümesi vardır.</li></ul></div>
+  <div class="pg"><div class="pgt">Kontrol ve rekor</div><ul class="rl"><li><b>Kontrol</b> yanlış rakamları kırmızı gösterir. Hatalar yalnızca bu düğmeyle görünür.</li><li>Rekor, her boyut için en kısa süredir (ipucu cezası dahil) ve cihazınızda saklanır.</li><li>Oyununuz otomatik kaydedilir; sayfayı kapatıp açınca kaldığınız yerden devam edersiniz.</li></ul></div>
+ </div>
+ <div class="rnav"><button class="btn secondary rarr" id="rPrev" aria-label="Önceki">‹</button><div class="rdots" id="rDots"><span class="on"></span><span></span><span></span></div><button class="btn secondary rarr" id="rNext" aria-label="Sonraki">›</button></div>
+ <button class="btn" id="rClose">Kapat</button>
+</div></div>
 
-  <div class="infobar">
-    <div class="ibox"><div class="l">Zorluk</div><div class="v" id="diffDisp">Orta</div></div>
-    <div class="ibox"><div class="l">Bulmaca</div><div class="v" id="puzDisp">1/10</div></div>
-    <div class="ibox"><div class="l">Hata</div><div class="v" id="errDisp">0</div></div>
-  </div>
+<div class="ov" id="confirm" hidden><div class="mcard" role="dialog" aria-modal="true"><h2 id="cqT">Emin misiniz?</h2><p id="cqP"></p><div class="row"><button class="btn" id="cqY">Evet</button><button class="btn secondary" id="cqN">İptal</button></div></div></div>
 
-  <div class="board-wrap">
-    <div class="board" id="board"></div>
-  </div>
-
-  <div class="numpad" id="numpad"></div>
-
-  <div class="msg" id="msg">Boş bir hücreye tıklayın, ardından sayı girin.</div>
-  <div class="win-banner" id="winBanner">
-    <h2>Tebrikler!</h2>
-    <p id="winBody"></p>
-  </div>
-
-  <div class="br-btns">
-    <button class="a" onclick="restartPuzzle()">&#8635; Yeniden</button>
-    <button class="a" onclick="checkAll()">&#10003; Kontrol</button>
-    <button class="a" onclick="revealAll()">&#128065; Çöz</button>
-    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
-  </div>
-</div>
+<div class="ov" id="win" hidden><div class="mcard" role="dialog" aria-modal="true" aria-labelledby="wT">
+ <div class="eyebrow" id="wEye">Çözüldü</div><h2 id="wT">Tebrikler! 🎉</h2><p id="wTx"></p>
+ <div class="stats3"><div class="st"><b class="nm" id="wTime">0:00</b><span>Süre</span></div><div class="st"><b class="nm" id="wHint">0</b><span>İpucu</span></div><div class="st"><b class="nm" id="wPen">0</b><span>Ceza (sn)</span></div></div>
+ <div class="rec-line" id="wRec"></div>
+ <div class="row"><button class="btn" id="wNew">Yeni Bulmaca</button><button class="btn secondary" id="wClose">Tahtayı Gör</button></div>
+</div></div>
 
 <script>
-const PUZZLES={
-  easy:[
-    {size:4,grid:[[0,{"type":"clue","d":22,"r":0},{"type":"clue","d":8,"r":0},0,0],[{"type":"clue","d":0,"r":7},null,null,-1,-1],[{"type":"clue","d":0,"r":7},null,null,-1,{"type":"clue","d":15,"r":0}],[0,null,{"type":"clue","d":0,"r":12},null,null],[{"type":"clue","d":0,"r":11},null,null,-1,null]],solution:[[0,0,0,0,0],[0,2,5,0,0],[0,4,3,0,0],[0,7,0,4,8],[0,9,2,0,7]]},
-    {size:4,grid:[[0,0,0,0,0],[0,-1,{"type":"clue","d":12,"r":0},-1,-1],[0,{"type":"clue","d":5,"r":17},null,null,null],[{"type":"clue","d":0,"r":8},null,null,-1,-1],[{"type":"clue","d":0,"r":12},null,null,null,null]],solution:[[0,0,0,0,0],[0,0,0,0,0],[0,0,4,6,7],[0,1,7,0,0],[0,4,1,2,5]]},
-    {size:4,grid:[[0,{"type":"clue","d":7,"r":0},{"type":"clue","d":23,"r":0},{"type":"clue","d":21,"r":0},{"type":"clue","d":19,"r":0}],[{"type":"clue","d":0,"r":24},null,null,null,null],[{"type":"clue","d":0,"r":26},null,null,null,null],[0,{"type":"clue","d":0,"r":14},null,null,null],[{"type":"clue","d":0,"r":15},null,null,null,null]],solution:[[0,0,0,0,0],[0,4,8,9,3],[0,3,9,8,6],[0,0,5,1,8],[0,9,1,3,2]]},
-    {size:4,grid:[[0,0,{"type":"clue","d":17,"r":0},0,{"type":"clue","d":20,"r":0}],[0,-1,null,-1,null],[{"type":"clue","d":0,"r":10},null,null,{"type":"clue","d":16,"r":0},null],[0,{"type":"clue","d":0,"r":24},null,null,null],[0,-1,{"type":"clue","d":0,"r":14},null,null]],solution:[[0,0,0,0,0],[0,0,2,0,1],[0,4,6,0,6],[0,0,9,7,8],[0,0,0,9,5]]},
-    {size:4,grid:[[0,{"type":"clue","d":6,"r":0},0,0,{"type":"clue","d":16,"r":0}],[{"type":"clue","d":0,"r":6},null,null,-1,null],[0,null,{"type":"clue","d":6,"r":10},null,null],[0,-1,null,-1,null],[{"type":"clue","d":0,"r":11},null,null,-1,null]],solution:[[0,0,0,0,0],[0,4,2,0,1],[0,2,0,1,9],[0,0,2,0,4],[0,7,4,0,2]]},
-    {size:4,grid:[[0,0,0,{"type":"clue","d":23,"r":0},0],[0,{"type":"clue","d":0,"r":16},null,null,null],[0,{"type":"clue","d":16,"r":0},{"type":"clue","d":5,"r":0},null,{"type":"clue","d":14,"r":0}],[{"type":"clue","d":0,"r":25},null,null,null,null],[{"type":"clue","d":0,"r":24},null,null,null,null]],solution:[[0,0,0,0,0],[0,0,6,7,3],[0,0,0,2,0],[0,9,3,8,5],[0,7,2,6,9]]},
-    {size:4,grid:[[0,{"type":"clue","d":5,"r":0},{"type":"clue","d":18,"r":0},{"type":"clue","d":13,"r":0},0],[{"type":"clue","d":0,"r":14},null,null,null,null],[{"type":"clue","d":0,"r":11},null,null,null,-1],[0,{"type":"clue","d":0,"r":11},null,null,null],[{"type":"clue","d":0,"r":19},null,null,null,-1]],solution:[[0,0,0,0,0],[0,1,8,3,2],[0,4,6,1,0],[0,0,1,2,8],[0,9,3,7,0]]},
-    {size:4,grid:[[0,0,0,{"type":"clue","d":10,"r":0},0],[0,{"type":"clue","d":8,"r":0},{"type":"clue","d":17,"r":12},null,null],[{"type":"clue","d":0,"r":11},null,null,null,{"type":"clue","d":11,"r":0}],[{"type":"clue","d":0,"r":17},null,null,null,null],[0,{"type":"clue","d":0,"r":14},null,null,null]],solution:[[0,0,0,0,0],[0,0,0,4,8],[0,1,8,2,0],[0,7,5,1,4],[0,0,4,3,7]]},
-    {size:4,grid:[[0,0,{"type":"clue","d":7,"r":0},0,0],[0,{"type":"clue","d":11,"r":0},null,{"type":"clue","d":14,"r":0},-1],[{"type":"clue","d":0,"r":13},null,null,null,{"type":"clue","d":11,"r":0}],[0,null,{"type":"clue","d":0,"r":10},null,null],[{"type":"clue","d":0,"r":16},null,null,null,null]],solution:[[0,0,0,0,0],[0,0,3,0,0],[0,1,4,8,0],[0,2,0,1,9],[0,8,1,5,2]]},
-    {size:4,grid:[[0,{"type":"clue","d":7,"r":0},{"type":"clue","d":26,"r":0},0,0],[{"type":"clue","d":0,"r":11},null,null,-1,-1],[{"type":"clue","d":0,"r":12},null,null,null,{"type":"clue","d":17,"r":0}],[0,-1,null,-1,null],[{"type":"clue","d":0,"r":24},null,null,null,null]],solution:[[0,0,0,0,0],[0,2,9,0,0],[0,5,3,4,0],[0,0,8,0,9],[0,7,6,3,8]]},
-  ],
-  medium:[
-    {size:5,grid:[[0,0,0,{"type":"clue","d":17,"r":0},{"type":"clue","d":16,"r":0},0],[0,-1,{"type":"clue","d":19,"r":11},null,null,null],[{"type":"clue","d":0,"r":22},null,null,null,null,{"type":"clue","d":12,"r":0}],[0,{"type":"clue","d":0,"r":15},null,null,null,null],[{"type":"clue","d":0,"r":10},null,null,{"type":"clue","d":0,"r":9},null,null],[0,{"type":"clue","d":0,"r":12},null,null,-1,null]],solution:[[0,0,0,0,0,0],[0,0,0,6,1,4],[0,3,9,4,6,0],[0,0,5,7,2,1],[0,8,2,0,7,2],[0,0,3,9,0,9]]},
-    {size:5,grid:[[0,{"type":"clue","d":7,"r":0},{"type":"clue","d":16,"r":0},0,0,{"type":"clue","d":16,"r":0}],[{"type":"clue","d":0,"r":12},null,null,null,{"type":"clue","d":16,"r":0},null],[{"type":"clue","d":0,"r":15},null,null,{"type":"clue","d":0,"r":13},null,null],[0,{"type":"clue","d":7,"r":0},null,{"type":"clue","d":10,"r":9},null,null],[0,null,-1,null,-1,null],[{"type":"clue","d":0,"r":23},null,null,null,-1,-1]],solution:[[0,0,0,0,0,0],[0,1,5,6,0,7],[0,6,9,0,9,4],[0,0,2,0,7,2],[0,1,0,2,0,3],[0,6,9,8,0,0]]},
-    {size:5,grid:[[0,{"type":"clue","d":11,"r":0},0,{"type":"clue","d":12,"r":0},{"type":"clue","d":14,"r":0},{"type":"clue","d":8,"r":0}],[0,null,{"type":"clue","d":0,"r":13},null,null,null],[0,null,{"type":"clue","d":18,"r":21},null,null,null],[0,{"type":"clue","d":12,"r":0},null,{"type":"clue","d":4,"r":0},-1,-1],[{"type":"clue","d":0,"r":13},null,null,null,-1,-1],[{"type":"clue","d":0,"r":21},null,null,null,null,-1]],solution:[[0,0,0,0,0,0],[0,3,0,3,9,1],[0,8,0,9,5,7],[0,0,9,0,0,0],[0,4,6,3,0,0],[0,8,3,1,9,0]]},
-    {size:5,grid:[[0,0,{"type":"clue","d":23,"r":0},0,{"type":"clue","d":15,"r":0},0],[{"type":"clue","d":0,"r":17},null,null,{"type":"clue","d":18,"r":9},null,null],[0,{"type":"clue","d":0,"r":17},null,null,null,-1],[0,{"type":"clue","d":0,"r":15},null,null,-1,{"type":"clue","d":15,"r":0}],[0,-1,-1,null,-1,null],[0,{"type":"clue","d":0,"r":15},null,null,null,null]],solution:[[0,0,0,0,0,0],[0,8,9,0,6,3],[0,0,6,2,9,0],[0,0,8,7,0,0],[0,0,0,8,0,8],[0,0,4,1,3,7]]},
-    {size:5,grid:[[0,{"type":"clue","d":24,"r":0},{"type":"clue","d":15,"r":0},0,0,{"type":"clue","d":11,"r":0}],[{"type":"clue","d":0,"r":14},null,null,null,{"type":"clue","d":18,"r":0},null],[{"type":"clue","d":0,"r":10},null,null,{"type":"clue","d":10,"r":11},null,null],[{"type":"clue","d":0,"r":23},null,null,null,null,-1],[{"type":"clue","d":0,"r":17},null,null,null,null,-1],[0,-1,-1,null,-1,-1]],solution:[[0,0,0,0,0,0],[0,7,1,6,0,7],[0,3,7,0,7,4],[0,6,3,5,9,0],[0,8,4,3,2,0],[0,0,0,2,0,0]]},
-    {size:5,grid:[[0,{"type":"clue","d":7,"r":0},{"type":"clue","d":15,"r":0},0,{"type":"clue","d":11,"r":0},0],[{"type":"clue","d":0,"r":11},null,null,{"type":"clue","d":0,"r":10},null,null],[{"type":"clue","d":0,"r":11},null,null,-1,null,-1],[0,{"type":"clue","d":13,"r":0},-1,-1,{"type":"clue","d":7,"r":0},-1],[{"type":"clue","d":0,"r":13},null,null,-1,null,-1],[0,null,{"type":"clue","d":0,"r":12},null,null,-1]],solution:[[0,0,0,0,0,0],[0,3,8,0,7,3],[0,4,7,0,4,0],[0,0,0,0,0,0],[0,7,6,0,4,0],[0,6,0,9,3,0]]},
-    {size:5,grid:[[0,0,{"type":"clue","d":13,"r":0},0,{"type":"clue","d":22,"r":0},0],[{"type":"clue","d":0,"r":9},null,null,{"type":"clue","d":0,"r":11},null,null],[0,{"type":"clue","d":0,"r":14},null,null,null,{"type":"clue","d":10,"r":0}],[0,-1,{"type":"clue","d":7,"r":0},{"type":"clue","d":0,"r":15},null,null],[0,-1,null,{"type":"clue","d":0,"r":6},null,null],[{"type":"clue","d":0,"r":11},null,null,-1,-1,-1]],solution:[[0,0,0,0,0,0],[0,1,8,0,3,8],[0,0,5,1,8,0],[0,0,0,0,7,8],[0,0,5,0,4,2],[0,9,2,0,0,0]]},
-    {size:5,grid:[[0,0,0,0,{"type":"clue","d":22,"r":0},{"type":"clue","d":8,"r":0}],[{"type":"clue","d":0,"r":15},null,null,{"type":"clue","d":16,"r":6},null,null],[0,-1,{"type":"clue","d":0,"r":18},null,null,null],[0,-1,{"type":"clue","d":8,"r":16},null,null,{"type":"clue","d":9,"r":0}],[{"type":"clue","d":0,"r":9},null,null,{"type":"clue","d":0,"r":8},null,null],[0,{"type":"clue","d":0,"r":3},null,null,-1,null]],solution:[[0,0,0,0,0,0],[0,9,6,0,4,2],[0,0,0,9,3,6],[0,0,0,7,9,0],[0,2,7,0,6,2],[0,0,1,2,0,7]]},
-    {size:5,grid:[[0,{"type":"clue","d":3,"r":0},0,{"type":"clue","d":15,"r":0},0,0],[{"type":"clue","d":0,"r":15},null,null,null,{"type":"clue","d":13,"r":0},-1],[0,null,{"type":"clue","d":0,"r":15},null,null,null],[0,{"type":"clue","d":13,"r":0},-1,{"type":"clue","d":10,"r":0},null,-1],[0,null,{"type":"clue","d":0,"r":16},null,null,null],[{"type":"clue","d":0,"r":19},null,null,null,null,-1]],solution:[[0,0,0,0,0,0],[0,2,5,8,0,0],[0,1,0,7,2,6],[0,0,0,0,7,0],[0,6,0,4,3,9],[0,7,5,6,1,0]]},
-    {size:5,grid:[[0,0,{"type":"clue","d":11,"r":0},0,0,{"type":"clue","d":10,"r":0}],[0,{"type":"clue","d":23,"r":28},null,null,null,null],[{"type":"clue","d":0,"r":7},null,null,-1,{"type":"clue","d":17,"r":0},null],[0,null,{"type":"clue","d":11,"r":0},-1,null,-1],[{"type":"clue","d":0,"r":15},null,null,{"type":"clue","d":0,"r":9},null,null],[{"type":"clue","d":0,"r":25},null,null,null,null,-1]],solution:[[0,0,0,0,0,0],[0,0,5,6,8,9],[0,1,6,0,0,1],[0,7,0,0,2,0],[0,6,9,0,7,2],[0,9,2,6,8,0]]},
-  ],
-  hard:[
-    {size:6,grid:[[0,0,{"type":"clue","d":19,"r":0},0,0,0,0],[{"type":"clue","d":0,"r":13},null,null,{"type":"clue","d":0,"r":7},null,null,-1],[0,{"type":"clue","d":0,"r":7},null,null,{"type":"clue","d":17,"r":0},-1,-1],[{"type":"clue","d":0,"r":5},null,null,{"type":"clue","d":14,"r":9},null,null,-1],[0,{"type":"clue","d":8,"r":15},null,null,null,-1,-1],[0,null,{"type":"clue","d":0,"r":15},null,null,-1,-1],[{"type":"clue","d":0,"r":8},null,null,null,{"type":"clue","d":0,"r":15},null,null]],solution:[[0,0,0,0,0,0,0],[0,9,4,0,3,4,0],[0,0,5,2,0,0,0],[0,2,3,0,6,3,0],[0,0,7,5,3,0,0],[0,7,0,7,8,0,0],[0,1,5,2,0,6,9]]},
-    {size:6,grid:[[0,0,0,0,{"type":"clue","d":13,"r":0},0,0],[0,-1,{"type":"clue","d":12,"r":0},-1,null,{"type":"clue","d":13,"r":0},-1],[0,{"type":"clue","d":9,"r":20},null,null,null,null,-1],[{"type":"clue","d":0,"r":5},null,null,{"type":"clue","d":19,"r":0},{"type":"clue","d":15,"r":13},null,null],[0,null,{"type":"clue","d":11,"r":15},null,null,-1,{"type":"clue","d":13,"r":0}],[{"type":"clue","d":0,"r":22},null,null,null,null,-1,null],[0,{"type":"clue","d":0,"r":11},null,null,-1,-1,null]],solution:[[0,0,0,0,0,0,0],[0,0,0,0,8,0,0],[0,0,8,3,5,4,0],[0,1,4,0,0,9,4],[0,5,0,8,7,0,0],[0,3,2,9,8,0,7],[0,0,9,2,0,0,6]]},
-    {size:6,grid:[[0,{"type":"clue","d":16,"r":0},{"type":"clue","d":9,"r":0},0,0,{"type":"clue","d":12,"r":0},0],[{"type":"clue","d":0,"r":12},null,null,null,-1,null,{"type":"clue","d":10,"r":0}],[{"type":"clue","d":0,"r":9},null,null,{"type":"clue","d":0,"r":15},null,null,null],[0,null,{"type":"clue","d":15,"r":0},-1,{"type":"clue","d":11,"r":8},null,null],[0,{"type":"clue","d":15,"r":0},null,-1,null,{"type":"clue","d":8,"r":0},-1],[{"type":"clue","d":0,"r":17},null,null,{"type":"clue","d":0,"r":3},null,null,-1],[0,null,{"type":"clue","d":0,"r":26},null,null,null,null]],solution:[[0,0,0,0,0,0,0],[0,6,2,4,0,1,0],[0,2,7,0,2,4,9],[0,8,0,0,0,7,1],[0,0,6,0,2,0,0],[0,8,9,0,1,2,0],[0,7,0,3,8,6,9]]},
-    {size:6,grid:[[0,0,0,0,0,0,0],[0,-1,-1,{"type":"clue","d":16,"r":0},-1,{"type":"clue","d":5,"r":0},-1],[0,-1,-1,null,-1,null,{"type":"clue","d":8,"r":0}],[0,-1,{"type":"clue","d":16,"r":21},null,null,null,null],[0,{"type":"clue","d":0,"r":8},null,null,-1,{"type":"clue","d":16,"r":0},null],[{"type":"clue","d":0,"r":16},null,null,{"type":"clue","d":0,"r":16},null,null,-1],[0,{"type":"clue","d":0,"r":9},null,null,{"type":"clue","d":0,"r":16},null,null]],solution:[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,2,0,1,0],[0,0,0,9,3,4,5],[0,0,3,5,0,0,3],[0,7,9,0,7,9,0],[0,0,4,5,0,7,9]]},
-    {size:6,grid:[[0,0,0,{"type":"clue","d":11,"r":0},0,0,0],[0,{"type":"clue","d":0,"r":10},null,null,-1,{"type":"clue","d":5,"r":0},-1],[0,{"type":"clue","d":19,"r":0},{"type":"clue","d":20,"r":12},null,null,null,{"type":"clue","d":21,"r":0}],[{"type":"clue","d":0,"r":12},null,null,{"type":"clue","d":9,"r":0},{"type":"clue","d":0,"r":10},null,null],[{"type":"clue","d":0,"r":19},null,null,null,-1,-1,null],[{"type":"clue","d":0,"r":11},null,null,null,-1,-1,null],[{"type":"clue","d":0,"r":6},null,null,{"type":"clue","d":0,"r":4},null,null,-1]],solution:[[0,0,0,0,0,0,0],[0,0,7,3,0,0,0],[0,0,0,8,1,3,0],[0,5,7,0,0,2,8],[0,9,3,7,0,0,6],[0,3,6,2,0,0,7],[0,2,4,0,1,3,0]]},
-    {size:6,grid:[[0,0,{"type":"clue","d":16,"r":0},0,{"type":"clue","d":13,"r":0},0,0],[{"type":"clue","d":0,"r":11},null,null,-1,null,-1,-1],[0,{"type":"clue","d":17,"r":18},null,null,null,{"type":"clue","d":19,"r":0},-1],[{"type":"clue","d":0,"r":7},null,null,{"type":"clue","d":0,"r":5},null,null,{"type":"clue","d":16,"r":0}],[0,null,-1,-1,{"type":"clue","d":0,"r":17},null,null],[0,null,-1,{"type":"clue","d":0,"r":13},null,null,null],[{"type":"clue","d":0,"r":18},null,null,null,{"type":"clue","d":0,"r":9},null,null]],solution:[[0,0,0,0,0,0,0],[0,8,3,0,6,0,0],[0,0,9,4,5,0,0],[0,3,4,0,2,3,0],[0,7,0,0,0,9,8],[0,1,0,0,7,1,5],[0,6,4,8,0,6,3]]},
-    {size:6,grid:[[0,{"type":"clue","d":12,"r":0},0,{"type":"clue","d":19,"r":0},0,{"type":"clue","d":16,"r":0},{"type":"clue","d":13,"r":0}],[{"type":"clue","d":0,"r":16},null,null,null,{"type":"clue","d":13,"r":7},null,null],[0,null,{"type":"clue","d":0,"r":27},null,null,null,null],[0,null,{"type":"clue","d":0,"r":20},null,null,null,{"type":"clue","d":12,"r":0}],[0,{"type":"clue","d":7,"r":0},-1,{"type":"clue","d":10,"r":0},{"type":"clue","d":9,"r":0},-1,null],[0,null,{"type":"clue","d":0,"r":27},null,null,null,null],[{"type":"clue","d":0,"r":18},null,null,null,null,-1,null]],solution:[[0,0,0,0,0,0,0],[0,3,6,7,0,1,6],[0,1,0,9,5,6,7],[0,8,0,3,8,9,0],[0,0,0,0,0,0,3],[0,3,0,9,3,8,7],[0,4,7,1,6,0,2]]},
-    {size:6,grid:[[0,{"type":"clue","d":15,"r":0},0,0,{"type":"clue","d":13,"r":0},0,{"type":"clue","d":8,"r":0}],[{"type":"clue","d":0,"r":13},null,null,null,null,-1,null],[0,null,{"type":"clue","d":17,"r":0},-1,null,{"type":"clue","d":20,"r":0},null],[{"type":"clue","d":0,"r":17},null,null,{"type":"clue","d":0,"r":11},null,null,{"type":"clue","d":4,"r":0}],[0,{"type":"clue","d":10,"r":0},null,{"type":"clue","d":0,"r":18},null,null,null],[{"type":"clue","d":0,"r":12},null,null,null,{"type":"clue","d":0,"r":4},null,null],[{"type":"clue","d":0,"r":8},null,null,-1,-1,-1,-1]],solution:[[0,0,0,0,0,0,0],[0,1,7,2,3,0,1],[0,6,0,0,1,0,7],[0,8,9,0,2,9,0],[0,0,5,0,7,8,3],[0,3,2,7,0,3,1],[0,7,1,0,0,0,0]]},
-    {size:6,grid:[[0,{"type":"clue","d":16,"r":0},0,0,0,0,0],[0,null,-1,-1,-1,{"type":"clue","d":14,"r":0},-1],[0,null,-1,-1,{"type":"clue","d":24,"r":0},null,{"type":"clue","d":7,"r":0}],[0,{"type":"clue","d":14,"r":0},-1,{"type":"clue","d":0,"r":16},null,null,null],[0,null,-1,-1,null,{"type":"clue","d":3,"r":0},null],[0,null,-1,{"type":"clue","d":0,"r":6},null,null,-1],[{"type":"clue","d":0,"r":11},null,null,{"type":"clue","d":0,"r":15},null,null,null]],solution:[[0,0,0,0,0,0,0],[0,9,0,0,0,0,0],[0,7,0,0,0,8,0],[0,0,0,0,7,6,3],[0,3,0,0,4,0,4],[0,5,0,0,5,1,0],[0,6,5,0,8,2,5]]},
-    {size:6,grid:[[0,{"type":"clue","d":17,"r":0},{"type":"clue","d":12,"r":0},0,0,{"type":"clue","d":14,"r":0},0],[{"type":"clue","d":0,"r":9},null,null,-1,{"type":"clue","d":0,"r":15},null,null],[{"type":"clue","d":0,"r":11},null,null,{"type":"clue","d":21,"r":12},null,null,{"type":"clue","d":17,"r":0}],[0,{"type":"clue","d":11,"r":13},null,null,{"type":"clue","d":0,"r":10},null,null],[0,null,{"type":"clue","d":14,"r":0},null,-1,{"type":"clue","d":12,"r":0},null],[{"type":"clue","d":0,"r":20},null,null,null,{"type":"clue","d":0,"r":11},null,null],[0,{"type":"clue","d":0,"r":14},null,null,{"type":"clue","d":0,"r":5},null,null]],solution:[[0,0,0,0,0,0,0],[0,8,1,0,0,7,8],[0,9,2,0,9,3,0],[0,0,9,4,0,4,6],[0,5,0,3,0,0,7],[0,6,5,9,0,8,3],[0,0,9,5,0,4,1]]},
-  ],
-};
+'use strict';
+function runsOf(W,m){const R=[];
+ for(let r=0;r<m;r++){let c=0;while(c<m){if(!W[r*m+c]){c++;continue}const cs=[];while(c<m&&W[r*m+c]){cs.push(r*m+c);c++}if(cs.length>=2)R.push({cells:cs,dir:'r'})}}
+ for(let c=0;c<m;c++){let r=0;while(r<m){if(!W[r*m+c]){r++;continue}const cs=[];while(r<m&&W[r*m+c]){cs.push(r*m+c);r++}if(cs.length>=2)R.push({cells:cs,dir:'d'})}}
+ return R}
+function genCore(){
+const rnd=n=>(Math.random()*n)|0,shuf=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+const pc=x=>{let k=0;for(;x;x&=x-1)k++;return k};
+function layout(m,p){const W=Array(m*m).fill(true);for(let i=0;i<m*m;i++)if(Math.random()<p)W[i]=false;
+ const fix=()=>{let bad=false;for(let r=0;r<m;r++){let c=0;while(c<m){if(!W[r*m+c]){c++;continue}let e=c;while(e<m&&W[r*m+e])e++;if(e-c===1){W[r*m+c]=false;bad=true}c=e}}
+  for(let c=0;c<m;c++){let r=0;while(r<m){if(!W[r*m+c]){r++;continue}let e=r;while(e<m&&W[e*m+c])e++;if(e-r===1){W[r*m+c]=false;bad=true}r=e}}return !bad};
+ for(let i=0;i<50&&!fix();i++);
+ const comp=Array(m*m).fill(-1);let best=-1,bs=0,id=0;
+ for(let s=0;s<m*m;s++)if(W[s]&&comp[s]<0){let z=0;const st=[s];comp[s]=id;while(st.length){const u=st.pop();z++;const r=(u/m)|0,c=u%m;for(const [y,x] of [[r+1,c],[r-1,c],[r,c+1],[r,c-1]]){if(y>=0&&x>=0&&y<m&&x<m&&W[y*m+x]&&comp[y*m+x]<0){comp[y*m+x]=id;st.push(y*m+x)}}}if(z>bs){bs=z;best=id}id++}
+ for(let i=0;i<m*m;i++)if(W[i]&&comp[i]!==best)W[i]=false;for(let i=0;i<50&&!fix();i++);return W}
+function fill(W,m,runs){const sol=Array(m*m).fill(0),cr=[...Array(m*m)].map(()=>[]);runs.forEach((ru,k)=>ru.cells.forEach(i=>cr[i].push(k)));
+ const used=runs.map(()=>0),cells=[];for(let i=0;i<m*m;i++)if(W[i])cells.push(i);let nodes=0;
+ return (function rec(j){if(++nodes>20000)return false;if(j===cells.length)return true;const i=cells[j];
+  for(const v of shuf([1,2,3,4,5,6,7,8,9])){const b=1<<v;if(cr[i].some(k=>used[k]&b))continue;sol[i]=v;cr[i].forEach(k=>used[k]|=b);if(rec(j+1))return true;cr[i].forEach(k=>used[k]&=~b);sol[i]=0}return false})(0)?sol:null}
+function solve2(W,m,runs,cap){const cells=[];for(let i=0;i<m*m;i++)if(W[i])cells.push(i);const cr={};cells.forEach(i=>cr[i]=[]);runs.forEach((ru,k)=>ru.cells.forEach(i=>cr[i].push(k)));
+ const used=runs.map(()=>0),sm=runs.map(()=>0),left=runs.map(r=>r.cells.length),val={},sols=[];let nodes=0,over=false;
+ const cand=i=>{let q=0;for(let v=1;v<=9;v++){const b=1<<v;let ok=true;for(const k of cr[i]){if(used[k]&b||sm[k]+v>runs[k].sum){ok=false;break}const rem=left[k]-1,mn=rem*(rem+1)>>1,mx=rem*(19-rem)>>1;if(rem===0?sm[k]+v!==runs[k].sum:(rem>9||sm[k]+v+mn>runs[k].sum||sm[k]+v+mx<runs[k].sum)){ok=false;break}}if(ok)q|=b}return q};
+ (function rec(){if(over||sols.length>=2)return;if(++nodes>cap){over=true;return}let best=-1,bm=0,bc=10;
+  for(const i of cells){if(val[i])continue;const cm=cand(i),k=pc(cm);if(k<bc){bc=k;best=i;bm=cm;if(k===0)return;if(k===1)break}}
+  if(best<0){sols.push({...val});return}
+  for(let v=1;v<=9;v++){const b=1<<v;if(!(bm&b))continue;val[best]=v;cr[best].forEach(k=>{used[k]|=b;sm[k]+=v;left[k]--});rec();cr[best].forEach(k=>{used[k]&=~b;sm[k]-=v;left[k]++});delete val[best];if(over||sols.length>=2)return}})();
+ return over?null:sols}
+function prop(W,m,runs){const d=Array(m*m).fill(0);for(let i=0;i<m*m;i++)if(W[i])d[i]=0x3fe;let first=null;
+ for(let it=0;it<100;it++){let ch=false;
+  for(const ru of runs){const cs=ru.cells,L=cs.length,al=cs.map(()=>0),cur=Array(L);
+   (function rec(j,s,u){if(j===L){if(s===ru.sum)for(let q=0;q<L;q++)al[q]|=1<<cur[q];return}for(let v=1;v<=9;v++){const b=1<<v;if(u&b||!(d[cs[j]]>>v&1)||s+v>ru.sum)continue;cur[j]=v;rec(j+1,s+v,u|b)}})(0,0,0);
+   cs.forEach((i,q)=>{const nd=d[i]&al[q];if(nd!==d[i]){d[i]=nd;ch=true}})}
+  if(first===null)first=d.filter(x=>pc(x)===1).length;if(d.some((x,i)=>W[i]&&!x))return{ok:false,first};if(!ch)break}
+ return{ok:d.every((x,i)=>!W[i]||pc(x)===1),first}}
+const PP={4:.2,5:.25,6:.3};
+return function make(m){for(;;){const W=layout(m,PP[m]);if(W.filter(x=>x).length<m*m*.55)continue;const runs=runsOf(W,m);const sol=fill(W,m,runs);if(!sol)continue;
+  for(let step=0;step<40;step++){runs.forEach(ru=>ru.sum=ru.cells.reduce((a,i)=>a+sol[i],0));const S=solve2(W,m,runs,60000);if(!S)break;
+   if(S.length===1){const p=prop(W,m,runs);if(p.ok&&p.first>=2)return{m,W:W.map(x=>x?1:0).join(''),sol:sol.join('')};break}
+   const D=Object.keys(S[0]).map(Number).filter(i=>S[0][i]!==S[1][i]),i=D[rnd(D.length)],ok=[];
+   for(let v=1;v<=9;v++){if(v!==sol[i]&&runs.filter(ru=>ru.cells.includes(i)).every(ru=>ru.cells.every(c=>c===i||sol[c]!==v)))ok.push(v)}
+   if(!ok.length)break;sol[i]=ok[rnd(ok.length)]}}}}
+const POOL=[["001100111100110000111100111111000011","005100523900130000213500752916000078"],["000011001111111100110110111111001111","000098009561514200760130956847002719"],["011011011111001110000111000111000011","071042096871002760000421000957000095"],["000000001110011110011011111011110011","000000002850061920076034298013150071"],["111000111110001111000011011110011100","964000372480001768000097073210082100"],["110111111111111011000110001110001110","480124894351362072000390003210009580"],["000011001111001111111110111000110000","000031006897003612492170251000130000"],["011011011011011111110110110110000110","013024049016067389850470120950000890"],["000011111011111011011110000111000111","000078978017713039095780000593000162"],["000011111111111110001110000011000011","000087682154891320003970000097000012"],["000011011011011011110011111110001110","000012013097084028860089398750002930"],["110000110000011100001100111111110111","860000420000018900004700521389760137"],["001100001100001111111011110011110011","001500009600005961492073130085270092"],["011011111011111110111111110011110000","013051789096527860648971130087970000"],["011100111100111111011111000110000000","086900379800157689012365000790000000"],["000110110111111011001111000111000110","000980420168897042008679000251000790"],["011000111000111000001110111110110110","025000142000371000003620587960290870"],["110110111111011011011011110000110000","310280578342031096095071120000480000"],["001100111100110011110111011110011110","009300127400310078790219085790062180"],["000000110110111110001100111110110110","000000890860127640001200576940490510"],["110110110110111111111011110000000000","780140310390598672869081940000000000"],["110011111111111100011000011000011000","310034982571865700097000031000023000"],["110000110000111111001111111000111000","510000320000971624004978849000715000"],["011110111110110111110111011000011000","032150314570170895980241061000096000"],["001100111100110111011111011011000000","002100978500890421043976051092000000"],["011100011111000111001110111000111000","041200092786000621001970317000259000"],["000011011111111100110111000111000011","000013074356698500210162000298000021"],["011011011111001100111100111000110000","012013027938003700821300935000610000"],["110000110110111110111111110011000000","740000150380598170983261230094000000"],["001110111110110000011000011111000111","007960495810130000041000087956000724"],["110000110011011111001100001111001111","310000840023036214004300009657008139"],["111000111000001100111111110111000011","924000713000001200815427970312000089"],["001111001111011111011000001111001111","005631007824068912049000001397004172"],["000011001111011100011111011011011000","000098001572072400095748084036013000"],["110110111110001100111111111011000011","780490946780009500983142751093000031"],["110110110110111011001111000111000000","590930120870679021006783000968000000"],["111000111000011000110000111111001111","132000375000086000160000496531004923"],["110011111111001110001100111111111011","960057736289005140002500694315279069"],["000000110000111111001111111110110110","000000790000987562009784598140780290"],["111000111000111100110111111011111000","312000698000571300120542984086241000"],["111000111100011111000011001111001100","859000726100048396000031002945001600"],["001111111111111000111100000111000111","002364261589485000143200000419000128"],["011011011011011110001100111000111000","056039089027093450008200685000217000"],["000111000111000111110111111111001100","000697000489000148640261896375009500"],["000000011110011110110111111011011000","000000051760072930380817798059024000"],["110110111111001111111000110000110000","120530694817007429158000280000490000"],["000110011111011111001100000111000111","000610096521078962009700000125000813"],["110000110000110111111111111100110000","390000140000670179465798253900980000"],["111000111000110011011011011110011100","421000745000960039071012084690012900"],["000110001111111011111100000111000111","000980007635985078796500000269000317"],["011011011011011111000110000111000011","096079021021084796000910000581000056"],["000011001111001100001110111111111011","000089007853002400001950163728986013"],["110011111011001111001100000111000011","810061963094009576002100000865000097"],["110000111000111100000111011111011011","590000178000289400000197079586084021"],["111100111111000011110110111111001111","137200458967000049190810756984005621"],["001110001111111011110110110110000110","001240002971843094210430950260000120"],["000110000111000011111111111111000011","000230000162000086368975135724000097"],["000111011111011100001100111100111000","000739085614062400007900974800561000"],["000011000111111111111100001110001110","000013000574467321849200002160008690"],["000110111110111011110111111100011100","000960351740185097890985679800035400"]];
+let worker=null;
+try{worker=new Worker(URL.createObjectURL(new Blob(['const runsOf='+runsOf.toString()+';const make=('+genCore.toString()+')();onmessage=e=>postMessage(make(e.data))'],{type:'text/javascript'})))}catch(e){worker=null}
+let syncMake=null;const syncGen=n=>(syncMake=syncMake||genCore())(n);
+function generate(n){return new Promise(res=>{if(worker){let done=false;worker.onmessage=e=>{done=true;res(e.data)};worker.onerror=()=>{worker=null;if(!done)res(syncGen(n))};worker.postMessage(n)}else setTimeout(()=>res(syncGen(n)),30)})}
 
-let puzzle, userGrid, selected, solved;
+const $=id=>document.getElementById(id),mem={};
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return mem[k]||null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){mem[k]=v}}};
+const fmt=ms=>{const s=Math.floor(ms/1000);return((s/60)|0)+':'+String(s%60).padStart(2,'0')};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const PEN=30000,MAXH=3,NAME={4:'Kolay',5:'Orta',6:'Zor'};
+let n=5,G=[],CG=[],OF=[],SOL=[],V=[],N=[],LOCK=[],sel=-1,noteMode=false,undo=[],err=new Set(),badC=new Set(),hints=0,elapsed=0,last=Date.now(),solved=false,busy=false,sound=false,rec=store.get('kakuro.rekor.v1')||{};
+try{sound=localStorage.getItem('kakuro.ses.v1')==='1'}catch(e){}
+let ac=null;
+function tone(f,d,t){if(!sound)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();const o=ac.createOscillator(),g=ac.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(.08,ac.currentTime);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function vib(p){if(sound)try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
 
-function loadPuzzle(diff, idx){
-  puzzle = PUZZLES[diff][idx];
-  const n = puzzle.size;
-  userGrid = Array.from({length:n+1}, ()=>Array(n+1).fill(0));
-  selected = null; solved = false;
-  const diffNames={easy:'Kolay',medium:'Orta',hard:'Zor'};
-  document.getElementById('diffDisp').textContent = diffNames[diff];
-  document.getElementById('puzDisp').textContent = (idx+1)+'/10';
-  document.getElementById('errDisp').textContent = '0';
-  document.getElementById('winBanner').classList.remove('show');
-  setMsg('Boş bir hücreye tıklayın, ardından sayı girin.');
-  buildNumpad();
-  render();
-}
-
-function buildNumpad(){
-  const np = document.getElementById('numpad');
-  np.innerHTML='';
-  for(let i=1;i<=9;i++){
-    const b=document.createElement('button');
-    b.className='nbtn';b.textContent=i;
-    b.onclick=(()=>{const v=i;return()=>enterNum(v);})();
-    np.appendChild(b);
-  }
-  const d=document.createElement('button');
-  d.className='nbtn del';d.textContent='Sil';
-  d.onclick=()=>enterNum(0);
-  np.appendChild(d);
-}
-
-function render(){
-  const board = document.getElementById('board');
-  const n = puzzle.size;
-  // Hücre boyutu
-  const maxW = Math.min(460, window.innerWidth - 32);
-  const CS = Math.min(52, Math.floor((maxW - (n+1)*2) / (n+1)));
-  const CF = Math.max(8, Math.floor(CS * 0.28));
-  const WF = Math.max(14, Math.floor(CS * 0.45));
-
-  board.style.setProperty('--cs', CS+'px');
-  board.style.setProperty('--cf', CF+'px');
-  board.style.setProperty('--wf', WF+'px');
-  board.style.gridTemplateColumns = `repeat(${n+1}, ${CS}px)`;
-  board.style.gridTemplateRows = `repeat(${n+1}, ${CS}px)`;
-  board.innerHTML='';
-
-  const g = puzzle.grid;
-
-  for(let r=0;r<=n;r++){
-    for(let c=0;c<=n;c++){
-      const cell = document.createElement('div');
-      cell.className='cell';
-      const gc = g[r][c];
-
-      if(gc === 0){
-        cell.classList.add('outer');
-      } else if(gc === -1){
-        cell.classList.add('black');
-      } else if(gc && gc.type === 'clue'){
-        cell.classList.add('black');
-        if(gc.r > 0){
-          const span=document.createElement('span');
-          span.className='clue-right';
-          span.textContent=gc.r;
-          cell.appendChild(span);
-        }
-        if(gc.d > 0){
-          const span=document.createElement('span');
-          span.className='clue-down';
-          span.textContent=gc.d;
-          cell.appendChild(span);
-        }
-      } else if(gc === null){
-        cell.classList.add('white');
-        const v = userGrid[r][c];
-        if(v > 0) cell.textContent = v;
-        if(selected && selected[0]===r && selected[1]===c) cell.classList.add('selected');
-        cell.addEventListener('click',(()=>{const rr=r,cc=c;return()=>selectCell(rr,cc);})());
-      }
-      board.appendChild(cell);
-    }
-  }
-}
-
-function selectCell(r,c){
-  if(puzzle.grid[r][c]!==null) return;
-  selected=[r,c];
-  render();
-}
-
-function enterNum(v){
-  if(!selected) return;
-  const [r,c]=selected;
-  if(puzzle.grid[r][c]!==null) return;
-  userGrid[r][c]=v;
-  render();
-  if(isComplete()) autoCheck();
-}
-
-function isComplete(){
-  const n=puzzle.size;
-  for(let r=1;r<=n;r++) for(let c=1;c<=n;c++){
-    if(puzzle.grid[r][c]===null && userGrid[r][c]===0) return false;
-  }
-  return true;
-}
-
-function getErrors(){
-  const n=puzzle.size;
-  const errs=new Set();
-  for(let r=1;r<=n;r++) for(let c=1;c<=n;c++){
-    if(puzzle.grid[r][c]===null && userGrid[r][c]!==0){
-      if(userGrid[r][c]!==puzzle.solution[r][c]) errs.add(r+','+c);
-    }
-  }
-  return errs;
-}
-
-function checkAll(){
-  const errs=getErrors();
-  document.getElementById('errDisp').textContent=errs.size;
-  if(errs.size===0 && isComplete()) autoCheck();
-  else if(errs.size>0) setMsg(errs.size+' hatalı hücre var.');
-  else setMsg('Henüz tamamlanmadı, devam edin.');
-}
-
-function autoCheck(){
-  solved=true;
-  document.getElementById('winBanner').classList.add('show');
-  document.getElementById('winBody').textContent='Kakuroyu çözdünüz!';
-  setMsg('');
-}
-
-function revealAll(){
-  const n=puzzle.size;
-  for(let r=1;r<=n;r++) for(let c=1;c<=n;c++){
-    if(puzzle.grid[r][c]===null) userGrid[r][c]=puzzle.solution[r][c];
-  }
-  render();
-  setMsg('Çözüm gösterildi.');
-}
-
-function restartPuzzle(){
-  const diff=document.getElementById('diffSel').value;
-  const idx=parseInt(document.getElementById('puzSel').value);
-  loadPuzzle(diff,idx);
-}
-
-function fillPuzSel(){
-  const ps=document.getElementById('puzSel');
-  ps.innerHTML='';
-  for(let i=0;i<10;i++){
-    const o=document.createElement('option');
-    o.value=i;o.textContent=(i+1)+'. Bulmaca';
-    ps.appendChild(o);
-  }
-}
-
-document.addEventListener('keydown',function(e){
-  const k=e.key;
-  if(k>='1'&&k<='9') enterNum(parseInt(k));
-  else if(k==='0'||k==='Backspace'||k==='Delete') enterNum(0);
-  else if(k==='ArrowUp'&&selected){e.preventDefault();if(selected[0]>1)selectCell(selected[0]-1,selected[1]);}
-  else if(k==='ArrowDown'&&selected){e.preventDefault();if(selected[0]<puzzle.size)selectCell(selected[0]+1,selected[1]);}
-  else if(k==='ArrowLeft'&&selected){e.preventDefault();if(selected[1]>1)selectCell(selected[0],selected[1]-1);}
-  else if(k==='ArrowRight'&&selected){e.preventDefault();if(selected[1]<puzzle.size)selectCell(selected[0],selected[1]+1);}
-});
-
-document.getElementById('diffSel').addEventListener('change',function(){
-  fillPuzSel();
-  document.getElementById('puzSel').value=0;
-  loadPuzzle(this.value,0);
-});
-document.getElementById('puzSel').addEventListener('change',function(){
-  loadPuzzle(document.getElementById('diffSel').value,parseInt(this.value));
-});
-window.addEventListener('resize',()=>{ if(puzzle) render(); });
-
-function setMsg(t){document.getElementById('msg').textContent=t;}
-function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
-function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
-
-fillPuzSel();
-loadPuzzle('medium',0);
+const field=$('field'),np=$('np');let cells=[],T=6,WH=[],CL=[],RUNS=[],RC=[],curW='',curS='';
+function setup(Ws,Ss){const m=n;T=m+1;WH=Array(T*T).fill(false);SOL=Array(T*T).fill(0);const gi=a=>((a/m|0)+1)*T+a%m+1;
+ for(let a=0;a<m*m;a++)if(Ws[a]==='1'){WH[gi(a)]=true;SOL[gi(a)]=+Ss[a]}
+ CL=Array(T*T).fill(null);RUNS=[];RC=Array(T*T).fill(0).map(()=>[]);
+ runsOf(Ws.split('').map(x=>x==='1'),m).forEach((ru,k)=>{const cs=ru.cells.map(gi),sum=cs.reduce((t,g)=>t+SOL[g],0),cg=ru.dir==='r'?cs[0]-1:cs[0]-T;(CL[cg]=CL[cg]||{})[ru.dir]=sum;RUNS.push({cells:cs,sum,dir:ru.dir});cs.forEach(g=>RC[g].push(k))});
+ curW=Ws;curS=Ss}
+function build(){T=n+1;field.innerHTML='';cells=[];field.style.setProperty('--n',T);field.style.gridTemplateColumns=field.style.gridTemplateRows='repeat('+T+',1fr)';WH=Array(T*T).fill(false);CL=Array(T*T).fill(null);RC=Array(T*T).fill(0).map(()=>[]);
+ for(let g=0;g<T*T;g++){const d=document.createElement('div');d.className='c nm';const s=document.createElement('span'),nt=document.createElement('div'),r=document.createElement('b'),dn=document.createElement('b');
+  nt.className='nt';for(let k=1;k<=9;k++)nt.appendChild(document.createElement('i'));r.className='cr';dn.className='cd';d.append(s,nt,r,dn);
+  d.addEventListener('pointerdown',e=>{e.preventDefault();if(WH[g]){sel=g;render();selInfo()}});field.appendChild(d);cells.push({d,s,nt:nt.children,rr:r,dd:dn,sh:-1})}
+ np.innerHTML='';np.style.setProperty('--k',9);
+ for(let v=1;v<=9;v++){const b=document.createElement('button');b.type='button';b.className='nb';b.dataset.v=v;b.innerHTML='<b class="nm">'+v+'</b>';b.addEventListener('pointerdown',e=>{e.preventDefault();enter(v)});np.appendChild(b)}}
+function selInfo(){if(sel<0||solved||busy||!WH[sel])return;msg(RC[sel].map(k=>{const ru=RUNS[k],f=ru.cells.reduce((t,g)=>t+V[g],0),e=ru.cells.filter(g=>!V[g]).length;return (ru.dir==='r'?'Yatay ':'Dikey ')+ru.sum+' ('+ru.cells.length+' hücre, kalan '+(ru.sum-f)+(e?'':' ✓')+')'}).join(' · '))}
+function render(pop){if(cells.length!==T*T)return;const sv=sel>=0?V[sel]:0,pr=new Set();if(sel>=0&&RC[sel])RC[sel].forEach(k=>RUNS[k].cells.forEach(g=>pr.add(g)));let empty=0;
+ for(let g=0;g<T*T;g++){const c=cells[g];
+  if(!WH[g]){const cl=CL[g];c.d.className='c nm k'+(cl?' kd':'');c.s.textContent='';c.rr.textContent=cl&&cl.r?cl.r:'';c.dd.textContent=cl&&cl.d?cl.d:'';continue}
+  const v=V[g];if(!v)empty++;let cl='c nm w';if(LOCK[g])cl+=' hn';if(sel>=0){if(g===sel)cl+=' sel';else if(sv&&v===sv)cl+=' sm';else if(pr.has(g))cl+=' pr'}
+  if(err.has(g))cl+=' er';if(pop===g)cl+=' pop';c.d.className=cl;c.s.textContent=v||'';c.rr.textContent=c.dd.textContent='';
+  const m=v?0:N[g];if(c.sh!==m){c.sh=m;for(let k=1;k<=9;k++)c.nt[k-1].textContent=(m>>k&1)?k:''}}
+ $('vE').textContent=empty;$('vH').textContent=hints+'/'+MAXH;$('hLeft').textContent=MAXH-hints;
+ $('bHint').disabled=hints>=MAXH||solved||busy;$('bUndo').disabled=!undo.length||solved;$('cNote').classList.toggle('on',noteMode);$('cNote').disabled=$('cDel').disabled=$('cChk').disabled=solved||busy;
+ $('vB').textContent=rec[n]?fmt(rec[n]):'—';document.querySelectorAll('#seg button').forEach(b=>b.classList.toggle('on',+b.dataset.l===n))}
+const msg=t=>$('msg').textContent=t||'';
+function save(){if(!curW||solved)return;store.set('kakuro.kayit.v1',{n,W:curW,S:curS,V,N,LOCK,hints,elapsed})}
+function snap(){undo.push({V:V.slice(),N:N.slice()});if(undo.length>300)undo.shift()}
+function clearMarks(){err.clear()}
+function allOK(){return WH.every((w,g)=>!w||V[g]===SOL[g])}
+function enter(v){
+ if(busy||solved||sel<0||!WH[sel])return;if(LOCK[sel]){msg('Bu hücre değiştirilemez.');return}
+ if(v&&noteMode){if(V[sel])return;snap();N[sel]^=1<<v;tone(520,.05)}
+ else{if(V[sel]===v&&v)return;snap();V[sel]=v;N[sel]=0;if(v){RC[sel].forEach(k=>RUNS[k].cells.forEach(p=>N[p]&=~(1<<v)));tone(660,.07);vib(8)}else tone(300,.06)}
+ clearMarks();msg('');render(v&&!noteMode?sel:-1);selInfo();save();
+ if(WH.every((w,g)=>!w||V[g])){if(allOK())win();else msg('Tahta dolu ama hata var. Kontrol düğmesine basın.')}}
+function check(){if(busy||solved)return;clearMarks();WH.forEach((w,g)=>{if(w&&V[g]&&V[g]!==SOL[g])err.add(g)});
+ if(err.size){msg(err.size+' hatalı hücre kırmızı gösterildi.');tone(180,.25,'square');vib([40,30,40])}else{msg(WH.every((w,g)=>!w||V[g])?'':'Şu ana kadar hata yok.');tone(880,.12)}render()}
+function doUndo(){if(!undo.length||solved)return;const s=undo.pop();V=s.V;N=s.N;clearMarks();render();save();tone(400,.05)}
+function hint(){
+ if(busy||solved)return;if(hints>=MAXH){msg('İpucu hakkınız bitti.');return}
+ let i=-1;if(sel>=0&&WH[sel]&&!LOCK[sel]&&V[sel]!==SOL[sel])i=sel;
+ if(i<0){let bc=99;for(let g=0;g<T*T;g++)if(WH[g]&&!V[g]){const e=Math.min(...RC[g].map(k=>RUNS[k].cells.filter(x=>!V[x]).length));if(e<bc){bc=e;i=g}}}
+ if(i<0)i=SOL.findIndex((x,g)=>WH[g]&&V[g]!==x);
+ if(i<0)return;snap();V[i]=SOL[i];N[i]=0;LOCK[i]=true;RC[i].forEach(k=>RUNS[k].cells.forEach(p=>N[p]&=~(1<<SOL[i])));
+ hints++;elapsed+=PEN;sel=i;clearMarks();render(i);msg('İpucu verildi: süreye 30 sn eklendi.');tone(740,.15);vib(15);save();
+ if(allOK())win()}
+function apply(r){n=r.m;build();setup(r.W,r.sol);G=Array(T*T).fill(0);V=Array(T*T).fill(0);N=Array(T*T).fill(0);LOCK=Array(T*T).fill(false);sel=-1;undo=[];clearMarks()}
+function pick(){const seen=store.get('kakuro.gorulen.v1')||[];let av=POOL.map((_,i)=>i).filter(i=>!seen.includes(i));if(!av.length){av=POOL.map((_,i)=>i);seen.length=0}const i=av[(Math.random()*av.length)|0];seen.push(i);store.set('kakuro.gorulen.v1',seen);return{m:6,W:POOL[i][0],sol:POOL[i][1]}}
+function newGame(l){busy=true;if(l)n=l;build();G=Array(T*T).fill(0);V=G.slice();N=G.slice();LOCK=Array(T*T).fill(false);msg('Bulmaca hazırlanıyor…');render();
+ const fin=r=>{apply(r);hints=0;elapsed=0;last=Date.now();solved=false;busy=false;noteMode=false;msg('Boş bir hücreye dokunun, sonra rakam seçin.');store.set('kakuro.kayit.v1',null);render();save()};
+ if(n===6)setTimeout(()=>fin(pick()),30);else generate(n).then(fin)}
+function progress(){return !solved&&V.some((v,i)=>v&&!LOCK[i])}
+function ask(t,p,yes){$('cqT').textContent=t;$('cqP').textContent=p;$('confirm').hidden=false;$('cqY').onclick=()=>{$('confirm').hidden=true;yes()};$('cqN').onclick=()=>$('confirm').hidden=true}
+function startNew(l){if(progress())ask('Yeni bulmaca','Bu bulmacanın ilerlemesi kaybolacak.',()=>newGame(l));else newGame(l)}
+setInterval(()=>{const t=Date.now();if(!solved&&!busy&&!document.hidden&&$('rules').hidden&&$('win').hidden&&$('confirm').hidden)elapsed+=t-last;last=t;$('vT').textContent=fmt(elapsed);if(!solved&&Math.floor(t/5000)!==Math.floor((t-250)/5000))save()},250);
+function win(){solved=true;store.set('kakuro.kayit.v1',null);clearMarks();render();
+ const nr=!rec[n]||elapsed<rec[n];if(nr){rec[n]=elapsed;store.set('kakuro.rekor.v1',rec)}render();
+ $('wTx').textContent=NAME[n]+' ('+n+'×'+n+') bulmacayı çözdünüz.';$('wTime').textContent=fmt(elapsed);$('wHint').textContent=hints;$('wPen').textContent=hints*30;
+ const r=$('wRec');r.className='rec-line'+(nr?' new':'');r.textContent=nr?'🏆 Yeni rekor!':'Rekorunuz: '+fmt(rec[n]);
+ tone(784,.15);setTimeout(()=>tone(988,.15),150);setTimeout(()=>tone(1318,.3),300);vib([60,40,60,40,120]);
+ setTimeout(()=>{$('win').hidden=false;confetti()},450)}
+function confetti(){if(reduce)return;const cv=$('fx'),x=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;const P=[...Array(110)].map(()=>({x:Math.random()*cv.width,y:-20-Math.random()*cv.height*.5,vx:(Math.random()-.5)*3,vy:2+Math.random()*4,s:4+Math.random()*6,c:['#ffd966','#b388ff','#ff7eb6','#4dd0e1','#50c878'][(Math.random()*5)|0],r:Math.random()*6}));
+ let f=0;(function a(){x.clearRect(0,0,cv.width,cv.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=.15;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/3,p.s,p.s*.6);x.restore()});if(++f<220)requestAnimationFrame(a);else x.clearRect(0,0,cv.width,cv.height)})()}
+let rp=0;
+function rPage(i){const p=document.querySelectorAll('#pgs .pg');rp=Math.max(0,Math.min(p.length-1,i));p.forEach((e,k)=>e.classList.toggle('on',k===rp));document.querySelectorAll('#rDots span').forEach((e,k)=>e.classList.toggle('on',k===rp));$('rPrev').disabled=rp===0;$('rNext').disabled=rp===p.length-1}
+$('bRules').onclick=()=>{rPage(0);$('rules').hidden=false};$('rClose').onclick=()=>$('rules').hidden=true;$('rPrev').onclick=()=>rPage(rp-1);$('rNext').onclick=()=>rPage(rp+1);
+$('rules').addEventListener('pointerdown',e=>{if(e.target===$('rules'))$('rules').hidden=true});
+let tx=0;$('pgs').addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});$('pgs').addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)rPage(rp+(d<0?1:-1))});
+$('wNew').onclick=()=>{$('win').hidden=true;newGame()};$('wClose').onclick=()=>$('win').hidden=true;
+$('bNew').onclick=()=>startNew();$('bUndo').onclick=doUndo;$('bHint').onclick=hint;
+$('cNote').onclick=()=>{noteMode=!noteMode;render()};$('cDel').onclick=()=>enter(0);$('cChk').onclick=check;
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{const l=+b.dataset.l;if(l===n&&!solved)return;startNew(l)});
+function setSound(on){sound=on;$('bSound').textContent=on?'🔊':'🔇';$('bSound').setAttribute('aria-pressed',on);try{localStorage.setItem('kakuro.ses.v1',on?'1':'0')}catch(e){}if(on){tone(660,.08);vib(10)}}
+$('bSound').onclick=()=>setSound(!sound);setSound(sound);
+const fsOK=document.fullscreenEnabled||document.webkitFullscreenEnabled;
+function toggleFs(){try{const el=document.documentElement;if(document.fullscreenElement||document.webkitFullscreenElement)(document.exitFullscreen||document.webkitExitFullscreen).call(document);else(el.requestFullscreen||el.webkitRequestFullscreen).call(el)}catch(e){}}
+if(fsOK){$('bFs').hidden=false;$('bFs').onclick=toggleFs}
+document.addEventListener('keydown',e=>{const k=e.key;
+ if(!$('rules').hidden){if(k==='Escape')$('rules').hidden=true;else if(k==='ArrowLeft')rPage(rp-1);else if(k==='ArrowRight')rPage(rp+1);else return;e.preventDefault();return}
+ if(!$('confirm').hidden){if(k==='Escape')$('confirm').hidden=true;return}
+ if(!$('win').hidden){if(k==='Escape'||k==='Enter')$('win').hidden=true;return}
+ if(e.ctrlKey||e.metaKey||e.altKey)return;let h=true;
+ if(k>='1'&&k<='9')enter(+k);else if(k==='0'||k==='Backspace'||k==='Delete')enter(0);
+ else if(k==='n'||k==='N'){noteMode=!noteMode;render()}else if(k==='z'||k==='Z')doUndo();else if(k==='h'||k==='H')hint();
+ else if(k==='k'||k==='K')check();else if((k==='f'||k==='F')&&fsOK)toggleFs();
+ else if(k.startsWith('Arrow')){const d={ArrowUp:-T,ArrowDown:T,ArrowLeft:-1,ArrowRight:1}[k];if(sel<0){sel=WH.indexOf(true)}else{let g=sel+d;while(g>=0&&g<T*T&&!WH[g]&&(d===T||d===-T||((g/T|0)===(sel/T|0))))g+=d;if(g>=0&&g<T*T&&WH[g]&&(Math.abs(d)===T||(g/T|0)===(sel/T|0)))sel=g}render();selInfo()}
+ else h=false;
+ if(h){e.preventDefault();if(document.activeElement&&document.activeElement.blur)document.activeElement.blur()}});
+const sv=store.get('kakuro.kayit.v1');
+if(sv&&sv.W&&sv.V&&sv.n&&sv.S&&sv.W.length===sv.n*sv.n){n=sv.n;build();setup(sv.W,sv.S);G=Array(T*T).fill(0);V=sv.V;N=sv.N;LOCK=sv.LOCK;hints=sv.hints||0;elapsed=sv.elapsed||0;msg('Kaldığınız yerden devam ediyorsunuz.');render()}
+else newGame(5);
 </script>
-
 </body>
 </html>

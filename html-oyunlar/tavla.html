@@ -272,6 +272,22 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
     for (let a = 1; a <= 24; a++) { const c = s.pts[a] * (p ? -1 : 1); if (c > 0) { const d = p ? 25 - a : a; if (d > 6) h += c * (d - 6); } }
     return h;
   }
+  function homeBias(s, p) {
+    let b = 0, mx = 0;
+    for (let a = 1; a <= 24; a++) {
+      const c = s.pts[a] * (p ? -1 : 1);
+      if (c > 0) {
+        const d = p ? 25 - a : a;
+        if (d > 6) {
+          b -= c * 1.5 + (d - 6) * c * 0.25;
+          if (d > mx) mx = d;
+        }
+      }
+    }
+    if (s.bar[p] > 0) { b -= s.bar[p] * 12; mx = 25; }
+    b -= mx * 0.35;
+    return b;
+  }
   function ev(s, p, tm, sm) {
     const q = 1 - p;
     let v = E.pipCount(s, q) - E.pipCount(s, p) + 3 * (s.off[p] - s.off[q]);
@@ -280,7 +296,7 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
       if (s.off[p] === 0 && s.off[q] > 0) v -= 3 * outH(s, p);
       if (s.off[q] === 0 && s.off[p] > 0) v += 3 * outH(s, q);
     }
-    if (!contact(s)) return v;
+    if (!contact(s)) return v + homeBias(s, p) - homeBias(s, q);
     return v + feat(s, p, p === tm ? .5 : 1, sm) - feat(s, q, q === tm ? .5 : 1, sm);
   }
   const ROLLS = []; for (let a = 1; a <= 6; a++) for (let b = a; b <= 6; b++) ROLLS.push([[a, b], a === b ? 1 : 2]);
