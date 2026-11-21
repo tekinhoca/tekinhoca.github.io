@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'" />
   <title>Sihirli Kartlar</title>
   <style>
     :root {
@@ -177,11 +178,11 @@
       place-items: center;
     }
 
-    .icon-btn:hover {
+    @media (hover: hover) { .icon-btn:hover {
       background: rgba(167, 139, 250, 0.2);
       border-color: var(--accent);
       transform: translateY(-1px);
-    }
+    } }
 
     .icon-btn:active {
       transform: scale(0.95);
@@ -406,10 +407,10 @@
       transition: transform 0.16s ease, box-shadow 0.2s ease, filter 0.2s ease;
     }
 
-    .btn-choice:hover {
+    @media (hover: hover) { .btn-choice:hover {
       transform: translateY(-2px);
       filter: brightness(1.08);
-    }
+    } }
 
     .btn-choice:active {
       transform: scale(0.97);
@@ -497,11 +498,11 @@
       transition: all 0.18s ease;
     }
 
-    .dot-chip:hover {
+    @media (hover: hover) { .dot-chip:hover {
       border-color: var(--accent);
       color: #fff;
       transform: translateY(-1px);
-    }
+    } }
 
     .dot-chip.active {
       box-shadow: 0 0 0 2px var(--accent);
@@ -552,10 +553,10 @@
       transition: background 0.2s ease, transform 0.15s ease;
     }
 
-    .secondary-btn:hover:not(:disabled) {
+    @media (hover: hover) { .secondary-btn:hover:not(:disabled) {
       background: rgba(255, 255, 255, 0.13);
       transform: translateY(-1px);
-    }
+    } }
 
     .secondary-btn:disabled {
       opacity: 0.4;
@@ -580,10 +581,10 @@
       pointer-events: auto;
     }
 
-    .logo-slot img:hover {
+    @media (hover: hover) { .logo-slot img:hover {
       opacity: 0.8;
       transform: scale(1.04);
-    }
+    } }
 
     /* Dikey mobil alt logo alanı (PC ve Yatay mobilde gizli, sağ paneldeki aktif) */
     .mobile-portrait-footer {
@@ -697,10 +698,10 @@
       transition: transform 0.16s ease, filter 0.2s ease, opacity 0.2s ease;
     }
 
-    .primary-action-btn:hover:not(:disabled) {
+    @media (hover: hover) { .primary-action-btn:hover:not(:disabled) {
       transform: translateY(-2px);
       filter: brightness(1.08);
-    }
+    } }
 
     .primary-action-btn:disabled {
       opacity: 0.42;
@@ -941,7 +942,7 @@
         gap: 5px;
       }
 
-      .hint-text, .info-box, .panel-title, .stage .decision-bar {
+      .info-box, .panel-title, .stage .decision-bar {
         display: none !important;
       }
 
@@ -1033,6 +1034,22 @@
         padding-top: 0;
       }
     }
+    /* ── Güncelleme: sayı boyutu, onay kutusu, erişilebilirlik ── */
+    .numbers-grid { --cols: 8; container-type: inline-size; }
+    .num-cell { font-size: clamp(0.8rem, calc(100cqw / var(--cols) * 0.27), 1.45rem); }
+    @media (max-width: 860px) and (orientation: portrait) { .numbers-grid { --cols: 4; } }
+    @media (max-height: 540px) and (orientation: landscape) {
+      .hint-text { display: block !important; font-size: 0.74rem; }
+      .stage-top { flex-wrap: nowrap; gap: 8px; }
+    }
+    .confirm-box { padding-top: 18px; width: min(92vw, 380px); }
+    .confirm-text { color: var(--muted); font-size: 0.92rem; line-height: 1.5; margin: 8px 0 14px; }
+    .confirm-row { display: flex; gap: 10px; justify-content: center; }
+    .confirm-row .secondary-btn { flex: 0 1 auto; padding: 10px 18px; }
+    :focus-visible { outline: 2px solid #ffd966; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    }
   </style>
 </head>
 <body>
@@ -1049,7 +1066,7 @@
         <h1>SİHİRLİ KARTLAR</h1>
       </div>
       <div class="header-actions">
-        <button class="icon-btn" id="soundBtn" type="button" title="Sesi Aç/Kapat" aria-label="Sesi Aç veya Kapat">🔊</button>
+        <button class="icon-btn" id="soundBtn" type="button" title="Sesi Aç/Kapat" aria-label="Sesi Aç veya Kapat" aria-pressed="false">🔇</button>
         <button class="icon-btn" id="helpBtn" type="button" title="Nasıl Oynanır?" aria-label="Nasıl Oynanır?">?</button>
       </div>
     </header>
@@ -1057,13 +1074,13 @@
     <main class="workspace">
       <section class="stage">
         <div class="stage-top">
-          <span class="step-pill" id="stepPill">Kart 1 / 6</span>
+          <span class="step-pill" id="stepPill" aria-live="polite">Kart 1 / 6</span>
           <span class="hint-text">Aklınızdan <strong>1 ile 63</strong> arasında bir sayı tutun.</span>
         </div>
 
         <div class="card-viewport">
           <!-- Oyun Kartı -->
-          <article class="magic-card anim-enter" id="magicCard" aria-live="polite">
+          <article class="magic-card anim-enter" id="magicCard">
             <div class="card-header">
               <div class="card-title-badge" id="cardTitleBadge">KART NO: 1</div>
               <span class="card-status-tag" id="cardStatusTag"></span>
@@ -1139,6 +1156,18 @@
     </main>
   </div>
 
+  <!-- SIFIRLA ONAY Modalı -->
+  <div class="modal-backdrop" id="confirmModal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="rules-box confirm-box">
+      <div class="rules-title" id="confirmTitle">Sıfırlansın mı?</div>
+      <p class="confirm-text">Şu ana kadarki yanıtlarınız silinecek ve 1. karttan yeniden başlayacaksınız.</p>
+      <div class="confirm-row">
+        <button class="secondary-btn" id="confirmNo" type="button">Vazgeç</button>
+        <button class="rules-close-btn" id="confirmYes" type="button">Sıfırla</button>
+      </div>
+    </div>
+  </div>
+
   <!-- NASIL OYNANIR Modalı -->
   <div class="modal-backdrop" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
     <div class="rules-box">
@@ -1188,7 +1217,7 @@
       // null: henüz yanıtlanmadı, true: Evet, false: Hayır
       let answers = new Array(cards.length).fill(null);
       let viewMode = "card"; // "card" | "review" | "result"
-      let soundEnabled = true;
+      let soundEnabled = false;
       let audioCtx = null;
       let isTransitioning = false;
 
@@ -1220,6 +1249,40 @@
       const helpBtn = document.getElementById("helpBtn");
       const closeHelpBtn = document.getElementById("closeHelpBtn");
       const helpModal = document.getElementById("helpModal");
+      const confirmModal = document.getElementById("confirmModal");
+      const confirmYes = document.getElementById("confirmYes");
+      const confirmNo = document.getElementById("confirmNo");
+      const appEl = document.querySelector(".app");
+      // Açılışta Nasıl Oynanır penceresi bir kez zorunlu gösterilir; "Anladım"a basılana kadar kapatılamaz.
+      let helpLocked = true;
+      let lastFocus = null;
+
+      function openHelp() {
+        lastFocus = document.activeElement;
+        helpModal.classList.add("open");
+        appEl.inert = true;
+        closeHelpBtn.focus();
+      }
+
+      function closeHelp() {
+        helpModal.classList.remove("open");
+        helpLocked = false;
+        appEl.inert = false;
+        if (lastFocus && lastFocus.focus && lastFocus !== document.body) lastFocus.focus();
+      }
+
+      function openConfirm() {
+        lastFocus = document.activeElement;
+        confirmModal.classList.add("open");
+        appEl.inert = true;
+        confirmNo.focus();
+      }
+
+      function closeConfirm() {
+        confirmModal.classList.remove("open");
+        appEl.inert = false;
+        if (lastFocus && lastFocus.focus && lastFocus !== document.body) lastFocus.focus();
+      }
 
       function playTone(type) {
         if (!soundEnabled) return;
@@ -1436,6 +1499,15 @@
 
       function resetGame() {
         if (isTransitioning) return;
+        // Yanıt varsa ve sonuç ekranında değilsek önce onay iste
+        if (viewMode !== "result" && answers.some((a) => a !== null)) {
+          openConfirm();
+          return;
+        }
+        doReset();
+      }
+
+      function doReset() {
         playTone("click");
         currentIndex = 0;
         answers = new Array(cards.length).fill(null);
@@ -1450,7 +1522,7 @@
 
       prevBtn.addEventListener("click", goPrevious);
       resetBtn.addEventListener("click", resetGame);
-      restartBtn.addEventListener("click", resetGame);
+      restartBtn.addEventListener("click", doReset);
 
       confirmCheck.addEventListener("change", () => {
         revealBtn.disabled = !confirmCheck.checked;
@@ -1474,28 +1546,40 @@
       soundBtn.addEventListener("click", () => {
         soundEnabled = !soundEnabled;
         soundBtn.textContent = soundEnabled ? "🔊" : "🔇";
+        soundBtn.setAttribute("aria-pressed", String(soundEnabled));
         if (soundEnabled) playTone("click");
       });
 
       helpBtn.addEventListener("click", () => {
         playTone("click");
-        helpModal.classList.add("open");
+        openHelp();
       });
 
       closeHelpBtn.addEventListener("click", () => {
         playTone("click");
-        helpModal.classList.remove("open");
+        closeHelp();
       });
 
       helpModal.addEventListener("click", (e) => {
-        if (e.target === helpModal) {
-          helpModal.classList.remove("open");
-        }
+        if (e.target === helpModal && !helpLocked) closeHelp();
+      });
+
+      confirmYes.addEventListener("click", () => {
+        closeConfirm();
+        doReset();
+      });
+      confirmNo.addEventListener("click", closeConfirm);
+      confirmModal.addEventListener("click", (e) => {
+        if (e.target === confirmModal) closeConfirm();
       });
 
       window.addEventListener("keydown", (e) => {
+        if (confirmModal.classList.contains("open")) {
+          if (e.key === "Escape") closeConfirm();
+          return;
+        }
         if (helpModal.classList.contains("open")) {
-          if (e.key === "Escape") helpModal.classList.remove("open");
+          if (e.key === "Escape" && !helpLocked) closeHelp();
           return;
         }
         if (viewMode === "card") {
@@ -1505,6 +1589,7 @@
       });
 
       render(true);
+      openHelp();
     })();
   </script>
 </body>
