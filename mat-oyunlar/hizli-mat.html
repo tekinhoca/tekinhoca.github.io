@@ -173,29 +173,64 @@ box-shadow:0 2px 0 #050505,inset 0 1px 0 rgba(255,255,255,.12);font-size:clamp(2
  #sEnd .btn{min-width:130px;padding:6px 10px;font-size:14px}
 }
 @media (prefers-reduced-motion:reduce){.row{transition-duration:.01s}.glow.rw{animation-duration:.4s}.dial.sh{animation:none}.row .tp::after{animation:none!important}.cd .g{animation:none}.halo.on{animation-duration:.5s}#dgrp.flash{animation:none}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ico{padding:0;width:38px;height:36px;font-size:18px;display:grid;place-items:center;border-radius:10px}.ico[hidden]{display:none}
+#sStart{grid-template-rows:minmax(0,1fr) auto auto;justify-items:center}
+.ringw{width:100%;min-height:0;display:grid;place-items:center;container-type:size;padding:6px}
+.ring{position:relative;width:min(98cqw,98cqh);height:min(98cqw,98cqh);container-type:size;border-radius:50%;border:3px solid rgba(255,255,255,.85);background:radial-gradient(circle at 50% 42%,#1f2326,#0d0f11 70%,#050607);box-shadow:0 0 22px rgba(255,255,255,.25),inset 0 0 30px rgba(0,0,0,.8)}
+.ri{position:absolute;inset:13%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3cqw}
+.ttl{margin:0;font-size:11cqw;line-height:1.2;text-align:center;color:var(--ok);text-shadow:none;filter:drop-shadow(0 0 .12em rgba(56,255,89,.6))}
+.ri .modes{gap:2cqw}.ri .mode{padding:1.6cqw 1cqw;border-radius:2.4cqw;gap:.6cqw;min-height:11cqw;justify-content:center}
+.ri .mode b{font-size:4.2cqw}.ri .mode span{font-size:3.2cqw;white-space:nowrap}
+.ri .btn{min-width:0;width:46cqw;font-size:4.6cqw;padding:2.2cqw 0;border-radius:3cqw}
+.chips{margin:6px 0}
+.glogo{display:none;order:99;grid-column:1/-1;justify-self:center;height:clamp(18px,4.5dvh,26px);width:auto;opacity:.35;filter:brightness(1.3);pointer-events:none;margin-top:4px}
+@media (min-aspect-ratio:13/10) and (min-width:640px){.glogo{display:block}}
+#rules{position:fixed;inset:0;z-index:30;display:none;place-items:center;padding:12px;background:rgba(0,0,0,.75)}#rules.on{display:grid}
+.rbox{width:min(94vw,440px);max-height:85dvh;overflow:auto;scrollbar-width:none;background:#0d1b0d;border:1px solid rgba(200,150,12,.5);border-radius:14px;padding:0 18px 14px;text-align:center}
+.rimg{display:block;margin:0 auto;width:130px;max-width:100%;max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 75% 70% at 50% 45%,#000 70%,transparent 100%)}
+.pgs{display:grid;margin:2px 0 8px;text-align:left;border-top:1px solid rgba(200,150,12,.22);padding-top:8px}
+.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}
+.pgt{text-align:center;color:#ffd966;font-weight:700;font-size:15px;margin:0 0 6px}
+.rl{list-style:none;font-size:14px;line-height:1.55;color:rgba(247,242,232,.88)}.rl li{margin-bottom:7px}.rl b{color:#ffd966}
+.rnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}
+.rdots{display:flex;gap:8px}.rdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25)}.rdots span.on{background:#ffd966}
+#rules .btn{min-width:130px;padding:10px 22px;font-size:14px}#rules .rarr{width:38px;height:38px;min-width:0;padding:0;border-radius:50%;font-size:22px}#rules .tiny{min-width:0;font-size:12px;padding:6px 12px}
+@media(min-width:768px){.rbox{width:min(92vw,520px)}.rl{font-size:15.5px}}
+@media(max-height:520px){.rimg{max-height:20dvh}.rl{font-size:13px;line-height:1.45}.rl li{margin-bottom:4px}}
+.ri .mode b{line-height:1.15;text-align:center}
+.bgm{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.bgm .l{position:absolute;width:70vmax;height:70vmax;border-radius:50%;will-change:transform}
+.bgm .l1{left:-25vmax;top:-30vmax;background:radial-gradient(circle,rgba(205,215,230,.2),transparent 62%);animation:mb1 46s ease-in-out infinite alternate}
+.bgm .l2{right:-30vmax;bottom:-35vmax;background:radial-gradient(circle,rgba(150,170,196,.18),transparent 62%);animation:mb2 58s ease-in-out infinite alternate}
+.bgm .l3{left:25%;top:50%;width:55vmax;height:55vmax;background:radial-gradient(circle,rgba(77,208,225,.1),transparent 62%);animation:mb3 52s ease-in-out infinite alternate}
+@keyframes mb1{to{transform:translate(12vmax,10vmax)}}@keyframes mb2{to{transform:translate(-14vmax,-8vmax)}}@keyframes mb3{to{transform:translate(-10vmax,-12vmax)}}
+.bgm .st{position:absolute;inset:0}.bgm .st.a{background-image:radial-gradient(1.4px 1.4px at 12% 14%,rgba(225,232,242,.85),transparent),radial-gradient(1px 1px at 26% 36%,#fff,transparent),radial-gradient(1.6px 1.6px at 39% 8%,rgba(200,215,235,.8),transparent),radial-gradient(1px 1px at 56% 50%,#fff,transparent),radial-gradient(1.4px 1.4px at 81% 29%,rgba(225,232,242,.85),transparent),radial-gradient(1px 1px at 92% 65%,#fff,transparent),radial-gradient(1.4px 1.4px at 70% 88%,rgba(200,215,235,.8),transparent),radial-gradient(1px 1px at 9% 78%,#fff,transparent);animation:mtw 5s ease-in-out infinite}.bgm .st.b{background-image:radial-gradient(1px 1px at 20% 60%,#fff,transparent),radial-gradient(1.4px 1.4px at 47% 27%,rgba(225,232,242,.85),transparent),radial-gradient(1px 1px at 63% 12%,#fff,transparent),radial-gradient(1.6px 1.6px at 76% 56%,rgba(200,215,235,.8),transparent),radial-gradient(1px 1px at 88% 90%,#fff,transparent),radial-gradient(1.4px 1.4px at 33% 92%,rgba(225,232,242,.85),transparent),radial-gradient(1px 1px at 4% 38%,#fff,transparent),radial-gradient(1.4px 1.4px at 96% 8%,rgba(200,215,235,.8),transparent);animation:mtw 7s ease-in-out -2.5s infinite}
+@keyframes mtw{0%,100%{opacity:.25}50%{opacity:1}}
+#sStart>*:not(.bgm),#sEnd>*:not(.bgm){position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.bgm .l,.bgm .st{animation:none}}
 </style>
 </head>
 <body>
 
-<section id="sStart" class="screen center on">
- <div class="panel">
-  <h1 class="game-title">HIZLI<br>MATEMATİK</h1>
-  <p class="lead">Süre bitmeden işlemleri zihninizden çözün. Doğru cevaplar süre kazandırır, ardışık 10 doğru cevap süreyi yeniler.</p>
+<section id="sStart" class="screen on">
+ <div class="bgm" aria-hidden="true"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="st a"></i><i class="st b"></i></div>
+ <div class="ringw"><div class="ring"><div class="ri">
+  <h1 class="ttl" id="ttl" aria-label="Hızlı Matematik"></h1>
   <div class="modes" role="group" aria-label="Oyun modu">
-   <button class="mode" id="mNormal" aria-pressed="true"><b>Normal Mod</b><span>8 saniyeyle başlar</span></button>
-   <button class="mode" id="mEasy" aria-pressed="false"><b>Kolay Mod</b><span>Süreler iki katıdır</span></button>
+   <button class="mode" id="mNormal" aria-pressed="true"><b>Normal<br>Mod</b><span id="rcN">Rekor: —</span></button>
+   <button class="mode" id="mEasy" aria-pressed="false"><b>Kolay<br>Mod</b><span id="rcE">Rekor: —</span></button>
   </div>
-  <p class="rec" id="recLine"></p>
   <button class="btn" id="bStart">Oyuna Başla</button>
-  <div class="chips"><button class="chip" id="tSnd" aria-pressed="false">Ses: Kapalı</button><button class="chip" id="tVib" aria-pressed="false">Titreşim: Kapalı</button><button class="chip" id="bFs">Tam ekran</button></div>
- </div>
+ </div></div></div>
+ <div class="chips"><button class="chip" id="bRules">Kurallar</button><button class="chip" id="tSnd" aria-pressed="false">Ses ve titreşim: Kapalı</button><button class="chip" id="bFs">Tam ekran</button></div>
  <img class="logo" src="../img/THlogo.webp" alt="Logo" onerror="this.hidden=true">
 </section>
 
 <section id="sGame" class="screen">
  <div class="top">
-  <div><div class="tmw"><div class="tm" id="tm" aria-label="Kalan süre"></div><span class="dl" id="dl" aria-hidden="true"></span></div><div class="lvl" id="lvl">Seviye 1</div></div>
-  <div class="tools"><button class="chip" id="gSnd" aria-pressed="false">Ses: Kapalı</button><button class="quit" id="bQuit">Çıkış</button></div>
+  <div><div class="tmw"><div class="tm" id="tm" role="timer" aria-label="Kalan süre"></div><span class="dl" id="dl" aria-hidden="true"></span></div><div class="lvl" id="lvl">Seviye 1</div><div class="lvl" id="scr">0 puan</div></div>
+  <div class="tools"><button class="chip ico" id="gSnd" aria-label="Ses ve titreşim" aria-pressed="false">🔇</button><button class="chip ico" id="gFs" aria-label="Tam ekran" hidden>⛶</button><button class="quit ico" id="bQuit" aria-label="Çıkış">✕</button></div>
  </div>
  <div class="dialwrap"><div class="stage">
   <div class="side"><div class="note" id="nLevel"></div></div>
@@ -225,6 +260,7 @@ box-shadow:0 2px 0 #050505,inset 0 1px 0 rgba(255,255,255,.12);font-size:clamp(2
 </section>
 
 <section id="sEnd" class="screen center">
+ <div class="bgm" aria-hidden="true"><i class="l l1"></i><i class="l l2"></i><i class="l l3"></i><i class="st a"></i><i class="st b"></i></div>
  <div class="panel">
   <h1>Süre Doldu</h1>
   <p class="newrec" id="recMsg" hidden>Yeni rekor!</p>
@@ -235,6 +271,18 @@ box-shadow:0 2px 0 #050505,inset 0 1px 0 rgba(255,255,255,.12);font-size:clamp(2
 </section>
 
 <canvas id="fxc" aria-hidden="true"></canvas>
+<div id="sr" class="sr" aria-live="polite"></div>
+<div id="rules"><div class="rbox" role="dialog" aria-modal="true" aria-label="Kurallar">
+ <img class="rimg" src="../img/mecesml.webp" alt="Tekin Hoca" onerror="this.style.display='none'">
+ <div class="pgs" id="rpages">
+  <div class="pg on"><div class="pgt">Oyunun amacı</div><ul class="rl"><li>Ekrandaki işlemin sonucunu rakam tuşlarıyla yazın. Süre bitmeden mümkün olduğunca çok işlem çözün.</li><li>İlk yanlış rakamda cevap yanlış sayılır, düzeltme yoktur.</li></ul></div>
+  <div class="pg"><div class="pgt">Süre ve seri</div><ul class="rl"><li><b>Normal Mod</b> 8 saniyeyle başlar, <b>Kolay Mod</b>'da süreler iki katıdır.</li><li>Her doğru cevap süreyi 1 sn (Kolay Mod'da 2 sn) artırır; üst sınır seviyenin başlangıç süresidir. Yanlış cevap 0,5 sn (Kolay Mod'da 1 sn) azaltır.</li><li>Ardışık 10 doğru cevap süreyi yeniler.</li></ul></div>
+  <div class="pg"><div class="pgt">Puan ve seviye</div><ul class="rl"><li>Doğru cevap 100 puan × seviye çarpanıdır (1,0 – 1,4). Çarpan, seviye 6'dan sonra her seviyede 0,1 artar.</li><li>Hızlı cevap en fazla %50 <b>hız bonusu</b> kazandırır.</li><li>Seviyeler 20, 45, 70 ve 100 doğru cevapta atlanır; sonrasında her 30 doğru cevapta yeni seviye gelir. Seviye 6'dan itibaren doğru cevabın kazandırdığı süre her seviyede 0,1 sn azalır (en az 0,5 sn).</li></ul></div>
+  <div class="pg"><div class="pgt">Klavye ve rekor</div><ul class="rl"><li>PC'de <b>0-9</b> tuşlarını veya ekran tuş takımını kullanabilirsiniz.</li><li>Sonuç ekranında <b>Enter</b> / <b>Boşluk</b> yeniden oynatır, <b>Esc</b> ana menüye döndürür.</li><li>Rekorlar her mod için cihazınızda saklanır.</li></ul><div style="text-align:center"><button class="btn tiny" id="rReset">Rekorları Sıfırla</button></div></div>
+ </div>
+ <div class="rnav"><button class="btn rarr" id="rPrev" aria-label="Önceki sayfa">&#8249;</button><div class="rdots" id="rDots" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span></div><button class="btn rarr" id="rNext" aria-label="Sonraki sayfa">&#8250;</button></div>
+ <button class="btn" id="rClose">Kapat</button>
+</div></div>
 <div class="veil" id="veil"><div class="dlg" role="dialog" aria-modal="true" aria-label="Çıkış onayı">
  <p>Oyundan çıkılsın mı? Bu oyunun ilerlemesi kaybolacak. Onay penceresi açıkken de süre işlemeye devam eder.</p>
  <div class="row2"><button class="btn" id="bStay" style="min-width:140px">Oyuna dönün</button><button class="btn" id="bLeave" style="min-width:140px">Çıkış</button></div>
@@ -261,12 +309,13 @@ const G=[
  [()=>{const a=rnd(10,99),b=rnd(2,9);return Math.random()<.5?[`${a} × ${b}`,a*b]:[`${b} × ${a}`,a*b]},
   ()=>{const q=pk([2,3,10]),d=rnd(Math.max(10,Math.ceil(100/q)),Math.min(99,Math.floor(999/q)));return[`${d*q} ÷ ${d}`,q]}]
 ];
-const levelFor=n=>{let l=1;for(let i=1;i<5;i++)if(n>=TH[i])l=i+1;return l};
+const levelFor=n=>{let l=1;for(let i=1;i<5;i++)if(n>=TH[i])l=i+1;if(n>=100)l=5+Math.floor((n-100)/30);return l};
+const coef=l=>l<=5?COEF[l-1]:1.4+.1*(l-5);
 function mk(level,prev){
  let q,a;
  for(let t=0;t<6;t++){
-  let r=Math.random()*(level*(level+1)/2),g=0;
-  for(let i=1;i<=level;i++){r-=i;if(r<0){g=i-1;break}}
+  const L5=Math.min(level,5),ex=Math.max(0,level-5);let r=Math.random()*(L5*(L5+1)/2+ex),g=0;
+  for(let i=1;i<=L5;i++){r-=i+(i===5?ex:0);if(r<0){g=i-1;break}}
   [q,a]=pk(G[g])();
   if(q!==prev)break;
  }
@@ -276,6 +325,7 @@ function mk(level,prev){
 const SG={0:'abcdef',1:'bc',2:'abdeg',3:'abcdg',4:'bcfg',5:'acdfg',6:'acdefg',7:'abc',8:'abcdefg',9:'abcdfg'};
 const SL={a:[12,8,48,8],b:[52,12,52,46],c:[52,54,52,88],d:[12,92,48,92],e:[8,54,8,88],f:[8,12,8,46],g:[12,50,48,50]};
 const L=(a,b,c,d,k)=>`<line${k?` class="${k}"`:''} x1="${a}" y1="${b}" x2="${c}" y2="${d}"/>`;
+const LT={H:[[8,10,8,90],[52,10,52,90],[8,50,52,50]],I:[[13,10,13,90]],Z:[[10,10,50,10],[50,10,10,90],[10,90,50,90]],L:[[8,10,8,90],[8,90,50,90]],M:[[8,90,8,10],[8,10,30,50],[30,50,52,10],[52,10,52,90]],A:[[8,90,8,10],[8,10,52,10],[52,10,52,90],[8,50,52,50]],T:[[8,10,52,10],[30,10,30,90]],E:[[8,10,8,90],[8,10,52,10],[8,50,40,50],[8,90,52,90]],K:[[8,10,8,90],[52,10,12,52],[12,48,52,90]],'İ':[[13,34,13,90],[13,10,13,11]]};
 function glyph(ch){
  let w=60,b='';
  if(ch>='0'&&ch<='9'){for(const k in SL)b+=L(...SL[k],SG[ch].includes(k)?'':'off')}
@@ -285,6 +335,7 @@ function glyph(ch){
  else if(ch==='÷')b=L(10,50,50,50)+L(30,26,30,27)+L(30,73,30,74);
  else if(ch==='=')b=L(10,38,50,38)+L(10,62,50,62);
  else if(ch===':'){w=30;b=L(15,32,15,33)+L(15,68,15,69)}
+ else if(LT[ch]){b=LT[ch].map(a=>L(...a)).join('');if(ch==='I'||ch==='İ')w=26}
  else if(ch===' ')w=26;
  return `<svg class="g" viewBox="0 0 ${w} 100" style="width:${w/100}em" aria-hidden="true">${b}</svg>`;
 }
@@ -300,9 +351,9 @@ let easy=false,S=null;
 const T=[];
 const later=(f,ms)=>{T.push(setTimeout(f,ms))};
 const clearAll=()=>{T.forEach(clearTimeout);T.length=0};
-const base=l=>BASE[l-1]*(easy?2:1);
-/* Üst sınır: seviyenin başlangıç süresi; oyuncu bu değeri aşan bir süreye ulaşmışsa, ulaştığı en yüksek süre */
-const cap=l=>Math.max(base(l),S.peak);
+const base=l=>BASE[Math.min(l,5)-1]*(easy?2:1);
+/* Üst sınır: seviyenin başlangıç süresi */
+const cap=l=>base(l);
 const tm=$('#tm'),prog=$('#prog'),progG=$('#progG'),rowsEl=$('#rows'),glow=$('#glow'),hint=$('#hint'),cd=$('#cd'),dial=$('#dial');
 const slots=[];
 (()=>{for(let i=0;i<8;i++){const e=document.createElement('span');e.style.display='inline-flex';tm.appendChild(e);slots.push({e,c:''})}})();
@@ -318,10 +369,10 @@ function renderDots(all){dots.forEach((c,i)=>{const on=all||i<S.streak;c.setAttr
 (()=>{const p=$('#pad');for(const k of [1,2,3,4,5,6,7,8,9,0]){const b=document.createElement('button');
  b.className='key';b.type='button';b.tabIndex=-1;b.innerHTML=glyph(String(k));b.setAttribute('aria-label',k);
  b.addEventListener('pointerdown',e=>{e.preventDefault();b.classList.add('hit');setTimeout(()=>b.classList.remove('hit'),120);digit(k)});
- b.addEventListener('contextmenu',e=>e.preventDefault());p.appendChild(b)}})();
+ b.addEventListener('contextmenu',e=>e.preventDefault());p.appendChild(b)}const im=document.createElement('img');im.className='glogo';im.src='../img/THlogo.webp';im.alt='';im.onerror=()=>im.remove();p.appendChild(im)})();
 
 const go=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id))};
-const newState=()=>({level:1,time:base(1),peak:base(1),correct:0,wrong:0,score:0,streak:0,best:0,maxLevel:1,q:[],rows:{},cur:0,run:false,over:false,last:0,raf:0,dlg:false});
+const newState=()=>({level:1,time:base(1),correct:0,wrong:0,score:0,streak:0,best:0,maxLevel:1,q:[],rows:{},cur:0,run:false,over:false,last:0,raf:0,dlg:false,qt:0,bn:0});
 function fill(){while(S.q.length<S.cur+6)S.q.push(mk(S.level,S.q.length?S.q[S.q.length-1].q:''))}
 function setRow(i){const it=S.q[i],r=S.rows[i];if(!r)return;
  r.querySelector('.eq').innerHTML=sg(it.q+' =');
@@ -337,8 +388,9 @@ function layout(){
    r.innerHTML='<span class="eq"></span><span class="an"><span class="tp"></span><span class="mkw"></span></span>';
    rowsEl.appendChild(r);S.rows[i]=r;setRow(i)}
   r.style.setProperty('--k',i-S.cur);r.dataset.k=i-S.cur}
- for(const k of Object.keys(S.rows))if(+k<S.cur-3){S.rows[k].remove();delete S.rows[k]}
+ for(const k of Object.keys(S.rows))if(+k<S.cur-3){S.rows[k].remove();delete S.rows[k]}$('#sr').textContent=S.q[S.cur].q;
 }
+function showScore(){$('#scr').textContent=S.score+' puan'+(S.bn?'  +'+S.bn+' hız':'')}
 function drawTime(){const t=Math.max(0,S.time),s=Math.floor(t),c=Math.floor((t-s)*100),low=t>0&&t<3&&S.run;
  setTm('00:'+String(s).padStart(2,'0')+':'+String(c).padStart(2,'0'));
  tm.classList.toggle('low',low);dial.classList.toggle('low',low);
@@ -358,28 +410,27 @@ function resolve(ok){
  const it=S.q[S.cur];it.st=ok?'ok':'bad';hint.hidden=true;
  const t0=S.time;let rw=false,lv=false;
  if(ok){
-  S.score+=Math.round(100*COEF[S.level-1]);S.correct++;S.streak++;S.best=Math.max(S.best,S.streak);
+  {const pt=Math.round(100*coef(S.level)),t=(performance.now()-S.qt)/1000,tf=.8+.35*(it.ans.length-1),k=Math.max(0,Math.min(1,(3*tf-t)/(2*tf))),bn=Math.round(pt*.5*k);S.score+=pt+bn;S.bn=bn}S.correct++;S.streak++;S.best=Math.max(S.best,S.streak);
   if(S.streak>=10){rw=true;S.streak=0;S.time=base(S.level);renderDots(true);retrig($('#dgrp'),'flash');later(()=>renderDots(),800);
    note($('#nBonus'),'SÜRE ÖDÜLÜ',2200);fx('rw')}
-  else{S.time=Math.min(S.time+(easy?2:1),cap(S.level));renderDots();fx('ok')}
-  S.peak=Math.max(S.peak,S.time);
+  else{S.time=Math.min(S.time+Math.max(.5,1-.1*Math.max(0,S.level-5))*(easy?2:1),cap(S.level));renderDots();fx('ok')}
   const nl=levelFor(S.correct);
-  if(nl>S.level){lv=true;S.level=nl;S.maxLevel=nl;S.time=base(nl);S.peak=Math.max(S.peak,S.time);$('#lvl').textContent='Seviye '+nl;
+  if(nl>S.level){lv=true;S.level=nl;S.maxLevel=nl;S.time=base(nl);$('#lvl').textContent='Seviye '+nl;
    note($('#nLevel'),'YENİ SEVİYE: '+nl,2400);retrig($('#halo'),'on');confetti();
    for(let i=S.cur+1;i<S.q.length;i++){S.q[i]=mk(nl,S.q[i-1].q);if(S.rows[i])setRow(i)}}
   if(rw){sfx.reward();vib([40,50,40])}
   if(lv){rw?later(sfx.level,450):sfx.level()}
   if(!rw&&!lv)sfx.ok(S.streak);
  }else{
-  S.wrong++;S.streak=0;S.time=Math.max(0,S.time-(easy?1:.5));renderDots();fx('bad');shake();sfx.bad();vib(70);
+  S.wrong++;S.bn=0;S.streak=0;S.time=Math.max(0,S.time-(easy?1:.5));renderDots();fx('bad');shake();sfx.bad();vib(70);
  }
  timeFx(S.time-t0,rw||lv);
- setRow(S.cur);S.cur++;fill();layout();drawTime();
+ setRow(S.cur);S.cur++;S.qt=performance.now();fill();layout();drawTime();showScore();
  if(S.time<=0)end();
 }
 function tick(t){
  if(!S.run)return;
- let dt=(t-S.last)/1000;S.last=t;if(dt>.3)dt=0;
+ let dt=(t-S.last)/1000;S.last=t;if(dt<0)dt=0;
  S.time-=dt;
  if(S.time<=0){S.time=0;drawTime();end();return}
  drawTime();S.raf=requestAnimationFrame(tick);
@@ -389,21 +440,21 @@ function end(){
  later(()=>{
   const n=S.correct+S.wrong,acc=n?Math.round(S.correct/n*100):0;
   const k=easy?'kolay':'normal',rec=getRec(),prev=rec[k],isNew=S.score>prev&&S.score>0;
-  if(isNew){rec[k]=S.score;try{sessionStorage.setItem(REC,JSON.stringify(rec))}catch(_){}}
+  if(isNew){rec[k]=S.score;memRec=rec;try{localStorage.setItem(REC,JSON.stringify(rec))}catch(_){}}
   $('#recMsg').hidden=!isNew;
   const rows=[['Toplam puan',sg(String(S.score))],['Doğru cevap',sg(String(S.correct))],['Yanlış cevap',sg(String(S.wrong))],
    ['Doğruluk',sg(String(acc))+'<i>%</i>'],['Ulaşılan en yüksek seviye',sg(String(S.maxLevel))],['En uzun doğru cevap serisi',sg(String(S.best))],
    ['Rekor ('+(easy?'Kolay':'Normal')+' Mod)',sg(String(Math.max(prev,S.score)))]];
   $('#stats').innerHTML=rows.map(r=>`<dt>${r[0]}</dt><dd>${r[1]}</dd>`).join('');
   const b=[$('#bAgain'),$('#bMenu')];b.forEach(x=>x.disabled=true);later(()=>b.forEach(x=>x.disabled=false),800);
-  showRec();go('sEnd');
+  showRec();go('sEnd');if(isNew){confetti();sfx.reward();vib([40,50,40])}
  },600);
 }
 function startGame(){
  clearAll();if(S)cancelAnimationFrame(S.raf);
  S=newState();rowsEl.querySelectorAll('.row').forEach(r=>r.remove());
  ['#nLevel','#nBonus'].forEach(s=>{const e=$(s);e.classList.remove('on');e.textContent=''});
- glow.className='glow';dial.classList.remove('low','sh','cdn','pls','rok','rbad');parts=[];$('#lvl').textContent='Seviye 1';
+ glow.className='glow';dial.classList.remove('low','sh','cdn','pls','rok','rbad');parts=[];$('#lvl').textContent='Seviye 1';S.bn=0;showScore();
  fill();layout();drawTime();renderDots();go('sGame');
  /* geri sayım sırasında işlemler gizli kalır */
  rowsEl.style.visibility='hidden';hint.hidden=true;dial.classList.add('cdn');
@@ -411,11 +462,11 @@ function startGame(){
  const show=()=>{cd.innerHTML=glyph(String(n));retrig(dial,'pls');sfx.tick()};
  show();
  const step=()=>{n--;if(n>0){show();later(step,800)}
-  else{dial.classList.remove('cdn','pls');cd.hidden=true;rowsEl.style.visibility='';hint.hidden=false;S.run=true;S.last=performance.now();S.raf=requestAnimationFrame(tick);sfx.go()}};
+  else{dial.classList.remove('cdn','pls');cd.hidden=true;rowsEl.style.visibility='';hint.hidden=false;S.run=true;S.last=performance.now();S.qt=S.last;S.raf=requestAnimationFrame(tick);sfx.go()}};
  later(step,800);
 }
 function leave(){clearAll();dial.classList.remove('cdn','pls');parts=[];if(S){S.run=false;S.over=true;cancelAnimationFrame(S.raf)}closeDlg();go('sStart')}
-function openDlg(){if(S&&!S.over){S.dlg=true;$('#veil').classList.add('on')}}
+function openDlg(){if(S&&!S.over){S.dlg=true;$('#veil').classList.add('on');$('#bStay').focus()}}
 function closeDlg(){if(S)S.dlg=false;$('#veil').classList.remove('on')}
 /* etki yardımcıları */
 const retrig=(el,c,rm)=>{el.classList.remove(...(rm||[c]));void el.offsetWidth;el.classList.add(c)};
@@ -431,7 +482,7 @@ function sizeCv(){if(!c2)return;const r=window.devicePixelRatio||1;cv.width=Math
 sizeCv();addEventListener('resize',sizeCv);
 function confetti(){
  if(!c2||(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches))return;
- const r=dial.getBoundingClientRect(),X=r.left+r.width/2,Y=r.top+r.height/2,R=r.width/2,cols=['#4dd0e1','#38ff59','#ffd54a','#ffffff','#ff7ab8'];
+ const r=dial.getBoundingClientRect(),big=r.width<2,X=big?innerWidth/2:r.left+r.width/2,Y=big?innerHeight*.45:r.top+r.height/2,R=big?Math.min(innerWidth,innerHeight)*.2:r.width/2,cols=['#4dd0e1','#38ff59','#ffd54a','#ffffff','#ff7ab8'];
  for(let i=0;i<80;i++){const a=-Math.PI/2+(Math.random()-.5)*Math.PI*1.8,sp=250+Math.random()*450;
   parts.push({x:X+Math.cos(a)*R*.98,y:Y+Math.sin(a)*R*.98,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-120,t:0,life:1.6+Math.random()*.8,
    w:5+Math.random()*5,h:3+Math.random()*3,r:Math.random()*6,vr:(Math.random()-.5)*12,c:pk(cols)})}
@@ -449,7 +500,7 @@ function cstep(ts){
 }
 /* ses, titreşim, tam ekran (varsayılan: kapalı) */
 const LS=k=>{try{return localStorage.getItem(k)}catch(_){return null}},LSS=(k,v)=>{try{localStorage.setItem(k,v)}catch(_){}};
-const snd={on:LS('hizlimat.ses.v1')==='1',vib:LS('hizlimat.tit.v1')==='1'&&!!navigator.vibrate};
+const snd={on:LS('hizlimat.ses.v1')==='1',vib:LS('hizlimat.ses.v1')==='1'&&!!navigator.vibrate};
 let actx=null;
 function ac(){if(!snd.on)return null;try{if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();return actx}catch(_){return null}}
 function tone(f,d,type,v,at){const a=ac();if(!a)return;try{const t=a.currentTime+(at||0),o=a.createOscillator(),g=a.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t);
@@ -461,22 +512,21 @@ const sfx={ok:n=>tone(620+n*45,.09,'triangle',.08),bad:()=>tone(150,.2,'sawtooth
  tick:()=>tone(440,.08,'square',.04),go:()=>tone(880,.25,'square',.05),
  end:()=>[440,330,220].forEach((f,i)=>tone(f,.25,'sawtooth',.06,i*.18))};
 function paintSet(){
- [['#tSnd',snd.on,'Ses'],['#gSnd',snd.on,'Ses'],['#tVib',snd.vib,'Titreşim']].forEach(([s,on,n])=>{const e=$(s);e.setAttribute('aria-pressed',on);e.textContent=n+': '+(on?'Açık':'Kapalı')})}
-const togSnd=e=>{e.currentTarget.blur();snd.on=!snd.on;LSS('hizlimat.ses.v1',snd.on?'1':'0');paintSet();if(snd.on)sfx.ok(0)};
+ const t=$('#tSnd');t.setAttribute('aria-pressed',snd.on);t.textContent='Ses ve titreşim: '+(snd.on?'Açık':'Kapalı');const g=$('#gSnd');g.setAttribute('aria-pressed',snd.on);g.textContent=snd.on?'🔊':'🔇'}
+const togSnd=e=>{e.currentTarget.blur();snd.on=!snd.on;snd.vib=snd.on&&!!navigator.vibrate;LSS('hizlimat.ses.v1',snd.on?'1':'0');paintSet();vib(30);if(snd.on)sfx.ok(0)};
 $('#tSnd').onclick=togSnd;$('#gSnd').onclick=togSnd;
-if(!navigator.vibrate)$('#tVib').hidden=true;
-$('#tVib').onclick=e=>{e.currentTarget.blur();snd.vib=!snd.vib;LSS('hizlimat.tit.v1',snd.vib?'1':'0');paintSet();vib(40)};
 paintSet();
 const de=document.documentElement,reqFs=de.requestFullscreen||de.webkitRequestFullscreen,exFs=document.exitFullscreen||document.webkitExitFullscreen;
 const isFs=()=>!!(document.fullscreenElement||document.webkitFullscreenElement);
-if(!reqFs)$('#bFs').hidden=true;
-$('#bFs').onclick=e=>{e.currentTarget.blur();try{const r=isFs()?exFs.call(document):reqFs.call(de);if(r&&r.catch)r.catch(()=>{})}catch(_){}};
-const fsPaint=()=>{$('#bFs').textContent=isFs()?'Tam ekrandan çık':'Tam ekran'};
+if(!reqFs){$('#bFs').hidden=true;$('#gFs').hidden=true}
+$('#bFs').onclick=$('#gFs').onclick=e=>{e.currentTarget.blur();try{const r=isFs()?exFs.call(document):reqFs.call(de);if(r&&r.catch)r.catch(()=>{})}catch(_){}};
+const fsPaint=()=>{$('#gFs').textContent=isFs()?'⤡':'⛶';$('#bFs').textContent=isFs()?'Tam ekrandan çık':'Tam ekran'};
 document.addEventListener('fullscreenchange',fsPaint);document.addEventListener('webkitfullscreenchange',fsPaint);
 /* rekor */
 const REC='hizlimat.rekor.v1';
-function getRec(){try{const o=JSON.parse(sessionStorage.getItem(REC))||{};return{normal:+o.normal||0,kolay:+o.kolay||0}}catch(_){return{normal:0,kolay:0}}}
-function showRec(){const v=getRec()[easy?'kolay':'normal'];$('#recLine').textContent=v?'Bu oturumun rekoru ('+(easy?'Kolay':'Normal')+' Mod): '+v+' puan':''}
+let memRec=null;
+function getRec(){try{const o=JSON.parse(localStorage.getItem(REC))||{};return{normal:+o.normal||0,kolay:+o.kolay||0}}catch(_){return memRec||{normal:0,kolay:0}}}
+function showRec(){const r=getRec();$('#rcN').textContent='Rekor: '+(r.normal||'—');$('#rcE').textContent='Rekor: '+(r.kolay||'—')}
 const setMode=e=>{easy=e;$('#mEasy').setAttribute('aria-pressed',e);$('#mNormal').setAttribute('aria-pressed',!e);
  try{localStorage.setItem('hizlimat.mod.v1',e?'kolay':'normal')}catch(_){}showRec()};
 try{if(localStorage.getItem('hizlimat.mod.v1')==='kolay')setMode(true)}catch(_){}
@@ -488,8 +538,18 @@ $('#bMenu').onclick=e=>{e.currentTarget.blur();go('sStart')};
 $('#bQuit').onclick=e=>{e.currentTarget.blur();openDlg()};
 $('#bStay').onclick=e=>{e.currentTarget.blur();closeDlg()};
 $('#bLeave').onclick=e=>{e.currentTarget.blur();leave()};
+$('#ttl').innerHTML=sg('HIZLI')+'<br>'+sg('MATEMATİK');
+let rp=0,rst=0;
+function rPage(i){const p=document.querySelectorAll('#rpages .pg');rp=Math.max(0,Math.min(p.length-1,i));p.forEach((e,k)=>e.classList.toggle('on',k===rp));document.querySelectorAll('#rDots span').forEach((e,k)=>e.classList.toggle('on',k===rp));$('#rPrev').disabled=rp===0;$('#rNext').disabled=rp===p.length-1}
+const rOpen=()=>{rPage(0);$('#rules').classList.add('on');$('#rClose').focus()},rClose=()=>$('#rules').classList.remove('on');
+$('#bRules').onclick=e=>{e.currentTarget.blur();rOpen()};$('#rClose').onclick=rClose;$('#rPrev').onclick=()=>rPage(rp-1);$('#rNext').onclick=()=>rPage(rp+1);
+$('#rules').addEventListener('pointerdown',e=>{if(e.target===$('#rules'))rClose()});
+let tx=0;$('#rpages').addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});$('#rpages').addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>40)rPage(rp+(d<0?1:-1))},{passive:true});
+$('#rReset').onclick=()=>{const b=$('#rReset');if(!rst){rst=1;b.textContent='Silmek için tekrar dokunun';setTimeout(()=>{rst=0;b.textContent='Rekorları Sıfırla'},3000)}else{rst=0;memRec={normal:0,kolay:0};try{localStorage.removeItem(REC)}catch(_){}showRec();b.textContent='Rekorlar silindi'}};
 addEventListener('keydown',e=>{
+ if($('#rules').classList.contains('on')&&!(e.ctrlKey||e.metaKey||e.altKey)){if(e.key==='Escape')rClose();else if(e.key==='ArrowRight')rPage(rp+1);else if(e.key==='ArrowLeft')rPage(rp-1);else return;e.preventDefault();return}
  if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if($('#sEnd').classList.contains('on')&&!$('#bAgain').disabled&&!e.repeat){if(e.key==='Enter'||e.key===' '){e.preventDefault();startGame();return}if(e.key==='Escape'){e.preventDefault();go('sStart');return}}
  if(e.key==='Escape'){if(S&&!S.over&&$('#sGame').classList.contains('on')){e.preventDefault();S.dlg?closeDlg():openDlg()}return}
  if(/^[0-9]$/.test(e.key)&&!e.repeat){e.preventDefault();digit(+e.key)}
 });
