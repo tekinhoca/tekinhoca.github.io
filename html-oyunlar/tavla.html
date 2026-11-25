@@ -18,9 +18,11 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
 .scorebox .value{display:block;margin-top:2px;font-size:clamp(23px,2.5vw,30px);line-height:1.05;font-weight:850;color:#fff1cb;font-variant-numeric:tabular-nums}
 .btns{width:100%;display:flex;flex-direction:column;gap:7px}
 #rules{width:100%;min-height:43px}
-.brow{width:100%;display:flex;gap:6px}
+.brow{width:100%;display:flex;flex-wrap:wrap;gap:6px}
 #new,#fs{flex:1 1 0;min-width:0;height:43px;padding:2px 3px;line-height:1.1;white-space:nowrap;overflow:hidden;text-align:center}
 #fs[hidden]{display:none}
+#suggestion{flex:0 0 100%;min-width:0}
+#suggestBtn{width:100%;height:43px;min-width:0;padding:3px 4px;font-size:clamp(10px,1.25vw,13px);line-height:1.1;white-space:normal}
 br.lb{display:none}
 button{font:inherit;font-weight:700;padding:10px 6px;border-radius:8px;border:1px solid rgba(255,217,102,.6);color:#20160a;background:linear-gradient(#e6b93f,#b07d08);cursor:pointer}
 button:active:not(:disabled){transform:scale(.96)}
@@ -31,6 +33,7 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
 @media(hover:hover){#ft img:hover{opacity:.7}}
 @media(min-aspect-ratio:1/1) and (min-width:560px){br.lb{display:inline}#main{flex-direction:row}#side{width:clamp(150px,16vw,200px);justify-content:center;align-items:center;position:relative;left:0}.btns{width:100%}#ft{width:100%}}
 #nt{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:0;background:transparent;border:0;border-radius:0;color:#f4e9c9;font-weight:800;letter-spacing:.12em;font-size:clamp(13px,2.4dvh,18px);white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.85);opacity:0;pointer-events:none;transition:opacity .25s}#nt.on{opacity:1}
+#nt.rematch{max-width:calc(100% - 20px);padding:10px 14px;text-align:center;white-space:pre-line;line-height:1.45;letter-spacing:normal;color:#ffe8a6;background:linear-gradient(145deg,rgba(105,69,28,.97),rgba(48,29,17,.98));border:1px solid rgba(255,217,102,.78);border-radius:10px;box-shadow:0 5px 18px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,235,170,.12);text-shadow:0 1px 3px rgba(0,0,0,.85)}
 #ov{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(5,4,2,.74)}
 #ov[hidden]{display:none}
 #card{width:100%;max-width:420px;max-height:85dvh;overflow:auto;padding:14px 16px;text-align:center;font-size:14px;line-height:1.5;background:radial-gradient(120% 90% at 50% 0%,rgba(91,58,34,.55),transparent 65%),linear-gradient(165deg,#3f2316 0%,#24140a 100%);border:1px solid rgba(200,150,12,.68);box-shadow:0 14px 34px rgba(0,0,0,.78),inset 0 1px 0 rgba(241,226,218,.12);border-radius:14px}
@@ -39,11 +42,89 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
 #card .h{font-size:22px;font-weight:800;color:#ffd966;margin-bottom:4px}#card .result{padding:12px 10px 9px;margin:0 0 8px;border:1px solid rgba(255,217,102,.42);border-radius:11px;background:linear-gradient(145deg,rgba(255,217,102,.13),rgba(45,31,26,.55))}#card .result .h{font-size:clamp(21px,4vw,27px)}#card .points{font-size:19px;font-weight:800;color:#ffe7a0;margin:4px 0}#card .matchscore{font-size:16px;font-weight:750;color:#f5e7c6}
 #card p{margin:6px 0;color:#f1e2da;font-weight:600;letter-spacing:.02em}
 #card.rules-card p{color:var(--tx);font-weight:400;letter-spacing:normal}
-.pgs{display:grid;margin:2px 0 6px;text-align:left}.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}.pgt{text-align:center;color:#ffd966;font-weight:700;font-size:15px;margin:0 0 4px}.pg p{margin:0 0 7px}.pg b{color:#ffd966}
-.rnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}.rarr{width:38px;height:38px;border-radius:50%;padding:0;font-size:22px;line-height:1}
-.rdots{display:flex;gap:8px}.rdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25)}.rdots span.on{background:#ffd966}
-@media(max-height:480px){#card img{display:none}}
+.rules-layout{display:flex;flex-direction:column;gap:7px;min-width:0}
+.rules-head{display:flex;flex-direction:column;align-items:center;text-align:center}
+.rules-heading{font-size:22px;font-weight:850;line-height:1.15;color:#ffd966}
+.rules-sub{display:none}
+.rules-pages{min-width:0}
+.pgs{display:grid;margin:2px 0 6px;text-align:left;grid-template-areas:"page"}
+.pg{grid-area:page;visibility:hidden;opacity:0;transition:opacity .2s;min-width:0}
+.pg.on{visibility:visible;opacity:1}
+.pgt{text-align:center;color:#ffd966;font-weight:750;font-size:15px;margin:0 0 5px}
+.pg p{margin:0 0 7px;line-height:1.45}
+.pg b{color:#ffd966}
+.rules-footer{display:flex;align-items:center;justify-content:center;gap:10px}
+.rnav{display:flex;align-items:center;justify-content:center;gap:10px;margin:0}
+.rarr{width:38px;height:38px;flex:0 0 auto;border-radius:50%;padding:0;font-size:22px;line-height:1}
+.rdots{display:flex;gap:7px;align-items:center}
+.rdots span{width:8px;height:8px;flex:0 0 auto;border-radius:50%;background:rgba(255,255,255,.25)}
+.rdots span.on{background:#ffd966}
+.rules-footer .go{min-width:var(--mw);margin:0}
 #card .go{min-width:var(--mw);margin:4px 3px 0}
+/* Başlangıç menüsü: kısa yatay ekranlarda iki sütunlu, kaydırmasız düzen. */
+#card.menu-card{width:100%}
+.menu-layout{display:block}.menu-intro,.menu-options{min-width:0}.menu-row{display:block}.menu-row[hidden]{display:none}.menu-row p{margin:6px 0}
+.menu-actions{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.menu-actions .go{flex:0 1 var(--mw)}
+@media(orientation:landscape) and (max-height:600px){
+ #ov{padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+ #card.menu-card{width:min(94vw,780px);max-width:none;max-height:94dvh;overflow:hidden;padding:10px 14px}
+ #card.menu-card .menu-layout{min-height:0;display:grid;grid-template-columns:minmax(145px,.72fr) minmax(0,1.55fr);align-items:center;gap:clamp(12px,3vw,28px)}
+ #card.menu-card .menu-intro{display:flex;flex-direction:column;align-items:center;justify-content:center;align-self:stretch;border-right:1px solid rgba(255,217,102,.2);padding-right:clamp(8px,2vw,18px)}
+ #card.menu-card .menu-intro .h{font-size:clamp(20px,4.2dvh,26px);margin:0}
+ #card.menu-card .menu-intro p{font-size:12px;margin:3px 0 0;color:#d8c3a0}
+ #card.menu-card .menu-options{display:flex;flex-direction:column;justify-content:center;gap:6px}
+ #card.menu-card .menu-row{display:grid;grid-template-columns:clamp(66px,10vw,92px) minmax(0,1fr);align-items:center;gap:8px}
+ #card.menu-card .menu-row p{margin:0;text-align:left;font-size:12px;white-space:nowrap}
+ #card.menu-card .seg{gap:5px;margin:0}
+ #card.menu-card .seg button{min-width:0;min-height:34px;padding:6px 5px;font-size:clamp(11px,1.65vw,13px);line-height:1.15}
+ #card.menu-card .menu-actions{gap:7px;margin-top:2px}
+ #card.menu-card .menu-actions .go{min-width:0;min-height:36px;flex:1 1 120px;margin:0;padding:7px 10px;font-size:13px}
+}
+@media(orientation:landscape) and (max-height:390px){
+ #card.menu-card{padding:7px 11px}
+ #card.menu-card .menu-layout{grid-template-columns:minmax(125px,.65fr) minmax(0,1.7fr);gap:10px}
+ #card.menu-card .menu-options{gap:4px}
+ #card.menu-card .menu-row{grid-template-columns:60px minmax(0,1fr);gap:6px}
+ #card.menu-card .seg button{min-height:30px;padding:5px 3px;font-size:11px}
+ #card.menu-card .menu-actions .go{min-height:32px;padding:5px 8px;font-size:12px}
+}
+/* Yatay mobil: KURALLAR penceresi iki sütunlu ve kaydırmasızdır. */
+@media(orientation:landscape) and (max-height:600px){
+ #ov{padding:max(7px,env(safe-area-inset-top)) max(9px,env(safe-area-inset-right)) max(7px,env(safe-area-inset-bottom)) max(9px,env(safe-area-inset-left))}
+ #card.rules-card{width:min(94vw,820px);max-width:none;height:min(92dvh,360px);max-height:92dvh;overflow:hidden;padding:10px 12px}
+ #card.rules-card .rules-layout{height:100%;min-height:0;display:grid;grid-template-columns:minmax(126px,.34fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:clamp(10px,2vw,20px);align-items:stretch}
+ #card.rules-card .rules-head{grid-column:1;grid-row:1;min-width:0;display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(255,217,102,.22);padding:0 10px 0 0}
+ #card.rules-card .rules-heading{font-size:clamp(20px,4.5dvh,26px)}
+ #card.rules-card .rules-sub{display:block;margin-top:5px;color:#c9bd91;font-size:11px;line-height:1.35}
+ #card.rules-card .rules-pages{grid-column:2;grid-row:1 / span 2;align-self:center;min-width:0;max-height:100%;overflow:hidden}
+ #card.rules-card .pgs{margin:0}
+ #card.rules-card .pgt{font-size:clamp(14px,3.7dvh,17px);margin-bottom:8px}
+ #card.rules-card .pg p{font-size:clamp(12px,3.15dvh,14px);line-height:1.42;margin:0 0 8px}
+ #card.rules-card .rules-footer{grid-column:1;grid-row:2;align-self:end;display:flex;flex-direction:column;gap:8px;padding:0 10px 0 0}
+ #card.rules-card .rnav{width:100%;gap:6px;justify-content:center}
+ #card.rules-card .rarr{width:32px;height:32px;font-size:20px}
+ #card.rules-card .rdots{gap:5px}
+ #card.rules-card .rdots span{width:6px;height:6px}
+ #card.rules-card .rules-footer .go{width:100%;min-width:0;min-height:34px;padding:6px 8px;font-size:12px}
+}
+@media(orientation:landscape) and (max-height:390px){
+ #card.rules-card{padding:8px 10px;height:92dvh}
+ #card.rules-card .rules-layout{grid-template-columns:minmax(116px,.31fr) minmax(0,1fr);gap:9px}
+ #card.rules-card .rules-head{padding-right:8px;padding-bottom:0}
+ #card.rules-card .rules-footer{padding-right:8px;gap:6px}
+ #card.rules-card .rarr{width:29px;height:29px}
+ #card.rules-card .rdots{gap:4px}
+ #card.rules-card .rdots span{width:5px;height:5px}
+ #card.rules-card .rules-footer .go{min-height:31px;padding:5px 6px}
+ #card.rules-card .pg p{font-size:12px;line-height:1.35;margin-bottom:6px}
+}
+/* Dikey mobilde teklif düğmesi mevcut YENİ OYUN satırını paylaşır; tahta yüksekliği değişmez. */
+@media(orientation:portrait) and (max-width:900px){
+ .brow{flex-wrap:nowrap}
+ #suggestion{flex:1 1 0}
+ #suggestBtn{font-size:clamp(9px,2.8vw,12px);padding:3px 2px}
+}
+
 .seg{display:flex;gap:6px;margin:4px 0 10px}
 .seg button{flex:1;color:#f1e2da;background:linear-gradient(180deg,#36241d,#261813);border:1px solid rgba(200,150,12,.42);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
 .seg button.on{color:#20160a;background:linear-gradient(#e6b93f,#b07d08);border-color:rgba(255,217,102,.78);box-shadow:0 2px 8px rgba(0,0,0,.35)}
@@ -55,7 +136,7 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
  <div class="scorebox"><span class="name" id="scoreName0">SİZ</span><span class="value" id="scoreValue0">0</span></div>
  <div class="scorebox"><span class="name" id="scoreName1">PC</span><span class="value" id="scoreValue1">0</span></div>
 </div>
-<div class="btns"><div class="brow"><button id="new">YENİ<br class="lb"> OYUN</button><button id="fs" type="button" hidden>TAM<br class="lb"> EKRAN</button></div><button id="rules">KURALLAR</button></div>
+<div class="btns"><div class="brow"><button id="new">YENİ<br class="lb"> OYUN</button><button id="fs" type="button" hidden>TAM<br class="lb"> EKRAN</button><div id="suggestion" hidden><button id="suggestBtn">SONUÇ ÖNERİSİ</button></div></div><button id="rules">KURALLAR</button></div>
 <div id="ft"><img src="../img/THlogo.webp" alt="" onerror="this.remove()"></div>
 </aside></div>
 <div id="ov" hidden><div id="card" role="dialog" aria-modal="true" aria-label="Tavla"></div></div>
@@ -350,7 +431,54 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
     }
     return best;
   }
-  const api = { plan: plan, ev: ev, outcomes: outcomes, book: book };
+  // Kesin sonuç çözücüsü: zarların her olası sonucunu ve tarafların yasal
+  // hamlelerini tarar. Arama bütçesi aşılırsa sonuç bilinmiyor kabul edilir.
+  function guaranteedResult(state, turn, winner, budget) {
+    const limit = budget || 24000, memo = new Map(), visiting = new Set(), rolls = [];
+    for (let a = 1; a <= 6; a++) for (let b = a; b <= 6; b++) rolls.push([a,b]);
+    let visited = 0, aborted = false;
+    function solve(st, side) {
+      const w = E.winner(st);
+      if (w >= 0) return w === winner ? (st.off[1-winner] === 0 ? 2 : 1) : 0;
+      if (!contact(st)) { /* temassızlık korunur; vurma ihtimali yoktur */ }
+      const k = sk(st) + '|' + side + '|' + winner;
+      if (memo.has(k)) return memo.get(k);
+      if (visiting.has(k)) return 0;
+      if (++visited > limit) { aborted = true; return 0; }
+      visiting.add(k);
+      let overall = 2;
+      for (const r of rolls) {
+        if (aborted) return 0;
+        const os = outcomes(st, side, E.diceFromRoll(r), new Map());
+        let rollValue;
+        if (!os.size) rollValue = solve(st, 1-side);
+        else if (side === winner) {
+          rollValue = 0;
+          for (const o of os.values()) {
+            const v = solve(o.s, 1-side);
+            if (v > rollValue) rollValue = v;
+            if (rollValue === 2) break;
+          }
+        } else {
+          rollValue = 2;
+          for (const o of os.values()) {
+            const v = solve(o.s, 1-side);
+            if (v < rollValue) rollValue = v;
+            if (rollValue === 0) break;
+          }
+        }
+        if (rollValue < overall) overall = rollValue;
+        if (overall === 0) break;
+      }
+      visiting.delete(k);
+      if (!aborted) memo.set(k, overall);
+      return overall;
+    }
+    if (contact(state)) return { value: 0, complete: true, visited: 0 };
+    const value = solve(state, turn);
+    return { value: aborted ? 0 : value, complete: !aborted, visited: visited };
+  }
+  const api = { plan: plan, ev: ev, outcomes: outcomes, book: book, guaranteedResult: guaranteedResult };
   G.TavlaAI = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })();
@@ -361,9 +489,10 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
 const E=window.TavlaEngine,$=id=>document.getElementById(id),cv=$('cv'),cx=cv.getContext('2d');
 const LW=1000,LH=640,R=27,K=matchMedia('(prefers-reduced-motion: reduce)').matches?.5:1;
 const PP={1:[[0,0]],2:[[-1,-1],[1,1]],3:[[-1,-1],[0,0],[1,1]],4:[[-1,-1],[1,-1],[-1,1],[1,1]],5:[[-1,-1],[1,-1],[0,0],[-1,1],[1,1]],6:[[-1,-1],[1,-1],[-1,0],[1,0],[-1,1],[1,1]]};
-let S=E.newState(),cur=0,dice=[],dd=[],phase='menu',sel=null,dests=null,froms=null,last=[],hl=null,anim=null,rolling=0,run=0,busy=false,mode='cpu',target=1,match=null,canClose=false,gid=0,level=1,wk=null,aid=0,lw=0,openingNames=false,statusText='',noteActive=false;
+let S=E.newState(),cur=0,dice=[],dd=[],phase='menu',sel=null,dests=null,froms=null,last=[],hl=null,anim=null,rolling=0,run=0,busy=false,mode='cpu',target=1,match=null,canClose=false,gid=0,level=1,wk=null,aid=0,lw=0,openingNames=false,statusText='',noteActive=false,pendingRematch=null,pendingSuggestion=null;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms*K));
-async function note(t){const e=$('nt');if(t==='OYNANACAK HAMLE YOK'){noteActive=true;kick()}e.textContent=t;e.classList.add('on');await sleep(1700);e.classList.remove('on');if(t==='OYNANACAK HAMLE YOK'){noteActive=false;kick()}await sleep(250)}
+async function note(t){const e=$('nt');if(t==='OYNANACAK HAMLE YOK'){noteActive=true;kick()}e.textContent=t;e.classList.add('on');await sleep(1700);e.classList.remove('on');if(t==='OYNANACAK HAMLE YOK'){noteActive=false;statusText=''}await sleep(250)}
+async function rematchNotice(st){const e=$('nt'),name=mode==='cpu'?(st===0?'SİZ':'PC'):(st===0?'BEYAZ':'SİYAH');noteActive=true;statusText='';e.textContent='Tavla kapanmadığı için\nyeni partiye '+name+(st===0&&mode==='cpu'?' başlarsınız.':' başlar.');e.classList.add('rematch','on');kick();await sleep(1500);e.classList.remove('on','rematch');noteActive=false;statusText=''}
 const isCpu=()=>mode==='cpu'&&cur===1;
 const nm=()=>mode==='cpu'?['Siz','Bilgisayar']:['Beyaz','Siyah'];
 function currentStatus(){if(mode==='cpu')return cur===1?'BİLGİSAYAR OYNUYOR':'SIRA SİZDE';return cur===0?'SIRA BEYAZDA':'SIRA SİYAHTA'}
@@ -487,11 +616,33 @@ function fly(m){return new Promise(res=>{const p=cur,a=pos(m.from,p,cnt(m.from,p
 const dfo=(q,i)=>q.tx!==undefined?q.tx:q.fx!==undefined?q.fx:i;
 function use(d){const q=dd.map((x,i)=>[x,dfo(x,i)]).filter(a=>a[0].v===d&&!a[0].u).sort((a,b)=>a[1]-b[1])[0];if(q)q[0].u=true;dice=rm(dice,d)}
 function score(){const n=mode==='cpu'?['SİZ','PC']:['BEYAZ','SİYAH'];$('scoreName0').textContent=n[0];$('scoreName1').textContent=n[1];$('scoreValue0').textContent=match?match.score[0]:0;$('scoreValue1').textContent=match?match.score[1]:0}
+async function inspectForcedResult(nextTurn){
+ const panel=$('suggestion');panel.hidden=true;pendingSuggestion=null;
+ if(AIbusy || typeof window.TavlaAI?.guaranteedResult!=='function')return;
+ // Yalnızca taşlar birbirini tamamen geçtiğinde; aksi durumda vurulma ihtimali vardır.
+ let found=null;
+ for(const w of [0,1]){
+  // Bilgisayara karşı oyunda yalnızca bilgisayarın teklifini kullanıcıya sunuyoruz.
+  if(mode==='cpu'&&w===0)continue;
+  const r=window.TavlaAI.guaranteedResult(S,nextTurn,w,9000);
+  if(r.complete&&r.value>0){found={winner:w,points:r.value===2?2:1};break}
+ }
+ if(!found)return;
+ pendingSuggestion=found;
+ $('suggestBtn').textContent=found.points===2?'MARS ÖNERİSİ':'1 PUAN ÖNERİSİ';
+ panel.hidden=false;
+}
+let AIbusy=false;
+$('suggestBtn').onclick=()=>{
+ if(!pendingSuggestion)return;
+ const w=pendingSuggestion.winner,who=mode==='cpu'?(w===1?'Bilgisayar':'Siz'):(w===0?'Beyaz':'Siyah');
+ modal('<div class="h">'+(pendingSuggestion.points===2?'MARS ÖNERİSİ':'1 PUAN ÖNERİSİ')+'</div><p>Mevcut konumdan itibaren yapılan tüm olası zar ve yasal hamleler incelendi. '+who+' için galibiyet matematiksel olarak kaçınılmaz görünüyor.</p><p>Oyunu şimdi bitirmeyi kabul ediyor musunuz?</p><button class="go" id="acceptSuggestion">KABUL ET</button><button class="go" id="rejectSuggestion">OYUNA DEVAM ET</button>',false);
+};
 async function after(){const g=gid,w=E.winner(S);if(w>=0){end(w);return}
  const lg=E.legalMoves(S,cur,dice);froms=new Set(lg.map(m=>m.from));
  if(lg.length){phase='move';statusText=currentStatus();kick();return}
  phase='wait';kick();if(dice.length)await note('OYNANACAK HAMLE YOK');else await sleep(450);
- if(g!==gid)return;cur=1-cur;turnStart(mode==='cpu'?(cur===1?300:1400):700)}
+ if(g!==gid)return;cur=1-cur;if(mode==='two')await inspectForcedResult(cur);if(g!==gid)return;turnStart(mode==='cpu'?(cur===1?300:1400):700)}
 async function tumble(p,r){const g=gid;dd=[0,1].map(i=>({p:p,v:r[i],u:false,fx:i?34:-34}));rolling=1;kick();await sleep(650);if(g!==gid)return;rolling=0;kick();
  if(r[0]===r[1]){await sleep(140);if(g!==gid)return;const t0=performance.now(),d=320*K;dd.push({p:p,v:r[0],u:false,fx:-34,tx:-102,t0:t0,d:d},{p:p,v:r[1],u:false,fx:34,tx:102,t0:t0,d:d});grow=t0+d;kick();await sleep(320+60);if(g!==gid)return;kick()}}
 async function doRoll(){const g=gid;phase='rolling';busy=true;msg(currentStatus());const r=E.rollTwo();await tumble(cur,r);if(g!==gid)return;dice=E.diceFromRoll(r);busy=false;after()}
@@ -507,7 +658,7 @@ async function cpuTurn(){const g=gid;phase='wait';busy=true;last=[];msg('Bilgisa
  for(;;){if(E.winner(S)>=0)break;let m;if(plan){if(!plan.length)break;m=plan.shift()}else{const ms=E.legalMoves(S,1,dice);if(!ms.length)break;m=cpuPick(ms)}msg('Bilgisayar oynuyor…');hl=m.from;kick();await sleep(520);hl=null;if(g!==gid)return;
   await fly(m);if(g!==gid)return;use(m.die);last.push({...m,p:1});if(m.hit)vib();kick();await sleep(380);if(g!==gid)return;n++}
  if(E.winner(S)>=0){busy=false;end(1);return}
- msg('Bilgisayar '+r[0]+'-'+r[1]+' attı.');if(dice.length)await note('OYNANACAK HAMLE YOK');else await sleep(300);if(g!==gid)return;cur=0;turnStart(1400)}
+ msg('Bilgisayar '+r[0]+'-'+r[1]+' attı.');if(dice.length)await note('OYNANACAK HAMLE YOK');else await sleep(300);if(g!==gid)return;cur=0;await inspectForcedResult(cur);if(g!==gid)return;turnStart(1400)}
 const nh=c=>c.filter(x=>x.hit).length,better=(c,o)=>c.length<o.length||(c.length===o.length&&nh(c)>nh(o));
 function paths(f){const mp=new Map();(function rec(st,ds,pf,ch){E.legalMoves(st,cur,ds).filter(m=>m.from===pf).sort((a,b)=>a.die-b.die).forEach(m=>{const c=ch.concat(m);if(!mp.has(m.to)||better(c,mp.get(m.to)))mp.set(m.to,c);if(m.to!=='off')rec(E.applyMove(st,cur,m),rm(ds,m.die),m.to,c)})})(S,dice,f,[]);return mp}
 async function play(path){const g=gid,p=cur;busy=true;froms=null;sel=null;dests=null;last=[];
@@ -524,15 +675,26 @@ cv.addEventListener('pointerdown',e=>{if(phase!=='move'||busy||isCpu())return;
  kick()});
 function modal(html,cl,cls){canClose=!!cl;const card=$('card');card.className=cls||'';card.innerHTML=html;$('ov').hidden=false}
 function closeM(){$('ov').hidden=true;canClose=false}
-function menu(){pm=mode;pl=level;pt=target;modal('<div class="h">TAVLA</div><p>Oyun türü</p><div class="seg" id="gm"><button data-m="cpu"'+(pm==='cpu'?' class="on"':'')+'>Bilgisayara karşı</button><button data-m="two"'+(pm==='two'?' class="on"':'')+'>İki kişilik</button></div><div id="gl"'+(pm==='cpu'?'':' hidden')+'><p>Seviye</p><div class="seg" id="gv">'+['Kolay','Orta','Zor'].map((x,i)=>'<button data-l="'+i+'"'+(pl===i?' class="on"':'')+'>'+x+'</button>').join('')+'</div></div><p>Parti</p><div class="seg" id="gt">'+[1,3,5].map(t=>'<button data-t="'+t+'"'+(pt===t?' class="on"':'')+'>'+(t===1?'Tek oyun':t+"\'te biter")+'</button>').join('')+'</div><button class="go" id="go">BAŞLA</button>'+(phase!=='menu'&&phase!=='over'?'<button class="go" id="cl">VAZGEÇ</button>':''))}
+function menu(){pm=mode;pl=level;pt=target;modal('<div class="menu-layout"><div class="menu-intro"><div class="h">TAVLA</div><p>Oyun ayarları</p></div><div class="menu-options"><div class="menu-row"><p>Oyun türü</p><div class="seg" id="gm"><button data-m="cpu"'+(pm==='cpu'?' class="on"':'')+'>Bilgisayara karşı</button><button data-m="two"'+(pm==='two'?' class="on"':'')+'>İki kişilik</button></div></div><div class="menu-row" id="gl"'+(pm==='cpu'?'':' hidden')+'><p>Seviye</p><div class="seg" id="gv">'+['Kolay','Orta','Zor'].map((x,i)=>'<button data-l="'+i+'"'+(pl===i?' class="on"':'')+'>'+x+'</button>').join('')+'</div></div><div class="menu-row"><p>Parti</p><div class="seg" id="gt">'+[1,3,5].map(t=>'<button data-t="'+t+'"'+(pt===t?' class="on"':'')+'>'+(t===1?'Tek oyun':t+"'te biter")+'</button>').join('')+'</div></div><div class="menu-actions"><button class="go" id="go">BAŞLA</button>'+(phase!=='menu'&&phase!=='over'?'<button class="go" id="cl">VAZGEÇ</button>':'')+'</div></div></div>','', 'menu-card')}
 let rp=0,pm='cpu',pl=1,pt=1;
 function rPage(i){const p=[...document.querySelectorAll('#card .pg')];rp=Math.max(0,Math.min(p.length-1,i));p.forEach((x,k)=>x.classList.toggle('on',k===rp));document.querySelectorAll('#card .rdots span').forEach((x,k)=>x.classList.toggle('on',k===rp));$('rP').disabled=rp===0;$('rN').disabled=rp===p.length-1}
-function rules(){modal('<img src="../img/mecesml.webp" alt="Tavla" onerror="this.remove()"><div class="pgs"><div class="pg"><div class="pgt">Amaç ve açılış</div><p><b>Amaç:</b> 15 taşınızı önce eve (son 6 hane) getirip tahtadan toplamak. Beyazın evi altta, siyahın evi üsttedir; toplama bölmesi evlerin yanındadır.</p><p><b>Açılış:</b> İlk oyunda iki taraf birer zar atar. Büyük atan oyuncu zarları yeniden atarak başlar; eşitlikte açılış atışı tekrarlanır. Aynı parti içindeki sonraki oyunlarda son oyunu kazanan oyuncu ilk zarı atar. Zarlar otomatik atılır.</p></div><div class="pg"><div class="pgt">Hamle ve kırma</div><p>Zar sayısı kadar hane ilerlenir. Taşa dokunun, gidebileceği yerler altın parlar; hedefe dokunun. Oynanan hamle geri alınamaz.</p><p>Rakibin <b>2 veya daha fazla</b> taşı olan haneye gidilemez. <b>Tek taşın</b> üzerine basarsanız o taş kırılır ve orta çubuğa gider (kırma hamlesi turuncu gösterilir).</p><p>Kırık taşınız varsa önce onu rakibin evine sokmalısınız.</p></div><div class="pg"><div class="pgt">Zar kuralları</div><p>İki zar da oynanabiliyorsa ikisi de oynanmalıdır. Çift atarsanız dört kez oynarsınız.</p><p>Yalnız biri oynanabiliyorsa o oynanır; ikisinden biri seçilebiliyorsa <b>büyük zar</b> oynanır.</p><p>Oynanacak hamle kalmadığında sıra otomatik geçer.</p></div><div class="pg"><div class="pgt">Toplama ve puan</div><p>Tüm taşlarınız evdeyken toplayabilirsiniz. Zarın hanesinde taş yoksa ve daha yüksek hanede de taş kalmadıysa en yüksek haneden toplanır. Toplamak zorunlu değildir.</p><p><b>Puan:</b> Normal galibiyet 1, <b>mars</b> (rakip hiç taş toplayamadan biterse) 2 puandır. Parti, seçilen puana ilk ulaşanındır; mars ile hedef aşılabilir.</p></div></div><div class="rnav"><button class="rarr" id="rP" aria-label="Önceki sayfa">&#8249;</button><div class="rdots"><span class="on"></span><span></span><span></span><span></span></div><button class="rarr" id="rN" aria-label="Sonraki sayfa">&#8250;</button></div><button class="go" id="cl">KAPAT</button>',true,'rules-card');rPage(0)}
+function rules(){
+ const pages=[
+  '<div class="pg"><div class="pgt">Amaç ve taşların yönü</div><p>Her oyuncunun <b>15 taşı</b> vardır. Amaç, bütün taşlarını kendi evine (son 6 hane) getirip tahtadan ilk toplamaktır.</p><p>Beyazın evi altta, siyahın evi üsttedir. Taşlarınızı kendi evinize doğru ilerletirsiniz; toplama bölmesi evlerin yanındadır.</p></div>',
+  '<div class="pg"><div class="pgt">Açılış ve sıra</div><p>İlk oyunda iki taraf birer zar atar. Büyük atan, zarları yeniden atarak başlar; eşitlikte açılış atışı tekrarlanır. Zarlar otomatik atılır.</p><p>Aynı parti içindeki sonraki oyunlarda önceki oyunun galibi başlar. Parti bittikten sonra tavla kapatılmadan yeni parti açılırsa son partinin galibi başlar; tavla kapatılıp yeniden açılırsa açılış atışı yapılır.</p></div>',
+  '<div class="pg"><div class="pgt">Hamle ve kırma</div><p>Zar sayısı kadar ilerleyin. Taşa dokunun; gidebileceği haneler altın renkle parlar. Hedefe dokunarak hamleyi yapın. <b>Hamle geri alınamaz.</b></p><p>Rakibin iki veya daha fazla taşı bulunan haneye gidilemez. Tek rakip taşının üzerine gelirseniz taş kırılır ve orta çubuğa gider. Kırık taşınız varsa önce rakibin evinden oyuna sokmalısınız.</p></div>',
+  '<div class="pg"><div class="pgt">Zar kuralları</div><p>İki zar da oynanabiliyorsa <b>ikisi de oynanmalıdır.</b> Çift zar attığınızda dört hamle yaparsınız.</p><p>Yalnız bir zar oynanabiliyorsa o zar kullanılır. İki zardan yalnız biri seçilebiliyorsa <b>büyük zar</b> oynanır. Oynanabilir hamle kalmadığında sıra otomatik geçer.</p></div>',
+  '<div class="pg"><div class="pgt">Taş toplama ve puan</div><p>15 taşınızın tamamı kendi evinizdeyken taş toplamaya başlayabilirsiniz. Zarın gösterdiği hanede taş yoksa ve daha yüksek hanede de taş kalmamışsa en yüksek haneden taş alınabilir. Taş toplamak zorunlu değildir.</p><p>Normal galibiyet <b>1 puan</b>, mars (rakip hiç taş toplayamadan biterse) <b>2 puandır.</b> Parti, seçilen puana ilk ulaşan oyuncunun olur; mars ile hedef aşılabilir.</p></div>'
+ ];
+ const dots=pages.map((_,i)=>'<span'+(i===0?' class="on"':'')+'></span>').join('');
+ modal('<div class="rules-layout"><div class="rules-head"><div class="rules-heading">KURALLAR</div><div class="rules-sub">Tavla nasıl oynanır?</div></div><div class="rules-pages"><div class="pgs">'+pages.join('')+'</div></div><div class="rules-footer"><div class="rnav"><button class="rarr" id="rP" aria-label="Önceki sayfa">&#8249;</button><div class="rdots">'+dots+'</div><button class="rarr" id="rN" aria-label="Sonraki sayfa">&#8250;</button></div><button class="go" id="cl">KAPAT</button></div></div>',true,'rules-card');
+ rPage(0);
+}
 function end(w){lw=w;phase='over';busy=false;const pts=E.gamePoints(S,w,null),r=E.recordGame(match,w,pts),n=nm();vib();score();
  const t=mode==='cpu'?(w===0?'Siz kazandınız':'Bilgisayar kazandı'):n[w]+' kazandı';
  modal('<div class="result"><div class="h">'+t+(pts===2?' — MARS!':'')+'</div><div class="points">+'+pts+' puan</div>'+(target>1?'<div class="matchscore">'+n[0]+' '+match.score[0]+' — '+match.score[1]+' '+n[1]+'</div>':'')+'</div>'+(r.over?'<p><b>Parti sona erdi.</b></p><button class="go" id="mn">YENİ PARTİ</button>':'<p>Sonraki oyunda ilk zarı kazanan oyuncu atacak.</p><button class="go" id="nx">SONRAKİ OYUN</button>'))}
-async function startGame(st){cancelAnimation();const g=++gid;hl=null;rolling=0;S=E.newState();dice=[];last=[];sel=dests=froms=null;cur=0;busy=true;phase='open';openingNames=false;score();
- if(st!==undefined){cur=st;dd=[];msg(currentStatus());await sleep(650);if(g!==gid)return;turnStart();return}
+async function startGame(st){cancelAnimation();const g=++gid;hl=null;rolling=0;S=E.newState();pendingSuggestion=null;$('suggestion').hidden=true;dice=[];last=[];sel=dests=froms=null;cur=0;busy=true;phase='open';openingNames=false;score();
+ if(st!==undefined){cur=st;dd=[];await rematchNotice(st);if(g!==gid)return;turnStart();return}
  const o=E.openingRoll();msg('Açılış atışı…');openingNames=true;dd=[{x:710,y:320,v:o.dice[0],p:0,u:false},{x:230,y:320,v:o.dice[1],p:1,u:false}];rolling=1;kick();await sleep(1500);if(g!==gid)return;rolling=0;kick();
  cur=o.starter;statusText=currentStatus();kick();await sleep(1100);if(g!==gid)return;openingNames=false;dd=[];turnStart()}
 $('ov').addEventListener('click',e=>{const b=e.target.closest('button');
@@ -541,10 +703,10 @@ $('ov').addEventListener('click',e=>{const b=e.target.closest('button');
  if(b.dataset.l){pl=+b.dataset.l;[...$('gv').children].forEach(x=>x.classList.toggle('on',x===b));return}
  if(b.dataset.t){pt=+b.dataset.t;[...$('gt').children].forEach(x=>x.classList.toggle('on',x===b));return}
  if(b.id==='rP'){rPage(rp-1);return}if(b.id==='rN'){rPage(rp+1);return}
- if(b.id==='go'){mode=pm;level=pl;target=pt;match=E.newMatch(target);closeM();startGame()}
- else if(b.id==='mn'){menu()}
+ if(b.id==='go'){const starter=pendingRematch&&pendingRematch.mode===pm?pendingRematch.winner:undefined;pendingRematch=null;mode=pm;level=pl;target=pt;match=E.newMatch(target);closeM();startGame(starter)}
+ else if(b.id==='mn'){pendingRematch={mode:mode,winner:lw};menu()}
  else if(b.id==='nx'){closeM();startGame(lw)}
- else if(b.id==='cl'){closeM()}});
+ else if(b.id==='acceptSuggestion'){const w=pendingSuggestion&&pendingSuggestion.winner;pendingSuggestion=null;$('suggestion').hidden=true;closeM();if(w!==null&&w!==undefined)end(w)}else if(b.id==='rejectSuggestion'){pendingSuggestion=null;$('suggestion').hidden=true;closeM()}else if(b.id==='cl'){closeM()}});
 (function(){let x0=null;const c=$('card');c.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});c.addEventListener('touchend',e=>{if(x0===null||!$('rP'))return;const d=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(d)>40)rPage(rp+(d<0?1:-1))},{passive:true})})();
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&canClose)closeM()});
 $('new').onclick=menu;$('rules').onclick=rules;
