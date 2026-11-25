@@ -214,8 +214,8 @@
     padding: 0;
   }
 
-  /* Bilgisayar: ilk satırda 5, ikinci satırda 4 kart (ortalı) */
-  .game-link { text-decoration: none; display: block; flex: 0 0 calc((100% - 4 * var(--gg)) / 5); min-width: 0; }
+  /* Bilgisayar, tablet ve yatay telefon: 4 + 4 kart (8 oyun) */
+  .game-link { text-decoration: none; display: block; flex: 0 0 calc((100% - 3 * var(--gg)) / 4); min-width: 0; }
   .game-link .game-card { height: 100%; box-sizing: border-box; }
   .game-card {
     background: var(--aged);
@@ -422,7 +422,6 @@
   }
 
   @media(max-width:700px){
-    .game-link { flex-basis: calc((100% - 2 * var(--gg)) / 3); }
     .selection-row { gap: 8px; }
     .selection-button,
     .grade-row .selection-button,
@@ -441,6 +440,11 @@
     .col-btn { width:auto; padding-left:4px; }
     .go-btn { font-size:0.65rem; padding:7px 9px; letter-spacing:0.08em; }
     .act-name { font-size:0.92rem; }
+  }
+
+  /* Dikey telefon: 2 + 2 + 2 + 2 kart */
+  @media(max-width:559px) and (orientation:portrait){
+    .game-link { flex-basis: calc((100% - var(--gg)) / 2); }
   }
 
   @media(max-width:600px){
@@ -556,16 +560,6 @@
 </svg>
 <span>Cevapları</span>
 <span>Yakala</span>
-</div>
-</a>
-<a class="game-link" href="mat-oyunlar/kesir-eslestir.html" target="_blank">
-<div class="game-card">
-<svg fill="none" height="28" stroke="var(--rust)" stroke-width="1.5" viewbox="0 0 24 24" width="28">
-<line x1="12" x2="12" y1="4" y2="20"></line><circle cx="12" cy="8" r="2.5"></circle><circle cx="12" cy="16" r="2.5"></circle>
-<line x1="7" x2="17" y1="12" y2="12"></line>
-</svg>
-<span>Kesirleri</span>
-<span>Eşleştirme</span>
 </div>
 </a>
 <a class="game-link" href="mat-oyunlar/koordinatlar.html" target="_blank">
