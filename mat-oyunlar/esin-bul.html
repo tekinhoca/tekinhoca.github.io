@@ -2,468 +2,223 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Eşini Bul</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:#0a0c0e;font-family:Georgia,serif;display:flex;align-items:flex-start;justify-content:center;padding:8px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none}
-html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
-.wrap{width:100%;max-width:500px;display:flex;flex-direction:column;gap:8px;margin:auto}
-
-.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
-.game-title{font-size:17px;font-weight:700;color:#c8960c;letter-spacing:.07em}
-
-.infobar{display:flex;gap:6px}
-.ibox{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:5px;padding:5px 8px;flex:1;text-align:center}
-.ibox .l{font-size:9px;color:rgba(247,242,232,0.3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:1px}
-.ibox .v{font-size:13px;font-weight:700;color:#c8960c}
-
-/* SEVİYE SEÇİM EKRANI */
-#levelScreen{display:flex;flex-direction:column;gap:10px}
-.level-title{font-size:13px;color:rgba(247,242,232,0.5);text-align:center;margin-bottom:4px}
-.level-btn{
-  padding:14px 20px;border-radius:6px;
-  border:1px solid rgba(200,150,12,0.35);
-  background:rgba(200,150,12,0.06);
-  color:rgba(247,242,232,0.85);
-  font-family:Georgia,serif;font-size:14px;
-  cursor:pointer;transition:all .2s;
-  text-align:left;
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{--f:'Segoe UI','Helvetica Neue',Arial,Roboto,system-ui,sans-serif;--u:clamp(12.5px,min(1.9dvh,3.7vw),17px);--g:#ffd966;--g2:#c8960c}
+html,body{height:100%;overflow:hidden;background:#1d1a63;font-family:var(--f);color:#fff;font-variant-numeric:lining-nums tabular-nums}
+body::before{content:"";position:fixed;inset:-20%;z-index:-1;background:radial-gradient(40% 35% at 15% 15%,rgba(255,107,157,.42),transparent),radial-gradient(40% 35% at 85% 20%,rgba(77,208,225,.38),transparent),radial-gradient(45% 40% at 50% 100%,rgba(179,136,255,.45),transparent),radial-gradient(30% 30% at 90% 85%,rgba(255,217,102,.25),transparent);animation:drift 30s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(4%,3%) scale(1.08)}}
+button{font-family:var(--f);cursor:pointer;touch-action:manipulation;color:inherit}
+.app{height:100dvh;display:flex;flex-direction:column;gap:calc(var(--u)*.55);padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+.side{display:contents}.side>*{flex:none}
+.title{font-size:calc(var(--u)*1.6);font-weight:800;text-align:center;background:linear-gradient(90deg,#ffd966,#ff9ec4,#7fe3f0,#ffd966);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 8s linear infinite}
+@keyframes sh{to{background-position:250% 0}}
+.bt{background:linear-gradient(180deg,rgba(255,217,102,.28),rgba(200,150,12,.22));border:1px solid rgba(255,217,102,.6);border-radius:8px;color:#fff6d8;font-weight:700;font-size:calc(var(--u)*.9);padding:calc(var(--u)*.45) calc(var(--u)*1);transition:transform .1s,filter .2s}
+.bt:active:not(:disabled){transform:scale(.95)}.bt:disabled{opacity:.4;cursor:default}
+@media(hover:hover){.bt:hover:not(:disabled){filter:brightness(1.18)}}
+.hud{display:flex;gap:6px}
+.hb{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:8px;text-align:center;padding:calc(var(--u)*.3) 2px}
+.hb b{display:block;font-size:calc(var(--u)*1.3);color:var(--g);font-weight:800}
+.hb span{font-size:calc(var(--u)*.7);color:rgba(255,255,255,.85)}
+.msg{text-align:center;min-height:calc(var(--u)*1.4);font-size:calc(var(--u)*.98);font-weight:600;color:#fff6d8}
+.btns{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.foot{display:flex;justify-content:center;pointer-events:none}
+.foot img{height:min(34px,5dvh);opacity:.5;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}.foot img:hover{opacity:.9}
+@media(max-height:760px) and (orientation:portrait){.foot{display:none}}
+.board{order:6;flex:1;min-height:0;position:relative;border-radius:12px;overflow:hidden;border:2px solid rgba(255,217,102,.55);box-shadow:0 0 22px rgba(179,136,255,.4);background:rgba(12,10,50,.45);display:grid;place-items:center}
+.btns{order:7}.msg{order:8}.foot{order:9}
+.grid{display:grid;justify-content:center;align-content:center}
+.cd{background:none;border:0;padding:0;perspective:700px;position:relative}
+.in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .35s}
+.cd.o .in{transform:rotateY(180deg)}
+.f,.b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:grid;place-items:center;border-radius:calc(var(--cs)*.12);font-weight:800;text-align:center}
+.f{background:linear-gradient(135deg,#ff9ec4,#b388ff 55%,#6fe3f0);border:2px solid rgba(255,255,255,.7);font-size:calc(var(--cs)*.42);color:#fff;text-shadow:0 0 10px rgba(0,0,0,.35);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+@media(hover:hover){.cd:not(.o):hover .f{filter:brightness(1.12)}}
+.b{transform:rotateY(180deg);background:linear-gradient(180deg,#fffdf2,#ffe9a8);color:#1b1650;border:2px solid #ffd966;white-space:nowrap}
+.t{display:block;line-height:1.1;white-space:nowrap}
+.b sup{font-size:.58em;line-height:0;vertical-align:baseline;position:relative;top:-.62em;margin-left:.05em}
+.cd.m .b{background:linear-gradient(180deg,#b8ffd0,#3ed17f);border-color:#fff;box-shadow:0 0 14px rgba(80,255,150,.7)}
+.cd:focus-visible .f,.cd:focus-visible .b{outline:3px solid #fff}
+.cd.m{animation:pop .5s}@keyframes pop{40%{transform:scale(1.1)}}
+.cd.x .b{animation:shk .45s}@keyframes shk{25%,75%{transform:rotateY(180deg) translateX(-4px)}50%{transform:rotateY(180deg) translateX(4px)}}
+.ov{position:absolute;inset:0;display:grid;place-items:center;background:rgba(14,12,60,.72);backdrop-filter:blur(2px);z-index:5}
+.hidden{display:none!important}
+.ovc{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:10px}
+.ovt{font-size:clamp(20px,5cqw,32px);font-weight:800;color:var(--g)}
+.mo{position:fixed;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);z-index:50;padding:10px}
+.box{background:#0d1b0d;border:1px solid rgba(200,150,12,.6);border-radius:14px;padding:16px;width:min(92vw,520px);max-height:92dvh;overflow:auto;box-shadow:0 0 30px rgba(255,217,102,.25)}
+.box h2{color:var(--g);text-align:center;font-size:19px;margin-bottom:10px}
+.mb{display:flex;gap:10px;justify-content:center}
+.rules{display:flex;flex-direction:column;align-items:center;gap:10px}
+.mi{width:130px;max-height:30dvh;object-fit:contain;-webkit-mask-image:radial-gradient(closest-side,#000 62%,transparent);mask-image:radial-gradient(closest-side,#000 62%,transparent)}
+.rb{width:100%;display:flex;flex-direction:column;gap:10px}
+.pgs{display:grid}.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}
+.pg h3{color:var(--g);font-size:15px;margin-bottom:6px}
+.pg ul{list-style:none;font-size:14px;line-height:1.5;color:#f3ecd2}
+.pg li{margin-bottom:5px;padding-left:14px;position:relative}.pg li::before{content:"◈";color:var(--g2);position:absolute;left:0}
+.nav{display:flex;align-items:center;justify-content:center;gap:10px}
+.nav button{background:none;border:0;color:var(--g);font-size:22px;padding:0 8px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);margin:0 3px}.dot.on{background:var(--g)}
+.opts{display:grid;gap:9px;margin-bottom:12px}
+.op{text-align:left;background:linear-gradient(135deg,rgba(255,217,102,.14),rgba(179,136,255,.16));border:1px solid rgba(255,217,102,.55);border-radius:12px;padding:10px 14px;display:flex;flex-direction:column;gap:3px}
+.op b{color:var(--g);font-size:16px}.op span{font-size:12.5px;color:#e4dcc0;line-height:1.35}
+.op:active{transform:scale(.98)}@media(hover:hover){.op:hover{border-color:#fff1b8;filter:brightness(1.15)}}
+.hint{font-size:12.5px;text-align:center;color:#d9cfa6;margin-bottom:10px}
+.lst{display:grid;gap:8px;margin-bottom:12px}
+.li{display:flex;align-items:center;gap:10px;text-align:left;background:rgba(255,255,255,.06);border:1px solid rgba(255,217,102,.4);border-radius:10px;padding:9px 12px;font-size:14px;font-weight:700;line-height:1.3}
+.li i{flex:none;width:22px;height:22px;border-radius:5px;border:2px solid var(--g);display:grid;place-items:center;font-style:normal;color:#0d1b0d;font-size:15px}
+.li.on{background:rgba(255,217,102,.18);border-color:#fff1b8}.li.on i{background:var(--g)}
+.res{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;width:min(92%,420px)}
+.res .big{font-size:32px;font-weight:800;color:var(--g)}.res p{font-size:14px;line-height:1.6;color:#f3ecd2}
+.cbox{display:flex;flex-direction:column;gap:12px;text-align:center;font-size:15px;line-height:1.5;width:min(90vw,380px)}
+@media(orientation:landscape) and (max-height:600px){
+ .box{padding:10px 16px}.box h2{font-size:15px;margin-bottom:6px}
+ .rules{display:grid;grid-template-columns:minmax(90px,24%) minmax(0,1fr);align-items:center;gap:14px;width:min(94vw,780px);max-height:94dvh;overflow:hidden}
+ .mi{width:100%;max-height:82dvh}.pg ul{font-size:12.5px;line-height:1.4}.pg h3{font-size:13.5px;margin-bottom:3px}
+ .mbox,.lbox{width:min(94vw,720px)}
+ .opts{grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px}.op{padding:7px 12px}.op b{font-size:14px}.op span{font-size:11.5px}
+ .lst{grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.li{padding:6px 10px;font-size:12.5px}.hint{font-size:11.5px;margin-bottom:6px}
+ .res{display:grid;grid-template-columns:1fr 1.2fr;align-items:center;gap:6px 16px;width:min(96%,600px)}.res .l{text-align:center}.res .big{font-size:28px}.res p{font-size:12.5px;line-height:1.45}
+ .cbox{display:grid;grid-template-columns:1fr auto;align-items:center;width:min(94vw,560px);font-size:13px;text-align:left}
 }
-.level-btn:hover{background:rgba(200,150,12,0.15);border-color:#c8960c}
-.level-btn .lname{font-weight:700;color:#c8960c;display:block;margin-bottom:3px}
-.level-btn .ldesc{font-size:11px;color:rgba(247,242,232,0.4)}
-
-/* KART TAHTASI */
-#gameScreen{display:none;flex-direction:column;gap:6px;position:relative}
-.board{display:grid;gap:6px;justify-content:center}
-.card{
-  aspect-ratio:1;
-  border-radius:8px;
-  cursor:pointer;
-  position:relative;
-  user-select:none;
+@media(min-width:700px) and (min-height:601px){.lst{grid-template-columns:1fr 1fr}.mbox{width:min(92vw,560px)}.lbox{width:min(92vw,640px)}}
+@media(min-aspect-ratio:13/10) and (min-width:640px){
+ .app{display:grid;grid-template-columns:minmax(280px,34%) minmax(0,1fr);gap:14px}
+ .side{display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,2.2vmin,18px);min-width:0}
+ .board{order:0;grid-column:2;grid-row:1}.btns,.msg,.foot{order:0}
 }
-.card-face{
-  position:absolute;inset:0;
-  border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-}
-.card-back{
-  background:#1a1628;
-  border:1.5px solid rgba(200,150,12,0.25);
-}
-.card-back::after{
-  content:'?';
-  font-size:clamp(16px,4vw,24px);
-  font-weight:700;
-  color:rgba(200,150,12,0.3);
-  font-family:Georgia,serif;
-}
-.card-front{
-  background:#1e1830;
-  border:1.5px solid rgba(200,150,12,0.4);
-  display:none;
-  flex-direction:column;
-  gap:2px;
-  padding:4px;
-}
-.card.flipped .card-back{display:none}
-.card.flipped .card-front{display:flex}
-.card.matched .card-back{display:none}
-.card.matched .card-front{display:flex;background:#0e1e14;border-color:rgba(80,200,120,0.5);}
-
-.card-text{
-  font-family:Georgia,serif;
-  font-weight:700;
-  color:rgba(247,242,232,0.9);
-  text-align:center;
-  line-height:1.1;
-}
-
-/* Kazanma overlay */
-.win-overlay{
-  display:none;
-  position:absolute;inset:0;
-  background:rgba(10,12,14,0.85);
-  border-radius:8px;
-  flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:14px;
-  z-index:10;
-}
-.win-overlay.show{display:flex}
-.win-overlay h2{font-size:18px;color:#50c878;font-family:Georgia,serif}
-.win-overlay p{font-size:12px;color:rgba(247,242,232,0.5)}
-.win-overlay .ov-btns{display:flex;gap:8px}
-
-.msg{font-size:11px;color:rgba(247,242,232,0.4);text-align:center;min-height:14px}
-.br-btns{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
-button.a{background:rgba(200,150,12,0.08);border:1px solid rgba(200,150,12,0.3);border-radius:4px;padding:5px 14px;font-size:11px;cursor:pointer;color:rgba(247,242,232,0.7);font-family:Georgia,serif;transition:background .2s}
-button.a:hover{background:rgba(200,150,12,0.2)}
-
-/* AÇILIŞ MODALI */
-.modal-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.85);
-  display:flex;align-items:center;justify-content:center;
-  z-index:1000;padding:16px;
-}
-.modal-overlay.hidden{display:none;}
-.modal-box{
-  background:#07090b;
-  border:1px solid rgba(200,150,12,0.5);
-  border-radius:8px;
-  padding:22px 20px 18px;
-  max-width:360px;width:100%;
-  display:flex;flex-direction:column;gap:12px;
-  animation:modalIn .3s ease;
-}
-@keyframes modalIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
-.modal-title{font-size:22px;font-weight:700;color:#c8960c;text-align:center;letter-spacing:.06em;}
-.modal-rules{
-  font-size:11.5px;color:rgba(247,242,232,0.72);line-height:1.75;
-  border-top:1px solid rgba(200,150,12,0.2);border-bottom:1px solid rgba(200,150,12,0.2);
-  padding:10px 4px;list-style:none;
-}
-.modal-rules li{margin-bottom:3px;padding-left:4px;}
-.modal-rules li::before{content:"◈ ";color:#c8960c;}
-.modal-btns{display:flex;gap:10px;justify-content:center;}
-.modal-close{
-  background:rgba(18,16,14,0.7);border:1px solid rgba(200,150,12,0.35);
-  border-radius:3px;padding:6px 18px;font-size:12px;cursor:pointer;
-  color:rgba(247,242,232,0.6);font-family:Georgia,serif;transition:background .2s;
-}
-.modal-close:hover{background:rgba(40,30,10,0.9);}
-.modal-start{
-  background:rgba(18,12,4,0.8);border:1px solid rgba(200,150,12,0.6);
-  border-radius:3px;padding:6px 22px;font-size:12px;cursor:pointer;
-  color:#c8960c;font-weight:600;font-family:Georgia,serif;transition:background .2s;
-}
-.modal-start:hover{background:rgba(60,40,5,0.9);}
-.modal-logo{display:flex;justify-content:center;padding-top:4px;}
-
-/* MASAÜSTÜ: daha geniş ve okunaklı açılış/kurallar modali */
-@media (min-width: 768px) {
-  .modal-overlay { padding: 24px; }
-  .modal-box {
-    width: min(92vw, 760px);
-    max-width: 760px;
-    max-height: 90vh;
-    padding: 26px 32px 22px;
-    gap: 16px;
-    overflow: auto;
-  }
-  .modal-title { font-size: clamp(25px, 2.2vw, 32px); }
-  .modal-rules {
-    font-size: 16px;
-    line-height: 1.7;
-    padding: 14px 10px;
-  }
-  .modal-rules li { margin-bottom: 7px; padding-left: 7px; }
-  .modal-btns { gap: 14px; }
-  .modal-close, .modal-start { font-size: 14px; padding: 9px 24px; }
-  .modal-logo { padding-top: 2px; }
-}
-
+@media(prefers-reduced-motion:reduce){body::before,.title{animation:none}.in{transition:none}.cd.m,.cd.x .b{animation:none}}
+.board{container-type:size}
 </style>
 </head>
 <body>
-
-<!-- Açılış Modalı -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <div class="modal-title">EŞİNİ BUL</div>
-    <ul class="modal-rules">
-      <li>Her turda <b style="color:#c8960c">8 çift</b> kart karışık şekilde dizilir.</li>
-      <li>Her hamlede <b style="color:#c8960c">iki kart</b> açılır; eşleşirlerse sabit kalır.</li>
-      <li>Kartlar soru–cevap çiftleridir; matematiksel eşitliği bul.</li>
-      <li>Seviyeyi seçerek başla: İlkokul, Ortaokul veya Lise.</li>
-      <li>En az <b style="color:#c8960c">hamleyle</b> tüm çiftleri bulmaya çalış!</li>
-    </ul>
-    <div class="modal-btns">
-      <button class="modal-close" onclick="closeModal()">Kapat</button>
-      <button class="modal-start" onclick="closeModal()">Başla</button>
-    </div>
-    <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo"
-           style="height:27px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s"
-           onmouseover="this.style.opacity='0.65'"
-           onmouseout="this.style.opacity='0.38'">
-    </div>
-  </div>
+<div class="app">
+ <div class="side">
+  <div class="title">Eşini Bul</div>
+  <div class="hud"><div class="hb"><b id="hm">0</b><span>Hamle</span></div><div class="hb"><b id="he">0/8</b><span>Eşleşen</span></div><div class="hb"><b id="hs">0:00</b><span>Süre</span></div></div>
+  <div class="btns"><button class="bt" id="bn">↺ Yeni oyun</button><button class="bt" id="br">ⓘ Kurallar</button><button class="bt" id="bm" title="Ses">🔇</button><button class="bt hidden" id="bf">⛶</button></div>
+  <div class="msg" id="msg"></div>
+  <div class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div>
+ </div>
+ <div class="board" id="board">
+  <div class="grid" id="grid"></div>
+  <div class="ov" id="st"><div class="ovc"><div class="ovt">Eşini Bul</div><div class="mb"><button class="bt" id="sb">▶ Mod seç</button></div></div></div>
+  <div class="ov hidden" id="rs"><div class="box res"><div class="l"><div class="ovt" style="font-size:22px">Tebrikler!</div><div class="big" id="rh"></div></div><div class="r"><p id="rd"></p><div class="mb" style="margin-top:6px"><button class="bt" id="ra">▶ Yeni oyun</button></div></div></div></div>
+ </div>
 </div>
 
-<div class="wrap">
-  <div class="top-bar">
-    <div class="game-title">Eşini Bul</div>
-    <div style="display:flex;gap:5px;">
-      <button class="a" onclick="openModal()">&#9432; Kurallar</button>
-    </div>
-  </div>
+<div class="mo" id="rm"><div class="box rules"><img class="mi" src="../img/mecesml.webp" alt="Tekin Hoca">
+ <div class="rb"><div class="pgs" id="pgs">
+  <div class="pg on"><h3>Amaç</h3><ul><li>16 kart kapalı dizilir. Her hamlede iki kart açın.</li><li>Bir işlem ile sonucu (ya da aynı değerin başka bir gösterimi) eşleşirse kartlar yeşil olur ve açık kalır.</li><li>Eşleşmeyen kartlar kapanır; yerlerini aklınızda tutun. En az hamleyle tüm çiftleri bulun.</li></ul></div>
+  <div class="pg"><h3>Mod ve kategoriler</h3><ul><li>Kolay, Orta ve Zor hazır ayarlardır. "Kategorileri ben seçeyim" ile dilediğiniz kategorileri işaretlersiniz.</li><li>Seçilen kategorilerden 8 çift, tek bir oyunda karışık gelir.</li><li>Aynı değere sahip iki çift aynı tahtada bulunmaz.</li></ul></div>
+  <div class="pg"><h3>Kontroller</h3><ul><li>Kartlara dokunun veya tıklayın.</li><li>Klavyede Tab ile bir kart seçin, Enter veya Boşluk ile açın.</li><li>Esc: pencereyi kapatır. F: tam ekran.</li></ul></div>
+ </div>
+ <div class="nav"><button id="pv" aria-label="Önceki">‹</button><span id="dots"></span><button id="nx" aria-label="Sonraki">›</button></div>
+ <div class="mb"><button class="bt" id="rc">Başla</button></div></div></div></div>
 
-  <div class="infobar">
-    <div class="ibox"><div class="l">Seviye</div><div class="v" id="levelDisp">—</div></div>
-    <div class="ibox"><div class="l">Hamle</div><div class="v" id="moveDisp">0</div></div>
-    <div class="ibox"><div class="l">Eşleşen</div><div class="v" id="matchDisp">0/8</div></div>
-  </div>
-
-  <!-- Seviye seçim ekranı -->
-  <div id="levelScreen">
-    <div class="level-title">Seviye seçin</div>
-    <button class="level-btn" onclick="startGame('ilkokul')">
-      <span class="lname">İlkokul</span>
-      <span class="ldesc">1-10 arası toplama, çıkarma ve çarpma</span>
-    </button>
-    <button class="level-btn" onclick="startGame('ortaokul')">
-      <span class="lname">Ortaokul</span>
-      <span class="ldesc">Çarpım tablosu, bölme ve karekök</span>
-    </button>
-    <button class="level-btn" onclick="startGame('lise')">
-      <span class="lname">Lise</span>
-      <span class="ldesc">Üslü sayılar, karekökler ve faktöriyel</span>
-    </button>
-  </div>
-
-  <!-- Oyun ekranı -->
-  <div id="gameScreen">
-    <div style="position:relative">
-      <div class="board" id="board"></div>
-      <div class="win-overlay" id="winOverlay">
-        <h2>Tebrikler!</h2>
-        <p id="winBody"></p>
-        <div class="ov-btns">
-          <button class="a" onclick="restartSame()">&#8635; Tekrar</button>
-          <button class="a" onclick="backToLevels()">&#8592; Seviye Seç</button>
-        </div>
-      </div>
-    </div>
-    <div class="msg" id="msg">Kartları açarak eşleşen çiftleri bulun.</div>
-    <div class="br-btns">
-      <button class="a" onclick="restartSame()">&#8635; Tekrar</button>
-      <button class="a" onclick="backToLevels()">&#8592; Seviye Seç</button>
-    </div>
-  </div>
-</div>
+<div class="mo hidden" id="mm"><div class="box mbox"><h2>Bir Mod Seçin</h2><div class="opts">
+ <button class="op" data-m="k"><b>Kolay</b><span>Tek ve iki basamaklı toplama/çıkarma, çarpım tablosu</span></button>
+ <button class="op" data-m="o"><b>Orta</b><span>Toplama/çıkarma, çarpım tablosu ve bölme</span></button>
+ <button class="op" data-m="z"><b>Zor</b><span>Kesirler/yüzdeler/ondalık, üslü sayılar ve faktöriyel, karekökler</span></button>
+ <button class="op" data-m="s"><b>Kategorileri ben seçeyim</b><span>İstediğiniz kategorileri işaretleyin</span></button></div>
+ <div class="mb"><button class="bt" id="mx">Vazgeç</button></div></div></div>
+<div class="mo hidden" id="cl"><div class="box lbox"><h2>Kategorileri Seçin</h2><div class="hint">Bir veya daha fazla kategori seçebilirsiniz.</div><div class="lst" id="lst"></div>
+ <div class="mb"><button class="bt" id="lb" disabled>▶ Başlat</button><button class="bt" id="lx">Vazgeç</button></div></div></div>
+<div class="mo hidden" id="cm"><div class="box cbox"><p id="ct"></p><div class="mb"><button class="bt" id="cn">Vazgeç</button><button class="bt" id="cy">Evet</button></div></div></div>
 
 <script>
-// ── KART SETLERİ ──
-function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const $=id=>document.getElementById(id),r=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const sh=a=>{for(let i=a.length-1;i>0;i--){const j=r(0,i);[a[i],a[j]]=[a[j],a[i]]}return a};
+const gcd=(a,b)=>b?gcd(b,a%b):a,num=n=>String(n).replace('.',','),sp=(b,e)=>`${b}<sup>${e}</sup>`;
+const CATS=[['tc','Toplama/Çıkarma'],['ct','Çarpım Tablosu'],['bl','Bölme'],['kr','Kesirler/Yüzdeler/Ondalık Gösterim'],['us','Üslü Sayılar ve Faktöriyel'],['kk','Kareköklü Sayılar']];
+const PRE={k:['tc','ct'],o:['tc','ct','bl'],z:['kr','us','kk']},ORD=['bl','kk','ct','us','kr','tc'],NP=8;
+const US=[];for(let e=2;e<=10;e++)US.push([2,e]);for(const b of[3,4,5,10])for(let e=2;e<=4;e++)US.push([b,e]);for(const b of[1,6,7,8,9])US.push([b,2]);for(let b=11;b<=25;b++)US.push([b,2]);
+const FK=[1,1,2,6,24,120,720];
+const G={
+ tc(){const t=r(0,3);let a,b,v,q;if(t===0){a=r(1,9);b=r(1,9);v=a+b;q=`${a}+${b}`}else if(t===1){a=r(2,9);b=r(1,a-1);v=a-b;q=`${a}−${b}`}else if(t===2){a=r(10,99);b=r(1,9);v=a+b;q=`${a}+${b}`}else{a=r(10,99);b=r(1,9);v=a-b;q=`${a}−${b}`}return{k:v,a:q,b:String(v)}},
+ ct(){if(Math.random()<.06){const b=r(2,9);return{k:0,a:`0×${b}`,b:'0'}}const a=r(2,9),b=r(2,9);return{k:a*b,a:`${a}×${b}`,b:String(a*b)}},
+ bl(){const b=r(2,9),q=r(0,8)?r(2,9):0;return{k:q,a:`${b*q}÷${b}`,b:String(q)}},
+ kr(){const q=[2,4,5,8,10,20,25][r(0,6)];let p;do{p=r(1,q-1)}while(gcd(p,q)>1);const v=p/q,f=sh([`${p}/${q}`,num(+v.toFixed(4)),'%'+num(+(v*100).toFixed(2))]);return{k:v,a:f[0],b:f[1]}},
+ us(){const i=r(0,US.length+6);if(i>=US.length){const n=i-US.length;return{k:FK[n],a:`${n}!`,b:String(FK[n])}}const[b,e]=US[i],v=Math.pow(b,e);return{k:v,a:sp(b,e),b:String(v)}},
+ kk(){const x=r(2,25);return{k:x*x/x,a:`√${x*x}`,b:String(x)}}};
+const key=p=>(+p.k).toFixed(6);
+function mk(cs){const n=cs.length,base=Math.floor(NP/n),cnt={};cs.forEach(c=>cnt[c]=base);sh([...cs]).slice(0,NP-base*n).forEach(c=>cnt[c]++);
+ const used=new Set,out=[],tryAdd=c=>{for(let t=0;t<400;t++){const p=G[c]();if(!used.has(key(p))){used.add(key(p));out.push(p);return true}}return false};
+ for(const c of ORD.filter(c=>cs.includes(c)))for(let i=0;i<cnt[c];i++)tryAdd(c);
+ let g=0;while(out.length<NP&&g++<300)tryAdd(cs[r(0,n-1)]);return out}
+// kart düzeni: kapsayıcıya sığan en büyük kart
+function layout(){const g=$('grid'),n=g.children.length;if(!n)return;const W=$('board').clientWidth-12,H=$('board').clientHeight-12,gap=Math.max(5,Math.min(W,H)*.02);let best=null;
+ for(let c=2;c<=8;c++){if(n%c)continue;const rw=n/c,s=Math.min((W-gap*(c-1))/c,(H-gap*(rw-1))/rw);if(!best||s>best.s)best={c,rw,s}}
+ if(!best)return;const s=Math.floor(Math.max(30,best.s));g.style.cssText=`gap:${gap}px;grid-template-columns:repeat(${best.c},${s}px);grid-auto-rows:${s}px;--cs:${s}px`;
+ [...g.children].forEach(el=>{const L=el.dataset.l;el.querySelector('.b').style.fontSize=s*(L<=3?.32:L==4?.27:.22)+'px'})}
+new ResizeObserver(layout).observe($('board'));
 
-function makePairs_ilkokul(){
-  const toplama=shuffle([
-    {q:'2+3',a:'5'},{q:'4+5',a:'9'},{q:'7+6',a:'13'},
-    {q:'8+4',a:'12'},{q:'9+5',a:'14'},{q:'3+8',a:'11'},
-    {q:'7+8',a:'15'},{q:'5+7',a:'12'},{q:'8+6',a:'14'},
-  ]);
-  const cikarma=shuffle([
-    {q:'9-4',a:'5'},{q:'8-3',a:'5'},{q:'10-6',a:'4'},
-    {q:'11-4',a:'7'},{q:'13-6',a:'7'},{q:'15-8',a:'7'},
-    {q:'14-9',a:'5'},{q:'16-9',a:'7'},{q:'12-5',a:'7'},
-  ]);
-  const carpma=shuffle([
-    {q:'2×3',a:'6'},{q:'3×4',a:'12'},{q:'4×5',a:'20'},
-    {q:'5×6',a:'30'},{q:'6×7',a:'42'},{q:'7×8',a:'56'},
-    {q:'8×9',a:'72'},{q:'6×8',a:'48'},{q:'9×4',a:'36'},
-  ]);
-  function pick(pool,n,usedGlobal){
-    const res=[];
-    for(const p of pool){if(!usedGlobal.has(p.a)){usedGlobal.add(p.a);res.push(p);}if(res.length>=n)break;}
-    return res;
-  }
-  // Not: cikarma havuzunda yalnızca 3 farklı cevap (4, 5, 7) bulunduğundan,
-  // kota tükenmesini önlemek için önce cikarma, sonra carpma, en son toplama seçilir.
-  const usedAll=new Set();
-  const cikarmaPicks=pick(cikarma,3,usedAll);
-  const carpmaPicks=pick(carpma,2,usedAll);
-  const toplamaPicks=pick(toplama,3,usedAll);
-  return [...toplamaPicks,...cikarmaPicks,...carpmaPicks];
-}
+let S={ph:'idle',gid:0,open:[],lock:false,moves:0,ok:0,t0:0,tm:null},last=null,snd=false,ask=null,rIdx=0,firstRules=true;
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+try{last=JSON.parse(localStorage.getItem('esin.son.v1')||'null');snd=localStorage.getItem('esin.ses.v1')==='1'}catch(e){}
+const save=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let AX=null;function beep(f,d,t='sine',v=.14,at=0){if(!snd)return;try{AX=AX||new(window.AudioContext||window.webkitAudioContext)();if(AX.state==='suspended')AX.resume();const o=AX.createOscillator(),g=AX.createGain(),s=AX.currentTime+at;o.type=t;o.frequency.setValueAtTime(f,s);g.gain.setValueAtTime(v,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.connect(g);g.connect(AX.destination);o.start(s);o.stop(s+d)}catch(e){}}
+const vib=p=>{if(snd)try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
+const msg=t=>$('msg').textContent=t,fmt=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+function hud(){$('hm').textContent=S.moves;$('he').textContent=S.ok+'/'+(S.np||NP)}
+function tick(){$('hs').textContent=fmt(S.t0?(performance.now()-S.t0)/1000:0)}
 
-function makePairs_ortaokul(){
-  const carpma=shuffle([
-    {q:'11×11',a:'121'},{q:'12×8',a:'96'},{q:'13×7',a:'91'},
-    {q:'14×6',a:'84'},{q:'15×6',a:'90'},{q:'11×12',a:'132'},
-    {q:'13×9',a:'117'},{q:'12×9',a:'108'},{q:'14×7',a:'98'},
-    {q:'15×7',a:'105'},{q:'11×9',a:'99'},
-  ]);
-  const bolme=shuffle([
-    {q:'63÷7',a:'9'},{q:'72÷8',a:'9'},{q:'54÷6',a:'9'},
-    {q:'48÷6',a:'8'},{q:'56÷7',a:'8'},{q:'64÷8',a:'8'},
-    {q:'45÷9',a:'5'},{q:'36÷6',a:'6'},{q:'42÷7',a:'6'},
-  ]);
-  const karekok=shuffle([
-    {q:'√36',a:'6'},{q:'√49',a:'7'},{q:'√64',a:'8'},
-    {q:'√81',a:'9'},{q:'√100',a:'10'},{q:'√121',a:'11'},
-    {q:'√144',a:'12'},{q:'√25',a:'5'},{q:'√16',a:'4'},
-  ]);
-  function pick(pool,n,usedGlobal){
-    const res=[];
-    for(const p of pool){if(!usedGlobal.has(p.a)){usedGlobal.add(p.a);res.push(p);}if(res.length>=n)break;}
-    return res;
-  }
-  const usedAll=new Set();
-  return [...pick(carpma,3,usedAll),...pick(bolme,3,usedAll),...pick(karekok,2,usedAll)];
-}
+function start(cs){
+ clearInterval(S.tm);const gid=S.gid+1,pairs=mk(cs),cards=[];
+ pairs.forEach((p,i)=>{cards.push({i,h:p.a,l:p.a.replace(/<[^>]+>/g,'').length});cards.push({i,h:p.b,l:p.b.replace(/<[^>]+>/g,'').length})});sh(cards);
+ S={ph:'play',gid,open:[],lock:false,moves:0,ok:0,np:pairs.length,t0:0,tm:null};
+ const g=$('grid');g.innerHTML='';
+ cards.forEach(c=>{const e=document.createElement('button');e.className='cd';e.dataset.p=c.i;e.dataset.l=c.l;e.setAttribute('aria-label','Kapalı kart');e.innerHTML=`<span class="in"><span class="f">?</span><span class="b"><span class="t">${c.h}</span></span></span>`;e.onclick=()=>flip(e);g.appendChild(e)});
+ $('st').classList.add('hidden');$('rs').classList.add('hidden');layout();hud();tick();msg('İki kart açarak eşlerini bulun.')}
+function flip(el){if(S.ph!=='play'||S.lock||el.classList.contains('o'))return;
+ el.classList.add('o');el.setAttribute('aria-label','Açık kart: '+el.querySelector('.b').textContent);S.open.push(el);beep(520,.06,'triangle');
+ if(!S.t0){S.t0=performance.now();const g=S.gid;S.tm=setInterval(()=>{if(g!==S.gid)return clearInterval(S.tm);tick()},500)}
+ if(S.open.length<2)return;
+ S.moves++;const[a,b]=S.open;S.open=[];
+ if(a.dataset.p===b.dataset.p){S.ok++;[a,b].forEach(x=>x.classList.add('m'));beep(880,.1,'triangle');beep(1175,.14,'triangle',.14,.09);vib(30);msg('✓ Eşleşti!');hud();if(S.ok===S.np)win()}
+ else{S.lock=true;msg('✗ Eşleşmedi. Yerlerini aklınızda tutun.');beep(220,.18,'sawtooth',.09);const g=S.gid;
+  setTimeout(()=>{if(g!==S.gid)return;[a,b].forEach(x=>{x.classList.remove('o');x.setAttribute('aria-label','Kapalı kart')});S.lock=false},950);
+  [a,b].forEach(x=>{x.classList.remove('x');void x.offsetWidth;x.classList.add('x')});hud()}}
+function win(){S.ph='over';clearInterval(S.tm);const t=(performance.now()-S.t0)/1000;tick();
+ [523,659,784,1047,1319].forEach((f,i)=>beep(f,.15,'triangle',.14,i*.1));vib([40,40,120]);
+ $('rh').textContent=S.moves+' hamle';$('rd').innerHTML=`Süre: ${fmt(t)}<br>Verimlilik: %${Math.round(S.np/S.moves*100)}`;msg('Tüm çiftleri buldunuz!');
+ setTimeout(()=>{if(S.ph==='over')$('rs').classList.remove('hidden')},700)}
 
-function makePairs_lise(){
-  const uslu=shuffle([
-    {q:'2²',a:'4'},{q:'3²',a:'9'},{q:'4²',a:'16'},
-    {q:'5²',a:'25'},{q:'6²',a:'36'},{q:'7²',a:'49'},
-    {q:'8²',a:'64'},{q:'9²',a:'81'},{q:'10²',a:'100'},
-    {q:'11²',a:'121'},{q:'12²',a:'144'},{q:'13²',a:'169'},
-    {q:'2³',a:'8'},{q:'3³',a:'27'},{q:'5³',a:'125'},
-    {q:'2⁴',a:'16'},{q:'2⁵',a:'32'},{q:'2⁷',a:'128'},
-  ]);
-  const karekok=shuffle([
-    {q:'√4',a:'2'},{q:'√9',a:'3'},{q:'√16',a:'4'},
-    {q:'√25',a:'5'},{q:'√36',a:'6'},{q:'√49',a:'7'},
-    {q:'√64',a:'8'},{q:'√81',a:'9'},{q:'√100',a:'10'},
-    {q:'√121',a:'11'},{q:'√144',a:'12'},{q:'√169',a:'13'},
-  ]);
-  const faktoriyel=shuffle([
-    {q:'1!',a:'1'},{q:'2!',a:'2'},{q:'3!',a:'6'},
-    {q:'4!',a:'24'},{q:'5!',a:'120'},
-  ]);
-  function pick(pool,n,usedGlobal){
-    const res=[];
-    for(const p of pool){if(!usedGlobal.has(p.a)){usedGlobal.add(p.a);res.push(p);}if(res.length>=n)break;}
-    return res;
-  }
-  const usedAll=new Set();
-  return [...pick(uslu,3,usedAll),...pick(karekok,2,usedAll),...pick(faktoriyel,3,usedAll)];
-}
+// ── pencereler ──
+const openM=id=>$(id).classList.remove('hidden'),closeM=id=>$(id).classList.add('hidden');
+function page(i){const p=document.querySelectorAll('#pgs .pg');rIdx=Math.max(0,Math.min(p.length-1,i));p.forEach((e,k)=>e.classList.toggle('on',k===rIdx));
+ $('dots').innerHTML=[...p].map((_,k)=>`<span class="dot${k===rIdx?' on':''}"></span>`).join('');$('pv').style.visibility=rIdx?'visible':'hidden';$('nx').style.visibility=rIdx<p.length-1?'visible':'hidden'}
+function rules(first){firstRules=first;$('rc').textContent=first?'Başla':'Kapat';page(0);openM('rm')}
+function modes(){openM('mm')}
+function list(){const sel=new Set(last&&last.m==='s'?last.c:[]);$('lst').innerHTML=CATS.map(([id,n])=>`<button class="li${sel.has(id)?' on':''}" data-c="${id}"><i>${sel.has(id)?'✓':''}</i>${n}</button>`).join('');upd();openM('cl')}
+function upd(){const n=document.querySelectorAll('#lst .li.on').length;$('lb').disabled=!n}
+function go(m,cs){last={m,c:cs};save('esin.son.v1',JSON.stringify(last));start(cs)}
+function confirmDo(t,fn){ask=fn;$('ct').textContent=t;openM('cm')}
+function newReq(){S.ph==='play'&&S.moves>0?confirmDo('Mevcut oyun sona erecek. Yeni oyun için mod seçilsin mi?',modes):modes()}
+function fs(){const d=document;if(d.fullscreenElement||d.webkitFullscreenElement)(d.exitFullscreen||d.webkitExitFullscreen).call(d);else{const e=d.documentElement;(e.requestFullscreen||e.webkitRequestFullscreen).call(e)}}
+if(document.fullscreenEnabled||document.webkitFullscreenEnabled)$('bf').classList.remove('hidden');
+const sndUI=()=>{$('bm').textContent=snd?'🔊':'🔇';$('bm').title='Ses ve titreşim: '+(snd?'açık':'kapalı')};
 
-// ── OYUN DURUMU ──
-let cards, flipped, matched, moves, locked, currentLevel;
-
-function startGame(level){
-  currentLevel=level;
-  document.getElementById('levelScreen').style.display='none';
-  document.getElementById('gameScreen').style.display='flex';
-
-  const levelNames={ilkokul:'İlkokul',ortaokul:'Ortaokul',lise:'Lise'};
-  document.getElementById('levelDisp').textContent=levelNames[level];
-
-  const makers={ilkokul:makePairs_ilkokul,ortaokul:makePairs_ortaokul,lise:makePairs_lise};
-  const pairs=makers[level]();
-
-  const allCards=[];
-  pairs.forEach((p,i)=>{
-    allCards.push({id:i,type:'q',text:p.q,pairId:i});
-    allCards.push({id:i+100,type:'a',text:p.a,pairId:i});
-  });
-  cards=shuffle(allCards);
-  flipped=[];matched=new Set();moves=0;locked=false;
-
-  document.getElementById('moveDisp').textContent='0';
-  document.getElementById('matchDisp').textContent='0/8';
-  document.getElementById('winOverlay').classList.remove('show');
-  setMsg('Kartları açarak eşleşen çiftleri bulun.');
-  renderBoard();
-}
-
-function renderBoard(){
-  const board=document.getElementById('board');
-  const cols=4;
-  const maxW=Math.min(460,window.innerWidth-20);
-  const cardSize=Math.floor((maxW-(cols-1)*6-16)/cols);
-
-  board.style.gridTemplateColumns=`repeat(${cols},${cardSize}px)`;
-  board.innerHTML='';
-
-  cards.forEach((card,idx)=>{
-    const el=document.createElement('div');
-    el.className='card';
-    el.style.width=cardSize+'px';
-    el.dataset.idx=idx;
-
-    const isFlipped=flipped.includes(idx)||matched.has(card.pairId);
-    if(isFlipped) el.classList.add(matched.has(card.pairId)?'matched':'flipped');
-
-    const back=document.createElement('div');
-    back.className='card-face card-back';
-    el.appendChild(back);
-
-    const front=document.createElement('div');
-    front.className='card-face card-front';
-    const fs=Math.max(11,Math.floor(cardSize*0.26));
-    front.innerHTML=renderCardContent(card.text,fs);
-    el.appendChild(front);
-
-    el.addEventListener('click',()=>handleCardClick(idx));
-    board.appendChild(el);
-  });
-}
-
-function renderCardContent(text,fs){
-  const styled=text
-    .replace(/²/g,'<sup style="color:#f0a040;font-size:0.65em;">2</sup>')
-    .replace(/³/g,'<sup style="color:#f0a040;font-size:0.65em;">3</sup>')
-    .replace(/⁴/g,'<sup style="color:#f0a040;font-size:0.65em;">4</sup>')
-    .replace(/⁵/g,'<sup style="color:#f0a040;font-size:0.65em;">5</sup>')
-    .replace(/⁶/g,'<sup style="color:#f0a040;font-size:0.65em;">6</sup>')
-    .replace(/⁷/g,'<sup style="color:#f0a040;font-size:0.65em;">7</sup>')
-    .replace(/!/g,'<span style="color:#f0a040;">!</span>')
-    .replace(/√/g,'<span style="color:#f0a040;">√</span>');
-  return `<div class="card-text" style="font-size:${fs}px;">${styled}</div>`;
-}
-
-function handleCardClick(idx){
-  if(locked)return;
-  if(matched.has(cards[idx].pairId))return;
-  if(flipped.includes(idx))return;
-  if(flipped.length>=2)return;
-
-  flipped.push(idx);
-  renderBoard();
-
-  if(flipped.length===2){
-    moves++;
-    document.getElementById('moveDisp').textContent=moves;
-    locked=true;
-
-    const [i1,i2]=flipped;
-    const c1=cards[i1],c2=cards[i2];
-
-    if(c1.pairId===c2.pairId){
-      setTimeout(()=>{
-        matched.add(c1.pairId);
-        flipped=[];
-        locked=false;
-        document.getElementById('matchDisp').textContent=matched.size+'/8';
-        renderBoard();
-        if(matched.size===8){
-          document.getElementById('winOverlay').classList.add('show');
-          document.getElementById('winBody').textContent=moves+' hamlede tamamladınız!';
-          setMsg('');
-        }
-      },600);
-    } else {
-      setTimeout(()=>{
-        flipped=[];
-        locked=false;
-        renderBoard();
-      },900);
-    }
-  }
-}
-
-function restartSame(){startGame(currentLevel);}
-function backToLevels(){
-  document.getElementById('gameScreen').style.display='none';
-  document.getElementById('levelScreen').style.display='flex';
-  document.getElementById('levelDisp').textContent='—';
-  document.getElementById('moveDisp').textContent='0';
-  document.getElementById('matchDisp').textContent='0/8';
-}
-
-function closeModal(){document.getElementById('modalOverlay').classList.add('hidden');}
-function openModal(){document.getElementById('modalOverlay').classList.remove('hidden');}
-
-window.addEventListener('resize',()=>{if(cards)renderBoard();});
-function setMsg(t){document.getElementById('msg').textContent=t;}
+$('bn').onclick=newReq;$('ra').onclick=modes;$('sb').onclick=modes;$('br').onclick=()=>rules(false);$('bf').onclick=fs;
+$('bm').onclick=()=>{snd=!snd;save('esin.ses.v1',snd?'1':'0');sndUI();if(snd){beep(660,.08,'triangle');vib(30)}};
+$('rc').onclick=()=>{closeM('rm');if(firstRules)modes()};$('pv').onclick=()=>page(rIdx-1);$('nx').onclick=()=>page(rIdx+1);
+$('rm').onclick=e=>{if(e.target===$('rm'))closeM('rm')};$('mm').onclick=e=>{if(e.target===$('mm'))closeM('mm')};
+$('mx').onclick=()=>closeM('mm');$('lx').onclick=()=>{closeM('cl');modes()};
+document.querySelectorAll('.op').forEach(b=>b.onclick=()=>{const m=b.dataset.m;closeM('mm');m==='s'?list():go(m,PRE[m])});
+$('lst').onclick=e=>{const b=e.target.closest('.li');if(!b)return;b.classList.toggle('on');b.querySelector('i').textContent=b.classList.contains('on')?'✓':'';upd()};
+$('lb').onclick=()=>{const cs=[...document.querySelectorAll('#lst .li.on')].map(b=>b.dataset.c);if(!cs.length)return;closeM('cl');go('s',cs)};
+$('cn').onclick=()=>{closeM('cm');ask=null};$('cy').onclick=()=>{closeM('cm');const f=ask;ask=null;f&&f()};
+let sx=0;$('rm').addEventListener('pointerdown',e=>sx=e.clientX);$('rm').addEventListener('pointerup',e=>{const d=e.clientX-sx;if(Math.abs(d)>50)page(rIdx+(d<0?1:-1))});
+document.addEventListener('keydown',e=>{const k=e.key;
+ if(!$('rm').classList.contains('hidden')){if(k==='Escape'){closeM('rm')}else if(k==='ArrowLeft')page(rIdx-1);else if(k==='ArrowRight')page(rIdx+1);return}
+ if(!$('cm').classList.contains('hidden')){if(k==='Escape')$('cn').click();return}
+ if(!$('cl').classList.contains('hidden')){if(k==='Escape')$('lx').click();return}
+ if(!$('mm').classList.contains('hidden')){if(k==='Escape')$('mx').click();return}
+ if((k==='f'||k==='F')&&!$('bf').classList.contains('hidden'))fs()});
+sndUI();rules(true);
 </script>
 </body>
 </html>
