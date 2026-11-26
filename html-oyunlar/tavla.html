@@ -22,30 +22,29 @@ body{display:flex;flex-direction:column;padding:env(safe-area-inset-top) env(saf
 #new,#fs{flex:1 1 0;min-width:0;height:43px;padding:2px 3px;line-height:1.1;white-space:nowrap;overflow:hidden;text-align:center}
 #fs[hidden]{display:none}
 #suggestion{flex:0 0 100%;min-width:0}
-#suggestBtn{width:100%;height:43px;min-width:0;padding:3px 4px;font-size:clamp(10px,1.25vw,13px);line-height:1.1;white-space:normal}
+#suggestBtn{width:100%;height:43px;min-width:0;padding:3px 4px;font-size:clamp(11px,1.6vw,13px);line-height:1.1;white-space:normal}
 br.lb{display:none}
 button{font:inherit;font-weight:700;padding:10px 6px;border-radius:8px;border:1px solid rgba(255,217,102,.6);color:#20160a;background:linear-gradient(#e6b93f,#b07d08);cursor:pointer}
 button:active:not(:disabled){transform:scale(.96)}
 button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
 @media(hover:hover){button:hover:not(:disabled){filter:brightness(1.12)}}
 #ft{flex:none;height:min(34px,5dvh);display:flex;justify-content:center;pointer-events:none}
+@media(orientation:portrait) and (max-height:759px){#ft{display:none}}
 #ft img{height:100%;max-width:100%;object-fit:contain;opacity:.35;filter:brightness(1.3);transition:opacity .3s;pointer-events:auto}
 @media(hover:hover){#ft img:hover{opacity:.7}}
-@media(min-aspect-ratio:1/1) and (min-width:560px){br.lb{display:inline}#main{flex-direction:row}#side{width:clamp(150px,16vw,200px);justify-content:center;align-items:center;position:relative;left:0}.btns{width:100%}#ft{width:100%}}
+@media(min-aspect-ratio:1/1) and (min-width:560px){br.lb{display:inline}#main{flex-direction:row}#side{width:clamp(150px,16vw,200px);justify-content:center;align-items:center;position:relative;left:0}.btns{width:100%}#ft{width:100%;height:clamp(28px,6vmin,50px)}}
 #nt{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:0;background:transparent;border:0;border-radius:0;color:#f4e9c9;font-weight:800;letter-spacing:.12em;font-size:clamp(13px,2.4dvh,18px);white-space:nowrap;text-shadow:0 2px 4px rgba(0,0,0,.85);opacity:0;pointer-events:none;transition:opacity .25s}#nt.on{opacity:1}
 #nt.rematch{max-width:calc(100% - 20px);padding:10px 14px;text-align:center;white-space:pre-line;line-height:1.45;letter-spacing:normal;color:#ffe8a6;background:linear-gradient(145deg,rgba(105,69,28,.97),rgba(48,29,17,.98));border:1px solid rgba(255,217,102,.78);border-radius:10px;box-shadow:0 5px 18px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,235,170,.12);text-shadow:0 1px 3px rgba(0,0,0,.85)}
 #ov{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:12px;background:rgba(5,4,2,.74)}
 #ov[hidden]{display:none}
 #card{width:100%;max-width:420px;max-height:85dvh;overflow:auto;padding:14px 16px;text-align:center;font-size:14px;line-height:1.5;background:radial-gradient(120% 90% at 50% 0%,rgba(91,58,34,.55),transparent 65%),linear-gradient(165deg,#3f2316 0%,#24140a 100%);border:1px solid rgba(200,150,12,.68);box-shadow:0 14px 34px rgba(0,0,0,.78),inset 0 1px 0 rgba(241,226,218,.12);border-radius:14px}
 #card.rules-card{background:#0d1b0d;border:1px solid rgba(200,150,12,.5);box-shadow:none}
-#card img{display:block;margin:0 auto 8px;width:var(--mw);max-height:34dvh;object-fit:contain;-webkit-mask-image:radial-gradient(closest-side,#000 68%,transparent);mask-image:radial-gradient(closest-side,#000 68%,transparent)}
+#card.rules-card img.m{display:block;margin:0 auto;width:104px;max-width:100%;max-height:20dvh;object-fit:contain;-webkit-mask-image:radial-gradient(closest-side,#000 68%,transparent);mask-image:radial-gradient(closest-side,#000 68%,transparent)}
 #card .h{font-size:22px;font-weight:800;color:#ffd966;margin-bottom:4px}#card .result{padding:12px 10px 9px;margin:0 0 8px;border:1px solid rgba(255,217,102,.42);border-radius:11px;background:linear-gradient(145deg,rgba(255,217,102,.13),rgba(45,31,26,.55))}#card .result .h{font-size:clamp(21px,4vw,27px)}#card .points{font-size:19px;font-weight:800;color:#ffe7a0;margin:4px 0}#card .matchscore{font-size:16px;font-weight:750;color:#f5e7c6}
 #card p{margin:6px 0;color:#f1e2da;font-weight:600;letter-spacing:.02em}
 #card.rules-card p{color:var(--tx);font-weight:400;letter-spacing:normal}
 .rules-layout{display:flex;flex-direction:column;gap:7px;min-width:0}
 .rules-head{display:flex;flex-direction:column;align-items:center;text-align:center}
-.rules-heading{font-size:22px;font-weight:850;line-height:1.15;color:#ffd966}
-.rules-sub{display:none}
 .rules-pages{min-width:0}
 .pgs{display:grid;margin:2px 0 6px;text-align:left;grid-template-areas:"page"}
 .pg{grid-area:page;visibility:hidden;opacity:0;transition:opacity .2s;min-width:0}
@@ -61,6 +60,7 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
 .rdots span.on{background:#ffd966}
 .rules-footer .go{min-width:var(--mw);margin:0}
 #card .go{min-width:var(--mw);margin:4px 3px 0}
+#card .menu-actions{margin-top:8px}#card .menu-actions .go.wide{flex:1 1 140px;margin:0}
 /* Başlangıç menüsü: kısa yatay ekranlarda iki sütunlu, kaydırmasız düzen. */
 #card.menu-card{width:100%}
 .menu-layout{display:block}.menu-intro,.menu-options{min-width:0}.menu-row{display:block}.menu-row[hidden]{display:none}.menu-row p{margin:6px 0}
@@ -94,8 +94,7 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
  #card.rules-card{width:min(94vw,820px);max-width:none;height:min(92dvh,360px);max-height:92dvh;overflow:hidden;padding:10px 12px}
  #card.rules-card .rules-layout{height:100%;min-height:0;display:grid;grid-template-columns:minmax(126px,.34fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:clamp(10px,2vw,20px);align-items:stretch}
  #card.rules-card .rules-head{grid-column:1;grid-row:1;min-width:0;display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(255,217,102,.22);padding:0 10px 0 0}
- #card.rules-card .rules-heading{font-size:clamp(20px,4.5dvh,26px)}
- #card.rules-card .rules-sub{display:block;margin-top:5px;color:#c9bd91;font-size:11px;line-height:1.35}
+ #card.rules-card .rules-head img.m{width:min(86px,100%);max-height:40dvh}
  #card.rules-card .rules-pages{grid-column:2;grid-row:1 / span 2;align-self:center;min-width:0;max-height:100%;overflow:hidden}
  #card.rules-card .pgs{margin:0}
  #card.rules-card .pgt{font-size:clamp(14px,3.7dvh,17px);margin-bottom:8px}
@@ -109,6 +108,7 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
 }
 @media(orientation:landscape) and (max-height:390px){
  #card.rules-card{padding:8px 10px;height:92dvh}
+ #card.rules-card .rules-head img.m{width:min(72px,100%);max-height:34dvh}
  #card.rules-card .rules-layout{grid-template-columns:minmax(116px,.31fr) minmax(0,1fr);gap:9px}
  #card.rules-card .rules-head{padding-right:8px;padding-bottom:0}
  #card.rules-card .rules-footer{padding-right:8px;gap:6px}
@@ -118,11 +118,13 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
  #card.rules-card .rules-footer .go{min-height:31px;padding:5px 6px}
  #card.rules-card .pg p{font-size:12px;line-height:1.35;margin-bottom:6px}
 }
+@media(orientation:portrait) and (max-height:620px){#card.rules-card img.m{width:70px;max-height:12dvh}#card.rules-card .pg p{font-size:13px;line-height:1.38;margin-bottom:5px}}
+@media(max-width:380px) and (orientation:portrait){.rules-footer{gap:6px}.rnav{gap:6px}.rarr{width:34px;height:34px}.rdots{gap:5px}.rules-footer .go{min-width:92px;padding-left:4px;padding-right:4px}}
 /* Dikey mobilde teklif düğmesi mevcut YENİ OYUN satırını paylaşır; tahta yüksekliği değişmez. */
 @media(orientation:portrait) and (max-width:900px){
  .brow{flex-wrap:nowrap}
  #suggestion{flex:1 1 0}
- #suggestBtn{font-size:clamp(9px,2.8vw,12px);padding:3px 2px}
+ #suggestBtn{font-size:clamp(10px,3.1vw,13px);padding:3px 2px}
 }
 
 .seg{display:flex;gap:6px;margin:4px 0 10px}
@@ -270,33 +272,18 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
     return { dice: [a, b], starter: a > b ? 0 : 1 };
   }
 
-  function newMatch(target, opts) {
-    return { target: target, score: [0, 0], game: 0, crawford: false, crawfordUsed: false,
-             cubeEnabled: !!(opts && opts.cubeEnabled) };
-  }
-  function newCube() { return { value: 1, owner: null }; }
-  function canDouble(match, cube, p) {
-    return match.cubeEnabled && !match.crawford && match.target > 1 &&
-      (cube.owner === null || cube.owner === p) && cube.value < 64;
-  }
-  function respondDouble(cube, doubler, take) {
-    if (take) return { ended: false, cube: { value: cube.value * 2, owner: 1 - doubler } };
-    return { ended: true, winner: doubler, points: cube.value, cube: cube };
-  }
-  function gamePoints(s, w, cube) { return basePoints(s, w) * (cube ? cube.value : 1); }
+  function newMatch(target) { return { target: target, score: [0, 0], game: 0 }; }
+  function gamePoints(s, w) { return basePoints(s, w); }
   function recordGame(match, w, points) {
     match.score[w] += points; match.game++;
-    if (match.crawford) { match.crawfordUsed = true; match.crawford = false; }
     const over = match.score[w] >= match.target;
-    if (!over && !match.crawfordUsed && Math.max(match.score[0], match.score[1]) === match.target - 1) match.crawford = true;
     return { over: over, winner: over ? w : -1 };
   }
 
   const api = { BAR: BAR, OFF: OFF, newState: newState, clone: clone, singleMoves: singleMoves, applyMove: applyMove,
     legalMoves: legalMoves, bestLen: bestLen, diceFromRoll: diceFromRoll, winner: winner, basePoints: basePoints,
     gamePoints: gamePoints, pipCount: pipCount, rollDie: rollDie, rollTwo: rollTwo, openingRoll: openingRoll,
-    secureRandInt: secureRandInt, newMatch: newMatch, newCube: newCube, canDouble: canDouble,
-    respondDouble: respondDouble, recordGame: recordGame, allHome: allHome };
+    secureRandInt: secureRandInt, newMatch: newMatch, recordGame: recordGame, allHome: allHome };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.TavlaEngine = api;
 })(typeof window !== 'undefined' ? window : this);
 </script>
@@ -433,52 +420,134 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
   }
   // Kesin sonuç çözücüsü: zarların her olası sonucunu ve tarafların yasal
   // hamlelerini tarar. Arama bütçesi aşılırsa sonuç bilinmiyor kabul edilir.
-  function guaranteedResult(state, turn, winner, budget) {
-    const limit = budget || 24000, memo = new Map(), visiting = new Set(), rolls = [];
-    for (let a = 1; a <= 6; a++) for (let b = a; b <= 6; b++) rolls.push([a,b]);
-    let visited = 0, aborted = false;
-    function solve(st, side) {
-      const w = E.winner(st);
-      if (w >= 0) return w === winner ? (st.off[1-winner] === 0 ? 2 : 1) : 0;
-      if (!contact(st)) { /* temassızlık korunur; vurma ihtimali yoktur */ }
-      const k = sk(st) + '|' + side + '|' + winner;
-      if (memo.has(k)) return memo.get(k);
-      if (visiting.has(k)) return 0;
-      if (++visited > limit) { aborted = true; return 0; }
-      visiting.add(k);
-      let overall = 2;
-      for (const r of rolls) {
-        if (aborted) return 0;
-        const os = outcomes(st, side, E.diceFromRoll(r), new Map());
-        let rollValue;
-        if (!os.size) rollValue = solve(st, 1-side);
-        else if (side === winner) {
-          rollValue = 0;
-          for (const o of os.values()) {
-            const v = solve(o.s, 1-side);
-            if (v > rollValue) rollValue = v;
-            if (rollValue === 2) break;
-          }
-        } else {
-          rollValue = 2;
-          for (const o of os.values()) {
-            const v = solve(o.s, 1-side);
-            if (v < rollValue) rollValue = v;
-            if (rollValue === 0) break;
-          }
-        }
-        if (rollValue < overall) overall = rollValue;
-        if (overall === 0) break;
-      }
-      visiting.delete(k);
-      if (!aborted) memo.set(k, overall);
-      return overall;
-    }
-    if (contact(state)) return { value: 0, complete: true, visited: 0 };
-    const value = solve(state, turn);
-    return { value: aborted ? 0 : value, complete: !aborted, visited: visited };
+  // ---- Kesin sonuç önerisi ----
+  // Temassız konumda iki taraf birbirini etkilemez. Bu yüzden her taraf için, en iyi ve en kötü zar
+  // dizisiyle gereken tur sayısı ayrı ayrı hesaplanır ve sıra düzeniyle karşılaştırılır.
+  // "Kesin": hangi zarlar gelirse gelsin ve rakip nasıl oynarsa oynasın sonuç değişmez
+  // (kazanan taraf en iyi oynar). Kesin değilse null döner.
+  const RO = [];
+  for (let a = 1; a <= 6; a++) for (let b = a; b <= 6; b++) RO.push([a, b]);
+  const pr = r => r[0] === r[1] ? 4 * r[0] : r[0] + r[1];
+  const ROW = RO.slice().sort((x, y) => pr(x) - pr(y));
+  const ROB = RO.slice().sort((x, y) => pr(y) - pr(x));
+  function solo(s, p) {
+    const n = { pts: new Array(25).fill(0), bar: [0, 0], off: [0, 0] };
+    for (let a = 1; a <= 24; a++) if (p ? s.pts[a] < 0 : s.pts[a] > 0) n.pts[a] = s.pts[a];
+    n.off[p] = s.off[p];
+    return n;
   }
-  const api = { plan: plan, ev: ev, outcomes: outcomes, book: book, guaranteedResult: guaranteedResult };
+  function pipsOf(s, p) {
+    let t = 0;
+    for (let a = 1; a <= 24; a++) { const v = p ? -s.pts[a] : s.pts[a]; if (v > 0) t += v * (p ? 25 - a : a); }
+    return t;
+  }
+  function homeNeed(s, p) {
+    let t = 0;
+    for (let a = 1; a <= 24; a++) { const v = p ? -s.pts[a] : s.pts[a]; if (v > 0) { const d = p ? 25 - a : a; if (d > 6) t += v * (d - 6); } }
+    return t;
+  }
+  function suggest(s, turn, budget) {
+    if (E.winner(s) >= 0 || s.bar[0] || s.bar[1] || contact(s)) return null;
+    const lim = budget || 40000;
+    let nodes = 0, over = false;
+    const mg = new Map(), mp = new Map(), oc = new Map();
+    const reached = (st, p, goal) => goal === 0 ? st.off[p] >= 15 : st.off[p] >= 1;
+    const key = (st, p) => p + '|' + st.pts.join(',') + '|' + st.off[p];
+    function outs(st, p, r) {
+      const k = key(st, p) + '|' + r[0] + r[1];
+      let v = oc.get(k);
+      if (!v) {
+        v = [];
+        for (const o of outcomes(st, p, E.diceFromRoll(r), new Map()).values()) v.push(o.s);
+        oc.set(k, v);
+      }
+      return v;
+    }
+    // goal 0: 15 taşın hepsi toplanır; goal 1: en az bir taş toplanır.
+    // guar: HER zar için, k tur içinde hedefe ulaştıran bir oynayış var mı? (en kötü zarlar)
+    function guar(st, p, k, goal) {
+      if (reached(st, p, goal)) return true;
+      if (k <= 0 || over) return false;
+      const mk = key(st, p) + '|' + k + '|' + goal, c = mg.get(mk);
+      if (c !== undefined) return c;
+      if (++nodes > lim) { over = true; return false; }
+      let res = true;
+      for (const r of ROW) {
+        let g = false;
+        for (const n of outs(st, p, r)) { if (guar(n, p, k - 1, goal)) { g = true; break; } if (over) return false; }
+        if (!g) { res = false; break; }
+      }
+      if (!over) mg.set(mk, res);
+      return res;
+    }
+    // poss: en iyi zarlarla, k tur içinde hedefe ulaşılabilir mi?
+    function poss(st, p, k, goal) {
+      if (reached(st, p, goal)) return true;
+      if (k <= 0 || over) return false;
+      if (goal === 0 ? pipsOf(st, p) > 24 * k : homeNeed(st, p) > 24 * k) return false;
+      const mk = key(st, p) + '|' + k + '|' + goal, c = mp.get(mk);
+      if (c !== undefined) return c;
+      if (++nodes > lim) { over = true; return false; }
+      let res = false;
+      for (const r of ROB) {
+        for (const n of outs(st, p, r)) { if (poss(n, p, k - 1, goal)) { res = true; break; } if (over) return false; }
+        if (res) break;
+      }
+      if (!over) mp.set(mk, res);
+      return res;
+    }
+    function minT(st, p, goal) { for (let k = 1; k <= 40; k++) { if (poss(st, p, k, goal)) return k; if (over) return null; } return null; }
+    function maxT(st, p, goal) { for (let k = 1; k <= 24; k++) { if (guar(st, p, k, goal)) return k; if (over) return null; } return null; }
+    function tryW(W) {
+      const L = 1 - W, sw = solo(s, W), sl = solo(s, L);
+      nodes = 0; over = false;
+      const Wmax = maxT(sw, W, 0);                 // W en kötü zarlarla bile bu kadar turda biter
+      if (over || Wmax === null) return null;
+      const KL = turn === W ? Wmax - 1 : Wmax;     // W bitmeden önce L'nin alabileceği tur sayısı
+      if (KL >= 1) { const lf = poss(sl, L, KL, 0); if (over || lf) return null; }   // L bitirebiliyorsa kesin değil
+      // Buraya gelindiyse W'nin galibiyeti kesin. Puan?
+      if (s.off[L] === 0) {
+        if (KL < 1) return { w: W, points: 2 };
+        const f = poss(sl, L, KL, 1);
+        if (over) return null;
+        if (!f) return { w: W, points: 2 };       // L en iyi zarla bile taş toplayamaz: mars kesin
+      }
+      if (s.off[L] >= 1) return { w: W, points: 1 };
+      const Wmin = minT(sw, W, 0);                 // W en iyi zarlarla bile bu kadar turdan önce bitiremez
+      if (over || Wmin === null) return null;
+      const KM = turn === W ? Wmin - 1 : Wmin;     // W en hızlı bitirse bile L'nin alacağı tur sayısı
+      if (KM < 1) return null;
+      const g = guar(sl, L, KM, 1);                // L en kötü zarlarla bile bu sürede en az bir taş toplar
+      if (over) return null;
+      return g ? { w: W, points: 1 } : null;
+    }
+    // Hızlı eleme (yalnızca hesabı kısaltır, sonucu değiştirmez): W'nin en kötü zarlarla gereken tur sayısı
+    // en az pip/3'tür (her tur en çok 3 pip ilerleten zar: 1-2); L'nin en iyi tur sayısı ise
+    // 6-6 oynayarak elde edilen sayıdan büyük olamaz. İlki ikincisini aşıyorsa W'nin galibiyeti kesin olamaz.
+    function sixes(st, p) {
+      let cur = st, t = 0;
+      while (cur.off[p] < 15 && t < 60) {
+        const ds = [6, 6, 6, 6];
+        for (;;) {
+          const ms = E.legalMoves(cur, p, ds);
+          if (!ms.length) break;
+          let b = ms[0];
+          for (const m of ms) if ((p ? 25 - m.from : m.from) > (p ? 25 - b.from : b.from)) b = m;
+          cur = E.applyMove(cur, p, b); ds.pop();
+        }
+        t++;
+      }
+      return t;
+    }
+    function possible(W) {
+      const L = 1 - W, ub = sixes(solo(s, L), L), lb = Math.ceil(pipsOf(s, W) / 3);
+      return lb <= (turn === W ? ub : ub - 1);
+    }
+    const order = pipsOf(s, 0) <= pipsOf(s, 1) ? [0, 1] : [1, 0];
+    for (const W of order) { if (!possible(W)) continue; const r = tryW(W); if (r) return r; }
+    return null;
+  }
+  const api = { plan: plan, ev: ev, outcomes: outcomes, book: book, suggest: suggest };
   G.TavlaAI = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })();
@@ -489,10 +558,10 @@ button:disabled{opacity:.35;filter:grayscale(.6);cursor:default}
 const E=window.TavlaEngine,$=id=>document.getElementById(id),cv=$('cv'),cx=cv.getContext('2d');
 const LW=1000,LH=640,R=27,K=matchMedia('(prefers-reduced-motion: reduce)').matches?.5:1;
 const PP={1:[[0,0]],2:[[-1,-1],[1,1]],3:[[-1,-1],[0,0],[1,1]],4:[[-1,-1],[1,-1],[-1,1],[1,1]],5:[[-1,-1],[1,-1],[0,0],[-1,1],[1,1]],6:[[-1,-1],[1,-1],[-1,0],[1,0],[-1,1],[1,1]]};
-let S=E.newState(),cur=0,dice=[],dd=[],phase='menu',sel=null,dests=null,froms=null,last=[],hl=null,anim=null,rolling=0,run=0,busy=false,mode='cpu',target=1,match=null,canClose=false,gid=0,level=1,wk=null,aid=0,lw=0,openingNames=false,statusText='',noteActive=false,pendingRematch=null,pendingSuggestion=null;
+let S=E.newState(),cur=0,dice=[],dd=[],phase='menu',sel=null,dests=null,froms=null,last=[],hl=null,anim=null,rolling=0,run=0,busy=false,mode='cpu',target=1,match=null,canClose=false,gid=0,level=1,aid=0,lw=0,openingNames=false,statusText='',noteActive=false,partyDone=null,pendingSuggestion=null;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms*K));
-async function note(t){const e=$('nt');if(t==='OYNANACAK HAMLE YOK'){noteActive=true;kick()}e.textContent=t;e.classList.add('on');await sleep(1700);e.classList.remove('on');if(t==='OYNANACAK HAMLE YOK'){noteActive=false;statusText=''}await sleep(250)}
-async function rematchNotice(st){const e=$('nt'),name=mode==='cpu'?(st===0?'SİZ':'PC'):(st===0?'BEYAZ':'SİYAH');noteActive=true;statusText='';e.textContent='Tavla kapanmadığı için\nyeni partiye '+name+(st===0&&mode==='cpu'?' başlarsınız.':' başlar.');e.classList.add('rematch','on');kick();await sleep(1500);e.classList.remove('on','rematch');noteActive=false;statusText=''}
+async function note(t){const g=gid,e=$('nt'),nm0=t==='OYNANACAK HAMLE YOK';if(nm0){noteActive=true;kick()}e.textContent=t;e.classList.add('on');await sleep(1700);if(g!==gid)return;e.classList.remove('on');if(nm0){noteActive=false;statusText=''}await sleep(250)}
+async function rematchNotice(st){const g=gid,e=$('nt'),name=mode==='cpu'?(st===0?'SİZ':'PC'):(st===0?'BEYAZ':'SİYAH');noteActive=true;statusText='';e.textContent='Tavla kapanmadığı için\nyeni partiye '+name+(st===0&&mode==='cpu'?' başlarsınız.':' başlar.');e.classList.add('rematch','on');kick();await sleep(1500);if(g!==gid)return;e.classList.remove('on','rematch');noteActive=false;statusText=''}
 const isCpu=()=>mode==='cpu'&&cur===1;
 const nm=()=>mode==='cpu'?['Siz','Bilgisayar']:['Beyaz','Siyah'];
 function currentStatus(){if(mode==='cpu')return cur===1?'BİLGİSAYAR OYNUYOR':'SIRA SİZDE';return cur===0?'SIRA BEYAZDA':'SIRA SİYAHTA'}
@@ -611,54 +680,57 @@ function size(){const b=$('bw'),aw=b.clientWidth,ah=b.clientHeight,wl=Math.min(a
 new ResizeObserver(()=>{size();kick();if(typeof fitBtns==='function')fitBtns()}).observe($('bw'));
 
 function cancelAnimation(){if(anim){const r=anim.r;anim=null;if(r)r();}}
-function fly(m){return new Promise(res=>{const p=cur,a=pos(m.from,p,cnt(m.from,p)-1);S=E.applyMove(S,p,m);const b=pos(m.to,p,cnt(m.to,p)-1);
+function fly(m){hideSug();return new Promise(res=>{const p=cur,a=pos(m.from,p,cnt(m.from,p)-1);S=E.applyMove(S,p,m);const b=pos(m.to,p,cnt(m.to,p)-1);
  anim={x0:a[0],y0:a[1],x1:b[0],y1:b[1],p:p,dst:m.to,t0:performance.now(),d:420*K+80,r:res};kick()})}
 const dfo=(q,i)=>q.tx!==undefined?q.tx:q.fx!==undefined?q.fx:i;
 function use(d){const q=dd.map((x,i)=>[x,dfo(x,i)]).filter(a=>a[0].v===d&&!a[0].u).sort((a,b)=>a[1]-b[1])[0];if(q)q[0].u=true;dice=rm(dice,d)}
 function score(){const n=mode==='cpu'?['SİZ','PC']:['BEYAZ','SİYAH'];$('scoreName0').textContent=n[0];$('scoreName1').textContent=n[1];$('scoreValue0').textContent=match?match.score[0]:0;$('scoreValue1').textContent=match?match.score[1]:0}
-async function inspectForcedResult(nextTurn){
- const panel=$('suggestion');panel.hidden=true;pendingSuggestion=null;
- if(AIbusy || typeof window.TavlaAI?.guaranteedResult!=='function')return;
- // Yalnızca taşlar birbirini tamamen geçtiğinde; aksi durumda vurulma ihtimali vardır.
- let found=null;
- for(const w of [0,1]){
-  // Bilgisayara karşı oyunda yalnızca bilgisayarın teklifini kullanıcıya sunuyoruz.
-  if(mode==='cpu'&&w===0)continue;
-  const r=window.TavlaAI.guaranteedResult(S,nextTurn,w,9000);
-  if(r.complete&&r.value>0){found={winner:w,points:r.value===2?2:1};break}
- }
- if(!found)return;
- pendingSuggestion=found;
- $('suggestBtn').textContent=found.points===2?'MARS ÖNERİSİ':'1 PUAN ÖNERİSİ';
- panel.hidden=false;
-}
-let AIbusy=false;
+let sugTok=0;
+function showSug(on){$('suggestion').hidden=!on;fitBtns()}
+function hideSug(){sugTok++;pendingSuggestion=null;killW('sg');if(!$('suggestion').hidden)showSug(false)}
+// Sonuç önerisi: yalnızca temassız konumda ve sonuç (galip + puan) her zar dizisinde kesinse görünür.
+function inspectForcedResult(nextTurn){
+ hideSug();if(typeof window.TavlaAI?.suggest!=='function')return;
+ const g=gid,tok=sugTok,st=S;
+ callW('sg',{s:st,t:nextTurn,b:60000},4000,()=>{try{return window.TavlaAI.suggest(st,nextTurn,6000)}catch(x){return null}}).then(r=>{
+  if(g!==gid||tok!==sugTok||!r||typeof r.w!=='number')return;
+  pendingSuggestion={winner:r.w,points:r.points};
+  $('suggestBtn').textContent=r.points===2?'MARS ÖNERİSİ':'1 PUAN ÖNERİSİ';showSug(true)})}
 $('suggestBtn').onclick=()=>{
- if(!pendingSuggestion)return;
- const w=pendingSuggestion.winner,who=mode==='cpu'?(w===1?'Bilgisayar':'Siz'):(w===0?'Beyaz':'Siyah');
- modal('<div class="h">'+(pendingSuggestion.points===2?'MARS ÖNERİSİ':'1 PUAN ÖNERİSİ')+'</div><p>Mevcut konumdan itibaren yapılan tüm olası zar ve yasal hamleler incelendi. '+who+' için galibiyet matematiksel olarak kaçınılmaz görünüyor.</p><p>Oyunu şimdi bitirmeyi kabul ediyor musunuz?</p><button class="go" id="acceptSuggestion">KABUL ET</button><button class="go" id="rejectSuggestion">OYUNA DEVAM ET</button>',false);
+ const sg=pendingSuggestion;if(!sg)return;
+ const w=sg.winner,mars=sg.points===2,cpu=mode==='cpu',
+  win=cpu?(w===1?'Bilgisayar':'Siz'):(w===0?'Beyaz':'Siyah'),lose=cpu?(w===1?'siz':'bilgisayar'):(w===0?'Siyah':'Beyaz'),
+  v1=cpu&&w===0?'kazanacaksınız':'kazanacak',v2=cpu&&w===1?'kaybedeceksiniz':'kaybedecek',pt=mars?'2 puanla (mars)':'1 puanla',lp=mars?'2 puan':'1 puan';
+ modal('<div class="h">'+(mars?'MARS ÖNERİSİ':'1 PUAN ÖNERİSİ')+'</div><p>'+win+' bu oyunu <b>'+pt+'</b> '+v1+'; '+lose+' <b>'+lp+'</b> '+v2+'.</p><p>Zarlar nasıl gelirse gelsin, kazanan taraf en iyi oynadığında sonuç değişmez.</p><p>Oyunu şimdi bu sonuçla bitirmeyi kabul ediyor musunuz?</p><div class="menu-actions"><button class="go wide" id="acceptSuggestion">KABUL ET</button><button class="go wide" id="rejectSuggestion">OYUNA DEVAM ET</button></div>',false,'sug-card','Sonuç önerisi');
 };
 async function after(){const g=gid,w=E.winner(S);if(w>=0){end(w);return}
  const lg=E.legalMoves(S,cur,dice);froms=new Set(lg.map(m=>m.from));
  if(lg.length){phase='move';statusText=currentStatus();kick();return}
  phase='wait';kick();if(dice.length)await note('OYNANACAK HAMLE YOK');else await sleep(450);
- if(g!==gid)return;cur=1-cur;if(mode==='two')await inspectForcedResult(cur);if(g!==gid)return;turnStart(mode==='cpu'?(cur===1?300:1400):700)}
+ if(g!==gid)return;cur=1-cur;if(mode==='two')inspectForcedResult(cur);turnStart(mode==='cpu'?(cur===1?300:1400):700)}
 async function tumble(p,r){const g=gid;dd=[0,1].map(i=>({p:p,v:r[i],u:false,fx:i?34:-34}));rolling=1;kick();await sleep(650);if(g!==gid)return;rolling=0;kick();
  if(r[0]===r[1]){await sleep(140);if(g!==gid)return;const t0=performance.now(),d=320*K;dd.push({p:p,v:r[0],u:false,fx:-34,tx:-102,t0:t0,d:d},{p:p,v:r[1],u:false,fx:34,tx:102,t0:t0,d:d});grow=t0+d;kick();await sleep(320+60);if(g!==gid)return;kick()}}
 async function doRoll(){const g=gid;phase='rolling';busy=true;msg(currentStatus());const r=E.rollTwo();await tumble(cur,r);if(g!==gid)return;dice=E.diceFromRoll(r);busy=false;after()}
 async function turnStart(d){const g=gid;phase='wait';busy=true;sel=dests=froms=null;msg(isCpu()?'Bilgisayarın sırası':nm()[cur]+' sırası');await sleep(d||0);if(g!==gid)return;if(isCpu())cpuTurn();else doRoll()}
 function cpuPick(ms){let b=null,bs=-9;ms.forEach(m=>{let s=Math.random();if(m.hit)s+=3;if(m.to==='off')s+=3;else if(cnt(m.to,1)>0)s+=1.2;if(m.from!=='bar'&&cnt(m.from,1)===2)s-=.8;if(s>bs){bs=s;b=m}});return b}
-function aiPlan(lv,r){return new Promise(res=>{const id=++aid,sync=()=>{try{return window.TavlaAI.plan(S,1,r,lv,900)}catch(x){return null}};
- try{if(!wk){const src=$('eng').textContent+';'+$('ai').textContent+';onmessage=function(e){var d=e.data,m;try{m=self.TavlaAI.plan(d.s,d.p,d.roll,d.lv)}catch(x){m=null}postMessage({id:d.id,mv:m})}';wk=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})))}
-  const to=setTimeout(()=>{try{wk&&wk.terminate()}catch(x){}wk=null;res(null)},5500);
-  wk.onmessage=e=>{if(e.data.id!==id)return;clearTimeout(to);res(e.data.mv)};
-  wk.onerror=()=>{clearTimeout(to);wk=null;res(sync())};
-  wk.postMessage({id:id,s:S,p:1,roll:r,lv:lv})}catch(x){res(sync())}})}
+let wkUrl=null;const WK={ai:null,sg:null},RQ={ai:null,sg:null};
+function wkMake(k){if(!wkUrl){const src=$('eng').textContent+';'+$('ai').textContent+';onmessage=function(e){var d=e.data,r=null;try{r=d.k==="sg"?self.TavlaAI.suggest(d.s,d.t,d.b):self.TavlaAI.plan(d.s,d.p,d.roll,d.lv)}catch(x){r=null}postMessage({id:d.id,r:r})}';wkUrl=URL.createObjectURL(new Blob([src],{type:'text/javascript'}))}return WK[k]=new Worker(wkUrl)}
+function killW(k){const q=RQ[k];if(q){clearTimeout(q.to);RQ[k]=null;q.res(null)}if(WK[k]){try{WK[k].terminate()}catch(x){}WK[k]=null}}
+function killAI(){killW('ai');killW('sg')}
+function callW(k,data,ms,sync){return new Promise(res=>{if(k==='sg')killW('sg');
+ const id=++aid,done=v=>{const q=RQ[k];if(!q||q.id!==id)return;clearTimeout(q.to);RQ[k]=null;res(v)};
+ try{const w=WK[k]||wkMake(k);
+  RQ[k]={id:id,res:res,to:setTimeout(()=>{try{w.terminate()}catch(x){}if(WK[k]===w)WK[k]=null;done(null)},ms)};
+  w.onmessage=e=>{if(e.data.id===id)done(e.data.r)};
+  w.onerror=()=>{try{w.terminate()}catch(x){}if(WK[k]===w)WK[k]=null;if(RQ[k]&&RQ[k].id===id)done(sync())};
+  data.id=id;data.k=k;w.postMessage(data)}
+ catch(x){if(RQ[k]&&RQ[k].id===id)done(sync());else res(sync())}})}
+function aiPlan(lv,r){return callW('ai',{s:S,p:1,roll:r,lv:lv},5500,()=>{try{return window.TavlaAI.plan(S,1,r,lv,900)}catch(x){return null}})}
 async function cpuTurn(){const g=gid;phase='wait';busy=true;last=[];msg('Bilgisayar zar atıyor…');await sleep(700);if(g!==gid)return;const r=E.rollTwo(),pp=level?aiPlan(level,r):null;await tumble(1,r);if(g!==gid)return;dice=E.diceFromRoll(r);await sleep(700);if(g!==gid)return;let n=0,plan=pp?await pp:null;if(g!==gid)return;
  for(;;){if(E.winner(S)>=0)break;let m;if(plan){if(!plan.length)break;m=plan.shift()}else{const ms=E.legalMoves(S,1,dice);if(!ms.length)break;m=cpuPick(ms)}msg('Bilgisayar oynuyor…');hl=m.from;kick();await sleep(520);hl=null;if(g!==gid)return;
   await fly(m);if(g!==gid)return;use(m.die);last.push({...m,p:1});if(m.hit)vib();kick();await sleep(380);if(g!==gid)return;n++}
  if(E.winner(S)>=0){busy=false;end(1);return}
- msg('Bilgisayar '+r[0]+'-'+r[1]+' attı.');if(dice.length)await note('OYNANACAK HAMLE YOK');else await sleep(300);if(g!==gid)return;cur=0;await inspectForcedResult(cur);if(g!==gid)return;turnStart(1400)}
+ msg('Bilgisayar '+r[0]+'-'+r[1]+' attı.');if(dice.length)await note('OYNANACAK HAMLE YOK');else await sleep(300);if(g!==gid)return;cur=0;inspectForcedResult(cur);turnStart(1400)}
 const nh=c=>c.filter(x=>x.hit).length,better=(c,o)=>c.length<o.length||(c.length===o.length&&nh(c)>nh(o));
 function paths(f){const mp=new Map();(function rec(st,ds,pf,ch){E.legalMoves(st,cur,ds).filter(m=>m.from===pf).sort((a,b)=>a.die-b.die).forEach(m=>{const c=ch.concat(m);if(!mp.has(m.to)||better(c,mp.get(m.to)))mp.set(m.to,c);if(m.to!=='off')rec(E.applyMove(st,cur,m),rm(ds,m.die),m.to,c)})})(S,dice,f,[]);return mp}
 async function play(path){const g=gid,p=cur;busy=true;froms=null;sel=null;dests=null;last=[];
@@ -673,9 +745,9 @@ cv.addEventListener('pointerdown',e=>{if(phase!=='move'||busy||isCpu())return;
  if(sel!==null&&dests&&dests.has(h)){play(dests.get(h));return}
  if(froms&&froms.has(h)){sel=h;dests=paths(h)}else{sel=null;dests=null}
  kick()});
-function modal(html,cl,cls){canClose=!!cl;const card=$('card');card.className=cls||'';card.innerHTML=html;$('ov').hidden=false}
+function modal(html,cl,cls,lb){canClose=!!cl;const card=$('card');card.className=cls||'';card.setAttribute('aria-label',lb||'Tavla');card.innerHTML=html;$('ov').hidden=false}
 function closeM(){$('ov').hidden=true;canClose=false}
-function menu(){pm=mode;pl=level;pt=target;modal('<div class="menu-layout"><div class="menu-intro"><div class="h">TAVLA</div><p>Oyun ayarları</p></div><div class="menu-options"><div class="menu-row"><p>Oyun türü</p><div class="seg" id="gm"><button data-m="cpu"'+(pm==='cpu'?' class="on"':'')+'>Bilgisayara karşı</button><button data-m="two"'+(pm==='two'?' class="on"':'')+'>İki kişilik</button></div></div><div class="menu-row" id="gl"'+(pm==='cpu'?'':' hidden')+'><p>Seviye</p><div class="seg" id="gv">'+['Kolay','Orta','Zor'].map((x,i)=>'<button data-l="'+i+'"'+(pl===i?' class="on"':'')+'>'+x+'</button>').join('')+'</div></div><div class="menu-row"><p>Parti</p><div class="seg" id="gt">'+[1,3,5].map(t=>'<button data-t="'+t+'"'+(pt===t?' class="on"':'')+'>'+(t===1?'Tek oyun':t+"'te biter")+'</button>').join('')+'</div></div><div class="menu-actions"><button class="go" id="go">BAŞLA</button>'+(phase!=='menu'&&phase!=='over'?'<button class="go" id="cl">VAZGEÇ</button>':'')+'</div></div></div>','', 'menu-card')}
+function menu(){pm=mode;pl=level;pt=target;modal('<div class="menu-layout"><div class="menu-intro"><div class="h">TAVLA</div><p>Oyun ayarları</p></div><div class="menu-options"><div class="menu-row"><p>Oyun türü</p><div class="seg" id="gm"><button data-m="cpu"'+(pm==='cpu'?' class="on"':'')+'>Bilgisayara karşı</button><button data-m="two"'+(pm==='two'?' class="on"':'')+'>İki kişilik</button></div></div><div class="menu-row" id="gl"'+(pm==='cpu'?'':' hidden')+'><p>Seviye</p><div class="seg" id="gv">'+['Kolay','Orta','Zor'].map((x,i)=>'<button data-l="'+i+'"'+(pl===i?' class="on"':'')+'>'+x+'</button>').join('')+'</div></div><div class="menu-row"><p>Parti</p><div class="seg" id="gt">'+[1,3,5].map(t=>'<button data-t="'+t+'"'+(pt===t?' class="on"':'')+'>'+(t===1?'Tek oyun':t+"'te biter")+'</button>').join('')+'</div></div><div class="menu-actions"><button class="go" id="go">BAŞLA</button>'+(phase!=='menu'&&phase!=='over'?'<button class="go" id="cl">VAZGEÇ</button>':'')+'</div></div></div>',phase!=='menu'&&phase!=='over','menu-card','Oyun ayarları')}
 let rp=0,pm='cpu',pl=1,pt=1;
 function rPage(i){const p=[...document.querySelectorAll('#card .pg')];rp=Math.max(0,Math.min(p.length-1,i));p.forEach((x,k)=>x.classList.toggle('on',k===rp));document.querySelectorAll('#card .rdots span').forEach((x,k)=>x.classList.toggle('on',k===rp));$('rP').disabled=rp===0;$('rN').disabled=rp===p.length-1}
 function rules(){
@@ -687,14 +759,14 @@ function rules(){
   '<div class="pg"><div class="pgt">Taş toplama ve puan</div><p>15 taşınızın tamamı kendi evinizdeyken taş toplamaya başlayabilirsiniz. Zarın gösterdiği hanede taş yoksa ve daha yüksek hanede de taş kalmamışsa en yüksek haneden taş alınabilir. Taş toplamak zorunlu değildir.</p><p>Normal galibiyet <b>1 puan</b>, mars (rakip hiç taş toplayamadan biterse) <b>2 puandır.</b> Parti, seçilen puana ilk ulaşan oyuncunun olur; mars ile hedef aşılabilir.</p></div>'
  ];
  const dots=pages.map((_,i)=>'<span'+(i===0?' class="on"':'')+'></span>').join('');
- modal('<div class="rules-layout"><div class="rules-head"><div class="rules-heading">KURALLAR</div><div class="rules-sub">Tavla nasıl oynanır?</div></div><div class="rules-pages"><div class="pgs">'+pages.join('')+'</div></div><div class="rules-footer"><div class="rnav"><button class="rarr" id="rP" aria-label="Önceki sayfa">&#8249;</button><div class="rdots">'+dots+'</div><button class="rarr" id="rN" aria-label="Sonraki sayfa">&#8250;</button></div><button class="go" id="cl">KAPAT</button></div></div>',true,'rules-card');
+ modal('<div class="rules-layout"><div class="rules-head"><img class="m" src="../img/mecesml.webp" alt="Tekin Hoca" onerror="this.remove()"></div><div class="rules-pages"><div class="pgs">'+pages.join('')+'</div></div><div class="rules-footer"><div class="rnav"><button class="rarr" id="rP" aria-label="Önceki sayfa">&#8249;</button><div class="rdots">'+dots+'</div><button class="rarr" id="rN" aria-label="Sonraki sayfa">&#8250;</button></div><button class="go" id="cl">KAPAT</button></div></div>',true,'rules-card','Kurallar');
  rPage(0);
 }
-function end(w){lw=w;phase='over';busy=false;const pts=E.gamePoints(S,w,null),r=E.recordGame(match,w,pts),n=nm();vib();score();
+function end(w,fp){lw=w;phase='over';busy=false;hideSug();const g0=gid,pts=fp||E.gamePoints(S,w),r=E.recordGame(match,w,pts),n=nm();partyDone=r.over?{mode:mode,winner:w}:null;vib();score();
  const t=mode==='cpu'?(w===0?'Siz kazandınız':'Bilgisayar kazandı'):n[w]+' kazandı';
- modal('<div class="result"><div class="h">'+t+(pts===2?' — MARS!':'')+'</div><div class="points">+'+pts+' puan</div>'+(target>1?'<div class="matchscore">'+n[0]+' '+match.score[0]+' — '+match.score[1]+' '+n[1]+'</div>':'')+'</div>'+(r.over?'<p><b>Parti sona erdi.</b></p><button class="go" id="mn">YENİ PARTİ</button>':'<p>Sonraki oyunda ilk zarı kazanan oyuncu atacak.</p><button class="go" id="nx">SONRAKİ OYUN</button>'))}
-async function startGame(st){cancelAnimation();const g=++gid;hl=null;rolling=0;S=E.newState();pendingSuggestion=null;$('suggestion').hidden=true;dice=[];last=[];sel=dests=froms=null;cur=0;busy=true;phase='open';openingNames=false;score();
- if(st!==undefined){cur=st;dd=[];await rematchNotice(st);if(g!==gid)return;turnStart();return}
+ modal('<div class="result"><div class="h">'+t+(pts===2?' — MARS!':'')+'</div><div class="points">+'+pts+' puan</div>'+(target>1?'<div class="matchscore">'+n[0]+' '+match.score[0]+' — '+match.score[1]+' '+n[1]+'</div>':'')+'</div>'+(r.over?'<p><b>Parti sona erdi.</b></p><button class="go" id="mn">YENİ PARTİ</button>':'<p>Sonraki oyunda ilk zarı, bu oyunun kazananı atacak.</p><button class="go" id="nx">SONRAKİ OYUN</button>'),false,'','Oyun sonucu');const bb=$('nx')||$('mn');if(bb){bb.disabled=true;setTimeout(()=>{if(bb.isConnected&&gid===g0)bb.disabled=false},800)}}
+async function startGame(st,notice){killAI();cancelAnimation();const g=++gid;noteActive=false;statusText='';$('nt').classList.remove('on','rematch');hl=null;rolling=0;S=E.newState();hideSug();dice=[];last=[];sel=dests=froms=null;cur=0;busy=true;phase='open';openingNames=false;score();
+ if(st!==undefined){cur=st;dd=[];if(notice){await rematchNotice(st);if(g!==gid)return}turnStart();return}
  const o=E.openingRoll();msg('Açılış atışı…');openingNames=true;dd=[{x:710,y:320,v:o.dice[0],p:0,u:false},{x:230,y:320,v:o.dice[1],p:1,u:false}];rolling=1;kick();await sleep(1500);if(g!==gid)return;rolling=0;kick();
  cur=o.starter;statusText=currentStatus();kick();await sleep(1100);if(g!==gid)return;openingNames=false;dd=[];turnStart()}
 $('ov').addEventListener('click',e=>{const b=e.target.closest('button');
@@ -703,17 +775,37 @@ $('ov').addEventListener('click',e=>{const b=e.target.closest('button');
  if(b.dataset.l){pl=+b.dataset.l;[...$('gv').children].forEach(x=>x.classList.toggle('on',x===b));return}
  if(b.dataset.t){pt=+b.dataset.t;[...$('gt').children].forEach(x=>x.classList.toggle('on',x===b));return}
  if(b.id==='rP'){rPage(rp-1);return}if(b.id==='rN'){rPage(rp+1);return}
- if(b.id==='go'){const starter=pendingRematch&&pendingRematch.mode===pm?pendingRematch.winner:undefined;pendingRematch=null;mode=pm;level=pl;target=pt;match=E.newMatch(target);closeM();startGame(starter)}
- else if(b.id==='mn'){pendingRematch={mode:mode,winner:lw};menu()}
- else if(b.id==='nx'){closeM();startGame(lw)}
- else if(b.id==='acceptSuggestion'){const w=pendingSuggestion&&pendingSuggestion.winner;pendingSuggestion=null;$('suggestion').hidden=true;closeM();if(w!==null&&w!==undefined)end(w)}else if(b.id==='rejectSuggestion'){pendingSuggestion=null;$('suggestion').hidden=true;closeM()}else if(b.id==='cl'){closeM()}});
+ if(b.id==='go'){const starter=partyDone&&partyDone.mode===pm?partyDone.winner:undefined;partyDone=null;mode=pm;level=pl;target=pt;match=E.newMatch(target);closeM();startGame(starter,starter!==undefined)}
+ else if(b.id==='mn'){menu()}
+ else if(b.id==='nx'){closeM();startGame(lw,false)}
+ else if(b.id==='newYes'){menu()}else if(b.id==='newNo'){closeM()}
+ else if(b.id==='acceptSuggestion'){const sg=pendingSuggestion;hideSug();closeM();if(sg)end(sg.winner,sg.points)}else if(b.id==='rejectSuggestion'){closeM()}else if(b.id==='cl'){closeM()}});
 (function(){let x0=null;const c=$('card');c.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});c.addEventListener('touchend',e=>{if(x0===null||!$('rP'))return;const d=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(d)>40)rPage(rp+(d<0?1:-1))},{passive:true})})();
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&canClose)closeM()});
-$('new').onclick=menu;$('rules').onclick=rules;
-const fsb=$('fs'),fsOK=!!(document.fullscreenEnabled&&document.documentElement.requestFullscreen);
-function fitBtns(){const bs=[$('new'),fsb].filter(b=>!b.hidden);let f=16;const set=v=>bs.forEach(b=>b.style.fontSize=v+'px'),bad=()=>bs.some(b=>b.scrollWidth>b.clientWidth||b.scrollHeight>b.clientHeight);set(f);while(f>6&&bad()){f-=.5;set(f)}}
-function fsLabel(){fsb.innerHTML=document.fullscreenElement?'NORMAL<br class="lb"> EKRAN':'TAM<br class="lb"> EKRAN';fitBtns()}
-if(fsOK){fsb.hidden=false;fsb.onclick=()=>{try{const r=document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();if(r&&r.catch)r.catch(()=>{})}catch(e){}};document.addEventListener('fullscreenchange',fsLabel)}
+const blurAct=()=>{const a=document.activeElement;if(a&&a!==document.body&&a.blur)a.blur()};
+document.addEventListener('keydown',e=>{if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(!$('ov').hidden){
+  if(e.key==='Escape'){if(canClose){e.preventDefault();closeM()}return}
+  if($('rP')){if(e.key==='ArrowLeft'){e.preventDefault();rPage(rp-1)}else if(e.key==='ArrowRight'){e.preventDefault();rPage(rp+1)}else if(e.key==='Enter'){e.preventDefault();$('cl').click()}}
+  else if(e.key==='Enter'){const b=$('go')||$('nx')||$('mn');if(b&&!b.disabled){e.preventDefault();b.click()}}
+  blurAct();return}
+ if((e.key==='f'||e.key==='F')&&fsOK){e.preventDefault();fsToggle();blurAct()}});
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('button');if(b)setTimeout(()=>{if(b.isConnected&&document.activeElement===b)b.blur()},0)});
+function newGameClick(){if(phase==='menu'||phase==='over'){menu();return}
+ modal('<div class="h">Oyun sürüyor</div><p>Yeni oyun başlatılırsa mevcut oyun ve parti skoru kaybolacak.</p><div class="menu-actions"><button class="go wide" id="newYes">YENİ OYUN BAŞLAT</button><button class="go wide" id="newNo">OYUNA DÖN</button></div>',true,'warn-card','Uyarı')}
+$('new').onclick=newGameClick;$('rules').onclick=rules;
+const fsb=$('fs'),fsOK=!!(document.fullscreenEnabled||document.webkitFullscreenEnabled),fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement;
+let fsSym=false;
+function renderFs(){const full=!!fsEl();fsb.innerHTML=fsSym?(full?'⤡':'⛶'):(full?'NORMAL<br class="lb"> EKRAN':'TAM<br class="lb"> EKRAN');fsb.setAttribute('aria-label',full?'Normal ekran':'Tam ekran');fsb.style.flex=fsSym?'0 0 44px':''}
+function fitLogo(){const ft=$('ft'),sd=$('side');if(!ft)return;ft.style.display='';
+ if(!matchMedia('(min-aspect-ratio:1/1) and (min-width:560px)').matches||getComputedStyle(ft).display==='none')return;
+ const a=sd.firstElementChild.getBoundingClientRect(),b=ft.getBoundingClientRect(),r=sd.getBoundingClientRect();if(a.top<r.top+4||b.bottom>r.bottom-4)ft.style.display='none'}
+function fitBtns(){const bs=[$('new'),fsb].filter(b=>!b.hidden),
+  run=()=>{let f=16;const set=v=>bs.forEach(b=>b.style.fontSize=v+'px'),bad=()=>bs.some(b=>b.scrollWidth>b.clientWidth||b.scrollHeight>b.clientHeight);set(f);while(f>6&&bad()){f-=.5;set(f)}return f};
+ if(fsOK){fsSym=false;renderFs()}
+ let f=run();if(fsOK&&f<11){fsSym=true;renderFs();f=run()}
+ fitLogo()}
+function fsToggle(){try{const d=document,e=d.documentElement,r=fsEl()?(d.exitFullscreen||d.webkitExitFullscreen).call(d):(e.requestFullscreen||e.webkitRequestFullscreen).call(e);if(r&&r.catch)r.catch(()=>{})}catch(x){}}
+if(fsOK){fsb.hidden=false;fsb.onclick=fsToggle;document.addEventListener('fullscreenchange',fitBtns);document.addEventListener('webkitfullscreenchange',fitBtns)}
 addEventListener('resize',fitBtns);fitBtns();
 size();kick();menu();
 })();
