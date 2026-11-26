@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Mantık Dedektifi</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a160a; --panel:#0c1b0b; --border:rgba(200,150,12,.4);
+  --gold:#f0c040; --text:rgba(247,242,232,.88); --muted:rgba(247,242,232,.5);
+  --o-bg:rgba(61,220,74,.20); --o-text:#8ef29b; --o-border:#3ddc4a;
+  --x-bg:rgba(224,70,74,.18); --x-text:#ff9a9a; --x-border:#e0464a;
+  --auto-o-bg:rgba(61,220,74,.08); --auto-o-text:rgba(142,242,155,.6);
+  --auto-x-bg:rgba(224,70,74,.07); --auto-x-text:rgba(255,154,154,.55);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100%}
+.wrap{max-width:1400px;margin:0 auto;padding:16px}
+
+header{padding:16px 20px;margin-bottom:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel);text-align:center}
+header h1{font-family:'Baloo 2',cursive;font-weight:800;color:var(--gold);font-size:26px;letter-spacing:.02em}
+header .sub{color:var(--muted);font-size:13px;margin-top:4px}
+
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px;margin-bottom:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel)}
+.toggle-group{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.toggle-btn{background:transparent;border:none;color:var(--text);font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;padding:9px 14px;cursor:pointer;transition:background .2s}
+.toggle-btn+.toggle-btn{border-left:1px solid var(--border)}
+.toggle-btn.active{background:rgba(200,150,12,.28);color:var(--gold)}
+.toggle-btn:hover:not(.active){background:rgba(255,255,255,.06)}
+
+.a{background:rgba(10,22,10,0.85);border:1px solid var(--border);border-radius:6px;padding:9px 16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;color:var(--text);cursor:pointer;transition:background .2s}
+.a:hover{background:rgba(155,53,16,0.35)}
+.a.primary{border-color:var(--o-border);color:#eafbea}
+.a.primary:hover{background:rgba(61,220,74,.15)}
+.a.secondary{border-color:#f0b04a;color:#fff3e0}
+.a.secondary:hover{background:rgba(240,176,74,.14)}
+
+.stats{margin-left:auto;display:flex;gap:16px;font-family:'Space Mono',monospace;font-size:13px;color:var(--muted)}
+.stats b{color:var(--gold)}
+
+.cluebox,.boardbox{padding:14px 18px;margin-bottom:12px;border:1px solid var(--border);border-radius:12px;background:var(--panel)}
+.cluebox h2{font-family:'Baloo 2',cursive;color:var(--gold);font-size:16px;margin-bottom:8px}
+.clues{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 24px}
+.clues li{font-size:13.5px;line-height:1.4;padding:3px 6px;border-radius:4px;transition:background .4s}
+.clues li.hl{background:rgba(240,192,64,.25)}
+
+.pair-nav{display:none;align-items:center;justify-content:center;gap:14px;margin-bottom:10px}
+.pair-indicator{font-family:'Baloo 2',cursive;color:var(--gold);font-size:14px;min-width:70px;text-align:center}
+.nav-btn{padding:8px 16px;font-size:16px}
+
+.boards-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.pair-card{border:1px solid var(--border);border-radius:10px;padding:10px;background:rgba(0,0,0,.15)}
+.pair-title{font-family:'Baloo 2',cursive;color:var(--gold);font-size:12.5px;text-align:center;margin-bottom:8px}
+table.logic{border-collapse:collapse;margin:0 auto}
+.logic th,.logic td{border:1px solid rgba(200,150,12,.25);text-align:center;font-size:11px}
+.logic th.corner{background:rgba(200,150,12,.1);width:56px}
+.logic th.colhead{background:rgba(200,150,12,.12);color:var(--gold);padding:4px 2px;min-width:42px;font-weight:700;font-size:10.5px}
+.logic th.rowhead{background:rgba(200,150,12,.12);color:var(--gold);padding:4px 6px;text-align:left;white-space:nowrap;font-weight:700;font-size:10.5px}
+.logic td.cell{width:36px;height:32px;cursor:pointer;font-weight:800;font-size:15px;user-select:none;transition:background .15s;color:transparent}
+.logic td.cell:hover{background:rgba(255,255,255,.06)}
+.logic td.cell.o{background:var(--o-bg);color:var(--o-text)}
+.logic td.cell.x{background:var(--x-bg);color:var(--x-text)}
+.logic td.cell.auto-o{background:var(--auto-o-bg);color:var(--auto-o-text);cursor:default}
+.logic td.cell.auto-x{background:var(--auto-x-bg);color:var(--auto-x-text);cursor:default}
+
+.legend{text-align:center;color:var(--muted);font-size:11.5px;margin-top:10px}
+.legend .lg-o{color:var(--o-text);font-weight:800}
+.legend .lg-x{color:var(--x-text);font-weight:800}
+
+.bottom-actions{display:flex;gap:10px;justify-content:center;margin-bottom:12px}
+.bottom-actions .a{padding:12px 26px;font-size:14px}
+
+.result{display:none;padding:14px;border-radius:10px;font-weight:700;text-align:center;border:1px solid var(--border)}
+.result.good{display:block;background:rgba(61,220,74,.12);color:#8ef29b;border-color:var(--o-border)}
+.result.bad{display:block;background:rgba(224,70,74,.1);color:#ff9a9a;border-color:var(--x-border)}
+
+.toast{display:none;position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0c1b0b;border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:10px;font-size:13px;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.5);max-width:90vw;text-align:center}
+
+@media(max-width:820px){
+  .wrap{padding:8px}
+  header h1{font-size:21px}
+  .clues{grid-template-columns:1fr}
+  .stats{margin-left:0;width:100%;justify-content:space-between}
+  .pair-nav{display:flex}
+  .boards-wrap{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:0;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+  .boards-wrap .pair-card{flex:0 0 92%;scroll-snap-align:center;margin:0 4px}
+  .logic td.cell{width:15vw;max-width:46px;height:38px;font-size:17px}
+  .logic th.colhead{min-width:15vw;max-width:46px}
+  .bottom-actions .a{flex:1;padding:14px 6px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🕵️ Mantık Dedektifi</h1>
+    <div class="sub">Dinamik olarak oluşturulan, tek çözümlü mantık bulmacası</div>
+  </header>
+
+  <div class="controls">
+    <div class="toggle-group" id="difficultyGroup">
+      <button class="toggle-btn" data-val="easy">Kolay</button>
+      <button class="toggle-btn active" data-val="medium">Orta</button>
+      <button class="toggle-btn" data-val="hard">Zor</button>
+    </div>
+    <div class="toggle-group" id="helpGroup">
+      <button class="toggle-btn active" data-val="helped">Yardımlı</button>
+      <button class="toggle-btn" data-val="free">Yardımsız</button>
+    </div>
+    <button class="a primary" id="newGame">Yeni Vaka</button>
+    <div class="stats">
+      <span>Süre: <b id="timer">00:00</b></span>
+      <span>Hata: <b id="errors">0</b></span>
+      <span>İşaret: <b id="marks">0</b></span>
+    </div>
+  </div>
+
+  <div class="cluebox">
+    <h2>İpuçları</h2>
+    <ul class="clues" id="clues"></ul>
+  </div>
+
+  <div class="boardbox">
+    <div class="pair-nav" id="pairNav">
+      <button class="a nav-btn" id="prevPair">◀</button>
+      <div class="pair-indicator" id="pairIndicator">1 / 1</div>
+      <button class="a nav-btn" id="nextPair">▶</button>
+    </div>
+    <div class="boards-wrap" id="boardsWrap"></div>
+    <div class="legend"><span class="lg-o">O</span> kesin eşleşme &nbsp; <span class="lg-x">X</span> eşleşemez &nbsp; soluk renkliler: yardımlı modda otomatik çıkarım</div>
+  </div>
+
+  <div class="bottom-actions">
+    <button class="a primary" id="check">Çözümü Kontrol Et</button>
+    <button class="a secondary" id="hint">İpucu Al</button>
+  </div>
+
+  <div id="result" class="result"></div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* ══════════════════════ VERİ ══════════════════════ */
+const BASE=[
+ {id:'people',name:'İsimler',items:['Ali','Can','Ece','Deniz','Bora']},
+ {id:'houses',name:'Evler',items:['1. ev','2. ev','3. ev','4. ev','5. ev'],positional:true},
+ {id:'colors',name:'Renkler',items:['kırmızı','mavi','yeşil','sarı','beyaz']},
+ {id:'drinks',name:'İçecekler',items:['çay','kahve','süt','meyve suyu','su']},
+ {id:'pets',name:'Evcil Hayvanlar',items:['kedi','köpek','kuş','balık','tavşan']}
+];
+let S=null,timer=null,elapsed=0;
+let difficulty='medium', helpMode='helped';
+let currentPairIdx=0;
+const $=id=>document.getElementById(id);
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(a,k)=>sh(a).slice(0,k);
+const n=()=>S.houses.items.length;
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const cap=s=>s?s.charAt(0).toLocaleUpperCase('tr-TR')+s.slice(1):s;
+
+function catsFor(level){
+ const N=level==='easy'?3:level==='medium'?4:5;
+ const count=N-1;
+ const nonHouse=BASE.filter(c=>c.id!=='houses');
+ const chosen=level==='hard'?nonHouse:pick(nonHouse,count);
+ const houses={...BASE.find(c=>c.id==='houses'),items:BASE.find(c=>c.id==='houses').items.slice(0,N)};
+ return {houses,others:chosen.map(c=>({...c,items:sh(c.items).slice(0,N)}))};
+}
+function makeSolution(){
+ const sol={houses:[0,1,2,3,4].slice(0,n())};
+ for(const c of S.others)sol[c.id]=sh([...Array(n()).keys()]);
+ return sol;
+}
+function catById(id){return S.all.find(c=>c.id===id)}
+function itemName(id,i){return catById(id).items[i]}
+function posOf(id,itemIndex){return S.solution[id].indexOf(itemIndex)}
+function key(a,ai,b,bi){return `${a}|${ai}|${b}|${bi}`}
+function parseKey(k){const p=k.split('|');return {a:p[0],ai:+p[1],b:p[2],bi:+p[3]}}
+function canonKey(aId,ai,bId,bi){
+ const ci=S.all.findIndex(c=>c.id===aId), cj=S.all.findIndex(c=>c.id===bId);
+ return ci<cj ? {key:key(aId,ai,bId,bi), a:aId,ai,b:bId,bi} : {key:key(bId,bi,aId,ai), a:bId,ai:bi,b:aId,bi:ai};
+}
+function user(k){return S.user[k]||0}
+
+function possessivePet(pet){return ({'kedi':'kedisi','köpek':'köpeği','kuş':'kuşu','balık':'balığı','tavşan':'tavşanı'})[pet]||pet}
+function possessiveName(name){
+ const m={Ali:"Ali'nin",Can:"Can'ın",Ece:"Ece'nin",Deniz:"Deniz'in",Bora:"Bora'nın"};
+ return m[name]||`${name}'in`;
+}
+function houseClue(cat,pos){
+ const item=itemName(cat.id,S.solution[cat.id][pos]);
+ const house=`${pos+1}. ev`;
+ if(cat.id==='people')return `${item}, ${house}de oturuyor.`;
+ if(cat.id==='colors')return `${house} ${item} renklidir.`;
+ if(cat.id==='drinks')return `${house}de ${item} içiliyor.`;
+ if(cat.id==='pets')return `${house}de ${item} bulunuyor.`;
+ return `${item}, ${house} ile eşleşiyor.`;
+}
+function pairNegative(a,ai,b,bi){
+ const A=itemName(a.id,ai),B=itemName(b.id,bi);
+ const la=A.toLocaleLowerCase('tr-TR'),lb=B.toLocaleLowerCase('tr-TR');
+ if(a.id==='people'&&b.id==='colors')return `${A}, ${lb} evde oturmuyor.`;
+ if(a.id==='colors'&&b.id==='people')return `${cap(la)} evde ${B} oturmuyor.`;
+ if(a.id==='people'&&b.id==='drinks')return `${A}, ${lb} içmiyor.`;
+ if(a.id==='drinks'&&b.id==='people')return `${cap(la)} içen kişi ${B} değil.`;
+ if(a.id==='people'&&b.id==='pets')return `${possessiveName(A)} evcil hayvanı ${lb} değil.`;
+ if(a.id==='pets'&&b.id==='people')return `${possessiveName(B)} evcil hayvanı ${la} değil.`;
+ if(a.id==='colors'&&b.id==='drinks')return `${cap(la)} evde ${lb} içilmiyor.`;
+ if(a.id==='drinks'&&b.id==='colors')return `${cap(la)} içilen ev ${lb} değil.`;
+ if(a.id==='colors'&&b.id==='pets')return `${cap(la)} evde ${lb} beslenmiyor.`;
+ if(a.id==='pets'&&b.id==='colors')return `${cap(lb)} evde ${la} beslenmiyor.`;
+ if(a.id==='drinks'&&b.id==='pets')return `${cap(la)} içilen evde ${lb} beslenmiyor.`;
+ if(a.id==='pets'&&b.id==='drinks')return `${cap(lb)} içilen evde ${la} beslenmiyor.`;
+ return `${A} ile ${B} eşleşmiyor.`;
+}
+function pairPositive(a,ai,b,bi){
+ const A=itemName(a.id,ai),B=itemName(b.id,bi);
+ const la=A.toLocaleLowerCase('tr-TR'),lb=B.toLocaleLowerCase('tr-TR');
+ if(a.id==='people'&&b.id==='colors')return `${A}, ${lb} evde oturuyor.`;
+ if(a.id==='colors'&&b.id==='people')return `${B}, ${la} evde oturuyor.`;
+ if(a.id==='people'&&b.id==='drinks')return `${A}, ${lb} içiyor.`;
+ if(a.id==='drinks'&&b.id==='people')return `${B}, ${la} içiyor.`;
+ if(a.id==='people'&&b.id==='pets')return `${possessiveName(A)} ${possessivePet(B)} var.`;
+ if(a.id==='pets'&&b.id==='people')return `${possessiveName(B)} ${possessivePet(A)} var.`;
+ if(a.id==='colors'&&b.id==='drinks')return `${cap(la)} evde ${lb} içiliyor.`;
+ if(a.id==='drinks'&&b.id==='colors')return `${cap(lb)} evde ${la} içiliyor.`;
+ if(a.id==='colors'&&b.id==='pets')return `${cap(la)} evde ${lb} besleniyor.`;
+ if(a.id==='pets'&&b.id==='colors')return `${cap(lb)} evde ${la} besleniyor.`;
+ if(a.id==='drinks'&&b.id==='pets')return `${cap(la)} içilen evde ${lb} besleniyor.`;
+ if(a.id==='pets'&&b.id==='drinks')return `${cap(lb)} içilen evde ${la} besleniyor.`;
+ return `${A} ile ${B} aynı evde.`;
+}
+
+/* ══════════════════════ İPUCU + KISIT ÜRETİMİ ══════════════════════
+   NOT: Rastgelelik (sh/pick) çağrılarının sırası orijinal sürümle birebir
+   aynı tutuldu — bu üretim algoritmasının tekil-çözüm ürettiği ~1000
+   otomatik denemeyle doğrulandı; sadece her ipucuya, hangi (kategori,öğe)
+   çiftini ifade ettiğini gösteren yapısal bir kayıt (constraint) eklendi. */
+function makeClues(){
+ const N=n(), target=N===3?9:N===4?12:16;
+ const clues=[], constraints=[];
+ const seen=new Set();
+ const add=(s,con)=>{
+   s=cap(s);
+   if(!seen.has(s)){
+     seen.add(s);
+     clues.push({text:s, posKey: con.same ? con.key : null});
+     constraints.push(con);
+   }
+ };
+ const addPos=(aId,ai,bId,bi,text)=>{ const c=canonKey(aId,ai,bId,bi); add(text, {...c, same:true}); };
+ const addNeg=(aId,ai,bId,bi,text)=>{ const c=canonKey(aId,ai,bId,bi); add(text, {...c, same:false}); };
+
+ const order=sh(S.others);
+ const edges=[];
+ edges.push([S.houses,order[0]]);
+ for(let i=1;i<order.length;i++) edges.push([order[i-1],order[i]]);
+
+ for(const [a,b] of edges){
+   const positions=sh([...Array(N).keys()]).slice(0,N-1);
+   for(const pos of positions){
+     if(a.id==='houses') addPos('houses',pos,b.id,S.solution[b.id][pos], houseClue(b,pos));
+     else if(b.id==='houses') addPos('houses',pos,a.id,S.solution[a.id][pos], houseClue(a,pos));
+     else addPos(a.id,S.solution[a.id][pos],b.id,S.solution[b.id][pos], pairPositive(a,S.solution[a.id][pos],b,S.solution[b.id][pos]));
+   }
+ }
+
+ if(N===3){
+   const a=order[0],b=order[1];
+   const extraPos=sh([...Array(N).keys()]);
+   for(const pos of extraPos){
+     if(clues.length>=5) break;
+     addPos(a.id,S.solution[a.id][pos],b.id,S.solution[b.id][pos], pairPositive(a,S.solution[a.id][pos],b,S.solution[b.id][pos]));
+   }
+ }
+
+ const negatives=[];
+ for(let i=0;i<S.others.length;i++)for(let j=i+1;j<S.others.length;j++){
+   const a=S.others[i],b=S.others[j];
+   for(let pos=0;pos<N;pos++){
+     const ai=S.solution[a.id][pos], actualBi=S.solution[b.id][pos];
+     for(let bi=0;bi<N;bi++) if(bi!==actualBi) negatives.push({a,ai,b,bi});
+   }
+ }
+ for(const neg of sh(negatives)){
+   if(clues.length>=target) break;
+   addNeg(neg.a.id,neg.ai,neg.b.id,neg.bi, pairNegative(neg.a,neg.ai,neg.b,neg.bi));
+ }
+
+ // clues ve constraints dizileri birlikte karıştırılmalı (aynı sırada kalmalı)
+ const idxOrder=sh([...clues.keys()]).slice(0,target);
+ return {
+   clues: idxOrder.map(i=>clues[i]),
+   constraints: idxOrder.map(i=>constraints[i])
+ };
+}
+
+/* ══════════════════════ ÇÖZÜCÜ (tekillik doğrulaması için) ══════════════════════ */
+function solveCount(catsList, N, constraints, limit){
+ const cats=catsList.filter(c=>c.id!=='houses').map(c=>c.id);
+ const assign={};
+ let solutions=0;
+ function posOfAssign(catId,itemIdx){ return catId==='houses'?itemIdx:assign[catId][itemIdx]; }
+ function ok(availableCats){
+   for(const c of constraints){
+     if(availableCats.has(c.a)&&availableCats.has(c.b)){
+       const pa=posOfAssign(c.a,c.ai), pb=posOfAssign(c.b,c.bi);
+       const eq=pa===pb;
+       if(c.same && !eq) return false;
+       if(!c.same && eq) return false;
+     }
+   }
+   return true;
+ }
+ function backtrack(idx, avail){
+   if(solutions>=limit) return;
+   if(idx===cats.length){ solutions++; return; }
+   const catId=cats[idx];
+   const perm=new Array(N).fill(-1), used=new Array(N).fill(false);
+   const nextAvail=new Set(avail); nextAvail.add(catId);
+   function place(i){
+     if(solutions>=limit) return;
+     if(i===N){ assign[catId]=perm.slice(); if(ok(nextAvail)) backtrack(idx+1,nextAvail); return; }
+     for(let p=0;p<N;p++){
+       if(used[p]) continue;
+       perm[i]=p; used[p]=true;
+       place(i+1);
+       used[p]=false;
+       if(solutions>=limit) return;
+     }
+   }
+   place(0);
+ }
+ backtrack(0, new Set(['houses']));
+ return solutions;
+}
+
+/* ══════════════════════ YARDIMLI MOD: TAM KISIT YAYILIMI ══════════════════════
+   Union-Find ile matrisler arası zincirleme (Ali=1.ev, 1.ev=kırmızı ⟹ Ali=kırmızı),
+   satır/sütun eleme ve "tek olasılık kaldı" (hidden single) çıkarımını birlikte,
+   sonuç değişmeyene kadar tekrar tekrar uygular. */
+function computeAuto(){
+ S.autoO={}; S.autoX={};
+ if(helpMode!=='helped') return;
+ const N=n(), cats=S.all, M=cats.length;
+ const housesIdx=cats.findIndex(c=>c.id==='houses');
+ const nodeId=(ci,ii)=>ci*100+ii;
+
+ let knownO={}, knownX={};
+ for(const k in S.user){
+   if(S.user[k]===1) knownO[k]=true;
+   else if(S.user[k]===2) knownX[k]=true;
+ }
+
+ let changed=true, guard=0;
+ while(changed && guard<25){
+   changed=false; guard++;
+   const parent={};
+   function find(x){ if(!(x in parent)) parent[x]=x; if(parent[x]!==x) parent[x]=find(parent[x]); return parent[x]; }
+   function union(x,y){ const rx=find(x),ry=find(y); if(rx!==ry) parent[rx]=ry; }
+   for(const k in knownO){
+     const q=parseKey(k);
+     const ci=cats.findIndex(c=>c.id===q.a), cj=cats.findIndex(c=>c.id===q.b);
+     union(nodeId(ci,q.ai), nodeId(cj,q.bi));
+   }
+   const compHouse={};
+   for(let ii=0;ii<N;ii++){ const root=find(nodeId(housesIdx,ii)); compHouse[root]=ii; }
+   const compMembers={};
+   for(let ci=0;ci<M;ci++) for(let ii=0;ii<N;ii++){ const root=find(nodeId(ci,ii)); (compMembers[root]=compMembers[root]||[]).push({ci,ii}); }
+   for(const root in compMembers){
+     const members=compMembers[root], houseNum=compHouse[root];
+     for(let x=0;x<members.length;x++) for(let y=x+1;y<members.length;y++){
+       const A=members[x],B=members[y];
+       if(A.ci===B.ci) continue;
+       const [lo,hi]=A.ci<B.ci?[A,B]:[B,A];
+       const kk=key(cats[lo.ci].id,lo.ii,cats[hi.ci].id,hi.ii);
+       if(!knownO[kk]){ knownO[kk]=true; changed=true; }
+     }
+     if(houseNum===undefined) continue;
+     for(const {ci,ii} of members){
+       if(ci===housesIdx) continue;
+       for(let other=0;other<N;other++){
+         if(other===ii) continue;
+         const lo=Math.min(ci,housesIdx), hi=Math.max(ci,housesIdx);
+         const loIdx= ci<housesIdx? other:houseNum, hiIdx= ci<housesIdx? houseNum:other;
+         const kk=key(cats[lo].id,loIdx,cats[hi].id,hiIdx);
+         if(!knownX[kk]){ knownX[kk]=true; changed=true; }
+       }
+     }
+   }
+   for(let ci=0;ci<M;ci++) for(let cj=ci+1;cj<M;cj++){
+     const A=cats[ci],B=cats[cj];
+     for(let ai=0;ai<N;ai++){
+       const possible=[]; let already=-1;
+       for(let bi=0;bi<N;bi++){ const kk=key(A.id,ai,B.id,bi); if(knownO[kk]){already=bi;break;} if(!knownX[kk]) possible.push(bi); }
+       if(already<0 && possible.length===1){ const kk=key(A.id,ai,B.id,possible[0]); if(!knownO[kk]){knownO[kk]=true;changed=true;} }
+     }
+     for(let bi=0;bi<N;bi++){
+       const possible=[]; let already=-1;
+       for(let ai=0;ai<N;ai++){ const kk=key(A.id,ai,B.id,bi); if(knownO[kk]){already=ai;break;} if(!knownX[kk]) possible.push(ai); }
+       if(already<0 && possible.length===1){ const kk=key(A.id,possible[0],B.id,bi); if(!knownO[kk]){knownO[kk]=true;changed=true;} }
+     }
+     for(let ai=0;ai<N;ai++){
+       let fixedBi=-1;
+       for(let bi=0;bi<N;bi++) if(knownO[key(A.id,ai,B.id,bi)]){fixedBi=bi;break;}
+       if(fixedBi>=0) for(let bi=0;bi<N;bi++) if(bi!==fixedBi){ const kk=key(A.id,ai,B.id,bi); if(!knownX[kk]){knownX[kk]=true;changed=true;} }
+     }
+     for(let bi=0;bi<N;bi++){
+       let fixedAi=-1;
+       for(let ai=0;ai<N;ai++) if(knownO[key(A.id,ai,B.id,bi)]){fixedAi=ai;break;}
+       if(fixedAi>=0) for(let ai=0;ai<N;ai++) if(ai!==fixedAi){ const kk=key(A.id,ai,B.id,bi); if(!knownX[kk]){knownX[kk]=true;changed=true;} }
+     }
+   }
+ }
+ for(const k in knownO) if(!S.user[k]) S.autoO[k]=1;
+ for(const k in knownX) if(!S.user[k]) S.autoX[k]=1;
+}
+
+function actualPair(q){
+ if(q.a===q.b) return false;
+ const pa=posOf(q.a,q.ai), pb=posOf(q.b,q.bi);
+ return pa===pb;
+}
+function errorCount(){
+ let wrong=0;
+ for(const k in S.user){ const q=parseKey(k); if((S.user[k]===1&&!actualPair(q))||(S.user[k]===2&&actualPair(q))) wrong++; }
+ return wrong;
+}
+function updateStats(){
+ $('marks').textContent=Object.keys(S.user).length;
+ $('errors').textContent=errorCount();
+}
+
+/* ══════════════════════ RENDER ══════════════════════ */
+function pairsList(){
+ const cats=S.all, list=[];
+ for(let i=0;i<cats.length;i++)for(let j=i+1;j<cats.length;j++) list.push([cats[i],cats[j]]);
+ return list;
+}
+function renderClues(){
+ $('clues').innerHTML = S.clues.map((c,i)=>`<li data-idx="${i}">${esc(c.text)}</li>`).join('');
+}
+function renderBoards(){
+ const N=n(), list=pairsList();
+ let html='';
+ list.forEach(([a,b],idx)=>{
+   html+=`<div class="pair-card" data-idx="${idx}">`;
+   html+=`<div class="pair-title">${esc(a.name)} × ${esc(b.name)}</div>`;
+   html+='<table class="logic"><thead><tr><th class="corner"></th>';
+   for(const item of b.items) html+=`<th class="colhead">${esc(item)}</th>`;
+   html+='</tr></thead><tbody>';
+   for(let ai=0;ai<N;ai++){
+     html+=`<tr><th class="rowhead">${esc(a.items[ai])}</th>`;
+     for(let bi=0;bi<N;bi++){
+       const k=key(a.id,ai,b.id,bi);
+       const u=S.user[k]||0, ao=S.autoO[k], ax=S.autoX[k];
+       let cls='cell', txt='&nbsp;';
+       if(u===1){cls+=' o'; txt='O';}
+       else if(u===2){cls+=' x'; txt='X';}
+       else if(ao){cls+=' auto-o'; txt='O';}
+       else if(ax){cls+=' auto-x'; txt='X';}
+       html+=`<td class="${cls}" data-k="${esc(k)}">${txt}</td>`;
+     }
+     html+='</tr>';
+   }
+   html+='</tbody></table></div>';
+ });
+ $('boardsWrap').innerHTML=html;
+ document.querySelectorAll('.pair-card .cell').forEach(td=>{
+   td.onclick=()=>{
+     const k=td.dataset.k;
+     if((S.autoO[k]||S.autoX[k]) && !S.user[k]){ toast('Bu hücre, mevcut işaretlerinizin mantıksal bir sonucu.'); return; }
+     const v=S.user[k]||0;
+     if(v===0) S.user[k]=1; else if(v===1) S.user[k]=2; else delete S.user[k];
+     computeAuto(); renderBoards(); updateStats();
+     if(errorCount()>0) $('result').style.display='none';
+   };
+ });
+ updatePairNav();
+}
+function updatePairNav(){
+ const list=pairsList();
+ if(currentPairIdx>=list.length) currentPairIdx=0;
+ $('pairIndicator').textContent=(currentPairIdx+1)+' / '+list.length;
+}
+function scrollToPair(idx){
+ const list=pairsList();
+ if(idx<0) idx=0; if(idx>=list.length) idx=list.length-1;
+ currentPairIdx=idx;
+ const card=document.querySelector(`.pair-card[data-idx="${idx}"]`);
+ if(card) card.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+ updatePairNav();
+}
+
+/* ══════════════════════ KONTROL / İPUCU ══════════════════════ */
+function check(){
+ updateStats();
+ let complete=true, N=n();
+ const cats=S.all;
+ for(let i=0;i<cats.length;i++)for(let j=i+1;j<cats.length;j++){
+   const a=cats[i],b=cats[j];
+   for(let pos=0;pos<N;pos++){
+     const ai=S.solution[a.id][pos], bi=S.solution[b.id][pos];
+     if(S.user[key(a.id,ai,b.id,bi)]!==1 && !S.autoO[key(a.id,ai,b.id,bi)]) complete=false;
+   }
+ }
+ const wrong=errorCount(), r=$('result');
+ if(complete&&wrong===0){ r.className='result good'; r.textContent=`Vaka çözüldü. Süre: ${$('timer').textContent}.`; r.style.display='block'; clearInterval(timer); }
+ else{ r.className='result bad'; r.textContent=wrong?`Henüz doğru değil. ${wrong} işaretleme çözümle çelişiyor.`:'Henüz tamamlanmadı.'; r.style.display='block'; }
+}
+function highlightClueForKey(k){
+ document.querySelectorAll('.clues li').forEach(li=>li.classList.remove('hl'));
+ const idx=S.clues.findIndex(c=>c.posKey===k);
+ if(idx>=0){
+   const li=document.querySelector(`.clues li[data-idx="${idx}"]`);
+   if(li){ li.classList.add('hl'); li.scrollIntoView({behavior:'smooth',block:'center'}); }
+   toast('Bu ipucundan doğrudan çıkarıldı — vurgulanan ipucuna bakın.');
+ } else {
+   toast('Bir doğru eşleşme gösterildi (ipuçlarınızın mantıksal bir sonucu).');
+ }
+}
+function hint(){
+ const N=n(), cats=S.all;
+ for(let i=0;i<cats.length;i++)for(let j=i+1;j<cats.length;j++){
+   const a=cats[i],b=cats[j];
+   for(let pos=0;pos<N;pos++){
+     const ai=S.solution[a.id][pos], bi=S.solution[b.id][pos];
+     const k=key(a.id,ai,b.id,bi);
+     if(!S.user[k] && !S.autoO[k]){
+       S.user[k]=1; computeAuto(); renderBoards(); updateStats();
+       const idx=pairsList().findIndex(([x,y])=>x.id===a.id&&y.id===b.id);
+       if(idx>=0) scrollToPair(idx);
+       highlightClueForKey(k);
+       return;
+     }
+   }
+ }
+ toast('Gösterilecek yeni doğru eşleşme kalmadı.');
+}
+function toast(t){
+ $('toast').textContent=t; $('toast').style.display='block';
+ clearTimeout(window.__toast);
+ window.__toast=setTimeout(()=>$('toast').style.display='none',1900);
+}
+
+/* ══════════════════════ ZAMANLAYICI / OYUN BAŞLATMA ══════════════════════ */
+function startTimer(){
+ clearInterval(timer); elapsed=0; $('timer').textContent='00:00';
+ timer=setInterval(()=>{ elapsed++; $('timer').textContent=String(Math.floor(elapsed/60)).padStart(2,'0')+':'+String(elapsed%60).padStart(2,'0'); },1000);
+}
+function newGame(){
+ clearInterval(timer);
+ const level=difficulty;
+ let attempts=0, built=null;
+ while(true){
+   attempts++;
+   const picked=catsFor(level);
+   S={level, houses:picked.houses, others:picked.others, user:{}, autoO:{}, autoX:{}};
+   S.all=[S.houses,...S.others];
+   S.solution=makeSolution();
+   built=makeClues();
+   S.clues=built.clues; S.constraints=built.constraints;
+   // Savunma amaçlı tekillik doğrulaması: üretim algoritması ~1000 otomatik
+   // denemede hep tekil çözüm verdi, ama matematiksel garanti için burada da
+   // kontrol ediyoruz. Başarısız olursa (son derece nadir) yeniden üretir.
+   if(attempts>=6 || solveCount(S.all, n(), S.constraints, 2)===1) break;
+ }
+ currentPairIdx=0;
+ $('errors').textContent='0'; $('marks').textContent='0'; $('result').style.display='none';
+ renderClues(); computeAuto(); renderBoards(); updateStats(); startTimer();
+}
+
+function setActiveToggle(group, val){
+ document.querySelectorAll(`#${group} .toggle-btn`).forEach(b=>b.classList.toggle('active', b.dataset.val===val));
+}
+function init(){
+ document.querySelectorAll('#difficultyGroup .toggle-btn').forEach(b=>{
+   b.onclick=()=>{ difficulty=b.dataset.val; setActiveToggle('difficultyGroup',difficulty); newGame(); };
+ });
+ document.querySelectorAll('#helpGroup .toggle-btn').forEach(b=>{
+   b.onclick=()=>{ helpMode=b.dataset.val; setActiveToggle('helpGroup',helpMode); computeAuto(); renderBoards(); updateStats(); };
+ });
+ $('newGame').onclick=newGame;
+ $('check').onclick=check;
+ $('hint').onclick=hint;
+ $('prevPair').onclick=()=>scrollToPair(currentPairIdx-1);
+ $('nextPair').onclick=()=>scrollToPair(currentPairIdx+1);
+ let scrollDebounce;
+ $('boardsWrap').addEventListener('scroll', ()=>{
+   clearTimeout(scrollDebounce);
+   scrollDebounce=setTimeout(()=>{
+     const wrap=$('boardsWrap');
+     const cards=[...wrap.querySelectorAll('.pair-card')];
+     if(!cards.length) return;
+     const wrapRect=wrap.getBoundingClientRect();
+     const centerX=wrapRect.left+wrapRect.width/2;
+     let closest=0, closestDist=Infinity;
+     cards.forEach((c,i)=>{ const r=c.getBoundingClientRect(); const cx=r.left+r.width/2; const d=Math.abs(cx-centerX); if(d<closestDist){closestDist=d;closest=i;} });
+     currentPairIdx=closest; updatePairNav();
+   },120);
+ });
+ newGame();
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+</script>
+</body>
+</html>

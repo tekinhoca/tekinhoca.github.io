@@ -560,8 +560,10 @@ const LW=1000,LH=640,R=27,K=matchMedia('(prefers-reduced-motion: reduce)').match
 const PP={1:[[0,0]],2:[[-1,-1],[1,1]],3:[[-1,-1],[0,0],[1,1]],4:[[-1,-1],[1,-1],[-1,1],[1,1]],5:[[-1,-1],[1,-1],[0,0],[-1,1],[1,1]],6:[[-1,-1],[1,-1],[-1,0],[1,0],[-1,1],[1,1]]};
 let S=E.newState(),cur=0,dice=[],dd=[],phase='menu',sel=null,dests=null,froms=null,last=[],hl=null,anim=null,rolling=0,run=0,busy=false,mode='cpu',target=1,match=null,canClose=false,gid=0,level=1,aid=0,lw=0,openingNames=false,statusText='',noteActive=false,partyDone=null,pendingSuggestion=null;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms*K));
-async function note(t){const g=gid,e=$('nt'),nm0=t==='OYNANACAK HAMLE YOK';if(nm0){noteActive=true;kick()}e.textContent=t;e.classList.add('on');await sleep(1700);if(g!==gid)return;e.classList.remove('on');if(nm0){noteActive=false;statusText=''}await sleep(250)}
-async function rematchNotice(st){const g=gid,e=$('nt'),name=mode==='cpu'?(st===0?'SİZ':'PC'):(st===0?'BEYAZ':'SİYAH');noteActive=true;statusText='';e.textContent='Tavla kapanmadığı için\nyeni partiye '+name+(st===0&&mode==='cpu'?' başlarsınız.':' başlar.');e.classList.add('rematch','on');kick();await sleep(1500);if(g!==gid)return;e.classList.remove('on','rematch');noteActive=false;statusText=''}
+async function note(t){const g=gid,e=$('nt'),nm0=t==='OYNANACAK HAMLE YOK';if(nm0){noteActive=true;kick()}e.classList.remove('rematch');e.textContent=t;e.classList.add('on');await sleep(1700);if(g!==gid)return;e.classList.remove('on');if(nm0){noteActive=false;statusText=''}await sleep(250)}
+async function rematchNotice(st){const g=gid,e=$('nt'),name=mode==='cpu'?(st===0?'SİZ':'PC'):(st===0?'BEYAZ':'SİYAH');noteActive=true;statusText='';e.textContent='Tavla kapanmadığı için\nyeni partiye '+name+(st===0&&mode==='cpu'?' başlarsınız.':' başlar.');e.classList.add('rematch','on');kick();await sleep(1500);if(g!==gid)return;e.classList.remove('on');noteActive=false;statusText='';
+ /* Kutu stili, solma bitmeden (0,25 sn) kaldırılmaz; aksi hâlde metin kısa süre arka plansız tek satır görünür. */
+ setTimeout(()=>{if(!e.classList.contains('on')){e.classList.remove('rematch');e.textContent=''}},400)}
 const isCpu=()=>mode==='cpu'&&cur===1;
 const nm=()=>mode==='cpu'?['Siz','Bilgisayar']:['Beyaz','Siyah'];
 function currentStatus(){if(mode==='cpu')return cur===1?'BİLGİSAYAR OYNUYOR':'SIRA SİZDE';return cur===0?'SIRA BEYAZDA':'SIRA SİYAHTA'}
@@ -699,10 +701,8 @@ function inspectForcedResult(nextTurn){
 $('suggestBtn').onclick=()=>{
  const sg=pendingSuggestion;if(!sg)return;
  const w=sg.winner,mars=sg.points===2,cpu=mode==='cpu',
-  win=cpu?(w===1?'Bilgisayar':'Siz'):(w===0?'Beyaz':'Siyah'),lose=cpu?(w===1?'siz':'bilgisayar'):(w===0?'Siyah':'Beyaz'),
-  v1=cpu&&w===0?'kazanacaksınız':'kazanacak',v2=cpu&&w===1?'kaybedeceksiniz':'kaybedecek',pt=mars?'2 puanla (mars)':'1 puanla',lp=mars?'2 puan':'1 puan';
- modal('<div class="h">'+(mars?'MARS ÖNERİSİ':'1 PUAN ÖNERİSİ')+'</div><p>'+win+' bu oyunu <b>'+pt+'</b> '+v1+'; '+lose+' <b>'+lp+'</b> '+v2+'.</p><p>Zarlar nasıl gelirse gelsin, kazanan taraf en iyi oynadığında sonuç değişmez.</p><p>Oyunu şimdi bu sonuçla bitirmeyi kabul ediyor musunuz?</p><div class="menu-actions"><button class="go wide" id="acceptSuggestion">KABUL ET</button><button class="go wide" id="rejectSuggestion">OYUNA DEVAM ET</button></div>',false,'sug-card','Sonuç önerisi');
-};
+  who=cpu?(w===1?'Bilgisayar':'Siz'):(w===0?'Beyaz':'Siyah'),verb=cpu&&w===0?'kazanacaksınız':'kazanacak',pt=mars?'2 puan (mars)':'1 puan';
+ modal('<div class="h">'+(mars?'MARS ÖNERİSİ':'1 PUAN ÖNERİSİ')+'</div><p>Bu hamleden sonra oyunu kimin kazanacağı kesinleşmiş oldu. '+who+' bu oyundan <b>'+pt+'</b> '+verb+'. Devam ederseniz sonucun değişmesi mümkün görünmüyor. Oyunu şimdi bitirebilir ya da sonuna kadar devam edebilirsiniz.</p><div class="menu-actions"><button class="go wide" id="acceptSuggestion">OYUNU BİTİR</button><button class="go wide" id="rejectSuggestion">OYUNA DEVAM ET</button></div>',false,'sug-card','Sonuç önerisi')};
 async function after(){const g=gid,w=E.winner(S);if(w>=0){end(w);return}
  const lg=E.legalMoves(S,cur,dice);froms=new Set(lg.map(m=>m.from));
  if(lg.length){phase='move';statusText=currentStatus();kick();return}
@@ -753,7 +753,7 @@ function rPage(i){const p=[...document.querySelectorAll('#card .pg')];rp=Math.ma
 function rules(){
  const pages=[
   '<div class="pg"><div class="pgt">Amaç ve taşların yönü</div><p>Her oyuncunun <b>15 taşı</b> vardır. Amaç, bütün taşlarını kendi evine (son 6 hane) getirip tahtadan ilk toplamaktır.</p><p>Beyazın evi altta, siyahın evi üsttedir. Taşlarınızı kendi evinize doğru ilerletirsiniz; toplama bölmesi evlerin yanındadır.</p></div>',
-  '<div class="pg"><div class="pgt">Açılış ve sıra</div><p>İlk oyunda iki taraf birer zar atar. Büyük atan, zarları yeniden atarak başlar; eşitlikte açılış atışı tekrarlanır. Zarlar otomatik atılır.</p><p>Aynı parti içindeki sonraki oyunlarda önceki oyunun galibi başlar. Parti bittikten sonra tavla kapatılmadan yeni parti açılırsa son partinin galibi başlar; tavla kapatılıp yeniden açılırsa açılış atışı yapılır.</p></div>',
+  '<div class="pg"><div class="pgt">Açılış ve sıra</div><p>İlk oyunda iki taraf birer zar atar. Büyük atan, zarları yeniden atarak başlar; eşitlikte açılış atışı tekrarlanır. Zarlar otomatik atılır.</p><p>Aynı parti içindeki sonraki oyunlarda önceki oyunun galibi başlar. Parti bittikten sonra tavla kapatılmadan yeni parti açılırsa (oyun türü değişse bile) son partiyi kazanan renk başlar; tavla kapatılıp yeniden açılırsa ya da bitmemiş parti bırakılıp yeni oyun başlatılırsa açılış atışı yapılır.</p></div>',
   '<div class="pg"><div class="pgt">Hamle ve kırma</div><p>Zar sayısı kadar ilerleyin. Taşa dokunun; gidebileceği haneler altın renkle parlar. Hedefe dokunarak hamleyi yapın. <b>Hamle geri alınamaz.</b></p><p>Rakibin iki veya daha fazla taşı bulunan haneye gidilemez. Tek rakip taşının üzerine gelirseniz taş kırılır ve orta çubuğa gider. Kırık taşınız varsa önce rakibin evinden oyuna sokmalısınız.</p></div>',
   '<div class="pg"><div class="pgt">Zar kuralları</div><p>İki zar da oynanabiliyorsa <b>ikisi de oynanmalıdır.</b> Çift zar attığınızda dört hamle yaparsınız.</p><p>Yalnız bir zar oynanabiliyorsa o zar kullanılır. İki zardan yalnız biri seçilebiliyorsa <b>büyük zar</b> oynanır. Oynanabilir hamle kalmadığında sıra otomatik geçer.</p></div>',
   '<div class="pg"><div class="pgt">Taş toplama ve puan</div><p>15 taşınızın tamamı kendi evinizdeyken taş toplamaya başlayabilirsiniz. Zarın gösterdiği hanede taş yoksa ve daha yüksek hanede de taş kalmamışsa en yüksek haneden taş alınabilir. Taş toplamak zorunlu değildir.</p><p>Normal galibiyet <b>1 puan</b>, mars (rakip hiç taş toplayamadan biterse) <b>2 puandır.</b> Parti, seçilen puana ilk ulaşan oyuncunun olur; mars ile hedef aşılabilir.</p></div>'
@@ -765,7 +765,7 @@ function rules(){
 function end(w,fp){lw=w;phase='over';busy=false;hideSug();const g0=gid,pts=fp||E.gamePoints(S,w),r=E.recordGame(match,w,pts),n=nm();partyDone=r.over?{mode:mode,winner:w}:null;vib();score();
  const t=mode==='cpu'?(w===0?'Siz kazandınız':'Bilgisayar kazandı'):n[w]+' kazandı';
  modal('<div class="result"><div class="h">'+t+(pts===2?' — MARS!':'')+'</div><div class="points">+'+pts+' puan</div>'+(target>1?'<div class="matchscore">'+n[0]+' '+match.score[0]+' — '+match.score[1]+' '+n[1]+'</div>':'')+'</div>'+(r.over?'<p><b>Parti sona erdi.</b></p><button class="go" id="mn">YENİ PARTİ</button>':'<p>Sonraki oyunda ilk zarı, bu oyunun kazananı atacak.</p><button class="go" id="nx">SONRAKİ OYUN</button>'),false,'','Oyun sonucu');const bb=$('nx')||$('mn');if(bb){bb.disabled=true;setTimeout(()=>{if(bb.isConnected&&gid===g0)bb.disabled=false},800)}}
-async function startGame(st,notice){killAI();cancelAnimation();const g=++gid;noteActive=false;statusText='';$('nt').classList.remove('on','rematch');hl=null;rolling=0;S=E.newState();hideSug();dice=[];last=[];sel=dests=froms=null;cur=0;busy=true;phase='open';openingNames=false;score();
+async function startGame(st,notice){killAI();cancelAnimation();const g=++gid;noteActive=false;statusText='';{const nt=$('nt');nt.style.transition='none';nt.classList.remove('on','rematch');nt.textContent='';void nt.offsetWidth;nt.style.transition=''}hl=null;rolling=0;S=E.newState();hideSug();dice=[];last=[];sel=dests=froms=null;cur=0;busy=true;phase='open';openingNames=false;score();
  if(st!==undefined){cur=st;dd=[];if(notice){await rematchNotice(st);if(g!==gid)return}turnStart();return}
  const o=E.openingRoll();msg('Açılış atışı…');openingNames=true;dd=[{x:710,y:320,v:o.dice[0],p:0,u:false},{x:230,y:320,v:o.dice[1],p:1,u:false}];rolling=1;kick();await sleep(1500);if(g!==gid)return;rolling=0;kick();
  cur=o.starter;statusText=currentStatus();kick();await sleep(1100);if(g!==gid)return;openingNames=false;dd=[];turnStart()}
@@ -775,7 +775,7 @@ $('ov').addEventListener('click',e=>{const b=e.target.closest('button');
  if(b.dataset.l){pl=+b.dataset.l;[...$('gv').children].forEach(x=>x.classList.toggle('on',x===b));return}
  if(b.dataset.t){pt=+b.dataset.t;[...$('gt').children].forEach(x=>x.classList.toggle('on',x===b));return}
  if(b.id==='rP'){rPage(rp-1);return}if(b.id==='rN'){rPage(rp+1);return}
- if(b.id==='go'){const starter=partyDone&&partyDone.mode===pm?partyDone.winner:undefined;partyDone=null;mode=pm;level=pl;target=pt;match=E.newMatch(target);closeM();startGame(starter,starter!==undefined)}
+ if(b.id==='go'){const starter=partyDone?partyDone.winner:undefined;partyDone=null;mode=pm;level=pl;target=pt;match=E.newMatch(target);closeM();startGame(starter,starter!==undefined)}
  else if(b.id==='mn'){menu()}
  else if(b.id==='nx'){closeM();startGame(lw,false)}
  else if(b.id==='newYes'){menu()}else if(b.id==='newNo'){closeM()}
