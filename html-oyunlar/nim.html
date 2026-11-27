@@ -1292,5 +1292,22 @@ document.addEventListener('keydown',function(e){
   fit();
 })();
 </script>
+
+<script>
+/* Aşama 2: modal uyumu: #xorModal içeriği kartı aşıyorsa .xpgs yakınlaştırması kademeli azaltılır (en az 0.7). */
+(function(){
+  var o=document.querySelector('#xorModal'),c=o&&o.querySelector('.mcard'),t=c&&c.querySelector('.xpgs');if(!t)return;
+  function shown(){return getComputedStyle(o).display!=='none'}
+  function fit(){
+    if(!shown())return;
+    var z=1,n=0;t.style.zoom=1;
+    while(c.scrollHeight>c.clientHeight+1&&z>0.7&&n++<30){z=+(z-.04).toFixed(2);t.style.zoom=z}
+  }
+  new MutationObserver(fit).observe(o,{attributes:true,attributeFilter:['hidden','class']});
+  addEventListener('resize',fit);
+  addEventListener('orientationchange',function(){setTimeout(fit,250)});
+  if(window.visualViewport)visualViewport.addEventListener('resize',fit);
+})();
+</script>
 </body>
 </html>
