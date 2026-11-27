@@ -436,6 +436,28 @@ button{font-family:inherit;touch-action:manipulation}
   .stage.shake{animation:none}
   .mcard,.rules-box,.small-box{animation-duration:.01s}
 }
+
+/* ── Kurallar modalı: genel sığdırma (27/11/2026) ──
+   Boyutlar --rs (yazı/boşluk) ve --is (görsel) çarpanlarına bağlıdır; JS, içerik sığana kadar bunları kademeli küçültür. */
+.rules-box{--rs:1;--is:1;max-height:94dvh;padding:0 calc(18px*var(--rs)) calc(14px*var(--rs))}
+.rules-img{width:calc(var(--mw,130px)*var(--is));height:auto;aspect-ratio:399/434;max-height:calc(32dvh*var(--is))}
+.pgs{margin:calc(2px*var(--rs)) 0 calc(8px*var(--rs));padding-top:calc(8px*var(--rs))}
+.pgt{font-size:calc(15px*var(--rs));margin:0 0 calc(6px*var(--rs))}
+.rl{font-size:calc(14px*var(--rs));line-height:1.45}
+.rl li{margin-bottom:calc(6px*var(--rs))}
+.rnav{margin-bottom:calc(10px*var(--rs))}
+.rarr{width:calc(38px*var(--rs));height:calc(38px*var(--rs))}
+@media(min-width:768px){.rl{font-size:calc(15.5px*var(--rs))}.pgt{font-size:calc(16px*var(--rs))}}
+@media(orientation:landscape) and (max-height:600px){
+ .rules-box{display:grid;grid-template-columns:minmax(90px,24%) minmax(0,1fr);column-gap:calc(16px*var(--rs));align-items:center;width:min(94vw,780px);max-height:94dvh;padding:calc(10px*var(--rs)) 16px}
+ .rules-img{grid-column:1;grid-row:1/4;width:calc(min(100%,150px)*var(--is));height:auto;max-height:none}
+ .pgs{grid-column:2;grid-row:1;margin:0;border-top:none;padding-top:0}
+ .rnav{grid-column:2;grid-row:2;margin:calc(4px*var(--rs)) 0}
+ .rules-box>.btn,.rules-box>.row{grid-column:2;grid-row:3;justify-self:center}
+ .rl{font-size:calc(12.5px*var(--rs));line-height:1.4}
+ .rl li{margin-bottom:calc(4px*var(--rs))}
+ .pgt{font-size:calc(14px*var(--rs));margin-bottom:calc(4px*var(--rs))}
+}
 </style>
 </head>
 <body>
@@ -1242,6 +1264,32 @@ document.addEventListener('keydown',function(e){
   }catch(e){}
   updSound();updFs();initGame();openRules(true);
 })();
+})();
+</script>
+
+<script>
+/* Kurallar modalı otomatik sığdırma: içerik kutuya sığmıyorsa önce görsel, sonra yazı kademeli küçülür (yedek: kutu kayar). */
+(function(){
+  var r=document.getElementById('rules'),b=r&&r.querySelector('.rules-box');if(!b)return;
+  function fit(){
+    if(r.hidden)return;
+    var is=1,rs=1,n=0;
+    function set(){b.style.setProperty('--is',is);b.style.setProperty('--rs',rs)}
+    set();
+    while(b.scrollHeight>b.clientHeight+1&&n++<40){
+      if(is>.5)is=+(is-.1).toFixed(2);
+      else if(rs>.8)rs=+(rs-.04).toFixed(2);
+      else if(is>.3)is=+(is-.1).toFixed(2);
+      else break;
+      set();
+    }
+  }
+  new MutationObserver(fit).observe(r,{attributes:true,attributeFilter:['hidden']});
+  addEventListener('resize',fit);
+  addEventListener('orientationchange',function(){setTimeout(fit,250)});
+  if(window.visualViewport)visualViewport.addEventListener('resize',fit);
+  if(document.fonts){document.fonts.ready.then(fit);document.fonts.addEventListener&&document.fonts.addEventListener('loadingdone',fit)}
+  fit();
 })();
 </script>
 </body>

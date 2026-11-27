@@ -81,6 +81,28 @@ button.a.on{border-color:#ffd966;color:#fff3c4;background:linear-gradient(135deg
 @media(min-aspect-ratio:5/4) and (max-height:520px){.foot{display:none!important}}
 @media(max-width:380px){.stat .ico{display:none}}
 @media(prefers-reduced-motion:reduce){body::before,body::after{animation:none}}
+
+/* ── Kurallar modalı: genel sığdırma (27/11/2026) ──
+   --rs (yazı/boşluk) ve --is (görsel) çarpanları; betik, içerik sığana kadar bunları kademeli küçültür. */
+#modalOverlay .mbox{--rs:1;--is:1;max-height:94dvh;padding:0 calc(18px*var(--rs)) calc(14px*var(--rs))}
+#modalOverlay .mbox .mimg{display:block;width:calc(var(--mw,130px)*var(--is));height:auto;max-height:calc(32dvh*var(--is))}
+#modalOverlay .mbox .pgs{margin:calc(2px*var(--rs)) 0 calc(8px*var(--rs))}
+#modalOverlay .mbox .pgt{font-size:calc(15px*var(--rs));margin:0 0 calc(5px*var(--rs))}
+#modalOverlay .mbox .mtext{font-size:calc(14px*var(--rs));line-height:1.5;margin:calc(4px*var(--rs)) 0 calc(6px*var(--rs))}
+#modalOverlay .mbox .mtext p{margin-bottom:calc(6px*var(--rs))}
+#modalOverlay .mbox .rnav{margin-bottom:calc(10px*var(--rs))}
+#modalOverlay .mbox .rarr{width:calc(38px*var(--rs));height:calc(38px*var(--rs));flex:none;min-width:0}
+@media(min-width:768px){#modalOverlay .mbox .mtext{font-size:calc(15.5px*var(--rs))}#modalOverlay .mbox .pgt{font-size:calc(16px*var(--rs))}}
+@media(orientation:landscape) and (max-height:600px){
+ #modalOverlay .mbox{display:grid;grid-template-columns:minmax(90px,24%) minmax(0,1fr);column-gap:calc(16px*var(--rs));align-items:center;width:min(94vw,780px);max-width:none;max-height:94dvh;padding:calc(10px*var(--rs)) 16px}
+ #modalOverlay .mbox .mimg{grid-column:1;grid-row:1/4;display:block;width:calc(min(100%,150px)*var(--is));max-height:none}
+ #modalOverlay .mbox .pgs{grid-column:2;grid-row:1;margin:0;border-top:none;padding-top:0}
+ #modalOverlay .mbox .rnav{grid-column:2;grid-row:2;margin:calc(4px*var(--rs)) 0}
+ #modalOverlay .mbox>button,#modalOverlay .mbox>.btn,#modalOverlay .mbox>.row{grid-column:2;grid-row:3;justify-self:center}
+ #modalOverlay .mbox .pgt{font-size:calc(14px*var(--rs));margin-bottom:calc(4px*var(--rs))}
+ #modalOverlay .mbox .mtext{font-size:calc(12.5px*var(--rs));line-height:1.4;margin:0}
+ #modalOverlay .mbox .mtext p{margin-bottom:calc(4px*var(--rs))}
+}
 </style>
 </head>
 <body>
@@ -313,6 +335,33 @@ for(const id of['modalOverlay','cf'])$(id).addEventListener('pointerdown',e=>{if
 addEventListener('keydown',e=>{if(e.key==='Escape'){$('modalOverlay').classList.add('hidden');$('cf').classList.add('hidden');}
  else if(!$('modalOverlay').classList.contains('hidden')){if(e.key==='ArrowRight')rPage(rp+1);else if(e.key==='ArrowLeft')rPage(rp-1);}});
 MT.newGame();rPage(0);
+</script>
+
+<script>
+/* Kurallar modalı otomatik sığdırma: içerik kutuya sığmıyorsa önce görsel, sonra yazı kademeli küçülür (yedek: kutu kayar). */
+(function(){
+  var r=document.querySelector('#modalOverlay'),b=r&&r.querySelector('.mbox');if(!b)return;
+  function shown(){return getComputedStyle(r).display!=='none'}
+  function fit(){
+    if(!shown())return;
+    var is=1,rs=1,n=0;
+    function set(){b.style.setProperty('--is',is);b.style.setProperty('--rs',rs)}
+    set();
+    while(b.scrollHeight>b.clientHeight+1&&n++<40){
+      if(is>.5)is=+(is-.1).toFixed(2);
+      else if(rs>.8)rs=+(rs-.04).toFixed(2);
+      else if(is>.3)is=+(is-.1).toFixed(2);
+      else break;
+      set();
+    }
+  }
+  new MutationObserver(fit).observe(r,{attributes:true,attributeFilter:['hidden','class']});
+  addEventListener('resize',fit);
+  addEventListener('orientationchange',function(){setTimeout(fit,250)});
+  if(window.visualViewport)visualViewport.addEventListener('resize',fit);
+  if(document.fonts){document.fonts.ready.then(fit);document.fonts.addEventListener&&document.fonts.addEventListener('loadingdone',fit)}
+  fit();
+})();
 </script>
 </body>
 </html>

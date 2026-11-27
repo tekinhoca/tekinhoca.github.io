@@ -263,6 +263,34 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
 .cards-area.locked,.ops-area.locked{pointer-events:none}
 .ops-area.locked{opacity:.4}
 @media(max-width:700px){#scNames.active{justify-content:flex-start;padding-top:min(8dvh,48px)}}
+
+.pgs{display:grid;margin:2px 0 8px;text-align:left}.pg{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .2s}.pg.on{visibility:visible;opacity:1}
+.pgt{text-align:center;color:#ffd966;font-weight:700;font-size:15px;margin:0 0 4px}
+.rnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:12px}
+.rarr{width:38px;height:38px;border-radius:50%;padding:0;font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;flex:none;min-width:0}.rarr:disabled{opacity:.4;pointer-events:none}
+.rdots{display:flex;gap:8px}.rdots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .2s;cursor:pointer}.rdots span.on{background:#ffd966}
+
+/* ── Kurallar modalı: genel sığdırma (27/11/2026) ──
+   --rs (yazı/boşluk) ve --is (görsel) çarpanları; betik, içerik sığana kadar bunları kademeli küçültür. */
+#rulesM .mbox{--rs:1;--is:1;max-height:94dvh;padding:0 calc(18px*var(--rs)) calc(14px*var(--rs))}
+#rulesM .mbox .mimg{display:block;width:calc(var(--mw,130px)*var(--is));height:auto;max-height:calc(32dvh*var(--is))}
+#rulesM .mbox .pgs{margin:calc(2px*var(--rs)) 0 calc(8px*var(--rs))}
+#rulesM .mbox .pgt{font-size:calc(15px*var(--rs));margin:0 0 calc(5px*var(--rs))}
+#rulesM .mbox .mtext{font-size:calc(14px*var(--rs));line-height:1.5;margin:calc(4px*var(--rs)) 0 calc(6px*var(--rs))}
+#rulesM .mbox .mtext p{margin-bottom:calc(6px*var(--rs))}
+#rulesM .mbox .rnav{margin-bottom:calc(10px*var(--rs))}
+#rulesM .mbox .rarr{width:calc(38px*var(--rs));height:calc(38px*var(--rs));flex:none;min-width:0}
+@media(min-width:768px){#rulesM .mbox .mtext{font-size:calc(15.5px*var(--rs))}#rulesM .mbox .pgt{font-size:calc(16px*var(--rs))}}
+@media(orientation:landscape) and (max-height:600px){
+ #rulesM .mbox{display:grid;grid-template-columns:minmax(90px,24%) minmax(0,1fr);column-gap:calc(16px*var(--rs));align-items:center;width:min(94vw,780px);max-width:none;max-height:94dvh;padding:calc(10px*var(--rs)) 16px}
+ #rulesM .mbox .mimg{grid-column:1;grid-row:1/4;display:block;width:calc(min(100%,150px)*var(--is));max-height:none}
+ #rulesM .mbox .pgs{grid-column:2;grid-row:1;margin:0;border-top:none;padding-top:0}
+ #rulesM .mbox .rnav{grid-column:2;grid-row:2;margin:calc(4px*var(--rs)) 0}
+ #rulesM .mbox>button,#rulesM .mbox>.btn,#rulesM .mbox>.row{grid-column:2;grid-row:3;justify-self:center}
+ #rulesM .mbox .pgt{font-size:calc(14px*var(--rs));margin-bottom:calc(4px*var(--rs))}
+ #rulesM .mbox .mtext{font-size:calc(12.5px*var(--rs));line-height:1.4;margin:0}
+ #rulesM .mbox .mtext p{margin-bottom:calc(4px*var(--rs))}
+}
 </style>
 </head>
 <body>
@@ -381,7 +409,8 @@ button.primary.big{font-size:min(20px,2.8dvh);padding:min(16px,2dvh) 24px}
 
 <div class="modal" id="rulesM" role="dialog" aria-modal="true" aria-label="Kurallar" hidden><div class="mbox">
  <img class="mimg" src="../img/mecesml.webp" alt="Tekin Hoca">
- <div class="mtext"><p>Altı sayı ve 3 basamaklı bir hedef verilir. Seçeceğiniz iki sayıyla bir işlem yaptığınızda sonuç yeni bir sayı olarak eklenir, kullandığınız iki sayı kalkar.</p><p>Her bir işlemin sonucu <b>pozitif bir tam sayı</b> olmalıdır.</p><p>Süre <b>90 saniyedir</b>. Hedefe ulaşınca ya da tüm sayılar bitince tur biter ve süre durur. İsterseniz "Süreyi Bitir" ile erken bitirebilirsiniz. Ara sonuçlar dahil, hedefe en yakın sayınız puanla değerlendirilir.</p><p><b>Puan:</b> Tam isabet 20. Fark 1-19 ise 20 − fark.<br>Fark 20 ve üzeriyse 0 puan.</p><p>İki kişilik modda aynı bulmacayı sırayla çözersiniz. Sorular ilerledikçe hedefe ulaşmak için gereken en kısa işlem sayısı artar.</p></div>
+ <div class="pgs" id="rpages"><div class="pg on"><div class="pgt">Nasıl oynanır?</div><div class="mtext"><p>Altı sayı ve 3 basamaklı bir hedef verilir. Seçeceğiniz iki sayıyla bir işlem yaptığınızda sonuç yeni bir sayı olarak eklenir, kullandığınız iki sayı kalkar.</p><p>Her bir işlemin sonucu <b>pozitif bir tam sayı</b> olmalıdır.</p></div></div><div class="pg"><div class="pgt">Süre ve puan</div><div class="mtext"><p>Süre <b>90 saniyedir</b>. Hedefe ulaşınca ya da tüm sayılar bitince tur biter ve süre durur. İsterseniz "Süreyi Bitir" ile erken bitirebilirsiniz. Ara sonuçlar dahil, hedefe en yakın sayınız puanla değerlendirilir.</p><p><b>Puan:</b> Tam isabet 20. Fark 1-19 ise 20 − fark.<br>Fark 20 ve üzeriyse 0 puan.</p></div></div><div class="pg"><div class="pgt">İki kişilik mod</div><div class="mtext"><p>İki kişilik modda aynı bulmacayı sırayla çözersiniz. Sorular ilerledikçe hedefe ulaşmak için gereken en kısa işlem sayısı artar.</p></div></div></div>
+ <div class="rnav"><button type="button" class="a rarr rprev" aria-label="Önceki sayfa">&#8249;</button><div class="rdots" aria-hidden="true"><span class="on"></span><span></span><span></span></div><button type="button" class="a rarr rnext" aria-label="Sonraki sayfa">&#8250;</button></div>
  <button class="primary" id="rBtn2">Kapat</button></div></div>
 <script>
 const G = (function(){
@@ -903,6 +932,50 @@ const G = (function(){
  window.openRules=()=>{m.hidden=false;document.getElementById('rBtn2').focus();};
  document.getElementById('rBtn2').onclick=close;m.addEventListener('pointerdown',e=>{if(e.target===m)close();});
  addEventListener('keydown',e=>{if(e.key==='Escape')close();});})();
+</script>
+
+<script>
+/* Kurallar modalı otomatik sığdırma: içerik kutuya sığmıyorsa önce görsel, sonra yazı kademeli küçülür (yedek: kutu kayar). */
+(function(){
+  var r=document.querySelector('#rulesM'),b=r&&r.querySelector('.mbox');if(!b)return;
+  function shown(){return getComputedStyle(r).display!=='none'}
+  function fit(){
+    if(!shown())return;
+    var is=1,rs=1,n=0;
+    function set(){b.style.setProperty('--is',is);b.style.setProperty('--rs',rs)}
+    set();
+    while(b.scrollHeight>b.clientHeight+1&&n++<40){
+      if(is>.5)is=+(is-.1).toFixed(2);
+      else if(rs>.8)rs=+(rs-.04).toFixed(2);
+      else if(is>.3)is=+(is-.1).toFixed(2);
+      else break;
+      set();
+    }
+  }
+  new MutationObserver(fit).observe(r,{attributes:true,attributeFilter:['hidden','class']});
+  addEventListener('resize',fit);
+  addEventListener('orientationchange',function(){setTimeout(fit,250)});
+  if(window.visualViewport)visualViewport.addEventListener('resize',fit);
+  if(document.fonts){document.fonts.ready.then(fit);document.fonts.addEventListener&&document.fonts.addEventListener('loadingdone',fit)}
+  fit();
+})();
+</script>
+
+<script>
+/* Kurallar modalı sayfa gezintisi: düğmeler, noktalar, ← → tuşları ve yatay kaydırma. Her açılışta ilk sayfaya döner. */
+(function(){
+  var r=document.querySelector('#rulesM'),b=r&&r.querySelector('.mbox');if(!b)return;
+  var pg=[].slice.call(b.querySelectorAll('.pg')),dots=[].slice.call(b.querySelectorAll('.rdots span')),pv=b.querySelector('.rprev'),nx=b.querySelector('.rnext'),cur=0;
+  function show(i){cur=Math.max(0,Math.min(pg.length-1,i));pg.forEach(function(e,k){e.classList.toggle('on',k===cur)});dots.forEach(function(e,k){e.classList.toggle('on',k===cur)});pv.disabled=cur===0;nx.disabled=cur===pg.length-1}
+  pv.addEventListener('click',function(){show(cur-1)});nx.addEventListener('click',function(){show(cur+1)});
+  dots.forEach(function(d,k){d.addEventListener('click',function(){show(k)})});
+  new MutationObserver(function(){if(!r.hidden)show(0)}).observe(r,{attributes:true,attributeFilter:['hidden']});
+  document.addEventListener('keydown',function(e){if(r.hidden)return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();e.stopPropagation();show(cur+(e.key==='ArrowRight'?1:-1))}},true);
+  var sx=null,sy=null;
+  b.addEventListener('pointerdown',function(e){sx=e.clientX;sy=e.clientY});
+  b.addEventListener('pointerup',function(e){if(sx===null)return;var dx=e.clientX-sx,dy=e.clientY-sy;sx=null;if(Math.abs(dx)>45&&Math.abs(dy)<40)show(cur+(dx<0?1:-1))});
+  show(0);
+})();
 </script>
 </body>
 </html>
