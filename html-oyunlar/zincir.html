@@ -2,270 +2,1016 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <title>Zincir</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@600;700;800&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;background:#0a160a;font-family:'Nunito',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:hidden}
-.wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:8px;padding:8px;height:100%;overflow:hidden}
+:root{
+  --u:clamp(12.5px,min(1.9dvh,3.7vw),17px);
+  --bg:#0a160a;
+  --board-bg:#10151f;
+  --cell-bg:#1b2230;
+  --gold:#f0c040;
+  --gold-dim:#c8960c;
+  --gold-soft:#e8d5a0;
+  --green:#4ade80;
+  --red:#ff5c5c;
+  --text-sub:rgba(247,242,232,0.72);
+  --cell-px:44px;
+}
+@media(min-aspect-ratio:13/10) and (min-width:640px){
+  :root{--u:clamp(13px,2.3vmin,18.5px)}
+}
+html,body{
+  height:100vh;
+  height:100dvh;
+  background:var(--bg);
+  color:var(--gold-soft);
+  font-family:Georgia,'Times New Roman',serif;
+  overflow:hidden;
+  user-select:none;
+  -webkit-user-select:none;
+}
+.nm{
+  font-family:'Segoe UI','Helvetica Neue',Arial,Roboto,sans-serif;
+  font-variant-numeric:lining-nums;
+  font-weight:700;
+}
 
-/* ── MODAL ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;padding:16px}
-.modal-overlay.hidden{display:none}
-.modal-box{background:#0c1b0b;border:1px solid rgba(200,150,12,0.5);border-radius:10px;padding:20px 20px 18px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:10px;animation:modalIn .3s ease}
-@keyframes modalIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-.character-box{width:96px;height:96px;margin:0 auto 2px;flex-shrink:0}
-.character-img{width:100%;height:100%;object-fit:contain}
-.modal-title{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;color:#f0c040;text-align:center;letter-spacing:.03em;text-shadow:0 0 14px rgba(240,192,64,.35)}
-.modal-sub{font-size:12px;font-weight:600;color:rgba(247,242,232,0.55);text-align:center}
-.modal-rules{font-size:13px;font-weight:600;color:rgba(247,242,232,0.82);line-height:1.85}
-.modal-rules b{color:#f0c040}
-.modal-btns{display:flex;gap:8px;justify-content:center}
-button.modal-start{background:rgba(200,150,12,0.2);border:1px solid rgba(200,150,12,0.6);border-radius:6px;padding:9px 26px;font-size:13px;font-weight:700;cursor:pointer;color:#f0d9a0;font-family:'Nunito',sans-serif;transition:background .2s}
-button.modal-start:hover{background:rgba(200,150,12,0.35)}
-button.modal-close{background:transparent;border:1px solid rgba(255,255,255,0.14);border-radius:6px;padding:9px 14px;font-size:12px;font-weight:700;cursor:pointer;color:rgba(247,242,232,0.5);font-family:'Nunito',sans-serif}
-button.modal-close:hover{background:rgba(255,255,255,0.06)}
-.modal-logo{text-align:center;margin-top:2px}
-.modal-logo img{height:28px;opacity:0.38;filter:brightness(1.3);transition:opacity .3s}
-.modal-logo img:hover{opacity:.7}
+/* ── ARKA PLAN EFEKTLERİ ── */
+.bg-fx{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.aurora{
+  position:absolute;inset:-25%;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(200,150,12,0.12), transparent 44%),
+    radial-gradient(circle at 80% 75%, rgba(74,222,128,0.09), transparent 46%),
+    radial-gradient(circle at 52% 14%, rgba(92,124,255,0.10), transparent 42%);
+  animation:auroraDrift 18s ease-in-out infinite alternate;
+}
+@keyframes auroraDrift{
+  0%{transform:translate3d(-2%,-1%,0) scale(1)}
+  100%{transform:translate3d(2%,2%,0) scale(1.06)}
+}
+.stars,.stars2{
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 14% 22%, rgba(255,233,168,0.45), transparent),
+    radial-gradient(1.2px 1.2px at 38% 68%, rgba(74,222,128,0.35), transparent),
+    radial-gradient(1.6px 1.6px at 72% 18%, rgba(255,217,102,0.42), transparent),
+    radial-gradient(1.3px 1.3px at 86% 62%, rgba(255,233,168,0.38), transparent),
+    radial-gradient(1.4px 1.4px at 54% 84%, rgba(92,124,255,0.35), transparent);
+  animation:starTwinkle 5.5s ease-in-out infinite alternate;
+}
+.stars2{
+  background-image:
+    radial-gradient(1.3px 1.3px at 26% 44%, rgba(255,217,102,0.36), transparent),
+    radial-gradient(1.5px 1.5px at 64% 36%, rgba(74,222,128,0.32), transparent),
+    radial-gradient(1.2px 1.2px at 90% 28%, rgba(255,233,168,0.40), transparent),
+    radial-gradient(1.4px 1.4px at 18% 78%, rgba(255,217,102,0.32), transparent);
+  animation-duration:7.5s;
+  animation-delay:-2.5s;
+}
+@keyframes starTwinkle{
+  0%{opacity:0.28}
+  100%{opacity:0.85}
+}
+
+/* ── ANA DÜZEN ── */
+.app{
+  position:relative;z-index:1;
+  width:100%;height:100%;
+  padding:
+    max(8px,env(safe-area-inset-top))
+    max(10px,env(safe-area-inset-right))
+    max(8px,env(safe-area-inset-bottom))
+    max(10px,env(safe-area-inset-left));
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:auto auto minmax(140px,1fr) auto auto auto;
+  grid-template-areas:
+    "head"
+    "info"
+    "board"
+    "msg"
+    "ctrl"
+    "logo";
+  gap:clamp(6px,1.2dvh,10px);
+  max-width:540px;
+  margin:0 auto;
+}
+.side{display:contents}
+
+@media(min-aspect-ratio:13/10) and (min-width:640px){
+  .app{
+    max-width:1180px;
+    grid-template-columns:minmax(270px,36%) minmax(0,1fr);
+    grid-template-rows:minmax(0,1fr);
+    grid-template-areas:"side board";
+    gap:clamp(14px,2.6vw,28px);
+    padding:
+      max(12px,env(safe-area-inset-top))
+      max(16px,env(safe-area-inset-right))
+      max(12px,env(safe-area-inset-bottom))
+      max(16px,env(safe-area-inset-left));
+  }
+  .side{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:clamp(8px,2.1vmin,18px);
+    grid-area:side;
+    min-width:0;
+  }
+}
+
+/* ── ÜST BAŞLIK VE ARAÇ ÇUBUĞU ── */
+.topbar{
+  grid-area:head;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+.game-title{
+  font-size:calc(var(--u)*1.55);
+  font-weight:700;
+  letter-spacing:.08em;
+  background:linear-gradient(110deg,#c8960c 15%,#ffe9a8 45%,#f0c040 65%,#c8960c 90%);
+  background-size:220% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:titleShimmer 5s linear infinite;
+  text-shadow:0 0 18px rgba(240,192,64,0.18);
+}
+@keyframes titleShimmer{
+  0%{background-position:0% center}
+  100%{background-position:220% center}
+}
+.top-actions{display:flex;gap:6px;align-items:center}
+.icon-btn{
+  background:linear-gradient(180deg,rgba(255,233,168,0.12),rgba(200,150,12,0.08));
+  border:1px solid rgba(200,150,12,0.45);
+  border-radius:8px;
+  color:var(--gold-soft);
+  width:clamp(34px,4.8vmin,40px);
+  height:clamp(34px,4.8vmin,40px);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:calc(var(--u)*1.05);
+  cursor:pointer;
+  touch-action:manipulation;
+  transition:transform .12s,background .2s,border-color .2s;
+}
+.icon-btn:active{transform:scale(.94)}
+@media(hover:hover){
+  .icon-btn:hover{background:rgba(200,150,12,0.26);border-color:rgba(240,192,64,0.75)}
+}
+.icon-btn.hidden{display:none}
 
 /* ── BİLGİ ÇUBUĞU ── */
-.infobar{display:flex;gap:6px;flex-shrink:0}
-.ibox{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:7px 10px;flex:1;text-align:center;transition:background .2s,border-color .2s}
-.ibox .l{font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;color:rgba(247,242,232,0.5);text-transform:uppercase;letter-spacing:.14em;margin-bottom:2px}
-.ibox .v{font-family:'Space Mono',monospace;font-size:27px;font-weight:700;color:#f0c040;line-height:1}
-.ibox.time-low{background:rgba(200,60,40,0.15);border-color:rgba(200,60,40,0.5)}
-.ibox.time-low .v{color:#ff5c5c;animation:pulseWarn .55s ease-in-out infinite;transform-origin:center}
-.ibox.reward-flash .v{animation:rewardFlash .34s ease-out}
-.ibox.score-bump .v{animation:scoreBump .22s ease-out}
-@keyframes rewardFlash{0%{transform:scale(1);text-shadow:none}35%{transform:scale(1.22);text-shadow:0 0 14px rgba(74,222,128,.9)}100%{transform:scale(1);text-shadow:none}}
-@keyframes scoreBump{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+.infobar{
+  grid-area:info;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+}
+.ibox{
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(200,150,12,0.28);
+  border-radius:9px;
+  padding:clamp(5px,1vmin,8px) 6px;
+  text-align:center;
+  box-shadow:inset 0 1px 0 rgba(255,233,168,0.08);
+  transition:background .2s,border-color .2s,box-shadow .2s;
+}
+.ibox .l{
+  font-size:calc(var(--u)*0.68);
+  font-weight:700;
+  color:var(--text-sub);
+  text-transform:uppercase;
+  letter-spacing:.11em;
+  margin-bottom:2px;
+}
+.ibox .v{
+  font-size:calc(var(--u)*1.42);
+  color:var(--gold);
+  line-height:1.05;
+}
+.ibox.time-low{
+  background:rgba(220,53,53,0.18);
+  border-color:rgba(255,92,92,0.65);
+  box-shadow:0 0 16px rgba(255,92,92,0.25);
+}
+.ibox.time-low .v{
+  color:var(--red);
+  animation:pulseWarn .55s ease-in-out infinite;
+}
+.ibox.reward-flash{border-color:rgba(74,222,128,0.7);box-shadow:0 0 16px rgba(74,222,128,0.28)}
+.ibox.reward-flash .v{animation:rewardFlash .36s ease-out}
+.ibox.score-bump .v{animation:scoreBump .24s ease-out}
+@keyframes rewardFlash{
+  0%{transform:scale(1);color:var(--gold)}
+  35%{transform:scale(1.22);color:var(--green);text-shadow:0 0 14px rgba(74,222,128,.9)}
+  100%{transform:scale(1);color:var(--gold)}
+}
+@keyframes scoreBump{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.14);text-shadow:0 0 12px rgba(240,192,64,.75)}
+  100%{transform:scale(1)}
+}
 @keyframes pulseWarn{
   0%,100%{transform:scale(1);text-shadow:0 0 0 rgba(255,92,92,0)}
-  50%{transform:scale(1.10);text-shadow:0 0 10px rgba(255,92,92,.65)}
+  50%{transform:scale(1.1);text-shadow:0 0 12px rgba(255,92,92,.75)}
 }
 
-/* ── TAHTA ── */
-.board-wrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;position:relative}
-.board{display:grid;gap:3px;background:#10151f;border-radius:8px;padding:6px;border:2px solid rgba(200,150,12,0.25);position:relative;transition:filter .3s}
-.board.blurred{filter:blur(6px)}
-.board.chain-flash{animation:chainBoardFlash .30s ease-out}
-@keyframes chainBoardFlash{0%{filter:brightness(1)}35%{filter:brightness(1.38)}100%{filter:brightness(1)}}
-.cell{background:#1b2230;border-radius:5px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:visible;transition:background .12s;user-select:none;-webkit-user-select:none;touch-action:manipulation}
-.cell:hover{background:#232c3f}
-.cell.selected{background:rgba(200,150,12,0.28);outline:2px solid #c8960c;outline-offset:-2px}
-.cell.hint-cell{animation:hintPulse .6s ease-in-out 2}
-@keyframes hintPulse{
-  0%,100%{background:#1b2230;filter:none}
-  25%{background:rgba(240,192,64,0.22);filter:brightness(1.12)}
-  50%{background:rgba(240,192,64,0.34);filter:brightness(1.22)}
-  75%{background:rgba(240,192,64,0.22);filter:brightness(1.12)}
+/* ── OYUN TAHTASI ── */
+.board-wrap{
+  grid-area:board;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+  min-height:0;
+  position:relative;
 }
-.cell.hint-cell .tile{animation:hintTile .6s ease-in-out 2}
+.board{
+  display:grid;
+  gap:3px;
+  background:radial-gradient(circle at 50% 35%,#172030 0%,var(--board-bg) 100%);
+  border-radius:11px;
+  padding:6px;
+  border:2px solid rgba(200,150,12,0.38);
+  box-shadow:0 10px 28px rgba(0,0,0,0.48),0 0 22px rgba(200,150,12,0.12);
+  position:relative;
+  transition:filter .25s,box-shadow .25s;
+  touch-action:none;
+}
+.board.blurred{filter:blur(6px)}
+.board.chain-flash{animation:chainBoardFlash .34s ease-out}
+@keyframes chainBoardFlash{
+  0%{filter:brightness(1);box-shadow:0 10px 28px rgba(0,0,0,0.48),0 0 22px rgba(200,150,12,0.12)}
+  40%{filter:brightness(1.36);box-shadow:0 0 34px rgba(240,192,64,0.62)}
+  100%{filter:brightness(1);box-shadow:0 10px 28px rgba(0,0,0,0.48),0 0 22px rgba(200,150,12,0.12)}
+}
+.cell{
+  background:var(--cell-bg);
+  border-radius:6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  position:relative;
+  overflow:visible;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.06);
+  transition:background .12s,transform .12s;
+  touch-action:none;
+}
+@media(hover:hover){
+  .cell:not(.disabled):hover{background:#252f44}
+}
+.cell.selected{
+  background:rgba(240,192,64,0.28);
+  outline:2px solid var(--gold);
+  outline-offset:-2px;
+  box-shadow:0 0 14px rgba(240,192,64,0.42);
+}
+.cell.hint-cell{animation:hintPulse .65s ease-in-out 2}
+@keyframes hintPulse{
+  0%,100%{background:var(--cell-bg);box-shadow:inset 0 1px 0 rgba(255,255,255,0.06)}
+  50%{background:rgba(240,192,64,0.36);box-shadow:0 0 16px rgba(240,192,64,0.65)}
+}
+.cell.hint-cell .tile{animation:hintTile .65s ease-in-out 2}
 @keyframes hintTile{
   0%,100%{transform:scale(1)}
-  25%{transform:scale(1.06) translateY(-2px)}
-  50%{transform:scale(1.10) translateY(0)}
-  75%{transform:scale(1.06) translateY(2px)}
+  50%{transform:scale(1.13)}
 }
-.cell .tile{line-height:1;position:relative;will-change:transform}
+.cell .tile{
+  line-height:1;
+  position:relative;
+  will-change:transform;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,0.45));
+}
 .tile.settling{animation:tileSettle .16s ease-out forwards}
 @keyframes tileSettle{
-  0%{transform:scale(1.035,.965)}
-  45%{transform:scale(.985,1.015)}
+  0%{transform:scale(1.04,.96)}
+  50%{transform:scale(.98,1.02)}
   100%{transform:scale(1)}
 }
 .cell.matched .tile{animation:tilePop .32s ease forwards}
 .cell.matched.match-strong .tile{animation:tilePopStrong .38s ease forwards}
-.cell.matched::after{content:'';position:absolute;inset:22%;border:2px solid rgba(240,192,64,.9);border-radius:50%;pointer-events:none;animation:matchBurst .32s ease-out forwards}
-.cell.matched.match-strong::after{inset:16%;border-width:3px;animation:matchBurstStrong .38s ease-out forwards}
-@keyframes matchBurst{
-  0%{transform:scale(.35);opacity:0;box-shadow:0 0 0 rgba(240,192,64,0)}
-  25%{opacity:1;box-shadow:0 0 10px rgba(240,192,64,.8)}
-  100%{transform:scale(2.15);opacity:0;box-shadow:0 0 18px rgba(240,192,64,0)}
+.cell.matched::after{
+  content:'';position:absolute;inset:20%;
+  border:2px solid rgba(240,192,64,.95);
+  border-radius:50%;pointer-events:none;
+  animation:matchBurst .32s ease-out forwards;
 }
-@keyframes tilePopStrong{
-  0%{transform:scale(1);opacity:1;filter:brightness(1) drop-shadow(0 0 0 rgba(240,192,64,0))}
-  38%{transform:scale(1.48);opacity:1;filter:brightness(2) drop-shadow(0 0 11px rgba(240,192,64,1))}
-  100%{transform:scale(0);opacity:0;filter:brightness(1) drop-shadow(0 0 0 rgba(240,192,64,0))}
+.cell.matched.match-strong::after{
+  inset:14%;border-width:3px;
+  animation:matchBurstStrong .38s ease-out forwards;
+}
+@keyframes matchBurst{
+  0%{transform:scale(.35);opacity:0}
+  30%{opacity:1;box-shadow:0 0 12px rgba(240,192,64,.85)}
+  100%{transform:scale(2.15);opacity:0}
 }
 @keyframes matchBurstStrong{
-  0%{transform:scale(.3);opacity:0;box-shadow:0 0 0 rgba(240,192,64,0)}
-  25%{opacity:1;box-shadow:0 0 16px rgba(240,192,64,1)}
-  100%{transform:scale(2.35);opacity:0;box-shadow:0 0 25px rgba(240,192,64,0)}
+  0%{transform:scale(.3);opacity:0}
+  30%{opacity:1;box-shadow:0 0 18px rgba(74,222,128,.95)}
+  100%{transform:scale(2.4);opacity:0}
 }
 @keyframes tilePop{
-  0%{transform:scale(1);opacity:1;filter:brightness(1) drop-shadow(0 0 0 rgba(240,192,64,0))}
-  40%{transform:scale(1.35);opacity:1;filter:brightness(1.7) drop-shadow(0 0 7px rgba(240,192,64,0.85))}
-  100%{transform:scale(0);opacity:0;filter:brightness(1) drop-shadow(0 0 0 rgba(240,192,64,0))}
+  0%{transform:scale(1);opacity:1}
+  40%{transform:scale(1.36);opacity:1;filter:brightness(1.75) drop-shadow(0 0 8px rgba(240,192,64,0.9))}
+  100%{transform:scale(0);opacity:0}
+}
+@keyframes tilePopStrong{
+  0%{transform:scale(1);opacity:1}
+  38%{transform:scale(1.5);opacity:1;filter:brightness(2.05) drop-shadow(0 0 12px rgba(74,222,128,1))}
+  100%{transform:scale(0);opacity:0}
 }
 .cell.disabled{cursor:default}
 
-/* ── YÜKSELEN METİN KATMANI (render() tarafından silinmez) ── */
+/* ── YÜKSELEN METİN VE KONFETİ KATMANLARI ── */
 .fx-layer{position:absolute;inset:0;pointer-events:none;z-index:45;overflow:visible}
-.float-fx{position:absolute;transform:translate(-50%,0);font-family:'Baloo 2',cursive;font-weight:800;font-size:15px;pointer-events:none;white-space:nowrap;animation:floatUp 1.1s ease-out forwards}
-.float-fx.time{color:#4ade80;text-shadow:0 0 8px rgba(74,222,128,.85),0 0 3px rgba(74,222,128,.9)}
-.float-fx.chain{color:#f0c040;font-size:21px;letter-spacing:.03em;animation-duration:1.5s;text-shadow:0 0 12px rgba(240,192,64,.9),0 0 4px rgba(240,192,64,.95)}
+.float-fx{
+  position:absolute;transform:translate(-50%,0);
+  font-weight:700;font-size:calc(var(--u)*0.96);
+  pointer-events:none;white-space:nowrap;
+  animation:floatUp 1.1s ease-out forwards;
+}
+.float-fx.time{color:var(--green);text-shadow:0 0 10px rgba(74,222,128,.9),0 1px 3px rgba(0,0,0,.9)}
+.float-fx.score{color:#ffe9a8;font-size:calc(var(--u)*0.84);text-shadow:0 0 8px rgba(240,192,64,.85),0 1px 3px rgba(0,0,0,.9)}
+.float-fx.chain{
+  color:var(--gold);font-size:calc(var(--u)*1.38);letter-spacing:.05em;
+  animation-duration:1.45s;
+  text-shadow:0 0 14px rgba(240,192,64,.95),0 2px 4px rgba(0,0,0,.95);
+}
 .float-fx.center{left:50%;top:38%}
 @keyframes floatUp{
-  0%{transform:translate(-50%,0) scale(.7);opacity:0}
-  16%{opacity:1;transform:translate(-50%,-6px) scale(1.15)}
-  32%{transform:translate(-50%,-10px) scale(1)}
-  100%{transform:translate(-50%,-52px) scale(1);opacity:0}
+  0%{transform:translate(-50%,0) scale(.72);opacity:0}
+  18%{opacity:1;transform:translate(-50%,-8px) scale(1.16)}
+  35%{transform:translate(-50%,-12px) scale(1)}
+  100%{transform:translate(-50%,-54px) scale(1);opacity:0}
+}
+#confettiCanvas{
+  position:fixed;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:1200;
+  background:none;border:0;box-shadow:none;
 }
 
 /* ── HAMLE KALMADI ── */
-.deadlock-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);opacity:0;pointer-events:none;transition:opacity .2s;z-index:60;border-radius:8px}
+.deadlock-overlay{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,0.42);opacity:0;pointer-events:none;
+  transition:opacity .2s;z-index:60;border-radius:11px;
+}
 .deadlock-overlay.show{opacity:1;pointer-events:auto}
-.deadlock-box{background:rgba(10,22,10,.95);border:2px solid #f0c040;border-radius:10px;padding:16px 22px;text-align:center;font-family:'Baloo 2',cursive;font-weight:800;font-size:14px;color:#f0c040;line-height:1.7;letter-spacing:.03em;box-shadow:0 0 30px rgba(240,192,64,.25)}
+.deadlock-box{
+  background:rgba(16,21,31,.96);border:2px solid var(--gold);border-radius:12px;
+  padding:14px 20px;text-align:center;font-weight:700;font-size:calc(var(--u)*0.92);
+  color:var(--gold);line-height:1.65;letter-spacing:.03em;
+  box-shadow:0 0 28px rgba(240,192,64,.32);
+}
 
-/* ── ALT ── */
-.msg{font-size:12px;font-weight:600;color:rgba(247,242,232,0.65);text-align:center;min-height:15px;flex-shrink:0}
-.gameover-info{background:rgba(200,150,12,0.1);border:1px solid rgba(200,150,12,0.35);border-radius:8px;padding:10px 14px;text-align:center}
-.gameover-info h2{font-family:'Baloo 2',cursive;font-size:17px;color:#f0c040;margin-bottom:3px}
-.gameover-info p{font-size:14px;font-weight:700;color:rgba(247,242,232,0.85)}
-.br{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;flex-shrink:0}
-button.a{background:rgba(10,22,10,0.8);border:1px solid rgba(200,150,12,0.35);border-radius:5px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;color:rgba(247,242,232,0.8);font-family:'Nunito',sans-serif;transition:background .2s}
-button.a:hover{background:rgba(155,53,16,0.45)}
+/* ── MESAJ, ALT DÜĞMELER VE LOGO ── */
+.msg{
+  grid-area:msg;
+  font-size:calc(var(--u)*0.8);
+  color:var(--text-sub);
+  text-align:center;
+  min-height:1.3em;
+  display:flex;align-items:center;justify-content:center;
+}
+.br{
+  grid-area:ctrl;
+  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+}
+button.a{
+  background:linear-gradient(180deg,rgba(255,233,168,0.14),rgba(200,150,12,0.10));
+  border:1px solid rgba(200,150,12,0.48);
+  border-radius:8px;
+  padding:clamp(7px,1.2vmin,10px) clamp(12px,2vw,16px);
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:calc(var(--u)*0.84);
+  font-weight:700;
+  cursor:pointer;
+  color:var(--gold-soft);
+  touch-action:manipulation;
+  transition:transform .12s,background .2s,border-color .2s;
+}
+button.a:active{transform:scale(.96)}
+@media(hover:hover){
+  button.a:hover{background:rgba(200,150,12,0.28);border-color:rgba(240,192,64,0.8)}
+}
+
+.foot{
+  grid-area:logo;
+  flex:none;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:min(34px,5dvh);
+  pointer-events:none;
+}
+.foot img{
+  height:100%;
+  max-height:34px;
+  opacity:.35;
+  filter:brightness(1.3);
+  transition:opacity .3s;
+  pointer-events:auto;
+}
+@media(hover:hover){
+  .foot img:hover{opacity:.7}
+}
+@media(max-height:759px) and (orientation:portrait){
+  .foot{display:none}
+}
+@media(min-aspect-ratio:13/10) and (min-width:640px){
+  .foot{display:flex;height:clamp(28px,6vmin,48px)}
+  .foot img{max-height:48px}
+}
+
+/* ── MODALLAR ── */
+.modal-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.82);
+  backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;
+  padding:
+    max(12px,env(safe-area-inset-top))
+    max(12px,env(safe-area-inset-right))
+    max(12px,env(safe-area-inset-bottom))
+    max(12px,env(safe-area-inset-left));
+}
+.modal-overlay.hidden{display:none}
+
+/* Kurallar modalı: tüm oyunlarla ortak #0d1b0d zemin */
+.box{
+  border-radius:14px;
+  padding:18px 20px;
+  width:min(92vw,420px);
+  max-height:85dvh;
+  overflow-y:auto;
+  display:flex;flex-direction:column;gap:12px;
+  animation:modalIn .26s ease;
+}
+.box.rules{
+  background:#0d1b0d;
+  border:1px solid rgba(200,150,12,0.5);
+  box-shadow:0 16px 42px rgba(0,0,0,0.65);
+}
+/* Oyun sonu ve onay modalları: Zincir oyun paleti (#10151f) */
+.box.game-modal{
+  background:radial-gradient(circle at 50% 0%,#1a2336 0%,#10151f 100%);
+  border:1px solid rgba(240,192,64,0.55);
+  box-shadow:0 16px 44px rgba(0,0,0,0.72),0 0 24px rgba(200,150,12,0.18);
+  text-align:center;
+}
+.box.game-modal.record-glow{
+  border:2px solid #4ade80;
+  animation:modalIn .26s ease,pulseG 2s ease-in-out .3s infinite;
+}
+@keyframes pulseG{
+  0%,100%{box-shadow:0 0 12px 2px rgba(74,222,128,.45),0 0 32px rgba(74,222,128,.22)}
+  50%{box-shadow:0 0 24px 6px rgba(74,222,128,.8),0 0 56px 12px rgba(74,222,128,.36)}
+}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.94)}
+  to{opacity:1;transform:scale(1)}
+}
+
+.m-mascot{
+  width:min(130px,34vw);
+  max-height:28dvh;
+  margin:0 auto;
+  display:block;
+  object-fit:contain;
+  -webkit-mask-image:radial-gradient(circle,rgba(0,0,0,1) 58%,rgba(0,0,0,0) 96%);
+  mask-image:radial-gradient(circle,rgba(0,0,0,1) 58%,rgba(0,0,0,0) 96%);
+}
+
+/* Çok sayfalı kurallar yapısı */
+.rb{display:flex;flex-direction:column;gap:10px;min-width:0}
+.pgs{display:grid}
+.pg{
+  grid-area:1/1;
+  visibility:hidden;opacity:0;
+  transition:opacity .2s;
+  font-size:14px;
+  line-height:1.65;
+  color:rgba(247,242,232,0.86);
+}
+@media(min-width:768px){.pg{font-size:15.5px}}
+.pg.on{visibility:visible;opacity:1}
+.pg h3{
+  font-size:15.5px;
+  color:var(--gold);
+  margin-bottom:6px;
+  letter-spacing:.03em;
+}
+.pg ul{padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.pg b{color:var(--gold)}
+
+.pg-nav{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+}
+.nav-arrow{
+  background:rgba(200,150,12,0.16);
+  border:1px solid rgba(200,150,12,0.45);
+  color:var(--gold-soft);
+  border-radius:7px;
+  width:32px;height:30px;
+  font-size:16px;font-weight:700;
+  cursor:pointer;
+  touch-action:manipulation;
+}
+.nav-arrow:disabled{opacity:.3;cursor:default}
+.dots{display:flex;gap:7px;align-items:center}
+.dot{
+  width:8px;height:8px;border-radius:50%;
+  background:rgba(247,242,232,0.28);
+  border:0;cursor:pointer;padding:0;
+}
+.dot.on{background:var(--gold);transform:scale(1.22)}
+
+.modal-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+button.m-primary{
+  background:linear-gradient(180deg,rgba(240,192,64,0.32),rgba(200,150,12,0.22));
+  border:1px solid rgba(240,192,64,0.72);
+  border-radius:8px;
+  padding:9px 24px;
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:14px;font-weight:700;
+  cursor:pointer;color:#ffe9a8;
+  touch-action:manipulation;
+  transition:transform .12s,background .2s,opacity .2s;
+}
+button.m-primary:disabled{opacity:.42;cursor:default}
+button.m-primary:not(:disabled):active{transform:scale(.96)}
+button.m-sec{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.22);
+  border-radius:8px;
+  padding:9px 16px;
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:13px;font-weight:700;
+  cursor:pointer;color:rgba(247,242,232,0.8);
+  touch-action:manipulation;
+}
+.m-sec.hidden{display:none}
+
+/* Yatay mobil kurallar modalı (görsel solda, çok sayfalı) */
+@media(orientation:landscape) and (max-height:600px){
+  .box.rules{
+    display:grid;
+    grid-template-columns:minmax(90px,24%) minmax(0,1fr);
+    align-items:center;
+    gap:14px;
+    width:min(94vw,780px);
+    max-height:94dvh;
+    padding:10px 16px;
+    overflow:hidden;
+  }
+  .box.rules .m-mascot{
+    width:100%;
+    max-height:82dvh;
+  }
+  .rules .pg{font-size:12.5px;line-height:1.4}
+  .rules .pg h3{font-size:14px;margin-bottom:4px}
+  .rules .pg ul{gap:3px}
+  .rules .rb{gap:7px}
+  .rules button.m-primary,.rules button.m-sec{padding:6px 16px;font-size:12.5px}
+}
+
+.go-title{font-size:21px;color:var(--gold);letter-spacing:.04em}
+.go-score{font-size:16px;color:var(--gold-soft)}
+.go-rec{font-size:14px;color:var(--green);font-weight:700}
+.confirm-text{font-size:15px;line-height:1.6;color:rgba(247,242,232,0.88)}
+
+/* ── HAREKET AZALTMA (AZALT YAKLAŞIMI) ── */
+@media(prefers-reduced-motion:reduce){
+  .aurora,.stars,.stars2,.game-title{animation:none!important}
+  .box.game-modal.record-glow{
+    animation:none!important;
+    box-shadow:0 0 18px 4px rgba(74,222,128,.6);
+  }
+}
 </style>
 </head>
 <body>
 
-<!-- ── MODAL ── -->
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-box">
-    <div class="character-box">
-      <img src="../img/mecetru.webp" alt="Matece" class="character-img">
-    </div>
-    <div class="modal-title">ZİNCİR<br>OYUNU</div>
-    <div class="modal-rules" id="rulesText">
-      <b>3'lü</b> eşleşme puan kazandırır.<br>
-      <b>4'lü</b> eşleşme puan + <b>3 saniye</b> ekler.<br>
-      <b>5'li</b> eşleşme puan + <b>5 saniye</b> ekler.<br>
-      Bir hamle art arda birden fazla eşleşme tetiklerse <b>ZİNCİR!</b> oluşur; 2. eşleşmeden başlayarak her eşleşme için kademeli süre ödülü verilir (<b>2, 3, 4… saniye</b>).<br><br>
-      Süre dolduğunda oyun biter. <b id="ctrlHint">Kontrol yöntemi yükleniyor…</b>
-    </div>
-    <div class="modal-btns">
-      <button class="modal-close" onclick="closeModal()">Kapat</button>
-      <button class="modal-start" onclick="closeModal()">▶ Başla</button>
-    </div>
-    <div class="modal-logo">
-      <img src="../img/THlogo.webp" alt="Tekin Hoca Logo">
+<div class="bg-fx" aria-hidden="true">
+  <div class="aurora"></div>
+  <div class="stars"></div>
+  <div class="stars2"></div>
+</div>
+
+<canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
+<!-- ── KURALLAR MODALI ── -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Kurallar">
+  <div class="box rules" id="rulesBox">
+    <img src="../img/mecesml.webp" alt="Tekin Hoca" class="m-mascot">
+    <div class="rb">
+      <div class="pgs" id="rpages">
+        <div class="pg on">
+          <h3>Amaç ve Eşleşmeler</h3>
+          <ul>
+            <li>Aynı sembolden en az <span class="nm">3</span> tanesini yatay veya dikey yan yana getirin.</li>
+            <li><b><span class="nm">3</span>'lü</b> eşleşme <span class="nm">30</span> puan kazandırır.</li>
+            <li><b><span class="nm">4</span>'lü</b> eşleşme <span class="nm">60</span> puan ve <b>+<span class="nm">3</span> saniye</b> ekler.</li>
+            <li><b><span class="nm">5</span>'li</b> eşleşme <span class="nm">100</span> puan ve <b>+<span class="nm">5</span> saniye</b> ekler.</li>
+          </ul>
+        </div>
+        <div class="pg">
+          <h3>Zincir ve Süre</h3>
+          <ul>
+            <li>Tek hamle art arda birden fazla eşleşme tetiklerse <b>ZİNCİR!</b> oluşur.</li>
+            <li><span class="nm">2</span>. eşleşmeden başlayarak her eşleşme için <b><span class="nm">2</span>, <span class="nm">3</span>, <span class="nm">4</span>… saniye</b> ek süre verilir.</li>
+            <li>Oyun <span class="nm">60</span> saniye ile başlar; süre <span class="nm">0</span> (sıfır) olduğunda oyun biter.</li>
+          </ul>
+        </div>
+        <div class="pg">
+          <h3>Kontroller ve İpucu</h3>
+          <ul>
+            <li id="ctrlRuleItem">Bilgisayarda bir kutuyu tutup komşusuna sürükleyin; dokunmatik ekranda iki kutuya sırayla dokunun.</li>
+            <li>Bir süre hamle yapmazsanız olası bir hamle otomatik parlar.</li>
+            <li>Kısayollar: <b><span class="nm">F</span></b> tam ekran, <b>Esc</b> kurallar veya çıkış.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pg-nav">
+        <button type="button" class="nav-arrow" id="prevPg" aria-label="Önceki sayfa">&#8249;</button>
+        <div class="dots" id="pgDots">
+          <button type="button" class="dot on" data-pg="0" aria-label="Sayfa 1"></button>
+          <button type="button" class="dot" data-pg="1" aria-label="Sayfa 2"></button>
+          <button type="button" class="dot" data-pg="2" aria-label="Sayfa 3"></button>
+        </div>
+        <button type="button" class="nav-arrow" id="nextPg" aria-label="Sonraki sayfa">&#8250;</button>
+      </div>
+
+      <div class="modal-btns">
+        <button type="button" class="m-sec hidden" id="resetRecBtn">Rekorları Sıfırla</button>
+        <button type="button" class="m-primary" id="rulesActionBtn">Başla</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ── OYUN SONU MODALİ ── -->
-<div class="modal-overlay hidden" id="gameOverOverlay">
-  <div class="modal-box">
-    <div class="character-box">
-      <img src="../img/mecesry.webp" alt="Matece" class="character-img">
-    </div>
-    <div class="gameover-info">
-      <h2>Oyun Bitti!</h2>
-      <p id="finalScoreText">Skorunuz: 0</p>
-    </div>
+<!-- ── ONAY MODALI ── -->
+<div class="modal-overlay hidden" id="confirmOverlay" role="dialog" aria-modal="true" aria-label="Onay">
+  <div class="box game-modal">
+    <p class="confirm-text" id="confirmText">Bu oyunun ilerlemesi kaybolacak. Devam etmek istiyor musunuz?</p>
     <div class="modal-btns">
-      <button class="modal-close" onclick="showRulesFromGameOver()">&#9432; Kurallar</button>
-      <button class="modal-start" onclick="resetGame()">&#8635; Tekrar Oyna</button>
+      <button type="button" class="m-sec" id="confirmNoBtn">Vazgeç</button>
+      <button type="button" class="m-primary" id="confirmYesBtn">Onayla</button>
     </div>
   </div>
 </div>
 
-<div class="wrap">
-  <div class="infobar">
-    <div class="ibox" id="timeBox"><div class="l">Süre</div><div class="v" id="timeDisp">60</div></div>
-    <div class="ibox" id="scoreBox"><div class="l">Skor</div><div class="v" id="scoreDisp">0</div></div>
+<!-- ── OYUN SONU MODALI ── -->
+<div class="modal-overlay hidden" id="gameOverOverlay" role="dialog" aria-modal="true" aria-label="Oyun Sonu">
+  <div class="box game-modal" id="gameOverBox">
+    <div class="go-title">Oyun Bitti!</div>
+    <p class="go-score" id="finalScoreText">Skorunuz: <span class="nm">0</span></p>
+    <p class="go-rec" id="finalRecordText"></p>
+    <div class="modal-btns">
+      <button type="button" class="m-sec" id="goRulesBtn">&#9432; Kurallar</button>
+      <button type="button" class="m-primary" id="goRestartBtn">&#8635; Tekrar Oyna</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ANA UYGULAMA ── -->
+<div class="app" id="app">
+  <div class="side">
+    <div class="topbar">
+      <div class="game-title">ZİNCİR</div>
+      <div class="top-actions">
+        <button type="button" class="icon-btn" id="soundBtn" aria-label="Ses ve titreşim" title="Ses ve titreşim">&#128263;</button>
+        <button type="button" class="icon-btn hidden" id="fsBtn" aria-label="Tam ekran" title="Tam ekran">&#9974;</button>
+      </div>
+    </div>
+
+    <div class="infobar">
+      <div class="ibox" id="timeBox"><div class="l">Süre</div><div class="v nm" id="timeDisp">60</div></div>
+      <div class="ibox" id="scoreBox"><div class="l">Skor</div><div class="v nm" id="scoreDisp">0</div></div>
+      <div class="ibox" id="recBox"><div class="l">Rekor</div><div class="v nm" id="recDisp">0</div></div>
+    </div>
+
+    <div class="msg" id="msg" aria-live="polite"></div>
+
+    <div class="br">
+      <button type="button" class="a" id="restartBtn">&#8635; Yeni Oyun</button>
+      <button type="button" class="a" id="rulesBtn">&#9432; Kurallar</button>
+    </div>
+
+    <div class="foot">
+      <img src="../img/THlogo.webp" alt="Tekin Hoca">
+    </div>
   </div>
 
   <div class="board-wrap" id="boardWrap">
     <div class="board" id="board"></div>
     <div class="fx-layer" id="fxLayer"></div>
     <div class="deadlock-overlay" id="deadlockOverlay">
-      <div class="deadlock-box">HAMLE KALMADI<br>TAŞLAR TEKRAR YERLEŞTİRİLİYOR</div>
+      <div class="deadlock-box">HAMLE KALMADI<br>TAŞLAR YENİDEN YERLEŞTİRİLİYOR</div>
     </div>
-  </div>
-
-  <div class="msg" id="msg"></div>
-
-  <div class="br">
-    <button class="a" onclick="resetGame()">&#8635; Tekrar Oyna</button>
-    <button class="a" onclick="openModal()">&#9432; Kurallar</button>
   </div>
 </div>
 
 <script>
+/* ── ZAMANLAYICI KAYDI VE TOPLU İPTAL ── */
+(function(){
+  const N={
+    st:setTimeout.bind(window),ct:clearTimeout.bind(window),
+    si:setInterval.bind(window),ci:clearInterval.bind(window),
+    raf:requestAnimationFrame.bind(window),caf:cancelAnimationFrame.bind(window)
+  };
+  window.__native=N;
+  const T=new Set(),I=new Set(),R=new Set();
+  window.setTimeout=(f,ms,...a)=>{const id=N.st(()=>{T.delete(id);f(...a)},ms);T.add(id);return id};
+  window.clearTimeout=id=>{T.delete(id);N.ct(id)};
+  window.setInterval=(f,ms,...a)=>{const id=N.si(()=>f(...a),ms);I.add(id);return id};
+  window.clearInterval=id=>{I.delete(id);N.ci(id)};
+  window.requestAnimationFrame=f=>{const id=N.raf(t=>{R.delete(id);f(t)});R.add(id);return id};
+  window.cancelAnimationFrame=id=>{R.delete(id);N.caf(id)};
+  window.abortAll=()=>{T.forEach(N.ct);I.forEach(N.ci);R.forEach(N.caf);T.clear();I.clear();R.clear()};
+})();
+
+/* ── GÜVENLİ DEPOLAMA ── */
+const memStore={};
+function storeGet(k,defVal){
+  try{
+    const v=localStorage.getItem(k);
+    return v===null?defVal:v;
+  }catch(e){
+    return Object.prototype.hasOwnProperty.call(memStore,k)?memStore[k]:defVal;
+  }
+}
+function storeSet(k,v){
+  memStore[k]=String(v);
+  try{localStorage.setItem(k,String(v));}catch(e){}
+}
+
+const REC_KEY='zincir.rekor.v1';
+const SND_KEY='zincir.ses.v1';
 const TYPES=['⭐','🔷','🟥','🟢','🟣','🟠'];
-const isMobileMode = window.innerWidth <= 600;
-const SIZE = isMobileMode ? 6 : 8;
 const DRAG_THRESHOLD=14;
 
-let board, score, timeLeft, timerId, gameOver, isResolving, selected, dragStart, chainCount;
-let hintTimerId=null, hintRepeatTimerId=null, hintLevel=1, hintCell=null, strongMatchActive=false;
+function isCompactViewport(){
+  return Math.min(window.innerWidth,window.innerHeight)<=520 && window.innerWidth<=600;
+}
+function isTouchPrimary(){
+  return window.matchMedia('(pointer: coarse)').matches || isCompactViewport();
+}
+
+let SIZE=isCompactViewport()?6:8;
+let board=[],score=0,timeLeft=60,timerId=null;
+let gameOver=false,isResolving=false,selected=null,dragStart=null,chainCount=0;
+let hintTimerId=null,hintRepeatTimerId=null,hintLevel=1,hintCell=null,strongMatchActive=false;
+let gid=0,hasStartedOnce=false,confirmAction=null,rp=0;
+let soundOn=storeGet(SND_KEY,'0')==='1';
+let bestScore=Math.max(0,parseInt(storeGet(REC_KEY,'0'),10)||0);
+let audioCtx=null;
 
 const boardEl=document.getElementById('board');
 const boardWrapEl=document.getElementById('boardWrap');
 const fxLayer=document.getElementById('fxLayer');
 const deadlockOverlay=document.getElementById('deadlockOverlay');
+const modalOverlay=document.getElementById('modalOverlay');
+const confirmOverlay=document.getElementById('confirmOverlay');
+const gameOverOverlay=document.getElementById('gameOverOverlay');
+const rulesActionBtn=document.getElementById('rulesActionBtn');
+const resetRecBtn=document.getElementById('resetRecBtn');
 
-/* ── MODAL ── */
-function closeModal(){
-  document.getElementById('modalOverlay').classList.add('hidden');
+function isAnyModalOpen(){
+  return !modalOverlay.classList.contains('hidden') ||
+         !confirmOverlay.classList.contains('hidden') ||
+         !gameOverOverlay.classList.contains('hidden');
+}
+
+/* ── SES VE TİTREŞİM ── */
+function updateSoundUI(){
+  const btn=document.getElementById('soundBtn');
+  btn.innerHTML=soundOn?'&#128266;':'&#128263;';
+  btn.setAttribute('aria-pressed',soundOn?'true':'false');
+}
+function toggleSound(){
+  soundOn=!soundOn;
+  storeSet(SND_KEY,soundOn?'1':'0');
+  updateSoundUI();
+  if(soundOn){
+    playTone(520,0.06,'sine',0.08);
+    vibrate(15);
+  }
+}
+function vibrate(pattern){
+  if(!soundOn) return;
+  try{if(navigator.vibrate) navigator.vibrate(pattern);}catch(e){}
+}
+function playTone(freq,dur=0.08,type='sine',vol=0.09,delay=0){
+  if(!soundOn) return;
+  try{
+    const AC=window.AudioContext||window.webkitAudioContext;
+    if(!AC) return;
+    if(!audioCtx) audioCtx=new AC();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    const now=audioCtx.currentTime+delay;
+    const osc=audioCtx.createOscillator();
+    const gain=audioCtx.createGain();
+    osc.type=type;
+    osc.frequency.setValueAtTime(freq,now);
+    gain.gain.setValueAtTime(0.0001,now);
+    gain.gain.exponentialRampToValueAtTime(vol,now+0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001,now+dur);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(now);
+    osc.stop(now+dur+0.02);
+  }catch(e){}
+}
+function playSfx(kind){
+  if(!soundOn) return;
+  if(kind==='tap') playTone(420,0.045,'triangle',0.06);
+  else if(kind==='bad'){playTone(190,0.11,'sawtooth',0.07);vibrate(30);}
+  else if(kind==='match'){playTone(520,0.09,'sine',0.09);playTone(680,0.11,'sine',0.08,0.05);vibrate(20);}
+  else if(kind==='bonus'){playTone(587,0.09,'triangle',0.1);playTone(784,0.12,'triangle',0.1,0.06);playTone(988,0.15,'sine',0.09,0.12);vibrate([25,30,35]);}
+  else if(kind==='chain'){playTone(660,0.09,'sine',0.1);playTone(880,0.11,'sine',0.1,0.06);playTone(1175,0.18,'triangle',0.1,0.12);vibrate([30,25,45]);}
+  else if(kind==='win'){playTone(523,0.12,'triangle',0.11);playTone(659,0.12,'triangle',0.11,0.1);playTone(784,0.14,'triangle',0.11,0.2);playTone(1047,0.28,'sine',0.12,0.3);vibrate([40,35,60]);}
+  else if(kind==='end'){playTone(440,0.14,'sine',0.09);playTone(349,0.22,'sine',0.08,0.12);}
+}
+
+/* ── TAM EKRAN ── */
+const fsBtn=document.getElementById('fsBtn');
+function initFullscreen(){
+  if(document.fullscreenEnabled || document.webkitFullscreenEnabled){
+    fsBtn.classList.remove('hidden');
+  }
+}
+function toggleFullscreen(){
+  try{
+    if(!document.fullscreenElement && !document.webkitFullscreenElement){
+      const el=document.documentElement;
+      if(el.requestFullscreen) el.requestFullscreen();
+      else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    }else{
+      if(document.exitFullscreen) document.exitFullscreen();
+      else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+  }catch(e){}
+}
+function syncFullscreenIcon(){
+  const active=!!(document.fullscreenElement || document.webkitFullscreenElement);
+  fsBtn.innerHTML=active?'&#10529;':'&#9974;';
+}
+document.addEventListener('fullscreenchange',syncFullscreenIcon);
+document.addEventListener('webkitfullscreenchange',syncFullscreenIcon);
+
+/* ── KONFETİ ── */
+const confettiCanvas=document.getElementById('confettiCanvas');
+const cCtx=confettiCanvas.getContext('2d');
+let confettiParts=[],confettiRaf=null;
+function launchConfetti(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  confettiCanvas.width=window.innerWidth*dpr;
+  confettiCanvas.height=window.innerHeight*dpr;
+  cCtx.setTransform(dpr,0,0,dpr,0,0);
+  const colors=['#f0c040','#4ade80','#ffe9a8','#5c7cff','#ff6b6b','#4dd0e1'];
+  confettiParts=Array.from({length:48},()=>({
+    x:Math.random()*window.innerWidth,
+    y:-20-Math.random()*140,
+    vx:(Math.random()-0.5)*3.4,
+    vy:2.2+Math.random()*3.2,
+    size:6+Math.random()*6,
+    rot:Math.random()*Math.PI*2,
+    vrot:(Math.random()-0.5)*0.16,
+    color:colors[Math.floor(Math.random()*colors.length)],
+    shape:Math.random()>0.5?'rect':'circle'
+  }));
+  if(confettiRaf) window.__native.caf(confettiRaf);
+  const step=()=>{
+    cCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+    let alive=0;
+    for(const p of confettiParts){
+      p.x+=p.vx;p.y+=p.vy;p.rot+=p.vrot;p.vy+=0.04;
+      if(p.y<window.innerHeight+30) alive++;
+      cCtx.save();
+      cCtx.translate(p.x,p.y);
+      cCtx.rotate(p.rot);
+      cCtx.fillStyle=p.color;
+      if(p.shape==='rect') cCtx.fillRect(-p.size/2,-p.size/3,p.size,p.size*0.65);
+      else{cCtx.beginPath();cCtx.arc(0,0,p.size/2.4,0,Math.PI*2);cCtx.fill();}
+      cCtx.restore();
+    }
+    if(alive>0) confettiRaf=window.__native.raf(step);
+    else cCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+  };
+  confettiRaf=window.__native.raf(step);
+}
+
+/* ── ÇOK SAYFALI KURALLAR MODALI ── */
+function renderRulePage(idx){
+  const pages=document.querySelectorAll('#rpages .pg');
+  const dots=document.querySelectorAll('#pgDots .dot');
+  rp=Math.max(0,Math.min(pages.length-1,idx));
+  pages.forEach((p,i)=>p.classList.toggle('on',i===rp));
+  dots.forEach((d,i)=>d.classList.toggle('on',i===rp));
+  document.getElementById('prevPg').disabled=(rp===0);
+  document.getElementById('nextPg').disabled=(rp===pages.length-1);
+  resetRecBtn.classList.toggle('hidden',rp!==pages.length-1 || bestScore<=0);
+}
+function openRulesModal(){
+  clearInterval(timerId);
+  timerId=null;
+  pauseHints();
+  rulesActionBtn.textContent=hasStartedOnce?'Kapat':'Başla';
+  renderRulePage(0);
+  modalOverlay.classList.remove('hidden');
+}
+function closeRulesModal(){
+  modalOverlay.classList.add('hidden');
+  hasStartedOnce=true;
   if(gameOver){
-    document.getElementById('gameOverOverlay').classList.remove('hidden');
+    gameOverOverlay.classList.remove('hidden');
     return;
   }
-  if(!isResolving){
+  if(!isResolving && confirmOverlay.classList.contains('hidden')){
     startTimer();
     resumeHints();
   }
 }
-function showRulesFromGameOver(){
-  document.getElementById('gameOverOverlay').classList.add('hidden');
-  openModal();
-}
-function openModal(){
-  clearInterval(timerId);
-  pauseHints();
-  document.getElementById('modalOverlay').classList.remove('hidden');
-}
-document.getElementById('ctrlHint').textContent = isMobileMode
-  ? 'Değiştirmek için iki kutuya sırayla dokunun.'
-  : 'Değiştirmek için bir kutuyu tutup komşusuna sürükleyin.';
 
-/* ── YARDIMCI FONKSİYONLAR ── */
-function randType(){ return Math.floor(Math.random()*TYPES.length); }
-function swapCells(b,r1,c1,r2,c2){ const t=b[r1][c1]; b[r1][c1]=b[r2][c2]; b[r2][c2]=t; }
-function isAdjacent(a,b){ return Math.abs(a.r-b.r)+Math.abs(a.c-b.c)===1; }
+/* Kaydırma ile sayfa değişimi */
+let touchStartX=0;
+const rulesBox=document.getElementById('rulesBox');
+rulesBox.addEventListener('touchstart',e=>{
+  if(e.touches.length===1) touchStartX=e.touches[0].clientX;
+},{passive:true});
+rulesBox.addEventListener('touchend',e=>{
+  if(e.changedTouches.length===1){
+    const dx=e.changedTouches[0].clientX-touchStartX;
+    if(Math.abs(dx)>42) renderRulePage(rp+(dx<0?1:-1));
+  }
+},{passive:true});
+
+/* ── ONAY MODALI ── */
+function openConfirm(text,onYes){
+  clearInterval(timerId);
+  timerId=null;
+  pauseHints();
+  confirmAction=onYes;
+  document.getElementById('confirmText').textContent=text;
+  confirmOverlay.classList.remove('hidden');
+}
+function closeConfirm(resumeGame){
+  confirmOverlay.classList.add('hidden');
+  confirmAction=null;
+  if(resumeGame && !gameOver && !isResolving && modalOverlay.classList.contains('hidden')){
+    startTimer();
+    resumeHints();
+  }
+}
+
+/* ── OYUN YARDIMCILARI ── */
+function randType(){return Math.floor(Math.random()*TYPES.length);}
+function swapCells(b,r1,c1,r2,c2){const t=b[r1][c1];b[r1][c1]=b[r2][c2];b[r2][c2]=t;}
+function isAdjacent(a,b){return Math.abs(a.r-b.r)+Math.abs(a.c-b.c)===1;}
 
 function getMatches(b){
-  const mask=Array.from({length:SIZE},()=>Array(SIZE).fill(false));
+  const n=b.length;
+  const mask=Array.from({length:n},()=>Array(n).fill(false));
   const runs=[];
-  for(let r=0;r<SIZE;r++){
+  for(let r=0;r<n;r++){
     let c=0;
-    while(c<SIZE){
+    while(c<n){
       let c2=c;
-      while(c2<SIZE && b[r][c2]===b[r][c]) c2++;
+      while(c2<n && b[r][c2]===b[r][c]) c2++;
       const len=c2-c;
       if(len>=3){
         const cells=[];
-        for(let k=c;k<c2;k++){ mask[r][k]=true; cells.push([r,k]); }
+        for(let k=c;k<c2;k++){mask[r][k]=true;cells.push([r,k]);}
         runs.push({length:len,cells});
       }
       c=c2;
     }
   }
-  for(let c=0;c<SIZE;c++){
+  for(let c=0;c<n;c++){
     let r=0;
-    while(r<SIZE){
+    while(r<n){
       let r2=r;
-      while(r2<SIZE && b[r2][c]===b[r][c]) r2++;
+      while(r2<n && b[r2][c]===b[r][c]) r2++;
       const len=r2-r;
       if(len>=3){
         const cells=[];
-        for(let k=r;k<r2;k++){ mask[k][c]=true; cells.push([k,c]); }
+        for(let k=r;k<r2;k++){mask[k][c]=true;cells.push([k,c]);}
         runs.push({length:len,cells});
       }
       r=r2;
@@ -275,14 +1021,15 @@ function getMatches(b){
 }
 
 function hasValidMove(b){
-  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
-    if(c+1<SIZE){
+  const n=b.length;
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+    if(c+1<n){
       swapCells(b,r,c,r,c+1);
       const has=getMatches(b).runs.length>0;
       swapCells(b,r,c,r,c+1);
       if(has) return true;
     }
-    if(r+1<SIZE){
+    if(r+1<n){
       swapCells(b,r,c,r+1,c);
       const has=getMatches(b).runs.length>0;
       swapCells(b,r,c,r+1,c);
@@ -292,15 +1039,15 @@ function hasValidMove(b){
   return false;
 }
 
-function createBoard(){
+function createBoard(size){
   let b;
   do{
     b=[];
-    for(let r=0;r<SIZE;r++){
+    for(let r=0;r<size;r++){
       b[r]=[];
-      for(let c=0;c<SIZE;c++){
+      for(let c=0;c<size;c++){
         let t,tries=0;
-        do{ t=randType(); tries++; }
+        do{t=randType();tries++;}
         while(tries<50 && (
           (c>=2 && b[r][c-1]===t && b[r][c-2]===t) ||
           (r>=2 && b[r-1][c]===t && b[r-2][c]===t)
@@ -308,25 +1055,26 @@ function createBoard(){
         b[r][c]=t;
       }
     }
-  } while(!hasValidMove(b));
+  }while(!hasValidMove(b));
   return b;
 }
 
-/* Çöküş + yeniden doldurma: her hücrenin kaç sıra "düştüğünü" de
-   fallMask olarak döndürür, böylece render() bunu animasyonla gösterebilir. */
 function collapseAndRefill(){
-  const fallMask=Array.from({length:SIZE},()=>Array(SIZE).fill(0));
-  for(let c=0;c<SIZE;c++){
+  const n=SIZE;
+  const fallMask=Array.from({length:n},()=>Array(n).fill(0));
+  for(let c=0;c<n;c++){
     const survivors=[];
-    for(let r=SIZE-1;r>=0;r--){ if(board[r][c]!==-1) survivors.push({val:board[r][c],oldRow:r}); }
-    for(let i=0;i<SIZE;i++){
-      const newRow=SIZE-1-i;
+    for(let r=n-1;r>=0;r--){
+      if(board[r][c]!==-1) survivors.push({val:board[r][c],oldRow:r});
+    }
+    for(let i=0;i<n;i++){
+      const newRow=n-1-i;
       if(i<survivors.length){
         const {val,oldRow}=survivors[i];
         board[newRow][c]=val;
         const dist=newRow-oldRow;
         if(dist>0) fallMask[newRow][c]=dist;
-      } else {
+      }else{
         board[newRow][c]=randType();
         fallMask[newRow][c]=newRow+1;
       }
@@ -336,35 +1084,37 @@ function collapseAndRefill(){
 }
 
 function fullFallMask(){
-  const m=Array.from({length:SIZE},()=>Array(SIZE).fill(0));
-  for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++) m[r][c]=r+1;
+  const n=SIZE;
+  const m=Array.from({length:n},()=>Array(n).fill(0));
+  for(let r=0;r<n;r++) for(let c=0;c<n;c++) m[r][c]=r+1;
   return m;
 }
 
-function flashInfo(id, cls, duration=400){
+function flashInfo(id,cls,duration=400){
   const el=document.getElementById(id);
   if(!el) return;
   el.classList.remove(cls);
   void el.offsetWidth;
   el.classList.add(cls);
-  setTimeout(()=>el.classList.remove(cls),duration);
+  const curGid=gid;
+  setTimeout(()=>{if(gid===curGid) el.classList.remove(cls);},duration);
 }
 
-function triggerChainEffect(){
+function triggerChainEffect(bonusSec){
   boardEl.classList.remove('chain-flash');
   void boardEl.offsetWidth;
   boardEl.classList.add('chain-flash');
-  setTimeout(()=>boardEl.classList.remove('chain-flash'),320);
-  spawnCenterFloatText('ZİNCİR!','chain');
+  const curGid=gid;
+  setTimeout(()=>{if(gid===curGid) boardEl.classList.remove('chain-flash');},340);
+  spawnCenterFloatText('ZİNCİR! +'+bonusSec+'sn','chain');
 }
 
 function applyBonus(len){
-  if(len>=5){ score+=100; timeLeft+=5; }
-  else if(len===4){ score+=60; timeLeft+=3; }
-  else { score+=30; }
+  if(len>=5){score+=100;timeLeft+=5;return 100;}
+  if(len===4){score+=60;timeLeft+=3;return 60;}
+  score+=30;return 30;
 }
 
-/* ── YÜKSELEN METİNLER (fxLayer'a eklenir, render() bunları silmez) ── */
 function spawnFloatText(text,r,c,cls){
   const cellEl=boardEl.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
   if(!cellEl) return;
@@ -384,41 +1134,48 @@ function spawnCenterFloatText(text,cls){
   el.className='float-fx center '+cls;
   el.textContent=text;
   fxLayer.appendChild(el);
-  setTimeout(()=>el.remove(),1550);
+  setTimeout(()=>el.remove(),1500);
 }
 
-/* ── GÖRÜNTÜLEME ── */
+/* ── BOYUTLANDIRMA VE ÇİZİM ── */
 function fitBoard(){
-  const wH=window.innerHeight;
-  const wW=Math.min(window.innerWidth,480);
-  const reserved=215;
-  const avail=Math.min(wH-reserved, wW-16);
-  const cellPx=Math.max(24, Math.floor((avail-14-(SIZE-1)*3)/SIZE));
+  const rect=boardWrapEl.getBoundingClientRect();
+  const availW=Math.max(180,rect.width-8);
+  const availH=Math.max(180,rect.height-8);
+  const avail=Math.min(availW,availH);
+  const cellPx=Math.max(26,Math.floor((avail-16-(SIZE-1)*3)/SIZE));
   boardEl.style.gridTemplateColumns=`repeat(${SIZE},${cellPx}px)`;
   boardEl.style.gridTemplateRows=`repeat(${SIZE},${cellPx}px)`;
-  document.documentElement.style.setProperty('--cell-px', cellPx+'px');
-  document.querySelectorAll('.cell').forEach(c=>{
-    c.style.width=cellPx+'px'; c.style.height=cellPx+'px';
-    c.style.fontSize=Math.floor(cellPx*0.6)+'px';
+  document.documentElement.style.setProperty('--cell-px',cellPx+'px');
+  boardEl.querySelectorAll('.cell').forEach(c=>{
+    c.style.width=cellPx+'px';
+    c.style.height=cellPx+'px';
+    const t=c.querySelector('.tile');
+    if(t) t.style.fontSize=Math.floor(cellPx*0.62)+'px';
   });
 }
 
-/* fallMask verilirse, taşlar yukarıdan düşerek yerine oturur. */
-function render(matchedMask, fallMask){
-  const cellPx=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell-px'))||36;
+function render(matchedMask,fallMask){
+  const cellPx=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell-px'),10)||38;
   boardEl.innerHTML='';
+  const curGid=gid;
   for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
     const cell=document.createElement('div');
     cell.className='cell'+(gameOver?' disabled':'');
-    cell.style.width=cellPx+'px'; cell.style.height=cellPx+'px';
-    cell.dataset.r=r; cell.dataset.c=c;
+    cell.style.width=cellPx+'px';
+    cell.style.height=cellPx+'px';
+    cell.dataset.r=r;
+    cell.dataset.c=c;
     if(selected && selected.r===r && selected.c===c) cell.classList.add('selected');
     if(hintCell && hintCell.r===r && hintCell.c===c) cell.classList.add('hint-cell');
-    if(matchedMask && matchedMask[r][c]){ cell.classList.add('matched'); if(strongMatchActive) cell.classList.add('match-strong'); }
+    if(matchedMask && matchedMask[r][c]){
+      cell.classList.add('matched');
+      if(strongMatchActive) cell.classList.add('match-strong');
+    }
     const tile=document.createElement('span');
     tile.className='tile';
-    tile.style.fontSize=Math.floor(cellPx*0.6)+'px';
-    tile.textContent = board[r][c]===-1 ? '' : TYPES[board[r][c]];
+    tile.style.fontSize=Math.floor(cellPx*0.62)+'px';
+    tile.textContent=board[r][c]===-1?'':TYPES[board[r][c]];
     if(fallMask && fallMask[r][c]>0){
       tile.style.transition='none';
       tile.style.transform=`translateY(${-fallMask[r][c]*(cellPx+3)}px)`;
@@ -430,11 +1187,13 @@ function render(matchedMask, fallMask){
   if(fallMask){
     requestAnimationFrame(()=>{
       requestAnimationFrame(()=>{
+        if(gid!==curGid) return;
         boardEl.querySelectorAll('.tile').forEach(t=>{
           t.style.transition='transform .32s cubic-bezier(.34,1.56,.64,1)';
           t.style.transform='translateY(0)';
         });
         setTimeout(()=>{
+          if(gid!==curGid) return;
           boardEl.querySelectorAll('.tile').forEach(t=>t.classList.add('settling'));
         },330);
       });
@@ -442,72 +1201,84 @@ function render(matchedMask, fallMask){
   }
 }
 
+/* ── ETKİLEŞİM (POINTERDOWN + SÜRÜKLEME/DOKUNMA) ── */
 function attachCellEvents(cell,r,c){
   if(gameOver) return;
-  if(isMobileMode){
-    cell.addEventListener('click', ()=>handleTap(r,c));
-  } else {
-    cell.addEventListener('mousedown', e=>{
-      e.preventDefault();
-      if(isResolving) return;
-      dragStart={r,c,x:e.clientX,y:e.clientY};
-      cell.classList.add('selected');
-    });
-  }
+  cell.addEventListener('pointerdown',e=>{
+    if(e.button!==undefined && e.button!==0) return;
+    if(isResolving || gameOver || isAnyModalOpen()) return;
+    e.preventDefault();
+    dragStart={r,c,x:e.clientX,y:e.clientY,pointerId:e.pointerId};
+  });
 }
 
-/* Sürükleme: bırakma noktasının tam hangi hücrede olduğuna değil,
-   başlangıç hücresinden hangi yöne ne kadar hareket edildiğine bakılır. */
-document.addEventListener('mouseup', e=>{
-  if(isMobileMode || !dragStart || isResolving || gameOver) { dragStart=null; render(); return; }
-  const dx=e.clientX-dragStart.x, dy=e.clientY-dragStart.y;
+document.addEventListener('pointerup',e=>{
+  if(!dragStart) return;
+  const ds=dragStart;
+  dragStart=null;
+  if(isResolving || gameOver || isAnyModalOpen()){render();return;}
+  const dx=e.clientX-ds.x,dy=e.clientY-ds.y;
   const dist=Math.hypot(dx,dy);
   if(dist>=DRAG_THRESHOLD){
-    let tr=dragStart.r, tc=dragStart.c;
-    if(Math.abs(dx)>Math.abs(dy)) tc += dx>0?1:-1;
-    else tr += dy>0?1:-1;
-    if(tr>=0&&tr<SIZE&&tc>=0&&tc<SIZE){
-      attemptSwap(dragStart.r,dragStart.c,tr,tc);
-    } else {
+    selected=null;
+    let tr=ds.r,tc=ds.c;
+    if(Math.abs(dx)>Math.abs(dy)) tc+=dx>0?1:-1;
+    else tr+=dy>0?1:-1;
+    if(tr>=0 && tr<SIZE && tc>=0 && tc<SIZE){
+      attemptSwap(ds.r,ds.c,tr,tc);
+    }else{
       render();
     }
-  } else {
-    render();
+  }else{
+    handleTap(ds.r,ds.c);
   }
-  dragStart=null;
+});
+
+document.addEventListener('pointercancel',()=>{
+  if(dragStart){dragStart=null;render();}
 });
 
 function handleTap(r,c){
-  if(isResolving||gameOver) return;
-  if(!selected){ selected={r,c}; render(); return; }
-  if(selected.r===r && selected.c===c){ selected=null; render(); return; }
+  if(isResolving || gameOver || isAnyModalOpen()) return;
+  if(!selected){
+    selected={r,c};
+    playSfx('tap');
+    render();
+    return;
+  }
+  if(selected.r===r && selected.c===c){
+    selected=null;
+    playSfx('tap');
+    render();
+    return;
+  }
   if(isAdjacent(selected,{r,c})){
-    const s=selected; selected=null;
+    const s=selected;
+    selected=null;
     attemptSwap(s.r,s.c,r,c);
-  } else {
-    selected={r,c}; render();
+  }else{
+    selected={r,c};
+    playSfx('tap');
+    render();
   }
 }
 
-
-/* ── İPUCU SİSTEMİ ── */
+/* ── OTOMATİK İPUCU SİSTEMİ (KORUNDU) ── */
 function clearHintTimers(){
   if(hintTimerId!==null){clearTimeout(hintTimerId);hintTimerId=null;}
   if(hintRepeatTimerId!==null){clearTimeout(hintRepeatTimerId);hintRepeatTimerId=null;}
 }
-
 function pauseHints(){
   clearHintTimers();
   hintCell=null;
 }
-
 function resumeHints(){
   clearHintTimers();
   hintCell=null;
-  if(gameOver || isResolving || !document.getElementById('modalOverlay').classList.contains('hidden')) return;
-  hintTimerId=setTimeout(showHint,hintLevel*5000);
+  if(gameOver || isResolving || isAnyModalOpen()) return;
+  const curGid=gid;
+  hintTimerId=setTimeout(()=>{if(gid===curGid) showHint();},hintLevel*5000);
 }
-
 function getValidMoves(){
   const moves=[];
   for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++){
@@ -515,18 +1286,17 @@ function getValidMoves(){
       swapCells(board,r,c,r,c+1);
       const valid=getMatches(board).runs.length>0;
       swapCells(board,r,c,r,c+1);
-      if(valid) moves.push([{r:r,c:c},{r:r,c:c+1}]);
+      if(valid) moves.push([{r,c},{r,c:c+1}]);
     }
     if(r+1<SIZE){
       swapCells(board,r,c,r+1,c);
       const valid=getMatches(board).runs.length>0;
       swapCells(board,r,c,r+1,c);
-      if(valid) moves.push([{r:r,c:c},{r:r+1,c:c}]);
+      if(valid) moves.push([{r,c},{r:r+1,c}]);
     }
   }
   return moves;
 }
-
 function chooseHintCell(){
   const moves=getValidMoves();
   if(!moves.length) return null;
@@ -537,69 +1307,64 @@ function chooseHintCell(){
   const pool=candidates.length?candidates:moves.flat();
   return pool[Math.floor(Math.random()*pool.length)];
 }
-
 function showHint(){
   hintTimerId=null;
-  if(gameOver || isResolving || !document.getElementById('modalOverlay').classList.contains('hidden')) return;
+  if(gameOver || isResolving || isAnyModalOpen()) return;
   hintCell=chooseHintCell();
   if(!hintCell) return;
   render();
-  hintRepeatTimerId=setTimeout(repeatHint,5000);
+  const curGid=gid;
+  hintRepeatTimerId=setTimeout(()=>{if(gid===curGid) repeatHint();},5000);
 }
-
 function repeatHint(){
   hintRepeatTimerId=null;
-  if(gameOver || isResolving || !document.getElementById('modalOverlay').classList.contains('hidden')) return;
-  if(!hintCell) return;
+  if(gameOver || isResolving || isAnyModalOpen() || !hintCell) return;
   const cell=boardEl.querySelector(`.cell[data-r="${hintCell.r}"][data-c="${hintCell.c}"]`);
   if(cell){
     cell.classList.remove('hint-cell');
     void cell.offsetWidth;
     cell.classList.add('hint-cell');
   }
-  hintRepeatTimerId=setTimeout(repeatHint,5000);
-}
-
-function registerPlayerMove(){
-  clearHintTimers();
-  hintCell=null;
-  if(!gameOver && !isResolving && document.getElementById('modalOverlay').classList.contains('hidden')){
-    hintTimerId=setTimeout(showHint,hintLevel*5000);
-  }
+  const curGid=gid;
+  hintRepeatTimerId=setTimeout(()=>{if(gid===curGid) repeatHint();},5000);
 }
 
 /* ── OYUN AKIŞI ── */
 function moveTileVisual(tileEl,dx,dy,duration,cb){
+  const curGid=gid;
   tileEl.style.transition=`transform ${duration}ms ease`;
   tileEl.style.transform=`translate(${dx}px,${dy}px)`;
   tileEl.style.zIndex=5;
-  setTimeout(cb,duration);
+  setTimeout(()=>{if(gid===curGid) cb();},duration);
 }
 
 function attemptSwap(r1,c1,r2,c2){
-  if(gameOver||isResolving) return;
-  if(!isAdjacent({r:r1,c:c1},{r:r2,c:c2})){ render(); return; }
+  if(gameOver || isResolving || isAnyModalOpen()) return;
+  if(!isAdjacent({r:r1,c:c1},{r:r2,c:c2})){render();return;}
   const cellA=boardEl.querySelector(`.cell[data-r="${r1}"][data-c="${c1}"]`);
   const cellB=boardEl.querySelector(`.cell[data-r="${r2}"][data-c="${c2}"]`);
-  if(!cellA||!cellB){ render(); return; }
-  const tileA=cellA.querySelector('.tile'), tileB=cellB.querySelector('.tile');
-  const rectA=cellA.getBoundingClientRect(), rectB=cellB.getBoundingClientRect();
-  const dx=rectB.left-rectA.left, dy=rectB.top-rectA.top;
+  if(!cellA || !cellB){render();return;}
+  const tileA=cellA.querySelector('.tile'),tileB=cellB.querySelector('.tile');
+  const rectA=cellA.getBoundingClientRect(),rectB=cellB.getBoundingClientRect();
+  const dx=rectB.left-rectA.left,dy=rectB.top-rectA.top;
+  const usedHint=!!hintCell && ((hintCell.r===r1 && hintCell.c===c1) || (hintCell.r===r2 && hintCell.c===c2));
 
-  const usedHint = !!hintCell &&
-    ((hintCell.r===r1 && hintCell.c===c1) || (hintCell.r===r2 && hintCell.c===c2));
   isResolving=true;
+  const curGid=gid;
   let doneCount=0;
   const onBothDone=()=>{
+    if(gid!==curGid) return;
     doneCount++;
     if(doneCount<2) return;
-    if(gameOver){ isResolving=false; return; }
+    if(gameOver){isResolving=false;return;}
     swapCells(board,r1,c1,r2,c2);
     const {runs}=getMatches(board);
     if(runs.length===0){
       swapCells(board,r1,c1,r2,c2);
+      playSfx('bad');
       let backCount=0;
       const onBackDone=()=>{
+        if(gid!==curGid) return;
         backCount++;
         if(backCount<2) return;
         isResolving=false;
@@ -609,14 +1374,14 @@ function attemptSwap(r1,c1,r2,c2){
       };
       moveTileVisual(tileA,0,0,150,onBackDone);
       moveTileVisual(tileB,0,0,150,onBackDone);
-    } else {
+    }else{
       setMsg('');
       chainCount=0;
       clearHintTimers();
       hintCell=null;
       if(usedHint) hintLevel++;
       render();
-      setTimeout(resolveBoard,120);
+      setTimeout(()=>{if(gid===curGid) resolveBoard();},110);
     }
   };
   moveTileVisual(tileA,dx,dy,150,onBothDone);
@@ -625,74 +1390,90 @@ function attemptSwap(r1,c1,r2,c2){
 
 function resolveBoard(){
   if(gameOver) return;
+  const curGid=gid;
   const {mask,runs}=getMatches(board);
   if(runs.length===0){
     isResolving=false;
     if(chainCount>=2){
       timeLeft+=chainCount;
-      flashInfo('timeBox','reward-flash',400);
-      triggerChainEffect();
+      flashInfo('timeBox','reward-flash',420);
+      triggerChainEffect(chainCount);
+      playSfx('chain');
     }
     chainCount=0;
     updateInfobar();
     checkDeadlock();
-    if(!isResolving && !gameOver && document.getElementById('modalOverlay').classList.contains('hidden')) resumeHints();
+    if(!isResolving && !gameOver && !isAnyModalOpen()) resumeHints();
     return;
   }
   chainCount++;
   strongMatchActive=runs.some(run=>run.length>=5);
   let timeRewarded=false;
   runs.forEach(run=>{
-    applyBonus(run.length);
+    const pts=applyBonus(run.length);
     if(run.length>=4) timeRewarded=true;
     const anchor=run.cells[Math.floor(run.cells.length/2)];
     if(run.length===4) spawnFloatText('+3sn',anchor[0],anchor[1],'time');
     else if(run.length>=5) spawnFloatText('+5sn',anchor[0],anchor[1],'time');
+    else spawnFloatText('+'+pts,anchor[0],anchor[1],'score');
   });
+  playSfx(timeRewarded?'bonus':'match');
   updateInfobar();
   flashInfo('scoreBox','score-bump',260);
-  if(timeRewarded) flashInfo('timeBox','reward-flash',400);
+  if(timeRewarded) flashInfo('timeBox','reward-flash',420);
   render(mask);
   setTimeout(()=>{
-    if(gameOver) return;
+    if(gid!==curGid || gameOver) return;
     for(let r=0;r<SIZE;r++) for(let c=0;c<SIZE;c++) if(mask[r][c]) board[r][c]=-1;
     const fallMask=collapseAndRefill();
     strongMatchActive=false;
-    render(null, fallMask);
-    setTimeout(resolveBoard, 380);
-  }, 320);
+    render(null,fallMask);
+    setTimeout(()=>{if(gid===curGid) resolveBoard();},360);
+  },310);
 }
 
 function checkDeadlock(){
   if(gameOver) return;
   if(!hasValidMove(board)){
+    const curGid=gid;
     isResolving=true;
     pauseHints();
     clearInterval(timerId);
+    timerId=null;
     boardEl.classList.add('blurred');
     deadlockOverlay.classList.add('show');
     setTimeout(()=>{
-      board=createBoard();
+      if(gid!==curGid || gameOver) return;
+      board=createBoard(SIZE);
       deadlockOverlay.classList.remove('show');
       boardEl.classList.remove('blurred');
-      render(null, fullFallMask());
+      render(null,fullFallMask());
       isResolving=false;
-      startTimer();
-      resumeHints();
-    }, 1800);
+      if(!isAnyModalOpen()){
+        startTimer();
+        resumeHints();
+      }
+    },1650);
   }
 }
 
-/* ── SÜRE / SKOR ── */
+/* ── SÜRE, SKOR VE REKOR ── */
 function updateInfobar(){
   document.getElementById('timeDisp').textContent=timeLeft;
   document.getElementById('scoreDisp').textContent=score;
-  document.getElementById('timeBox').classList.toggle('time-low', timeLeft<=5);
+  document.getElementById('recDisp').textContent=bestScore;
+  document.getElementById('timeBox').classList.toggle('time-low',timeLeft<=5);
 }
 
 function startTimer(){
   clearInterval(timerId);
+  const curGid=gid;
   timerId=setInterval(()=>{
+    if(gid!==curGid || gameOver || isAnyModalOpen()){
+      clearInterval(timerId);
+      timerId=null;
+      return;
+    }
     timeLeft--;
     if(timeLeft<=0){
       timeLeft=0;
@@ -706,39 +1487,185 @@ function startTimer(){
 
 function endGame(){
   clearInterval(timerId);
+  timerId=null;
   pauseHints();
   gameOver=true;
-  document.getElementById('finalScoreText').textContent='Skorunuz: '+score;
+  const isNewRecord=score>0 && score>bestScore;
+  if(isNewRecord){
+    bestScore=score;
+    storeSet(REC_KEY,bestScore);
+  }
+  updateInfobar();
+  document.getElementById('finalScoreText').innerHTML='Skorunuz: <span class="nm">'+score+'</span>';
+  const recEl=document.getElementById('finalRecordText');
+  const goBox=document.getElementById('gameOverBox');
+  if(isNewRecord){
+    recEl.innerHTML='&#127942; Yeni rekor! (<span class="nm">'+bestScore+'</span>)';
+    goBox.classList.add('record-glow');
+    playSfx('win');
+    launchConfetti();
+  }else{
+    recEl.innerHTML='Rekorunuz: <span class="nm">'+bestScore+'</span>';
+    goBox.classList.remove('record-glow');
+    playSfx('end');
+  }
   boardEl.classList.add('blurred');
-  document.getElementById('gameOverOverlay').classList.remove('hidden');
   setMsg('');
   render();
+
+  /* Aynı noktada yanlışlıkla çift dokunmayı önlemek için kısa gecikmeyle etkinleştir */
+  const goRestartBtn=document.getElementById('goRestartBtn');
+  goRestartBtn.disabled=true;
+  gameOverOverlay.classList.remove('hidden');
+  const curGid=gid;
+  setTimeout(()=>{if(gid===curGid) goRestartBtn.disabled=false;},800);
 }
 
-function setMsg(t){ document.getElementById('msg').textContent=t; }
+function setMsg(t){document.getElementById('msg').textContent=t;}
+function updateHintPrompt(){
+  const touch=isTouchPrimary();
+  setMsg(touch
+    ?'Değiştirmek için iki kutuya sırayla dokunun.'
+    :'Bir kutuyu tutup komşusuna sürükleyin veya sırayla tıklayın.');
+  document.getElementById('ctrlRuleItem').textContent=touch
+    ?'Değiştirmek için iki kutuya sırayla dokunun veya kaydırın.'
+    :'Bir kutuyu tutup komşusuna sürükleyin ya da iki kutuya sırayla tıklayın.';
+}
 
 function resetGame(startImmediately=true){
+  window.abortAll();
+  gid++;
   strongMatchActive=false;
-  clearInterval(timerId);
-  gameOver=false; isResolving=false; selected=null; dragStart=null; chainCount=0;
-  clearHintTimers(); hintLevel=1; hintCell=null;
-  score=0; timeLeft=60;
-  board=createBoard();
-  document.getElementById('gameOverOverlay').classList.add('hidden');
+  timerId=null;
+  gameOver=false;isResolving=false;selected=null;dragStart=null;chainCount=0;
+  hintTimerId=null;hintRepeatTimerId=null;hintLevel=1;hintCell=null;
+  score=0;timeLeft=60;
+  SIZE=isCompactViewport()?6:8;
+  board=createBoard(SIZE);
+  fxLayer.innerHTML='';
+  gameOverOverlay.classList.add('hidden');
+  confirmOverlay.classList.add('hidden');
   deadlockOverlay.classList.remove('show');
   boardEl.classList.remove('blurred');
   fitBoard();
-  render(null, fullFallMask());
+  render(null,fullFallMask());
   updateInfobar();
-  setMsg(isMobileMode ? 'Değiştirmek için iki kutuya sırayla dokunun.' : 'Bir kutuyu tutup komşusuna sürükleyin.');
-  if(startImmediately){
+  updateHintPrompt();
+  if(startImmediately && !isAnyModalOpen()){
     startTimer();
     resumeHints();
   }
 }
 
-window.addEventListener('resize', ()=>{ fitBoard(); render(); });
+/* ── MERKEZÎ KLAVYE DİNLEYİCİSİ ── */
+document.addEventListener('keydown',e=>{
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  const key=e.key;
+  if(!modalOverlay.classList.contains('hidden')){
+    if(key==='Escape' || key==='Enter' || key===' '){
+      e.preventDefault();
+      if(document.activeElement) document.activeElement.blur();
+      closeRulesModal();
+    }else if(key==='ArrowLeft'){
+      e.preventDefault();
+      renderRulePage(rp-1);
+    }else if(key==='ArrowRight'){
+      e.preventDefault();
+      renderRulePage(rp+1);
+    }
+    return;
+  }
+  if(!confirmOverlay.classList.contains('hidden')){
+    if(key==='Escape'){
+      e.preventDefault();
+      closeConfirm(true);
+    }else if(key==='Enter'){
+      e.preventDefault();
+      const fn=confirmAction;
+      closeConfirm(false);
+      if(fn) fn();
+    }
+    return;
+  }
+  if(!gameOverOverlay.classList.contains('hidden')){
+    if((key==='Enter' || key===' ') && !document.getElementById('goRestartBtn').disabled){
+      e.preventDefault();
+      resetGame(true);
+    }
+    return;
+  }
+  if(key==='f' || key==='F'){
+    e.preventDefault();
+    if(document.activeElement) document.activeElement.blur();
+    toggleFullscreen();
+  }else if(key==='Escape'){
+    e.preventDefault();
+    if(document.activeElement) document.activeElement.blur();
+    openRulesModal();
+  }
+});
 
+/* ── OLAY BAĞLANTILARI ── */
+document.getElementById('soundBtn').addEventListener('click',toggleSound);
+fsBtn.addEventListener('click',toggleFullscreen);
+rulesActionBtn.addEventListener('click',closeRulesModal);
+document.getElementById('rulesBtn').addEventListener('click',openRulesModal);
+document.getElementById('goRulesBtn').addEventListener('click',()=>{
+  gameOverOverlay.classList.add('hidden');
+  openRulesModal();
+});
+document.getElementById('goRestartBtn').addEventListener('click',()=>resetGame(true));
+
+document.getElementById('restartBtn').addEventListener('click',()=>{
+  if(!gameOver && score>0){
+    openConfirm('Bu oyunun ilerlemesi kaybolacak. Yeni oyun başlatılsın mı?',()=>resetGame(true));
+  }else{
+    resetGame(true);
+  }
+});
+
+document.getElementById('prevPg').addEventListener('click',()=>renderRulePage(rp-1));
+document.getElementById('nextPg').addEventListener('click',()=>renderRulePage(rp+1));
+document.querySelectorAll('#pgDots .dot').forEach(dot=>{
+  dot.addEventListener('click',()=>renderRulePage(parseInt(dot.dataset.pg,10)||0));
+});
+
+resetRecBtn.addEventListener('click',()=>{
+  modalOverlay.classList.add('hidden');
+  openConfirm('Kaydedilen rekor sıfırlanacak. Onaylıyor musunuz?',()=>{
+    bestScore=0;
+    storeSet(REC_KEY,0);
+    updateInfobar();
+    openRulesModal();
+  });
+});
+
+modalOverlay.addEventListener('click',e=>{if(e.target===modalOverlay) closeRulesModal();});
+confirmOverlay.addEventListener('click',e=>{if(e.target===confirmOverlay) closeConfirm(true);});
+document.getElementById('confirmNoBtn').addEventListener('click',()=>closeConfirm(true));
+document.getElementById('confirmYesBtn').addEventListener('click',()=>{
+  const fn=confirmAction;
+  closeConfirm(false);
+  if(fn) fn();
+});
+
+/* Ekran boyutu/yönü değişiminde oyunu sıfırlamadan yeniden yerleşim */
+const ro=new ResizeObserver(()=>{
+  fitBoard();
+  render();
+  updateHintPrompt();
+});
+ro.observe(boardWrapEl);
+window.addEventListener('resize',()=>{
+  fitBoard();
+  render();
+  updateHintPrompt();
+});
+
+/* ── BAŞLANGIÇ ── */
+updateSoundUI();
+initFullscreen();
+renderRulePage(0);
 resetGame(false);
 </script>
 </body>
