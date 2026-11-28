@@ -132,6 +132,11 @@ button{font-family:inherit;touch-action:manipulation}
 
 /* ── Aşama 2: modal uyumu: çok alçak ekranda sonuç kartı sıkıştırma ── */
 @media(max-height:300px){#win .mcard{padding:8px 14px}#win .mcard .eyebrow{display:none}#win .mcard p{margin:4px 0}#win .stats3{margin:6px 0 4px}}
+
+/* ── Aşama 3: klavye odak göstergesi ── */
+button:focus-visible,[role=button]:focus-visible,a:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid #ffd966;outline-offset:2px}
+input:focus-visible{outline:2px solid #ffd966;outline-offset:1px}
+[role=dialog]:focus-visible,[role=alertdialog]:focus-visible{outline:none}
 </style>
 </head>
 <body>
@@ -365,6 +370,43 @@ else newGame(5);
   if(window.visualViewport)visualViewport.addEventListener('resize',fit);
   if(document.fonts){document.fonts.ready.then(fit);document.fonts.addEventListener&&document.fonts.addEventListener('loadingdone',fit)}
   fit();
+})();
+</script>
+
+<script>
+/* Aşama 3: modal odak yönetimi. Açılışta odağı içeri alır, Tab'ı pencerede tutar, kapanışta odağı açan öğeye geri verir. */
+(function(){
+  var SEL='button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  function rootOf(d){var o=d;while(o&&o!==document.body){if(getComputedStyle(o).position==='fixed')return o;o=o.parentElement}return d}
+  function shown(el){var s=getComputedStyle(el);return s.display!=='none'&&s.visibility!=='hidden'&&el.getClientRects().length>0}
+  var state=[];
+  [].slice.call(document.querySelectorAll('[role=dialog],[role=alertdialog]')).forEach(function(d){
+    var r=rootOf(d),st={d:d,open:false,opener:null};state.push(st);
+    function sync(){
+      var vis=shown(r)&&shown(d);
+      if(vis&&!st.open){
+        st.open=true;st.opener=(document.activeElement&&document.activeElement!==document.body)?document.activeElement:null;
+        requestAnimationFrame(function(){if(!st.open)return;if(!d.contains(document.activeElement)){d.setAttribute('tabindex','-1');try{d.focus({preventScroll:true})}catch(e){}}});
+      }else if(!vis&&st.open){
+        st.open=false;var o=st.opener;st.opener=null;
+        if(o&&document.contains(o)&&!d.contains(o)&&shown(o)){try{o.focus({preventScroll:true})}catch(e){}}
+      }
+    }
+    var mo=new MutationObserver(sync);mo.observe(r,{attributes:true,attributeFilter:['hidden','class','style']});
+    if(r!==d)mo.observe(d,{attributes:true,attributeFilter:['hidden','class','style']});
+    sync();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Tab')return;
+    var top=null;state.forEach(function(s){if(s.open)top=s});
+    if(!top)return;
+    var d=top.d,f=[].slice.call(d.querySelectorAll(SEL)).filter(shown);
+    if(!f.length){e.preventDefault();d.focus();return}
+    var first=f[0],last=f[f.length-1],a=document.activeElement;
+    if(!d.contains(a)){e.preventDefault();(e.shiftKey?last:first).focus();return}
+    if(e.shiftKey&&(a===first||a===d)){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&a===last){e.preventDefault();first.focus()}
+  },true);
 })();
 </script>
 </body>

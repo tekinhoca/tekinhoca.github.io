@@ -2,7 +2,8 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b0d12">
 <meta name="robots" content="noindex, nofollow">
 <title>Mayın Tarlası</title>
 <style>
@@ -103,6 +104,11 @@ button.a.on{border-color:#ffd966;color:#fff3c4;background:linear-gradient(135deg
  #modalOverlay .mbox .mtext{font-size:calc(12.5px*var(--rs));line-height:1.4;margin:0}
  #modalOverlay .mbox .mtext p{margin-bottom:calc(4px*var(--rs))}
 }
+
+/* ── Aşama 3: klavye odak göstergesi ── */
+button:focus-visible,[role=button]:focus-visible,a:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid #ffd966;outline-offset:2px}
+input:focus-visible{outline:2px solid #ffd966;outline-offset:1px}
+[role=dialog]:focus-visible,[role=alertdialog]:focus-visible{outline:none}
 </style>
 </head>
 <body>
@@ -122,7 +128,7 @@ button.a.on{border-color:#ffd966;color:#fff3c4;background:linear-gradient(135deg
  <div id="stagecol"><div id="shaker"><div id="board" role="grid" aria-label="Mayın tarlası"></div></div>
   <div class="banner" id="banner"><div class="card"><h2 id="bannerTitle"></h2><p id="bannerBody"></p><div class="row"><button class="a pri" id="bNew">Yeni Oyun</button><button class="a" id="bSee">Tahtayı gör</button></div></div></div>
  </div>
- <div id="bar"><div class="msg" id="msg"></div></div>
+ <div id="bar"><div class="msg" id="msg" role="status" aria-live="polite"></div></div>
  <div id="btns"><button class="a" id="flagBtn" aria-pressed="false"><svg class="bi" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-flag"/></svg>Bayrak</button><button class="a on" id="fairBtn" aria-pressed="true">Adil tahta</button><button class="a pri" id="newBtn">&#8635; Yeni Oyun</button><button class="a" id="rulesBtn">&#9432; Kurallar</button></div>
  <div class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo"></div>
 </div>
@@ -194,7 +200,7 @@ const MT=(function(){
  /* PC / tablet: sütun×satır = 9×9, 12×12, 20×15. Telefon (dar-uzun): 7×10, 9×12, 11×14 */
  const CONFIGS={easy:{rows:9,cols:9,mines:10},medium:{rows:12,cols:12,mines:25},hard:{rows:15,cols:20,mines:60}};
  const PHONE={easy:{rows:10,cols:7,mines:9},medium:{rows:12,cols:9,mines:17},hard:{rows:14,cols:11,mines:31}};
- let diff='medium',cfg,grid,rev,flag,mineSet,over,first,moves,timerID,t0,hitR,hitC,cells,press=null,fxRaf=0,fair=true,flagMode=false;
+ let diff='medium',cfg,grid,rev,flag,mineSet,over,first,moves,timerID,t0,pausedMs=0,pauseStart=0,hitR,hitC,cells,press=null,fxRaf=0,fair=true,flagMode=false;
  try{const sv=localStorage.getItem('mayin-diff');if(sv&&CONFIGS[sv])diff=sv;fair=localStorage.getItem('mayin-fair')!=='0';}catch(e){}
  const phone=()=>Math.min(innerWidth,innerHeight)<=600;
  const pickCfg=d=>phone()?PHONE[d]:CONFIGS[d];
@@ -211,7 +217,7 @@ const MT=(function(){
  function setMsg(t){$('msg').textContent=t;}
  function hint(){setMsg(flagMode?'Bayrak modu: dokunun = bayrak · uzun basın = aç':(FINE?'Sol tık: aç · Sağ tık: bayrak · Sayıya tık: akor':'Dokunun: aç · Uzun basın: bayrak · Sayıya dokunun: akor'));}
  function newGame(){
-  clearInterval(timerID);cancelAnimationFrame(fxRaf);clearFx();
+  pausedMs=0;pauseStart=0;clearInterval(timerID);cancelAnimationFrame(fxRaf);clearFx();
   cfg=pickCfg(diff);grid=mk2d(0);rev=mk2d(false);flag=mk2d(false);mineSet=new Set();
   over=false;first=true;moves=0;hitR=-1;hitC=-1;press=null;
   $('timeDisp').textContent='0:00';$('banner').className='banner';
@@ -245,7 +251,7 @@ const MT=(function(){
   return out;}
  function reveal(r,c){
   if(over||rev[r][c]||flag[r][c])return;
-  if(first){first=false;placeMines(r,c);t0=Date.now();timerID=setInterval(()=>{$('timeDisp').textContent=fmt(Math.floor((Date.now()-t0)/1000));},250);}
+  if(first){first=false;placeMines(r,c);t0=Date.now();pausedMs=0;pauseStart=0;timerID=setInterval(()=>{syncPause();$('timeDisp').textContent=fmt(elapsedSec());},250);}
   if(grid[r][c]===-1){lose(r,c);return;}
   const list=flood(r,c);moves++;for(const it of list)paint(it.r,it.c,{delay:it.d});checkWin();}
  function cue(){const st=$('mineStat');st.classList.remove('pulse');void st.offsetWidth;st.classList.add('pulse');}
@@ -262,7 +268,13 @@ const MT=(function(){
  function alt(r,c){if(over||rev[r][c])return;if(flagMode){reveal(r,c);buzz(20);}else flagAct(r,c,true);}
  function toggleFlag(r,c){if(over||rev[r][c])return;flag[r][c]=!flag[r][c];paint(r,c);hud();}
  function checkWin(){let closed=0;for(let r=0;r<cfg.rows;r++)for(let c=0;c<cfg.cols;c++)if(!rev[r][c])closed++;if(closed===cfg.mines)win();}
- function elapsedSec(){return Math.floor((Date.now()-t0)/1000);}
+ /* Aşama 3: sekme gizliyken veya kurallar/onay penceresi açıkken süre durur */
+ function isPaused(){return document.hidden||!$('modalOverlay').classList.contains('hidden')||!$('cf').classList.contains('hidden');}
+ function syncPause(){if(!t0||over)return;var p=isPaused();if(p&&!pauseStart)pauseStart=Date.now();else if(!p&&pauseStart){pausedMs+=Date.now()-pauseStart;pauseStart=0;}}
+ function elapsedMs(){return Date.now()-t0-pausedMs-(pauseStart?Date.now()-pauseStart:0);}
+ function elapsedSec(){return Math.floor(elapsedMs()/1000);}
+ document.addEventListener('visibilitychange',syncPause);
+ ['modalOverlay','cf'].forEach(function(i){new MutationObserver(syncPause).observe($(i),{attributes:true,attributeFilter:['class']});});
  function win(){over=true;clearInterval(timerID);const sec=elapsedSec();$('timeDisp').textContent=fmt(sec);
   mineSet.forEach(k=>{const [r,c]=k.split(',').map(Number);if(!flag[r][c]){flag[r][c]=true;paint(r,c);}});hud();
   const prev=getBest();let note='';if(prev===null||sec<prev){setBest(sec);note=prev===null?' İlk rekorunuz kaydedildi!':' Yeni rekor!';}else note=' Rekorunuz: '+fmt(prev)+'.';
@@ -361,6 +373,43 @@ MT.newGame();rPage(0);
   if(window.visualViewport)visualViewport.addEventListener('resize',fit);
   if(document.fonts){document.fonts.ready.then(fit);document.fonts.addEventListener&&document.fonts.addEventListener('loadingdone',fit)}
   fit();
+})();
+</script>
+
+<script>
+/* Aşama 3: modal odak yönetimi. Açılışta odağı içeri alır, Tab'ı pencerede tutar, kapanışta odağı açan öğeye geri verir. */
+(function(){
+  var SEL='button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  function rootOf(d){var o=d;while(o&&o!==document.body){if(getComputedStyle(o).position==='fixed')return o;o=o.parentElement}return d}
+  function shown(el){var s=getComputedStyle(el);return s.display!=='none'&&s.visibility!=='hidden'&&el.getClientRects().length>0}
+  var state=[];
+  [].slice.call(document.querySelectorAll('[role=dialog],[role=alertdialog]')).forEach(function(d){
+    var r=rootOf(d),st={d:d,open:false,opener:null};state.push(st);
+    function sync(){
+      var vis=shown(r)&&shown(d);
+      if(vis&&!st.open){
+        st.open=true;st.opener=(document.activeElement&&document.activeElement!==document.body)?document.activeElement:null;
+        requestAnimationFrame(function(){if(!st.open)return;if(!d.contains(document.activeElement)){d.setAttribute('tabindex','-1');try{d.focus({preventScroll:true})}catch(e){}}});
+      }else if(!vis&&st.open){
+        st.open=false;var o=st.opener;st.opener=null;
+        if(o&&document.contains(o)&&!d.contains(o)&&shown(o)){try{o.focus({preventScroll:true})}catch(e){}}
+      }
+    }
+    var mo=new MutationObserver(sync);mo.observe(r,{attributes:true,attributeFilter:['hidden','class','style']});
+    if(r!==d)mo.observe(d,{attributes:true,attributeFilter:['hidden','class','style']});
+    sync();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Tab')return;
+    var top=null;state.forEach(function(s){if(s.open)top=s});
+    if(!top)return;
+    var d=top.d,f=[].slice.call(d.querySelectorAll(SEL)).filter(shown);
+    if(!f.length){e.preventDefault();d.focus();return}
+    var first=f[0],last=f[f.length-1],a=document.activeElement;
+    if(!d.contains(a)){e.preventDefault();(e.shiftKey?last:first).focus();return}
+    if(e.shiftKey&&(a===first||a===d)){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&a===last){e.preventDefault();first.focus()}
+  },true);
 })();
 </script>
 </body>

@@ -2,7 +2,8 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0e0c08">
 <meta name="robots" content="noindex, nofollow">
 <title>Mangala</title>
 <style>
@@ -125,6 +126,14 @@ button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#
  #modalOverlay .mbox .mtext{font-size:calc(12.5px*var(--rs));line-height:1.4;margin:0}
  #modalOverlay .mbox .mtext p{margin-bottom:calc(4px*var(--rs))}
 }
+
+/* ── Aşama 3: klavye odak göstergesi ── */
+button:focus-visible,[role=button]:focus-visible,a:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid #ffd966;outline-offset:2px}
+input:focus-visible{outline:2px solid #ffd966;outline-offset:1px}
+[role=dialog]:focus-visible,[role=alertdialog]:focus-visible{outline:none}
+
+/* ── Aşama 3: Mangala set sonucu kartı alçak ekranda ── */
+@media(max-height:420px){.set-modal .card{padding:10px 14px}.set-modal h2{font-size:18px;margin-bottom:4px}.set-modal p{font-size:12.5px;margin-bottom:8px}}
 </style>
 </head>
 <body>
@@ -137,7 +146,7 @@ button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#
   <div id="board" role="group" aria-label="Mangala tahtası"></div>
   <div class="set-modal" id="modal"><div class="card"><h2 id="modal-title"></h2><p id="modal-body"></p><button class="a pri" id="modal-btn"></button></div></div>
  </div>
- <div id="bar"><div class="hand" id="hand" style="visibility:hidden"><span class="hi">ELDE <b>0</b> TAŞ</span></div><div class="msg" id="msg">Oyuncu 1, bir kuyu seçin.</div></div>
+ <div id="bar"><div class="hand" id="hand" style="visibility:hidden"><span class="hi">ELDE <b>0</b> TAŞ</span></div><div class="msg" id="msg" role="status" aria-live="polite">Oyuncu 1, bir kuyu seçin.</div></div>
  <div id="modes" role="group" aria-label="Oyun modu"><button class="a on" data-m="2p">İki<br>oyuncu</button><button class="a" data-m="e">PC'ye karşı<br>kolay</button><button class="a" data-m="m">PC'ye karşı<br>orta</button><button class="a" data-m="h">PC'ye karşı<br>zor</button></div>
  <div id="btns"><button class="a" id="m3" onclick="setMaxSets(3)">3 Set<span class="tn"> (Turnuva)</span></button><button class="a" id="m5" onclick="setMaxSets(5)">5 Set</button><button class="a pri" onclick="askNew()">&#8635; Baştan</button><button class="a" onclick="openModal()">&#9432; Kurallar</button></div>
  <div class="foot"><img src="../img/THlogo.webp" alt="Tekin Hoca Logo" onerror="this.remove()"></div>
@@ -430,6 +439,43 @@ buildBoard();resetAll();fit();rPage(0);
   if(window.visualViewport)visualViewport.addEventListener('resize',fit);
   if(document.fonts){document.fonts.ready.then(fit);document.fonts.addEventListener&&document.fonts.addEventListener('loadingdone',fit)}
   fit();
+})();
+</script>
+
+<script>
+/* Aşama 3: modal odak yönetimi. Açılışta odağı içeri alır, Tab'ı pencerede tutar, kapanışta odağı açan öğeye geri verir. */
+(function(){
+  var SEL='button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  function rootOf(d){var o=d;while(o&&o!==document.body){if(getComputedStyle(o).position==='fixed')return o;o=o.parentElement}return d}
+  function shown(el){var s=getComputedStyle(el);return s.display!=='none'&&s.visibility!=='hidden'&&el.getClientRects().length>0}
+  var state=[];
+  [].slice.call(document.querySelectorAll('[role=dialog],[role=alertdialog]')).forEach(function(d){
+    var r=rootOf(d),st={d:d,open:false,opener:null};state.push(st);
+    function sync(){
+      var vis=shown(r)&&shown(d);
+      if(vis&&!st.open){
+        st.open=true;st.opener=(document.activeElement&&document.activeElement!==document.body)?document.activeElement:null;
+        requestAnimationFrame(function(){if(!st.open)return;if(!d.contains(document.activeElement)){d.setAttribute('tabindex','-1');try{d.focus({preventScroll:true})}catch(e){}}});
+      }else if(!vis&&st.open){
+        st.open=false;var o=st.opener;st.opener=null;
+        if(o&&document.contains(o)&&!d.contains(o)&&shown(o)){try{o.focus({preventScroll:true})}catch(e){}}
+      }
+    }
+    var mo=new MutationObserver(sync);mo.observe(r,{attributes:true,attributeFilter:['hidden','class','style']});
+    if(r!==d)mo.observe(d,{attributes:true,attributeFilter:['hidden','class','style']});
+    sync();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Tab')return;
+    var top=null;state.forEach(function(s){if(s.open)top=s});
+    if(!top)return;
+    var d=top.d,f=[].slice.call(d.querySelectorAll(SEL)).filter(shown);
+    if(!f.length){e.preventDefault();d.focus();return}
+    var first=f[0],last=f[f.length-1],a=document.activeElement;
+    if(!d.contains(a)){e.preventDefault();(e.shiftKey?last:first).focus();return}
+    if(e.shiftKey&&(a===first||a===d)){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&a===last){e.preventDefault();first.focus()}
+  },true);
 })();
 </script>
 </body>

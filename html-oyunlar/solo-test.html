@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="tr"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#12100a">
 <meta name="robots" content="noindex, nofollow"><title>Solo Test</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
@@ -67,6 +68,23 @@ button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#
  #rules .mbox .mtext{font-size:calc(12.5px*var(--rs));line-height:1.4;margin:0}
  #rules .mbox .mtext p{margin-bottom:calc(4px*var(--rs))}
 }
+
+/* ── Aşama 3: klavye odak göstergesi ── */
+button:focus-visible,[role=button]:focus-visible,a:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid #ffd966;outline-offset:2px}
+input:focus-visible{outline:2px solid #ffd966;outline-offset:1px}
+[role=dialog]:focus-visible,[role=alertdialog]:focus-visible{outline:none}
+
+/* ── Aşama 3: sonuç katmanı kısa ekranda tam ekran ── */
+@media(max-height:600px){
+ .end{position:fixed;inset:0;z-index:55;border-radius:0;background:rgba(4,5,10,.94);overflow:auto;scrollbar-width:none;justify-content:safe center;align-items:safe center}
+ .end::-webkit-scrollbar{display:none}
+ .ecard{padding:8px;gap:min(8px,1.4dvh)}
+ .ecard h2{font-size:clamp(18px,4.4dvh,30px)}
+ .ecard p{font-size:13px}
+ .ecard .btns{flex-direction:row;flex-wrap:wrap;justify-content:center}
+ .estats b{font-size:18px}
+}
+@media(orientation:landscape) and (max-height:600px){.end{flex-direction:row;gap:28px}}
 </style></head><body>
 <div class="app">
  <div class="title">Solo Test</div>
@@ -78,7 +96,7 @@ button.a:active{transform:scale(.96)}button.a.pri{font-weight:700;border-color:#
   </div></div>
   <div class="side">
    <div class="infobar"><div class="ibox"><div class="l">Kalan Taş</div><div class="v" id="dS">32</div></div><div class="ibox"><div class="l">Hamle</div><div class="v" id="dM">0</div></div><div class="ibox"><div class="l">Geri Al</div><div class="v" id="dU">5</div></div><div class="ibox"><div class="l">En İyi</div><div class="v" id="dB">—</div></div></div>
-   <div class="msg" id="msg"></div>
+   <div class="msg" id="msg" role="status" aria-live="polite"></div>
    <div class="btns"><button class="a pri" id="bNew">&#8635; Yeni Oyun</button><button class="a" id="bUndo">&#8592; Geri Al</button><button class="a" id="bRules">&#9432; Kurallar</button></div>
   </div>
  </div>
@@ -204,6 +222,62 @@ return{newGame,undo};})();
   b.addEventListener('pointerdown',function(e){sx=e.clientX;sy=e.clientY});
   b.addEventListener('pointerup',function(e){if(sx===null)return;var dx=e.clientX-sx,dy=e.clientY-sy;sx=null;if(Math.abs(dx)>45&&Math.abs(dy)<40)show(cur+(dx<0?1:-1))});
   show(0);
+})();
+</script>
+
+<script>
+/* Aşama 3: modal odak yönetimi. Açılışta odağı içeri alır, Tab'ı pencerede tutar, kapanışta odağı açan öğeye geri verir. */
+(function(){
+  var SEL='button:not([disabled]),[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  function rootOf(d){var o=d;while(o&&o!==document.body){if(getComputedStyle(o).position==='fixed')return o;o=o.parentElement}return d}
+  function shown(el){var s=getComputedStyle(el);return s.display!=='none'&&s.visibility!=='hidden'&&el.getClientRects().length>0}
+  var state=[];
+  [].slice.call(document.querySelectorAll('[role=dialog],[role=alertdialog]')).forEach(function(d){
+    var r=rootOf(d),st={d:d,open:false,opener:null};state.push(st);
+    function sync(){
+      var vis=shown(r)&&shown(d);
+      if(vis&&!st.open){
+        st.open=true;st.opener=(document.activeElement&&document.activeElement!==document.body)?document.activeElement:null;
+        requestAnimationFrame(function(){if(!st.open)return;if(!d.contains(document.activeElement)){d.setAttribute('tabindex','-1');try{d.focus({preventScroll:true})}catch(e){}}});
+      }else if(!vis&&st.open){
+        st.open=false;var o=st.opener;st.opener=null;
+        if(o&&document.contains(o)&&!d.contains(o)&&shown(o)){try{o.focus({preventScroll:true})}catch(e){}}
+      }
+    }
+    var mo=new MutationObserver(sync);mo.observe(r,{attributes:true,attributeFilter:['hidden','class','style']});
+    if(r!==d)mo.observe(d,{attributes:true,attributeFilter:['hidden','class','style']});
+    sync();
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key!=='Tab')return;
+    var top=null;state.forEach(function(s){if(s.open)top=s});
+    if(!top)return;
+    var d=top.d,f=[].slice.call(d.querySelectorAll(SEL)).filter(shown);
+    if(!f.length){e.preventDefault();d.focus();return}
+    var first=f[0],last=f[f.length-1],a=document.activeElement;
+    if(!d.contains(a)){e.preventDefault();(e.shiftKey?last:first).focus();return}
+    if(e.shiftKey&&(a===first||a===d)){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&a===last){e.preventDefault();first.focus()}
+  },true);
+})();
+</script>
+
+<script>
+/* Aşama 3: sonuç katmanı taşarsa kartlar kademeli küçültülür (en az 0,6). */
+(function(){
+  var e=document.getElementById('end');if(!e)return;
+  /* Tahta kapsayıcısı transform içerdiğinden position:fixed ona göre çalışır. Kısa ekranda katmanı body'ye taşıyıp gerçekten tam ekran yapıyoruz. */
+  var home=e.parentNode,next=e.nextSibling,mq=window.matchMedia('(max-height:600px)');
+  function place(){if(mq.matches){if(e.parentNode!==document.body)document.body.appendChild(e)}else if(e.parentNode!==home){home.insertBefore(e,next&&next.parentNode===home?next:null)}}
+  if(mq.addEventListener)mq.addEventListener('change',place);else if(mq.addListener)mq.addListener(place);
+  place();
+  function fit(){
+    var cs=[].slice.call(e.querySelectorAll('.ecard'));if(e.hidden||!cs.length)return;
+    var z=1,n=0;cs.forEach(function(c){c.style.zoom=1});
+    while(e.scrollHeight>e.clientHeight+1&&z>.6&&n++<20){z=+(z-.05).toFixed(2);cs.forEach(function(c){c.style.zoom=z})}
+  }
+  new MutationObserver(fit).observe(e,{attributes:true,attributeFilter:['hidden','class'],childList:true});
+  addEventListener('resize',fit);addEventListener('orientationchange',function(){setTimeout(fit,250)});
 })();
 </script>
 </body></html>
